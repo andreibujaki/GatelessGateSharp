@@ -121,16 +121,20 @@ namespace GatelessGateSharp
                 {
                     var ID = response["id"];
                     JArray result = (JArray)response["result"];
-                    mMutex.WaitOne();
-                    System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^0x");
-                    mJob = (EthashStratum.Job)(new Job(
-                        regex.Replace((string)result[0], ""), // Use headerhash as job ID.
-                        regex.Replace((string)result[1], ""),
-                        regex.Replace((string)result[0], "")));
-                    regex = new System.Text.RegularExpressions.Regex(@"^0x(.*)................................................$");
-                    mDifficulty = (double)0xffff0000U / (double)Convert.ToUInt64(regex.Replace((string)result[2], "$1"), 16);
-                    mMutex.ReleaseMutex();
-                    MainForm.Logger("Received new job: " + mJob.ID);
+                    var oldJob = mJob;
+                    if (oldJob == null || ("0x" + oldJob.ID) != (string)result[0])
+                    {
+                        mMutex.WaitOne();
+                        System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^0x");
+                        mJob = (EthashStratum.Job)(new Job(
+                            regex.Replace((string)result[0], ""), // Use headerhash as job ID.
+                            regex.Replace((string)result[1], ""),
+                            regex.Replace((string)result[0], "")));
+                        regex = new System.Text.RegularExpressions.Regex(@"^0x(.*)................................................$");
+                        mDifficulty = (double)0xffff0000U / (double)Convert.ToUInt64(regex.Replace((string)result[2], "$1"), 16);
+                        mMutex.ReleaseMutex();
+                        MainForm.Logger("Received new job: " + (string)result[0]);
+                    }
                 }
                 else
                 {
@@ -184,6 +188,8 @@ namespace GatelessGateSharp
             if (Stopped)
                 return;
 
+            MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort +" as " + Username + "...");
+
             mMutex.WaitOne();
 
             mClient = new TcpClient(ServerAddress, ServerPort);
@@ -206,6 +212,7 @@ namespace GatelessGateSharp
             if (response["result"] == null)
             {
                 mMutex.ReleaseMutex();
+                MainForm.Logger("Authorization failed.");
                 throw new Exception("Authorization failed.");
             }
             

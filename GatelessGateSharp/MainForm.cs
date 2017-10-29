@@ -1,19 +1,19 @@
-﻿// Copyright 2017 Yurio Miyazawa (a.k.a zawawa)
+﻿// Copyright 2017 Yurio Miyazawa (a.k.a zawawa) <me@yurio.net>
 //
-// This file is part of Gateless Gate #.
+// This file is part of Gateless Gate Sharp.
 //
-// Gateless Gate # is free software: you can redistribute it and/or modify
+// Gateless Gate Sharp is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Gateless Gate # is distributed in the hope that it will be useful,
+// Gateless Gate Sharp is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Gateless Gate #.  If not, see <http://www.gnu.org/licenses/>.
+// along with Gateless Gate Sharp.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -597,6 +597,22 @@ namespace GatelessGateSharp
                     labelPriceWeek.Text = "-";
                     labelPriceMonth.Text = "-";
                 }
+                else if (poolName == "DwarfPool" && textBoxEthereumAddress.Text != "")
+                {
+                    String jsonString = client.DownloadString("http://dwarfpool.com/eth/api?wallet=" + textBoxEthereumAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
+                    double balance = 0;
+                    try
+                    {
+                        balance = Double.Parse((String)response["wallet_balance"]);
+                    }
+                    catch (Exception ex) { }
+                    labelBalance.Text = String.Format("{0:N6}", balance) + " ETH (" + String.Format("{0:N2}", (balance * USDETH)) + " USD)";
+
+                    labelPriceDay.Text = "-";
+                    labelPriceWeek.Text = "-";
+                    labelPriceMonth.Text = "-";
+                }
                 else
                 {
                     labelPriceDay.Text = "-";
@@ -1060,7 +1076,28 @@ namespace GatelessGateSharp
             }
             else if (pool == "ethpool.org")
             {
-                mStratum = new OpenEthereumPoolEthashStratum("us1.ethpool.org", 3333, textBoxEthereumAddress.Text, "x", pool);
+                var hosts = new List<StratumServerInfo> {
+                                new StratumServerInfo("us1.ethpool.org", 0),
+                                new StratumServerInfo("us2.ethpool.org", 0),
+                                new StratumServerInfo("eu1.ethpool.org", 0),
+                                new StratumServerInfo("asia1.ethpool.org", 0)
+                            };
+                hosts.Sort();
+                foreach (StratumServerInfo host in hosts)
+                {
+                    if (host.time >= 0)
+                    {
+                        try
+                        {
+                            mStratum = new OpenEthereumPoolEthashStratum(host.name, 3333, textBoxEthereumAddress.Text, "x", pool);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+                    }
+                }
             }
             else if (pool == "Nanopool")
             {

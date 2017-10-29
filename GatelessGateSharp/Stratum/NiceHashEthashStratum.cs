@@ -77,7 +77,7 @@ namespace GatelessGateSharp
                         mMutex.ReleaseMutex();
                         MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                     }
-                    else if (method.Equals("mining.notify"))
+                    else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
                     {
                         mMutex.WaitOne();
                         mJob = (EthashStratum.Job)(new Job((string)parameters[0], (string)parameters[1], (string)parameters[2]));
@@ -138,6 +138,8 @@ namespace GatelessGateSharp
         {
             if (Stopped)
                 return;
+
+            MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
 
             mMutex.WaitOne();
 
