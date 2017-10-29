@@ -178,7 +178,13 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="Kernels\blake256.cl" />
+    <None Include="Kernels\cryptonight.cl" />
     <None Include="Kernels\ethash.cl" />
+    <None Include="Kernels\groestl256.cl" />
+    <None Include="Kernels\jh.cl" />
+    <None Include="Kernels\wolf-aes.cl" />
+    <None Include="Kernels\wolf-skein.cl" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
