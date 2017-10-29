@@ -47,6 +47,7 @@ namespace GatelessGateSharp
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
+        Thread mPingThread;
         int mJsonRPCMessageID = 1;
         private Mutex mMutex = new Mutex();
 
@@ -154,6 +155,30 @@ namespace GatelessGateSharp
             }
         }
 
+
+        // This is for DwarfPool.
+        private void PingThread()
+        {
+            System.Threading.Thread.Sleep(5000);
+
+            while (!Stopped)
+            {
+                mMutex.WaitOne();
+
+                mStreamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
+                    { "id", mJsonRPCMessageID++ },
+                    { "jsonrpc", "2.0" },
+                    { "method", "eth_getWork" }
+                }));
+                mStreamWriter.Write("\n");
+                mStreamWriter.Flush();
+
+                mMutex.ReleaseMutex();
+
+                System.Threading.Thread.Sleep(5000);
+            }
+        }
+
         override protected void Connect()
         {
             if (Stopped)
@@ -197,6 +222,10 @@ namespace GatelessGateSharp
             mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
             mStreamReaderThread.IsBackground = true;
             mStreamReaderThread.Start();
+
+            mPingThread = new Thread(new ThreadStart(PingThread));
+            mPingThread.IsBackground = true;
+            mPingThread.Start();
         }
 
         public override void Submit(EthashStratum.Job job, UInt64 output)

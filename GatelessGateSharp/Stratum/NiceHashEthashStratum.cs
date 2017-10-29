@@ -151,7 +151,7 @@ namespace GatelessGateSharp
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.subscribe" },
                 { "params", new List<string> {
-                    "GatelessGateSharp/0.0.1",
+                    MainForm.shortAppName + "/" + MainForm.appVersion,
                     "EthereumStratum/1.0.0"
             }}}));
             mStreamWriter.Write("\n");
@@ -211,9 +211,6 @@ namespace GatelessGateSharp
                          (PoolExtranonce.Length == 2) ? (String.Format("{6:x2}{5:x2}{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff), ((output >> 48) & 0xff))) :
                          (PoolExtranonce.Length == 4) ? (String.Format("{5:x2}{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff))) :
                                                         (String.Format("{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff))));
-                //      = ((Extranonce.Length == 2) ? (String.Format("{0:x2}{1:x2}{2:x2}{3:x2}{4:x2}{5:x2}{6:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff), ((output >> 48) & 0xff))) :
-                //         (Extranonce.Length == 4) ? (String.Format("{0:x2}{1:x2}{2:x2}{3:x2}{4:x2}{5:x2}",       ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff))) :
-                //                                    (String.Format("{0:x2}{1:x2}{2:x2}{3:x2}{4:x2}",             ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff))));
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
                     { "id", mJsonRPCMessageID++ },
                     { "method", "mining.submit" },

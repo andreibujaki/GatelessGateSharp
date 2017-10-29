@@ -46,7 +46,9 @@ namespace GatelessGateSharp
         extern public static void UnloadPhyMemDriver();
 
         private static MainForm instance;
-        public static String appName = "Gateless Gate Sharp 0.0.3 alpha";
+        public static String shortAppName = "Gateless Gate Sharp";
+        public static String appVersion = "0.0.4";
+        public static String appName = shortAppName + " " + appVersion + " alpha";
         private static String databaseFileName = "GatelessGateSharp.sqlite";
         private static String logFileName = "GatelessGateSharp.log";
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
@@ -247,6 +249,8 @@ namespace GatelessGateSharp
                 CreateNewDatabase();
             LoadDatabase();
             InitializeDevices();
+
+            Text = appName;
         }
 
         private void InitializeDevices()
@@ -885,7 +889,7 @@ namespace GatelessGateSharp
 
         public bool ValidateEthereumAddress()
         {
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^0x[a-f0-9]{40}$");
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^0x[a-fA-Z0-9]{40}$");
             var match = regex.Match(textBoxEthereumAddress.Text);
             if (match.Success)
             {
