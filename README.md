@@ -1,4 +1,4 @@
-# Gateless Gate \#
+# Gateless Gate Sharp
 
 ![Screen Shot](https://i.imgur.com/2uxU07X.png)
 
