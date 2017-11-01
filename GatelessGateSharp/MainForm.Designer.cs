@@ -131,10 +131,10 @@
             this.buttonPoolPrioritiesUp = new System.Windows.Forms.Button();
             this.listBoxPoolPriorities = new System.Windows.Forms.ListBox();
             this.groupBoxCoinsToMine = new System.Windows.Forms.GroupBox();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButtonZcash = new System.Windows.Forms.RadioButton();
+            this.radioButtonMonero = new System.Windows.Forms.RadioButton();
+            this.radioButtonEthereum = new System.Windows.Forms.RadioButton();
+            this.radioButtonMostProfitable = new System.Windows.Forms.RadioButton();
             this.label17 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -1186,10 +1186,10 @@
             // 
             // groupBoxCoinsToMine
             // 
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButton4);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButton3);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButton2);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButton1);
+            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonZcash);
+            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMonero);
+            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonEthereum);
+            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMostProfitable);
             this.groupBoxCoinsToMine.Location = new System.Drawing.Point(9, 6);
             this.groupBoxCoinsToMine.Name = "groupBoxCoinsToMine";
             this.groupBoxCoinsToMine.Size = new System.Drawing.Size(112, 115);
@@ -1197,50 +1197,53 @@
             this.groupBoxCoinsToMine.TabStop = false;
             this.groupBoxCoinsToMine.Text = "Coin(s) to Mine";
             // 
-            // radioButton4
+            // radioButtonZcash
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Enabled = false;
-            this.radioButton4.Location = new System.Drawing.Point(6, 89);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(85, 17);
-            this.radioButton4.TabIndex = 7;
-            this.radioButton4.Text = "Zcash (ZEC)";
-            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButtonZcash.AutoSize = true;
+            this.radioButtonZcash.Enabled = false;
+            this.radioButtonZcash.Location = new System.Drawing.Point(6, 89);
+            this.radioButtonZcash.Name = "radioButtonZcash";
+            this.radioButtonZcash.Size = new System.Drawing.Size(85, 17);
+            this.radioButtonZcash.TabIndex = 7;
+            this.radioButtonZcash.Text = "Zcash (ZEC)";
+            this.radioButtonZcash.UseVisualStyleBackColor = true;
+            this.radioButtonZcash.CheckedChanged += new System.EventHandler(this.radioButtonZcash_CheckedChanged);
             // 
-            // radioButton3
+            // radioButtonMonero
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Enabled = false;
-            this.radioButton3.Location = new System.Drawing.Point(6, 66);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(94, 17);
-            this.radioButton3.TabIndex = 6;
-            this.radioButton3.Text = "Monero (XMR)";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButtonMonero.AutoSize = true;
+            this.radioButtonMonero.Location = new System.Drawing.Point(6, 66);
+            this.radioButtonMonero.Name = "radioButtonMonero";
+            this.radioButtonMonero.Size = new System.Drawing.Size(94, 17);
+            this.radioButtonMonero.TabIndex = 6;
+            this.radioButtonMonero.Text = "Monero (XMR)";
+            this.radioButtonMonero.UseVisualStyleBackColor = true;
+            this.radioButtonMonero.CheckedChanged += new System.EventHandler(this.radioButtonMonero_CheckedChanged);
             // 
-            // radioButton2
+            // radioButtonEthereum
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Checked = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 43);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(101, 17);
-            this.radioButton2.TabIndex = 5;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Ethereum (ETH)";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButtonEthereum.AutoSize = true;
+            this.radioButtonEthereum.Checked = true;
+            this.radioButtonEthereum.Location = new System.Drawing.Point(6, 43);
+            this.radioButtonEthereum.Name = "radioButtonEthereum";
+            this.radioButtonEthereum.Size = new System.Drawing.Size(101, 17);
+            this.radioButtonEthereum.TabIndex = 5;
+            this.radioButtonEthereum.TabStop = true;
+            this.radioButtonEthereum.Text = "Ethereum (ETH)";
+            this.radioButtonEthereum.UseVisualStyleBackColor = true;
+            this.radioButtonEthereum.CheckedChanged += new System.EventHandler(this.radioButtonEthereum_CheckedChanged);
             // 
-            // radioButton1
+            // radioButtonMostProfitable
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Enabled = false;
-            this.radioButton1.Location = new System.Drawing.Point(6, 20);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(94, 17);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.Text = "Most profitable";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButtonMostProfitable.AutoSize = true;
+            this.radioButtonMostProfitable.Enabled = false;
+            this.radioButtonMostProfitable.Location = new System.Drawing.Point(6, 20);
+            this.radioButtonMostProfitable.Name = "radioButtonMostProfitable";
+            this.radioButtonMostProfitable.Size = new System.Drawing.Size(94, 17);
+            this.radioButtonMostProfitable.TabIndex = 4;
+            this.radioButtonMostProfitable.Text = "Most profitable";
+            this.radioButtonMostProfitable.UseVisualStyleBackColor = true;
+            this.radioButtonMostProfitable.CheckedChanged += new System.EventHandler(this.radioButtonMostProfitable_CheckedChanged);
             // 
             // label17
             // 
@@ -1477,10 +1480,10 @@
         private System.Windows.Forms.Button buttonBenchmark;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.GroupBox groupBoxCoinsToMine;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButtonZcash;
+        private System.Windows.Forms.RadioButton radioButtonMonero;
+        private System.Windows.Forms.RadioButton radioButtonEthereum;
+        private System.Windows.Forms.RadioButton radioButtonMostProfitable;
         private System.Windows.Forms.Label labelCurrentPool;
         private System.Windows.Forms.Label label70;
         private System.Windows.Forms.Timer timerDeviceStatusUpdates;

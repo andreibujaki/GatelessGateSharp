@@ -232,7 +232,7 @@ namespace GatelessGateSharp
             mMutex.ReleaseMutex();
         }
 
-        public NiceHashEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName) // "daggerhashimoto.usa.nicehash.com", 3353
+        public NiceHashEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
             : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
         {
         }

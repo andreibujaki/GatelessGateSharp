@@ -231,7 +231,7 @@ namespace GatelessGateSharp
             return new Work(mJob);
         }
 
-        public EthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName) // "daggerhashimoto.usa.nicehash.com", 3353
+        public EthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
             : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
         {
         }

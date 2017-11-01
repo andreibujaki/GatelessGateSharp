@@ -719,7 +719,19 @@ __kernel void search6(__global ulong *states, __global uint *BranchBuf, __global
 
     //vstore8(p, 0, output);
 
-    if (as_uint16(p).s7 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
+	//if (as_uint16(p).s7 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
+	if (as_uint16(p).s7 <= Target) {
+		int i = atomic_inc(output + 0xFF);
+		output[i] = BranchBuf[idx] + get_global_offset(0);
+		output[256 + i * 8] = as_uint16(p).s0;
+		output[256 + i * 8 + 1] = as_uint16(p).s1;
+		output[256 + i * 8 + 2] = as_uint16(p).s2;
+		output[256 + i * 8 + 3] = as_uint16(p).s3;
+		output[256 + i * 8 + 4] = as_uint16(p).s4;
+		output[256 + i * 8 + 5] = as_uint16(p).s5;
+		output[256 + i * 8 + 6] = as_uint16(p).s6;
+		output[256 + i * 8 + 7] = as_uint16(p).s7;
+	}
 
     mem_fence(CLK_GLOBAL_MEM_FENCE);
 }
@@ -783,7 +795,19 @@ __kernel void search5(__global ulong *states, __global uint *BranchBuf, __global
     //output[2] = h7h;
     //output[3] = h7l;
 
-    if (as_uint2(h7l).s1 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
+	//if (as_uint2(h7l).s1 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
+	if (as_uint2(h7l).s1 <= Target) {
+		int i = atomic_inc(output + 0xFF);
+		output[i] = BranchBuf[idx] + get_global_offset(0);
+		output[256 + i * 8 + 0] = as_uint2(h6h).s0;
+		output[256 + i * 8 + 1] = as_uint2(h6h).s1;
+		output[256 + i * 8 + 2] = as_uint2(h6l).s0;
+		output[256 + i * 8 + 3] = as_uint2(h6l).s1;
+		output[256 + i * 8 + 4] = as_uint2(h7h).s0;
+		output[256 + i * 8 + 5] = as_uint2(h7h).s1;
+		output[256 + i * 8 + 6] = as_uint2(h7l).s0;
+		output[256 + i * 8 + 7] = as_uint2(h7l).s1;
+	}
 }
 
 #define SWAP4(x)	as_uint(as_uchar4(x).s3210)
@@ -849,8 +873,19 @@ __kernel void search3(__global ulong *states, __global uint *BranchBuf, __global
 
     for (int i = 0; i < 8; ++i) h[i] = SWAP4(h[i]);
 
-    //for(int i = 0; i < 4; ++i) output[i] = ((ulong *)h)[i];
-    if (h[7] <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
+	//if (h[7] <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
+	if (h[7] <= Target) {
+		int i = atomic_inc(output + 0xFF);
+		output[i] = BranchBuf[idx] + get_global_offset(0);
+		output[256 + i * 8] = h[0];
+		output[256 + i * 8 + 1] = h[1];
+		output[256 + i * 8 + 2] = h[2];
+		output[256 + i * 8 + 3] = h[3];
+		output[256 + i * 8 + 4] = h[4];
+		output[256 + i * 8 + 5] = h[5];
+		output[256 + i * 8 + 6] = h[6];
+		output[256 + i * 8 + 7] = h[7];
+	}
 }
 
 __kernel void search4(__global ulong *states, __global uint *BranchBuf, __global uint *output, uint Target, ulong Threads)
@@ -901,5 +936,17 @@ __kernel void search4(__global ulong *states, __global uint *BranchBuf, __global
     for (int i = 0; i < 8; ++i) State[i] ^= tmp[i];
 
     //for(int i = 0; i < 4; ++i) output[i] = State[i + 4];
-    if (as_uint2(State[7]).s1 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
+	//if (as_uint2(State[7]).s1 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
+	if (as_uint2(State[7]).s1 <= Target) {
+		int i = atomic_inc(output + 0xFF);
+		output[i] = BranchBuf[idx] + get_global_offset(0);
+		output[256 + i * 8 + 0] = as_uint2(State[4]).s0;
+		output[256 + i * 8 + 1] = as_uint2(State[4]).s1;
+		output[256 + i * 8 + 2] = as_uint2(State[5]).s0;
+		output[256 + i * 8 + 3] = as_uint2(State[5]).s1;
+		output[256 + i * 8 + 4] = as_uint2(State[6]).s0;
+		output[256 + i * 8 + 5] = as_uint2(State[6]).s1;
+		output[256 + i * 8 + 6] = as_uint2(State[7]).s0;
+		output[256 + i * 8 + 7] = as_uint2(State[7]).s1;
+	}
 }

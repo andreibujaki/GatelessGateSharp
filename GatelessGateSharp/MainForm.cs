@@ -878,7 +878,7 @@ namespace GatelessGateSharp
             UpdateDeviceStatus();
         }
 
-        EthashStratum mStratum;
+        Stratum mStratum;
         List<Miner> mMiners = null;
         enum ApplicationGlobalState
         {
@@ -964,8 +964,47 @@ namespace GatelessGateSharp
             }
         };
 
+        public void LaunchCryptoNightMiners(String pool)
+        {
+            NiceHashCryptoNightStratum stratum = null;
+
+            if (pool == "NiceHash" || mDevFee)
+            {
+                var hosts = new List<StratumServerInfo> {
+                                new StratumServerInfo("cryptonight.usa.nicehash.com", 0),   
+                                new StratumServerInfo("cryptonight.eu.nicehash.com", 0),
+                                new StratumServerInfo("cryptonight.hk.nicehash.com", 150),
+                                new StratumServerInfo("cryptonight.jp.nicehash.com", 100),
+                                new StratumServerInfo("cryptonight.in.nicehash.com", 200),
+                                new StratumServerInfo("cryptonight.br.nicehash.com", 180)
+                            };
+                hosts.Sort();
+                foreach (StratumServerInfo host in hosts)
+                {
+                    if (host.time >= 0)
+                    {
+                        try
+                        {
+                            stratum = (new NiceHashCryptoNightStratum(host.name, 3355, (mDevFee ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool));
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+                    }
+                }
+            }
+            mStratum = (Stratum)stratum;
+            mMiners = new List<Miner>();
+            for (int deviceIndex = 0; deviceIndex < 1; ++deviceIndex) //computeDeviceArray.Length; ++deviceIndex)
+                mMiners.Add(new OpenCLCryptoNightMiner(computeDeviceArray[deviceIndex], deviceIndex, stratum));
+        }
+
         public void LaunchEthashMiners(String pool)
         {
+            EthashStratum stratum = null;
+
             if (pool == "NiceHash" || mDevFee)
             {
                 var hosts = new List<StratumServerInfo> {
@@ -983,7 +1022,7 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            mStratum = new NiceHashEthashStratum(host.name, 3353, (mDevFee ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool);
+                            stratum = new NiceHashEthashStratum(host.name, 3353, (mDevFee ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -1005,7 +1044,7 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            mStratum = new OpenEthereumPoolEthashStratum(host.name, 4000, textBoxEthereumAddress.Text, "x", pool);
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 4000, textBoxEthereumAddress.Text, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -1039,7 +1078,7 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            mStratum = new OpenEthereumPoolEthashStratum(host.name, 8008, textBoxEthereumAddress.Text, "x", pool);
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, textBoxEthereumAddress.Text, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -1064,7 +1103,7 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            mStratum = new OpenEthereumPoolEthashStratum(host.name, 4444, textBoxEthereumAddress.Text, "x", pool);
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 4444, textBoxEthereumAddress.Text, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -1089,7 +1128,7 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            mStratum = new OpenEthereumPoolEthashStratum(host.name, 3333, textBoxEthereumAddress.Text, "x", pool);
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 3333, textBoxEthereumAddress.Text, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -1115,7 +1154,7 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            mStratum = new OpenEthereumPoolEthashStratum(host.name, 9999, textBoxEthereumAddress.Text, "x", pool);
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 9999, textBoxEthereumAddress.Text, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -1127,11 +1166,13 @@ namespace GatelessGateSharp
             }
             else
             {
-                mStratum = new OpenEthereumPoolEthashStratum("eth-uswest.zawawa.net", 4000, textBoxEthereumAddress.Text, "x", pool);
+                stratum = new OpenEthereumPoolEthashStratum("eth-uswest.zawawa.net", 4000, textBoxEthereumAddress.Text, "x", pool);
             }
+
+            mStratum = (Stratum)stratum;
             mMiners = new List<Miner>();
             for (int deviceIndex = 0; deviceIndex < computeDeviceArray.Length; ++deviceIndex)
-                mMiners.Add(new OpenCLEthashMiner(computeDeviceArray[deviceIndex], deviceIndex, mStratum));
+                mMiners.Add(new OpenCLEthashMiner(computeDeviceArray[deviceIndex], deviceIndex, stratum));
         }
 
         private void LaunchMiners()
@@ -1140,12 +1181,22 @@ namespace GatelessGateSharp
             {
                 try
                 {
-                    Logger("Launching Ethash miners...");
-                    LaunchEthashMiners(pool);
-                    break;
+                    if (radioButtonEthereum.Checked)
+                    {
+                        Logger("Launching Ethash miners...");
+                        LaunchEthashMiners(pool);
+                        break;
+                    }
+                    else if (radioButtonMonero.Checked)
+                    {
+                        Logger("Launching CryptoNight miners...");
+                        LaunchCryptoNightMiners(pool);
+                        break;
+                    }
                 }
                 catch (Exception ex)
                 {
+                    Logger("Exception: " + ex.Message + ex.StackTrace);
                     if (mStratum != null)
                         mStratum.Stop();
                     if (mMiners != null)
@@ -1210,7 +1261,7 @@ namespace GatelessGateSharp
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to stop miner(s):\n" + ex.Message, appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Logger("Exception: " + ex.Message + ex.StackTrace);
                     mStratum = null;
                     mMiners = null;
                 }
@@ -1327,6 +1378,45 @@ namespace GatelessGateSharp
             }
 
             UpdateCurrencyStats();
+        }
+
+        private void radioButtonMonero_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonMonero.Checked){
+                radioButtonMostProfitable.Checked = false;
+                radioButtonEthereum.Checked = false;
+                radioButtonZcash.Checked = false;
+            }
+        }
+
+        private void radioButtonEthereum_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonEthereum.Checked)
+            {
+                radioButtonMostProfitable.Checked = false;
+                radioButtonMonero.Checked = false;
+                radioButtonZcash.Checked = false;
+            }
+        }
+
+        private void radioButtonMostProfitable_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonMostProfitable.Checked)
+            {
+                radioButtonMonero.Checked = false;
+                radioButtonEthereum.Checked = false;
+                radioButtonZcash.Checked = false;
+            }
+        }
+
+        private void radioButtonZcash_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonZcash.Checked)
+            {
+                radioButtonMostProfitable.Checked = false;
+                radioButtonEthereum.Checked = false;
+                radioButtonMonero.Checked = false;
+            }
         }
     }
 }
