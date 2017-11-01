@@ -39,26 +39,27 @@ namespace GatelessGateSharp
         private long mLocalWorkSize = 32;
         private long mGlobalWorkSize;
 
-        public OpenCLCryptoNightMiner(ComputeDevice aDevice, int aDeviceIndex, NiceHashCryptoNightStratum aStratum)
-            : base(aDevice, aDeviceIndex, "CrypoNight")
+        public OpenCLCryptoNightMiner(Device aGatelessGateDevice, NiceHashCryptoNightStratum aStratum)
+            : base(aGatelessGateDevice, "CrypoNight")
         {
             mStratum = aStratum;
             mGlobalWorkSize = mLocalWorkSize * Device.MaxComputeUnits;
 
             mProgram = new ComputeProgram(this.Context, System.IO.File.ReadAllText(@"Kernels\cryptonight.cl"));
-            MainForm.Logger("Loaded cryptonight program for Device #" + aDeviceIndex + ".");
+            MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
             List<ComputeDevice> deviceList = new List<ComputeDevice>();
             deviceList.Add(Device);
             try
             {
-                mProgram.Build(deviceList, "-IKernels -DWORKSIZE=" + mLocalWorkSize, null, IntPtr.Zero);
+                String options = (Device.Vendor == "Advanced Micro Devices, Inc." ? "-O1 " : "") + "-IKernels -DWORKSIZE=" + mLocalWorkSize;
+                mProgram.Build(deviceList, options, null, IntPtr.Zero);
             }
             catch (Exception ex)
             {
-                MainForm.Logger(mProgram.GetBuildLog(aDevice));
+                MainForm.Logger(mProgram.GetBuildLog(Device));
                 throw ex;
             }
-            MainForm.Logger("Built cryptonight program for Device #" + aDeviceIndex + ".");
+            MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
             mSearchKernels[0] = mProgram.CreateKernel("search");
             mSearchKernels[1] = mProgram.CreateKernel("search1");
             mSearchKernels[2] = mProgram.CreateKernel("search2");
@@ -183,6 +184,8 @@ namespace GatelessGateSharp
                         {
                             fixed (UInt64* q = branchBufferCount)
                                 Queue.Read<UInt32>(branchBuffers[i], true, mGlobalWorkSize, 2, (IntPtr)q, null);
+                            if ((branchBufferCount[0] % (ulong)mLocalWorkSize) != 0)
+                                branchBufferCount[0] += (ulong)mLocalWorkSize - branchBufferCount[0] % (ulong)mLocalWorkSize;
                             mSearchKernels[3 + i].SetValueArgument<UInt64>(4, branchBufferCount[0]);
                             Queue.Execute(mSearchKernels[i + 3], new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
                         }
@@ -203,7 +206,7 @@ namespace GatelessGateSharp
                             UInt32 word = output[256 + i * 8 + j];
                             result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                         }
-                        mStratum.Submit(work.GetJob(), startNonce + output[i], result);
+                        mStratum.Submit(GatelessGateDevice, work.GetJob(), startNonce + output[i], result);
 
                     }
                     startNonce += (UInt32)mGlobalWorkSize;

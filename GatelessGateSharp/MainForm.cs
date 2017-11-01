@@ -61,8 +61,9 @@ namespace GatelessGateSharp
         private Control[] labelGPUFanArray;
         private Control[] labelGPUCoreClockArray;
         private Control[] labelGPUMemoryClockArray;
-        private ComputeDevice[] computeDeviceArray;
-        private const int computeDeviceArrayMaxLength = 8; // This depends on MainForm.
+        private Control[] labelGPUSharesArray;
+        private Device[] mDevices;
+        private const int maxNumDevices = 8; // This depends on MainForm.
         private bool ADLInitialized = false;
         private bool NVMLInitialized = false;
         private Int32[] ADLAdapterIndexArray;
@@ -233,6 +234,7 @@ namespace GatelessGateSharp
             labelGPUSpeedArray = new Control[] { labelGPU0Speed, labelGPU1Speed, labelGPU2Speed, labelGPU3Speed, labelGPU4Speed, labelGPU5Speed, labelGPU6Speed, labelGPU7Speed };
             labelGPUCoreClockArray = new Control[] { labelGPU0CoreClock, labelGPU1CoreClock, labelGPU2CoreClock, labelGPU3CoreClock, labelGPU4CoreClock, labelGPU5CoreClock, labelGPU6CoreClock, labelGPU7CoreClock };
             labelGPUMemoryClockArray = new Control[] { labelGPU0MemoryClock, labelGPU1MemoryClock, labelGPU2MemoryClock, labelGPU3MemoryClock, labelGPU4MemoryClock, labelGPU5MemoryClock, labelGPU6MemoryClock, labelGPU7MemoryClock };
+            labelGPUSharesArray = new Control[] { labelGPU0Shares, labelGPU1Shares, labelGPU2Shares, labelGPU3Shares, labelGPU4Shares, labelGPU5Shares, labelGPU6Shares, labelGPU7Shares };
 
             if (LoadPhyMemDriver() != 0)
             {
@@ -259,41 +261,48 @@ namespace GatelessGateSharp
 
             foreach (ComputePlatform platform in ComputePlatform.Platforms)
             {
-                IList<ComputeDevice> devices = platform.Devices;
+                IList<ComputeDevice> openclDevices = platform.Devices;
                 ComputeContextPropertyList properties = new ComputeContextPropertyList(platform);
-                ComputeContext context = new ComputeContext(devices, properties, null, IntPtr.Zero);
+                ComputeContext context = new ComputeContext(openclDevices, properties, null, IntPtr.Zero);
 
-                foreach (ComputeDevice device in context.Devices)
+                foreach (ComputeDevice openclDevice in context.Devices)
                 {
-                    if (device.Vendor == "Intel Corporation"
-                        || device.Vendor == "GenuineIntel"
-                        || device.Type == ComputeDeviceTypes.Cpu)
+                    if (openclDevice.Vendor == "Intel Corporation"
+                        || openclDevice.Vendor == "GenuineIntel"
+                        || openclDevice.Type == ComputeDeviceTypes.Cpu)
                         continue;
-                    computeDeviceArrayList.Add(device);
+                    computeDeviceArrayList.Add(openclDevice);
                 }
             }
-            computeDeviceArray = Array.ConvertAll(computeDeviceArrayList.ToArray(), item => (Cloo.ComputeDevice)item);
-            Logger("Number of Devices: " + computeDeviceArray.Length);
-
-            int index = 0;
-            foreach (ComputeDevice device in computeDeviceArray)
+            ComputeDevice[] computeDevices = Array.ConvertAll(computeDeviceArrayList.ToArray(), item => (Cloo.ComputeDevice)item);
+            mDevices = new Device[computeDevices.Length];
+            int deviceIndex = 0;
+            foreach (var computeDevice in computeDevices)
             {
-                labelGPUVendorArray[index].Text = (device.Vendor == "Advanced Micro Devices, Inc.") ? "AMD" :
-                                                  (device.Vendor == "NVIDIA Corporation") ? "NVIDIA" :
-                                                  (device.Vendor == "Intel Corporation") ? "Intel" :
-                                                  (device.Vendor == "GenuineIntel") ? "Intel" :
-                                                  device.Vendor;
-                labelGPUNameArray[index].Text = device.Name;
+                mDevices[deviceIndex] = new Device(deviceIndex, computeDevice);
+                deviceIndex++;
+            }
+            Logger("Number of Devices: " + mDevices.Length);
+
+            foreach (Device device in mDevices)
+            {
+                ComputeDevice openclDevice = device.GetComputeDevice();
+                int index = device.DeviceIndex;
+                labelGPUVendorArray[index].Text = (openclDevice.Vendor == "Advanced Micro Devices, Inc.") ? "AMD" :
+                                                  (openclDevice.Vendor == "NVIDIA Corporation") ? "NVIDIA" :
+                                                  (openclDevice.Vendor == "Intel Corporation") ? "Intel" :
+                                                  (openclDevice.Vendor == "GenuineIntel") ? "Intel" :
+                                                  openclDevice.Vendor;
+                labelGPUNameArray[index].Text = openclDevice.Name;
 
                 labelGPUSpeedArray[index].Text = "-";
                 labelGPUActivityArray[index].Text = "-";
                 labelGPUTempArray[index].Text = "-";
                 labelGPUFanArray[index].Text = "-";
- 
-                ++index;
+                labelGPUSharesArray[index].Text = "-";
             }
 
-            for (; index < computeDeviceArrayMaxLength; ++index)
+            for (int index = mDevices.Length; index < maxNumDevices; ++index)
             {
                 labelGPUVendorArray[index].Visible = false;
                 labelGPUNameArray[index].Visible = false;
@@ -304,12 +313,13 @@ namespace GatelessGateSharp
                 labelGPUFanArray[index].Visible = false;
                 labelGPUCoreClockArray[index].Visible = false;
                 labelGPUMemoryClockArray[index].Visible = false;
+                labelGPUSharesArray[index].Visible = false;
             }
 
             int ADLRet = -1;
             int NumberOfAdapters = 0;
-            ADLAdapterIndexArray = new Int32[computeDeviceArray.Length];
-            for (int i = 0; i < computeDeviceArray.Length; i++)
+            ADLAdapterIndexArray = new Int32[mDevices.Length];
+            for (int i = 0; i < mDevices.Length; i++)
                 ADLAdapterIndexArray[i] = -1;
             if (null != ADL.ADL_Main_Control_Create)
                 ADLRet = ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1);
@@ -343,12 +353,14 @@ namespace GatelessGateSharp
                                 OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
                                 int IsActive = 0;
 
-                                int deviceIndex = 0;
-                                foreach (ComputeDevice device in computeDeviceArray)
+                                //int deviceIndex = 0;
+                                deviceIndex = 0;
+                                foreach (var device in mDevices)
                                 {
-                                    if (device.Vendor == "Advanced Micro Devices, Inc.")
+                                    ComputeDevice openclDevice = device.GetComputeDevice();
+                                    if (openclDevice.Vendor == "Advanced Micro Devices, Inc.")
                                     {
-                                        ComputeDevice.cl_device_topology_amd topology = device.TopologyAMD;
+                                        ComputeDevice.cl_device_topology_amd topology = openclDevice.TopologyAMD;
                                         for (int i = 0; i < NumberOfAdapters; i++)
                                         {
                                             if (null != ADL.ADL_Adapter_Active_Get)
@@ -391,7 +403,7 @@ namespace GatelessGateSharp
                     ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetCount(ref nvmlDeviceCount);
                     Logger("NVML Device Count: " + nvmlDeviceCount);
 
-                    nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[computeDeviceArray.Length];
+                    nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[mDevices.Length];
                     for (uint i = 0; i < nvmlDeviceCount; ++i)
                     {
                         ManagedCuda.Nvml.nvmlDevice nvmlDevice = new ManagedCuda.Nvml.nvmlDevice();
@@ -400,13 +412,13 @@ namespace GatelessGateSharp
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetPciInfo(nvmlDevice, ref info);
 
                         uint j;
-                        for (j = 0; j < computeDeviceArray.Length; ++j) {
-                            if (computeDeviceArray[j].Vendor == "NVIDIA Corporation" && computeDeviceArray[j].PciBusIdNV == info.bus) { 
+                        for (j = 0; j < mDevices.Length; ++j) {
+                            if (mDevices[j].GetComputeDevice().Vendor == "NVIDIA Corporation" && mDevices[j].GetComputeDevice().PciBusIdNV == info.bus) { 
                                 nvmlDeviceArray[j] = nvmlDevice;
                                 break;
                             }
                         }
-                        if (j >= computeDeviceArray.Length)
+                        if (j >= mDevices.Length)
                             throw new Exception();
                     }
 
@@ -626,24 +638,69 @@ namespace GatelessGateSharp
             }
         }
 
+        private String ConvertHashRateToString(double totalSpeed)
+        {
+            if (totalSpeed < 1000)
+            {
+                return String.Format("{0:N1} h/s", totalSpeed);
+            }
+            else if (totalSpeed < 10000)
+            {
+                return String.Format("{0:N0} h/s", totalSpeed);
+            }
+            else if (totalSpeed < 100000)
+            {
+                return String.Format("{0:N2} Kh/s", totalSpeed / 1000);
+            }
+            else if (totalSpeed < 1000000)
+            {
+                return String.Format("{0:N1} Kh/s", totalSpeed / 1000);
+            }
+            else if (totalSpeed < 10000000)
+            {
+                return String.Format("{0:N0} Kh/s", totalSpeed / 1000);
+            }
+            else if (totalSpeed < 100000000)
+            {
+                return String.Format("{0:N2} Mh/s", totalSpeed / 1000000);
+            }
+            else if (totalSpeed < 1000000000)
+            {
+                return String.Format("{0:N1} Mh/s", totalSpeed / 1000000);
+            }
+            else
+            {
+                return String.Format("{0:N0} Mh/s", totalSpeed / 1000000);
+            }
+        }
+
         private void UpdateDeviceStatus()
         {
             double totalSpeed = 0;
             if (mMiners != null)
                 foreach (Miner miner in mMiners)
                     totalSpeed += miner.Speed;
-            labelCurrentSpeed.Text = (appState != ApplicationGlobalState.Mining) ? "-" : String.Format("{0:N2} Mh/s", totalSpeed / 1000000);
-
+            labelCurrentSpeed.Text = (appState != ApplicationGlobalState.Mining) ? "-" : ConvertHashRateToString(totalSpeed);
             DeviceManagementLibrariesMutex.WaitOne();
-            int deviceIndex = 0;
-            foreach (ComputeDevice device in computeDeviceArray)
+            foreach (var device in mDevices)
             {
+                ComputeDevice computeDevice = device.GetComputeDevice();
+                int deviceIndex = device.DeviceIndex;
                 double speed = 0;
                 if (mMiners != null)
                     foreach (Miner miner in mMiners)
                         if (miner.DeviceIndex == deviceIndex)
                             speed += miner.Speed;
-                labelGPUSpeedArray[deviceIndex].Text = (appState != ApplicationGlobalState.Mining) ? "-" : String.Format("{0:N2} Mh/s", speed / 1000000);
+                labelGPUSpeedArray[deviceIndex].Text = (appState != ApplicationGlobalState.Mining) ? "-" : ConvertHashRateToString(speed);
+
+                if (device.AcceptedShares + device.RejectedShares == 0) {
+                    labelGPUSharesArray[deviceIndex].ForeColor = Color.Black;
+                    labelGPUSharesArray[deviceIndex].Text = (appState == ApplicationGlobalState.Mining) ? "0" : "-";
+                } else {
+                    double acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
+                    labelGPUSharesArray[deviceIndex].Text = device.AcceptedShares.ToString() + "/" + (device.AcceptedShares + device.RejectedShares).ToString() + " (" + String.Format("{0:N1}", (acceptanceRate) * 100) + "%)";
+                    labelGPUSharesArray[deviceIndex].ForeColor = (acceptanceRate >= 0.95 ? Color.Green : Color.Red); // TODO
+                }
 
                 if (ADLAdapterIndexArray[deviceIndex] >= 0)
                 {
@@ -706,7 +763,7 @@ namespace GatelessGateSharp
                             labelGPUFanArray[deviceIndex].Text = OSADLFanSpeedValueData.iFanSpeed.ToString() + "%";
                         }
                     }
-                } else if (NVMLInitialized && device.Vendor.Equals("NVIDIA Corporation")) {
+                } else if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation")) {
                     uint temp = 0;
                     ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetTemperature(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlTemperatureSensors.Gpu, ref temp);
                     labelGPUTempArray[deviceIndex].Text      = temp.ToString() + "℃";
@@ -728,7 +785,6 @@ namespace GatelessGateSharp
                     ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetClockInfo(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlClockType.Mem, ref clock);
                     labelGPUMemoryClockArray[deviceIndex].Text = clock.ToString() + " MHz";
                 }
-                ++deviceIndex;
             }
             DeviceManagementLibrariesMutex.ReleaseMutex();
         }
@@ -997,8 +1053,8 @@ namespace GatelessGateSharp
             }
             mStratum = (Stratum)stratum;
             mMiners = new List<Miner>();
-            for (int deviceIndex = 0; deviceIndex < 1; ++deviceIndex) //computeDeviceArray.Length; ++deviceIndex)
-                mMiners.Add(new OpenCLCryptoNightMiner(computeDeviceArray[deviceIndex], deviceIndex, stratum));
+            for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum));
         }
 
         public void LaunchEthashMiners(String pool)
@@ -1171,8 +1227,8 @@ namespace GatelessGateSharp
 
             mStratum = (Stratum)stratum;
             mMiners = new List<Miner>();
-            for (int deviceIndex = 0; deviceIndex < computeDeviceArray.Length; ++deviceIndex)
-                mMiners.Add(new OpenCLEthashMiner(computeDeviceArray[deviceIndex], deviceIndex, stratum));
+            for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                mMiners.Add(new OpenCLEthashMiner(mDevices[deviceIndex], stratum));
         }
 
         private void LaunchMiners()
@@ -1236,7 +1292,13 @@ namespace GatelessGateSharp
 
             if (appState == ApplicationGlobalState.Idle)
             {
-                mStratum = null;
+                foreach(var device in mDevices)
+                {
+                    device.ClearShares();
+                    labelGPUSharesArray[device.DeviceIndex].Text = "0";
+                }
+
+                    mStratum = null;
                 mMiners = null;
 
                 mDevFee = true;
@@ -1417,6 +1479,11 @@ namespace GatelessGateSharp
                 radioButtonEthereum.Checked = false;
                 radioButtonMonero.Checked = false;
             }
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

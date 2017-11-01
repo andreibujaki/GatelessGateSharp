@@ -42,23 +42,23 @@ namespace GatelessGateSharp
         private long mLocalWorkSize = 192;
         private long mGlobalWorkSize;
 
-        public OpenCLEthashMiner(ComputeDevice aDevice, int aDeviceIndex, EthashStratum aStratum)
-            : base(aDevice, aDeviceIndex, "Ethash")
+        public OpenCLEthashMiner(Device aGatelessGateDevice, EthashStratum aStratum)
+            : base(aGatelessGateDevice, "Ethash")
         {
             mStratum = aStratum;
             mGlobalWorkSize = 4096 * mLocalWorkSize * Device.MaxComputeUnits;
 
             mProgram = new ComputeProgram(this.Context, System.IO.File.ReadAllText(@"Kernels\ethash.cl"));
             //mProgram = new ComputeProgram(this.Context, new List<byte[]> { System.IO.File.ReadAllBytes(@"BinaryKernels\ethash-newEllesmeregw192l8.bin") }, new List<ComputeDevice> { Device });
-            MainForm.Logger("Loaded ethash program for Device #" + aDeviceIndex + ".");
+            MainForm.Logger("Loaded ethash program for Device #" + aGatelessGateDevice.DeviceIndex + ".");
             List<ComputeDevice> deviceList = new List<ComputeDevice>();
             deviceList.Add(Device);
             mProgram.Build(deviceList, "-DWORKSIZE=" + mLocalWorkSize, null, IntPtr.Zero);
-            MainForm.Logger("Built ethash program for Device #" + aDeviceIndex + ".");
+            MainForm.Logger("Built ethash program for Device #" + aGatelessGateDevice.DeviceIndex + ".");
             mDAGKernel = mProgram.CreateKernel("GenerateDAG");
-            MainForm.Logger("Created DAG kernel for Device #" + aDeviceIndex + ".");
+            MainForm.Logger("Created DAG kernel for Device #" + aGatelessGateDevice.DeviceIndex + ".");
             mSearchKernel = mProgram.CreateKernel("search");
-            MainForm.Logger("Created search kernel for Device #" + aDeviceIndex + ".");
+            MainForm.Logger("Created search kernel for Device #" + aGatelessGateDevice.DeviceIndex + ".");
 
             mMinerThread = new Thread(new ThreadStart(MinerThread));
             mMinerThread.IsBackground = true;

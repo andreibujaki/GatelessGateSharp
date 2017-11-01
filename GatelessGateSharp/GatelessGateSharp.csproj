@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADL.cs" />
+    <Compile Include="Device.cs" />
     <Compile Include="Miner\OpenCLCryptoNightMiner.cs" />
     <Compile Include="Stratum\EthashStratum.cs" />
     <Compile Include="Stratum\NiceHashCryptoNightStratum.cs" />

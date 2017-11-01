@@ -30,19 +30,20 @@ namespace GatelessGateSharp
 {
     class Miner
     {
-        private int mDeviceIndex;
+        private Device mDevice;
         private bool mStopped = false;
         protected double mSpeed = 0;
         private String mAlgorithmName = "";
 
-        public int DeviceIndex { get { return mDeviceIndex; } }
+        public Device GatelessGateDevice { get { return mDevice; } }
+        public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
         public double Speed { get { return mSpeed; } }
         public String AlgorithmName { get { return mAlgorithmName; } }
 
-        protected Miner(int aDeviceIndex, String aAlgorithmName )
+        protected Miner(Device aDevice, String aAlgorithmName )
         {
-            mDeviceIndex = aDeviceIndex;
+            mDevice = aDevice;
             mAlgorithmName = aAlgorithmName;
         }
 

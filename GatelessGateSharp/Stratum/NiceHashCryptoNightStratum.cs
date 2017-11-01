@@ -54,7 +54,7 @@ namespace GatelessGateSharp
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
-        string mSubsciptionID;
+        Device mLastDeviceToSubmitShare = null;
         private Mutex mMutex = new Mutex();
 
         public Job GetJob()
@@ -90,18 +90,21 @@ namespace GatelessGateSharp
                             MainForm.Logger("Unknown stratum method: " + line);
                         }
                     }
-                    /*
-                    else if (response.ContainsKey("id") && response.ContainsKey("result"))
+                    else if (response.ContainsKey("id") && response.ContainsKey("error"))
                     {
                         var ID = response["id"];
-                        bool result = (bool)response["result"];
+                        var error = response["error"];
 
-                        if (result) {
-                            MainForm.Logger("Share #" + ID + " accepted.");
+                        if (error == null) {
+                            MainForm.Logger("Share accepted.");
+                            if (mLastDeviceToSubmitShare != null)
+                                mLastDeviceToSubmitShare.IncrementAcceptedShares();
                         } else {
-                            MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
+                            MainForm.Logger("Share rejected: " + (String)(((JContainer)response["error"])["message"]));
+                            if (mLastDeviceToSubmitShare != null)
+                                mLastDeviceToSubmitShare.IncrementRejectedShares();
                         }
-                    }*/
+                    }
                     else
                     {
                         MainForm.Logger("Unknown JSON message: " + line);
@@ -173,7 +176,7 @@ namespace GatelessGateSharp
             mStreamReaderThread.Start();
         }
 
-        public void Submit(Job job, UInt32 output, String result)
+        public void Submit(Device device, Job job, UInt32 output, String result)
         {
             if (Stopped)
                 return;
@@ -193,6 +196,7 @@ namespace GatelessGateSharp
                 mStreamWriter.Write(message + "\n");
                 mStreamWriter.Flush();
                 MainForm.Logger("message: " + message);
+                mLastDeviceToSubmitShare = device;
             }
             catch (Exception ex)
             {
