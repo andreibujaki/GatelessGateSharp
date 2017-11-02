@@ -70,12 +70,13 @@ namespace GatelessGateSharp
         private System.Threading.Mutex DeviceManagementLibrariesMutex = new System.Threading.Mutex();
         private ManagedCuda.Nvml.nvmlDevice[] nvmlDeviceArray;
 
-        private bool mDevFee = true;
+        private bool mDevFeeMode = true;
         private int mDevFeePercentage = 1;
         private int mDevFeeDurationInSeconds = 60;
         private String mDevFeeBitcoinAddress = "1BHwDWVerUTiKxhHPf2ubqKKiBMiKQGomZ";
 
-        public static MainForm Instance { get { return instance; }}
+        public static MainForm Instance { get { return instance; } }
+        public static bool DevFeeMode { get { return Instance.mDevFeeMode; } }
 
         public static void Logger(String lines)
         {
@@ -462,9 +463,9 @@ namespace GatelessGateSharp
                 labelCurrentSpeed.Text = (appState != ApplicationGlobalState.Mining) ? "-" : String.Format("{0:N2} Mh/s", totalSpeed / 1000000);
 
                 String poolName = (string)listBoxPoolPriorities.Items[0];
-                if (appState == ApplicationGlobalState.Mining && mDevFee)
+                if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
                 {
-                    labelCurrentPool.Text = "DEVFEE";
+                    labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%)";
                     poolName = mStratum.PoolName;
                 }
                 else if (appState == ApplicationGlobalState.Mining && mStratum != null)
@@ -1022,9 +1023,9 @@ namespace GatelessGateSharp
 
         public void LaunchCryptoNightMiners(String pool)
         {
-            NiceHashCryptoNightStratum stratum = null;
+            CryptoNightStratum stratum = null;
 
-            if (pool == "NiceHash" || mDevFee)
+            if (pool == "NiceHash" || mDevFeeMode)
             {
                 var hosts = new List<StratumServerInfo> {
                                 new StratumServerInfo("cryptonight.usa.nicehash.com", 0),   
@@ -1041,7 +1042,7 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            stratum = (new NiceHashCryptoNightStratum(host.name, 3355, (mDevFee ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool));
+                            stratum = (new CryptoNightStratum(host.name, 3355, (mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool));
                             break;
                         }
                         catch (Exception ex)
@@ -1053,7 +1054,7 @@ namespace GatelessGateSharp
             }
             else if (pool == "mineXMR.com")
             {
-                stratum = new NiceHashCryptoNightStratum("pool.minexmr.com", 7777, textBoxMoneroAddress.Text, "x", pool);
+                stratum = new CryptoNightStratum("pool.minexmr.com", 7777, textBoxMoneroAddress.Text, "x", pool);
             }
             mStratum = (Stratum)stratum;
             mMiners = new List<Miner>();
@@ -1065,7 +1066,7 @@ namespace GatelessGateSharp
         {
             EthashStratum stratum = null;
 
-            if (pool == "NiceHash" || mDevFee)
+            if (pool == "NiceHash" || mDevFeeMode)
             {
                 var hosts = new List<StratumServerInfo> {
                                 new StratumServerInfo("daggerhashimoto.usa.nicehash.com", 0),   
@@ -1082,7 +1083,7 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            stratum = new NiceHashEthashStratum(host.name, 3353, (mDevFee ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool);
+                            stratum = new NiceHashEthashStratum(host.name, 3353, (mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -1305,7 +1306,7 @@ namespace GatelessGateSharp
                     mStratum = null;
                 mMiners = null;
 
-                mDevFee = true;
+                mDevFeeMode = true;
                 LaunchMiners();
                 if (mStratum == null || mMiners == null)
                 {
@@ -1428,17 +1429,17 @@ namespace GatelessGateSharp
             {
                 timerDevFee.Enabled = false;
             }
-            else if (mDevFee)
+            else if (mDevFeeMode)
             {
                 StopMiners();
-                mDevFee = false;
+                mDevFeeMode = false;
                 timerDevFee.Interval = (int)(((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage)) * 1000);
                 LaunchMiners();
             }
             else
             {
                 StopMiners();
-                mDevFee = true;
+                mDevFeeMode = true;
                 timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
                 LaunchMiners();
             }

@@ -34,16 +34,17 @@ namespace GatelessGateSharp
     {
         private ComputeProgram mProgram;
         private ComputeKernel[] mSearchKernels = new ComputeKernel[7];
-        private NiceHashCryptoNightStratum mStratum;
+        private CryptoNightStratum mStratum;
         private Thread mMinerThread = null;
-        private long mLocalWorkSize = 4;
+        private long mLocalWorkSize;
         private long mGlobalWorkSize;
 
-        public OpenCLCryptoNightMiner(Device aGatelessGateDevice, NiceHashCryptoNightStratum aStratum)
+        public OpenCLCryptoNightMiner(Device aGatelessGateDevice, CryptoNightStratum aStratum)
             : base(aGatelessGateDevice, "CrypoNight")
         {
             mStratum = aStratum;
-            mGlobalWorkSize = 8 * mLocalWorkSize * Device.MaxComputeUnits;
+            mLocalWorkSize = (Device.Vendor == "Advanced Micro Devices, Inc." ? 8 : 4);
+            mGlobalWorkSize = 32 * Device.MaxComputeUnits;
 
             mProgram = new ComputeProgram(this.Context, System.IO.File.ReadAllText(@"Kernels\cryptonight.cl"));
             MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
@@ -92,7 +93,7 @@ namespace GatelessGateSharp
             }
 
             System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-            NiceHashCryptoNightStratum.Work work;
+            CryptoNightStratum.Work work;
             ComputeBuffer<byte> inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
             ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256 + 255 * 8);
             ComputeBuffer<byte> scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * mGlobalWorkSize);

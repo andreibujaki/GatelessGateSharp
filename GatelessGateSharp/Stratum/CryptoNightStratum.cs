@@ -14,13 +14,13 @@ using HashLib;
 
 namespace GatelessGateSharp
 {
-    class NiceHashCryptoNightStratum : Stratum
+    class CryptoNightStratum : Stratum
     {
         public new class Work : Stratum.Work
         {
             private Job mJob;
 
-            public Job GetJob() { return mJob; }
+            public new Job GetJob() { return mJob; }
 
             public Work(Job aJob)
                 : base(aJob)
@@ -95,11 +95,13 @@ namespace GatelessGateSharp
                         var ID = response["id"];
                         var error = response["error"];
 
-                        if (error == null) {
+                        if (error == null && !MainForm.DevFeeMode) {
                             MainForm.Logger("Share accepted.");
                             if (mLastDeviceToSubmitShare != null)
                                 mLastDeviceToSubmitShare.IncrementAcceptedShares();
-                        } else {
+                        }
+                        else if (error != null && !MainForm.DevFeeMode)
+                        {
                             MainForm.Logger("Share rejected: " + (String)(((JContainer)response["error"])["message"]));
                             if (mLastDeviceToSubmitShare != null)
                                 mLastDeviceToSubmitShare.IncrementRejectedShares();
@@ -211,7 +213,7 @@ namespace GatelessGateSharp
             return new Work(mJob);
         }
 
-        public NiceHashCryptoNightStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
+        public CryptoNightStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
             : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
         {
         }

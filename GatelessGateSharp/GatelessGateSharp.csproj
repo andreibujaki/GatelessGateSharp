@@ -108,7 +108,7 @@
     <Compile Include="Device.cs" />
     <Compile Include="Miner\OpenCLCryptoNightMiner.cs" />
     <Compile Include="Stratum\EthashStratum.cs" />
-    <Compile Include="Stratum\NiceHashCryptoNightStratum.cs" />
+    <Compile Include="Stratum\CryptoNightStratum.cs" />
     <Compile Include="Stratum\OpenEthereumPoolEthashStratum.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Cloo\Bindings\CL10.cs" />
