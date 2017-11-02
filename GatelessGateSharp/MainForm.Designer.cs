@@ -1151,7 +1151,7 @@
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(662, 369);
+            this.tabPageSettings.Size = new System.Drawing.Size(732, 369);
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
@@ -1192,6 +1192,7 @@
             // 
             this.listBoxPoolPriorities.FormattingEnabled = true;
             this.listBoxPoolPriorities.Items.AddRange(new object[] {
+            "mineXMR.com",
             "NiceHash",
             "ethermine.org",
             "ethpool.org",
@@ -1330,7 +1331,6 @@
             // 
             // textBoxMoneroAddress
             // 
-            this.textBoxMoneroAddress.Enabled = false;
             this.textBoxMoneroAddress.Location = new System.Drawing.Point(97, 228);
             this.textBoxMoneroAddress.Name = "textBoxMoneroAddress";
             this.textBoxMoneroAddress.Size = new System.Drawing.Size(461, 20);

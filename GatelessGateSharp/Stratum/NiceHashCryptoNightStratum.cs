@@ -78,7 +78,7 @@ namespace GatelessGateSharp
                     {
                         string method = (string)response["method"];
                         JContainer parameters = (JContainer)response["params"];
-                        if (method.Equals("job") && (mJob == null || mJob.ID != (string)parameters["job_id"]))
+                        if (method.Equals("job"))
                         {
                             mMutex.WaitOne();
                             mJob = new Job((string)parameters["job_id"], (string)parameters["blob"], (string)parameters["target"]);
@@ -158,6 +158,7 @@ namespace GatelessGateSharp
             mStreamWriter.Flush();
 
             line = mStreamReader.ReadLine();
+            MainForm.Logger(line);
             Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
             var result = ((JContainer)response["result"]);
             var status = (String)(result["status"]);

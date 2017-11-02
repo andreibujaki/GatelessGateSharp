@@ -36,14 +36,14 @@ namespace GatelessGateSharp
         private ComputeKernel[] mSearchKernels = new ComputeKernel[7];
         private NiceHashCryptoNightStratum mStratum;
         private Thread mMinerThread = null;
-        private long mLocalWorkSize = 32;
+        private long mLocalWorkSize = 4;
         private long mGlobalWorkSize;
 
         public OpenCLCryptoNightMiner(Device aGatelessGateDevice, NiceHashCryptoNightStratum aStratum)
             : base(aGatelessGateDevice, "CrypoNight")
         {
             mStratum = aStratum;
-            mGlobalWorkSize = mLocalWorkSize * Device.MaxComputeUnits;
+            mGlobalWorkSize = 8 * mLocalWorkSize * Device.MaxComputeUnits;
 
             mProgram = new ComputeProgram(this.Context, System.IO.File.ReadAllText(@"Kernels\cryptonight.cl"));
             MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
@@ -104,13 +104,13 @@ namespace GatelessGateSharp
                 new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, mGlobalWorkSize + 2)
             };
             UInt32[] output = new UInt32[256 + 255 * 8];
-            UInt64[] branchBufferCount = new UInt64[1];
+            UInt32[] branchBufferCount = new UInt32[1];
             while (!Stopped && (work = mStratum.GetWork()) != null)
             {
-                byte[] blobByteArray = Utilities.StringToByteArray(work.GetJob().Blob);
+                var job = work.GetJob();
+                byte[] blobByteArray = Utilities.StringToByteArray(job.Blob);
                 byte localExtranonce = work.LocalExtranonce;
-                String jobID = work.GetJob().ID;
-                byte[] targetByteArray = Utilities.StringToByteArray(work.GetJob().Target);
+                byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
                 UInt32 startNonce = ((UInt32)blobByteArray[42] << (8 * 3)) | ((UInt32)localExtranonce << (8 * 2));
                 UInt32 target =   ((UInt32)targetByteArray[0] << 0) 
                                 | ((UInt32)targetByteArray[1] << 8)
@@ -119,15 +119,15 @@ namespace GatelessGateSharp
 
                 consoleUpdateStopwatch.Start();
 
-                while (!Stopped && mStratum.GetJob().ID.Equals(jobID))
+                while (!Stopped && mStratum.GetJob().ID == job.ID && mStratum.GetJob().Blob == job.Blob && mStratum.GetJob().Target == job.Target)
                 {
                     // Get a new local extranonce if necessary.
                     if ((startNonce & 0xffff) + (UInt32)mGlobalWorkSize >= 0x10000)
                         break;
 
-                    blobByteArray[39] = (byte)((startNonce >> 0) & 0xff);
-                    blobByteArray[40] = (byte)((startNonce >> 8) & 0xff);
-                    blobByteArray[41] = (byte)localExtranonce;
+                    //blobByteArray[39] = (byte)((startNonce >> 0) & 0xff);
+                    //blobByteArray[40] = (byte)((startNonce >> 8) & 0xff);
+                    //blobByteArray[41] = (byte)localExtranonce;
                     fixed (byte* p = blobByteArray)
                         Queue.Write<byte>(inputBuffer, true, 0, 76, (IntPtr)p, null);
 
@@ -178,16 +178,16 @@ namespace GatelessGateSharp
                         output[255] = 0; // output[255] is used as an atomic counter.
                         Queue.Write<UInt32>(outputBuffer, false, 0, 256 + 255 * 8, (IntPtr)p, null);
                         Queue.Execute(mSearchKernels[0], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
-                        Queue.Execute(mSearchKernels[1], new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
+                        Queue.Execute(mSearchKernels[1], new long[] { startNonce }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
                         Queue.Execute(mSearchKernels[2], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
                         for (int i = 0; i < 4; ++i)
                         {
-                            fixed (UInt64* q = branchBufferCount)
-                                Queue.Read<UInt32>(branchBuffers[i], true, mGlobalWorkSize, 2, (IntPtr)q, null);
+                            fixed (UInt32* q = branchBufferCount)
+                                Queue.Read<UInt32>(branchBuffers[i], true, mGlobalWorkSize, 1, (IntPtr)q, null);
+                            mSearchKernels[i + 3].SetValueArgument<UInt64>(4, branchBufferCount[0]);
                             if ((branchBufferCount[0] % (ulong)mLocalWorkSize) != 0)
-                                branchBufferCount[0] += (ulong)mLocalWorkSize - branchBufferCount[0] % (ulong)mLocalWorkSize;
-                            mSearchKernels[3 + i].SetValueArgument<UInt64>(4, branchBufferCount[0]);
-                            Queue.Execute(mSearchKernels[i + 3], new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
+                                branchBufferCount[0] += (uint)mLocalWorkSize - branchBufferCount[0] % (uint)mLocalWorkSize;
+                            Queue.Execute(mSearchKernels[i + 3], new long[] { startNonce }, new long[] { branchBufferCount[0] }, new long[] { mLocalWorkSize }, null);
                         }
                         Queue.Read<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
                     }
@@ -206,7 +206,7 @@ namespace GatelessGateSharp
                             UInt32 word = output[256 + i * 8 + j];
                             result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                         }
-                        mStratum.Submit(GatelessGateDevice, work.GetJob(), startNonce + output[i], result);
+                        mStratum.Submit(GatelessGateDevice, job, output[i], result);
 
                     }
                     startNonce += (UInt32)mGlobalWorkSize;

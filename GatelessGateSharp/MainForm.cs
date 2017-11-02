@@ -1051,6 +1051,10 @@ namespace GatelessGateSharp
                     }
                 }
             }
+            else if (pool == "mineXMR.com")
+            {
+                stratum = new NiceHashCryptoNightStratum("pool.minexmr.com", 7777, textBoxMoneroAddress.Text, "x", pool);
+            }
             mStratum = (Stratum)stratum;
             mMiners = new List<Miner>();
             for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
