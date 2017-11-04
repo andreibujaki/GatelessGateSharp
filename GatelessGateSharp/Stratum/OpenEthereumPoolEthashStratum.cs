@@ -42,124 +42,93 @@ namespace GatelessGateSharp
             }
         }
 
-        TcpClient mClient;
-        NetworkStream mStream;
-        StreamReader mStreamReader;
-        StreamWriter mStreamWriter;
-        Thread mStreamReaderThread;
         Thread mPingThread;
         int mJsonRPCMessageID = 1;
+        Device mLastDeviceToSubmitShare = null;
         private Mutex mMutex = new Mutex();
 
-        private void StreamReaderThread()
+        protected override void ProcessLine(String line)
         {
-            string line;
-
-            while (!Stopped)
+            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
+            if (response.ContainsKey("result")
+                && response["result"] == null
+                && response.ContainsKey("error") && response["error"].GetType() == typeof(String))
             {
-                try
+                MainForm.Logger("Stratum server responded: " + (String)response["error"]);
+            }
+            else if (response.ContainsKey("result")
+                && response["result"] == null
+                && response.ContainsKey("error") && response["error"].GetType() == typeof(Newtonsoft.Json.Linq.JObject))
+            {
+                MainForm.Logger("Stratum server responded: " + ((JContainer)response["error"])["message"]);
+            }
+            else if (response.ContainsKey("result")
+                    && response["result"] == null)
+            {
+                MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
+                if (mLastDeviceToSubmitShare != null)
+                    mLastDeviceToSubmitShare.IncrementRejectedShares();
+            }
+            else if (response.ContainsKey("result")
+                && response["result"] != null
+                && response["result"].GetType() == typeof(bool))
+            {
+                if ((bool)response["result"])
                 {
-                    if ((line = mStreamReader.ReadLine()) == null)
-                        throw new Exception("Disconnected from stratum server.");
+                    MainForm.Logger("Share #" + response["id"].ToString() + " accepted.");
+                    if (mLastDeviceToSubmitShare != null)
+                        mLastDeviceToSubmitShare.IncrementAcceptedShares();
                 }
-                catch (Exception ex)
+                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String))
                 {
-                    MainForm.Logger("Failed to receive data from stratum server: " + ex.Message);
-                    break;
+                    MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + (String)response["error"]);
+                    if (mLastDeviceToSubmitShare != null)
+                        mLastDeviceToSubmitShare.IncrementRejectedShares();
                 }
-                if (Stopped)
-                    break;
-                if (line == "")
-                    continue;
-
-                Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
-                if (response.ContainsKey("result")
-                    && response["result"] == null
-                    && response.ContainsKey("error") && response["error"].GetType() == typeof(String))
+                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray))
                 {
-                    MainForm.Logger("Stratum server responded: " + (String)response["error"]);
+                    MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + ((JArray)response["error"])["message"]);
+                    if (mLastDeviceToSubmitShare != null)
+                        mLastDeviceToSubmitShare.IncrementRejectedShares();
                 }
-                else if (response.ContainsKey("result")
-                    && response["result"] == null
-                    && response.ContainsKey("error") && response["error"].GetType() == typeof(Newtonsoft.Json.Linq.JObject))
-                {
-                    MainForm.Logger("Stratum server responded: " + ((JContainer)response["error"])["message"]);
-                }
-                else if (response.ContainsKey("result")
-                     && response["result"] == null)
+                else if (!(bool)response["result"])
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
+                    if (mLastDeviceToSubmitShare != null)
+                        mLastDeviceToSubmitShare.IncrementRejectedShares();
                 }
-                else if (response.ContainsKey("result")
-                    && response["result"] != null
-                    && response["result"].GetType() == typeof(bool))
-                {
-                    if ((bool)response["result"])
-                    {
-                        MainForm.Logger("Share #" + response["id"].ToString() + " accepted.");
-                    }
-                    else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String))
-                    {
-                        MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + (String)response["error"]);
-                    }
-                    else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray))
-                    {
-                        MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + ((JArray)response["error"])["message"]);
-                    }
-                    else if (!(bool)response["result"])
-                    {
-                        MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
-                    }
-                    else 
-                    {
-                        MainForm.Logger("Unknown JSON message: " + line);
-                    }
-                }
-                else if (response.ContainsKey("result")
-                         && response["result"] != null
-                         && response["result"].GetType() == typeof(JArray))
-                {
-                    var ID = response["id"];
-                    JArray result = (JArray)response["result"];
-                    var oldJob = mJob;
-                    if (oldJob == null || ("0x" + oldJob.ID) != (string)result[0])
-                    {
-                        mMutex.WaitOne();
-                        System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^0x");
-                        mJob = (EthashStratum.Job)(new Job(
-                            regex.Replace((string)result[0], ""), // Use headerhash as job ID.
-                            regex.Replace((string)result[1], ""),
-                            regex.Replace((string)result[0], "")));
-                        regex = new System.Text.RegularExpressions.Regex(@"^0x(.*)................................................$");
-                        mDifficulty = (double)0xffff0000U / (double)Convert.ToUInt64(regex.Replace((string)result[2], "$1"), 16);
-                        mMutex.ReleaseMutex();
-                        MainForm.Logger("Received new job: " + (string)result[0]);
-                    }
-                }
-                else
+                else 
                 {
                     MainForm.Logger("Unknown JSON message: " + line);
                 }
             }
-
-            if (Stopped)
+            else if (response.ContainsKey("result")
+                        && response["result"] != null
+                        && response["result"].GetType() == typeof(JArray))
             {
-                try
+                var ID = response["id"];
+                JArray result = (JArray)response["result"];
+                var oldJob = mJob;
+                if (oldJob == null || ("0x" + oldJob.ID) != (string)result[0])
                 {
-                    mClient.Close();
+                    mMutex.WaitOne();
+                    System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^0x");
+                    mJob = (EthashStratum.Job)(new Job(
+                        regex.Replace((string)result[0], ""), // Use headerhash as job ID.
+                        regex.Replace((string)result[1], ""),
+                        regex.Replace((string)result[0], "")));
+                    regex = new System.Text.RegularExpressions.Regex(@"^0x(.*)................................................$"); // I don't know about this one...
+                    mDifficulty = (double)0xffff0000U / (double)Convert.ToUInt64(regex.Replace((string)result[2], "$1"), 16);
+                    mMutex.ReleaseMutex();
+                    MainForm.Logger("Received new job: " + (string)result[0]);
                 }
-                catch (Exception ex) { }
             }
             else
             {
-                MainForm.Logger("Connection terminated. Reconnecting...");
-                Thread reconnectThread = new Thread(new ThreadStart(Connect));
-                reconnectThread.IsBackground = true;
-                reconnectThread.Start();
+                MainForm.Logger("Unknown JSON message: " + line);
             }
         }
-
-
+        
         // This is for DwarfPool.
         private void PingThread()
         {
@@ -167,80 +136,67 @@ namespace GatelessGateSharp
 
             while (!Stopped)
             {
-                mMutex.WaitOne();
+                try
+                {
+                    mMutex.WaitOne();
 
-                mStreamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
-                    { "id", mJsonRPCMessageID++ },
-                    { "jsonrpc", "2.0" },
-                    { "method", "eth_getWork" }
-                }));
-                mStreamWriter.Write("\n");
-                mStreamWriter.Flush();
+                    WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
+                        { "id", mJsonRPCMessageID++ },
+                        { "jsonrpc", "2.0" },
+                        { "method", "eth_getWork" }
+                    }));
 
-                mMutex.ReleaseMutex();
+                    mMutex.ReleaseMutex();
+                }
+                catch (Exception ex)
+                {
+                    MainForm.Logger("Exception in ping thread: " + ex.Message + ex.StackTrace);
+                }
 
                 System.Threading.Thread.Sleep(5000);
             }
         }
 
-        override protected void Connect()
+        override protected void Authorize()
         {
-            if (Stopped)
-                return;
-
-            MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort +" as " + Username + "...");
-
             mMutex.WaitOne();
 
-            mClient = new TcpClient(ServerAddress, ServerPort);
-            mStream = mClient.GetStream();
-            mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
-            mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
-            mJsonRPCMessageID = 1;
-
-            mStreamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
+            WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "jsonrpc", "2.0" },
                 { "method", "eth_submitLogin" },
                 { "params", new List<string> {
                     Username
             }}}));
-            mStreamWriter.Write("\n");
-            mStreamWriter.Flush();
 
-            var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(mStreamReader.ReadLine());
+            var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
             if (response["result"] == null)
             {
                 mMutex.ReleaseMutex();
                 MainForm.Logger("Authorization failed.");
                 throw new Exception("Authorization failed.");
             }
-            
-            mStreamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
+
+            WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "jsonrpc", "2.0" },
                 { "method", "eth_getWork" }
             }));
-            mStreamWriter.Write("\n");
-            mStreamWriter.Flush();
 
             mMutex.ReleaseMutex();
-
-            mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
-            mStreamReaderThread.IsBackground = true;
-            mStreamReaderThread.Start();
 
             mPingThread = new Thread(new ThreadStart(PingThread));
             mPingThread.IsBackground = true;
             mPingThread.Start();
         }
 
-        public override void Submit(EthashStratum.Job job, UInt64 output)
+        override public void Submit(Device aDevice, EthashStratum.Job job, UInt64 output)
         {
             if (Stopped)
                 return;
 
             mMutex.WaitOne();
+            mLastDeviceToSubmitShare = aDevice;
             try
             {
                 String stringNonce
@@ -262,8 +218,8 @@ namespace GatelessGateSharp
                         "0x" + job.Headerhash, // The header's pow-hash (256 bits)
                         "0x" + job.GetMixHash(output) // mix digest
                 }}});
-                mStreamWriter.Write(message + "\n");
-                mStreamWriter.Flush();
+                WriteLine(message);
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
             }
             catch (Exception ex)
             {

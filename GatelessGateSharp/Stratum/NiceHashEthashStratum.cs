@@ -20,7 +20,7 @@ namespace GatelessGateSharp
         {
             private Job mJob;
 
-            public Job GetJob() { return mJob; }
+            new public Job GetJob() { return mJob; }
 
             public Work(Job aJob)
                 : base(aJob)
@@ -37,156 +37,104 @@ namespace GatelessGateSharp
             }
         }
 
-        TcpClient mClient;
-        NetworkStream mStream;
-        StreamReader mStreamReader;
-        StreamWriter mStreamWriter;
-        Thread mStreamReaderThread;
         int mJsonRPCMessageID = 1;
-        string mSubsciptionID;
+        string mSubsciptionID = null;
+        Device mLastDeviceToSubmitShare = null;
         private Mutex mMutex = new Mutex();
 
-        private void StreamReaderThread()
+        protected override void ProcessLine(String line)
         {
-            string line;
-
-            while (!Stopped)
+            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
+            if (response.ContainsKey("method") && response.ContainsKey("params"))
             {
-                try
+                string method = (string)response["method"];
+                JArray parameters = (JArray)response["params"];
+                if (method.Equals("mining.set_difficulty"))
                 {
-                    if ((line = mStreamReader.ReadLine()) == null)
-                        throw new Exception("Disconnected from stratum server.");
+                    mMutex.WaitOne();
+                    mDifficulty = (double)parameters[0];
+                    mMutex.ReleaseMutex();
+                    MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                 }
-                catch (Exception ex)
+                else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
                 {
-                    MainForm.Logger("Failed to receive data from stratum server: " + ex.Message);
-                    break;
+                    mMutex.WaitOne();
+                    mJob = (EthashStratum.Job)(new Job((string)parameters[0], (string)parameters[1], (string)parameters[2]));
+                    mMutex.ReleaseMutex();
+                    MainForm.Logger("Received new job: " + parameters[0]);
                 }
-                if (Stopped)
-                    break;
-
-                Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
-                if (response.ContainsKey("method") && response.ContainsKey("params"))
+                else if (method.Equals("mining.set_extranonce"))
                 {
-                    string method = (string)response["method"];
-                    JArray parameters = (JArray)response["params"];
-                    if (method.Equals("mining.set_difficulty"))
-                    {
-                        mMutex.WaitOne();
-                        mDifficulty = (double)parameters[0];
-                        mMutex.ReleaseMutex();
-                        MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
-                    }
-                    else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
-                    {
-                        mMutex.WaitOne();
-                        mJob = (EthashStratum.Job)(new Job((string)parameters[0], (string)parameters[1], (string)parameters[2]));
-                        mMutex.ReleaseMutex();
-                        MainForm.Logger("Received new job: " + parameters[0]);
-                    }
-                    else if (method.Equals("mining.set_extranonce"))
-                    {
-                        mMutex.WaitOne();
-                        mPoolExtranonce = (String)parameters[0];
-                        mMutex.ReleaseMutex();
-                        MainForm.Logger("Received new extranonce: " + parameters[0]);
-                    }
-                    else if (method.Equals("client.reconnect"))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        MainForm.Logger("Unknown stratum method: " + line);
-                    }
-                }   
-                else if (response.ContainsKey("id") && response.ContainsKey("result"))
+                    mMutex.WaitOne();
+                    mPoolExtranonce = (String)parameters[0];
+                    mMutex.ReleaseMutex();
+                    MainForm.Logger("Received new extranonce: " + parameters[0]);
+                }
+                else if (method.Equals("client.reconnect"))
                 {
-                    var ID = response["id"];
-                    bool result = (bool)response["result"];
-
-                    if (result) {
-                        MainForm.Logger("Share #" + ID + " accepted.");
-                    } else {
-                        MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
-                    }
+                    throw new Exception("client.reconnect");
                 }
                 else
                 {
-                    MainForm.Logger("Unknown JSON message: " + line);
+                    MainForm.Logger("Unknown stratum method: " + line);
                 }
-            }
-
-            if (Stopped)
+            }   
+            else if (response.ContainsKey("id") && response.ContainsKey("result"))
             {
-                try
-                {
-                    mClient.Close();
+                var ID = response["id"];
+                bool result = (bool)response["result"];
+
+                if (result) {
+                    MainForm.Logger("Share #" + ID + " accepted.");
+                    if (mLastDeviceToSubmitShare != null)
+                        mLastDeviceToSubmitShare.IncrementAcceptedShares();
+                } else {
+                    MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
+                    if (mLastDeviceToSubmitShare != null)
+                        mLastDeviceToSubmitShare.IncrementRejectedShares();
                 }
-                catch (Exception ex) { }
             }
             else
             {
-                MainForm.Logger("Connection terminated. Reconnecting...");
-                Thread reconnectThread = new Thread(new ThreadStart(Connect));
-                reconnectThread.IsBackground = true;
-                reconnectThread.Start();
+                MainForm.Logger("Unknown JSON message: " + line);
             }
         }
 
-        override protected void Connect()
+        override protected void Authorize()
         {
-            if (Stopped)
-                return;
-
-            MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
-
             mMutex.WaitOne();
 
-            mClient = new TcpClient(ServerAddress, ServerPort);
-            mStream = mClient.GetStream();
-            mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
-            mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
             mJsonRPCMessageID = 1;
 
-            mStreamWriter.Write(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
+            WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.subscribe" },
                 { "params", new List<string> {
                     MainForm.shortAppName + "/" + MainForm.appVersion,
                     "EthereumStratum/1.0.0"
             }}}));
-            mStreamWriter.Write("\n");
-            mStreamWriter.Flush();
 
-            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object> >(mStreamReader.ReadLine());
+            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object> >(ReadLine());
             mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
             mPoolExtranonce = (string)(((JArray)(response["result"]))[1]);
-            //MainForm.Logger("Subsciption ID: " + mSubsciptionID);
-            //MainForm.Logger("Protocol Version: " + ((JArray)(((JArray)(response["result"]))[0]))[2]); // TODO: Check this.
-            //MainForm.Logger("Extranonce: " + mExtranonce);
 
             // mining.extranonce.subscribe
-            mStreamWriter.Write(JsonConvert.SerializeObject(new Dictionary<string, Object> {
+            WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.extranonce.subscribe" },
                 { "params", new List<string> {
             }}}));
-            mStreamWriter.Write("\n");
-            mStreamWriter.Flush();
-            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(mStreamReader.ReadLine());
+            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
             //MainForm.Logger("mining.extranonce.subscribe: " + response["result"]); // TODO
             
-            mStreamWriter.Write(JsonConvert.SerializeObject(new Dictionary<string, Object> {
+            WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.authorize" },
                 { "params", new List<string> {
                     Username,
                     Password
             }}}));
-            mStreamWriter.Write("\n");
-            mStreamWriter.Flush();
-            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(mStreamReader.ReadLine());
+            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
             if (!(bool)response["result"])
             {
                 mMutex.ReleaseMutex();
@@ -194,18 +142,15 @@ namespace GatelessGateSharp
             }
 
             mMutex.ReleaseMutex();
-
-            mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
-            mStreamReaderThread.IsBackground = true;
-            mStreamReaderThread.Start();
         }
 
-        public override void Submit(EthashStratum.Job job, UInt64 output)
+        override public void Submit(Device aDevice, EthashStratum.Job job, UInt64 output)
         {
             if (Stopped)
                 return;
 
             mMutex.WaitOne();
+            mLastDeviceToSubmitShare = aDevice;
             try
             {
                 String stringNonce
@@ -221,9 +166,8 @@ namespace GatelessGateSharp
                         job.ID,
                         stringNonce
                 }}});
-                mStreamWriter.Write(message + "\n");
-                mStreamWriter.Flush();
-                //MainForm.Logger("message: " + message);
+                WriteLine(message);
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
             }
             catch (Exception ex)
             {

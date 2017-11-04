@@ -720,7 +720,7 @@ __kernel void search6(__global ulong *states, __global uint *BranchBuf, __global
     //vstore8(p, 0, output);
 
 	//if (as_uint16(p).s7 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
-	if (as_uint16(p).s7 <= Target) {
+	if ((p.s3 >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
 		output[i] = BranchBuf[idx] + get_global_offset(0);
 		output[256 + i * 8] = as_uint16(p).s0;
@@ -796,7 +796,7 @@ __kernel void search5(__global ulong *states, __global uint *BranchBuf, __global
     //output[3] = h7l;
 
 	//if (as_uint2(h7l).s1 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
-	if (as_uint2(h7l).s1 <= Target) {
+	if ((h7l >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
 		output[i] = BranchBuf[idx] + get_global_offset(0);
 		output[256 + i * 8 + 0] = as_uint2(h6h).s0;
@@ -937,7 +937,7 @@ __kernel void search4(__global ulong *states, __global uint *BranchBuf, __global
 
     //for(int i = 0; i < 4; ++i) output[i] = State[i + 4];
 	//if (as_uint2(State[7]).s1 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
-	if (as_uint2(State[7]).s1 <= Target) {
+	if ((State[7] >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
 		output[i] = BranchBuf[idx] + get_global_offset(0);
 		output[256 + i * 8 + 0] = as_uint2(State[4]).s0;

@@ -47,13 +47,8 @@ namespace GatelessGateSharp
             }
         }
 
-        Job mJob;
         String mUserID;
-        TcpClient mClient;
-        NetworkStream mStream;
-        StreamReader mStreamReader;
-        StreamWriter mStreamWriter;
-        Thread mStreamReaderThread;
+        Job mJob;
         Device mLastDeviceToSubmitShare = null;
         private Mutex mMutex = new Mutex();
 
@@ -62,91 +57,50 @@ namespace GatelessGateSharp
             return mJob;
         }
 
-        private void StreamReaderThread()
+        protected override void ProcessLine(String line)
         {
-            try
+            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
+            if (response.ContainsKey("method") && response.ContainsKey("params"))
             {
-                while (!Stopped)
+                string method = (string)response["method"];
+                JContainer parameters = (JContainer)response["params"];
+                if (method.Equals("job"))
                 {
-                    string line;
-                    if ((line = mStreamReader.ReadLine()) == null)
-                        throw new Exception("Disconnected from stratum server.");
-                    if (Stopped)
-                        break;
-                    Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
-                    if (response.ContainsKey("method") && response.ContainsKey("params"))
-                    {
-                        string method = (string)response["method"];
-                        JContainer parameters = (JContainer)response["params"];
-                        if (method.Equals("job"))
-                        {
-                            mMutex.WaitOne();
-                            mJob = new Job((string)parameters["job_id"], (string)parameters["blob"], (string)parameters["target"]);
-                            mMutex.ReleaseMutex();
-                            MainForm.Logger("Received new job: " + parameters["job_id"]);
-                        }
-                        else
-                        {
-                            MainForm.Logger("Unknown stratum method: " + line);
-                        }
-                    }
-                    else if (response.ContainsKey("id") && response.ContainsKey("error"))
-                    {
-                        var ID = response["id"];
-                        var error = response["error"];
-
-                        if (error == null && !MainForm.DevFeeMode) {
-                            MainForm.Logger("Share accepted.");
-                            if (mLastDeviceToSubmitShare != null)
-                                mLastDeviceToSubmitShare.IncrementAcceptedShares();
-                        }
-                        else if (error != null && !MainForm.DevFeeMode)
-                        {
-                            MainForm.Logger("Share rejected: " + (String)(((JContainer)response["error"])["message"]));
-                            if (mLastDeviceToSubmitShare != null)
-                                mLastDeviceToSubmitShare.IncrementRejectedShares();
-                        }
-                    }
-                    else
-                    {
-                        MainForm.Logger("Unknown JSON message: " + line);
-                    }
+                    mMutex.WaitOne();
+                    mJob = new Job((string)parameters["job_id"], (string)parameters["blob"], (string)parameters["target"]);
+                    mMutex.ReleaseMutex();
+                    MainForm.Logger("Received new job: " + parameters["job_id"]);
+                }
+                else
+                {
+                    MainForm.Logger("Unknown stratum method: " + line);
                 }
             }
-            catch (Exception ex)
+            else if (response.ContainsKey("id") && response.ContainsKey("error"))
             {
-                MainForm.Logger("Failed to receive data from stratum server: " + ex.Message);
-            }
+                var ID = response["id"];
+                var error = response["error"];
 
-            try
-            {
-                mClient.Close();
+                if (error == null && !MainForm.DevFeeMode) {
+                    MainForm.Logger("Share accepted.");
+                    if (mLastDeviceToSubmitShare != null)
+                        mLastDeviceToSubmitShare.IncrementAcceptedShares();
+                }
+                else if (error != null && !MainForm.DevFeeMode)
+                {
+                    MainForm.Logger("Share rejected: " + (String)(((JContainer)response["error"])["message"]));
+                    if (mLastDeviceToSubmitShare != null)
+                        mLastDeviceToSubmitShare.IncrementRejectedShares();
+                }
             }
-            catch (Exception ex) { }
-
-            if (!Stopped)
+            else
             {
-                MainForm.Logger("Connection terminated. Reconnecting...");
-                Thread reconnectThread = new Thread(new ThreadStart(Connect));
-                reconnectThread.IsBackground = true;
-                reconnectThread.Start();
+                MainForm.Logger("Unknown JSON message: " + line);
             }
         }
 
-        override protected void Connect()
+        override protected void Authorize()
         {
-            if (Stopped)
-                return;
-
-            MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
-
-            mMutex.WaitOne();
-
-            mClient = new TcpClient(ServerAddress, ServerPort);
-            mStream = mClient.GetStream();
-            mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
-            mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
-
             var line = Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "method", "login" },
                 { "params", new Dictionary<string, string> {
@@ -155,28 +109,20 @@ namespace GatelessGateSharp
                     { "agent", MainForm.shortAppName + "/" + MainForm.appVersion}}},
                 { "id", 1 }
             });
-            mStreamWriter.Write(line);
-            mStreamWriter.Write("\n");
-            mStreamWriter.Flush();
+            WriteLine(line);
 
-            line = mStreamReader.ReadLine();
-            MainForm.Logger(line);
+            if ((line = ReadLine()) == null)
+                throw new Exception("Disconnected from stratum server.");
             Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
             var result = ((JContainer)response["result"]);
             var status = (String)(result["status"]);
             if (status != "OK")
-            {
-                mMutex.ReleaseMutex();
                 throw new Exception("Authorization failed.");
-            }
+
+            mMutex.WaitOne();
             mUserID = (String)(result["id"]);
             mJob = new Job((String)(((JContainer)result["job"])["job_id"]), (String)(((JContainer)result["job"])["blob"]), (String)(((JContainer)result["job"])["target"]));
-
             mMutex.ReleaseMutex();
-
-            mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
-            mStreamReaderThread.IsBackground = true;
-            mStreamReaderThread.Start();
         }
 
         public void Submit(Device device, Job job, UInt32 output, String result)
@@ -185,6 +131,7 @@ namespace GatelessGateSharp
                 return;
 
             mMutex.WaitOne();
+            mLastDeviceToSubmitShare = device;
             try
             {
                 String stringNonce = String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff));
@@ -196,10 +143,8 @@ namespace GatelessGateSharp
                         { "nonce", stringNonce },
                         { "result", result }}},
                     { "id", 4 }});
-                mStreamWriter.Write(message + "\n");
-                mStreamWriter.Flush();
-                MainForm.Logger("message: " + message);
-                mLastDeviceToSubmitShare = device;
+                WriteLine(message);
+                MainForm.Logger("Device #" + device.DeviceIndex + " submitted a share.");
             }
             catch (Exception ex)
             {

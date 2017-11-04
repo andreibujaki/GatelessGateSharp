@@ -34,6 +34,8 @@ namespace GatelessGateSharp
         private bool mStopped = false;
         protected double mSpeed = 0;
         private String mAlgorithmName = "";
+        private System.Threading.Thread mMinerThread = null;
+        private DateTime mLastAlive = DateTime.Now;
 
         public Device GatelessGateDevice { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
@@ -41,15 +43,59 @@ namespace GatelessGateSharp
         public double Speed { get { return mSpeed; } }
         public String AlgorithmName { get { return mAlgorithmName; } }
 
-        protected Miner(Device aDevice, String aAlgorithmName )
+        protected Miner(Device aDevice, String aAlgorithmName)
         {
             mDevice = aDevice;
             mAlgorithmName = aAlgorithmName;
         }
 
+        ~Miner()
+        {
+            Stop();
+            System.Threading.Thread.Sleep(5000);
+            if (mMinerThread != null)
+            {
+                try
+                {
+                    mMinerThread.Abort();
+                }
+                catch (Exception ex) { }
+            }
+        }
+
+        protected void StartMinerThread()
+        {
+            MarkAsAlive();
+            mMinerThread = new System.Threading.Thread(new System.Threading.ThreadStart(MinerThread));
+            mMinerThread.IsBackground = true;
+            mMinerThread.Start();
+        }
+
+        unsafe protected virtual void MinerThread() { }
+
         public void Stop()
         {
             mStopped = true;
+        }
+
+        protected void MarkAsAlive()
+        {
+            mLastAlive = DateTime.Now;
+        }
+
+        public void KeepAlive()
+        {
+            if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 15)
+            {
+                MainForm.Logger("Miner thread is unresponsive. Restarting...");
+                try
+                {
+                    mMinerThread.Abort();
+                }
+                catch (Exception ex) { }
+                mSpeed = 0;
+                StartMinerThread();
+            }
         }
     }
 }

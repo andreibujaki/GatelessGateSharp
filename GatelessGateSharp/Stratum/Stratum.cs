@@ -2,7 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Sockets;
+using System.IO;
+
+
 
 namespace GatelessGateSharp
 {
@@ -10,13 +16,13 @@ namespace GatelessGateSharp
     {
         public class Job
         {
-            private System.Threading.Mutex mMutex = new System.Threading.Mutex();
-            private byte mLocalExtranonce = 0;
+            private Mutex mMutex = new Mutex();
+            Random r = new Random();
 
             public byte GetNewLocalExtranonce()
             {
                 mMutex.WaitOne();
-                byte ret = mLocalExtranonce++;
+                byte ret = (byte)(r.Next(0, int.MaxValue) & (0xffu));
                 mMutex.ReleaseMutex();
                 return ret;
             }
@@ -41,7 +47,7 @@ namespace GatelessGateSharp
             return null;
         }
 
-        private System.Threading.Mutex mMutex = new System.Threading.Mutex();
+        private Mutex mMutex = new Mutex();
         private bool mStopped = false;
         String mServerAddress;
         int mServerPort;
@@ -50,6 +56,11 @@ namespace GatelessGateSharp
         protected double mDifficulty = 1.0;
         protected String mPoolExtranonce = "";
         protected String mPoolName = "";
+        TcpClient mClient;
+        NetworkStream mStream;
+        StreamReader mStreamReader;
+        StreamWriter mStreamWriter;
+        Thread mStreamReaderThread;
 
         public bool Stopped { get { return mStopped; } }
         public String ServerAddress { get { return mServerAddress; } }
@@ -76,6 +87,88 @@ namespace GatelessGateSharp
             Connect();
         }
 
-        protected virtual void Connect() { }
+        public void Connect() 
+        {
+            if (Stopped)
+                return;
+
+            MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
+
+            mMutex.WaitOne();
+
+            mClient = new TcpClient(ServerAddress, ServerPort);
+            mStream = mClient.GetStream();
+            mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
+            mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
+
+            mMutex.ReleaseMutex();
+
+            Authorize();
+
+            mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
+            mStreamReaderThread.IsBackground = true;
+            mStreamReaderThread.Start();
+        }
+
+        protected void WriteLine(String line)
+        {
+            mMutex.WaitOne();
+            mStreamWriter.Write(line);
+            mStreamWriter.Write("\n");
+            mStreamWriter.Flush();
+            mMutex.ReleaseMutex();
+        }
+
+        protected String ReadLine()
+        {
+            return mStreamReader.ReadLine();
+        }
+
+        protected virtual void Authorize() { }
+        protected virtual void ProcessLine(String line) { }
+
+        private void StreamReaderThread()
+        {
+            try
+            {
+                while (!Stopped)
+                {
+                    string line;
+                    if ((line = mStreamReader.ReadLine()) == null)
+                        throw new Exception("Disconnected from stratum server.");
+                    if (Stopped)
+                        break;
+                    ProcessLine(line);
+                }
+            }
+            catch (Exception ex)
+            {
+                MainForm.Logger("Failed to receive data from stratum server: " + ex.Message);
+            }
+
+            try
+            {
+                mClient.Close();
+            }
+            catch (Exception ex) { }
+
+            if (!Stopped)
+            {
+                MainForm.Logger("Connection terminated. Reconnecting in 10 seconds...");
+                for (int counter = 0; counter < 100; ++counter)
+                {
+                    if (Stopped)
+                        break;
+                    System.Threading.Thread.Sleep(100);
+                }
+            }
+
+            if (!Stopped)
+            {
+                Thread reconnectThread = new Thread(new ThreadStart(Connect));
+                reconnectThread.IsBackground = true;
+                reconnectThread.Start();
+            }
+        }
     }
 }
