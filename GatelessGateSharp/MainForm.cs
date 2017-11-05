@@ -1311,7 +1311,8 @@ namespace GatelessGateSharp
             for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
             {
                 mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, niceHashMode));
-                System.Threading.Thread.Sleep(1000);
+                mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, niceHashMode));
+                System.Threading.Thread.Sleep(0);
             }
         }
 
@@ -1504,7 +1505,7 @@ namespace GatelessGateSharp
             for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
             {
                 mMiners.Add(new OpenCLEthashMiner(mDevices[deviceIndex], stratum));
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(0);
             }
         }
 
@@ -1549,7 +1550,7 @@ namespace GatelessGateSharp
                 foreach (Miner miner in mMiners)
                 {
                     miner.Stop();
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(0);
                 }
                 mStratum.Stop();
             }
@@ -1590,7 +1591,7 @@ namespace GatelessGateSharp
                 mStratum = null;
                 mMiners = null;
 
-                mDevFeeMode = true;
+                mDevFeeMode = false;
                 LaunchMiners();
                 if (mStratum == null || mMiners == null)
                 {
@@ -1601,7 +1602,7 @@ namespace GatelessGateSharp
                     appState = ApplicationGlobalState.Mining;
                     tabControlMainForm.SelectedIndex = 0;
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
-                    timerDevFee.Enabled = true;
+                    timerDevFee.Enabled = false;
                 }
             }
             else if (appState == ApplicationGlobalState.Mining) {
@@ -1712,7 +1713,7 @@ namespace GatelessGateSharp
                 mDevFeeMode = false;
                 timerDevFee.Interval = (int)(((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage)) * 1000);
                 LaunchMiners();
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(0);
                 if (mMiners == null || mStratum == null)
                 {
                     mDevFeeMode = true;
@@ -1726,7 +1727,7 @@ namespace GatelessGateSharp
                 StopMiners();
                 mDevFeeMode = true;
                 timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(0);
                 LaunchMiners();
                 if (mMiners == null || mStratum == null)
                 {
