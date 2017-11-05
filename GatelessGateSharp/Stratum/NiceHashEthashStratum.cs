@@ -84,11 +84,14 @@ namespace GatelessGateSharp
                 var ID = response["id"];
                 bool result = (bool)response["result"];
 
-                if (result) {
+                if (result && !MainForm.DevFeeMode)
+                {
                     MainForm.Logger("Share #" + ID + " accepted.");
                     if (mLastDeviceToSubmitShare != null)
                         mLastDeviceToSubmitShare.IncrementAcceptedShares();
-                } else {
+                }
+                else if (!result && !MainForm.DevFeeMode)
+                {
                     MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
                     if (mLastDeviceToSubmitShare != null)
                         mLastDeviceToSubmitShare.IncrementRejectedShares();

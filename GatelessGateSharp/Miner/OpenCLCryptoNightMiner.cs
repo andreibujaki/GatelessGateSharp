@@ -46,10 +46,10 @@ namespace GatelessGateSharp
             : base(aGatelessGateDevice, "CrypoNight")
         {
             mStratum = aStratum;
-            mLocalWorkSize = (Device.Vendor == "AMD" ? 8 : 4);
-            mGlobalWorkSize = (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 480")         ? (28 * Device.MaxComputeUnits) :
+            mLocalWorkSize = (Device.Vendor == "AMD" ? 4 : 4);
+            mGlobalWorkSize = (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 480")         ? (16 * Device.MaxComputeUnits) :
                               (Device.Vendor == "AMD"    && Device.Name == "Radeon R9 Fury X/Nano") ? (16 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "NVIDIA" && Device.Name == "GeForce GTX 1080 Ti")   ? (32 * Device.MaxComputeUnits) :
+                              (Device.Vendor == "NVIDIA" && Device.Name == "GeForce GTX 1080 Ti")   ? (16 * Device.MaxComputeUnits) :
                                                                                                       (16 * Device.MaxComputeUnits);
             mNicehashMode = aNicehashMode;
             StartMinerThread();
@@ -63,6 +63,8 @@ namespace GatelessGateSharp
             ComputeBuffer<byte> inputBuffer = null;
             ComputeBuffer<UInt32> outputBuffer = null;
             Random r = new Random();
+
+            MarkAsAlive();
 
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
@@ -93,8 +95,6 @@ namespace GatelessGateSharp
             mSearchKernels[5] = mProgram.CreateKernel("search5");
             mSearchKernels[6] = mProgram.CreateKernel("search6");
 
-            MarkAsAlive();
-
             while (!Stopped)
             {
                 MarkAsAlive();
@@ -102,11 +102,11 @@ namespace GatelessGateSharp
                 try
                 {
                     // Wait for the first job to arrive.
-                    int timePassed = 0;
-                    while ((mStratum == null || mStratum.GetJob() == null) && timePassed < 5000)
+                    int elapsedTime = 0;
+                    while ((mStratum == null || mStratum.GetJob() == null) && elapsedTime < 5000)
                     {
                         Thread.Sleep(10);
-                        timePassed += 10;
+                        elapsedTime += 10;
                     }
                     if (mStratum == null || mStratum.GetJob() == null)
                         throw new TimeoutException("Stratum server failed to send a new job.");
@@ -147,6 +147,39 @@ namespace GatelessGateSharp
                                         | ((UInt32)targetByteArray[2] << 16)
                                         | ((UInt32)targetByteArray[3] << 24);
 
+                        fixed (byte* p = blobByteArray)
+                            Queue.Write<byte>(inputBuffer, true, 0, 76, (IntPtr)p, null);
+
+                        mSearchKernels[0].SetMemoryArgument(0, inputBuffer);
+                        mSearchKernels[0].SetMemoryArgument(1, scratchpadsBuffer);
+                        mSearchKernels[0].SetMemoryArgument(2, statesBuffer);
+
+                        mSearchKernels[1].SetMemoryArgument(0, scratchpadsBuffer);
+                        mSearchKernels[1].SetMemoryArgument(1, statesBuffer);
+
+                        mSearchKernels[2].SetMemoryArgument(0, scratchpadsBuffer);
+                        mSearchKernels[2].SetMemoryArgument(1, statesBuffer);
+                        mSearchKernels[2].SetMemoryArgument(2, branchBuffers[0]);
+                        mSearchKernels[2].SetMemoryArgument(3, branchBuffers[1]);
+                        mSearchKernels[2].SetMemoryArgument(4, branchBuffers[2]);
+                        mSearchKernels[2].SetMemoryArgument(5, branchBuffers[3]);
+
+                        mSearchKernels[3].SetMemoryArgument(0, statesBuffer);
+                        mSearchKernels[3].SetMemoryArgument(1, branchBuffers[0]);
+                        mSearchKernels[3].SetMemoryArgument(2, outputBuffer);
+
+                        mSearchKernels[4].SetMemoryArgument(0, statesBuffer);
+                        mSearchKernels[4].SetMemoryArgument(1, branchBuffers[1]);
+                        mSearchKernels[4].SetMemoryArgument(2, outputBuffer);
+
+                        mSearchKernels[5].SetMemoryArgument(0, statesBuffer);
+                        mSearchKernels[5].SetMemoryArgument(1, branchBuffers[2]);
+                        mSearchKernels[5].SetMemoryArgument(2, outputBuffer);
+
+                        mSearchKernels[6].SetMemoryArgument(0, statesBuffer);
+                        mSearchKernels[6].SetMemoryArgument(1, branchBuffers[3]);
+                        mSearchKernels[6].SetMemoryArgument(2, outputBuffer); 
+                        
                         consoleUpdateStopwatch.Start();
 
                         while (!Stopped && mStratum.GetJob().ID == job.ID && mStratum.GetJob().Blob == job.Blob && mStratum.GetJob().Target == job.Target)
@@ -165,41 +198,9 @@ namespace GatelessGateSharp
                                     break;
                             }
 
-                            fixed (byte* p = blobByteArray)
-                                Queue.Write<byte>(inputBuffer, true, 0, 76, (IntPtr)p, null);
-
-                            mSearchKernels[0].SetMemoryArgument(0, inputBuffer);
-                            mSearchKernels[0].SetMemoryArgument(1, scratchpadsBuffer);
-                            mSearchKernels[0].SetMemoryArgument(2, statesBuffer);
-
-                            mSearchKernels[1].SetMemoryArgument(0, scratchpadsBuffer);
-                            mSearchKernels[1].SetMemoryArgument(1, statesBuffer);
-
-                            mSearchKernels[2].SetMemoryArgument(0, scratchpadsBuffer);
-                            mSearchKernels[2].SetMemoryArgument(1, statesBuffer);
-                            mSearchKernels[2].SetMemoryArgument(2, branchBuffers[0]);
-                            mSearchKernels[2].SetMemoryArgument(3, branchBuffers[1]);
-                            mSearchKernels[2].SetMemoryArgument(4, branchBuffers[2]);
-                            mSearchKernels[2].SetMemoryArgument(5, branchBuffers[3]);
-
-                            mSearchKernels[3].SetMemoryArgument(0, statesBuffer);
-                            mSearchKernels[3].SetMemoryArgument(1, branchBuffers[0]);
-                            mSearchKernels[3].SetMemoryArgument(2, outputBuffer);
                             mSearchKernels[3].SetValueArgument<UInt32>(3, target);
-
-                            mSearchKernels[4].SetMemoryArgument(0, statesBuffer);
-                            mSearchKernels[4].SetMemoryArgument(1, branchBuffers[1]);
-                            mSearchKernels[4].SetMemoryArgument(2, outputBuffer);
                             mSearchKernels[4].SetValueArgument<UInt32>(3, target);
-
-                            mSearchKernels[5].SetMemoryArgument(0, statesBuffer);
-                            mSearchKernels[5].SetMemoryArgument(1, branchBuffers[2]);
-                            mSearchKernels[5].SetMemoryArgument(2, outputBuffer);
                             mSearchKernels[5].SetValueArgument<UInt32>(3, target);
-
-                            mSearchKernels[6].SetMemoryArgument(0, statesBuffer);
-                            mSearchKernels[6].SetMemoryArgument(1, branchBuffers[3]);
-                            mSearchKernels[6].SetMemoryArgument(2, outputBuffer);
                             mSearchKernels[6].SetValueArgument<UInt32>(3, target);
 
                             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
@@ -209,11 +210,11 @@ namespace GatelessGateSharp
                                 zero[i] = 0;
                             fixed (UInt32* p = zero)
                                 for (int i = 0; i < 4; ++i)
-                                    Queue.Write<UInt32>(branchBuffers[i], false, 0, mGlobalWorkSize + 2, (IntPtr)p, null);
+                                    Queue.Write<UInt32>(branchBuffers[i], true, 0, mGlobalWorkSize + 2, (IntPtr)p, null);
                             fixed (UInt32* p = output)
                             {
                                 output[255] = 0; // output[255] is used as an atomic counter.
-                                Queue.Write<UInt32>(outputBuffer, false, 0, 256 + 255 * 8, (IntPtr)p, null);
+                                Queue.Write<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
                                 Queue.Execute(mSearchKernels[0], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
                                 Queue.Execute(mSearchKernels[1], new long[] { startNonce }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
                                 Queue.Execute(mSearchKernels[2], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
@@ -225,6 +226,7 @@ namespace GatelessGateSharp
                                     if ((branchBufferCount[0] % (ulong)mLocalWorkSize) != 0)
                                         branchBufferCount[0] += (uint)mLocalWorkSize - branchBufferCount[0] % (uint)mLocalWorkSize;
                                     Queue.Execute(mSearchKernels[i + 3], new long[] { startNonce }, new long[] { branchBufferCount[0] }, new long[] { mLocalWorkSize }, null);
+                                    Queue.Finish(); // Run the above statement before leaving the current local scope.
                                 }
                                 Queue.Read<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
                             }
@@ -244,7 +246,6 @@ namespace GatelessGateSharp
                                     result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                                 }
                                 mStratum.Submit(GatelessGateDevice, job, output[i], result);
-
                             }
                             startNonce += (UInt32)mGlobalWorkSize;
                         }
@@ -271,6 +272,13 @@ namespace GatelessGateSharp
                 if (!Stopped)
                     System.Threading.Thread.Sleep(5000);
             }
+
+            foreach (var kernel in mSearchKernels)
+                kernel.Dispose();
+            mProgram.Dispose();
+            Dispose();
+
+            MarkAsDone();
         }
     }
 }

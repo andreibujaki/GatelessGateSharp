@@ -73,25 +73,25 @@ namespace GatelessGateSharp
                 && response["result"] != null
                 && response["result"].GetType() == typeof(bool))
             {
-                if ((bool)response["result"])
+                if ((bool)response["result"] && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " accepted.");
                     if (mLastDeviceToSubmitShare != null)
                         mLastDeviceToSubmitShare.IncrementAcceptedShares();
                 }
-                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String))
+                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String) && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + (String)response["error"]);
                     if (mLastDeviceToSubmitShare != null)
                         mLastDeviceToSubmitShare.IncrementRejectedShares();
                 }
-                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray))
+                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray) && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + ((JArray)response["error"])["message"]);
                     if (mLastDeviceToSubmitShare != null)
                         mLastDeviceToSubmitShare.IncrementRejectedShares();
                 }
-                else if (!(bool)response["result"])
+                else if (!(bool)response["result"] && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
                     if (mLastDeviceToSubmitShare != null)

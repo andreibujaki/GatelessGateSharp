@@ -46,13 +46,15 @@ namespace GatelessGateSharp
             : base(aGatelessGateDevice, "Ethash")
         {
             mStratum = aStratum;
-            mGlobalWorkSize = 4096 * mLocalWorkSize * Device.GetComputeDevice().MaxComputeUnits;
+            mGlobalWorkSize = 2048 * mLocalWorkSize * Device.GetComputeDevice().MaxComputeUnits;
             
             StartMinerThread();
         }
 
         unsafe override protected void MinerThread()
         {
+            MarkAsAlive();
+
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
  
             mProgram = new ComputeProgram(this.Context, System.IO.File.ReadAllText(@"Kernels\ethash.cl"));
@@ -66,8 +68,6 @@ namespace GatelessGateSharp
             mSearchKernel = mProgram.CreateKernel("search");
             MainForm.Logger("Created search kernel for Device #" + GatelessGateDevice.DeviceIndex + ".");
 
-            MarkAsAlive();
-
             while (!Stopped) {
 
                 MarkAsAlive();
@@ -75,11 +75,11 @@ namespace GatelessGateSharp
                 try
                 {
                     // Wait for the first job to arrive.
-                    int timePassed = 0;
-                    while ((mStratum == null || mStratum.CurrentJob == null) && timePassed < 5000)
+                    int elapsedTime = 0;
+                    while ((mStratum == null || mStratum.CurrentJob == null) && elapsedTime < 5000)
                     {
                         Thread.Sleep(10);
-                        timePassed += 10;
+                        elapsedTime += 10;
                     }
                     if (mStratum == null || mStratum.CurrentJob == null)
                     {
@@ -105,7 +105,7 @@ namespace GatelessGateSharp
                         UInt64 startNonce = (UInt64)localExtranonce << (8 * (7 - extranonceByteArray.Length));
                         for (int i = 0; i < extranonceByteArray.Length; ++i)
                             startNonce |= (UInt64)extranonceByteArray[i] << (8 * (7 - i));
-                        startNonce += (ulong)r.Next(0, int.MaxValue) & (0xfffffffffffffffful >> (extranonceByteArray.Length * 8 + 16));
+                        startNonce += (ulong)r.Next(0, int.MaxValue) & (0xfffffffffffffffful >> (extranonceByteArray.Length * 8 + 8));
                         String jobID = work.GetJob().ID;
                         String headerhash = work.GetJob().Headerhash;
                         String seedhash = work.GetJob().Seedhash;
@@ -160,6 +160,10 @@ namespace GatelessGateSharp
                         {
                             MarkAsAlive();
 
+                            // Get a new local extranonce if necessary.
+                            if ((startNonce & (0xfffffffffffffffful >> (extranonceByteArray.Length * 8 + 8)) + (ulong)mGlobalWorkSize) >= ((ulong)0x1 << (64 - (extranonceByteArray.Length * 8 + 8))))
+                                break;
+
                             UInt64 target = (UInt64)((double)0xffff0000U / difficulty);
                             mSearchKernel.SetMemoryArgument(0, outputBuffer); // g_output
                             mSearchKernel.SetMemoryArgument(1, headerBuffer); // g_header
@@ -202,6 +206,13 @@ namespace GatelessGateSharp
                     MainForm.Logger("Restarting miner thread...");
                 }
             }
+
+            foreach (var kernel in new ComputeKernel[] { mSearchKernel, mDAGKernel })
+                kernel.Dispose();
+            mProgram.Dispose();
+            Dispose();
+
+            MarkAsDone();
         }
     }
 }

@@ -36,6 +36,8 @@ namespace GatelessGateSharp
         [STAThread]
         static void Main()
         {
+            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

@@ -32,6 +32,7 @@ namespace GatelessGateSharp
     {
         private Device mDevice;
         private bool mStopped = false;
+        private bool mDone = false;
         protected double mSpeed = 0;
         private String mAlgorithmName = "";
         private System.Threading.Thread mMinerThread = null;
@@ -40,6 +41,7 @@ namespace GatelessGateSharp
         public Device GatelessGateDevice { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
+        public bool Done { get { return mDone; } }
         public double Speed { get { return mSpeed; } }
         public String AlgorithmName { get { return mAlgorithmName; } }
 
@@ -52,15 +54,8 @@ namespace GatelessGateSharp
         ~Miner()
         {
             Stop();
-            System.Threading.Thread.Sleep(5000);
-            if (mMinerThread != null)
-            {
-                try
-                {
-                    mMinerThread.Abort();
-                }
-                catch (Exception ex) { }
-            }
+            WaitForExit(5000);
+            Abort();
         }
 
         protected void StartMinerThread()
@@ -78,16 +73,43 @@ namespace GatelessGateSharp
             mStopped = true;
         }
 
+        public void WaitForExit(int ms)
+        {
+            while (!Done && ms > 0)
+            {
+                System.Threading.Thread.Sleep((ms < 10) ? ms : 10);
+                ms -= 10;
+            }
+        }
+
+        public void Abort()
+        {
+            if (mMinerThread != null)
+            {
+                try
+                {
+                    mMinerThread.Abort();
+                }
+                catch (Exception ex) { }
+                mMinerThread = null;
+            }
+        }
+
         protected void MarkAsAlive()
         {
             mLastAlive = DateTime.Now;
+        }
+
+        protected void MarkAsDone()
+        {
+            mDone = true;
         }
 
         public void KeepAlive()
         {
             if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 15)
             {
-                MainForm.Logger("Miner thread is unresponsive. Restarting...");
+                //MainForm.Logger("Miner thread is unresponsive. Restarting...");
                 try
                 {
                     mMinerThread.Abort();

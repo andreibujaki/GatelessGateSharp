@@ -51,10 +51,11 @@ namespace GatelessGateSharp
             mQueue = new ComputeCommandQueue(mContext, GetComputeDevice(), ComputeCommandQueueFlags.None);
         }
 
-        ~OpenCLMiner()
+        protected void Dispose()
         {
-            mQueue = null;
-            mContext = null;
+            mQueue.Dispose();
+            mContext.Dispose();
         }
     }
 }
+

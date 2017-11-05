@@ -135,6 +135,15 @@
             this.labelCurrentAlgorithm = new System.Windows.Forms.Label();
             this.labelCurrentAlgorithmCaption = new System.Windows.Forms.Label();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxRigID = new System.Windows.Forms.TextBox();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.labelPassword = new System.Windows.Forms.Label();
+            this.labelEmail = new System.Windows.Forms.Label();
+            this.textBoxLogin = new System.Windows.Forms.TextBox();
+            this.textBoxEmail = new System.Windows.Forms.TextBox();
+            this.labelLogin = new System.Windows.Forms.Label();
             this.groupBoxPoolPriorities = new System.Windows.Forms.GroupBox();
             this.buttonPoolPrioritiesDown = new System.Windows.Forms.Button();
             this.buttonPoolPrioritiesUp = new System.Windows.Forms.Button();
@@ -155,6 +164,8 @@
             this.label15 = new System.Windows.Forms.Label();
             this.textBoxEthereumAddress = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.textBoxBitcoinAddress = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.buttonStart = new System.Windows.Forms.Button();
@@ -163,25 +174,19 @@
             this.timerCurrencyStatUpdates = new System.Windows.Forms.Timer(this.components);
             this.timerDevFee = new System.Windows.Forms.Timer(this.components);
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
-            this.label13 = new System.Windows.Forms.Label();
-            this.textBoxBitcoinAddress = new System.Windows.Forms.TextBox();
-            this.textBoxRigID = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxEmail = new System.Windows.Forms.TextBox();
-            this.labelEmail = new System.Windows.Forms.Label();
-            this.textBoxPassword = new System.Windows.Forms.TextBox();
-            this.labelPassword = new System.Windows.Forms.Label();
-            this.textBoxLogin = new System.Windows.Forms.TextBox();
-            this.labelLogin = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.timerUpdateLog = new System.Windows.Forms.Timer(this.components);
+            this.checkBoxAutoStart = new System.Windows.Forms.CheckBox();
+            this.checkBoxLaunchAtStartup = new System.Windows.Forms.CheckBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageStatus.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBoxPoolPriorities.SuspendLayout();
             this.groupBoxCoinsToMine.SuspendLayout();
             this.tabPageLog.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMainForm
@@ -1226,6 +1231,7 @@
             // 
             // tabPageSettings
             // 
+            this.tabPageSettings.Controls.Add(this.groupBox3);
             this.tabPageSettings.Controls.Add(this.groupBox1);
             this.tabPageSettings.Controls.Add(this.groupBoxPoolPriorities);
             this.tabPageSettings.Controls.Add(this.groupBoxCoinsToMine);
@@ -1249,6 +1255,87 @@
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBoxRigID);
+            this.groupBox1.Controls.Add(this.textBoxPassword);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.labelPassword);
+            this.groupBox1.Controls.Add(this.labelEmail);
+            this.groupBox1.Controls.Add(this.textBoxLogin);
+            this.groupBox1.Controls.Add(this.textBoxEmail);
+            this.groupBox1.Controls.Add(this.labelLogin);
+            this.groupBox1.Location = new System.Drawing.Point(300, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(389, 134);
+            this.groupBox1.TabIndex = 26;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Pool Parameters";
+            // 
+            // textBoxRigID
+            // 
+            this.textBoxRigID.Location = new System.Drawing.Point(116, 19);
+            this.textBoxRigID.Name = "textBoxRigID";
+            this.textBoxRigID.Size = new System.Drawing.Size(267, 20);
+            this.textBoxRigID.TabIndex = 27;
+            // 
+            // textBoxPassword
+            // 
+            this.textBoxPassword.Location = new System.Drawing.Point(116, 97);
+            this.textBoxPassword.Name = "textBoxPassword";
+            this.textBoxPassword.Size = new System.Drawing.Size(267, 20);
+            this.textBoxPassword.TabIndex = 33;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(86, 13);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "Rig ID (optional):";
+            // 
+            // labelPassword
+            // 
+            this.labelPassword.AutoSize = true;
+            this.labelPassword.Location = new System.Drawing.Point(8, 100);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(102, 13);
+            this.labelPassword.TabIndex = 32;
+            this.labelPassword.Text = "Password (optional):";
+            // 
+            // labelEmail
+            // 
+            this.labelEmail.AutoSize = true;
+            this.labelEmail.Location = new System.Drawing.Point(8, 48);
+            this.labelEmail.Name = "labelEmail";
+            this.labelEmail.Size = new System.Drawing.Size(81, 13);
+            this.labelEmail.TabIndex = 28;
+            this.labelEmail.Text = "Email (optional):";
+            // 
+            // textBoxLogin
+            // 
+            this.textBoxLogin.Location = new System.Drawing.Point(116, 71);
+            this.textBoxLogin.Name = "textBoxLogin";
+            this.textBoxLogin.Size = new System.Drawing.Size(267, 20);
+            this.textBoxLogin.TabIndex = 31;
+            // 
+            // textBoxEmail
+            // 
+            this.textBoxEmail.Location = new System.Drawing.Point(116, 45);
+            this.textBoxEmail.Name = "textBoxEmail";
+            this.textBoxEmail.Size = new System.Drawing.Size(267, 20);
+            this.textBoxEmail.TabIndex = 29;
+            // 
+            // labelLogin
+            // 
+            this.labelLogin.AutoSize = true;
+            this.labelLogin.Location = new System.Drawing.Point(8, 74);
+            this.labelLogin.Name = "labelLogin";
+            this.labelLogin.Size = new System.Drawing.Size(82, 13);
+            this.labelLogin.TabIndex = 30;
+            this.labelLogin.Text = "Login (optional):";
             // 
             // groupBoxPoolPriorities
             // 
@@ -1305,7 +1392,7 @@
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMostProfitable);
             this.groupBoxCoinsToMine.Location = new System.Drawing.Point(9, 6);
             this.groupBoxCoinsToMine.Name = "groupBoxCoinsToMine";
-            this.groupBoxCoinsToMine.Size = new System.Drawing.Size(112, 115);
+            this.groupBoxCoinsToMine.Size = new System.Drawing.Size(112, 134);
             this.groupBoxCoinsToMine.TabIndex = 20;
             this.groupBoxCoinsToMine.TabStop = false;
             this.groupBoxCoinsToMine.Text = "Coin(s) to Mine";
@@ -1361,7 +1448,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 156);
+            this.label17.Location = new System.Drawing.Point(5, 229);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(187, 13);
             this.label17.TabIndex = 19;
@@ -1369,7 +1456,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(597, 253);
+            this.button5.Location = new System.Drawing.Point(596, 326);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(92, 20);
             this.button5.TabIndex = 17;
@@ -1378,7 +1465,7 @@
             // 
             // buttonMoneroBalance
             // 
-            this.buttonMoneroBalance.Location = new System.Drawing.Point(597, 227);
+            this.buttonMoneroBalance.Location = new System.Drawing.Point(596, 300);
             this.buttonMoneroBalance.Name = "buttonMoneroBalance";
             this.buttonMoneroBalance.Size = new System.Drawing.Size(92, 20);
             this.buttonMoneroBalance.TabIndex = 16;
@@ -1388,7 +1475,7 @@
             // 
             // buttonEthereumBalance
             // 
-            this.buttonEthereumBalance.Location = new System.Drawing.Point(597, 200);
+            this.buttonEthereumBalance.Location = new System.Drawing.Point(596, 273);
             this.buttonEthereumBalance.Name = "buttonEthereumBalance";
             this.buttonEthereumBalance.Size = new System.Drawing.Size(92, 20);
             this.buttonEthereumBalance.TabIndex = 15;
@@ -1398,7 +1485,7 @@
             // 
             // buttonViewBalancesAtNiceHash
             // 
-            this.buttonViewBalancesAtNiceHash.Location = new System.Drawing.Point(597, 175);
+            this.buttonViewBalancesAtNiceHash.Location = new System.Drawing.Point(596, 248);
             this.buttonViewBalancesAtNiceHash.Name = "buttonViewBalancesAtNiceHash";
             this.buttonViewBalancesAtNiceHash.Size = new System.Drawing.Size(92, 20);
             this.buttonViewBalancesAtNiceHash.TabIndex = 14;
@@ -1409,7 +1496,7 @@
             // textBoxZcashAddress
             // 
             this.textBoxZcashAddress.Enabled = false;
-            this.textBoxZcashAddress.Location = new System.Drawing.Point(97, 254);
+            this.textBoxZcashAddress.Location = new System.Drawing.Point(96, 327);
             this.textBoxZcashAddress.Name = "textBoxZcashAddress";
             this.textBoxZcashAddress.Size = new System.Drawing.Size(494, 20);
             this.textBoxZcashAddress.TabIndex = 13;
@@ -1417,7 +1504,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 257);
+            this.label16.Location = new System.Drawing.Point(5, 330);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(70, 13);
             this.label16.TabIndex = 12;
@@ -1425,7 +1512,7 @@
             // 
             // textBoxMoneroAddress
             // 
-            this.textBoxMoneroAddress.Location = new System.Drawing.Point(97, 228);
+            this.textBoxMoneroAddress.Location = new System.Drawing.Point(96, 301);
             this.textBoxMoneroAddress.Name = "textBoxMoneroAddress";
             this.textBoxMoneroAddress.Size = new System.Drawing.Size(494, 20);
             this.textBoxMoneroAddress.TabIndex = 11;
@@ -1433,7 +1520,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 231);
+            this.label15.Location = new System.Drawing.Point(5, 304);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(79, 13);
             this.label15.TabIndex = 10;
@@ -1441,7 +1528,7 @@
             // 
             // textBoxEthereumAddress
             // 
-            this.textBoxEthereumAddress.Location = new System.Drawing.Point(97, 202);
+            this.textBoxEthereumAddress.Location = new System.Drawing.Point(96, 275);
             this.textBoxEthereumAddress.Name = "textBoxEthereumAddress";
             this.textBoxEthereumAddress.Size = new System.Drawing.Size(494, 20);
             this.textBoxEthereumAddress.TabIndex = 9;
@@ -1449,11 +1536,27 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 205);
+            this.label14.Location = new System.Drawing.Point(5, 278);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(86, 13);
             this.label14.TabIndex = 8;
             this.label14.Text = "Ethereum (ETH):";
+            // 
+            // textBoxBitcoinAddress
+            // 
+            this.textBoxBitcoinAddress.Location = new System.Drawing.Point(96, 249);
+            this.textBoxBitcoinAddress.Name = "textBoxBitcoinAddress";
+            this.textBoxBitcoinAddress.Size = new System.Drawing.Size(494, 20);
+            this.textBoxBitcoinAddress.TabIndex = 7;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(5, 252);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(72, 13);
+            this.label13.TabIndex = 6;
+            this.label13.Text = "Bitcoin (BTC):";
             // 
             // tabPageLog
             // 
@@ -1519,102 +1622,43 @@
             this.timerWatchdog.Interval = 1000;
             this.timerWatchdog.Tick += new System.EventHandler(this.timerWatchdog_Tick);
             // 
-            // label13
+            // timerUpdateLog
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 179);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(72, 13);
-            this.label13.TabIndex = 6;
-            this.label13.Text = "Bitcoin (BTC):";
+            this.timerUpdateLog.Enabled = true;
+            this.timerUpdateLog.Interval = 10;
+            this.timerUpdateLog.Tick += new System.EventHandler(this.timerUpdateLog_Tick);
             // 
-            // textBoxBitcoinAddress
+            // checkBoxAutoStart
             // 
-            this.textBoxBitcoinAddress.Location = new System.Drawing.Point(97, 176);
-            this.textBoxBitcoinAddress.Name = "textBoxBitcoinAddress";
-            this.textBoxBitcoinAddress.Size = new System.Drawing.Size(494, 20);
-            this.textBoxBitcoinAddress.TabIndex = 7;
+            this.checkBoxAutoStart.AutoSize = true;
+            this.checkBoxAutoStart.Location = new System.Drawing.Point(8, 19);
+            this.checkBoxAutoStart.Name = "checkBoxAutoStart";
+            this.checkBoxAutoStart.Size = new System.Drawing.Size(104, 17);
+            this.checkBoxAutoStart.TabIndex = 27;
+            this.checkBoxAutoStart.Text = "Auto-start mining";
+            this.checkBoxAutoStart.UseVisualStyleBackColor = true;
             // 
-            // textBoxRigID
+            // checkBoxLaunchAtStartup
             // 
-            this.textBoxRigID.Location = new System.Drawing.Point(116, 19);
-            this.textBoxRigID.Name = "textBoxRigID";
-            this.textBoxRigID.Size = new System.Drawing.Size(267, 20);
-            this.textBoxRigID.TabIndex = 27;
+            this.checkBoxLaunchAtStartup.AutoSize = true;
+            this.checkBoxLaunchAtStartup.Location = new System.Drawing.Point(8, 42);
+            this.checkBoxLaunchAtStartup.Name = "checkBoxLaunchAtStartup";
+            this.checkBoxLaunchAtStartup.Size = new System.Drawing.Size(163, 17);
+            this.checkBoxLaunchAtStartup.TabIndex = 28;
+            this.checkBoxLaunchAtStartup.Text = "Launch application at startup";
+            this.checkBoxLaunchAtStartup.UseVisualStyleBackColor = true;
+            this.checkBoxLaunchAtStartup.CheckedChanged += new System.EventHandler(this.checkBoxLaunchAtStartup_CheckedChanged);
             // 
-            // label1
+            // groupBox3
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 13);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "Rig ID (optional):";
-            // 
-            // textBoxEmail
-            // 
-            this.textBoxEmail.Location = new System.Drawing.Point(116, 45);
-            this.textBoxEmail.Name = "textBoxEmail";
-            this.textBoxEmail.Size = new System.Drawing.Size(267, 20);
-            this.textBoxEmail.TabIndex = 29;
-            // 
-            // labelEmail
-            // 
-            this.labelEmail.AutoSize = true;
-            this.labelEmail.Location = new System.Drawing.Point(8, 48);
-            this.labelEmail.Name = "labelEmail";
-            this.labelEmail.Size = new System.Drawing.Size(81, 13);
-            this.labelEmail.TabIndex = 28;
-            this.labelEmail.Text = "Email (optional):";
-            // 
-            // textBoxPassword
-            // 
-            this.textBoxPassword.Location = new System.Drawing.Point(116, 97);
-            this.textBoxPassword.Name = "textBoxPassword";
-            this.textBoxPassword.Size = new System.Drawing.Size(267, 20);
-            this.textBoxPassword.TabIndex = 33;
-            // 
-            // labelPassword
-            // 
-            this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(8, 100);
-            this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(102, 13);
-            this.labelPassword.TabIndex = 32;
-            this.labelPassword.Text = "Password (optional):";
-            // 
-            // textBoxLogin
-            // 
-            this.textBoxLogin.Location = new System.Drawing.Point(116, 71);
-            this.textBoxLogin.Name = "textBoxLogin";
-            this.textBoxLogin.Size = new System.Drawing.Size(267, 20);
-            this.textBoxLogin.TabIndex = 31;
-            // 
-            // labelLogin
-            // 
-            this.labelLogin.AutoSize = true;
-            this.labelLogin.Location = new System.Drawing.Point(8, 74);
-            this.labelLogin.Name = "labelLogin";
-            this.labelLogin.Size = new System.Drawing.Size(82, 13);
-            this.labelLogin.TabIndex = 30;
-            this.labelLogin.Text = "Login (optional):";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.textBoxRigID);
-            this.groupBox1.Controls.Add(this.textBoxPassword);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.labelPassword);
-            this.groupBox1.Controls.Add(this.labelEmail);
-            this.groupBox1.Controls.Add(this.textBoxLogin);
-            this.groupBox1.Controls.Add(this.textBoxEmail);
-            this.groupBox1.Controls.Add(this.labelLogin);
-            this.groupBox1.Location = new System.Drawing.Point(300, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(389, 127);
-            this.groupBox1.TabIndex = 26;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Pool Parameters";
+            this.groupBox3.Controls.Add(this.checkBoxAutoStart);
+            this.groupBox3.Controls.Add(this.checkBoxLaunchAtStartup);
+            this.groupBox3.Location = new System.Drawing.Point(9, 146);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(177, 66);
+            this.groupBox3.TabIndex = 34;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Automation";
             // 
             // MainForm
             // 
@@ -1637,12 +1681,14 @@
             this.groupBox2.PerformLayout();
             this.tabPageSettings.ResumeLayout(false);
             this.tabPageSettings.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBoxPoolPriorities.ResumeLayout(false);
             this.groupBoxCoinsToMine.ResumeLayout(false);
             this.groupBoxCoinsToMine.PerformLayout();
             this.tabPageLog.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1794,6 +1840,9 @@
         private System.Windows.Forms.Label labelLogin;
         private System.Windows.Forms.TextBox textBoxBitcoinAddress;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Timer timerUpdateLog;
+        private System.Windows.Forms.CheckBox checkBoxLaunchAtStartup;
+        private System.Windows.Forms.CheckBox checkBoxAutoStart;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }
-

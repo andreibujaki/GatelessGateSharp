@@ -47,10 +47,12 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static String shortAppName = "Gateless Gate Sharp";
-        public static String appVersion = "0.0.4";
+        public static String appVersion = "0.0.5";
         public static String appName = shortAppName + " " + appVersion + " alpha";
         private static String databaseFileName = "GatelessGateSharp.sqlite";
         private static String logFileName = "GatelessGateSharp.log";
+        private static int mLaunchInterval = 500;
+
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
         private Control[] labelGPUVendorArray;
         private Control[] labelGPUNameArray;
@@ -78,30 +80,38 @@ namespace GatelessGateSharp
         public static MainForm Instance { get { return instance; } }
         public static bool DevFeeMode { get { return Instance.mDevFeeMode; } }
 
+        private static String sLoggerBuffer = "";
+
         public static void Logger(String lines)
         {
+            System.Console.Write(lines + "\n");
             Instance.loggerMutex.WaitOne();
-            System.IO.StreamWriter file = new System.IO.StreamWriter(logFileName, true);
-            file.WriteLine(lines);
-            file.Close();
+            sLoggerBuffer += lines + "\n";
             Instance.loggerMutex.ReleaseMutex();
+        }
+
+        public static void UpdateLog()
+        {
+            Instance.loggerMutex.WaitOne();
+            String loggerBuffer = sLoggerBuffer;
+            sLoggerBuffer = "";
+            Instance.loggerMutex.ReleaseMutex();
+
+            if (loggerBuffer == "")
+                return;
 
             try
             {
-                Instance.richTextBoxLog.Invoke((MethodInvoker)delegate
-                {
-                    Instance.loggerMutex.WaitOne();
-                    Instance.richTextBoxLog.SelectionLength = 0;
-                    Instance.richTextBoxLog.SelectionStart = Instance.richTextBoxLog.Text.Length;
-                    Instance.richTextBoxLog.ScrollToCaret();
-                    if (Instance.richTextBoxLog.Text != "")
-                        Instance.richTextBoxLog.Text += "\n";
-                    Instance.richTextBoxLog.Text += lines;
-                    Instance.richTextBoxLog.SelectionLength = 0;
-                    Instance.richTextBoxLog.SelectionStart = Instance.richTextBoxLog.Text.Length;
-                    Instance.richTextBoxLog.ScrollToCaret();
-                    Instance.loggerMutex.ReleaseMutex();
-                });
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(logFileName, true))
+                    file.Write(loggerBuffer);
+
+                Instance.richTextBoxLog.SelectionLength = 0;
+                Instance.richTextBoxLog.SelectionStart = Instance.richTextBoxLog.Text.Length;
+                Instance.richTextBoxLog.ScrollToCaret();
+                Instance.richTextBoxLog.Text += loggerBuffer;
+                Instance.richTextBoxLog.SelectionLength = 0;
+                Instance.richTextBoxLog.SelectionStart = Instance.richTextBoxLog.Text.Length;
+                Instance.richTextBoxLog.ScrollToCaret();
             }
             catch (Exception ex) { }
         }
@@ -229,6 +239,14 @@ namespace GatelessGateSharp
                     {
                         textBoxPassword.Text = (String)reader["value"];
                     }
+                    else if (propertyName == "auto_start")
+                    {
+                        checkBoxAutoStart.Checked = ((String)reader["value"] == "true");
+                    }
+                    else if (propertyName == "launch_at_startup")
+                    {
+                        checkBoxLaunchAtStartup.Checked = ((String)reader["value"] == "true");
+                    }
                 }
             }
             catch (Exception ex) {
@@ -322,8 +340,12 @@ namespace GatelessGateSharp
             command.Parameters.AddWithValue("@value", textBoxLogin.Text);
             command.ExecuteNonQuery();
             command = new SQLiteCommand(sql, conn);
-            command.Parameters.AddWithValue("@name", "pool_password");
-            command.Parameters.AddWithValue("@value", textBoxPassword.Text);
+            command.Parameters.AddWithValue("@name", "auto_start");
+            command.Parameters.AddWithValue("@value", (checkBoxAutoStart.Checked ? "true" : "false"));
+            command.ExecuteNonQuery();
+            command = new SQLiteCommand(sql, conn);
+            command.Parameters.AddWithValue("@name", "launch_at_startup");
+            command.Parameters.AddWithValue("@value", (checkBoxLaunchAtStartup.Checked ? "true" : "false"));
             command.ExecuteNonQuery();
             
             conn.Close();
@@ -376,6 +398,9 @@ namespace GatelessGateSharp
                     try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); } catch (Exception ex) { } // Undocumented but found on Windows 10.
                 }
             }
+
+            if (checkBoxAutoStart.Checked)
+                buttonStart_Click(null, null);
         }
 
         private void InitializeDevices()
@@ -390,7 +415,7 @@ namespace GatelessGateSharp
 
                 foreach (ComputeDevice openclDevice in context.Devices)
                 {
-                    if (openclDevice.Vendor == "Intel Corporation"
+                    if (openclDevice.Vendor == "Intel(R) Corporation"
                         || openclDevice.Vendor == "GenuineIntel"
                         || openclDevice.Type == ComputeDeviceTypes.Cpu)
                         continue;
@@ -563,7 +588,7 @@ namespace GatelessGateSharp
             protected override System.Net.WebRequest GetWebRequest(Uri uri)
             {
                 System.Net.WebRequest request = base.GetWebRequest(uri);
-                request.Timeout = 5 * 1000;
+                request.Timeout = 60 * 1000;
                 return request;
             }
         }
@@ -1312,7 +1337,7 @@ namespace GatelessGateSharp
             {
                 mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, niceHashMode));
                 mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, niceHashMode));
-                System.Threading.Thread.Sleep(0);
+                System.Threading.Thread.Sleep(mLaunchInterval);
             }
         }
 
@@ -1505,7 +1530,7 @@ namespace GatelessGateSharp
             for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
             {
                 mMiners.Add(new OpenCLEthashMiner(mDevices[deviceIndex], stratum));
-                System.Threading.Thread.Sleep(0);
+                System.Threading.Thread.Sleep(mLaunchInterval);
             }
         }
 
@@ -1550,7 +1575,9 @@ namespace GatelessGateSharp
                 foreach (Miner miner in mMiners)
                 {
                     miner.Stop();
-                    System.Threading.Thread.Sleep(0);
+                    miner.WaitForExit(60000);
+                    if (!miner.Done)
+                        miner.Abort(); // Not good at all.s
                 }
                 mStratum.Stop();
             }
@@ -1591,7 +1618,7 @@ namespace GatelessGateSharp
                 mStratum = null;
                 mMiners = null;
 
-                mDevFeeMode = false;
+                mDevFeeMode = true;
                 LaunchMiners();
                 if (mStratum == null || mMiners == null)
                 {
@@ -1602,7 +1629,7 @@ namespace GatelessGateSharp
                     appState = ApplicationGlobalState.Mining;
                     tabControlMainForm.SelectedIndex = 0;
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
-                    timerDevFee.Enabled = false;
+                    timerDevFee.Enabled = true;
                 }
             }
             else if (appState == ApplicationGlobalState.Mining) {
@@ -1713,11 +1740,10 @@ namespace GatelessGateSharp
                 mDevFeeMode = false;
                 timerDevFee.Interval = (int)(((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage)) * 1000);
                 LaunchMiners();
-                System.Threading.Thread.Sleep(0);
                 if (mMiners == null || mStratum == null)
                 {
                     mDevFeeMode = true;
-                    timerDevFee.Interval = 10000;
+                    timerDevFee.Interval = 1000;
                 }
             }
             else
@@ -1727,12 +1753,11 @@ namespace GatelessGateSharp
                 StopMiners();
                 mDevFeeMode = true;
                 timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
-                System.Threading.Thread.Sleep(0);
                 LaunchMiners();
                 if (mMiners == null || mStratum == null)
                 {
                     mDevFeeMode = false;
-                    timerDevFee.Interval = 10000;
+                    timerDevFee.Interval = 1000;
                 }
             }
 
@@ -1809,6 +1834,36 @@ namespace GatelessGateSharp
                     System.Diagnostics.Process.Start("http://minexmr.com/");
                     return;
                 }
+            }
+        }
+
+        private void timerUpdateLog_Tick(object sender, EventArgs e)
+        {
+            UpdateLog();
+        }
+
+        private void checkBoxLaunchAtStartup_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                if (checkBoxLaunchAtStartup.Checked)
+                {
+                    startInfo.Arguments = "/C schtasks /create /sc onlogon /tn GatelessGateSharp /rl highest /tr \"" + Application.ExecutablePath + "\"";
+                }
+                else
+                {
+                    startInfo.Arguments = "/C schtasks /delete /f /tn GatelessGateSharp";
+                }
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to complete the operation.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
