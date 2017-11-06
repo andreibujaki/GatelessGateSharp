@@ -60,7 +60,7 @@ namespace GatelessGateSharp
         NetworkStream mStream;
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
-        Thread mStreamReaderThread = null;
+        Thread mStreamReaderThread;
 
         public bool Stopped { get { return mStopped; } }
         public String ServerAddress { get { return mServerAddress; } }
@@ -168,23 +168,6 @@ namespace GatelessGateSharp
                 Thread reconnectThread = new Thread(new ThreadStart(Connect));
                 reconnectThread.IsBackground = true;
                 reconnectThread.Start();
-            }
-        }
-
-        ~Stratum()
-        {
-            Stop();
-            if (mStreamReaderThread != null)
-            {
-                int ms = 5000;
-                while (mStreamReaderThread.IsAlive && ms > 0)
-                {
-                    System.Threading.Thread.Sleep((ms < 10) ? ms : 10);
-                    ms -= 10;
-                }
-                if (mStreamReaderThread.IsAlive)
-                    mStreamReaderThread.Abort();
-                mStreamReaderThread = null;
             }
         }
     }
