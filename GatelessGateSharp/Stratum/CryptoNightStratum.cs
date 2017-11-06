@@ -54,7 +54,6 @@ namespace GatelessGateSharp
 
         String mUserID;
         Job mJob;
-        Device mLastDeviceToSubmitShare = null;
         private Mutex mMutex = new Mutex();
 
         public Job GetJob()
@@ -88,14 +87,12 @@ namespace GatelessGateSharp
 
                 if (error == null && !MainForm.DevFeeMode) {
                     MainForm.Logger("Share accepted.");
-                    if (mLastDeviceToSubmitShare != null)
-                        mLastDeviceToSubmitShare.IncrementAcceptedShares();
+                    ReportShareAcceptance();
                 }
                 else if (error != null && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share rejected: " + (String)(((JContainer)response["error"])["message"]));
-                    if (mLastDeviceToSubmitShare != null)
-                        mLastDeviceToSubmitShare.IncrementRejectedShares();
+                    ReportShareRejection();
                 }
             }
             else
@@ -136,7 +133,7 @@ namespace GatelessGateSharp
                 return;
 
             mMutex.WaitOne();
-            mLastDeviceToSubmitShare = device;
+            RegisterDeviceWithShare(device);
             try
             {
                 String stringNonce = String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff));

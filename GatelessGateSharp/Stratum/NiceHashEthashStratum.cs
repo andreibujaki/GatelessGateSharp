@@ -39,7 +39,6 @@ namespace GatelessGateSharp
 
         int mJsonRPCMessageID = 1;
         string mSubsciptionID = null;
-        Device mLastDeviceToSubmitShare = null;
         private Mutex mMutex = new Mutex();
 
         protected override void ProcessLine(String line)
@@ -87,14 +86,12 @@ namespace GatelessGateSharp
                 if (result && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + ID + " accepted.");
-                    if (mLastDeviceToSubmitShare != null)
-                        mLastDeviceToSubmitShare.IncrementAcceptedShares();
+                    ReportShareAcceptance();
                 }
                 else if (!result && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
-                    if (mLastDeviceToSubmitShare != null)
-                        mLastDeviceToSubmitShare.IncrementRejectedShares();
+                    ReportShareRejection();
                 }
             }
             else
@@ -153,7 +150,7 @@ namespace GatelessGateSharp
                 return;
 
             mMutex.WaitOne();
-            mLastDeviceToSubmitShare = aDevice;
+            RegisterDeviceWithShare(aDevice);
             try
             {
                 String stringNonce

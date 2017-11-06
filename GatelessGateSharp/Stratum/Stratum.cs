@@ -61,6 +61,7 @@ namespace GatelessGateSharp
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
+        private List<Device> mDevicesWithShare = new List<Device>();
 
         public bool Stopped { get { return mStopped; } }
         public String ServerAddress { get { return mServerAddress; } }
@@ -70,6 +71,37 @@ namespace GatelessGateSharp
         public String PoolExtranonce { get { return mPoolExtranonce; } }
         public String PoolName { get { return mPoolName; } }
         public double Difficulty { get { return mDifficulty; } }
+
+        protected void RegisterDeviceWithShare(Device aDevice)
+        {
+            mMutex.WaitOne();
+            mDevicesWithShare.Add(aDevice);
+            mMutex.ReleaseMutex();
+        }
+
+        protected void ReportShareAcceptance()
+        {
+            mMutex.WaitOne();
+            if (mDevicesWithShare.Count > 0)
+            {
+                Device device = mDevicesWithShare[0];
+                mDevicesWithShare.RemoveAt(0);
+                device.IncrementAcceptedShares();
+            }
+            mMutex.ReleaseMutex();
+        }
+
+        protected void ReportShareRejection()
+        {
+            mMutex.WaitOne();
+            if (mDevicesWithShare.Count > 0)
+            {
+                Device device = mDevicesWithShare[0];
+                mDevicesWithShare.RemoveAt(0);
+                device.IncrementRejectedShares();
+            }
+            mMutex.ReleaseMutex();
+        }
 
         public void Stop()
         {

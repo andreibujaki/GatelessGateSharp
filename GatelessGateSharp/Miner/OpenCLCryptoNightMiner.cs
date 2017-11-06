@@ -47,8 +47,8 @@ namespace GatelessGateSharp
         {
             mStratum = aStratum;
             mLocalWorkSize = (Device.Vendor == "AMD" ? 8 : 4);
-            mGlobalWorkSize = (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 470")         ? (32 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 570")         ? (32 * Device.MaxComputeUnits) :
+            mGlobalWorkSize = (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 470")         ? (16 * Device.MaxComputeUnits) :
+                              (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 570")         ? (16 * Device.MaxComputeUnits) :
                               (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 480")         ? (32 * Device.MaxComputeUnits) :
                               (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 580")         ? (32 * Device.MaxComputeUnits) :
                               (Device.Vendor == "AMD"    && Device.Name == "Radeon R9 Fury X/Nano") ? (12 * Device.MaxComputeUnits) :

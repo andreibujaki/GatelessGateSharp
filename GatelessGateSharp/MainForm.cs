@@ -64,6 +64,7 @@ namespace GatelessGateSharp
         private Control[] labelGPUCoreClockArray;
         private Control[] labelGPUMemoryClockArray;
         private Control[] labelGPUSharesArray;
+        private CheckBox[] checkBoxGPUEnableArray;
         private Device[] mDevices;
         private const int maxNumDevices = 8; // This depends on MainForm.
         private bool ADLInitialized = false;
@@ -76,6 +77,10 @@ namespace GatelessGateSharp
         private int mDevFeePercentage = 1;
         private int mDevFeeDurationInSeconds = 60;
         private String mDevFeeBitcoinAddress = "1BHwDWVerUTiKxhHPf2ubqKKiBMiKQGomZ";
+        private DateTime mDevFeeModeStartTime = DateTime.Now; // dummy
+
+        private DateTime mStartTime = DateTime.Now;
+        private String mCurrentPool= "NiceHash";
 
         public static MainForm Instance { get { return instance; } }
         public static bool DevFeeMode { get { return Instance.mDevFeeMode; } }
@@ -247,6 +252,38 @@ namespace GatelessGateSharp
                     {
                         checkBoxLaunchAtStartup.Checked = ((String)reader["value"] == "true");
                     }
+                    else if (propertyName == "enable_gpu0")
+                    {
+                        checkBoxGPU0Enable.Checked = ((String)reader["value"] == "true");
+                    }
+                    else if (propertyName == "enable_gpu1")
+                    {
+                        checkBoxGPU1Enable.Checked = ((String)reader["value"] == "true");
+                    }
+                    else if (propertyName == "enable_gpu2")
+                    {
+                        checkBoxGPU2Enable.Checked = ((String)reader["value"] == "true");
+                    }
+                    else if (propertyName == "enable_gpu3")
+                    {
+                        checkBoxGPU3Enable.Checked = ((String)reader["value"] == "true");
+                    }
+                    else if (propertyName == "enable_gpu4")
+                    {
+                        checkBoxGPU4Enable.Checked = ((String)reader["value"] == "true");
+                    }
+                    else if (propertyName == "enable_gpu5")
+                    {
+                        checkBoxGPU5Enable.Checked = ((String)reader["value"] == "true");
+                    }
+                    else if (propertyName == "enable_gpu6")
+                    {
+                        checkBoxGPU6Enable.Checked = ((String)reader["value"] == "true");
+                    }
+                    else if (propertyName == "enable_gpu7")
+                    {
+                        checkBoxGPU7Enable.Checked = ((String)reader["value"] == "true");
+                    }
                 }
             }
             catch (Exception ex) {
@@ -347,6 +384,13 @@ namespace GatelessGateSharp
             command.Parameters.AddWithValue("@name", "launch_at_startup");
             command.Parameters.AddWithValue("@value", (checkBoxLaunchAtStartup.Checked ? "true" : "false"));
             command.ExecuteNonQuery();
+            for (int i = 0; i < mDevices.Length; ++i)
+            {
+                command = new SQLiteCommand(sql, conn);
+                command.Parameters.AddWithValue("@name", "enable_gpu" + i);
+                command.Parameters.AddWithValue("@value", (checkBoxGPUEnableArray[i].Checked ? "true" : "false"));
+                command.ExecuteNonQuery();
+            }
             
             conn.Close();
         }
@@ -364,6 +408,7 @@ namespace GatelessGateSharp
             labelGPUCoreClockArray = new Control[] { labelGPU0CoreClock, labelGPU1CoreClock, labelGPU2CoreClock, labelGPU3CoreClock, labelGPU4CoreClock, labelGPU5CoreClock, labelGPU6CoreClock, labelGPU7CoreClock };
             labelGPUMemoryClockArray = new Control[] { labelGPU0MemoryClock, labelGPU1MemoryClock, labelGPU2MemoryClock, labelGPU3MemoryClock, labelGPU4MemoryClock, labelGPU5MemoryClock, labelGPU6MemoryClock, labelGPU7MemoryClock };
             labelGPUSharesArray = new Control[] { labelGPU0Shares, labelGPU1Shares, labelGPU2Shares, labelGPU3Shares, labelGPU4Shares, labelGPU5Shares, labelGPU6Shares, labelGPU7Shares };
+            checkBoxGPUEnableArray = new CheckBox[] { checkBoxGPU0Enable, checkBoxGPU1Enable, checkBoxGPU2Enable, checkBoxGPU3Enable, checkBoxGPU4Enable, checkBoxGPU5Enable, checkBoxGPU6Enable, checkBoxGPU7Enable };
 
             if (LoadPhyMemDriver() != 0)
             {
@@ -458,6 +503,7 @@ namespace GatelessGateSharp
                 labelGPUCoreClockArray[index].Visible = false;
                 labelGPUMemoryClockArray[index].Visible = false;
                 labelGPUSharesArray[index].Visible = false;
+                checkBoxGPUEnableArray[index].Visible = false;
             }
 
             int ADLRet = -1;
@@ -577,9 +623,9 @@ namespace GatelessGateSharp
             else {
             }
             
-            UpdateDeviceStatus();
+            UpdateStatsWithShortPolling();
             timerDeviceStatusUpdates.Enabled = true;
-            UpdateCurrencyStats();
+            UpdateStatsWithLongPolling();
             timerCurrencyStatUpdates.Enabled = true;
         }
 
@@ -588,12 +634,12 @@ namespace GatelessGateSharp
             protected override System.Net.WebRequest GetWebRequest(Uri uri)
             {
                 System.Net.WebRequest request = base.GetWebRequest(uri);
-                request.Timeout = 60 * 1000;
+                request.Timeout = 1 * 1000;
                 return request;
             }
         }
 
-        private void UpdateCurrencyStats()
+        private void UpdateStatsWithLongPolling()
         {
             try
             {
@@ -602,31 +648,6 @@ namespace GatelessGateSharp
                     foreach (Miner miner in mMiners)
                         totalSpeed += miner.Speed;
                 labelCurrentSpeed.Text = (appState != ApplicationGlobalState.Mining) ? "-" : String.Format("{0:N2} Mh/s", totalSpeed / 1000000);
-
-                String poolName = (string)listBoxPoolPriorities.Items[0];
-                if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
-                {
-                    labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%)";
-                    poolName = mStratum.PoolName;
-                }
-                else if (appState == ApplicationGlobalState.Mining && mStratum != null)
-                {
-                    labelCurrentPool.Text = mStratum.PoolName + " (" + mStratum.ServerAddress + ")";
-                    poolName = mStratum.PoolName;
-                }
-                else
-                {
-                    labelCurrentPool.Text = (string)listBoxPoolPriorities.Items[0];
-                }
-
-                if (appState == ApplicationGlobalState.Mining && mMiners != null)
-                {
-                    labelCurrentAlgorithm.Text = mMiners[0].AlgorithmName; // TODO
-                }
-                else
-                {
-                    labelCurrentAlgorithm.Text = "-";
-                }
 
                 var client = new CustomWebClient();
                 double USDBTC = 0;
@@ -651,7 +672,7 @@ namespace GatelessGateSharp
                     }
                 }
 
-                if (poolName == "NiceHash" && radioButtonEthereum.Checked && textBoxBitcoinAddress.Text != "")
+                if (mCurrentPool == "NiceHash" && radioButtonEthereum.Checked && textBoxBitcoinAddress.Text != "")
                 {
                     double balance = 0;
                     String jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
@@ -684,7 +705,7 @@ namespace GatelessGateSharp
                         labelPriceMonth.Text = "-";
                     }
                 }
-                if (poolName == "NiceHash" && radioButtonMonero.Checked && textBoxBitcoinAddress.Text != "")
+                if (mCurrentPool == "NiceHash" && radioButtonMonero.Checked && textBoxBitcoinAddress.Text != "")
                 {
                     double balance = 0;
                     String jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
@@ -717,7 +738,7 @@ namespace GatelessGateSharp
                         labelPriceMonth.Text = "-";
                     }
                 }
-                else if (poolName == "ethermine.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
+                else if (mCurrentPool == "ethermine.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
                 {
                     String jsonString = client.DownloadString("https://api.ethermine.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
                     var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
@@ -742,7 +763,7 @@ namespace GatelessGateSharp
                         labelPriceMonth.Text = "-";
                     }
                 }
-                else if (poolName == "ethpool.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
+                else if (mCurrentPool == "ethpool.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
                 {
                     String jsonString = client.DownloadString("http://api.ethpool.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
                     var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
@@ -772,7 +793,7 @@ namespace GatelessGateSharp
                         labelPriceMonth.Text = "-";
                     }
                 }
-                else if (poolName == "Nanopool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
+                else if (mCurrentPool == "Nanopool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
                 {
                     String jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/user/" + textBoxEthereumAddress.Text);
                     var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
@@ -789,7 +810,7 @@ namespace GatelessGateSharp
                     labelPriceWeek.Text = "-";
                     labelPriceMonth.Text = "-";
                 }
-                else if (poolName == "Nanopool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "")
+                else if (mCurrentPool == "Nanopool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "")
                 {
                     String jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/user/" + textBoxMoneroAddress.Text);
                     var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
@@ -806,7 +827,7 @@ namespace GatelessGateSharp
                     labelPriceWeek.Text = "-";
                     labelPriceMonth.Text = "-";
                 }
-                else if (poolName == "DwarfPool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
+                else if (mCurrentPool == "DwarfPool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
                 {
                     String jsonString = client.DownloadString("http://dwarfpool.com/eth/api?wallet=" + textBoxEthereumAddress.Text);
                     var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
@@ -822,7 +843,7 @@ namespace GatelessGateSharp
                     labelPriceWeek.Text = "-";
                     labelPriceMonth.Text = "-";
                 }
-                else if (poolName == "DwarfPool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "")
+                else if (mCurrentPool == "DwarfPool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "")
                 {
                     String jsonString = client.DownloadString("http://dwarfpool.com/xmr/api?wallet=" + textBoxMoneroAddress.Text);
                     var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
@@ -888,8 +909,52 @@ namespace GatelessGateSharp
             }
         }
 
-        private void UpdateDeviceStatus()
+        private void UpdateStatsWithShortPolling()
         {
+            mCurrentPool = (string)listBoxPoolPriorities.Items[0];
+            if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
+            {
+                labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + String.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
+                mCurrentPool = mStratum.PoolName;
+            }
+            else if (appState == ApplicationGlobalState.Mining && mStratum != null)
+            {
+                labelCurrentPool.Text = mStratum.PoolName + " (" + mStratum.ServerAddress + ")";
+                mCurrentPool = mStratum.PoolName;
+            }
+            else
+            {
+                labelCurrentPool.Text = (string)listBoxPoolPriorities.Items[0];
+            }
+
+            for (int i = 0; i < mDevices.Length; ++i)
+            {
+                Color labelColor = (checkBoxGPUEnableArray[i].Checked ? Color.Black : Color.Gray);
+                labelGPUNameArray[i].ForeColor = labelColor;
+                labelGPUVendorArray[i].ForeColor = labelColor;
+                labelGPUIDArray[i].ForeColor = labelColor;
+                labelGPUSpeedArray[i].ForeColor = labelColor;
+                labelGPUActivityArray[i].ForeColor = labelColor;
+                labelGPUFanArray[i].ForeColor = labelColor;
+                labelGPUCoreClockArray[i].ForeColor = labelColor;
+                labelGPUMemoryClockArray[i].ForeColor = labelColor;
+                labelGPUSharesArray[i].ForeColor = labelColor;
+            }
+
+            long elapsedTimeInSeconds = (long)((DateTime.Now - mStartTime).TotalSeconds);
+            if (appState != ApplicationGlobalState.Mining)
+            {
+                labelElapsedTime.Text = "-";
+            }
+            else if (elapsedTimeInSeconds >= 24 * 60 * 60)
+            {
+                labelElapsedTime.Text = String.Format("{3} Days {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, (elapsedTimeInSeconds / 60) % 60, (elapsedTimeInSeconds / 60 / 60) % 24, (elapsedTimeInSeconds / 60 / 60 / 24));
+            }
+            else
+            {
+                labelElapsedTime.Text = String.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, (elapsedTimeInSeconds / 60) % 60, (elapsedTimeInSeconds / 60 / 60) % 24);
+            }
+
             double totalSpeed = 0;
             if (mMiners != null)
                 foreach (Miner miner in mMiners)
@@ -1129,7 +1194,7 @@ namespace GatelessGateSharp
 
         private void timerDeviceStatusUpdates_Tick(object sender, EventArgs e)
         {
-            UpdateDeviceStatus();
+            UpdateStatsWithShortPolling();
         }
 
         Stratum mStratum;
@@ -1336,9 +1401,12 @@ namespace GatelessGateSharp
             mMiners = new List<Miner>();
             for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
             {
-                mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, niceHashMode));
-                mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, niceHashMode));
-                System.Threading.Thread.Sleep(mLaunchInterval);
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                {
+                    mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, niceHashMode));
+                    mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, niceHashMode));
+                    System.Threading.Thread.Sleep(mLaunchInterval);
+                }
             }
         }
 
@@ -1530,8 +1598,11 @@ namespace GatelessGateSharp
             mMiners = new List<Miner>();
             for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
             {
-                mMiners.Add(new OpenCLEthashMiner(mDevices[deviceIndex], stratum));
-                System.Threading.Thread.Sleep(mLaunchInterval);
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                {
+                    mMiners.Add(new OpenCLEthashMiner(mDevices[deviceIndex], stratum));
+                    System.Threading.Thread.Sleep(mLaunchInterval);
+                }
             }
         }
 
@@ -1578,7 +1649,7 @@ namespace GatelessGateSharp
                     miner.Stop();
                     miner.WaitForExit(60000);
                     if (!miner.Done)
-                        miner.Abort(); // Not good at all.s
+                        miner.Abort(); // Not good at all. Avoid this at all costs.
                 }
                 mStratum.Stop();
             }
@@ -1603,6 +1674,16 @@ namespace GatelessGateSharp
             if (textBoxBitcoinAddress.Text == "" && textBoxEthereumAddress.Text == "" && textBoxMoneroAddress.Text == "")
             {
                 MessageBox.Show("Please enter at least one valid wallet address.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tabControlMainForm.TabIndex = 1;
+                return;
+            }
+            bool enabled = false;
+            foreach (var control in checkBoxGPUEnableArray)
+                enabled = enabled || control.Checked;
+            if (!enabled)
+            {
+                MessageBox.Show("Please enable at least one device.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tabControlMainForm.TabIndex = 0;
                 return;
             }
 
@@ -1631,6 +1712,8 @@ namespace GatelessGateSharp
                     tabControlMainForm.SelectedIndex = 0;
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
                     timerDevFee.Enabled = true;
+                    mStartTime = DateTime.Now;
+                    mDevFeeModeStartTime = DateTime.Now;
                 }
             }
             else if (appState == ApplicationGlobalState.Mining) {
@@ -1639,8 +1722,8 @@ namespace GatelessGateSharp
                 appState = ApplicationGlobalState.Idle;
             }
 
-            UpdateDeviceStatus();
-            UpdateCurrencyStats();
+            UpdateStatsWithShortPolling();
+            UpdateStatsWithLongPolling();
             UpdateControls();
         }
 
@@ -1651,17 +1734,18 @@ namespace GatelessGateSharp
 
             groupBoxCoinsToMine.Enabled = (appState == ApplicationGlobalState.Idle);
             groupBoxPoolPriorities.Enabled = (appState == ApplicationGlobalState.Idle);
-            textBoxBitcoinAddress.Enabled = (appState == ApplicationGlobalState.Idle);
-            textBoxEthereumAddress.Enabled = (appState == ApplicationGlobalState.Idle);
-            textBoxMoneroAddress.Enabled = (appState == ApplicationGlobalState.Idle);
-            textBoxZcashAddress.Enabled = (appState == ApplicationGlobalState.Idle);
+            groupBoxPoolParameters.Enabled = (appState == ApplicationGlobalState.Idle);
+            groupBoxWalletAddresses.Enabled = (appState == ApplicationGlobalState.Idle);
+            groupBoxAutomation.Enabled = (appState == ApplicationGlobalState.Idle);
+            foreach (var control in checkBoxGPUEnableArray)
+                control.Enabled = (appState == ApplicationGlobalState.Idle);
 
             this.Enabled = true;
         }
 
         private void timerCurrencyStatUpdates_Tick(object sender, EventArgs e)
         {
-            UpdateCurrencyStats();
+            UpdateStatsWithLongPolling();
         }
 
         private void buttonPoolPrioritiesUp_Click(object sender, EventArgs e)
@@ -1672,7 +1756,7 @@ namespace GatelessGateSharp
                 listBoxPoolPriorities.Items.Insert(selectedIndex - 1, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex + 1);
                 listBoxPoolPriorities.SelectedIndex = selectedIndex - 1;
-                UpdateCurrencyStats();
+                UpdateStatsWithLongPolling();
             }
         }
 
@@ -1684,7 +1768,7 @@ namespace GatelessGateSharp
                 listBoxPoolPriorities.Items.Insert(selectedIndex + 2, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex);
                 listBoxPoolPriorities.SelectedIndex = selectedIndex + 1;
-                UpdateCurrencyStats();
+                UpdateStatsWithLongPolling();
             }
         }
 
@@ -1762,7 +1846,7 @@ namespace GatelessGateSharp
                 }
             }
 
-            UpdateCurrencyStats();
+            UpdateStatsWithLongPolling();
             Enabled = true;
         }
 
@@ -1866,6 +1950,446 @@ namespace GatelessGateSharp
             {
                 MessageBox.Show("Failed to complete the operation.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void checkBoxGPU0Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatsWithShortPolling();
+        }
+
+        private void checkBoxGPU1Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatsWithShortPolling();
+        }
+
+        private void checkBoxGPU2Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatsWithShortPolling();
+        }
+
+        private void checkBoxGPU3Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatsWithShortPolling();
+        }
+
+        private void checkBoxGPU4Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatsWithShortPolling();
+        }
+
+        private void checkBoxGPU5Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatsWithShortPolling();
+        }
+
+        private void checkBoxGPU6Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatsWithShortPolling();
+        }
+
+        private void checkBoxGPU7Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatsWithShortPolling();
+        }
+
+        private void labelGPU0ID_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0Vendor_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0Name_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0Speed_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0Shares_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0Activity_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0Temp_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0Fan_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0CoreClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU0MemoryClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+        }
+
+        private void labelGPU1ID_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1Vendor_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1Name_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1Speed_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1Shares_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1Activity_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1Temp_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1Fan_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1CoreClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU1MemoryClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+        }
+
+        private void labelGPU2ID_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2Vendor_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2Name_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2Speed_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2Shares_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2Activity_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2Temp_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2Fan_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2CoreClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU2MemoryClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+        }
+
+        private void labelGPU3Vendor_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3ID_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3Name_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3Speed_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3Shares_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3Activity_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3Temp_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3Fan_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3CoreClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU3MemoryClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+        }
+
+        private void labelGPU4ID_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4Vendor_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4Name_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4Speed_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4Shares_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4Activity_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4Temp_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4Fan_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4CoreClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU4MemoryClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+        }
+
+        private void labelGPU5ID_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5Vendor_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5Name_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5Speed_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5Shares_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5Activity_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5Temp_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5Fan_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5CoreClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU5MemoryClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+        }
+
+        private void labelGPU6ID_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6Vendor_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6Name_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6Speed_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6Shares_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6Activity_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6Temp_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6Fan_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6CoreClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU6MemoryClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+        }
+
+        private void labelGPU7ID_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7Vendor_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7Name_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7Speed_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7Shares_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7Activity_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7Temp_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7Fan_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7CoreClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+        }
+
+        private void labelGPU7MemoryClock_Click(object sender, EventArgs e)
+        {
+            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
     }
 }

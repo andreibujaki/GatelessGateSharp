@@ -44,7 +44,6 @@ namespace GatelessGateSharp
 
         Thread mPingThread;
         int mJsonRPCMessageID = 1;
-        Device mLastDeviceToSubmitShare = null;
         private Mutex mMutex = new Mutex();
 
         protected override void ProcessLine(String line)
@@ -66,8 +65,7 @@ namespace GatelessGateSharp
                     && response["result"] == null)
             {
                 MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
-                if (mLastDeviceToSubmitShare != null)
-                    mLastDeviceToSubmitShare.IncrementRejectedShares();
+                ReportShareRejection();
             }
             else if (response.ContainsKey("result")
                 && response["result"] != null
@@ -76,26 +74,22 @@ namespace GatelessGateSharp
                 if ((bool)response["result"] && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " accepted.");
-                    if (mLastDeviceToSubmitShare != null)
-                        mLastDeviceToSubmitShare.IncrementAcceptedShares();
+                    ReportShareAcceptance();
                 }
                 else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String) && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + (String)response["error"]);
-                    if (mLastDeviceToSubmitShare != null)
-                        mLastDeviceToSubmitShare.IncrementRejectedShares();
+                    ReportShareRejection();
                 }
                 else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray) && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + ((JArray)response["error"])["message"]);
-                    if (mLastDeviceToSubmitShare != null)
-                        mLastDeviceToSubmitShare.IncrementRejectedShares();
+                    ReportShareRejection();
                 }
                 else if (!(bool)response["result"] && !MainForm.DevFeeMode)
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
-                    if (mLastDeviceToSubmitShare != null)
-                        mLastDeviceToSubmitShare.IncrementRejectedShares();
+                    ReportShareRejection();
                 }
                 else 
                 {
@@ -196,7 +190,7 @@ namespace GatelessGateSharp
                 return;
 
             mMutex.WaitOne();
-            mLastDeviceToSubmitShare = aDevice;
+            RegisterDeviceWithShare(aDevice);
             try
             {
                 String stringNonce
