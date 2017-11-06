@@ -46,11 +46,16 @@ namespace GatelessGateSharp
             : base(aGatelessGateDevice, "CrypoNight")
         {
             mStratum = aStratum;
-            mLocalWorkSize = (Device.Vendor == "AMD" ? 4 : 4);
-            mGlobalWorkSize = (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 480")         ? (16 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "AMD"    && Device.Name == "Radeon R9 Fury X/Nano") ? (16 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "NVIDIA" && Device.Name == "GeForce GTX 1080 Ti")   ? (16 * Device.MaxComputeUnits) :
+            mLocalWorkSize = (Device.Vendor == "AMD" ? 8 : 4);
+            mGlobalWorkSize = (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 470")         ? (32 * Device.MaxComputeUnits) :
+                              (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 570")         ? (32 * Device.MaxComputeUnits) :
+                              (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 480")         ? (32 * Device.MaxComputeUnits) :
+                              (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 580")         ? (32 * Device.MaxComputeUnits) :
+                              (Device.Vendor == "AMD"    && Device.Name == "Radeon R9 Fury X/Nano") ? (12 * Device.MaxComputeUnits) :
+                              (Device.Vendor == "NVIDIA" && Device.Name == "GeForce GTX 1080 Ti")   ? (32 * Device.MaxComputeUnits) :
                                                                                                       (16 * Device.MaxComputeUnits);
+            if (mGlobalWorkSize % mLocalWorkSize != 0)
+                mGlobalWorkSize = mLocalWorkSize - mGlobalWorkSize % mLocalWorkSize;
             mNicehashMode = aNicehashMode;
             StartMinerThread();
         }
