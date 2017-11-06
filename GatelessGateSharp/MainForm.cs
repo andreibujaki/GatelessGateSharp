@@ -47,7 +47,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static String shortAppName = "Gateless Gate Sharp";
-        public static String appVersion = "0.0.5";
+        public static String appVersion = "0.0.6";
         public static String appName = shortAppName + " " + appVersion + " alpha";
         private static String databaseFileName = "GatelessGateSharp.sqlite";
         private static String logFileName = "GatelessGateSharp.log";
@@ -848,6 +848,7 @@ namespace GatelessGateSharp
             }
             catch (Exception ex)
             {
+                MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
             }
         }
 

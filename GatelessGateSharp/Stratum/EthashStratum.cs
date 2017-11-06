@@ -224,7 +224,7 @@ namespace GatelessGateSharp
 
         protected Job mJob = null;
 
-        public Job CurrentJob { get { return mJob; } }
+        public Job GetJob() { return mJob; }
 
         public new Work GetWork()
         {

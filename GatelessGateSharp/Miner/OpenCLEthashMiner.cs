@@ -76,12 +76,12 @@ namespace GatelessGateSharp
                 {
                     // Wait for the first job to arrive.
                     int elapsedTime = 0;
-                    while ((mStratum == null || mStratum.CurrentJob == null) && elapsedTime < 5000)
+                    while ((mStratum == null || mStratum.GetJob() == null) && elapsedTime < 5000)
                     {
                         Thread.Sleep(10);
                         elapsedTime += 10;
                     }
-                    if (mStratum == null || mStratum.CurrentJob == null)
+                    if (mStratum == null || mStratum.GetJob() == null)
                     {
                         MainForm.Logger("Stratum server failed to send a new job.");
                         //throw new TimeoutException("Stratum server failed to send a new job.");
@@ -147,8 +147,12 @@ namespace GatelessGateSharp
                                 {
                                     Queue.Execute(mDAGKernel, new long[] { start }, new long[] { globalWorkSize }, new long[] { mLocalWorkSize }, null);
                                     Queue.Finish();
+                                    if (Stopped || !mStratum.GetJob().ID.Equals(jobID))
+                                        break;
                                 }
                                 DAGCacheBuffer.Dispose();
+                                if (Stopped || !mStratum.GetJob().ID.Equals(jobID))
+                                    break;
                             }
                             sw.Stop();
                             MainForm.Logger("Generated DAG for Epoch #" + epoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
@@ -156,7 +160,7 @@ namespace GatelessGateSharp
 
                         consoleUpdateStopwatch.Start();
 
-                        while (!Stopped && mStratum.CurrentJob.ID.Equals(jobID) && mStratum.PoolExtranonce.Equals(poolExtranonce))
+                        while (!Stopped && mStratum.GetJob().ID.Equals(jobID) && mStratum.PoolExtranonce.Equals(poolExtranonce))
                         {
                             MarkAsAlive();
 
@@ -182,6 +186,8 @@ namespace GatelessGateSharp
                                 Queue.Execute(mSearchKernel, new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
                                 Queue.Read<UInt32>(outputBuffer, true, 0, 256, (IntPtr)p, null);
                             }
+                            if (Stopped || !mStratum.GetJob().ID.Equals(jobID))
+                                break;
                             sw.Stop();
                             mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)

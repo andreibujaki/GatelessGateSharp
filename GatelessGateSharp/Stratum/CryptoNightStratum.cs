@@ -45,6 +45,11 @@ namespace GatelessGateSharp
                 mBlob = aBlob;
                 mTarget = aTarget;
             }
+
+            public bool Equals(Job right)
+            {
+                return mID == right.mID && mBlob == right.mBlob && mTarget == right.mTarget;
+            }
         }
 
         String mUserID;

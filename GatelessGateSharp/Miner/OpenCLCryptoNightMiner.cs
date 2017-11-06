@@ -187,7 +187,7 @@ namespace GatelessGateSharp
                         
                         consoleUpdateStopwatch.Start();
 
-                        while (!Stopped && mStratum.GetJob().ID == job.ID && mStratum.GetJob().Blob == job.Blob && mStratum.GetJob().Target == job.Target)
+                        while (!Stopped && mStratum.GetJob().Equals(job))
                         {
                             MarkAsAlive();
 
@@ -221,8 +221,14 @@ namespace GatelessGateSharp
                                 output[255] = 0; // output[255] is used as an atomic counter.
                                 Queue.Write<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
                                 Queue.Execute(mSearchKernels[0], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
+                                if (Stopped || !mStratum.GetJob().Equals(job))
+                                    break;
                                 Queue.Execute(mSearchKernels[1], new long[] { startNonce }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
+                                if (Stopped || !mStratum.GetJob().Equals(job))
+                                    break; 
                                 Queue.Execute(mSearchKernels[2], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
+                                if (Stopped || !mStratum.GetJob().Equals(job))
+                                    break; 
                                 for (int i = 0; i < 4; ++i)
                                 {
                                     fixed (UInt32* q = branchBufferCount)
@@ -232,6 +238,8 @@ namespace GatelessGateSharp
                                         branchBufferCount[0] += (uint)mLocalWorkSize - branchBufferCount[0] % (uint)mLocalWorkSize;
                                     Queue.Execute(mSearchKernels[i + 3], new long[] { startNonce }, new long[] { branchBufferCount[0] }, new long[] { mLocalWorkSize }, null);
                                     Queue.Finish(); // Run the above statement before leaving the current local scope.
+                                    if (Stopped || !mStratum.GetJob().Equals(job))
+                                        break;
                                 }
                                 Queue.Read<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
                             }
