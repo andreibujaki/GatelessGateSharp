@@ -42,7 +42,7 @@ namespace GatelessGateSharp
             }
         }
 
-        Thread mPingThread;
+        Thread mPingThread = null;
         int mJsonRPCMessageID = 1;
         Device mLastDeviceToSubmitShare = null;
         private Mutex mMutex = new Mutex();
@@ -231,6 +231,24 @@ namespace GatelessGateSharp
         public OpenEthereumPoolEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
             : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
         {
+        }
+
+        ~OpenEthereumPoolEthashStratum()
+        {
+            Stop();
+            if (mPingThread != null)
+            {
+                int ms = 5000;
+                while (mPingThread.IsAlive && ms > 0)
+                {
+                    System.Threading.Thread.Sleep((ms < 10) ? ms : 10);
+                    ms -= 10;
+                }
+                if (mPingThread.IsAlive)
+                    mPingThread.Abort();
+                mPingThread = null;
+            }
+
         }
     }
 }
