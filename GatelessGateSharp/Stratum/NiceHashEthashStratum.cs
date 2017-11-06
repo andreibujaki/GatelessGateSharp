@@ -72,7 +72,7 @@ namespace GatelessGateSharp
                 }
                 else if (method.Equals("client.reconnect"))
                 {
-                    throw new Exception("client.reconnect");
+                    throw new Exception("Stratum server sent client.reconnect.");
                 }
                 else
                 {
