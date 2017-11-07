@@ -565,6 +565,7 @@
             this.labelGPU7MemoryClock.TabIndex = 219;
             this.labelGPU7MemoryClock.Text = "0 MHz";
             this.labelGPU7MemoryClock.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelGPU7MemoryClock.Click += new System.EventHandler(this.labelGPU7MemoryClock_Click);
             // 
             // labelGPU3MemoryClock
             // 
@@ -1441,7 +1442,7 @@
             this.labelCurrentAlgorithmCaption.Name = "labelCurrentAlgorithmCaption";
             this.labelCurrentAlgorithmCaption.Size = new System.Drawing.Size(90, 13);
             this.labelCurrentAlgorithmCaption.TabIndex = 5;
-            this.labelCurrentAlgorithmCaption.Text = "Current Algorithm:";
+            this.labelCurrentAlgorithmCaption.Text = "Currenr Algorithm:";
             // 
             // tabPageSettings
             // 
