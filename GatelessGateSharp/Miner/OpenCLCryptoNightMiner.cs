@@ -25,6 +25,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cloo;
 using HashLib;
+using System.Runtime.ExceptionServices;
 
 
 
@@ -60,6 +61,7 @@ namespace GatelessGateSharp
             StartMinerThread();
         }
 
+        [HandleProcessCorruptedStateExceptions]
         override unsafe protected void MinerThread()
         {
             ComputeBuffer<byte> scratchpadsBuffer = null;
@@ -67,6 +69,7 @@ namespace GatelessGateSharp
             ComputeBuffer<byte> statesBuffer = null;
             ComputeBuffer<byte> inputBuffer = null;
             ComputeBuffer<UInt32> outputBuffer = null;
+            ComputeBuffer<Int32> terminateBuffer = null;
             Random r = new Random();
 
             MarkAsAlive();
@@ -128,8 +131,10 @@ namespace GatelessGateSharp
                     statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + mGlobalWorkSize);
                     inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
                     outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256 + 255 * 8);
+                    terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1);
                     UInt32[] output = new UInt32[256 + 255 * 8];
                     UInt32[] branchBufferCount = new UInt32[1];
+                    int[] terminate = new Int32[1];
                     while (!Stopped && (work = mStratum.GetWork()) != null)
                     {
                         MarkAsAlive();
@@ -161,6 +166,7 @@ namespace GatelessGateSharp
 
                         mSearchKernels[1].SetMemoryArgument(0, scratchpadsBuffer);
                         mSearchKernels[1].SetMemoryArgument(1, statesBuffer);
+                        mSearchKernels[1].SetMemoryArgument(2, terminateBuffer);
 
                         mSearchKernels[2].SetMemoryArgument(0, scratchpadsBuffer);
                         mSearchKernels[2].SetMemoryArgument(1, statesBuffer);
@@ -210,39 +216,58 @@ namespace GatelessGateSharp
 
                             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                             sw.Start();
+
+                            terminate[0] = 0;
+                            fixed (Int32* p = terminate)
+                                Queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)p, null);
+
                             UInt32[] zero = new UInt32[mGlobalWorkSize + 2];
                             for (int i = 0; i < mGlobalWorkSize + 2; ++i)
                                 zero[i] = 0;
                             fixed (UInt32* p = zero)
                                 for (int i = 0; i < 4; ++i)
                                     Queue.Write<UInt32>(branchBuffers[i], true, 0, mGlobalWorkSize + 2, (IntPtr)p, null);
+                            output[255] = 0; // output[255] is used as an atomic counter.
                             fixed (UInt32* p = output)
-                            {
-                                output[255] = 0; // output[255] is used as an atomic counter.
                                 Queue.Write<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
-                                Queue.Execute(mSearchKernels[0], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
+                            
+                            Queue.Execute(mSearchKernels[0], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
+                            if (Stopped || !mStratum.GetJob().Equals(job))
+                                break;
+                            ComputeEventList eventList = new ComputeEventList();
+                            Queue.Execute(mSearchKernels[1], new long[] { startNonce }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, eventList);
+                            Queue.Flush();
+                            while (eventList[0].Status != ComputeCommandExecutionStatus.Complete)
+                            {
+                                if ((Stopped || !mStratum.GetJob().Equals(job)) && terminate[0] == 0)
+                                {
+                                    terminate[0] = 1;
+                                    fixed (Int32* p = terminate)
+                                        Queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)p, null);
+                                }
+                                System.Threading.Thread.Sleep(10);
+                            }
+                            if (Stopped || !mStratum.GetJob().Equals(job))
+                                break; 
+
+                            Queue.Execute(mSearchKernels[2], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
+                            if (Stopped || !mStratum.GetJob().Equals(job))
+                                break; 
+                            
+                            for (int i = 0; i < 4; ++i)
+                            {
+                                fixed (UInt32* p = branchBufferCount)
+                                    Queue.Read<UInt32>(branchBuffers[i], true, mGlobalWorkSize, 1, (IntPtr)p, null);
+                                mSearchKernels[i + 3].SetValueArgument<UInt64>(4, branchBufferCount[0]);
+                                if ((branchBufferCount[0] % (ulong)mLocalWorkSize) != 0)
+                                    branchBufferCount[0] += (uint)mLocalWorkSize - branchBufferCount[0] % (uint)mLocalWorkSize;
+                                Queue.Execute(mSearchKernels[i + 3], new long[] { startNonce }, new long[] { branchBufferCount[0] }, new long[] { mLocalWorkSize }, null);
+                                Queue.Finish(); // Run the above statement before leaving the current local scope.
                                 if (Stopped || !mStratum.GetJob().Equals(job))
                                     break;
-                                Queue.Execute(mSearchKernels[1], new long[] { startNonce }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
-                                if (Stopped || !mStratum.GetJob().Equals(job))
-                                    break; 
-                                Queue.Execute(mSearchKernels[2], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
-                                if (Stopped || !mStratum.GetJob().Equals(job))
-                                    break; 
-                                for (int i = 0; i < 4; ++i)
-                                {
-                                    fixed (UInt32* q = branchBufferCount)
-                                        Queue.Read<UInt32>(branchBuffers[i], true, mGlobalWorkSize, 1, (IntPtr)q, null);
-                                    mSearchKernels[i + 3].SetValueArgument<UInt64>(4, branchBufferCount[0]);
-                                    if ((branchBufferCount[0] % (ulong)mLocalWorkSize) != 0)
-                                        branchBufferCount[0] += (uint)mLocalWorkSize - branchBufferCount[0] % (uint)mLocalWorkSize;
-                                    Queue.Execute(mSearchKernels[i + 3], new long[] { startNonce }, new long[] { branchBufferCount[0] }, new long[] { mLocalWorkSize }, null);
-                                    Queue.Finish(); // Run the above statement before leaving the current local scope.
-                                    if (Stopped || !mStratum.GetJob().Equals(job))
-                                        break;
-                                }
-                                Queue.Read<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
                             }
+                            fixed (UInt32* p = output)
+                                Queue.Read<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
                             sw.Stop();
                             mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)

@@ -47,7 +47,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static String shortAppName = "Gateless Gate Sharp";
-        public static String appVersion = "0.0.6";
+        public static String appVersion = "0.0.8";
         public static String appName = shortAppName + " " + appVersion + " alpha";
         private static String databaseFileName = "GatelessGateSharp.sqlite";
         private static String logFileName = "GatelessGateSharp.log";
@@ -773,7 +773,7 @@ namespace GatelessGateSharp
                     {
                         balance = (double)data["unpaid"] * 1e-18;
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                     double averageHashrate = (double)data["averageHashrate"];
                     double coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = String.Format("{0:N6}", balance) + " ETH (" + String.Format("{0:N2}", (balance * USDETH)) + " USD)";
@@ -1265,7 +1265,7 @@ namespace GatelessGateSharp
                 {
                     time = Utilities.MeasurePingRoundtripTime(aName);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     time = -1;
                 }
