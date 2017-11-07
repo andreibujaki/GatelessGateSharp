@@ -410,7 +410,7 @@ __kernel void search(__global ulong *input, __global uint4 *Scratchpad, __global
 }
 
 __attribute__((reqd_work_group_size(WORKSIZE, 1, 1)))
-__kernel void search1(__global uint4 *Scratchpad, __global ulong *states)
+__kernel void search1(__global uint4 *Scratchpad, __global ulong *states, __global int *terminate)
 {
     ulong a[2], b[2];
     __local uint AES0[256], AES1[256], AES2[256], AES3[256];
@@ -439,6 +439,9 @@ __kernel void search1(__global uint4 *Scratchpad, __global ulong *states)
 #pragma unroll 8
     for (int i = 0; i < 0x80000; ++i)
     {
+		if (i % 0x1000 == 0 && atomic_add(terminate, 0))
+			return;
+
         ulong c[2];
 
         ((uint4 *)c)[0] = Scratchpad[IDX((a[0] & 0x1FFFF0) >> 4)];
