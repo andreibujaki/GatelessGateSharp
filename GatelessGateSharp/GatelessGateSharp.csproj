@@ -238,6 +238,7 @@
     <PostBuildEvent>copy $(SolutionDir)$(SolutionName)\SQLite.Interop.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\System.Data.SQLite.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
+copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
 xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
 xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
 </PostBuildEvent>

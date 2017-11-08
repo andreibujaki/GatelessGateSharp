@@ -42,18 +42,12 @@ namespace GatelessGateSharp
 
         public bool NiceHashMode { get { return mNicehashMode; } }
 
-        public OpenCLCryptoNightMiner(Device aGatelessGateDevice, CryptoNightStratum aStratum, bool aNicehashMode = false)
+        public OpenCLCryptoNightMiner(Device aGatelessGateDevice, CryptoNightStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
             : base(aGatelessGateDevice, "CrypoNight")
         {
             mStratum = aStratum;
-            mLocalWorkSize = (Device.Vendor == "AMD" ? 8 : 4);
-            mGlobalWorkSize = (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 470")         ? (16 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 570")         ? (16 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 480")         ? (32 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "AMD"    && Device.Name == "Radeon RX 580")         ? (32 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "AMD"    && Device.Name == "Radeon R9 Fury X/Nano") ? (12 * Device.MaxComputeUnits) :
-                              (Device.Vendor == "NVIDIA" && Device.Name == "GeForce GTX 1080 Ti")   ? (32 * Device.MaxComputeUnits) :
-                                                                                                      (16 * Device.MaxComputeUnits);
+            mLocalWorkSize = aLocalWorkSize;
+            mGlobalWorkSize = aIntensity * Device.MaxComputeUnits;
             if (mGlobalWorkSize % mLocalWorkSize != 0)
                 mGlobalWorkSize = mLocalWorkSize - mGlobalWorkSize % mLocalWorkSize;
             mNicehashMode = aNicehashMode;
@@ -75,38 +69,39 @@ namespace GatelessGateSharp
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
-            mProgram = new ComputeProgram(this.Context, System.IO.File.ReadAllText(@"Kernels\cryptonight.cl"));
-            MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
-            List<ComputeDevice> deviceList = new List<ComputeDevice>();
-            deviceList.Add(Device.GetComputeDevice());
-            try
-            {
-                String options = (Device.Vendor == "AMD" ? "-O1 " :
-                                  Device.Vendor == "NVIDIA" ? "" :
-                                  "")
-                               + " -IKernels -DWORKSIZE=" + mLocalWorkSize;
-                mProgram.Build(deviceList, options, null, IntPtr.Zero);
-            }
-            catch (Exception ex)
-            {
-                MainForm.Logger(mProgram.GetBuildLog(Device.GetComputeDevice()));
-                throw ex;
-            }
-            MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
-            mSearchKernels[0] = mProgram.CreateKernel("search");
-            mSearchKernels[1] = mProgram.CreateKernel("search1");
-            mSearchKernels[2] = mProgram.CreateKernel("search2");
-            mSearchKernels[3] = mProgram.CreateKernel("search3");
-            mSearchKernels[4] = mProgram.CreateKernel("search4");
-            mSearchKernels[5] = mProgram.CreateKernel("search5");
-            mSearchKernels[6] = mProgram.CreateKernel("search6");
-
             while (!Stopped)
             {
                 MarkAsAlive();
 
                 try
                 {
+                    mProgram = new ComputeProgram(this.Context, System.IO.File.ReadAllText(@"Kernels\cryptonight.cl"));
+                    MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
+                    List<ComputeDevice> deviceList = new List<ComputeDevice>();
+                    deviceList.Add(Device.GetComputeDevice());
+                    try
+                    {
+                        String options = (Device.Vendor == "AMD" ? "-O1 " :
+                                          Device.Vendor == "NVIDIA" ? "" :
+                                          "")
+                                       + " -IKernels -DWORKSIZE=" + mLocalWorkSize;
+                        mProgram.Build(deviceList, options, null, IntPtr.Zero);
+                    }
+                    catch (Exception ex)
+                    {
+                        MainForm.Logger(mProgram.GetBuildLog(Device.GetComputeDevice()));
+                        throw ex;
+                    }
+                    MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
+
+                    mSearchKernels[0] = mProgram.CreateKernel("search");
+                    mSearchKernels[1] = mProgram.CreateKernel("search1");
+                    mSearchKernels[2] = mProgram.CreateKernel("search2");
+                    mSearchKernels[3] = mProgram.CreateKernel("search3");
+                    mSearchKernels[4] = mProgram.CreateKernel("search4");
+                    mSearchKernels[5] = mProgram.CreateKernel("search5");
+                    mSearchKernels[6] = mProgram.CreateKernel("search6");
+
                     // Wait for the first job to arrive.
                     int elapsedTime = 0;
                     while ((mStratum == null || mStratum.GetJob() == null) && elapsedTime < 5000)
@@ -133,6 +128,7 @@ namespace GatelessGateSharp
                     Int32[] terminate = new Int32[1];
                     UInt32[] output = new UInt32[256 + 255 * 8];
                     UInt32[] branchBufferCount = new UInt32[1];
+                    
                     while (!Stopped && (work = mStratum.GetWork()) != null)
                     {
                         MarkAsAlive();
@@ -242,6 +238,7 @@ namespace GatelessGateSharp
                                 }
                                 System.Threading.Thread.Sleep(10);
                             }
+                            eventList[0].Dispose();
                             if (Stopped || !mStratum.GetJob().Equals(job))
                                 break; 
                             Queue.Execute(mSearchKernels[2], new long[] { startNonce, 1 }, new long[] { mGlobalWorkSize, 8 }, new long[] { mLocalWorkSize, 8 }, null);
@@ -286,17 +283,21 @@ namespace GatelessGateSharp
                     MainForm.Logger("Restarting miner thread...");
                 }
 
-                try { if (scratchpadsBuffer != null) scratchpadsBuffer.Dispose(); } catch (Exception ex) { }
-                try { if (branchBuffers != null) foreach (var buffer in branchBuffers) buffer.Dispose(); } catch (Exception ex) { }
-                try { if (statesBuffer != null) statesBuffer.Dispose(); } catch (Exception ex) { }
-                try { if (inputBuffer != null) inputBuffer.Dispose(); } catch (Exception ex) { }
-                try { if (outputBuffer != null) outputBuffer.Dispose(); } catch (Exception ex) { }
- 
+                try { if (scratchpadsBuffer != null) scratchpadsBuffer.Dispose(); } catch (Exception) { }
+                try { if (branchBuffers != null) foreach (var buffer in branchBuffers) buffer.Dispose(); } catch (Exception) { }
+                try { if (statesBuffer != null) statesBuffer.Dispose(); } catch (Exception) { }
+                try { if (inputBuffer != null) inputBuffer.Dispose(); } catch (Exception) { }
+                try { if (outputBuffer != null) outputBuffer.Dispose(); } catch (Exception) { }
+                try { if (terminateBuffer != null) terminateBuffer.Dispose(); } catch (Exception) { }
+                try { foreach (var kernel in mSearchKernels) kernel.Dispose(); } catch (Exception) { }
+                try { mProgram.Dispose(); } catch (Exception) { }
+
                 scratchpadsBuffer = null;
                 branchBuffers = null;
                 statesBuffer = null;
                 inputBuffer = null;
                 outputBuffer = null;
+                terminateBuffer = null;
 
                 mSpeed = 0;
 
@@ -304,11 +305,7 @@ namespace GatelessGateSharp
                     System.Threading.Thread.Sleep(5000);
             }
 
-            foreach (var kernel in mSearchKernels)
-                kernel.Dispose();
-            mProgram.Dispose();
             Dispose();
-
             MarkAsDone();
         }
     }

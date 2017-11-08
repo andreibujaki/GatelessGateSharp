@@ -42,11 +42,11 @@ namespace GatelessGateSharp
         private long mLocalWorkSize = 192;
         private long mGlobalWorkSize;
 
-        public OpenCLEthashMiner(Device aGatelessGateDevice, EthashStratum aStratum)
+        public OpenCLEthashMiner(Device aGatelessGateDevice, EthashStratum aStratum, int aIntensity)
             : base(aGatelessGateDevice, "Ethash")
         {
             mStratum = aStratum;
-            mGlobalWorkSize = 2048 * mLocalWorkSize * Device.GetComputeDevice().MaxComputeUnits;
+            mGlobalWorkSize = aIntensity * mLocalWorkSize * Device.GetComputeDevice().MaxComputeUnits;
             
             StartMinerThread();
         }

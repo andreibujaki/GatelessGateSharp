@@ -23,6 +23,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Threading;
 
 
 
@@ -38,9 +40,26 @@ namespace GatelessGateSharp
         {
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            using (var mutex = new Mutex(true, "GatelessGateSharp.exe"))
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "GatelessGateSharpMonitor.exe";
+                //startInfo.Arguments = args;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.EnableRaisingEvents = true;
+                process.Start();
+                
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainForm());
+
+                process.Kill();
+            }
         }
     }
 }

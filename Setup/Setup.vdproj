@@ -34,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
-        "OwnerKey" = "8:_DCF000D8EB554A79B5E3E626565ACCB3"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,18 +52,18 @@
         "Entry"
         {
         "MsmKey" = "8:_41D73E71863A5CF344DE0BC191304925"
-        "OwnerKey" = "8:_DCF000D8EB554A79B5E3E626565ACCB3"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_5BAC70687BFA4D518161F15527D94E90"
+        "MsmKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_711D63775DB1453FA0D6E4EA75B3C808"
+        "MsmKey" = "8:_5BAC70687BFA4D518161F15527D94E90"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -82,18 +82,18 @@
         "Entry"
         {
         "MsmKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
-        "OwnerKey" = "8:_DCF000D8EB554A79B5E3E626565ACCB3"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_DA26F0A023D7F9002E8409A3798624AE"
-        "OwnerKey" = "8:_DCF000D8EB554A79B5E3E626565ACCB3"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_DCF000D8EB554A79B5E3E626565ACCB3"
+        "MsmKey" = "8:_DFDCB3E1FD61424AB847293197EEA140"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -118,13 +118,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_711D63775DB1453FA0D6E4EA75B3C808"
+        "OwnerKey" = "8:_41D73E71863A5CF344DE0BC191304925"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DCF000D8EB554A79B5E3E626565ACCB3"
+        "OwnerKey" = "8:_DFDCB3E1FD61424AB847293197EEA140"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -143,12 +149,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_41D73E71863A5CF344DE0BC191304925"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -342,7 +342,7 @@
             "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\SQLite.Interop.dll"
             "TargetName" = "8:SQLite.Interop.dll"
             "Tag" = "8:"
-            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Folder" = "8:_6CF204FAB1DD49F19C923F9DE58DB7BC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -408,10 +408,21 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5BAC70687BFA4D518161F15527D94E90"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_558AC528A5344188B265CAF48F34D908"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\phymem.sys"
-            "TargetName" = "8:phymem.sys"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_558AC528A5344188B265CAF48F34D908"
+                    {
+                    "Name" = "8:GatelessGateSharp.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharp.exe"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Condition" = "8:"
@@ -428,21 +439,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_711D63775DB1453FA0D6E4EA75B3C808"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5BAC70687BFA4D518161F15527D94E90"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ManagedCuda, Version=8.0.14.0, Culture=neutral, PublicKeyToken=242d898828717aa0, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_711D63775DB1453FA0D6E4EA75B3C808"
-                    {
-                    "Name" = "8:ManagedCuda.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\ManagedCuda.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\phymem.sys"
+            "TargetName" = "8:phymem.sys"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Condition" = "8:"
@@ -561,20 +561,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DCF000D8EB554A79B5E3E626565ACCB3"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DFDCB3E1FD61424AB847293197EEA140"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_DCF000D8EB554A79B5E3E626565ACCB3"
+                    "_DFDCB3E1FD61424AB847293197EEA140"
                     {
-                    "Name" = "8:GatelessGateSharp.exe"
+                    "Name" = "8:GatelessGateSharpMonitor.exe"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharp.exe"
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharpMonitor.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
@@ -701,6 +701,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_6CF204FAB1DD49F19C923F9DE58DB7BC"
+                    {
+                    "Name" = "8:x64"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_05C67EF2F3DC49ABBFC23DEEDA1A0D05"
+                        "Folders"
+                        {
+                        }
+                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_8C01C16FD26A4D52AFD91187105134F1"
                     {
                     "Name" = "8:Kernels"
@@ -731,7 +742,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
         "ProductCode" = "8:{23E1A19D-90B4-4FE9-874B-68978E315CAE}"
-        "PackageCode" = "8:{87B4DC4E-CAC8-46C4-84A4-0DB8694160AA}"
+        "PackageCode" = "8:{76B0AEFC-29B3-4840-90EA-23003617F2D2}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -859,7 +870,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_DCF000D8EB554A79B5E3E626565ACCB3"
+            "Target" = "8:"
             "Folder" = "8:_660873410D3F434FA886514EC3A2C4FC"
             "WorkingFolder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Icon" = "8:"
@@ -873,7 +884,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_DCF000D8EB554A79B5E3E626565ACCB3"
+            "Target" = "8:"
             "Folder" = "8:_B203AFE30AB346679C07ED227950460D"
             "WorkingFolder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Icon" = "8:"
