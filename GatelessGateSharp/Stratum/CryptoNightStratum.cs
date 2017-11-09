@@ -18,7 +18,7 @@ namespace GatelessGateSharp
     {
         public new class Work : Stratum.Work
         {
-            private Job mJob;
+            readonly private Job mJob;
 
             public new Job GetJob() { return mJob; }
 
@@ -31,9 +31,9 @@ namespace GatelessGateSharp
 
         public new class Job : Stratum.Job
         {
-            String mID;
-            String mBlob;
-            String mTarget;
+            readonly String mID;
+            readonly String mBlob;
+            readonly String mTarget;
 
             public String ID { get { return mID; } }
             public String Blob { get { return mBlob; } }

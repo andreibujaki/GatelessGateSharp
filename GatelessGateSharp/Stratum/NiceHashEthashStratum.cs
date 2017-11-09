@@ -18,7 +18,7 @@ namespace GatelessGateSharp
     {
         public new class Work : EthashStratum.Work
         {
-            private Job mJob;
+            readonly private Job mJob;
 
             new public Job GetJob() { return mJob; }
 

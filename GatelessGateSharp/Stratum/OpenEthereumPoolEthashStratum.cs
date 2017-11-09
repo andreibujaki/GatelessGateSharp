@@ -18,8 +18,8 @@ namespace GatelessGateSharp
     {
         public new class Work
         {
-            private Job mJob;
-            private byte mLocalExtranonce;
+            readonly private Job mJob;
+            readonly private byte mLocalExtranonce;
 
             public Job CurrentJob { get { return mJob; } }
             public byte LocalExtranonce { get { return mLocalExtranonce; } }
@@ -34,6 +34,7 @@ namespace GatelessGateSharp
         public new class Job : EthashStratum.Job
         {
             private byte mExtranonce = 0;
+
             public byte Extranonce { get { return mExtranonce; } }
 
             public Job(string aID, string aSeedhash, string aHeaderhash) 

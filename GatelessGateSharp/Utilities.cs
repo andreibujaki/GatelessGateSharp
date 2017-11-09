@@ -466,5 +466,16 @@ namespace GatelessGateSharp
             PingReply reply = pingSender.Send(host, timeout, buffer, options);
             return (reply.Status == IPStatus.Success) ? reply.RoundtripTime : -1;
         }
+
+        [System.Runtime.InteropServices.DllImport("msvcrt.dll", CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        extern static uint _controlfp(uint newcw,uint mask);
+
+        const uint _MCW_EM=0x0008001f;
+        const uint _EM_INVALID=0x00000010;
+
+        public static void FixFPU()
+        {
+            _controlfp(_MCW_EM, _EM_INVALID);
+        }
     }
 }

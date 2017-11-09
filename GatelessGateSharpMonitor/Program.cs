@@ -17,6 +17,7 @@ namespace GatelessGateSharpMonitor
             using (var handle = new Mutex(true, "GatelessGateSharp.exe"))
             {
                 try { handle.WaitOne(); } catch (Exception) {}
+                Thread.Sleep(5000);
                 Process.Start("GatelessGateSharp.exe");
             }
         }

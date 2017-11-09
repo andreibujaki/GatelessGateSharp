@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Cloo;
 
@@ -31,12 +32,8 @@ namespace GatelessGateSharp
     class OpenCLMiner : Miner
     {
         private Device mDevice;
-        private ComputeContext mContext = null;
-        private ComputeCommandQueue mQueue = null;
 
         public Device Device { get { return mDevice; } }
-        public ComputeContext Context { get { return mContext; } }
-        public ComputeCommandQueue Queue { get { return mQueue; } }
 
         public ComputeDevice GetComputeDevice() { return mDevice.GetComputeDevice(); }
 
@@ -44,17 +41,6 @@ namespace GatelessGateSharp
             : base(aDevice, aAlgorithmName)
         {
             mDevice = aDevice;
-            List<ComputeDevice> deviceList = new List<ComputeDevice>();
-            deviceList.Add(mDevice.GetComputeDevice());
-            ComputeContextPropertyList properties = new ComputeContextPropertyList(GetComputeDevice().Platform);
-            mContext = new ComputeContext(deviceList, properties, null, IntPtr.Zero);
-            mQueue = new ComputeCommandQueue(mContext, GetComputeDevice(), ComputeCommandQueueFlags.None);
-        }
-
-        protected void Dispose()
-        {
-            mQueue.Dispose();
-            mContext.Dispose();
         }
     }
 }

@@ -17,12 +17,20 @@ namespace GatelessGateSharp
         public class Job
         {
             private Mutex mMutex = new Mutex();
-            Random r = new Random();
+            static Random r = new Random();
+            byte nextLocalExtranonce;
+
+            public Job()
+            {
+                mMutex.WaitOne();
+                nextLocalExtranonce = (byte)(r.Next(0, int.MaxValue) & (0xffu));
+                mMutex.ReleaseMutex();
+            }
 
             public byte GetNewLocalExtranonce()
             {
                 mMutex.WaitOne();
-                byte ret = (byte)(r.Next(0, int.MaxValue) & (0xffu));
+                byte ret = nextLocalExtranonce++;
                 mMutex.ReleaseMutex();
                 return ret;
             }
@@ -30,8 +38,9 @@ namespace GatelessGateSharp
 
         public class Work
         {
-            private Job mJob;
-            private byte mLocalExtranonce;
+            readonly private Job mJob;
+            readonly private byte mLocalExtranonce;
+
             public byte LocalExtranonce { get { return mLocalExtranonce; } }
             public Job GetJob() { return mJob; }
 
@@ -81,6 +90,8 @@ namespace GatelessGateSharp
 
         protected void ReportShareAcceptance()
         {
+            if (MainForm.DevFeeMode)
+                return;
             mMutex.WaitOne();
             if (mDevicesWithShare.Count > 0)
             {
@@ -93,6 +104,8 @@ namespace GatelessGateSharp
 
         protected void ReportShareRejection()
         {
+            if (MainForm.DevFeeMode)
+                return;
             mMutex.WaitOne();
             if (mDevicesWithShare.Count > 0)
             {

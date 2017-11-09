@@ -117,6 +117,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F6A2FA18F955449E83C7F83DB16E2C23"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_41D73E71863A5CF344DE0BC191304925"
         "MsmSig" = "8:_UNDEFINED"
@@ -159,7 +165,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_0.0.2_alpha_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_0.0.9_alpha_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -191,7 +197,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_0.0.8_alpha_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_0.0.9_alpha_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -652,6 +658,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F6A2FA18F955449E83C7F83DB16E2C23"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Gateless Gate Sharp.ico"
+            "TargetName" = "8:Gateless Gate Sharp.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -741,15 +767,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
-        "ProductCode" = "8:{23E1A19D-90B4-4FE9-874B-68978E315CAE}"
-        "PackageCode" = "8:{76B0AEFC-29B3-4840-90EA-23003617F2D2}"
+        "ProductCode" = "8:{1F9FDABB-A547-4F24-B97F-56A11E52B511}"
+        "PackageCode" = "8:{3CC352F1-DCE8-47F6-9880-9BBCBA4DA696}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.0.8"
+        "ProductVersion" = "8:0.0.9"
         "Manufacturer" = "8:Zawawa Software LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -862,7 +888,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_17B3A28081AD431DB40CB7874CE4B632"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1E40E7F9B6E84E57A751723D9B11EA53"
             {
             "Name" = "8:Gateless Gate Sharp"
             "Arguments" = "8:"
@@ -870,13 +896,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:"
+            "Target" = "8:_558AC528A5344188B265CAF48F34D908"
             "Folder" = "8:_660873410D3F434FA886514EC3A2C4FC"
             "WorkingFolder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
-            "Icon" = "8:"
+            "Icon" = "8:_F6A2FA18F955449E83C7F83DB16E2C23"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C69EBFF7F74C448EABE8B6BBDE6BCF65"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_90C61B6D0B3D43BDB255DDE7369AEAA9"
             {
             "Name" = "8:Gateless Gate Sharp"
             "Arguments" = "8:"
@@ -884,10 +910,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:"
+            "Target" = "8:_558AC528A5344188B265CAF48F34D908"
             "Folder" = "8:_B203AFE30AB346679C07ED227950460D"
             "WorkingFolder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
-            "Icon" = "8:"
+            "Icon" = "8:_F6A2FA18F955449E83C7F83DB16E2C23"
             "Feature" = "8:"
             }
         }

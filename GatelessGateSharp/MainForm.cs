@@ -51,6 +51,7 @@ namespace GatelessGateSharp
         public static String appName = shortAppName + " " + appVersion + " alpha";
         private static String databaseFileName = "GatelessGateSharp.sqlite";
         private static String logFileName = "GatelessGateSharp.log";
+        private static String mAppStateFileName = "GatelessGateSharpState.txt";
         private static int mLaunchInterval = 500;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
@@ -70,6 +71,8 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceCryptoNightThreadsArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightIntensityArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
+        GroupBox[] groupBoxDeviceEthashArray;
+        GroupBox[] groupBoxDeviceCryptoNightArray;
 
         private Device[] mDevices;
         private const int maxNumDevices = 8; // This depends on MainForm.
@@ -117,6 +120,7 @@ namespace GatelessGateSharp
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(logFileName, true))
                     file.Write(loggerBuffer);
 
+                Utilities.FixFPU();
                 Instance.richTextBoxLog.SelectionLength = 0;
                 Instance.richTextBoxLog.SelectionStart = Instance.richTextBoxLog.Text.Length;
                 Instance.richTextBoxLog.ScrollToCaret();
@@ -125,10 +129,10 @@ namespace GatelessGateSharp
                 Instance.richTextBoxLog.SelectionStart = Instance.richTextBoxLog.Text.Length;
                 Instance.richTextBoxLog.ScrollToCaret();
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
         }
 
-        unsafe public MainForm()
+        public MainForm()
         {
             instance = this;
 
@@ -152,7 +156,6 @@ namespace GatelessGateSharp
 
                 sql = "create table device_parameters (device_id int, device_vendor varchar(128), device_name varchar(128), parameter_name varchar(128), parameter_value varchar(128));";
                 using (SQLiteCommand command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
-                conn.Close();
             }
         }
 
@@ -209,7 +212,6 @@ namespace GatelessGateSharp
                                     listBoxPoolPriorities.Items.Add(poolName);
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -221,7 +223,6 @@ namespace GatelessGateSharp
                     sql = "select * from properties";
                     using (SQLiteCommand command = new SQLiteCommand(sql, conn))
                     {
-
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
@@ -325,7 +326,6 @@ namespace GatelessGateSharp
                     sql = "select * from device_parameters";
                     using (SQLiteCommand command = new SQLiteCommand(sql, conn))
                     {
-
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
@@ -614,8 +614,6 @@ namespace GatelessGateSharp
                     }
 
                 }
-
-                conn.Close();
             }
         }
 
@@ -638,6 +636,8 @@ namespace GatelessGateSharp
             numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightThreads, numericUpDownDevice1CryptoNightThreads, numericUpDownDevice2CryptoNightThreads, numericUpDownDevice3CryptoNightThreads, numericUpDownDevice4CryptoNightThreads, numericUpDownDevice5CryptoNightThreads, numericUpDownDevice6CryptoNightThreads, numericUpDownDevice7CryptoNightThreads };
             numericUpDownDeviceCryptoNightIntensityArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightIntensity, numericUpDownDevice1CryptoNightIntensity, numericUpDownDevice2CryptoNightIntensity, numericUpDownDevice3CryptoNightIntensity, numericUpDownDevice4CryptoNightIntensity, numericUpDownDevice5CryptoNightIntensity, numericUpDownDevice6CryptoNightIntensity, numericUpDownDevice7CryptoNightIntensity };
             numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightLocalWorkSize, numericUpDownDevice1CryptoNightLocalWorkSize, numericUpDownDevice2CryptoNightLocalWorkSize, numericUpDownDevice3CryptoNightLocalWorkSize, numericUpDownDevice4CryptoNightLocalWorkSize, numericUpDownDevice5CryptoNightLocalWorkSize, numericUpDownDevice6CryptoNightLocalWorkSize, numericUpDownDevice7CryptoNightLocalWorkSize };
+            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash };
+            groupBoxDeviceCryptoNightArray = new GroupBox[] { groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight };
 
             if (LoadPhyMemDriver() != 0)
             {
@@ -680,7 +680,15 @@ namespace GatelessGateSharp
                 }
             }
 
-            if (checkBoxAutoStart.Checked)
+            // Auto-start mining if necessary.
+            bool autoStart = checkBoxAutoStart.Checked;
+            try
+            {
+                if (System.IO.File.ReadAllLines(mAppStateFileName)[0] == "Mining")
+                    autoStart = true;
+            }
+            catch (Exception) { }
+            if (autoStart)
                 buttonStart_Click(null, null);
         }
 
@@ -729,7 +737,7 @@ namespace GatelessGateSharp
                 labelGPUSharesArray[index].Text = "-";
             }
 
-            for (int index = mDevices.Length; index < maxNumDevices; ++index)
+            for (int index = maxNumDevices - 1; index >= mDevices.Length; --index)
             {
                 labelGPUVendorArray[index].Visible = false;
                 labelGPUNameArray[index].Visible = false;
@@ -742,6 +750,33 @@ namespace GatelessGateSharp
                 labelGPUMemoryClockArray[index].Visible = false;
                 labelGPUSharesArray[index].Visible = false;
                 checkBoxGPUEnableArray[index].Visible = false;
+            }
+
+            for (int index = maxNumDevices - 1; index >= mDevices.Length; --index)
+                tabControlDeviceSettings.TabPages.RemoveAt(index);
+
+            for (int index = maxNumDevices - 1; index >= mDevices.Length; --index)
+            {
+                Array.Resize(ref labelGPUVendorArray, mDevices.Length);
+                Array.Resize(ref labelGPUNameArray, mDevices.Length);
+                Array.Resize(ref labelGPUIDArray, mDevices.Length);
+                Array.Resize(ref labelGPUSpeedArray, mDevices.Length);
+                Array.Resize(ref labelGPUActivityArray, mDevices.Length);
+                Array.Resize(ref labelGPUTempArray, mDevices.Length);
+                Array.Resize(ref labelGPUFanArray, mDevices.Length);
+                Array.Resize(ref labelGPUCoreClockArray, mDevices.Length);
+                Array.Resize(ref labelGPUMemoryClockArray, mDevices.Length);
+                Array.Resize(ref labelGPUSharesArray, mDevices.Length);
+                Array.Resize(ref checkBoxGPUEnableArray, mDevices.Length);
+
+                Array.Resize(ref tabPageDeviceArray, mDevices.Length);
+                Array.Resize(ref numericUpDownDeviceEthashIntensityArray, mDevices.Length);
+                Array.Resize(ref numericUpDownDeviceCryptoNightThreadsArray, mDevices.Length);
+                Array.Resize(ref numericUpDownDeviceCryptoNightIntensityArray, mDevices.Length);
+                Array.Resize(ref numericUpDownDeviceCryptoNightLocalWorkSizeArray, mDevices.Length);
+                Array.Resize(ref groupBoxDeviceEthashArray, mDevices.Length);
+                Array.Resize(ref groupBoxDeviceCryptoNightArray, mDevices.Length);
+
             }
 
             int ADLRet = -1;
@@ -873,7 +908,7 @@ namespace GatelessGateSharp
                 numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)2000;
 
                 // CryptoNight
-                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)2;
+                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 2 : 1);
                 numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 8 : 4);
                 numericUpDownDeviceCryptoNightIntensityArray[device.DeviceIndex].Value
                     = (decimal)((device.Vendor == "AMD" && device.Name == "Radeon RX 470") ? (24) :
@@ -882,8 +917,8 @@ namespace GatelessGateSharp
                                 (device.Vendor == "AMD" && device.Name == "Radeon RX 580") ? (32) :
                                 (device.Vendor == "AMD" && device.Name == "Radeon R9 Fury X/Nano") ? (14) :
                                 (device.Vendor == "AMD") ? (16) :
-                                (device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti") ? (64) :
-                                                                                                      (32));
+                                (device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti") ? (32) :
+                                                                                                      (16));
             }
 
             UpdateStatsWithShortPolling();
@@ -1083,7 +1118,7 @@ namespace GatelessGateSharp
                     {
                         balance = (double)data["balance"];
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                     labelBalance.Text = String.Format("{0:N6}", balance) + " XMR (" + String.Format("{0:N2}", (balance * USDXMR)) + " USD)";
 
                     labelPriceDay.Text = "-";
@@ -1174,281 +1209,179 @@ namespace GatelessGateSharp
 
         private void UpdateStatsWithShortPolling()
         {
-            mCurrentPool = (string)listBoxPoolPriorities.Items[0];
-            if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
+            try
             {
-                labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + String.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
-                mCurrentPool = mStratum.PoolName;
-            }
-            else if (appState == ApplicationGlobalState.Mining && mStratum != null)
-            {
-                labelCurrentPool.Text = mStratum.PoolName + " (" + mStratum.ServerAddress + ")";
-                mCurrentPool = mStratum.PoolName;
-            }
-            else
-            {
-                labelCurrentPool.Text = (string)listBoxPoolPriorities.Items[0];
-            }
-
-            for (int i = 0; i < mDevices.Length; ++i)
-            {
-                Color labelColor = (checkBoxGPUEnableArray[i].Checked ? Color.Black : Color.Gray);
-                labelGPUNameArray[i].ForeColor = labelColor;
-                labelGPUVendorArray[i].ForeColor = labelColor;
-                labelGPUIDArray[i].ForeColor = labelColor;
-                labelGPUSpeedArray[i].ForeColor = labelColor;
-                labelGPUActivityArray[i].ForeColor = labelColor;
-                labelGPUFanArray[i].ForeColor = labelColor;
-                labelGPUCoreClockArray[i].ForeColor = labelColor;
-                labelGPUMemoryClockArray[i].ForeColor = labelColor;
-                labelGPUSharesArray[i].ForeColor = labelColor;
-            }
-
-            long elapsedTimeInSeconds = (long)((DateTime.Now - mStartTime).TotalSeconds);
-            if (appState != ApplicationGlobalState.Mining)
-            {
-                labelElapsedTime.Text = "-";
-            }
-            else if (elapsedTimeInSeconds >= 24 * 60 * 60)
-            {
-                labelElapsedTime.Text = String.Format("{3} Days {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, (elapsedTimeInSeconds / 60) % 60, (elapsedTimeInSeconds / 60 / 60) % 24, (elapsedTimeInSeconds / 60 / 60 / 24));
-            }
-            else
-            {
-                labelElapsedTime.Text = String.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, (elapsedTimeInSeconds / 60) % 60, (elapsedTimeInSeconds / 60 / 60) % 24);
-            }
-
-            double totalSpeed = 0;
-            if (mMiners != null)
-                foreach (Miner miner in mMiners)
-                    totalSpeed += miner.Speed;
-            labelCurrentSpeed.Text = (appState != ApplicationGlobalState.Mining) ? "-" : ConvertHashRateToString(totalSpeed);
-            DeviceManagementLibrariesMutex.WaitOne();
-            foreach (var device in mDevices)
-            {
-                ComputeDevice computeDevice = device.GetComputeDevice();
-                int deviceIndex = device.DeviceIndex;
-                double speed = 0;
-                if (mMiners != null)
-                    foreach (Miner miner in mMiners)
-                        if (miner.DeviceIndex == deviceIndex)
-                            speed += miner.Speed;
-                labelGPUSpeedArray[deviceIndex].Text = (appState != ApplicationGlobalState.Mining) ? "-" : ConvertHashRateToString(speed);
-
-                if (device.AcceptedShares + device.RejectedShares == 0)
+                // Pool
+                mCurrentPool = (string)listBoxPoolPriorities.Items[0];
+                if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
                 {
-                    labelGPUSharesArray[deviceIndex].ForeColor = Color.Black;
-                    labelGPUSharesArray[deviceIndex].Text = (appState == ApplicationGlobalState.Mining) ? "0" : "-";
+                    labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + String.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
+                    mCurrentPool = mStratum.PoolName;
+                }
+                else if (appState == ApplicationGlobalState.Mining && mStratum != null)
+                {
+                    labelCurrentPool.Text = mStratum.PoolName + " (" + mStratum.ServerAddress + ")";
+                    mCurrentPool = mStratum.PoolName;
                 }
                 else
                 {
-                    double acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
-                    labelGPUSharesArray[deviceIndex].Text = device.AcceptedShares.ToString() + "/" + (device.AcceptedShares + device.RejectedShares).ToString() + " (" + String.Format("{0:N1}", (acceptanceRate) * 100) + "%)";
-                    labelGPUSharesArray[deviceIndex].ForeColor = (acceptanceRate >= 0.95 ? Color.Green : Color.Red); // TODO
+                    labelCurrentPool.Text = (string)listBoxPoolPriorities.Items[0];
                 }
 
-                if (ADLAdapterIndexArray[deviceIndex] >= 0)
+                labelCurrentAlgorithm.Text = (appState == ApplicationGlobalState.Mining) ? mMiners[0].AlgorithmName : "-"; // TODO
+
+                for (int i = 0; i < mDevices.Length; ++i)
                 {
-                    // temperature
-                    ADLTemperature OSADLTemperatureData;
-                    OSADLTemperatureData = new ADLTemperature();
-                    IntPtr tempBuffer = IntPtr.Zero;
-                    int size = Marshal.SizeOf(OSADLTemperatureData);
-                    tempBuffer = Marshal.AllocCoTaskMem((int)size);
-                    Marshal.StructureToPtr(OSADLTemperatureData, tempBuffer, false);
-
-                    if (null != ADL.ADL_Overdrive5_Temperature_Get)
-                    {
-                        int ADLRet = ADL.ADL_Overdrive5_Temperature_Get(ADLAdapterIndexArray[deviceIndex], 0, tempBuffer);
-                        if (ADL.ADL_SUCCESS == ADLRet)
-                        {
-                            OSADLTemperatureData = (ADLTemperature)Marshal.PtrToStructure(tempBuffer, OSADLTemperatureData.GetType());
-                            labelGPUTempArray[deviceIndex].Text = (OSADLTemperatureData.Temperature / 1000).ToString() + "℃";
-                            labelGPUTempArray[deviceIndex].ForeColor = (OSADLTemperatureData.Temperature >= 80000) ? Color.Red :
-                                                                       (OSADLTemperatureData.Temperature >= 60000) ? Color.Purple :
-                                                                                                                     Color.Blue;
-                        }
-                    }
-
-                    // activity
-                    ADLPMActivity OSADLPMActivityData;
-                    OSADLPMActivityData = new ADLPMActivity();
-                    IntPtr activityBuffer = IntPtr.Zero;
-                    size = Marshal.SizeOf(OSADLPMActivityData);
-                    activityBuffer = Marshal.AllocCoTaskMem((int)size);
-                    Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
-
-                    if (null != ADL.ADL_Overdrive5_CurrentActivity_Get)
-                    {
-                        int ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndexArray[deviceIndex], activityBuffer);
-                        if (ADL.ADL_SUCCESS == ADLRet)
-                        {
-                            OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                            labelGPUActivityArray[deviceIndex].Text = OSADLPMActivityData.iActivityPercent.ToString() + "%";
-                            labelGPUCoreClockArray[deviceIndex].Text = (OSADLPMActivityData.iEngineClock / 100).ToString() + " MHz";
-                            labelGPUMemoryClockArray[deviceIndex].Text = (OSADLPMActivityData.iMemoryClock / 100).ToString() + " MHz";
-                        }
-                    }
-
-                    // fan speed
-                    ADLFanSpeedValue OSADLFanSpeedValueData;
-                    OSADLFanSpeedValueData = new ADLFanSpeedValue();
-                    IntPtr fanSpeedValueBuffer = IntPtr.Zero;
-                    size = Marshal.SizeOf(OSADLFanSpeedValueData);
-                    OSADLFanSpeedValueData.iSpeedType = 1;
-                    fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)size);
-                    Marshal.StructureToPtr(OSADLFanSpeedValueData, fanSpeedValueBuffer, false);
-
-                    if (null != ADL.ADL_Overdrive5_FanSpeed_Get)
-                    {
-                        int ADLRet = ADL.ADL_Overdrive5_FanSpeed_Get(ADLAdapterIndexArray[deviceIndex], 0, fanSpeedValueBuffer);
-                        if (ADL.ADL_SUCCESS == ADLRet)
-                        {
-                            OSADLFanSpeedValueData = (ADLFanSpeedValue)Marshal.PtrToStructure(fanSpeedValueBuffer, OSADLFanSpeedValueData.GetType());
-                            labelGPUFanArray[deviceIndex].Text = OSADLFanSpeedValueData.iFanSpeed.ToString() + "%";
-                        }
-                    }
+                    Color labelColor = (checkBoxGPUEnableArray[i].Checked ? Color.Black : Color.Gray);
+                    labelGPUNameArray[i].ForeColor = labelColor;
+                    labelGPUVendorArray[i].ForeColor = labelColor;
+                    labelGPUIDArray[i].ForeColor = labelColor;
+                    labelGPUSpeedArray[i].ForeColor = labelColor;
+                    labelGPUActivityArray[i].ForeColor = labelColor;
+                    labelGPUFanArray[i].ForeColor = labelColor;
+                    labelGPUCoreClockArray[i].ForeColor = labelColor;
+                    labelGPUMemoryClockArray[i].ForeColor = labelColor;
+                    labelGPUSharesArray[i].ForeColor = labelColor;
                 }
-                else if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation"))
+
+                long elapsedTimeInSeconds = (long)((DateTime.Now - mStartTime).TotalSeconds);
+                if (appState != ApplicationGlobalState.Mining)
                 {
-                    uint temp = 0;
-                    ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetTemperature(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlTemperatureSensors.Gpu, ref temp);
-                    labelGPUTempArray[deviceIndex].Text = temp.ToString() + "℃";
-                    labelGPUTempArray[deviceIndex].ForeColor = (temp >= 80) ? Color.Red :
-                                                               (temp >= 60) ? Color.Purple :
-                                                                              Color.Blue;
-
-                    uint fanSpeed = 0;
-                    ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetFanSpeed(nvmlDeviceArray[deviceIndex], ref fanSpeed);
-                    labelGPUFanArray[deviceIndex].Text = fanSpeed.ToString() + "%";
-
-                    ManagedCuda.Nvml.nvmlUtilization utilization = new ManagedCuda.Nvml.nvmlUtilization();
-                    ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetUtilizationRates(nvmlDeviceArray[deviceIndex], ref utilization);
-                    labelGPUActivityArray[deviceIndex].Text = utilization.gpu.ToString() + "%";
-
-                    uint clock = 0;
-                    ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetClockInfo(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlClockType.Graphics, ref clock);
-                    labelGPUCoreClockArray[deviceIndex].Text = clock.ToString() + " MHz";
-                    ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetClockInfo(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlClockType.Mem, ref clock);
-                    labelGPUMemoryClockArray[deviceIndex].Text = clock.ToString() + " MHz";
+                    labelElapsedTime.Text = "-";
                 }
-            }
-            DeviceManagementLibrariesMutex.ReleaseMutex();
-        }
-
-        private void DumpADLInfo()
-        {
-            int ADLRet = -1;
-            int NumberOfAdapters = 0;
-            int NumberOfDisplays = 0;
-
-            if (null != ADL.ADL_Adapter_NumberOfAdapters_Get)
-            {
-                ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
-            }
-
-            // Get OS adpater info from ADL
-            ADLAdapterInfoArray OSAdapterInfoData;
-            OSAdapterInfoData = new ADLAdapterInfoArray();
-
-            if (null != ADL.ADL_Adapter_AdapterInfo_Get)
-            {
-                IntPtr AdapterBuffer = IntPtr.Zero;
-                int size = Marshal.SizeOf(OSAdapterInfoData);
-                AdapterBuffer = Marshal.AllocCoTaskMem((int)size);
-                Marshal.StructureToPtr(OSAdapterInfoData, AdapterBuffer, false);
-
-                if (null != ADL.ADL_Adapter_AdapterInfo_Get)
+                else if (elapsedTimeInSeconds >= 24 * 60 * 60)
                 {
-                    ADLRet = ADL.ADL_Adapter_AdapterInfo_Get(AdapterBuffer, size);
-                    if (ADL.ADL_SUCCESS == ADLRet)
+                    labelElapsedTime.Text = String.Format("{3} Days {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, (elapsedTimeInSeconds / 60) % 60, (elapsedTimeInSeconds / 60 / 60) % 24, (elapsedTimeInSeconds / 60 / 60 / 24));
+                }
+                else
+                {
+                    labelElapsedTime.Text = String.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, (elapsedTimeInSeconds / 60) % 60, (elapsedTimeInSeconds / 60 / 60) % 24);
+                }
+
+                double totalSpeed = 0;
+                if (mMiners != null)
+                    foreach (Miner miner in mMiners)
+                        totalSpeed += miner.Speed;
+                labelCurrentSpeed.Text = (appState != ApplicationGlobalState.Mining) ? "-" : ConvertHashRateToString(totalSpeed);
+                DeviceManagementLibrariesMutex.WaitOne();
+                foreach (var device in mDevices)
+                {
+                    ComputeDevice computeDevice = device.GetComputeDevice();
+                    int deviceIndex = device.DeviceIndex;
+                    double speed = 0;
+                    if (mMiners != null)
+                        foreach (Miner miner in mMiners)
+                            if (miner.DeviceIndex == deviceIndex)
+                                speed += miner.Speed;
+                    labelGPUSpeedArray[deviceIndex].Text = (appState != ApplicationGlobalState.Mining) ? "-" : ConvertHashRateToString(speed);
+
+                    if (device.AcceptedShares + device.RejectedShares == 0)
                     {
-                        OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
-                        int IsActive = 0;
-
-                        for (int i = 0; i < NumberOfAdapters; i++)
-                        {
-                            // Check if the adapter is active
-                            if (null != ADL.ADL_Adapter_Active_Get)
-                                ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
-
-                            if (ADL.ADL_SUCCESS == ADLRet)
-                            {
-                                Logger("Adapter is   : " + (0 == IsActive ? "DISABLED" : "ENABLED"));
-                                Logger("Adapter Index: " + OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex.ToString());
-                                Logger("Adapter UDID : " + OSAdapterInfoData.ADLAdapterInfo[i].UDID);
-                                Logger("Bus No       : " + OSAdapterInfoData.ADLAdapterInfo[i].BusNumber.ToString());
-                                Logger("Driver No    : " + OSAdapterInfoData.ADLAdapterInfo[i].DriverNumber.ToString());
-                                Logger("Function No  : " + OSAdapterInfoData.ADLAdapterInfo[i].FunctionNumber.ToString());
-                                Logger("Vendor ID    : " + OSAdapterInfoData.ADLAdapterInfo[i].VendorID.ToString());
-                                Logger("Adapter Name : " + OSAdapterInfoData.ADLAdapterInfo[i].AdapterName);
-                                Logger("Display Name : " + OSAdapterInfoData.ADLAdapterInfo[i].DisplayName);
-                                Logger("Present      : " + (0 == OSAdapterInfoData.ADLAdapterInfo[i].Present ? "No" : "Yes"));
-                                Logger("Exist        : " + (0 == OSAdapterInfoData.ADLAdapterInfo[i].Exist ? "No" : "Yes"));
-                                Logger("Driver Path  : " + OSAdapterInfoData.ADLAdapterInfo[i].DriverPath);
-                                Logger("Driver Path X: " + OSAdapterInfoData.ADLAdapterInfo[i].DriverPathExt);
-                                Logger("PNP String   : " + OSAdapterInfoData.ADLAdapterInfo[i].PNPString);
-
-                                // Obtain information about displays
-                                ADLDisplayInfo oneDisplayInfo = new ADLDisplayInfo();
-
-                                if (null != ADL.ADL_Display_DisplayInfo_Get)
-                                {
-                                    IntPtr DisplayBuffer = IntPtr.Zero;
-                                    int j = 0;
-
-                                    // Force the display detection and get the Display Info. Use 0 as last parameter to NOT force detection
-                                    ADLRet = ADL.ADL_Display_DisplayInfo_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref NumberOfDisplays, out DisplayBuffer, 1);
-                                    if (ADL.ADL_SUCCESS == ADLRet)
-                                    {
-                                        List<ADLDisplayInfo> DisplayInfoData = new List<ADLDisplayInfo>();
-                                        for (j = 0; j < NumberOfDisplays; j++)
-                                        {
-                                            oneDisplayInfo = (ADLDisplayInfo)Marshal.PtrToStructure(new IntPtr(DisplayBuffer.ToInt64() + j * Marshal.SizeOf(oneDisplayInfo)), oneDisplayInfo.GetType());
-                                            DisplayInfoData.Add(oneDisplayInfo);
-                                        }
-                                        Logger("\nTotal Number of Displays supported: " + NumberOfDisplays.ToString());
-                                        Logger("\nDispID  AdpID  Type OutType  CnctType Connected  Mapped  InfoValue DisplayName ");
-
-                                        for (j = 0; j < NumberOfDisplays; j++)
-                                        {
-                                            int InfoValue = DisplayInfoData[j].DisplayInfoValue;
-                                            string StrConnected = (1 == (InfoValue & 1)) ? "Yes" : "No ";
-                                            string StrMapped = (2 == (InfoValue & 2)) ? "Yes" : "No ";
-                                            int AdpID = DisplayInfoData[j].DisplayID.DisplayLogicalAdapterIndex;
-                                            string StrAdpID = (AdpID < 0) ? "--" : AdpID.ToString("d2");
-
-                                            Logger(DisplayInfoData[j].DisplayID.DisplayLogicalIndex.ToString() + "        " +
-                                                                 StrAdpID + "      " +
-                                                                 DisplayInfoData[j].DisplayType.ToString() + "      " +
-                                                                 DisplayInfoData[j].DisplayOutputType.ToString() + "      " +
-                                                                 DisplayInfoData[j].DisplayConnector.ToString() + "        " +
-                                                                 StrConnected + "        " +
-                                                                 StrMapped + "      " +
-                                                                 InfoValue.ToString("x4") + "   " +
-                                                                 DisplayInfoData[j].DisplayName.ToString());
-                                        }
-                                        Logger("");
-                                    }
-                                    else
-                                    {
-                                        Logger("ADL_Display_DisplayInfo_Get() returned error code " + ADLRet.ToString());
-                                    }
-                                    // Release the memory for the DisplayInfo structure
-                                    if (IntPtr.Zero != DisplayBuffer)
-                                        Marshal.FreeCoTaskMem(DisplayBuffer);
-                                }
-                            }
-                        }
+                        labelGPUSharesArray[deviceIndex].ForeColor = Color.Black;
+                        labelGPUSharesArray[deviceIndex].Text = (appState == ApplicationGlobalState.Mining) ? "0" : "-";
                     }
                     else
                     {
-                        Logger("ADL_Adapter_AdapterInfo_Get() returned error code " + ADLRet.ToString());
+                        double acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
+                        labelGPUSharesArray[deviceIndex].Text = device.AcceptedShares.ToString() + "/" + (device.AcceptedShares + device.RejectedShares).ToString() + " (" + String.Format("{0:N1}", (acceptanceRate) * 100) + "%)";
+                        labelGPUSharesArray[deviceIndex].ForeColor = (acceptanceRate >= 0.95 ? Color.Green : Color.Red); // TODO
+                    }
+
+                    if (ADLAdapterIndexArray[deviceIndex] >= 0)
+                    {
+                        // temperature
+                        ADLTemperature OSADLTemperatureData;
+                        OSADLTemperatureData = new ADLTemperature();
+                        IntPtr tempBuffer = IntPtr.Zero;
+                        int size = Marshal.SizeOf(OSADLTemperatureData);
+                        tempBuffer = Marshal.AllocCoTaskMem((int)size);
+                        Marshal.StructureToPtr(OSADLTemperatureData, tempBuffer, false);
+
+                        if (null != ADL.ADL_Overdrive5_Temperature_Get)
+                        {
+                            int ADLRet = ADL.ADL_Overdrive5_Temperature_Get(ADLAdapterIndexArray[deviceIndex], 0, tempBuffer);
+                            if (ADL.ADL_SUCCESS == ADLRet)
+                            {
+                                OSADLTemperatureData = (ADLTemperature)Marshal.PtrToStructure(tempBuffer, OSADLTemperatureData.GetType());
+                                labelGPUTempArray[deviceIndex].Text = (OSADLTemperatureData.Temperature / 1000).ToString() + "℃";
+                                labelGPUTempArray[deviceIndex].ForeColor = (OSADLTemperatureData.Temperature >= 80000) ? Color.Red :
+                                                                           (OSADLTemperatureData.Temperature >= 60000) ? Color.Purple :
+                                                                                                                         Color.Blue;
+                            }
+                        }
+
+                        // activity
+                        ADLPMActivity OSADLPMActivityData;
+                        OSADLPMActivityData = new ADLPMActivity();
+                        IntPtr activityBuffer = IntPtr.Zero;
+                        size = Marshal.SizeOf(OSADLPMActivityData);
+                        activityBuffer = Marshal.AllocCoTaskMem((int)size);
+                        Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
+
+                        if (null != ADL.ADL_Overdrive5_CurrentActivity_Get)
+                        {
+                            int ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndexArray[deviceIndex], activityBuffer);
+                            if (ADL.ADL_SUCCESS == ADLRet)
+                            {
+                                OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
+                                labelGPUActivityArray[deviceIndex].Text = OSADLPMActivityData.iActivityPercent.ToString() + "%";
+                                labelGPUCoreClockArray[deviceIndex].Text = (OSADLPMActivityData.iEngineClock / 100).ToString() + " MHz";
+                                labelGPUMemoryClockArray[deviceIndex].Text = (OSADLPMActivityData.iMemoryClock / 100).ToString() + " MHz";
+                            }
+                        }
+
+                        // fan speed
+                        ADLFanSpeedValue OSADLFanSpeedValueData;
+                        OSADLFanSpeedValueData = new ADLFanSpeedValue();
+                        IntPtr fanSpeedValueBuffer = IntPtr.Zero;
+                        size = Marshal.SizeOf(OSADLFanSpeedValueData);
+                        OSADLFanSpeedValueData.iSpeedType = 1;
+                        fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)size);
+                        Marshal.StructureToPtr(OSADLFanSpeedValueData, fanSpeedValueBuffer, false);
+
+                        if (null != ADL.ADL_Overdrive5_FanSpeed_Get)
+                        {
+                            int ADLRet = ADL.ADL_Overdrive5_FanSpeed_Get(ADLAdapterIndexArray[deviceIndex], 0, fanSpeedValueBuffer);
+                            if (ADL.ADL_SUCCESS == ADLRet)
+                            {
+                                OSADLFanSpeedValueData = (ADLFanSpeedValue)Marshal.PtrToStructure(fanSpeedValueBuffer, OSADLFanSpeedValueData.GetType());
+                                labelGPUFanArray[deviceIndex].Text = OSADLFanSpeedValueData.iFanSpeed.ToString() + "%";
+                            }
+                        }
+                    }
+                    else if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation"))
+                    {
+                        uint temp = 0;
+                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetTemperature(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlTemperatureSensors.Gpu, ref temp);
+                        labelGPUTempArray[deviceIndex].Text = temp.ToString() + "℃";
+                        labelGPUTempArray[deviceIndex].ForeColor = (temp >= 80) ? Color.Red :
+                                                                   (temp >= 60) ? Color.Purple :
+                                                                                  Color.Blue;
+
+                        uint fanSpeed = 0;
+                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetFanSpeed(nvmlDeviceArray[deviceIndex], ref fanSpeed);
+                        labelGPUFanArray[deviceIndex].Text = fanSpeed.ToString() + "%";
+
+                        ManagedCuda.Nvml.nvmlUtilization utilization = new ManagedCuda.Nvml.nvmlUtilization();
+                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetUtilizationRates(nvmlDeviceArray[deviceIndex], ref utilization);
+                        labelGPUActivityArray[deviceIndex].Text = utilization.gpu.ToString() + "%";
+
+                        uint clock = 0;
+                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetClockInfo(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlClockType.Graphics, ref clock);
+                        labelGPUCoreClockArray[deviceIndex].Text = clock.ToString() + " MHz";
+                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetClockInfo(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlClockType.Mem, ref clock);
+                        labelGPUMemoryClockArray[deviceIndex].Text = clock.ToString() + " MHz";
                     }
                 }
-                // Release the memory for the AdapterInfo structure
-                if (IntPtr.Zero != AdapterBuffer)
-                    Marshal.FreeCoTaskMem(AdapterBuffer);
+            }
+            catch (Exception ex)
+            {
+                MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+            }
+            finally
+            {
+                try { DeviceManagementLibrariesMutex.ReleaseMutex(); }
+                catch (Exception ex) { }
             }
         }
 
@@ -1507,7 +1440,7 @@ namespace GatelessGateSharp
 
         public bool ValidateMoneroAddress()
         {
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}$");
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}(\.([0-9a-fA-F]{16}|[0-9a-fA-F]{64}))?$");
             var match = regex.Match(textBoxMoneroAddress.Text);
             if (match.Success)
             {
@@ -1516,6 +1449,21 @@ namespace GatelessGateSharp
             else
             {
                 MessageBox.Show("Please enter a valid Monero address.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public bool ValidateRigID()
+        {
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^[a-zA-Z0-9]+$");
+            var match = regex.Match(textBoxRigID.Text);
+            if (match.Success)
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid rig ID consisting of alphanumeric characters.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -1589,7 +1537,10 @@ namespace GatelessGateSharp
                     {
                         try
                         {
-                            stratum = (new CryptoNightStratum(host.name, 3355, (mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool));
+                            String username = (mDevFeeMode ? (mDevFeeBitcoinAddress + ".DEVFEE") : textBoxBitcoinAddress.Text);
+                            if (!mDevFeeMode && textBoxRigID.Text != "")
+                                username += "." + textBoxRigID.Text; // TODO
+                            stratum = (new CryptoNightStratum(host.name, 3355, username, "x", pool));
                             break;
                         }
                         catch (Exception ex)
@@ -1700,6 +1651,9 @@ namespace GatelessGateSharp
                     {
                         try
                         {
+                            String username = (mDevFeeMode ? (mDevFeeBitcoinAddress + ".DEVFEE") : textBoxBitcoinAddress.Text);
+                            if (!mDevFeeMode && textBoxRigID.Text != "")
+                                username += "." + textBoxRigID.Text; // TODO
                             stratum = new NiceHashEthashStratum(host.name, 3353, (mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool);
                             break;
                         }
@@ -1914,13 +1868,26 @@ namespace GatelessGateSharp
             {
                 Logger("Stopping miners...");
                 foreach (Miner miner in mMiners)
-                {
                     miner.Stop();
-                    miner.WaitForExit(60000);
+                bool allDone = false;
+                int counter = 600;
+                while (!allDone && counter-- > 0)
+                {
+                    System.Threading.Thread.Sleep(100);
+                    allDone = true;
+                    foreach (Miner miner in mMiners)
+                        if (!miner.Done)
+                        {
+                            allDone = false;
+                            break;
+                        }
+                }
+                foreach (Miner miner in mMiners)
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
-                }
                 mStratum.Stop();
+                foreach (var device in mDevices)
+                    device.ResetQueues();
             }
             catch (Exception ex)
             {
@@ -1939,6 +1906,8 @@ namespace GatelessGateSharp
             if (textBoxEthereumAddress.Text != "" && !ValidateEthereumAddress())
                 return;
             if (textBoxMoneroAddress.Text != "" && !ValidateMoneroAddress())
+                return;
+            if (textBoxRigID.Text != "" && !ValidateRigID())
                 return;
             if (textBoxBitcoinAddress.Text == "" && textBoxEthereumAddress.Text == "" && textBoxMoneroAddress.Text == "")
             {
@@ -1983,6 +1952,12 @@ namespace GatelessGateSharp
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
+                    try
+                    {
+                        using (System.IO.StreamWriter file = new System.IO.StreamWriter(mAppStateFileName, false))
+                            file.WriteLine("Mining");
+                    }
+                    catch (Exception) { }
                 }
             }
             else if (appState == ApplicationGlobalState.Mining)
@@ -1990,6 +1965,12 @@ namespace GatelessGateSharp
                 timerDevFee.Enabled = false;
                 StopMiners();
                 appState = ApplicationGlobalState.Idle;
+                try
+                {
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(mAppStateFileName, false))
+                        file.WriteLine("Idle");
+                }
+                catch (Exception) { }
             }
 
             UpdateStatsWithShortPolling();
@@ -1999,23 +1980,41 @@ namespace GatelessGateSharp
 
         private void UpdateControls()
         {
-            buttonStart.Text = (appState == ApplicationGlobalState.Mining) ? "Stop" : "Start";
-            buttonBenchmark.Enabled = false;
+            try
+            {
+                buttonStart.Text = (appState == ApplicationGlobalState.Mining) ? "Stop" : "Start";
+                buttonBenchmark.Enabled = false;
 
-            groupBoxCoinsToMine.Enabled = (appState == ApplicationGlobalState.Idle);
-            groupBoxPoolPriorities.Enabled = (appState == ApplicationGlobalState.Idle);
-            groupBoxPoolParameters.Enabled = (appState == ApplicationGlobalState.Idle);
-            groupBoxWalletAddresses.Enabled = (appState == ApplicationGlobalState.Idle);
-            groupBoxAutomation.Enabled = (appState == ApplicationGlobalState.Idle);
-            foreach (var control in checkBoxGPUEnableArray)
-                control.Enabled = (appState == ApplicationGlobalState.Idle);
+                groupBoxCoinsToMine.Enabled = (appState == ApplicationGlobalState.Idle);
+                groupBoxPoolPriorities.Enabled = (appState == ApplicationGlobalState.Idle);
+                groupBoxPoolParameters.Enabled = (appState == ApplicationGlobalState.Idle);
+                groupBoxWalletAddresses.Enabled = (appState == ApplicationGlobalState.Idle);
+                groupBoxAutomation.Enabled = (appState == ApplicationGlobalState.Idle);
+                foreach (var control in checkBoxGPUEnableArray)
+                    control.Enabled = (appState == ApplicationGlobalState.Idle);
+                foreach (var control in groupBoxDeviceEthashArray)
+                    control.Enabled = (appState == ApplicationGlobalState.Idle);
+                foreach (var control in groupBoxDeviceCryptoNightArray)
+                    control.Enabled = (appState == ApplicationGlobalState.Idle);
 
-            this.Enabled = true;
+                this.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void timerCurrencyStatUpdates_Tick(object sender, EventArgs e)
         {
-            UpdateStatsWithLongPolling();
+            try
+            {
+                UpdateStatsWithLongPolling();
+            }
+            catch (Exception ex)
+            {
+                Logger("Exception in timerCurrencyStatUpdates_Tick(): " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void buttonPoolPrioritiesUp_Click(object sender, EventArgs e)
@@ -2084,41 +2083,48 @@ namespace GatelessGateSharp
 
         private void timerDevFee_Tick(object sender, EventArgs e)
         {
-            if (appState != ApplicationGlobalState.Mining)
+            try
             {
-                timerDevFee.Enabled = false;
-            }
-            else if (mDevFeeMode)
-            {
-                labelCurrentPool.Text = "Switching...";
-                Enabled = false;
-                StopMiners();
-                mDevFeeMode = false;
-                timerDevFee.Interval = (int)(((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage)) * 1000);
-                LaunchMiners();
-                if (mMiners == null || mStratum == null)
+                if (appState != ApplicationGlobalState.Mining)
                 {
-                    mDevFeeMode = true;
-                    timerDevFee.Interval = 1000;
+                    timerDevFee.Enabled = false;
                 }
-            }
-            else
-            {
-                labelCurrentPool.Text = "Switching...";
-                Enabled = false;
-                StopMiners();
-                mDevFeeMode = true;
-                timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
-                LaunchMiners();
-                if (mMiners == null || mStratum == null)
+                else if (mDevFeeMode)
                 {
+                    labelCurrentPool.Text = "Switching...";
+                    Enabled = false;
+                    StopMiners();
                     mDevFeeMode = false;
-                    timerDevFee.Interval = 1000;
+                    timerDevFee.Interval = (int)(((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage)) * 1000);
+                    LaunchMiners();
+                    if (mMiners == null || mStratum == null)
+                    {
+                        mDevFeeMode = true;
+                        timerDevFee.Interval = 1000;
+                    }
                 }
-            }
+                else
+                {
+                    labelCurrentPool.Text = "Switching...";
+                    Enabled = false;
+                    StopMiners();
+                    mDevFeeMode = true;
+                    timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
+                    LaunchMiners();
+                    if (mMiners == null || mStratum == null)
+                    {
+                        mDevFeeMode = false;
+                        timerDevFee.Interval = 1000;
+                    }
+                }
 
-            UpdateStatsWithLongPolling();
-            Enabled = true;
+                UpdateStatsWithLongPolling();
+                Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                Logger("Exception in timerDevFee_Tick(): " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void radioButtonMonero_CheckedChanged(object sender, EventArgs e)
@@ -2163,10 +2169,17 @@ namespace GatelessGateSharp
 
         private void timerWatchdog_Tick(object sender, EventArgs e)
         {
-            if (appState == ApplicationGlobalState.Mining && mMiners != null)
+            try
             {
-                foreach (var miner in mMiners)
-                    miner.KeepAlive();
+                if (appState == ApplicationGlobalState.Mining && mMiners != null)
+                {
+                    foreach (var miner in mMiners)
+                        miner.KeepAlive();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger("Exception in timerWatchdog_Tick(): " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -2196,7 +2209,14 @@ namespace GatelessGateSharp
 
         private void timerUpdateLog_Tick(object sender, EventArgs e)
         {
-            UpdateLog();
+            try
+            {
+                UpdateLog();
+            }
+            catch (Exception ex)
+            {
+                Logger("Exception in timerUpdateLog_Tick(): " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void checkBoxLaunchAtStartup_CheckedChanged(object sender, EventArgs e)
@@ -2666,6 +2686,7 @@ namespace GatelessGateSharp
 
         private void buttonClearLog_Click(object sender, EventArgs e)
         {
+            Utilities.FixFPU();
             richTextBoxLog.Clear();
         }
 

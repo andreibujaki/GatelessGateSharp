@@ -725,15 +725,16 @@ __kernel void search6(__global ulong *states, __global uint *BranchBuf, __global
 	//if (as_uint16(p).s7 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
 	if ((p.s3 >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
-		output[i] = BranchBuf[idx] + get_global_offset(0);
-		output[256 + i * 8] = as_uint16(p).s0;
-		output[256 + i * 8 + 1] = as_uint16(p).s1;
-		output[256 + i * 8 + 2] = as_uint16(p).s2;
-		output[256 + i * 8 + 3] = as_uint16(p).s3;
-		output[256 + i * 8 + 4] = as_uint16(p).s4;
-		output[256 + i * 8 + 5] = as_uint16(p).s5;
-		output[256 + i * 8 + 6] = as_uint16(p).s6;
-		output[256 + i * 8 + 7] = as_uint16(p).s7;
+		output[i] = BranchBuf[idx] + get_global_offset(0);		
+		output[256 + i * 8 + 0] = (p.s0 & 0xffffffffu);
+		output[256 + i * 8 + 1] = (p.s0 >> 32);
+		output[256 + i * 8 + 2] = (p.s1 & 0xffffffffu);
+		output[256 + i * 8 + 3] = (p.s1 >> 32);
+		output[256 + i * 8 + 4] = (p.s2 & 0xffffffffu);
+		output[256 + i * 8 + 5] = (p.s2 >> 32);
+		output[256 + i * 8 + 6] = (p.s3 & 0xffffffffu);
+		output[256 + i * 8 + 7] = (p.s3 >> 32);
+
 	}
 
     mem_fence(CLK_GLOBAL_MEM_FENCE);
@@ -802,14 +803,14 @@ __kernel void search5(__global ulong *states, __global uint *BranchBuf, __global
 	if ((h7l >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
 		output[i] = BranchBuf[idx] + get_global_offset(0);
-		output[256 + i * 8 + 0] = as_uint2(h6h).s0;
-		output[256 + i * 8 + 1] = as_uint2(h6h).s1;
-		output[256 + i * 8 + 2] = as_uint2(h6l).s0;
-		output[256 + i * 8 + 3] = as_uint2(h6l).s1;
-		output[256 + i * 8 + 4] = as_uint2(h7h).s0;
-		output[256 + i * 8 + 5] = as_uint2(h7h).s1;
-		output[256 + i * 8 + 6] = as_uint2(h7l).s0;
-		output[256 + i * 8 + 7] = as_uint2(h7l).s1;
+		output[256 + i * 8 + 0] = (h6h & 0xffffffffu);
+		output[256 + i * 8 + 1] = (h6h >> 32);
+		output[256 + i * 8 + 2] = (h6l & 0xffffffffu);
+		output[256 + i * 8 + 3] = (h6l >> 32);
+		output[256 + i * 8 + 4] = (h7h & 0xffffffffu);
+		output[256 + i * 8 + 5] = (h7h >> 32);
+		output[256 + i * 8 + 6] = (h7l & 0xffffffffu);
+		output[256 + i * 8 + 7] = (h7l >> 32);
 	}
 }
 
@@ -943,13 +944,13 @@ __kernel void search4(__global ulong *states, __global uint *BranchBuf, __global
 	if ((State[7] >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
 		output[i] = BranchBuf[idx] + get_global_offset(0);
-		output[256 + i * 8 + 0] = as_uint2(State[4]).s0;
-		output[256 + i * 8 + 1] = as_uint2(State[4]).s1;
-		output[256 + i * 8 + 2] = as_uint2(State[5]).s0;
-		output[256 + i * 8 + 3] = as_uint2(State[5]).s1;
-		output[256 + i * 8 + 4] = as_uint2(State[6]).s0;
-		output[256 + i * 8 + 5] = as_uint2(State[6]).s1;
-		output[256 + i * 8 + 6] = as_uint2(State[7]).s0;
-		output[256 + i * 8 + 7] = as_uint2(State[7]).s1;
+		output[256 + i * 8 + 0] = (State[4] & 0xffffffffu);
+		output[256 + i * 8 + 1] = (State[4] >> 32);
+		output[256 + i * 8 + 2] = (State[5] & 0xffffffffu);
+		output[256 + i * 8 + 3] = (State[5] >> 32);
+		output[256 + i * 8 + 4] = (State[6] & 0xffffffffu);
+		output[256 + i * 8 + 5] = (State[6] >> 32);
+		output[256 + i * 8 + 6] = (State[7] & 0xffffffffu);
+		output[256 + i * 8 + 7] = (State[7] >> 32);
 	}
 }

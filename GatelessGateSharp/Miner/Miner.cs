@@ -107,14 +107,16 @@ namespace GatelessGateSharp
 
         public void KeepAlive()
         {
-            if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 15)
+            if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5)
+                mSpeed = 0;
+            if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 60)
             {
-                //MainForm.Logger("Miner thread is unresponsive. Restarting...");
+                MainForm.Logger("Miner thread is unresponsive. Restarting...");
                 try
                 {
                     mMinerThread.Abort();
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
                 mSpeed = 0;
                 StartMinerThread();
             }
