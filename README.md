@@ -1,6 +1,6 @@
 # Gateless Gate Sharp
 
-![Screen Shot](https://i.imgur.com/2uxU07X.png)
+![Screen Shot](https://i.imgur.com/AQAN8zx.png)
 
 Gateless Gate Sharp is yet another OpenCL ETH/XMR miner for Windows operating systems. It focuses on performance, stability, and ease of use.
 Unlike the original Gateless Gate or excavator/NiceHash Miner 2, this miner aims at stability with a much simpler design and the managed .NET Framework.
