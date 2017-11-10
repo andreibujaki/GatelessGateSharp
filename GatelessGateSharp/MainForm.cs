@@ -47,8 +47,8 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static String shortAppName = "Gateless Gate Sharp";
-        public static String appVersion = "0.0.9";
-        public static String appName = shortAppName + " " + appVersion + " alpha";
+        public static String appVersion = "0.0.10";
+        public static String appName = shortAppName + " " + appVersion + " beta";
         private static String databaseFileName = "GatelessGateSharp.sqlite";
         private static String logFileName = "GatelessGateSharp.log";
         private static String mAppStateFileName = "GatelessGateSharpState.txt";
@@ -636,8 +636,8 @@ namespace GatelessGateSharp
             numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightThreads, numericUpDownDevice1CryptoNightThreads, numericUpDownDevice2CryptoNightThreads, numericUpDownDevice3CryptoNightThreads, numericUpDownDevice4CryptoNightThreads, numericUpDownDevice5CryptoNightThreads, numericUpDownDevice6CryptoNightThreads, numericUpDownDevice7CryptoNightThreads };
             numericUpDownDeviceCryptoNightIntensityArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightIntensity, numericUpDownDevice1CryptoNightIntensity, numericUpDownDevice2CryptoNightIntensity, numericUpDownDevice3CryptoNightIntensity, numericUpDownDevice4CryptoNightIntensity, numericUpDownDevice5CryptoNightIntensity, numericUpDownDevice6CryptoNightIntensity, numericUpDownDevice7CryptoNightIntensity };
             numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightLocalWorkSize, numericUpDownDevice1CryptoNightLocalWorkSize, numericUpDownDevice2CryptoNightLocalWorkSize, numericUpDownDevice3CryptoNightLocalWorkSize, numericUpDownDevice4CryptoNightLocalWorkSize, numericUpDownDevice5CryptoNightLocalWorkSize, numericUpDownDevice6CryptoNightLocalWorkSize, numericUpDownDevice7CryptoNightLocalWorkSize };
-            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash, groupBoxDevice0Ethash };
-            groupBoxDeviceCryptoNightArray = new GroupBox[] { groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight, groupBoxDevice0CryptoNight };
+            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice0Ethash, groupBoxDevice1Ethash, groupBoxDevice2Ethash, groupBoxDevice3Ethash, groupBoxDevice4Ethash, groupBoxDevice5Ethash, groupBoxDevice6Ethash, groupBoxDevice7Ethash };
+            groupBoxDeviceCryptoNightArray = new GroupBox[] { groupBoxDevice0CryptoNight, groupBoxDevice1CryptoNight, groupBoxDevice2CryptoNight, groupBoxDevice3CryptoNight, groupBoxDevice4CryptoNight, groupBoxDevice5CryptoNight, groupBoxDevice6CryptoNight, groupBoxDevice7CryptoNight };
 
             if (LoadPhyMemDriver() != 0)
             {
@@ -823,12 +823,11 @@ namespace GatelessGateSharp
                                     ComputeDevice openclDevice = device.GetComputeDevice();
                                     if (openclDevice.Vendor == "Advanced Micro Devices, Inc.")
                                     {
-                                        ComputeDevice.cl_device_topology_amd topology = openclDevice.TopologyAMD;
                                         for (int i = 0; i < NumberOfAdapters; i++)
                                         {
                                             if (null != ADL.ADL_Adapter_Active_Get)
                                                 ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
-                                            if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == topology.bus
+                                            if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
                                                 && (ADLAdapterIndexArray[deviceIndex] < 0 || IsActive != 0))
                                             {
                                                 ADLAdapterIndexArray[deviceIndex] = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
@@ -932,7 +931,7 @@ namespace GatelessGateSharp
             protected override System.Net.WebRequest GetWebRequest(Uri uri)
             {
                 System.Net.WebRequest request = base.GetWebRequest(uri);
-                request.Timeout = 1 * 1000;
+                request.Timeout = 10 * 1000;
                 return request;
             }
         }
@@ -945,7 +944,6 @@ namespace GatelessGateSharp
                 if (mMiners != null)
                     foreach (Miner miner in mMiners)
                         totalSpeed += miner.Speed;
-                labelCurrentSpeed.Text = (appState != ApplicationGlobalState.Mining) ? "-" : String.Format("{0:N2} Mh/s", totalSpeed / 1000000);
 
                 var client = new CustomWebClient();
                 double USDBTC = 0;
@@ -963,10 +961,18 @@ namespace GatelessGateSharp
                     var responseArray = JsonConvert.DeserializeObject<JArray>(jsonString);
                     foreach (JContainer currency in responseArray)
                     {
-                        if ((String)currency["id"] == "ethereum")
-                            USDETH = Double.Parse((String)currency["price_usd"]);
-                        if ((String)currency["id"] == "monero")
-                            USDXMR = Double.Parse((String)currency["price_usd"]);
+                        try
+                        {
+                            if ((String)currency["id"] == "ethereum")
+                                USDETH = Double.Parse((String)currency["price_usd"]);
+                        }
+                        catch (Exception) { }
+                        try
+                        {
+                            if ((String)currency["id"] == "monero")
+                                USDXMR = Double.Parse((String)currency["price_usd"]);
+                        }
+                        catch (Exception) { }
                     }
                 }
 
@@ -978,10 +984,16 @@ namespace GatelessGateSharp
                     var result = (JContainer)(response["result"]);
                     var stats = (JArray)(result["stats"]);
                     foreach (JContainer item in stats)
-                        balance += Double.Parse((String)item["balance"]);
+                    {
+                        try
+                        {
+                            balance += Double.Parse((String)item["balance"]);
+                        }
+                        catch (Exception) { }
+                    }
                     labelBalance.Text = String.Format("{0:N6}", balance) + " BTC (" + String.Format("{0:N2}", (balance * USDBTC)) + " USD)";
 
-                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "")
+                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode)
                     {
                         double price = 0;
                         jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
@@ -989,9 +1001,14 @@ namespace GatelessGateSharp
                         result = (JContainer)(response["result"]);
                         stats = (JArray)(result["stats"]);
                         foreach (JContainer item in stats)
-                            if ((double)item["algo"] == 20)
-                                price = Double.Parse((String)item["price"]) * totalSpeed / 1000000000.0;
-
+                        {
+                            try
+                            {
+                                if ((double)item["algo"] == 20)
+                                    price = Double.Parse((String)item["price"]) * totalSpeed / 1000000000.0;
+                            }
+                            catch (Exception) { }
+                        }
                         labelPriceDay.Text = String.Format("{0:N6}", price) + " BTC/Day (" + String.Format("{0:N2}", (price * USDBTC)) + " USD/Day)";
                         labelPriceWeek.Text = String.Format("{0:N6}", price * 7) + " BTC/Week (" + String.Format("{0:N2}", (price * 7 * USDBTC)) + " USD/Week)";
                         labelPriceMonth.Text = String.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + String.Format("{0:N2}", (price * (365.25 / 12) * USDBTC)) + " USD/Month)";
@@ -1003,7 +1020,7 @@ namespace GatelessGateSharp
                         labelPriceMonth.Text = "-";
                     }
                 }
-                if (mCurrentPool == "NiceHash" && radioButtonMonero.Checked && textBoxBitcoinAddress.Text != "")
+                else if (mCurrentPool == "NiceHash" && radioButtonMonero.Checked && textBoxBitcoinAddress.Text != "")
                 {
                     double balance = 0;
                     String jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
@@ -1011,10 +1028,16 @@ namespace GatelessGateSharp
                     var result = (JContainer)(response["result"]);
                     var stats = (JArray)(result["stats"]);
                     foreach (JContainer item in stats)
-                        balance += Double.Parse((String)item["balance"]);
+                    {
+                        try
+                        {
+                            balance += Double.Parse((String)item["balance"]);
+                        }
+                        catch (Exception) { }
+                    }
                     labelBalance.Text = String.Format("{0:N6}", balance) + " BTC (" + String.Format("{0:N2}", (balance * USDBTC)) + " USD)";
 
-                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "")
+                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode)
                     {
                         double price = 0;
                         jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
@@ -1022,9 +1045,14 @@ namespace GatelessGateSharp
                         result = (JContainer)(response["result"]);
                         stats = (JArray)(result["stats"]);
                         foreach (JContainer item in stats)
-                            if ((double)item["algo"] == 22)
-                                price = Double.Parse((String)item["price"]) * totalSpeed / 1000000.0;
-
+                        {
+                            try
+                            {
+                                if ((double)item["algo"] == 22)
+                                    price = Double.Parse((String)item["price"]) * totalSpeed / 1000000.0;
+                            }
+                            catch (Exception) { }
+                        }
                         labelPriceDay.Text = String.Format("{0:N6}", price) + " BTC/Day (" + String.Format("{0:N2}", (price * USDBTC)) + " USD/Day)";
                         labelPriceWeek.Text = String.Format("{0:N6}", price * 7) + " BTC/Week (" + String.Format("{0:N2}", (price * 7 * USDBTC)) + " USD/Week)";
                         labelPriceMonth.Text = String.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + String.Format("{0:N2}", (price * (365.25 / 12) * USDBTC)) + " USD/Month)";
@@ -1216,7 +1244,6 @@ namespace GatelessGateSharp
                 if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
                 {
                     labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + String.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
-                    mCurrentPool = mStratum.PoolName;
                 }
                 else if (appState == ApplicationGlobalState.Mining && mStratum != null)
                 {

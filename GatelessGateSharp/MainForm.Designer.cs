@@ -3343,7 +3343,7 @@
             // 
             // timerCurrencyStatUpdates
             // 
-            this.timerCurrencyStatUpdates.Interval = 60000;
+            this.timerCurrencyStatUpdates.Interval = 10000;
             this.timerCurrencyStatUpdates.Tick += new System.EventHandler(this.timerCurrencyStatUpdates_Tick);
             // 
             // timerDevFee

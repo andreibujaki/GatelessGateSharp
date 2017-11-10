@@ -41,7 +41,7 @@ namespace GatelessGateSharp
         public bool NiceHashMode { get { return mNicehashMode; } }
 
         public OpenCLCryptoNightMiner(Device aGatelessGateDevice, CryptoNightStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
-            : base(aGatelessGateDevice, "CrypoNight")
+            : base(aGatelessGateDevice, "CryptoNight")
         {
             mStratum = aStratum;
             mLocalWorkSize = aLocalWorkSize;

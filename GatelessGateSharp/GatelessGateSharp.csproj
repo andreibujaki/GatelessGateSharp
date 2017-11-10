@@ -32,7 +32,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -115,48 +115,6 @@
     <Compile Include="Stratum\CryptoNightStratum.cs" />
     <Compile Include="Stratum\OpenEthereumPoolEthashStratum.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="Cloo\Bindings\CL10.cs" />
-    <Compile Include="Cloo\Bindings\CL11.cs" />
-    <Compile Include="Cloo\Bindings\CLCommandQueueHandle.cs" />
-    <Compile Include="Cloo\Bindings\CLContextHandle.cs" />
-    <Compile Include="Cloo\Bindings\CLDeviceHandle.cs" />
-    <Compile Include="Cloo\Bindings\CLEventHandle.cs" />
-    <Compile Include="Cloo\Bindings\CLKernelHandle.cs" />
-    <Compile Include="Cloo\Bindings\CLMemoryHandle.cs" />
-    <Compile Include="Cloo\Bindings\CLPlatformHandle.cs" />
-    <Compile Include="Cloo\Bindings\CLProgramHandle.cs" />
-    <Compile Include="Cloo\Bindings\CLSamplerHandle.cs" />
-    <Compile Include="Cloo\Bindings\Clx.cs" />
-    <Compile Include="Cloo\Bindings\Enums.cs" />
-    <Compile Include="Cloo\ComputeBuffer.cs" />
-    <Compile Include="Cloo\ComputeBufferBase.cs" />
-    <Compile Include="Cloo\ComputeCommandQueue.Added.cs" />
-    <Compile Include="Cloo\ComputeCommandQueue.cs" />
-    <Compile Include="Cloo\ComputeCompiler.cs" />
-    <Compile Include="Cloo\ComputeContext.cs" />
-    <Compile Include="Cloo\ComputeContextProperty.cs" />
-    <Compile Include="Cloo\ComputeContextPropertyList.cs" />
-    <Compile Include="Cloo\ComputeDevice.cs" />
-    <Compile Include="Cloo\ComputeEvent.cs" />
-    <Compile Include="Cloo\ComputeEventBase.cs" />
-    <Compile Include="Cloo\ComputeEventList.cs" />
-    <Compile Include="Cloo\ComputeException.cs" />
-    <Compile Include="Cloo\ComputeImage.cs" />
-    <Compile Include="Cloo\ComputeImage2D.cs" />
-    <Compile Include="Cloo\ComputeImage3D.cs" />
-    <Compile Include="Cloo\ComputeImageFormat.cs" />
-    <Compile Include="Cloo\ComputeKernel.cs" />
-    <Compile Include="Cloo\ComputeMemory.cs" />
-    <Compile Include="Cloo\ComputeObject.cs" />
-    <Compile Include="Cloo\ComputePlatform.cs" />
-    <Compile Include="Cloo\ComputeProgram.cs" />
-    <Compile Include="Cloo\ComputeResource.cs" />
-    <Compile Include="Cloo\ComputeSampler.cs" />
-    <Compile Include="Cloo\ComputeSubBuffer.cs" />
-    <Compile Include="Cloo\ComputeTools.cs" />
-    <Compile Include="Cloo\ComputeUserEvent.cs" />
-    <Compile Include="Cloo\SysIntX2.cs" />
-    <Compile Include="Cloo\SysIntX3.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -219,6 +177,10 @@
       <Project>{92d51a33-7bf0-47fd-9ece-d758ffe1691d}</Project>
       <Name>Nvml</Name>
     </ProjectReference>
+    <ProjectReference Include="Cloo\Cloo.csproj">
+      <Project>{5c25329d-774a-46c8-b52f-66dfd281e9cf}</Project>
+      <Name>Cloo</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -245,7 +207,7 @@
     <PostBuildEvent>copy $(SolutionDir)$(SolutionName)\SQLite.Interop.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\System.Data.SQLite.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
-
+copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
 "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:4194304
 xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels

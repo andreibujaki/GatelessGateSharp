@@ -34,9 +34,6 @@ namespace GatelessGateSharp
     {
         const int EPOCH_LENGTH = 30000;
 
-        private ComputeProgram mProgram;
-        private ComputeKernel mDAGKernel;
-        private ComputeKernel mSearchKernel;
         private EthashStratum mStratum;
         private Thread mMinerThread = null;
         private long mLocalWorkSize = 192;
@@ -104,11 +101,14 @@ namespace GatelessGateSharp
                         }
                         MainForm.Logger("Built ethash program for Device #" + DeviceIndex + ".");
 
-                        using (ComputeKernel DAGKernel = program.CreateKernel("DAGKernel"))
+                        using (ComputeKernel DAGKernel = program.CreateKernel("GenerateDAG"))
                         using (ComputeKernel searchKernel = program.CreateKernel("search"))
                         using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(Device.Context, ComputeMemoryFlags.ReadWrite, 256))
                         using (ComputeBuffer<byte> headerBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadOnly, 32))
-                        { 
+                        {
+
+                            MarkAsAlive();
+
                             System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                             EthashStratum.Work work;
  
@@ -151,16 +151,15 @@ namespace GatelessGateSharp
                                         ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, cache.GetData().Length, (IntPtr)p);
                                         DAGBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadWrite, globalWorkSize * 8 * 64 /* DAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
 
-                                        mDAGKernel.SetValueArgument<UInt32>(0, 0);
-                                        mDAGKernel.SetMemoryArgument(1, DAGCacheBuffer);
-                                        mDAGKernel.SetMemoryArgument(2, DAGBuffer);
-                                        mDAGKernel.SetValueArgument<UInt32>(3, (UInt32)cache.GetData().Length / 64);
-                                        //mDAGKernel.SetValueArgument<UInt32>(4, (UInt32)(DAGSize / 64));
-                                        mDAGKernel.SetValueArgument<UInt32>(4, 0xffffffffu);
+                                        DAGKernel.SetValueArgument<UInt32>(0, 0);
+                                        DAGKernel.SetMemoryArgument(1, DAGCacheBuffer);
+                                        DAGKernel.SetMemoryArgument(2, DAGBuffer);
+                                        DAGKernel.SetValueArgument<UInt32>(3, (UInt32)cache.GetData().Length / 64);
+                                        DAGKernel.SetValueArgument<UInt32>(4, 0xffffffffu);
 
                                         for (long start = 0; start < DAGSize / 64; start += globalWorkSize)
                                         {
-                                            queue.Execute(mDAGKernel, new long[] { start }, new long[] { globalWorkSize }, new long[] { mLocalWorkSize }, null);
+                                            queue.Execute(DAGKernel, new long[] { start }, new long[] { globalWorkSize }, new long[] { mLocalWorkSize }, null);
                                             queue.Finish();
                                             if (Stopped || !mStratum.GetJob().ID.Equals(jobID))
                                                 break;
@@ -184,13 +183,13 @@ namespace GatelessGateSharp
                                         break;
 
                                     UInt64 target = (UInt64)((double)0xffff0000U / difficulty);
-                                    mSearchKernel.SetMemoryArgument(0, outputBuffer); // g_output
-                                    mSearchKernel.SetMemoryArgument(1, headerBuffer); // g_header
-                                    mSearchKernel.SetMemoryArgument(2, DAGBuffer); // _g_dag
-                                    mSearchKernel.SetValueArgument<UInt32>(3, (UInt32)(DAGSize / 128)); // DAG_SIZE
-                                    mSearchKernel.SetValueArgument<UInt64>(4, startNonce); // start_nonce
-                                    mSearchKernel.SetValueArgument<UInt64>(5, target); // target
-                                    mSearchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
+                                    searchKernel.SetMemoryArgument(0, outputBuffer); // g_output
+                                    searchKernel.SetMemoryArgument(1, headerBuffer); // g_header
+                                    searchKernel.SetMemoryArgument(2, DAGBuffer); // _g_dag
+                                    searchKernel.SetValueArgument<UInt32>(3, (UInt32)(DAGSize / 128)); // DAG_SIZE
+                                    searchKernel.SetValueArgument<UInt64>(4, startNonce); // start_nonce
+                                    searchKernel.SetValueArgument<UInt64>(5, target); // target
+                                    searchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
 
                                     System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                                     sw.Start();
@@ -198,7 +197,7 @@ namespace GatelessGateSharp
                                     {
                                         output[255] = 0; // output[255] is used as an atomic counter.
                                         queue.Write<UInt32>(outputBuffer, true, 0, 256, (IntPtr)p, null);
-                                        queue.Execute(mSearchKernel, new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
+                                        queue.Execute(searchKernel, new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
                                         queue.Read<UInt32>(outputBuffer, true, 0, 256, (IntPtr)p, null);
                                     }
                                     sw.Stop();

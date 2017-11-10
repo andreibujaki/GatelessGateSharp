@@ -44,7 +44,7 @@ namespace Cloo
     /// <seealso cref="ComputeKernel"/>
     /// <seealso cref="ComputeMemory"/>
     /// <seealso cref="ComputePlatform"/>
-    unsafe public class ComputeDevice : ComputeObject
+    public class ComputeDevice : ComputeObject
     {
         #region Fields
 
@@ -538,34 +538,13 @@ namespace Cloo
         /// <remarks> Requires OpenCL 1.1. </remarks>
         public string OpenCLCVersionString { get { return GetStringInfo(ComputeDeviceInfo.OpenCLCVersion); } }
 
-
-
-        /// <summary>
-        /// Gets the topology of the <see cref="ComputeDevice"/>.
-        /// </summary>
-        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-        [CLSCompliant(false)]
-        public struct cl_device_topology_amd
-        {
-            /// <summary></summary>
-            public UInt32 type;
-            /// <summary></summary>
-            public fixed Byte unused[17];
-            /// <summary></summary>
-            public Byte bus;
-            /// <summary></summary>
-            public Byte device;
-            /// <summary></summary>
-            public Byte function;
-        };
         /// <summary></summary>
-        [CLSCompliant(false)]
-        public cl_device_topology_amd TopologyAMD { get { return GetInfo<cl_device_topology_amd>(ComputeDeviceInfo.CL_DEVICE_TOPOLOGY_AMD); } }
+        public byte[] TopologyAMD { get { return GetByteArrayInfo(ComputeDeviceInfo.CL_DEVICE_TOPOLOGY_AMD); } }
         /// <summary></summary>
-        [CLSCompliant(false)]
+        public byte PciBusIdAMD { get { return TopologyAMD[21]; } }
+        /// <summary></summary>
         public Int32 PciBusIdNV { get { return GetInfo<Int32>(ComputeDeviceInfo.CL_DEVICE_PCI_BUS_ID_NV); } }
         /// <summary></summary>
-        [CLSCompliant(false)]
         public Int32 PciSlotIdNV { get { return GetInfo<Int32>(ComputeDeviceInfo.CL_DEVICE_PCI_SLOT_ID_NV); } }
 
         #endregion
@@ -648,6 +627,11 @@ namespace Cloo
         private string GetStringInfo(ComputeDeviceInfo paramName)
         {
             return GetStringInfo<CLDeviceHandle, ComputeDeviceInfo>(Handle, paramName, CL10.GetDeviceInfo);
+        }
+
+        private byte[] GetByteArrayInfo(ComputeDeviceInfo paramName)
+        {
+            return GetArrayInfo<CLDeviceHandle, ComputeDeviceInfo, byte>(Handle, paramName, CL10.GetDeviceInfo);
         }
 
         #endregion
