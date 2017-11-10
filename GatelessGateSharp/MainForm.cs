@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "0.0.10";
+        public static string appVersion = "0.0.11";
         public static string appName = shortAppName + " " + appVersion + " beta";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -647,13 +647,73 @@ namespace GatelessGateSharp
             labelGPUSharesArray = new Control[] { labelGPU0Shares, labelGPU1Shares, labelGPU2Shares, labelGPU3Shares, labelGPU4Shares, labelGPU5Shares, labelGPU6Shares, labelGPU7Shares };
             checkBoxGPUEnableArray = new CheckBox[] { checkBoxGPU0Enable, checkBoxGPU1Enable, checkBoxGPU2Enable, checkBoxGPU3Enable, checkBoxGPU4Enable, checkBoxGPU5Enable, checkBoxGPU6Enable, checkBoxGPU7Enable };
             tabPageDeviceArray = new TabPage[] { tabPageDevice0, tabPageDevice1, tabPageDevice2, tabPageDevice3, tabPageDevice4, tabPageDevice5, tabPageDevice6, tabPageDevice7 };
-            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[] { numericUpDownDevice0EthashThreads, numericUpDownDevice1EthashThreads, numericUpDownDevice2EthashThreads, numericUpDownDevice3EthashThreads, numericUpDownDevice4EthashThreads, numericUpDownDevice5EthashThreads, numericUpDownDevice6EthashThreads, numericUpDownDevice7EthashThreads };
-            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[] { numericUpDownDevice0EthashIntensity, numericUpDownDevice1EthashIntensity, numericUpDownDevice2EthashIntensity, numericUpDownDevice3EthashIntensity, numericUpDownDevice4EthashIntensity, numericUpDownDevice5EthashIntensity, numericUpDownDevice6EthashIntensity, numericUpDownDevice7EthashIntensity };
-            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[] { numericUpDownDevice1EthashLocalWorkSize, numericUpDownDevice1EthashLocalWorkSize, numericUpDownDevice2EthashIntensity, numericUpDownDevice3EthashLocalWorkSize, numericUpDownDevice4EthashLocalWorkSize, numericUpDownDevice5EthashLocalWorkSize, numericUpDownDevice6EthashLocalWorkSize, numericUpDownDevice7EthashLocalWorkSize };
-            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightThreads, numericUpDownDevice1CryptoNightThreads, numericUpDownDevice2CryptoNightThreads, numericUpDownDevice3CryptoNightThreads, numericUpDownDevice4CryptoNightThreads, numericUpDownDevice5CryptoNightThreads, numericUpDownDevice6CryptoNightThreads, numericUpDownDevice7CryptoNightThreads };
-            numericUpDownDeviceCryptoNightIntensityArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightIntensity, numericUpDownDevice1CryptoNightIntensity, numericUpDownDevice2CryptoNightIntensity, numericUpDownDevice3CryptoNightIntensity, numericUpDownDevice4CryptoNightIntensity, numericUpDownDevice5CryptoNightIntensity, numericUpDownDevice6CryptoNightIntensity, numericUpDownDevice7CryptoNightIntensity };
-            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightLocalWorkSize, numericUpDownDevice1CryptoNightLocalWorkSize, numericUpDownDevice2CryptoNightIntensity, numericUpDownDevice3CryptoNightLocalWorkSize, numericUpDownDevice4CryptoNightLocalWorkSize, numericUpDownDevice5CryptoNightLocalWorkSize, numericUpDownDevice6CryptoNightLocalWorkSize, numericUpDownDevice7CryptoNightLocalWorkSize };
-            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice1Ethash, groupBoxDevice1Ethash, groupBoxDevice2Ethash, groupBoxDevice3Ethash, groupBoxDevice4Ethash, groupBoxDevice5Ethash, groupBoxDevice6Ethash, groupBoxDevice7Ethash };
+            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashThreads, 
+                numericUpDownDevice1EthashThreads,
+                numericUpDownDevice2EthashThreads,
+                numericUpDownDevice3EthashThreads, 
+                numericUpDownDevice4EthashThreads,
+                numericUpDownDevice5EthashThreads,
+                numericUpDownDevice6EthashThreads, 
+                numericUpDownDevice7EthashThreads
+            };
+            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashIntensity, 
+                numericUpDownDevice1EthashIntensity,
+                numericUpDownDevice2EthashIntensity,
+                numericUpDownDevice3EthashIntensity,
+                numericUpDownDevice4EthashIntensity, 
+                numericUpDownDevice5EthashIntensity,
+                numericUpDownDevice6EthashIntensity,
+                numericUpDownDevice7EthashIntensity
+            };
+            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashLocalWorkSize, 
+                numericUpDownDevice1EthashLocalWorkSize,
+                numericUpDownDevice2EthashLocalWorkSize, 
+                numericUpDownDevice3EthashLocalWorkSize,
+                numericUpDownDevice4EthashLocalWorkSize,
+                numericUpDownDevice5EthashLocalWorkSize,
+                numericUpDownDevice6EthashLocalWorkSize,
+                numericUpDownDevice7EthashLocalWorkSize
+            };
+            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0CryptoNightThreads, 
+                numericUpDownDevice1CryptoNightThreads,
+                numericUpDownDevice2CryptoNightThreads,
+                numericUpDownDevice3CryptoNightThreads,
+                numericUpDownDevice4CryptoNightThreads,
+                numericUpDownDevice5CryptoNightThreads,
+                numericUpDownDevice6CryptoNightThreads, 
+                numericUpDownDevice7CryptoNightThreads
+            };
+            numericUpDownDeviceCryptoNightIntensityArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0CryptoNightIntensity,
+                numericUpDownDevice1CryptoNightIntensity,
+                numericUpDownDevice2CryptoNightIntensity, 
+                numericUpDownDevice3CryptoNightIntensity, 
+                numericUpDownDevice4CryptoNightIntensity,
+                numericUpDownDevice5CryptoNightIntensity,
+                numericUpDownDevice6CryptoNightIntensity, 
+                numericUpDownDevice7CryptoNightIntensity
+            };
+            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0CryptoNightLocalWorkSize, 
+                numericUpDownDevice1CryptoNightLocalWorkSize,
+                numericUpDownDevice2CryptoNightLocalWorkSize,
+                numericUpDownDevice3CryptoNightLocalWorkSize,
+                numericUpDownDevice4CryptoNightLocalWorkSize,
+                numericUpDownDevice5CryptoNightLocalWorkSize,
+                numericUpDownDevice6CryptoNightLocalWorkSize,
+                numericUpDownDevice7CryptoNightLocalWorkSize
+            };
+            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice0Ethash, groupBoxDevice1Ethash, groupBoxDevice2Ethash, groupBoxDevice3Ethash, groupBoxDevice4Ethash, groupBoxDevice5Ethash, groupBoxDevice6Ethash, groupBoxDevice7Ethash };
             groupBoxDeviceCryptoNightArray = new GroupBox[] { groupBoxDevice0CryptoNight, groupBoxDevice1CryptoNight, groupBoxDevice2CryptoNight, groupBoxDevice3CryptoNight, groupBoxDevice4CryptoNight, groupBoxDevice5CryptoNight, groupBoxDevice6CryptoNight, groupBoxDevice7CryptoNight };
 
             InitializeDevices();
@@ -2245,402 +2305,402 @@ namespace GatelessGateSharp
 
         private void labelGPU0ID_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0Vendor_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0Name_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0Speed_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0Shares_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0Activity_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0Temp_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0Fan_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0CoreClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU0MemoryClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
         }
 
         private void labelGPU1ID_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1Vendor_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1Name_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1Speed_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1Shares_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1Activity_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1Temp_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1Fan_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1CoreClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU1MemoryClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
         }
 
         private void labelGPU2ID_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2Vendor_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2Name_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2Speed_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2Shares_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2Activity_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2Temp_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2Fan_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2CoreClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU2MemoryClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
         }
 
         private void labelGPU3Vendor_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3ID_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3Name_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3Speed_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3Shares_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3Activity_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3Temp_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3Fan_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3CoreClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU3MemoryClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
         }
 
         private void labelGPU4ID_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4Vendor_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4Name_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4Speed_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4Shares_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4Activity_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4Temp_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4Fan_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4CoreClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU4MemoryClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
         }
 
         private void labelGPU5ID_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5Vendor_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5Name_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5Speed_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5Shares_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5Activity_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5Temp_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5Fan_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5CoreClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU5MemoryClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
         }
 
         private void labelGPU6ID_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6Vendor_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6Name_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6Speed_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6Shares_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6Activity_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6Temp_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6Fan_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6CoreClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU6MemoryClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
         }
 
         private void labelGPU7ID_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7Vendor_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7Name_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7Speed_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7Shares_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7Activity_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7Temp_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7Fan_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7CoreClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void labelGPU7MemoryClock_Click(object sender, EventArgs e)
         {
-            checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
         }
 
         private void buttonClearLog_Click(object sender, EventArgs e)
