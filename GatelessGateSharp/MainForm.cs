@@ -19,16 +19,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Cloo;
 using ATI.ADL;
 using Newtonsoft.Json;
@@ -38,20 +34,20 @@ using Newtonsoft.Json.Linq;
 
 namespace GatelessGateSharp
 {
-    unsafe public partial class MainForm : Form
+    public partial class MainForm : Form
     {
         [DllImport("phymem_wrapper.dll")]
-        extern public static int LoadPhyMemDriver();
+        public static extern int LoadPhyMemDriver();
         [DllImport("phymem_wrapper.dll")]
-        extern public static void UnloadPhyMemDriver();
+        public static extern void UnloadPhyMemDriver();
 
         private static MainForm instance;
-        public static String shortAppName = "Gateless Gate Sharp";
-        public static String appVersion = "0.0.10";
-        public static String appName = shortAppName + " " + appVersion + " beta";
-        private static String databaseFileName = "GatelessGateSharp.sqlite";
-        private static String logFileName = "GatelessGateSharp.log";
-        private static String mAppStateFileName = "GatelessGateSharpState.txt";
+        public static string shortAppName = "Gateless Gate Sharp";
+        public static string appVersion = "0.0.10";
+        public static string appName = shortAppName + " " + appVersion + " beta";
+        private static string databaseFileName = "GatelessGateSharp.sqlite";
+        private static string logFileName = "GatelessGateSharp.log";
+        private static string mAppStateFileName = "GatelessGateSharpState.txt";
         private static int mLaunchInterval = 500;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
@@ -67,39 +63,42 @@ namespace GatelessGateSharp
         private Control[] labelGPUSharesArray;
         private CheckBox[] checkBoxGPUEnableArray;
         private TabPage[] tabPageDeviceArray;
+        private NumericUpDown[] numericUpDownDeviceEthashThreadsArray;
         private NumericUpDown[] numericUpDownDeviceEthashIntensityArray;
+        private NumericUpDown[] numericUpDownDeviceEthashLocalWorkSizeArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightThreadsArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightIntensityArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
-        GroupBox[] groupBoxDeviceEthashArray;
-        GroupBox[] groupBoxDeviceCryptoNightArray;
+        private GroupBox[] groupBoxDeviceEthashArray;
+        private GroupBox[] groupBoxDeviceCryptoNightArray;
 
         private Device[] mDevices;
         private const int maxNumDevices = 8; // This depends on MainForm.
         private bool ADLInitialized = false;
         private bool NVMLInitialized = false;
-        private Int32[] ADLAdapterIndexArray;
+        private int[] ADLAdapterIndexArray;
         private System.Threading.Mutex DeviceManagementLibrariesMutex = new System.Threading.Mutex();
         private ManagedCuda.Nvml.nvmlDevice[] nvmlDeviceArray;
+        private bool phymemLoaded = false;
 
         private bool mDevFeeMode = true;
         private int mDevFeePercentage = 1;
         private int mDevFeeDurationInSeconds = 60;
-        private String mDevFeeBitcoinAddress = "1BHwDWVerUTiKxhHPf2ubqKKiBMiKQGomZ";
+        private string mDevFeeBitcoinAddress = "1BHwDWVerUTiKxhHPf2ubqKKiBMiKQGomZ";
         private DateTime mDevFeeModeStartTime = DateTime.Now; // dummy
 
         private DateTime mStartTime = DateTime.Now;
-        private String mCurrentPool = "NiceHash";
+        private string mCurrentPool = "NiceHash";
 
         public static MainForm Instance { get { return instance; } }
         public static bool DevFeeMode { get { return Instance.mDevFeeMode; } }
 
-        private static String sLoggerBuffer = "";
+        private static string sLoggerBuffer = "";
 
-        public static void Logger(String lines)
+        public static void Logger(string lines)
         {
             lines = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff") + " [" + System.Threading.Thread.CurrentThread.ManagedThreadId + "] " + lines + "\r\n";
-            System.Console.Write(lines);
+            Console.Write(lines);
             Instance.loggerMutex.WaitOne();
             sLoggerBuffer += lines;
             Instance.loggerMutex.ReleaseMutex();
@@ -108,7 +107,7 @@ namespace GatelessGateSharp
         public static void UpdateLog()
         {
             Instance.loggerMutex.WaitOne();
-            String loggerBuffer = sLoggerBuffer;
+            var loggerBuffer = sLoggerBuffer;
             sLoggerBuffer = "";
             Instance.loggerMutex.ReleaseMutex();
 
@@ -117,8 +116,10 @@ namespace GatelessGateSharp
 
             try
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(logFileName, true))
+                using (var file = new System.IO.StreamWriter(logFileName, true))
+                {
                     file.Write(loggerBuffer);
+                }
 
                 Utilities.FixFPU();
                 Instance.richTextBoxLog.SelectionLength = 0;
@@ -142,53 +143,43 @@ namespace GatelessGateSharp
         private void CreateNewDatabase()
         {
             SQLiteConnection.CreateFile(databaseFileName);
-            using (SQLiteConnection conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;"))
+            using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;"))
             {
                 conn.Open();
-                String sql = "create table wallet_addresses (coin varchar(128), address varchar(128));";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
+                var sql = "create table wallet_addresses (coin varchar(128), address varchar(128));";
+                using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
 
                 sql = "create table pools (name varchar(128));";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
+                using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
 
                 sql = "create table properties (name varchar(128), value varchar(128));";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
+                using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
 
                 sql = "create table device_parameters (device_id int, device_vendor varchar(128), device_name varchar(128), parameter_name varchar(128), parameter_value varchar(128));";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
+                using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
             }
         }
 
         private void LoadDatabase()
         {
-            using (SQLiteConnection conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;"))
+            using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;"))
             {
                 conn.Open();
-                String sql = "select * from wallet_addresses";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                var sql = "select * from wallet_addresses";
+                using (var command = new SQLiteCommand(sql, conn))
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (var reader = command.ExecuteReader())
                     {
 
                         while (reader.Read())
-                        {
-                            if ((String)reader["coin"] == "bitcoin")
-                            {
-                                textBoxBitcoinAddress.Text = (String)reader["address"];
-                            }
-                            else if ((String)reader["coin"] == "ethereum")
-                            {
-                                textBoxEthereumAddress.Text = (String)reader["address"];
-                            }
-                            else if ((String)reader["coin"] == "monero")
-                            {
-                                textBoxMoneroAddress.Text = (String)reader["address"];
-                            }
-                            else if ((String)reader["coin"] == "zcash")
-                            {
-                                textBoxZcashAddress.Text = (String)reader["address"];
-                            }
-                        }
+                            if ((string)reader["coin"] == "bitcoin")
+                                textBoxBitcoinAddress.Text = (string)reader["address"];
+                            else if ((string)reader["coin"] == "ethereum")
+                                textBoxEthereumAddress.Text = (string)reader["address"];
+                            else if ((string)reader["coin"] == "monero")
+                                textBoxMoneroAddress.Text = (string)reader["address"];
+                            else if ((string)reader["coin"] == "zcash")
+                                textBoxZcashAddress.Text = (string)reader["address"];
                     }
                 }
 
@@ -197,17 +188,17 @@ namespace GatelessGateSharp
                 try
                 {
                     sql = "select * from pools";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         using (var reader = command.ExecuteReader())
                         {
-                            List<String> oldItems = new List<string>();
-                            foreach (String poolName in listBoxPoolPriorities.Items)
+                            var oldItems = new List<string>();
+                            foreach (string poolName in listBoxPoolPriorities.Items)
                                 oldItems.Add(poolName);
                             listBoxPoolPriorities.Items.Clear();
                             while (reader.Read())
-                                listBoxPoolPriorities.Items.Add((String)reader["name"]);
-                            foreach (String poolName in oldItems)
+                                listBoxPoolPriorities.Items.Add((string)reader["name"]);
+                            foreach (var poolName in oldItems)
                                 if (!listBoxPoolPriorities.Items.Contains(poolName))
                                     listBoxPoolPriorities.Items.Add(poolName);
                         }
@@ -215,22 +206,22 @@ namespace GatelessGateSharp
                 }
                 catch (Exception ex)
                 {
-                    MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                    Logger("Exception: " + ex.Message + ex.StackTrace);
                 }
 
                 try
                 {
                     sql = "select * from properties";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                String propertyName = (String)reader["name"];
+                                var propertyName = (string)reader["name"];
                                 if (propertyName == "coin_to_mine")
                                 {
-                                    String coinToMine = (String)reader["value"];
+                                    var coinToMine = (string)reader["value"];
                                     if (coinToMine == "ethereum")
                                     {
                                         radioButtonEthereum.Checked = true;
@@ -258,59 +249,63 @@ namespace GatelessGateSharp
                                 }
                                 else if (propertyName == "pool_rig_id")
                                 {
-                                    textBoxRigID.Text = (String)reader["value"];
+                                    textBoxRigID.Text = (string)reader["value"];
                                 }
                                 else if (propertyName == "pool_email")
                                 {
-                                    textBoxEmail.Text = (String)reader["value"];
+                                    textBoxEmail.Text = (string)reader["value"];
                                 }
                                 else if (propertyName == "pool_login")
                                 {
-                                    textBoxLogin.Text = (String)reader["value"];
+                                    textBoxLogin.Text = (string)reader["value"];
                                 }
                                 else if (propertyName == "pool_password")
                                 {
-                                    textBoxPassword.Text = (String)reader["value"];
+                                    textBoxPassword.Text = (string)reader["value"];
                                 }
                                 else if (propertyName == "auto_start")
                                 {
-                                    checkBoxAutoStart.Checked = ((String)reader["value"] == "true");
+                                    checkBoxAutoStart.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "launch_at_startup")
                                 {
-                                    checkBoxLaunchAtStartup.Checked = ((String)reader["value"] == "true");
+                                    checkBoxLaunchAtStartup.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "enable_gpu0")
                                 {
-                                    checkBoxGPU0Enable.Checked = ((String)reader["value"] == "true");
+                                    checkBoxGPU0Enable.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "enable_gpu1")
                                 {
-                                    checkBoxGPU1Enable.Checked = ((String)reader["value"] == "true");
+                                    checkBoxGPU1Enable.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "enable_gpu2")
                                 {
-                                    checkBoxGPU2Enable.Checked = ((String)reader["value"] == "true");
+                                    checkBoxGPU2Enable.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "enable_gpu3")
                                 {
-                                    checkBoxGPU3Enable.Checked = ((String)reader["value"] == "true");
+                                    checkBoxGPU3Enable.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "enable_gpu4")
                                 {
-                                    checkBoxGPU4Enable.Checked = ((String)reader["value"] == "true");
+                                    checkBoxGPU4Enable.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "enable_gpu5")
                                 {
-                                    checkBoxGPU5Enable.Checked = ((String)reader["value"] == "true");
+                                    checkBoxGPU5Enable.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "enable_gpu6")
                                 {
-                                    checkBoxGPU6Enable.Checked = ((String)reader["value"] == "true");
+                                    checkBoxGPU6Enable.Checked = (string)reader["value"] == "true";
                                 }
                                 else if (propertyName == "enable_gpu7")
                                 {
-                                    checkBoxGPU7Enable.Checked = ((String)reader["value"] == "true");
+                                    checkBoxGPU7Enable.Checked = (string)reader["value"] == "true";
+                                }
+                                else if (propertyName == "enable_phymem")
+                                {
+                                    checkBoxEnablePhymem.Checked = (string)reader["value"] == "true";
                                 }
                             }
                         }
@@ -318,48 +313,44 @@ namespace GatelessGateSharp
                 }
                 catch (Exception ex)
                 {
-                    MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                    Logger("Exception: " + ex.Message + ex.StackTrace);
                 }
 
                 try
                 {
                     sql = "select * from device_parameters";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                int deviceID = (int)reader["device_id"];
-                                String deviceVendor = (String)reader["device_vendor"];
-                                String deviceName = (String)reader["device_name"];
-                                String name = (String)reader["parameter_name"];
-                                String value = (String)reader["parameter_value"];
+                                var deviceID = (int)reader["device_id"];
+                                var deviceVendor = (string)reader["device_vendor"];
+                                var deviceName = (string)reader["device_name"];
+                                var name = (string)reader["parameter_name"];
+                                var value = (string)reader["parameter_value"];
                                 if (deviceID >= mDevices.Length || deviceVendor != mDevices[deviceID].Vendor || deviceName != mDevices[deviceID].Name)
                                     continue;
-                                if (name == "ethash_intensity")
-                                {
-                                    numericUpDownDeviceEthashIntensityArray[deviceID].Value = Decimal.Parse(value);
-                                }
+                                if (name == "ethash_threads")
+                                    numericUpDownDeviceEthashThreadsArray[deviceID].Value = decimal.Parse(value);
+                                else if (name == "ethash_intensity")
+                                    numericUpDownDeviceEthashIntensityArray[deviceID].Value = decimal.Parse(value);
+                                else if (name == "ethash_local_work_size")
+                                    numericUpDownDeviceEthashLocalWorkSizeArray[deviceID].Value = decimal.Parse(value);
                                 else if (name == "cryptonight_threads")
-                                {
-                                    numericUpDownDeviceCryptoNightThreadsArray[deviceID].Value = Decimal.Parse(value);
-                                }
+                                    numericUpDownDeviceCryptoNightThreadsArray[deviceID].Value = decimal.Parse(value);
                                 else if (name == "cryptonight_intensity")
-                                {
-                                    numericUpDownDeviceCryptoNightIntensityArray[deviceID].Value = Decimal.Parse(value);
-                                }
+                                    numericUpDownDeviceCryptoNightIntensityArray[deviceID].Value = decimal.Parse(value);
                                 else if (name == "cryptonight_local_work_size")
-                                {
-                                    numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceID].Value = Decimal.Parse(value);
-                                }
+                                    numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceID].Value = decimal.Parse(value);
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                    Logger("Exception: " + ex.Message + ex.StackTrace);
                 }
 
                 conn.Close();
@@ -368,33 +359,35 @@ namespace GatelessGateSharp
 
         private void UpdateDatabase()
         {
-            using (SQLiteConnection conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;"))
+            using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;"))
             {
                 conn.Open();
-                String sql = "delete from wallet_addresses";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                var sql = "delete from wallet_addresses";
+                using (var command = new SQLiteCommand(sql, conn))
+                {
                     command.ExecuteNonQuery();
+                }
 
                 sql = "insert into wallet_addresses (coin, address) values (@coin, @address)";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@coin", "bitcoin");
                     command.Parameters.AddWithValue("@address", textBoxBitcoinAddress.Text);
                     command.ExecuteNonQuery();
                 }
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@coin", "ethereum");
                     command.Parameters.AddWithValue("@address", textBoxEthereumAddress.Text);
                     command.ExecuteNonQuery();
                 }
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@coin", "monero");
                     command.Parameters.AddWithValue("@address", textBoxMoneroAddress.Text);
                     command.ExecuteNonQuery();
                 }
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@coin", "zcash");
                     command.Parameters.AddWithValue("@address", textBoxZcashAddress.Text);
@@ -404,173 +397,193 @@ namespace GatelessGateSharp
                 try
                 {
                     sql = "delete from pools";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
                         command.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                    Logger("Exception: " + ex.Message + ex.StackTrace);
                     sql = "create table pools (name varchar(128));";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
                         command.ExecuteNonQuery();
+                    }
                 }
 
                 sql = "insert into pools (name) values (@name)";
-                foreach (String poolName in listBoxPoolPriorities.Items)
-                {
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                foreach (string poolName in listBoxPoolPriorities.Items)
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@name", poolName);
                         command.ExecuteNonQuery();
                     }
-                }
 
                 try
                 {
                     sql = "delete from properties";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
                         command.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                    Logger("Exception: " + ex.Message + ex.StackTrace);
                     sql = "create table properties (name varchar(128), value varchar(128));";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
                         command.ExecuteNonQuery();
+                    }
                 }
 
                 sql = "insert into properties (name, value) values (@name, @value)";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "coin_to_mine");
                     command.Parameters.AddWithValue("@value",
-                                                    (radioButtonEthereum.Checked) ? "ethereum" :
-                                                    (radioButtonMonero.Checked) ? "monero" :
-                                                    (radioButtonMonero.Checked) ? "zcash" :
+                                                    radioButtonEthereum.Checked ? "ethereum" :
+                                                    radioButtonMonero.Checked ? "monero" :
+                                                    radioButtonMonero.Checked ? "zcash" :
                                                                                     "most_profitable");
                     command.ExecuteNonQuery();
                 }
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "pool_rig_id");
                     command.Parameters.AddWithValue("@value", textBoxRigID.Text);
                     command.ExecuteNonQuery();
                 }
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "pool_email");
                     command.Parameters.AddWithValue("@value", textBoxEmail.Text);
                     command.ExecuteNonQuery();
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "pool_login");
                     command.Parameters.AddWithValue("@value", textBoxLogin.Text);
                     command.ExecuteNonQuery();
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "auto_start");
-                    command.Parameters.AddWithValue("@value", (checkBoxAutoStart.Checked ? "true" : "false"));
+                    command.Parameters.AddWithValue("@value", checkBoxAutoStart.Checked ? "true" : "false");
                     command.ExecuteNonQuery();
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "launch_at_startup");
-                    command.Parameters.AddWithValue("@value", (checkBoxLaunchAtStartup.Checked ? "true" : "false"));
+                    command.Parameters.AddWithValue("@value", checkBoxLaunchAtStartup.Checked ? "true" : "false");
                     command.ExecuteNonQuery();
                 }
 
-                for (int i = 0; i < mDevices.Length; ++i)
-                {
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                for (var i = 0; i < mDevices.Length; ++i)
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@name", "enable_gpu" + i);
-                        command.Parameters.AddWithValue("@value", (checkBoxGPUEnableArray[i].Checked ? "true" : "false"));
+                        command.Parameters.AddWithValue("@value", checkBoxGPUEnableArray[i].Checked ? "true" : "false");
                         command.ExecuteNonQuery();
                     }
 
-                }
-
                 sql = "insert into properties (name, value) values (@name, @value)";
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "coin_to_mine");
                     command.Parameters.AddWithValue("@value",
-                                                    (radioButtonEthereum.Checked) ? "ethereum" :
-                                                    (radioButtonMonero.Checked) ? "monero" :
-                                                    (radioButtonMonero.Checked) ? "zcash" :
+                                                    radioButtonEthereum.Checked ? "ethereum" :
+                                                    radioButtonMonero.Checked ? "monero" :
+                                                    radioButtonMonero.Checked ? "zcash" :
                                                                                     "most_profitable");
                     command.ExecuteNonQuery();
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "pool_rig_id");
                     command.Parameters.AddWithValue("@value", textBoxRigID.Text);
                     command.ExecuteNonQuery();
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "pool_email");
                     command.Parameters.AddWithValue("@value", textBoxEmail.Text);
                     command.ExecuteNonQuery();
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "pool_login");
                     command.Parameters.AddWithValue("@value", textBoxLogin.Text);
                     command.ExecuteNonQuery();
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "auto_start");
-                    command.Parameters.AddWithValue("@value", (checkBoxAutoStart.Checked ? "true" : "false"));
+                    command.Parameters.AddWithValue("@value", checkBoxAutoStart.Checked ? "true" : "false");
                     command.ExecuteNonQuery();
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                using (var command = new SQLiteCommand(sql, conn))
                 {
                     command.Parameters.AddWithValue("@name", "launch_at_startup");
-                    command.Parameters.AddWithValue("@value", (checkBoxLaunchAtStartup.Checked ? "true" : "false"));
+                    command.Parameters.AddWithValue("@value", checkBoxLaunchAtStartup.Checked ? "true" : "false");
                     command.ExecuteNonQuery();
                 }
 
-                for (int i = 0; i < mDevices.Length; ++i)
+                using (var command = new SQLiteCommand(sql, conn))
                 {
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    command.Parameters.AddWithValue("@name", "enable_phymem");
+                    command.Parameters.AddWithValue("@value", checkBoxEnablePhymem.Checked ? "true" : "false");
+                    command.ExecuteNonQuery();
+                }
+
+                for (var i = 0; i < mDevices.Length; ++i)
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@name", "enable_gpu" + i);
-                        command.Parameters.AddWithValue("@value", (checkBoxGPUEnableArray[i].Checked ? "true" : "false"));
+                        command.Parameters.AddWithValue("@value", checkBoxGPUEnableArray[i].Checked ? "true" : "false");
                         command.ExecuteNonQuery();
                     }
-
-                }
 
                 try
                 {
                     sql = "delete from device_parameters";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
                         command.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                    Logger("Exception: " + ex.Message + ex.StackTrace);
                     sql = "create table device_parameters (device_id int, device_vendor varchar(128), device_name varchar(128), parameter_name varchar(128), parameter_value varchar(128));";
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
                         command.ExecuteNonQuery();
+                    }
                 }
 
                 sql = "insert into device_parameters (device_id, device_vendor, device_name, parameter_name, parameter_value) values (@device_id, @device_vendor, @device_name, @parameter_name, @parameter_value)";
-                for (int i = 0; i < mDevices.Length; ++i)
+                for (var i = 0; i < mDevices.Length; ++i)
                 {
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@device_id", i);
+                        command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                        command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                        command.Parameters.AddWithValue("@parameter_name", "ethash_threads");
+                        command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashThreadsArray[i].Value.ToString());
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@device_id", i);
                         command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
@@ -579,9 +592,16 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashIntensityArray[i].Value.ToString());
                         command.ExecuteNonQuery();
                     }
-
-
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@device_id", i);
+                        command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                        command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                        command.Parameters.AddWithValue("@parameter_name", "ethash_local_work_size");
+                        command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashLocalWorkSizeArray[i].Value.ToString());
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@device_id", i);
                         command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
@@ -590,9 +610,7 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightThreadsArray[i].Value.ToString());
                         command.ExecuteNonQuery();
                     }
-
-
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@device_id", i);
                         command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
@@ -601,9 +619,7 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightIntensityArray[i].Value.ToString());
                         command.ExecuteNonQuery();
                     }
-
-
-                    using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                    using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@device_id", i);
                         command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
@@ -612,7 +628,6 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightLocalWorkSizeArray[i].Value.ToString());
                         command.ExecuteNonQuery();
                     }
-
                 }
             }
         }
@@ -632,56 +647,64 @@ namespace GatelessGateSharp
             labelGPUSharesArray = new Control[] { labelGPU0Shares, labelGPU1Shares, labelGPU2Shares, labelGPU3Shares, labelGPU4Shares, labelGPU5Shares, labelGPU6Shares, labelGPU7Shares };
             checkBoxGPUEnableArray = new CheckBox[] { checkBoxGPU0Enable, checkBoxGPU1Enable, checkBoxGPU2Enable, checkBoxGPU3Enable, checkBoxGPU4Enable, checkBoxGPU5Enable, checkBoxGPU6Enable, checkBoxGPU7Enable };
             tabPageDeviceArray = new TabPage[] { tabPageDevice0, tabPageDevice1, tabPageDevice2, tabPageDevice3, tabPageDevice4, tabPageDevice5, tabPageDevice6, tabPageDevice7 };
+            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[] { numericUpDownDevice0EthashThreads, numericUpDownDevice1EthashThreads, numericUpDownDevice2EthashThreads, numericUpDownDevice3EthashThreads, numericUpDownDevice4EthashThreads, numericUpDownDevice5EthashThreads, numericUpDownDevice6EthashThreads, numericUpDownDevice7EthashThreads };
             numericUpDownDeviceEthashIntensityArray = new NumericUpDown[] { numericUpDownDevice0EthashIntensity, numericUpDownDevice1EthashIntensity, numericUpDownDevice2EthashIntensity, numericUpDownDevice3EthashIntensity, numericUpDownDevice4EthashIntensity, numericUpDownDevice5EthashIntensity, numericUpDownDevice6EthashIntensity, numericUpDownDevice7EthashIntensity };
+            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[] { numericUpDownDevice1EthashLocalWorkSize, numericUpDownDevice1EthashLocalWorkSize, numericUpDownDevice2EthashIntensity, numericUpDownDevice3EthashLocalWorkSize, numericUpDownDevice4EthashLocalWorkSize, numericUpDownDevice5EthashLocalWorkSize, numericUpDownDevice6EthashLocalWorkSize, numericUpDownDevice7EthashLocalWorkSize };
             numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightThreads, numericUpDownDevice1CryptoNightThreads, numericUpDownDevice2CryptoNightThreads, numericUpDownDevice3CryptoNightThreads, numericUpDownDevice4CryptoNightThreads, numericUpDownDevice5CryptoNightThreads, numericUpDownDevice6CryptoNightThreads, numericUpDownDevice7CryptoNightThreads };
             numericUpDownDeviceCryptoNightIntensityArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightIntensity, numericUpDownDevice1CryptoNightIntensity, numericUpDownDevice2CryptoNightIntensity, numericUpDownDevice3CryptoNightIntensity, numericUpDownDevice4CryptoNightIntensity, numericUpDownDevice5CryptoNightIntensity, numericUpDownDevice6CryptoNightIntensity, numericUpDownDevice7CryptoNightIntensity };
-            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightLocalWorkSize, numericUpDownDevice1CryptoNightLocalWorkSize, numericUpDownDevice2CryptoNightLocalWorkSize, numericUpDownDevice3CryptoNightLocalWorkSize, numericUpDownDevice4CryptoNightLocalWorkSize, numericUpDownDevice5CryptoNightLocalWorkSize, numericUpDownDevice6CryptoNightLocalWorkSize, numericUpDownDevice7CryptoNightLocalWorkSize };
-            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice0Ethash, groupBoxDevice1Ethash, groupBoxDevice2Ethash, groupBoxDevice3Ethash, groupBoxDevice4Ethash, groupBoxDevice5Ethash, groupBoxDevice6Ethash, groupBoxDevice7Ethash };
+            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[] { numericUpDownDevice0CryptoNightLocalWorkSize, numericUpDownDevice1CryptoNightLocalWorkSize, numericUpDownDevice2CryptoNightIntensity, numericUpDownDevice3CryptoNightLocalWorkSize, numericUpDownDevice4CryptoNightLocalWorkSize, numericUpDownDevice5CryptoNightLocalWorkSize, numericUpDownDevice6CryptoNightLocalWorkSize, numericUpDownDevice7CryptoNightLocalWorkSize };
+            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice1Ethash, groupBoxDevice1Ethash, groupBoxDevice2Ethash, groupBoxDevice3Ethash, groupBoxDevice4Ethash, groupBoxDevice5Ethash, groupBoxDevice6Ethash, groupBoxDevice7Ethash };
             groupBoxDeviceCryptoNightArray = new GroupBox[] { groupBoxDevice0CryptoNight, groupBoxDevice1CryptoNight, groupBoxDevice2CryptoNight, groupBoxDevice3CryptoNight, groupBoxDevice4CryptoNight, groupBoxDevice5CryptoNight, groupBoxDevice6CryptoNight, groupBoxDevice7CryptoNight };
-
-            if (LoadPhyMemDriver() != 0)
-            {
-                Logger("Successfully loaded phymem.");
-            }
-            else
-            {
-                Logger("Failed to load phymem.");
-                MessageBox.Show("Failed to load phymem.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Environment.Exit(1);
-            }
 
             InitializeDevices();
             if (!System.IO.File.Exists(databaseFileName))
                 CreateNewDatabase();
             LoadDatabase();
 
-            Text = appName; // Set the window title.
-
-            // Do everything to turn off TDR.
-            foreach (String controlSet in new String[] { "CurrentControlSet", "ControlSet001" })
-            { // This shouldn't be necessary but it doesn't work without this.
-                foreach (String path in new String[] { 
-                    @"HKEY_LOCAL_MACHINE\System\" + controlSet + @"\Control\GraphicsDrivers",
-                    @"HKEY_LOCAL_MACHINE\System\" + controlSet + @"\Control\GraphicsDrivers\TdrWatch"
-                })
+            if (checkBoxEnablePhymem.Checked)
+            {
+                if (LoadPhyMemDriver() != 0)
                 {
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLevel", 0); }
-                    catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrDelay", 60); }
-                    catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrDdiDelay", 60); }
-                    catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitTime", 60); }
-                    catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitCount", 256); }
-                    catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); }
-                    catch (Exception) { } // Undocumented but found on Windows 10.
+                    Logger("Successfully loaded phymem.");
+                    phymemLoaded = true;
+                }
+                else
+                {
+                    Logger("Failed to load phymem.");
+                    var w = new Form() {Size = new System.Drawing.Size(0, 0)};
+                    Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith((t) => w.Close(),
+                        TaskScheduler.FromCurrentSynchronizationContext());
+                    w.BringToFront();
+                    MessageBox.Show(w, "Failed to load phymem.", "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
             }
 
+            Text = appName; // Set the window title.
+
+            // Do everything to turn off TDR.
+            foreach (var controlSet in new string[] { "CurrentControlSet", "ControlSet001" })
+            // This shouldn't be necessary but it doesn't work without this.
+            foreach (var path in new string[] { 
+                @"HKEY_LOCAL_MACHINE\System\" + controlSet + @"\Control\GraphicsDrivers",
+                @"HKEY_LOCAL_MACHINE\System\" + controlSet + @"\Control\GraphicsDrivers\TdrWatch"
+            })
+            {
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrLevel", 0); }
+                catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrDelay", 60); }
+                catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrDdiDelay", 60); }
+                catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitTime", 60); }
+                catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitCount", 256); }
+                catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); }
+                catch (Exception) { } // Undocumented but found on Windows 10.
+            }
+
             // Auto-start mining if necessary.
-            bool autoStart = checkBoxAutoStart.Checked;
+            var autoStart = checkBoxAutoStart.Checked;
             try
             {
                 if (System.IO.File.ReadAllLines(mAppStateFileName)[0] == "Mining")
@@ -694,15 +717,15 @@ namespace GatelessGateSharp
 
         private void InitializeDevices()
         {
-            ArrayList computeDeviceArrayList = new ArrayList();
+            var computeDeviceArrayList = new ArrayList();
 
-            foreach (ComputePlatform platform in ComputePlatform.Platforms)
+            foreach (var platform in ComputePlatform.Platforms)
             {
                 IList<ComputeDevice> openclDevices = platform.Devices;
-                ComputeContextPropertyList properties = new ComputeContextPropertyList(platform);
-                using (ComputeContext context = new ComputeContext(openclDevices, properties, null, IntPtr.Zero))
+                var properties = new ComputeContextPropertyList(platform);
+                using (var context = new ComputeContext(openclDevices, properties, null, IntPtr.Zero))
                 {
-                    foreach (ComputeDevice openclDevice in context.Devices)
+                    foreach (var openclDevice in context.Devices)
                     {
                         if (openclDevice.Vendor == "Intel(R) Corporation"
                             || openclDevice.Vendor == "GenuineIntel"
@@ -713,9 +736,9 @@ namespace GatelessGateSharp
                 }
 
             }
-            ComputeDevice[] computeDevices = Array.ConvertAll(computeDeviceArrayList.ToArray(), item => (Cloo.ComputeDevice)item);
+            var computeDevices = Array.ConvertAll(computeDeviceArrayList.ToArray(), item => (ComputeDevice)item);
             mDevices = new Device[computeDevices.Length];
-            int deviceIndex = 0;
+            var deviceIndex = 0;
             foreach (var computeDevice in computeDevices)
             {
                 mDevices[deviceIndex] = new Device(deviceIndex, computeDevice);
@@ -723,10 +746,10 @@ namespace GatelessGateSharp
             }
             Logger("Number of Devices: " + mDevices.Length);
 
-            foreach (Device device in mDevices)
+            foreach (var device in mDevices)
             {
-                ComputeDevice openclDevice = device.GetComputeDevice();
-                int index = device.DeviceIndex;
+                var openclDevice = device.GetComputeDevice();
+                var index = device.DeviceIndex;
                 labelGPUVendorArray[index].Text = device.Vendor;
                 labelGPUNameArray[index].Text = openclDevice.Name;
 
@@ -737,7 +760,7 @@ namespace GatelessGateSharp
                 labelGPUSharesArray[index].Text = "-";
             }
 
-            for (int index = maxNumDevices - 1; index >= mDevices.Length; --index)
+            for (var index = maxNumDevices - 1; index >= mDevices.Length; --index)
             {
                 labelGPUVendorArray[index].Visible = false;
                 labelGPUNameArray[index].Visible = false;
@@ -752,10 +775,10 @@ namespace GatelessGateSharp
                 checkBoxGPUEnableArray[index].Visible = false;
             }
 
-            for (int index = maxNumDevices - 1; index >= mDevices.Length; --index)
-                tabControlDeviceSettings.TabPages.RemoveAt(index);
+            for (var index = maxNumDevices - 1; index >= mDevices.Length; --index)
+                tabControlDevices.TabPages.RemoveAt(index);
 
-            for (int index = maxNumDevices - 1; index >= mDevices.Length; --index)
+            for (var index = maxNumDevices - 1; index >= mDevices.Length; --index)
             {
                 Array.Resize(ref labelGPUVendorArray, mDevices.Length);
                 Array.Resize(ref labelGPUNameArray, mDevices.Length);
@@ -779,10 +802,10 @@ namespace GatelessGateSharp
 
             }
 
-            int ADLRet = -1;
-            int NumberOfAdapters = 0;
-            ADLAdapterIndexArray = new Int32[mDevices.Length];
-            for (int i = 0; i < mDevices.Length; i++)
+            var ADLRet = -1;
+            var NumberOfAdapters = 0;
+            ADLAdapterIndexArray = new int[mDevices.Length];
+            for (var i = 0; i < mDevices.Length; i++)
                 ADLAdapterIndexArray[i] = -1;
             if (null != ADL.ADL_Main_Control_Create)
                 ADLRet = ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1);
@@ -791,9 +814,7 @@ namespace GatelessGateSharp
                 Logger("Successfully initialized AMD Display Library.");
                 ADLInitialized = true;
                 if (null != ADL.ADL_Adapter_NumberOfAdapters_Get)
-                {
                     ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
-                }
                 Logger("Number of ADL Adapters: " + NumberOfAdapters.ToString());
 
                 if (0 < NumberOfAdapters)
@@ -803,8 +824,8 @@ namespace GatelessGateSharp
 
                     if (null != ADL.ADL_Adapter_AdapterInfo_Get)
                     {
-                        IntPtr AdapterBuffer = IntPtr.Zero;
-                        int size = Marshal.SizeOf(OSAdapterInfoData);
+                        var AdapterBuffer = IntPtr.Zero;
+                        var size = Marshal.SizeOf(OSAdapterInfoData);
                         AdapterBuffer = Marshal.AllocCoTaskMem((int)size);
                         Marshal.StructureToPtr(OSAdapterInfoData, AdapterBuffer, false);
 
@@ -814,16 +835,15 @@ namespace GatelessGateSharp
                             if (ADL.ADL_SUCCESS == ADLRet)
                             {
                                 OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
-                                int IsActive = 0;
+                                var IsActive = 0;
 
                                 //int deviceIndex = 0;
                                 deviceIndex = 0;
                                 foreach (var device in mDevices)
                                 {
-                                    ComputeDevice openclDevice = device.GetComputeDevice();
+                                    var openclDevice = device.GetComputeDevice();
                                     if (openclDevice.Vendor == "Advanced Micro Devices, Inc.")
-                                    {
-                                        for (int i = 0; i < NumberOfAdapters; i++)
+                                        for (var i = 0; i < NumberOfAdapters; i++)
                                         {
                                             if (null != ADL.ADL_Adapter_Active_Get)
                                                 ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
@@ -835,7 +855,6 @@ namespace GatelessGateSharp
                                                 labelGPUNameArray[deviceIndex].Text = device.Name;
                                             }
                                         }
-                                    }
                                     ++deviceIndex;
                                 }
                             }
@@ -867,20 +886,18 @@ namespace GatelessGateSharp
                     nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[mDevices.Length];
                     for (uint i = 0; i < nvmlDeviceCount; ++i)
                     {
-                        ManagedCuda.Nvml.nvmlDevice nvmlDevice = new ManagedCuda.Nvml.nvmlDevice();
+                        var nvmlDevice = new ManagedCuda.Nvml.nvmlDevice();
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetHandleByIndex(i, ref nvmlDevice);
-                        ManagedCuda.Nvml.nvmlPciInfo info = new ManagedCuda.Nvml.nvmlPciInfo();
+                        var info = new ManagedCuda.Nvml.nvmlPciInfo();
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetPciInfo(nvmlDevice, ref info);
 
                         uint j;
                         for (j = 0; j < mDevices.Length; ++j)
-                        {
                             if (mDevices[j].GetComputeDevice().Vendor == "NVIDIA Corporation" && mDevices[j].GetComputeDevice().PciBusIdNV == info.bus)
                             {
                                 nvmlDeviceArray[j] = nvmlDevice;
                                 break;
                             }
-                        }
                         if (j >= mDevices.Length)
                             throw new Exception();
                     }
@@ -899,7 +916,7 @@ namespace GatelessGateSharp
             {
             }
 
-            foreach (Device device in mDevices)
+            foreach (var device in mDevices)
             {
                 tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.Vendor + " " + device.Name;
 
@@ -910,14 +927,14 @@ namespace GatelessGateSharp
                 numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 2 : 1);
                 numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 8 : 4);
                 numericUpDownDeviceCryptoNightIntensityArray[device.DeviceIndex].Value
-                    = (decimal)((device.Vendor == "AMD" && device.Name == "Radeon RX 470") ? (24) :
-                                (device.Vendor == "AMD" && device.Name == "Radeon RX 570") ? (24) :
-                                (device.Vendor == "AMD" && device.Name == "Radeon RX 480") ? (32) :
-                                (device.Vendor == "AMD" && device.Name == "Radeon RX 580") ? (32) :
-                                (device.Vendor == "AMD" && device.Name == "Radeon R9 Fury X/Nano") ? (14) :
-                                (device.Vendor == "AMD") ? (16) :
-                                (device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti") ? (32) :
-                                                                                                      (16));
+                    = (decimal)(device.Vendor == "AMD" && device.Name == "Radeon RX 470" ? 24 :
+                                device.Vendor == "AMD" && device.Name == "Radeon RX 570" ? 24 :
+                                device.Vendor == "AMD" && device.Name == "Radeon RX 480" ? 30 :
+                                device.Vendor == "AMD" && device.Name == "Radeon RX 580" ? 30 :
+                                device.Vendor == "AMD" && device.Name == "Radeon R9 Fury X/Nano" ? 14 :
+                                device.Vendor == "AMD" ? 16 :
+                                device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti" ? 32 :
+                                                                                                      16);
             }
 
             UpdateStatsWithShortPolling();
@@ -930,7 +947,7 @@ namespace GatelessGateSharp
         {
             protected override System.Net.WebRequest GetWebRequest(Uri uri)
             {
-                System.Net.WebRequest request = base.GetWebRequest(uri);
+                var request = base.GetWebRequest(uri);
                 request.Timeout = 10 * 1000;
                 return request;
             }
@@ -942,35 +959,35 @@ namespace GatelessGateSharp
             {
                 double totalSpeed = 0;
                 if (mMiners != null)
-                    foreach (Miner miner in mMiners)
+                    foreach (var miner in mMiners)
                         totalSpeed += miner.Speed;
 
                 var client = new CustomWebClient();
                 double USDBTC = 0;
                 {
-                    String jsonString = client.DownloadString("https://blockchain.info/ticker");
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                    var USD = (JContainer)(response["USD"]);
-                    USDBTC = (double)(USD["15m"]);
+                    var jsonString = client.DownloadString("https://blockchain.info/ticker");
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var USD = (JContainer)response["USD"];
+                    USDBTC = (double)USD["15m"];
                 }
 
-                double USDETH = 0.0;
-                double USDXMR = 0.0;
+                var USDETH = 0.0;
+                var USDXMR = 0.0;
                 {
-                    String jsonString = client.DownloadString("https://api.coinmarketcap.com/v1/ticker/?convert=USD");
+                    var jsonString = client.DownloadString("https://api.coinmarketcap.com/v1/ticker/?convert=USD");
                     var responseArray = JsonConvert.DeserializeObject<JArray>(jsonString);
                     foreach (JContainer currency in responseArray)
                     {
                         try
                         {
-                            if ((String)currency["id"] == "ethereum")
-                                USDETH = Double.Parse((String)currency["price_usd"]);
+                            if ((string)currency["id"] == "ethereum")
+                                USDETH = double.Parse((string)currency["price_usd"]);
                         }
                         catch (Exception) { }
                         try
                         {
-                            if ((String)currency["id"] == "monero")
-                                USDXMR = Double.Parse((String)currency["price_usd"]);
+                            if ((string)currency["id"] == "monero")
+                                USDXMR = double.Parse((string)currency["price_usd"]);
                         }
                         catch (Exception) { }
                     }
@@ -979,39 +996,35 @@ namespace GatelessGateSharp
                 if (mCurrentPool == "NiceHash" && radioButtonEthereum.Checked && textBoxBitcoinAddress.Text != "")
                 {
                     double balance = 0;
-                    String jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                    var result = (JContainer)(response["result"]);
-                    var stats = (JArray)(result["stats"]);
+                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var result = (JContainer)response["result"];
+                    var stats = (JArray)result["stats"];
                     foreach (JContainer item in stats)
-                    {
                         try
                         {
-                            balance += Double.Parse((String)item["balance"]);
+                            balance += double.Parse((string)item["balance"]);
                         }
                         catch (Exception) { }
-                    }
-                    labelBalance.Text = String.Format("{0:N6}", balance) + " BTC (" + String.Format("{0:N2}", (balance * USDBTC)) + " USD)";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
 
                     if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode)
                     {
                         double price = 0;
                         jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                        response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                        result = (JContainer)(response["result"]);
-                        stats = (JArray)(result["stats"]);
+                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        result = (JContainer)response["result"];
+                        stats = (JArray)result["stats"];
                         foreach (JContainer item in stats)
-                        {
                             try
                             {
                                 if ((double)item["algo"] == 20)
-                                    price = Double.Parse((String)item["price"]) * totalSpeed / 1000000000.0;
+                                    price = double.Parse((string)item["price"]) * totalSpeed / 1000000000.0;
                             }
                             catch (Exception) { }
-                        }
-                        labelPriceDay.Text = String.Format("{0:N6}", price) + " BTC/Day (" + String.Format("{0:N2}", (price * USDBTC)) + " USD/Day)";
-                        labelPriceWeek.Text = String.Format("{0:N6}", price * 7) + " BTC/Week (" + String.Format("{0:N2}", (price * 7 * USDBTC)) + " USD/Week)";
-                        labelPriceMonth.Text = String.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + String.Format("{0:N2}", (price * (365.25 / 12) * USDBTC)) + " USD/Month)";
+                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
+                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
+                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
                     }
                     else
                     {
@@ -1023,39 +1036,35 @@ namespace GatelessGateSharp
                 else if (mCurrentPool == "NiceHash" && radioButtonMonero.Checked && textBoxBitcoinAddress.Text != "")
                 {
                     double balance = 0;
-                    String jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                    var result = (JContainer)(response["result"]);
-                    var stats = (JArray)(result["stats"]);
+                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var result = (JContainer)response["result"];
+                    var stats = (JArray)result["stats"];
                     foreach (JContainer item in stats)
-                    {
                         try
                         {
-                            balance += Double.Parse((String)item["balance"]);
+                            balance += double.Parse((string)item["balance"]);
                         }
                         catch (Exception) { }
-                    }
-                    labelBalance.Text = String.Format("{0:N6}", balance) + " BTC (" + String.Format("{0:N2}", (balance * USDBTC)) + " USD)";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
 
                     if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode)
                     {
                         double price = 0;
                         jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                        response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                        result = (JContainer)(response["result"]);
-                        stats = (JArray)(result["stats"]);
+                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        result = (JContainer)response["result"];
+                        stats = (JArray)result["stats"];
                         foreach (JContainer item in stats)
-                        {
                             try
                             {
                                 if ((double)item["algo"] == 22)
-                                    price = Double.Parse((String)item["price"]) * totalSpeed / 1000000.0;
+                                    price = double.Parse((string)item["price"]) * totalSpeed / 1000000.0;
                             }
                             catch (Exception) { }
-                        }
-                        labelPriceDay.Text = String.Format("{0:N6}", price) + " BTC/Day (" + String.Format("{0:N2}", (price * USDBTC)) + " USD/Day)";
-                        labelPriceWeek.Text = String.Format("{0:N6}", price * 7) + " BTC/Week (" + String.Format("{0:N2}", (price * 7 * USDBTC)) + " USD/Week)";
-                        labelPriceMonth.Text = String.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + String.Format("{0:N2}", (price * (365.25 / 12) * USDBTC)) + " USD/Month)";
+                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
+                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
+                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
                     }
                     else
                     {
@@ -1066,21 +1075,21 @@ namespace GatelessGateSharp
                 }
                 else if (mCurrentPool == "ethermine.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
                 {
-                    String jsonString = client.DownloadString("https://api.ethermine.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                    var data = (JContainer)(response["data"]);
-                    double balance = (double)data["unpaid"] * 1e-18;
-                    double averageHashrate = (double)data["averageHashrate"];
-                    double coinsPerMin = (double)data["coinsPerMin"];
-                    labelBalance.Text = String.Format("{0:N6}", balance) + " ETH (" + String.Format("{0:N2}", (balance * USDETH)) + " USD)";
+                    var jsonString = client.DownloadString("https://api.ethermine.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var data = (JContainer)response["data"];
+                    var balance = (double)data["unpaid"] * 1e-18;
+                    var averageHashrate = (double)data["averageHashrate"];
+                    var coinsPerMin = (double)data["coinsPerMin"];
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
 
                     if (appState == ApplicationGlobalState.Mining && averageHashrate != 0)
                     {
-                        double price = (coinsPerMin * 60 * 24) * (totalSpeed / averageHashrate);
+                        var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
 
-                        labelPriceDay.Text = String.Format("{0:N6}", price) + " ETH/Day (" + String.Format("{0:N2}", (price * USDETH)) + " USD/Day)";
-                        labelPriceWeek.Text = String.Format("{0:N6}", price * 7) + " ETH/Week (" + String.Format("{0:N2}", (price * 7 * USDETH)) + " USD/Week)";
-                        labelPriceMonth.Text = String.Format("{0:N6}", price * (365.25 / 12)) + " ETH/Month (" + String.Format("{0:N2}", (price * (365.25 / 12) * USDETH)) + " USD/Month)";
+                        labelPriceDay.Text = string.Format("{0:N6}", price) + " ETH/Day (" + string.Format("{0:N2}", price * USDETH) + " USD/Day)";
+                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " ETH/Week (" + string.Format("{0:N2}", price * 7 * USDETH) + " USD/Week)";
+                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " ETH/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDETH) + " USD/Month)";
                     }
                     else
                     {
@@ -1091,26 +1100,26 @@ namespace GatelessGateSharp
                 }
                 else if (mCurrentPool == "ethpool.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
                 {
-                    String jsonString = client.DownloadString("http://api.ethpool.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                    var data = (JContainer)(response["data"]);
+                    var jsonString = client.DownloadString("http://api.ethpool.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var data = (JContainer)response["data"];
                     double balance = 0;
                     try
                     {
                         balance = (double)data["unpaid"] * 1e-18;
                     }
                     catch (Exception ex) { }
-                    double averageHashrate = (double)data["averageHashrate"];
-                    double coinsPerMin = (double)data["coinsPerMin"];
-                    labelBalance.Text = String.Format("{0:N6}", balance) + " ETH (" + String.Format("{0:N2}", (balance * USDETH)) + " USD)";
+                    var averageHashrate = (double)data["averageHashrate"];
+                    var coinsPerMin = (double)data["coinsPerMin"];
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
 
                     if (appState == ApplicationGlobalState.Mining && averageHashrate != 0)
                     {
-                        double price = (coinsPerMin * 60 * 24) * (totalSpeed / averageHashrate);
+                        var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
 
-                        labelPriceDay.Text = String.Format("{0:N6}", price) + " ETH/Day (" + String.Format("{0:N2}", (price * USDETH)) + " USD/Day)";
-                        labelPriceWeek.Text = String.Format("{0:N6}", price * 7) + " ETH/Week (" + String.Format("{0:N2}", (price * 7 * USDETH)) + " USD/Week)";
-                        labelPriceMonth.Text = String.Format("{0:N6}", price * (365.25 / 12)) + " ETH/Month (" + String.Format("{0:N2}", (price * (365.25 / 12) * USDETH)) + " USD/Month)";
+                        labelPriceDay.Text = string.Format("{0:N6}", price) + " ETH/Day (" + string.Format("{0:N2}", price * USDETH) + " USD/Day)";
+                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " ETH/Week (" + string.Format("{0:N2}", price * 7 * USDETH) + " USD/Week)";
+                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " ETH/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDETH) + " USD/Month)";
                     }
                     else
                     {
@@ -1121,16 +1130,16 @@ namespace GatelessGateSharp
                 }
                 else if (mCurrentPool == "Nanopool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
                 {
-                    String jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/user/" + textBoxEthereumAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                    var data = (JContainer)(response["data"]);
+                    var jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/user/" + textBoxEthereumAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var data = (JContainer)response["data"];
                     double balance = 0;
                     try
                     {
                         balance = (double)data["balance"];
                     }
                     catch (Exception ex) { }
-                    labelBalance.Text = String.Format("{0:N6}", balance) + " ETH (" + String.Format("{0:N2}", (balance * USDETH)) + " USD)";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
 
                     labelPriceDay.Text = "-";
                     labelPriceWeek.Text = "-";
@@ -1138,16 +1147,16 @@ namespace GatelessGateSharp
                 }
                 else if (mCurrentPool == "Nanopool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "")
                 {
-                    String jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/user/" + textBoxMoneroAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
-                    var data = (JContainer)(response["data"]);
+                    var jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/user/" + textBoxMoneroAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var data = (JContainer)response["data"];
                     double balance = 0;
                     try
                     {
                         balance = (double)data["balance"];
                     }
                     catch (Exception) { }
-                    labelBalance.Text = String.Format("{0:N6}", balance) + " XMR (" + String.Format("{0:N2}", (balance * USDXMR)) + " USD)";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * USDXMR) + " USD)";
 
                     labelPriceDay.Text = "-";
                     labelPriceWeek.Text = "-";
@@ -1155,15 +1164,15 @@ namespace GatelessGateSharp
                 }
                 else if (mCurrentPool == "DwarfPool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "")
                 {
-                    String jsonString = client.DownloadString("http://dwarfpool.com/eth/api?wallet=" + textBoxEthereumAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
+                    var jsonString = client.DownloadString("http://dwarfpool.com/eth/api?wallet=" + textBoxEthereumAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                     double balance = 0;
                     try
                     {
-                        balance = Double.Parse((String)response["wallet_balance"]);
+                        balance = double.Parse((string)response["wallet_balance"]);
                     }
                     catch (Exception ex) { }
-                    labelBalance.Text = String.Format("{0:N6}", balance) + " ETH (" + String.Format("{0:N2}", (balance * USDETH)) + " USD)";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
 
                     labelPriceDay.Text = "-";
                     labelPriceWeek.Text = "-";
@@ -1171,15 +1180,15 @@ namespace GatelessGateSharp
                 }
                 else if (mCurrentPool == "DwarfPool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "")
                 {
-                    String jsonString = client.DownloadString("http://dwarfpool.com/xmr/api?wallet=" + textBoxMoneroAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(jsonString);
+                    var jsonString = client.DownloadString("http://dwarfpool.com/xmr/api?wallet=" + textBoxMoneroAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                     double balance = 0;
                     try
                     {
-                        balance = Double.Parse((String)response["wallet_balance"]);
+                        balance = double.Parse((string)response["wallet_balance"]);
                     }
                     catch (Exception ex) { }
-                    labelBalance.Text = String.Format("{0:N6}", balance) + " XMR (" + String.Format("{0:N2}", (balance * USDXMR)) + " USD)";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * USDXMR) + " USD)";
 
                     labelPriceDay.Text = "-";
                     labelPriceWeek.Text = "-";
@@ -1195,44 +1204,28 @@ namespace GatelessGateSharp
             }
             catch (Exception ex)
             {
-                MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger("Exception: " + ex.Message + ex.StackTrace);
             }
         }
 
-        private String ConvertHashRateToString(double totalSpeed)
+        private string ConvertHashRateToString(double totalSpeed)
         {
             if (totalSpeed < 1000)
-            {
-                return String.Format("{0:N1} h/s", totalSpeed);
-            }
+                return string.Format("{0:N1} h/s", totalSpeed);
             else if (totalSpeed < 10000)
-            {
-                return String.Format("{0:N0} h/s", totalSpeed);
-            }
+                return string.Format("{0:N0} h/s", totalSpeed);
             else if (totalSpeed < 100000)
-            {
-                return String.Format("{0:N2} Kh/s", totalSpeed / 1000);
-            }
+                return string.Format("{0:N2} Kh/s", totalSpeed / 1000);
             else if (totalSpeed < 1000000)
-            {
-                return String.Format("{0:N1} Kh/s", totalSpeed / 1000);
-            }
+                return string.Format("{0:N1} Kh/s", totalSpeed / 1000);
             else if (totalSpeed < 10000000)
-            {
-                return String.Format("{0:N0} Kh/s", totalSpeed / 1000);
-            }
+                return string.Format("{0:N0} Kh/s", totalSpeed / 1000);
             else if (totalSpeed < 100000000)
-            {
-                return String.Format("{0:N2} Mh/s", totalSpeed / 1000000);
-            }
+                return string.Format("{0:N2} Mh/s", totalSpeed / 1000000);
             else if (totalSpeed < 1000000000)
-            {
-                return String.Format("{0:N1} Mh/s", totalSpeed / 1000000);
-            }
+                return string.Format("{0:N1} Mh/s", totalSpeed / 1000000);
             else
-            {
-                return String.Format("{0:N0} Mh/s", totalSpeed / 1000000);
-            }
+                return string.Format("{0:N0} Mh/s", totalSpeed / 1000000);
         }
 
         private void UpdateStatsWithShortPolling()
@@ -1243,7 +1236,7 @@ namespace GatelessGateSharp
                 mCurrentPool = (string)listBoxPoolPriorities.Items[0];
                 if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
                 {
-                    labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + String.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
+                    labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + string.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
                 }
                 else if (appState == ApplicationGlobalState.Mining && mStratum != null)
                 {
@@ -1255,11 +1248,11 @@ namespace GatelessGateSharp
                     labelCurrentPool.Text = (string)listBoxPoolPriorities.Items[0];
                 }
 
-                labelCurrentAlgorithm.Text = (appState == ApplicationGlobalState.Mining) ? mMiners[0].AlgorithmName : "-"; // TODO
+                labelCurrentAlgorithm.Text = appState == ApplicationGlobalState.Mining ? mMiners[0].AlgorithmName : "-"; // TODO
 
-                for (int i = 0; i < mDevices.Length; ++i)
+                for (var i = 0; i < mDevices.Length; ++i)
                 {
-                    Color labelColor = (checkBoxGPUEnableArray[i].Checked ? Color.Black : Color.Gray);
+                    var labelColor = checkBoxGPUEnableArray[i].Checked ? Color.Black : Color.Gray;
                     labelGPUNameArray[i].ForeColor = labelColor;
                     labelGPUVendorArray[i].ForeColor = labelColor;
                     labelGPUIDArray[i].ForeColor = labelColor;
@@ -1271,47 +1264,41 @@ namespace GatelessGateSharp
                     labelGPUSharesArray[i].ForeColor = labelColor;
                 }
 
-                long elapsedTimeInSeconds = (long)((DateTime.Now - mStartTime).TotalSeconds);
+                var elapsedTimeInSeconds = (long)(DateTime.Now - mStartTime).TotalSeconds;
                 if (appState != ApplicationGlobalState.Mining)
-                {
                     labelElapsedTime.Text = "-";
-                }
                 else if (elapsedTimeInSeconds >= 24 * 60 * 60)
-                {
-                    labelElapsedTime.Text = String.Format("{3} Days {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, (elapsedTimeInSeconds / 60) % 60, (elapsedTimeInSeconds / 60 / 60) % 24, (elapsedTimeInSeconds / 60 / 60 / 24));
-                }
+                    labelElapsedTime.Text = string.Format("{3} Days {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24);
                 else
-                {
-                    labelElapsedTime.Text = String.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, (elapsedTimeInSeconds / 60) % 60, (elapsedTimeInSeconds / 60 / 60) % 24);
-                }
+                    labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
 
                 double totalSpeed = 0;
                 if (mMiners != null)
-                    foreach (Miner miner in mMiners)
+                    foreach (var miner in mMiners)
                         totalSpeed += miner.Speed;
-                labelCurrentSpeed.Text = (appState != ApplicationGlobalState.Mining) ? "-" : ConvertHashRateToString(totalSpeed);
+                labelCurrentSpeed.Text = appState != ApplicationGlobalState.Mining ? "-" : ConvertHashRateToString(totalSpeed);
                 DeviceManagementLibrariesMutex.WaitOne();
                 foreach (var device in mDevices)
                 {
-                    ComputeDevice computeDevice = device.GetComputeDevice();
-                    int deviceIndex = device.DeviceIndex;
+                    var computeDevice = device.GetComputeDevice();
+                    var deviceIndex = device.DeviceIndex;
                     double speed = 0;
                     if (mMiners != null)
-                        foreach (Miner miner in mMiners)
+                        foreach (var miner in mMiners)
                             if (miner.DeviceIndex == deviceIndex)
                                 speed += miner.Speed;
-                    labelGPUSpeedArray[deviceIndex].Text = (appState != ApplicationGlobalState.Mining) ? "-" : ConvertHashRateToString(speed);
+                    labelGPUSpeedArray[deviceIndex].Text = appState != ApplicationGlobalState.Mining ? "-" : ConvertHashRateToString(speed);
 
                     if (device.AcceptedShares + device.RejectedShares == 0)
                     {
                         labelGPUSharesArray[deviceIndex].ForeColor = Color.Black;
-                        labelGPUSharesArray[deviceIndex].Text = (appState == ApplicationGlobalState.Mining) ? "0" : "-";
+                        labelGPUSharesArray[deviceIndex].Text = appState == ApplicationGlobalState.Mining ? "0" : "-";
                     }
                     else
                     {
-                        double acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
-                        labelGPUSharesArray[deviceIndex].Text = device.AcceptedShares.ToString() + "/" + (device.AcceptedShares + device.RejectedShares).ToString() + " (" + String.Format("{0:N1}", (acceptanceRate) * 100) + "%)";
-                        labelGPUSharesArray[deviceIndex].ForeColor = (acceptanceRate >= 0.95 ? Color.Green : Color.Red); // TODO
+                        var acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
+                        labelGPUSharesArray[deviceIndex].Text = device.AcceptedShares.ToString() + "/" + (device.AcceptedShares + device.RejectedShares).ToString() + " (" + string.Format("{0:N1}", acceptanceRate * 100) + "%)";
+                        labelGPUSharesArray[deviceIndex].ForeColor = acceptanceRate >= 0.95 ? Color.Green : Color.Red; // TODO
                     }
 
                     if (ADLAdapterIndexArray[deviceIndex] >= 0)
@@ -1319,20 +1306,20 @@ namespace GatelessGateSharp
                         // temperature
                         ADLTemperature OSADLTemperatureData;
                         OSADLTemperatureData = new ADLTemperature();
-                        IntPtr tempBuffer = IntPtr.Zero;
-                        int size = Marshal.SizeOf(OSADLTemperatureData);
+                        var tempBuffer = IntPtr.Zero;
+                        var size = Marshal.SizeOf(OSADLTemperatureData);
                         tempBuffer = Marshal.AllocCoTaskMem((int)size);
                         Marshal.StructureToPtr(OSADLTemperatureData, tempBuffer, false);
 
                         if (null != ADL.ADL_Overdrive5_Temperature_Get)
                         {
-                            int ADLRet = ADL.ADL_Overdrive5_Temperature_Get(ADLAdapterIndexArray[deviceIndex], 0, tempBuffer);
+                            var ADLRet = ADL.ADL_Overdrive5_Temperature_Get(ADLAdapterIndexArray[deviceIndex], 0, tempBuffer);
                             if (ADL.ADL_SUCCESS == ADLRet)
                             {
                                 OSADLTemperatureData = (ADLTemperature)Marshal.PtrToStructure(tempBuffer, OSADLTemperatureData.GetType());
                                 labelGPUTempArray[deviceIndex].Text = (OSADLTemperatureData.Temperature / 1000).ToString() + "℃";
-                                labelGPUTempArray[deviceIndex].ForeColor = (OSADLTemperatureData.Temperature >= 80000) ? Color.Red :
-                                                                           (OSADLTemperatureData.Temperature >= 60000) ? Color.Purple :
+                                labelGPUTempArray[deviceIndex].ForeColor = OSADLTemperatureData.Temperature >= 80000 ? Color.Red :
+                                                                           OSADLTemperatureData.Temperature >= 60000 ? Color.Purple :
                                                                                                                          Color.Blue;
                             }
                         }
@@ -1340,14 +1327,14 @@ namespace GatelessGateSharp
                         // activity
                         ADLPMActivity OSADLPMActivityData;
                         OSADLPMActivityData = new ADLPMActivity();
-                        IntPtr activityBuffer = IntPtr.Zero;
+                        var activityBuffer = IntPtr.Zero;
                         size = Marshal.SizeOf(OSADLPMActivityData);
                         activityBuffer = Marshal.AllocCoTaskMem((int)size);
                         Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
 
                         if (null != ADL.ADL_Overdrive5_CurrentActivity_Get)
                         {
-                            int ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndexArray[deviceIndex], activityBuffer);
+                            var ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndexArray[deviceIndex], activityBuffer);
                             if (ADL.ADL_SUCCESS == ADLRet)
                             {
                                 OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
@@ -1360,7 +1347,7 @@ namespace GatelessGateSharp
                         // fan speed
                         ADLFanSpeedValue OSADLFanSpeedValueData;
                         OSADLFanSpeedValueData = new ADLFanSpeedValue();
-                        IntPtr fanSpeedValueBuffer = IntPtr.Zero;
+                        var fanSpeedValueBuffer = IntPtr.Zero;
                         size = Marshal.SizeOf(OSADLFanSpeedValueData);
                         OSADLFanSpeedValueData.iSpeedType = 1;
                         fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)size);
@@ -1368,7 +1355,7 @@ namespace GatelessGateSharp
 
                         if (null != ADL.ADL_Overdrive5_FanSpeed_Get)
                         {
-                            int ADLRet = ADL.ADL_Overdrive5_FanSpeed_Get(ADLAdapterIndexArray[deviceIndex], 0, fanSpeedValueBuffer);
+                            var ADLRet = ADL.ADL_Overdrive5_FanSpeed_Get(ADLAdapterIndexArray[deviceIndex], 0, fanSpeedValueBuffer);
                             if (ADL.ADL_SUCCESS == ADLRet)
                             {
                                 OSADLFanSpeedValueData = (ADLFanSpeedValue)Marshal.PtrToStructure(fanSpeedValueBuffer, OSADLFanSpeedValueData.GetType());
@@ -1381,15 +1368,15 @@ namespace GatelessGateSharp
                         uint temp = 0;
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetTemperature(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlTemperatureSensors.Gpu, ref temp);
                         labelGPUTempArray[deviceIndex].Text = temp.ToString() + "℃";
-                        labelGPUTempArray[deviceIndex].ForeColor = (temp >= 80) ? Color.Red :
-                                                                   (temp >= 60) ? Color.Purple :
+                        labelGPUTempArray[deviceIndex].ForeColor = temp >= 80 ? Color.Red :
+                                                                   temp >= 60 ? Color.Purple :
                                                                                   Color.Blue;
 
                         uint fanSpeed = 0;
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetFanSpeed(nvmlDeviceArray[deviceIndex], ref fanSpeed);
                         labelGPUFanArray[deviceIndex].Text = fanSpeed.ToString() + "%";
 
-                        ManagedCuda.Nvml.nvmlUtilization utilization = new ManagedCuda.Nvml.nvmlUtilization();
+                        var utilization = new ManagedCuda.Nvml.nvmlUtilization();
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetUtilizationRates(nvmlDeviceArray[deviceIndex], ref utilization);
                         labelGPUActivityArray[deviceIndex].Text = utilization.gpu.ToString() + "%";
 
@@ -1403,7 +1390,7 @@ namespace GatelessGateSharp
             }
             catch (Exception ex)
             {
-                MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger("Exception: " + ex.Message + ex.StackTrace);
             }
             finally
             {
@@ -1425,19 +1412,21 @@ namespace GatelessGateSharp
             UpdateStatsWithShortPolling();
         }
 
-        Stratum mStratum;
-        List<Miner> mMiners = null;
-        enum ApplicationGlobalState
+        private Stratum mStratum;
+        private List<Miner> mMiners = null;
+
+        private enum ApplicationGlobalState
         {
             Idle = 0,
             Mining = 1,
             Benchmarking = 2
         };
-        ApplicationGlobalState appState = ApplicationGlobalState.Idle;
+
+        private ApplicationGlobalState appState = ApplicationGlobalState.Idle;
 
         public bool ValidateBitcoinAddress()
         {
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$");
+            var regex = new System.Text.RegularExpressions.Regex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$");
             var match = regex.Match(textBoxBitcoinAddress.Text);
             if (match.Success)
             {
@@ -1452,7 +1441,7 @@ namespace GatelessGateSharp
 
         public bool ValidateEthereumAddress()
         {
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex("^0x[a-fA-Z0-9]{40}$");
+            var regex = new System.Text.RegularExpressions.Regex("^0x[a-fA-Z0-9]{40}$");
             var match = regex.Match(textBoxEthereumAddress.Text);
             if (match.Success)
             {
@@ -1467,7 +1456,7 @@ namespace GatelessGateSharp
 
         public bool ValidateMoneroAddress()
         {
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}(\.([0-9a-fA-F]{16}|[0-9a-fA-F]{64}))?$");
+            var regex = new System.Text.RegularExpressions.Regex(@"^4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}(\.([0-9a-fA-F]{16}|[0-9a-fA-F]{64}))?$");
             var match = regex.Match(textBoxMoneroAddress.Text);
             if (match.Success)
             {
@@ -1482,7 +1471,7 @@ namespace GatelessGateSharp
 
         public bool ValidateRigID()
         {
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^[a-zA-Z0-9]+$");
+            var regex = new System.Text.RegularExpressions.Regex(@"^[a-zA-Z0-9]+$");
             var match = regex.Match(textBoxRigID.Text);
             if (match.Success)
             {
@@ -1495,13 +1484,13 @@ namespace GatelessGateSharp
             }
         }
 
-        struct StratumServerInfo : IComparable<StratumServerInfo>
+        private struct StratumServerInfo : IComparable<StratumServerInfo>
         {
-            public String name;
+            public string name;
             public long delay;
             public long time;
 
-            public StratumServerInfo(String aName, long aDelay)
+            public StratumServerInfo(string aName, long aDelay)
             {
                 name = aName;
                 delay = aDelay;
@@ -1520,32 +1509,22 @@ namespace GatelessGateSharp
             public int CompareTo(StratumServerInfo other)
             {
                 if (time == other.time)
-                {
                     return 0;
-                }
                 else if (other.time < 0 && time >= 0)
-                {
                     return -1;
-                }
                 else if (other.time >= 0 && time < 0)
-                {
                     return 1;
-                }
                 else if (other.time > time)
-                {
                     return -1;
-                }
                 else
-                {
                     return 1;
-                }
             }
         };
 
-        public void LaunchCryptoNightMiners(String pool)
+        public void LaunchCryptoNightMiners(string pool)
         {
             CryptoNightStratum stratum = null;
-            bool niceHashMode = false;
+            var niceHashMode = false;
 
             if (pool == "NiceHash" || mDevFeeMode)
             {
@@ -1558,24 +1537,20 @@ namespace GatelessGateSharp
                     new StratumServerInfo("cryptonight.br.nicehash.com", 180)
                 };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
-                            String username = (mDevFeeMode ? (mDevFeeBitcoinAddress + ".DEVFEE") : textBoxBitcoinAddress.Text);
+                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
                             if (!mDevFeeMode && textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
-                            stratum = (new CryptoNightStratum(host.name, 3355, username, "x", pool));
+                            stratum = new CryptoNightStratum(host.name, 3355, username, "x", pool);
                             break;
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
                 niceHashMode = true;
             }
             else if (pool == "DwarfPool")
@@ -1585,24 +1560,20 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("xmr-usa.dwarfpool.com", 0)
                             };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
-                            String username = textBoxMoneroAddress.Text;
+                            var username = textBoxMoneroAddress.Text;
                             if (textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
-                            stratum = new CryptoNightStratum(host.name, 8005, username, (textBoxEmail.Text != "" ? textBoxEmail.Text : "x"), pool);
+                            stratum = new CryptoNightStratum(host.name, 8005, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool);
                             break;
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
             }
             else if (pool == "Nanopool")
             {
@@ -1614,13 +1585,11 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("xmr-asia1.nanopool.org", 0)
                             };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
-                            String username = textBoxMoneroAddress.Text;
+                            var username = textBoxMoneroAddress.Text;
                             if (textBoxRigID.Text != "")
                             {
                                 username += "." + textBoxRigID.Text; // TODO
@@ -1632,32 +1601,28 @@ namespace GatelessGateSharp
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
             }
             else if (pool == "mineXMR.com")
             {
-                String username = textBoxMoneroAddress.Text;
+                var username = textBoxMoneroAddress.Text;
                 if (textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text; // TODO
                 stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool);
             }
             mStratum = (Stratum)stratum;
             mMiners = new List<Miner>();
-            for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-            {
+            for (var deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    for (int i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
+                    for (var i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
                         mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightIntensityArray[deviceIndex].Value)), Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceIndex].Value)), niceHashMode));
                     System.Threading.Thread.Sleep(mLaunchInterval);
                 }
-            }
         }
 
-        public void LaunchEthashMiners(String pool)
+        public void LaunchEthashMiners(string pool)
         {
             EthashStratum stratum = null;
 
@@ -1672,24 +1637,20 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("daggerhashimoto.br.nicehash.com", 180)
                             };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
-                            String username = (mDevFeeMode ? (mDevFeeBitcoinAddress + ".DEVFEE") : textBoxBitcoinAddress.Text);
+                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
                             if (!mDevFeeMode && textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
-                            stratum = new NiceHashEthashStratum(host.name, 3353, (mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text), "x", pool);
+                            stratum = new NiceHashEthashStratum(host.name, 3353, mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text, "x", pool);
                             break;
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
             }
             else if (pool == "zawawa.net")
             {
@@ -1697,10 +1658,8 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("eth-uswest.zawawa.net", 0)
                             };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 4000, textBoxEthereumAddress.Text, "x", pool);
@@ -1708,10 +1667,8 @@ namespace GatelessGateSharp
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
             }
             else if (pool == "DwarfPool")
             {
@@ -1731,24 +1688,20 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("eth-ar.dwarfpool.com", 0)
                             };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
-                            String username = textBoxEthereumAddress.Text;
+                            var username = textBoxEthereumAddress.Text;
                             if (textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
-                            stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, username, (textBoxEmail.Text != "" ? textBoxEmail.Text : "x"), pool);
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool);
                             break;
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
             }
             else if (pool == "ethermine.org")
             {
@@ -1759,13 +1712,11 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("asia1.ethermine.org", 0)
                             };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
-                            String username = textBoxEthereumAddress.Text;
+                            var username = textBoxEthereumAddress.Text;
                             if (textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 4444, username, "x", pool);
@@ -1773,10 +1724,8 @@ namespace GatelessGateSharp
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
             }
             else if (pool == "ethpool.org")
             {
@@ -1787,13 +1736,11 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("asia1.ethpool.org", 0)
                             };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
-                            String username = textBoxEthereumAddress.Text;
+                            var username = textBoxEthereumAddress.Text;
                             if (textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 3333, username, "x", pool);
@@ -1801,10 +1748,8 @@ namespace GatelessGateSharp
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
             }
             else if (pool == "Nanopool")
             {
@@ -1816,13 +1761,11 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("eth-us-west1.nanopool.org", 0)
                             };
                 hosts.Sort();
-                foreach (StratumServerInfo host in hosts)
-                {
+                foreach (var host in hosts)
                     if (host.time >= 0)
-                    {
                         try
                         {
-                            String username = textBoxEthereumAddress.Text;
+                            var username = textBoxEthereumAddress.Text;
                             if (textBoxRigID.Text != "")
                             {
                                 username += "." + textBoxRigID.Text; // TODO
@@ -1834,10 +1777,8 @@ namespace GatelessGateSharp
                         }
                         catch (Exception ex)
                         {
-                            MainForm.Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-                    }
-                }
             }
             else
             {
@@ -1846,20 +1787,18 @@ namespace GatelessGateSharp
 
             mStratum = (Stratum)stratum;
             mMiners = new List<Miner>();
-            for (int deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-            {
+            for (var deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    mMiners.Add(new OpenCLEthashMiner(mDevices[deviceIndex], stratum, Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightIntensityArray[deviceIndex].Value))));
+                    for (var i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i)
+                        mMiners.Add(new OpenCLEthashMiner(mDevices[deviceIndex], stratum, Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightIntensityArray[deviceIndex].Value)), Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex].Value))));
                     System.Threading.Thread.Sleep(mLaunchInterval);
                 }
-            }
         }
 
         private void LaunchMiners()
         {
-            foreach (String pool in listBoxPoolPriorities.Items)
-            {
+            foreach (string pool in listBoxPoolPriorities.Items)
                 try
                 {
                     if (radioButtonEthereum.Checked)
@@ -1886,7 +1825,6 @@ namespace GatelessGateSharp
                     mStratum = null;
                     mMiners = null;
                 }
-            }
         }
 
         private void StopMiners()
@@ -1894,22 +1832,22 @@ namespace GatelessGateSharp
             try
             {
                 Logger("Stopping miners...");
-                foreach (Miner miner in mMiners)
+                foreach (var miner in mMiners)
                     miner.Stop();
-                bool allDone = false;
-                int counter = 600;
+                var allDone = false;
+                var counter = 600;
                 while (!allDone && counter-- > 0)
                 {
                     System.Threading.Thread.Sleep(100);
                     allDone = true;
-                    foreach (Miner miner in mMiners)
+                    foreach (var miner in mMiners)
                         if (!miner.Done)
                         {
                             allDone = false;
                             break;
                         }
                 }
-                foreach (Miner miner in mMiners)
+                foreach (var miner in mMiners)
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
                 mStratum.Stop();
@@ -1942,7 +1880,7 @@ namespace GatelessGateSharp
                 tabControlMainForm.TabIndex = 1;
                 return;
             }
-            bool enabled = false;
+            var enabled = false;
             foreach (var control in checkBoxGPUEnableArray)
                 enabled = enabled || control.Checked;
             if (!enabled)
@@ -1952,7 +1890,7 @@ namespace GatelessGateSharp
                 return;
             }
 
-            this.Enabled = false;
+            Enabled = false;
 
             if (appState == ApplicationGlobalState.Idle)
             {
@@ -1981,8 +1919,10 @@ namespace GatelessGateSharp
                     mDevFeeModeStartTime = DateTime.Now;
                     try
                     {
-                        using (System.IO.StreamWriter file = new System.IO.StreamWriter(mAppStateFileName, false))
+                        using (var file = new System.IO.StreamWriter(mAppStateFileName, false))
+                        {
                             file.WriteLine("Mining");
+                        }
                     }
                     catch (Exception) { }
                 }
@@ -1994,8 +1934,10 @@ namespace GatelessGateSharp
                 appState = ApplicationGlobalState.Idle;
                 try
                 {
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(mAppStateFileName, false))
+                    using (var file = new System.IO.StreamWriter(mAppStateFileName, false))
+                    {
                         file.WriteLine("Idle");
+                    }
                 }
                 catch (Exception) { }
             }
@@ -2009,22 +1951,22 @@ namespace GatelessGateSharp
         {
             try
             {
-                buttonStart.Text = (appState == ApplicationGlobalState.Mining) ? "Stop" : "Start";
+                buttonStart.Text = appState == ApplicationGlobalState.Mining ? "Stop" : "Start";
                 buttonBenchmark.Enabled = false;
 
-                groupBoxCoinsToMine.Enabled = (appState == ApplicationGlobalState.Idle);
-                groupBoxPoolPriorities.Enabled = (appState == ApplicationGlobalState.Idle);
-                groupBoxPoolParameters.Enabled = (appState == ApplicationGlobalState.Idle);
-                groupBoxWalletAddresses.Enabled = (appState == ApplicationGlobalState.Idle);
-                groupBoxAutomation.Enabled = (appState == ApplicationGlobalState.Idle);
+                groupBoxCoinsToMine.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxPoolPriorities.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxPoolParameters.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxWalletAddresses.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxAutomation.Enabled = appState == ApplicationGlobalState.Idle;
                 foreach (var control in checkBoxGPUEnableArray)
-                    control.Enabled = (appState == ApplicationGlobalState.Idle);
+                    control.Enabled = appState == ApplicationGlobalState.Idle;
                 foreach (var control in groupBoxDeviceEthashArray)
-                    control.Enabled = (appState == ApplicationGlobalState.Idle);
+                    control.Enabled = appState == ApplicationGlobalState.Idle;
                 foreach (var control in groupBoxDeviceCryptoNightArray)
-                    control.Enabled = (appState == ApplicationGlobalState.Idle);
+                    control.Enabled = appState == ApplicationGlobalState.Idle;
 
-                this.Enabled = true;
+                Enabled = true;
             }
             catch (Exception ex)
             {
@@ -2046,7 +1988,7 @@ namespace GatelessGateSharp
 
         private void buttonPoolPrioritiesUp_Click(object sender, EventArgs e)
         {
-            int selectedIndex = listBoxPoolPriorities.SelectedIndex;
+            var selectedIndex = listBoxPoolPriorities.SelectedIndex;
             if (selectedIndex > 0)
             {
                 listBoxPoolPriorities.Items.Insert(selectedIndex - 1, listBoxPoolPriorities.Items[selectedIndex]);
@@ -2058,8 +2000,8 @@ namespace GatelessGateSharp
 
         private void buttonPoolPrioritiesDown_Click(object sender, EventArgs e)
         {
-            int selectedIndex = listBoxPoolPriorities.SelectedIndex;
-            if (selectedIndex < listBoxPoolPriorities.Items.Count - 1 & selectedIndex != -1)
+            var selectedIndex = listBoxPoolPriorities.SelectedIndex;
+            if ((selectedIndex < listBoxPoolPriorities.Items.Count - 1) & (selectedIndex != -1))
             {
                 listBoxPoolPriorities.Items.Insert(selectedIndex + 2, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex);
@@ -2083,8 +2025,7 @@ namespace GatelessGateSharp
         {
             if (!ValidateEthereumAddress())
                 return;
-            foreach (String poolName in listBoxPoolPriorities.Items)
-            {
+            foreach (string poolName in listBoxPoolPriorities.Items)
                 if (poolName == "Nanopool")
                 {
                     System.Diagnostics.Process.Start("https://eth.nanopool.org/account/" + textBoxEthereumAddress.Text);
@@ -2105,7 +2046,6 @@ namespace GatelessGateSharp
                     System.Diagnostics.Process.Start("https://ethpool.org/miners/" + textBoxEthereumAddress.Text);
                     return;
                 }
-            }
         }
 
         private void timerDevFee_Tick(object sender, EventArgs e)
@@ -2122,7 +2062,7 @@ namespace GatelessGateSharp
                     Enabled = false;
                     StopMiners();
                     mDevFeeMode = false;
-                    timerDevFee.Interval = (int)(((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage)) * 1000);
+                    timerDevFee.Interval = (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
                     LaunchMiners();
                     if (mMiners == null || mStratum == null)
                     {
@@ -2199,10 +2139,8 @@ namespace GatelessGateSharp
             try
             {
                 if (appState == ApplicationGlobalState.Mining && mMiners != null)
-                {
                     foreach (var miner in mMiners)
                         miner.KeepAlive();
-                }
             }
             catch (Exception ex)
             {
@@ -2214,8 +2152,7 @@ namespace GatelessGateSharp
         {
             if (!ValidateMoneroAddress())
                 return;
-            foreach (String poolName in listBoxPoolPriorities.Items)
-            {
+            foreach (string poolName in listBoxPoolPriorities.Items)
                 if (poolName == "Nanopool")
                 {
                     System.Diagnostics.Process.Start("https://xmr.nanopool.org/account/" + textBoxMoneroAddress.Text);
@@ -2231,7 +2168,6 @@ namespace GatelessGateSharp
                     System.Diagnostics.Process.Start("http://minexmr.com/");
                     return;
                 }
-            }
         }
 
         private void timerUpdateLog_Tick(object sender, EventArgs e)
@@ -2250,18 +2186,14 @@ namespace GatelessGateSharp
         {
             try
             {
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                var process = new System.Diagnostics.Process();
+                var startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
                 if (checkBoxLaunchAtStartup.Checked)
-                {
                     startInfo.Arguments = "/C schtasks /create /sc onlogon /tn GatelessGateSharp /rl highest /tr \"" + Application.ExecutablePath + "\"";
-                }
                 else
-                {
                     startInfo.Arguments = "/C schtasks /delete /f /tn GatelessGateSharp";
-                }
                 process.StartInfo = startInfo;
                 process.Start();
             }

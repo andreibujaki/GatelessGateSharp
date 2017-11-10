@@ -47,6 +47,11 @@ namespace GatelessGateSharp
             Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith((t) => w.Close(), TaskScheduler.FromCurrentSynchronizationContext());
             w.BringToFront();
             MessageBox.Show(w, "Unhandled Exception: " + ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            if (e.ExceptionObject.GetType() == typeof(DllNotFoundException))
+            {
+                foreach (var process in Process.GetProcessesByName("GatelessGateSharp"))
+                    process.Kill();
+            }
             Environment.Exit(1);
         }
 
