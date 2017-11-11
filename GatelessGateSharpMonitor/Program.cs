@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Diagnostics;
 
 
@@ -14,7 +10,7 @@ namespace GatelessGateSharpMonitor
     {
         static void Main(string[] args)
         {
-            using (var handle = new Mutex(true, "GatelessGateSharp.exe"))
+            using (var handle = new Mutex(true, "{1D2A713A-A29C-418C-BC62-2E98BD325490}"))
             {
                 try { handle.WaitOne(); } catch (Exception) {}
                 Thread.Sleep(5000);

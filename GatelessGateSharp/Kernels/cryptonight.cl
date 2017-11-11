@@ -462,12 +462,10 @@ __kernel void search1(__global uint4 *Scratchpad, __global ulong *states, __glob
 
         b_x = ((uint4 *)c)[0];
     }
-
-    mem_fence(CLK_GLOBAL_MEM_FENCE);
 }
 
 __attribute__((reqd_work_group_size(WORKSIZE, 8, 1)))
-__kernel void search2(__global uint4 *Scratchpad, __global ulong *states, __global uint *Branch0, __global uint *Branch1, __global uint *Branch2, __global uint *Branch3)
+__kernel void search2(__global uint4 *Scratchpad, __global ulong *states)
 {
     __local uint AES0[256], AES1[256], AES2[256], AES3[256];
     uint ExpandedKey2[256];
@@ -523,25 +521,7 @@ __kernel void search2(__global uint4 *Scratchpad, __global ulong *states, __glob
         keccakf1600_2(State);
 
         for (int i = 0; i < 25; ++i) states[i] = State[i];
-
-        switch (State[0] & 3)
-        {
-        case 0:
-            Branch0[atomic_inc(Branch0 + get_global_size(0))] = get_global_id(0) - get_global_offset(0);
-            break;
-        case 1:
-            Branch1[atomic_inc(Branch1 + get_global_size(0))] = get_global_id(0) - get_global_offset(0);
-            break;
-        case 2:
-            Branch2[atomic_inc(Branch2 + get_global_size(0))] = get_global_id(0) - get_global_offset(0);
-            break;
-        case 3:
-            Branch3[atomic_inc(Branch3 + get_global_size(0))] = get_global_id(0) - get_global_offset(0);
-            break;
-        }
     }
-
-    mem_fence(CLK_GLOBAL_MEM_FENCE);
 }
 
 /*
@@ -675,14 +655,8 @@ __kernel void cryptonight(__global ulong *input, __global uint4 *Scratchpad, __g
 
 #define VSWAP4(x)	((((x) >> 24) & 0xFFU) | (((x) >> 8) & 0xFF00U) | (((x) << 8) & 0xFF0000U) | (((x) << 24) & 0xFF000000U))
 
-__kernel void search6(__global ulong *states, __global uint *BranchBuf, __global uint *output, uint Target, ulong Threads)
+void search3_branch3(__global ulong *states, __global uint *output, uint Target)
 {
-    const ulong idx = get_global_id(0) - get_global_offset(0);
-
-    if (idx >= Threads) return;
-
-    states += 25 * BranchBuf[idx];
-
     // skein
     ulong8 h = vload8(0, SKEIN512_256_IV);
 
@@ -694,8 +668,13 @@ __kernel void search6(__global ulong *states, __global uint *BranchBuf, __global
     ulong t[3] = { 0x00UL, 0x7000000000000000UL, 0x00UL };
     ulong8 p, m;
 
-    for (uint i = 0; i < 4; ++i)
-    {
+#ifdef cl_amd_media_ops2
+	for (uint i = 0; i < 4; ++i)
+#else
+#pragma unroll
+	for (uint i = 0; i < 4; ++i)
+#endif
+	{
         if (i < 3) t[0] += 0x40UL;
         else t[0] += 0x08UL;
 
@@ -725,7 +704,7 @@ __kernel void search6(__global ulong *states, __global uint *BranchBuf, __global
 	//if (as_uint16(p).s7 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
 	if ((p.s3 >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
-		output[i] = BranchBuf[idx] + get_global_offset(0);		
+		output[i] = get_global_id(0);		
 		output[256 + i * 8 + 0] = (p.s0 & 0xffffffffu);
 		output[256 + i * 8 + 1] = (p.s0 >> 32);
 		output[256 + i * 8 + 2] = (p.s1 & 0xffffffffu);
@@ -736,26 +715,23 @@ __kernel void search6(__global ulong *states, __global uint *BranchBuf, __global
 		output[256 + i * 8 + 7] = (p.s3 >> 32);
 
 	}
-
-    mem_fence(CLK_GLOBAL_MEM_FENCE);
 }
 
 #define SWAP8(x)	as_ulong(as_uchar8(x).s76543210)
 
-__kernel void search5(__global ulong *states, __global uint *BranchBuf, __global uint *output, uint Target, ulong Threads)
+void search3_branch2(__global ulong *states, __global uint *output, uint Target)
 {
-    const uint idx = get_global_id(0) - get_global_offset(0);
-
-    if (idx >= Threads) return;
-
-    states += 25 * BranchBuf[idx];
-
     sph_u64 h0h = 0xEBD3202C41A398EBUL, h0l = 0xC145B29C7BBECD92UL, h1h = 0xFAC7D4609151931CUL, h1l = 0x038A507ED6820026UL, h2h = 0x45B92677269E23A4UL, h2l = 0x77941AD4481AFBE0UL, h3h = 0x7A176B0226ABB5CDUL, h3l = 0xA82FFF0F4224F056UL;
     sph_u64 h4h = 0x754D2E7F8996A371UL, h4l = 0x62E27DF70849141DUL, h5h = 0x948F2476F7957627UL, h5l = 0x6C29804757B6D587UL, h6h = 0x6C0D8EAC2D275E5CUL, h6l = 0x0F7A0557C6508451UL, h7h = 0xEA12247067D3E47BUL, h7l = 0x69D71CD313ABE389UL;
     sph_u64 tmp;
 
-    for (int i = 0; i < 5; ++i)
-    {
+#ifdef cl_amd_media_ops2
+	for (uint i = 0; i < 5; ++i)
+#else
+#pragma unroll
+	for (uint i = 0; i < 5; ++i)
+#endif
+	{
         ulong input[8];
 
         if (i < 3)
@@ -802,7 +778,7 @@ __kernel void search5(__global ulong *states, __global uint *BranchBuf, __global
 	//if (as_uint2(h7l).s1 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
 	if ((h7l >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
-		output[i] = BranchBuf[idx] + get_global_offset(0);
+		output[i] = get_global_id(0);
 		output[256 + i * 8 + 0] = (h6h & 0xffffffffu);
 		output[256 + i * 8 + 1] = (h6h >> 32);
 		output[256 + i * 8 + 2] = (h6l & 0xffffffffu);
@@ -816,14 +792,8 @@ __kernel void search5(__global ulong *states, __global uint *BranchBuf, __global
 
 #define SWAP4(x)	as_uint(as_uchar4(x).s3210)
 
-__kernel void search3(__global ulong *states, __global uint *BranchBuf, __global uint *output, uint Target, ulong Threads)
+void search3_branch0(__global ulong *states, __global uint *output, uint Target)
 {
-    const uint idx = get_global_id(0) - get_global_offset(0);
-
-    if (idx >= Threads) return;
-
-    states += 25 * BranchBuf[idx];
-
     unsigned int m[16];
     unsigned int v[16];
     uint h[8];
@@ -880,7 +850,7 @@ __kernel void search3(__global ulong *states, __global uint *BranchBuf, __global
 	//if (h[7] <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
 	if (h[7] <= Target) {
 		int i = atomic_inc(output + 0xFF);
-		output[i] = BranchBuf[idx] + get_global_offset(0);
+		output[i] = get_global_id(0);
 		output[256 + i * 8] = h[0];
 		output[256 + i * 8 + 1] = h[1];
 		output[256 + i * 8 + 2] = h[2];
@@ -892,58 +862,53 @@ __kernel void search3(__global ulong *states, __global uint *BranchBuf, __global
 	}
 }
 
-__kernel void search4(__global ulong *states, __global uint *BranchBuf, __global uint *output, uint Target, ulong Threads)
+void search3_branch1(__global ulong *states, __global uint *output, uint Target)
 {
-    const uint idx = get_global_id(0) - get_global_offset(0);
+	ulong State[8];
 
-    if (idx >= Threads) return;
+	for (int i = 0; i < 7; ++i) State[i] = 0UL;
 
-    states += 25 * BranchBuf[idx];
+	State[7] = 0x0001000000000000UL;
 
-    ulong State[8];
+	for (uint i = 0; i < 4; ++i)
+	{
+		ulong H[8], M[8];
 
-    for (int i = 0; i < 7; ++i) State[i] = 0UL;
+		if (i < 3)
+		{
+			((ulong8 *)M)[0] = vload8(i, states);
+		}
+		else
+		{
+			M[0] = states[24];
+			M[1] = 0x80UL;
 
-    State[7] = 0x0001000000000000UL;
+			for (int x = 2; x < 7; ++x) M[x] = 0UL;
 
-    for (uint i = 0; i < 4; ++i)
-    {
-        ulong H[8], M[8];
+			M[7] = 0x0400000000000000UL;
+		}
 
-        if (i < 3)
-        {
-            ((ulong8 *)M)[0] = vload8(i, states);
-        } else
-        {
-            M[0] = states[24];
-            M[1] = 0x80UL;
+		for (int x = 0; x < 8; ++x) H[x] = M[x] ^ State[x];
 
-            for (int x = 2; x < 7; ++x) M[x] = 0UL;
+		PERM_SMALL_P(H);
+		PERM_SMALL_Q(M);
 
-            M[7] = 0x0400000000000000UL;
-        }
+		for (int x = 0; x < 8; ++x) State[x] ^= H[x] ^ M[x];
+	}
 
-        for (int x = 0; x < 8; ++x) H[x] = M[x] ^ State[x];
+	ulong tmp[8];
 
-        PERM_SMALL_P(H);
-        PERM_SMALL_Q(M);
+	for (int i = 0; i < 8; ++i) tmp[i] = State[i];
 
-        for (int x = 0; x < 8; ++x) State[x] ^= H[x] ^ M[x];
-    }
+	PERM_SMALL_P(State);
 
-    ulong tmp[8];
+	for (int i = 0; i < 8; ++i) State[i] ^= tmp[i];
 
-    for (int i = 0; i < 8; ++i) tmp[i] = State[i];
-
-    PERM_SMALL_P(State);
-
-    for (int i = 0; i < 8; ++i) State[i] ^= tmp[i];
-
-    //for(int i = 0; i < 4; ++i) output[i] = State[i + 4];
+	//for(int i = 0; i < 4; ++i) output[i] = State[i + 4];
 	//if (as_uint2(State[7]).s1 <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
 	if ((State[7] >> 32) <= Target) {
 		int i = atomic_inc(output + 0xFF);
-		output[i] = BranchBuf[idx] + get_global_offset(0);
+		output[i] = get_global_id(0);
 		output[256 + i * 8 + 0] = (State[4] & 0xffffffffu);
 		output[256 + i * 8 + 1] = (State[4] >> 32);
 		output[256 + i * 8 + 2] = (State[5] & 0xffffffffu);
@@ -952,5 +917,28 @@ __kernel void search4(__global ulong *states, __global uint *BranchBuf, __global
 		output[256 + i * 8 + 5] = (State[6] >> 32);
 		output[256 + i * 8 + 6] = (State[7] & 0xffffffffu);
 		output[256 + i * 8 + 7] = (State[7] >> 32);
+	}
+}
+
+__kernel void search3(__global ulong *states, __global uint *output, uint target)
+{
+	const uint idx = get_global_id(0) - get_global_offset(0);
+	
+	states += 25 * idx;
+
+	switch (states[0] & 3)
+	{
+	case 0:
+		search3_branch0(states, output, target);
+		break;
+	case 1:
+		search3_branch1(states, output, target);
+		break;
+	case 2:
+		//search3_branch2(states, output, target);
+		break;
+	case 3:
+		//search3_branch3(states, output, target); // 90.3%
+		break;
 	}
 }

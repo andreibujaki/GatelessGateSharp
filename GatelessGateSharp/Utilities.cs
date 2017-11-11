@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Windows.Forms;
 
 namespace GatelessGateSharp
 {
@@ -476,6 +477,14 @@ namespace GatelessGateSharp
         public static void FixFPU()
         {
             _controlfp(_MCW_EM, _EM_INVALID);
+        }
+
+        public static Form GetAutoClosingForm()
+        {
+            var w = new Form() { Size = new System.Drawing.Size(0, 0) };
+            Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith((t) => w.Close(), TaskScheduler.FromCurrentSynchronizationContext());
+            w.BringToFront();
+            return w;
         }
     }
 }

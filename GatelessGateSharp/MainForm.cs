@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cloo;
 using ATI.ADL;
@@ -43,7 +44,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "0.0.11";
+        public static string appVersion = "0.0.12";
         public static string appName = shortAppName + " " + appVersion + " beta";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -772,38 +773,22 @@ namespace GatelessGateSharp
             }
             catch (Exception) { }
             if (autoStart)
-                buttonStart_Click(null, null);
+            {
+                if (MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
+                        "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)
+                {
+                    buttonStart_Click(null, null);
+                }
+                else
+                {
+                    try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                }
+            }
         }
 
         private void InitializeDevices()
         {
-            var computeDeviceArrayList = new ArrayList();
-
-            foreach (var platform in ComputePlatform.Platforms)
-            {
-                IList<ComputeDevice> openclDevices = platform.Devices;
-                var properties = new ComputeContextPropertyList(platform);
-                using (var context = new ComputeContext(openclDevices, properties, null, IntPtr.Zero))
-                {
-                    foreach (var openclDevice in context.Devices)
-                    {
-                        if (openclDevice.Vendor == "Intel(R) Corporation"
-                            || openclDevice.Vendor == "GenuineIntel"
-                            || openclDevice.Type == ComputeDeviceTypes.Cpu)
-                            continue;
-                        computeDeviceArrayList.Add(openclDevice);
-                    }
-                }
-
-            }
-            var computeDevices = Array.ConvertAll(computeDeviceArrayList.ToArray(), item => (ComputeDevice)item);
-            mDevices = new Device[computeDevices.Length];
-            var deviceIndex = 0;
-            foreach (var computeDevice in computeDevices)
-            {
-                mDevices[deviceIndex] = new Device(deviceIndex, computeDevice);
-                deviceIndex++;
-            }
+            mDevices = Device.GetAllDevices();
             Logger("Number of Devices: " + mDevices.Length);
 
             foreach (var device in mDevices)
@@ -898,7 +883,7 @@ namespace GatelessGateSharp
                                 var IsActive = 0;
 
                                 //int deviceIndex = 0;
-                                deviceIndex = 0;
+                                int deviceIndex = 0;
                                 foreach (var device in mDevices)
                                 {
                                     var openclDevice = device.GetComputeDevice();
@@ -1041,13 +1026,13 @@ namespace GatelessGateSharp
                         try
                         {
                             if ((string)currency["id"] == "ethereum")
-                                USDETH = double.Parse((string)currency["price_usd"]);
+                                USDETH = double.Parse((string)currency["price_usd"], System.Globalization.CultureInfo.InvariantCulture);
                         }
                         catch (Exception) { }
                         try
                         {
                             if ((string)currency["id"] == "monero")
-                                USDXMR = double.Parse((string)currency["price_usd"]);
+                                USDXMR = double.Parse((string)currency["price_usd"], System.Globalization.CultureInfo.InvariantCulture);
                         }
                         catch (Exception) { }
                     }
@@ -1063,7 +1048,7 @@ namespace GatelessGateSharp
                     foreach (JContainer item in stats)
                         try
                         {
-                            balance += double.Parse((string)item["balance"]);
+                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
                         }
                         catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
@@ -1079,7 +1064,7 @@ namespace GatelessGateSharp
                             try
                             {
                                 if ((double)item["algo"] == 20)
-                                    price = double.Parse((string)item["price"]) * totalSpeed / 1000000000.0;
+                                    price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000.0;
                             }
                             catch (Exception) { }
                         labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
@@ -1103,7 +1088,7 @@ namespace GatelessGateSharp
                     foreach (JContainer item in stats)
                         try
                         {
-                            balance += double.Parse((string)item["balance"]);
+                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
                         }
                         catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
@@ -1119,7 +1104,7 @@ namespace GatelessGateSharp
                             try
                             {
                                 if ((double)item["algo"] == 22)
-                                    price = double.Parse((string)item["price"]) * totalSpeed / 1000000.0;
+                                    price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000.0;
                             }
                             catch (Exception) { }
                         labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
@@ -1229,7 +1214,7 @@ namespace GatelessGateSharp
                     double balance = 0;
                     try
                     {
-                        balance = double.Parse((string)response["wallet_balance"]);
+                        balance = double.Parse((string)response["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     }
                     catch (Exception ex) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
@@ -1245,7 +1230,7 @@ namespace GatelessGateSharp
                     double balance = 0;
                     try
                     {
-                        balance = double.Parse((string)response["wallet_balance"]);
+                        balance = double.Parse((string)response["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     }
                     catch (Exception ex) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * USDXMR) + " USD)";
@@ -1895,7 +1880,7 @@ namespace GatelessGateSharp
                 foreach (var miner in mMiners)
                     miner.Stop();
                 var allDone = false;
-                var counter = 600;
+                var counter = 50;
                 while (!allDone && counter-- > 0)
                 {
                     System.Threading.Thread.Sleep(100);
@@ -1911,8 +1896,6 @@ namespace GatelessGateSharp
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
                 mStratum.Stop();
-                foreach (var device in mDevices)
-                    device.ResetQueues();
             }
             catch (Exception ex)
             {
@@ -1977,14 +1960,7 @@ namespace GatelessGateSharp
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
-                    try
-                    {
-                        using (var file = new System.IO.StreamWriter(mAppStateFileName, false))
-                        {
-                            file.WriteLine("Mining");
-                        }
-                    }
-                    catch (Exception) { }
+                    try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Mining"); } catch (Exception) { }
                 }
             }
             else if (appState == ApplicationGlobalState.Mining)
@@ -1992,14 +1968,7 @@ namespace GatelessGateSharp
                 timerDevFee.Enabled = false;
                 StopMiners();
                 appState = ApplicationGlobalState.Idle;
-                try
-                {
-                    using (var file = new System.IO.StreamWriter(mAppStateFileName, false))
-                    {
-                        file.WriteLine("Idle");
-                    }
-                }
-                catch (Exception) { }
+                try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
             }
 
             UpdateStatsWithShortPolling();
@@ -2019,6 +1988,7 @@ namespace GatelessGateSharp
                 groupBoxPoolParameters.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxWalletAddresses.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxAutomation.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxHadrwareAcceleration.Enabled = appState == ApplicationGlobalState.Idle;
                 foreach (var control in checkBoxGPUEnableArray)
                     control.Enabled = appState == ApplicationGlobalState.Idle;
                 foreach (var control in groupBoxDeviceEthashArray)

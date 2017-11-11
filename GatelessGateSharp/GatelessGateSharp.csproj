@@ -204,8 +204,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
-xcopy $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
+    <PostBuildEvent>xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
+xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
 copy $(SolutionDir)SQLite\System.Data.SQLite.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cloo;
 
@@ -19,27 +21,6 @@ namespace GatelessGateSharp
         private ComputeContext mContext = null;
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
         private List<ComputeDevice> mDeviceList;
-        private List<ComputeCommandQueue> mQueues = new List<ComputeCommandQueue>();
-        private List<ComputeCommandQueue> mUnusedQueues = new List<ComputeCommandQueue>();
-
-        public ComputeContext Context
-        {
-            get
-            {
-                ComputeContext ret;
-                mMutex.WaitOne();
-                if (mContext == null)
-                {
-                    mDeviceList = new List<ComputeDevice>();
-                    mDeviceList.Add(mComputeDevice);
-                    var contextProperties = new ComputeContextPropertyList(GetComputeDevice().Platform);
-                    mContext = new ComputeContext(mDeviceList, contextProperties, null, IntPtr.Zero);
-                }
-                ret = mContext;
-                mMutex.ReleaseMutex();
-                return ret;
-            }
-        }
 
         public String Vendor
         {
@@ -62,6 +43,7 @@ namespace GatelessGateSharp
         public int RejectedShares { get { return mRejectedShares; } }
         public long MaxComputeUnits { get { return mComputeDevice.MaxComputeUnits; } }
         public ComputeDevice GetComputeDevice() { return mComputeDevice; }
+
         public Device(int aDeviceIndex, ComputeDevice aComputeDevice)
         {
             mComputeDevice = aComputeDevice;
@@ -71,7 +53,27 @@ namespace GatelessGateSharp
             mName = aComputeDevice.Name;
 
         }
-        
+
+        public ComputeDevice GetNewComputeDevice()
+        {
+            var computeDeviceArrayList = new ArrayList();
+            foreach (var platform in ComputePlatform.Platforms)
+            {
+                IList<ComputeDevice> openclDevices = platform.Devices;
+                var properties = new ComputeContextPropertyList(platform);
+                using (var context = new ComputeContext(openclDevices, properties, null, IntPtr.Zero))
+                {
+                    foreach (var openclDevice in context.Devices)
+                    {
+                        if (IsOpenCLDeviceIgnored(openclDevice))
+                            continue;
+                        computeDeviceArrayList.Add(openclDevice);
+                    }
+                }
+            }
+            return (ComputeDevice)computeDeviceArrayList[mDeviceIndex];
+        }
+
         public void SetADLName(String aName)
         {
             aName = aName.Replace("AMD ", "");
@@ -100,39 +102,40 @@ namespace GatelessGateSharp
             mRejectedShares = 0;
         }
 
-        public ComputeCommandQueue GetQueue()
+        public static bool IsOpenCLDeviceIgnored(ComputeDevice device)
         {
-            ComputeCommandQueue ret;
-            mMutex.WaitOne();
-            if (mUnusedQueues.Count > 0)
-            {
-                ret = mUnusedQueues[0];
-                mUnusedQueues.RemoveAt(0);
-            }
-            else
-            {
-                ret = new ComputeCommandQueue(Context, GetComputeDevice(), ComputeCommandQueueFlags.None);
-                mQueues.Add(ret);
-            }
-            mMutex.ReleaseMutex();
-
-            return ret;
+            return Regex.Match(device.Name, "Intel").Success || Regex.Match(device.Vendor, "Intel").Success || device.Type == ComputeDeviceTypes.Cpu;
         }
 
-        public void ResetQueues()
+        public static Device[] GetAllDevices()
         {
-            mMutex.WaitOne();
-            if (Vendor == "NVIDIA")
+            var computeDeviceArrayList = new ArrayList();
+
+            foreach (var platform in ComputePlatform.Platforms)
             {
-                foreach (var queue in mQueues)
-                    queue.Dispose();
-                mQueues.Clear();
+                IList<ComputeDevice> openclDevices = platform.Devices;
+                var properties = new ComputeContextPropertyList(platform);
+                using (var context = new ComputeContext(openclDevices, properties, null, IntPtr.Zero))
+                {
+                    foreach (var openclDevice in context.Devices)
+                    {
+                        if (IsOpenCLDeviceIgnored(openclDevice))
+                            continue;
+                        computeDeviceArrayList.Add(openclDevice);
+                    }
+                }
+
             }
-            else
+            var computeDevices = Array.ConvertAll(computeDeviceArrayList.ToArray(), item => (ComputeDevice)item);
+            Device[] devices = new Device[computeDevices.Length];
+            var deviceIndex = 0;
+            foreach (var computeDevice in computeDevices)
             {
-                mUnusedQueues = new List<ComputeCommandQueue>(mQueues);
+                devices[deviceIndex] = new Device(deviceIndex, computeDevice);
+                deviceIndex++;
             }
-            mMutex.ReleaseMutex();
+
+            return devices;
         }
     }
 }

@@ -32,11 +32,14 @@ namespace GatelessGateSharp
 {
     class OpenCLCryptoNightMiner : OpenCLMiner
     {
-        private CryptoNightStratum mStratum;
+        private readonly int outputSize = 256 + 255 * 8;
+
+        private readonly CryptoNightStratum mStratum;
+        private readonly long mLocalWorkSize;
+        private readonly long mGlobalWorkSize;
+        private readonly bool mNicehashMode = false;
+
         private Thread mMinerThread = null;
-        private long mLocalWorkSize;
-        private long mGlobalWorkSize;
-        public bool mNicehashMode = false;
 
         public bool NiceHashMode { get { return mNicehashMode; } }
 
@@ -55,7 +58,6 @@ namespace GatelessGateSharp
         override unsafe protected void MinerThread()
         {
             Random r = new Random();
-            ComputeCommandQueue queue = Device.GetQueue();
 
             long[] globalWorkSizeA = new long[] { mGlobalWorkSize, 8 };
             long[] globalWorkSizeB = new long[] { mGlobalWorkSize };
@@ -85,13 +87,19 @@ namespace GatelessGateSharp
                         throw new TimeoutException("Stratum server failed to send a new job.");
 
                     String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
+List<ComputeDevice> deviceList = new List<ComputeDevice>();
+                    var computeDevice = Device.GetNewComputeDevice();
+                    deviceList.Add(computeDevice);
+                    var contextProperties = new ComputeContextPropertyList(computeDevice.Platform);
 
-                    using (ComputeProgram program = new ComputeProgram(Device.Context, source))
+                    using (ComputeContext context = new ComputeContext(deviceList, contextProperties, null, IntPtr.Zero))
+                    using (ComputeCommandQueue queue = new ComputeCommandQueue(context, computeDevice, ComputeCommandQueueFlags.None))
+                    using (ComputeProgram program = new ComputeProgram(context, source))
                     { 
                         MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
 
                         String buildOptions = (Device.Vendor == "AMD" ? "-O1 " :
-                                               Device.Vendor == "NVIDIA" ? "" :
+                                               Device.Vendor == "NVIDIA" ? "-cl-nv-opt-level=4 -cl-nv-maxrregcount=128 " :
                                                "")
                                              + " -IKernels -DWORKSIZE=" + mLocalWorkSize;
                         try
@@ -100,35 +108,40 @@ namespace GatelessGateSharp
                         }
                         catch (Exception)
                         {
-                            MainForm.Logger(program.GetBuildLog(Device.GetComputeDevice()));
+                            MainForm.Logger(program.GetBuildLog(computeDevice));
                             throw;
                         }
                         MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
+                        MainForm.Logger("Built options: " + buildOptions);
 
                         using (ComputeKernel searchKernel0 = program.CreateKernel("search"))
                         using (ComputeKernel searchKernel1 = program.CreateKernel("search1"))
                         using (ComputeKernel searchKernel2 = program.CreateKernel("search2"))
                         using (ComputeKernel searchKernel3 = program.CreateKernel("search3"))
-                        using (ComputeKernel searchKernel4 = program.CreateKernel("search4"))
-                        using (ComputeKernel searchKernel5 = program.CreateKernel("search5"))
-                        using (ComputeKernel searchKernel6 = program.CreateKernel("search6"))
-                        using (ComputeBuffer<byte> scratchpadsBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * mGlobalWorkSize))
-                        using (ComputeBuffer<UInt32> branchBuffer0 = new ComputeBuffer<UInt32>(Device.Context, ComputeMemoryFlags.ReadWrite, mGlobalWorkSize + 2))
-                        using (ComputeBuffer<UInt32> branchBuffer1 = new ComputeBuffer<UInt32>(Device.Context, ComputeMemoryFlags.ReadWrite, mGlobalWorkSize + 2))
-                        using (ComputeBuffer<UInt32> branchBuffer2 = new ComputeBuffer<UInt32>(Device.Context, ComputeMemoryFlags.ReadWrite, mGlobalWorkSize + 2))
-                        using (ComputeBuffer<UInt32> branchBuffer3 = new ComputeBuffer<UInt32>(Device.Context, ComputeMemoryFlags.ReadWrite, mGlobalWorkSize + 2))
-                        using (ComputeBuffer<byte> statesBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadWrite, 200 + mGlobalWorkSize))
-                        using (ComputeBuffer<byte> inputBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadOnly, 76))
-                        using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(Device.Context, ComputeMemoryFlags.ReadWrite, 256 + 255 * 8))
-                        using (ComputeBuffer<Int32> terminateBuffer = new ComputeBuffer<Int32>(Device.Context, ComputeMemoryFlags.ReadWrite, 1))
+                        using (ComputeBuffer<byte> scratchpadsBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * mGlobalWorkSize))
+                        using (ComputeBuffer<byte> statesBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadWrite, 200 + mGlobalWorkSize))
+                        using (ComputeBuffer<byte> inputBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadOnly, 76))
+                        using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(context, ComputeMemoryFlags.ReadWrite, outputSize))
+                        using (ComputeBuffer<Int32> terminateBuffer = new ComputeBuffer<Int32>(context, ComputeMemoryFlags.ReadWrite, 1))
                         { 
                             System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                             CryptoNightStratum.Work work;
                             Int32[] terminate = new Int32[1];
-                            UInt32[] output = new UInt32[256 + 255 * 8];
-                            UInt32[] branchBufferCount = new UInt32[1];
-                            ComputeBuffer<UInt32>[] branchBuffers = new ComputeBuffer<UInt32>[] { branchBuffer0, branchBuffer1, branchBuffer2, branchBuffer3 };
-                            ComputeKernel[] searchKernels = new ComputeKernel[] { searchKernel0, searchKernel1, searchKernel2, searchKernel3, searchKernel4, searchKernel5, searchKernel6 }; 
+                            UInt32[] output = new UInt32[outputSize];
+
+                            searchKernel0.SetMemoryArgument(0, inputBuffer);
+                            searchKernel0.SetMemoryArgument(1, scratchpadsBuffer);
+                            searchKernel0.SetMemoryArgument(2, statesBuffer);
+
+                            searchKernel1.SetMemoryArgument(0, scratchpadsBuffer);
+                            searchKernel1.SetMemoryArgument(1, statesBuffer);
+                            searchKernel1.SetMemoryArgument(2, terminateBuffer);
+
+                            searchKernel2.SetMemoryArgument(0, scratchpadsBuffer);
+                            searchKernel2.SetMemoryArgument(1, statesBuffer);
+
+                            searchKernel3.SetMemoryArgument(0, statesBuffer);
+                            searchKernel3.SetMemoryArgument(1, outputBuffer);
 
                             while (!Stopped && (work = mStratum.GetWork()) != null)
                             {
@@ -151,40 +164,10 @@ namespace GatelessGateSharp
                                                 | ((UInt32)targetByteArray[1] << 8)
                                                 | ((UInt32)targetByteArray[2] << 16)
                                                 | ((UInt32)targetByteArray[3] << 24);
+                                searchKernel3.SetValueArgument<UInt32>(2, target);
 
                                 fixed (byte* p = blobByteArray)
                                     queue.Write<byte>(inputBuffer, true, 0, 76, (IntPtr)p, null);
-
-                                searchKernels[0].SetMemoryArgument(0, inputBuffer);
-                                searchKernels[0].SetMemoryArgument(1, scratchpadsBuffer);
-                                searchKernels[0].SetMemoryArgument(2, statesBuffer);
-
-                                searchKernels[1].SetMemoryArgument(0, scratchpadsBuffer);
-                                searchKernels[1].SetMemoryArgument(1, statesBuffer);
-                                searchKernels[1].SetMemoryArgument(2, terminateBuffer);
-
-                                searchKernels[2].SetMemoryArgument(0, scratchpadsBuffer);
-                                searchKernels[2].SetMemoryArgument(1, statesBuffer);
-                                searchKernels[2].SetMemoryArgument(2, branchBuffers[0]);
-                                searchKernels[2].SetMemoryArgument(3, branchBuffers[1]);
-                                searchKernels[2].SetMemoryArgument(4, branchBuffers[2]);
-                                searchKernels[2].SetMemoryArgument(5, branchBuffers[3]);
-
-                                searchKernels[3].SetMemoryArgument(0, statesBuffer);
-                                searchKernels[3].SetMemoryArgument(1, branchBuffers[0]);
-                                searchKernels[3].SetMemoryArgument(2, outputBuffer);
-
-                                searchKernels[4].SetMemoryArgument(0, statesBuffer);
-                                searchKernels[4].SetMemoryArgument(1, branchBuffers[1]);
-                                searchKernels[4].SetMemoryArgument(2, outputBuffer);
-
-                                searchKernels[5].SetMemoryArgument(0, statesBuffer);
-                                searchKernels[5].SetMemoryArgument(1, branchBuffers[2]);
-                                searchKernels[5].SetMemoryArgument(2, outputBuffer);
-
-                                searchKernels[6].SetMemoryArgument(0, statesBuffer);
-                                searchKernels[6].SetMemoryArgument(1, branchBuffers[3]);
-                                searchKernels[6].SetMemoryArgument(2, outputBuffer);
 
                                 consoleUpdateStopwatch.Start();
 
@@ -207,31 +190,20 @@ namespace GatelessGateSharp
                                             break;
                                     }
 
-                                    searchKernels[3].SetValueArgument<UInt32>(3, target);
-                                    searchKernels[4].SetValueArgument<UInt32>(3, target);
-                                    searchKernels[5].SetValueArgument<UInt32>(3, target);
-                                    searchKernels[6].SetValueArgument<UInt32>(3, target);
-
                                     System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                                     sw.Start();
-                                    UInt32[] zero = new UInt32[mGlobalWorkSize + 2];
-                                    for (int i = 0; i < mGlobalWorkSize + 2; ++i)
-                                        zero[i] = 0;
-                                    fixed (UInt32* p = zero)
-                                        for (int i = 0; i < 4; ++i)
-                                            queue.Write<UInt32>(branchBuffers[i], true, 0, mGlobalWorkSize + 2, (IntPtr)p, null);
                                     output[255] = 0; // output[255] is used as an atomic counter.
                                     fixed (UInt32* p = output)
-                                        queue.Write<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
+                                        queue.Write<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)p, null);
                                     terminate[0] = 0;
                                     fixed (Int32* p = terminate)
                                         queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)p, null);
                                     ComputeEventList eventList = new ComputeEventList();
-                                    queue.Execute(searchKernels[0], globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
+                                    queue.Execute(searchKernel0, globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
                                     queue.Finish(); 
                                     if (Stopped)
                                         break;
-                                    queue.Execute(searchKernels[1], globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, eventList);
+                                    queue.Execute(searchKernel1, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, eventList);
                                     queue.Flush();
                                     while (eventList[0].Status != ComputeCommandExecutionStatus.Complete)
                                     {
@@ -246,26 +218,16 @@ namespace GatelessGateSharp
                                     eventList[0].Dispose();
                                     if (Stopped)
                                         break;
-                                    queue.Execute(searchKernels[2], globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
+                                    queue.Execute(searchKernel2, globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
                                     queue.Finish(); 
                                     if (Stopped)
                                         break;
-                                    for (int i = 0; i < 4; ++i)
-                                    {
-                                        fixed (UInt32* q = branchBufferCount)
-                                            queue.Read<UInt32>(branchBuffers[i], true, mGlobalWorkSize, 1, (IntPtr)q, null);
-                                        searchKernels[i + 3].SetValueArgument<UInt64>(4, branchBufferCount[0]);
-                                        if ((branchBufferCount[0] % (ulong)mLocalWorkSize) != 0)
-                                            branchBufferCount[0] += (uint)mLocalWorkSize - branchBufferCount[0] % (uint)mLocalWorkSize;
-                                        long[] globalWorkOffsetC = new long[] { startNonce };
-                                        long[] globalWorkSizeC = new long[] { branchBufferCount[0] };
-                                        queue.Execute(searchKernels[i + 3], globalWorkOffsetC, new long[] { branchBufferCount[0] }, localWorkSizeB, null);
-                                        queue.Finish(); // Run the above statement before leaving the current local scope.
-                                        if (Stopped)
-                                            break;
-                                    }
+                                    queue.Execute(searchKernel3, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
+                                    queue.Finish(); // Run the above statement before leaving the current local scope.
+                                    if (Stopped)
+                                        break;
                                     fixed (UInt32* p = output)
-                                        queue.Read<UInt32>(outputBuffer, true, 0, 256 + 255 * 8, (IntPtr)p, null);
+                                        queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)p, null);
                                     sw.Stop();
                                     mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
                                     if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)

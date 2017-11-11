@@ -51,7 +51,6 @@ namespace GatelessGateSharp
 
         override unsafe protected void MinerThread()
         {
-            ComputeCommandQueue queue = Device.GetQueue();
             UInt32[] output = new UInt32[256];
             Random r = new Random();
 
@@ -84,7 +83,14 @@ namespace GatelessGateSharp
                     ComputeBuffer<byte> DAGBuffer = null;
                     String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
 
-                    using (ComputeProgram program = new ComputeProgram(Device.Context, source))
+                    List<ComputeDevice> deviceList = new List<ComputeDevice>();
+                    var computeDevice = Device.GetNewComputeDevice();
+                    deviceList.Add(computeDevice);
+                    var contextProperties = new ComputeContextPropertyList(computeDevice.Platform);
+
+                    using (ComputeContext context = new ComputeContext(deviceList, contextProperties, null, IntPtr.Zero))
+                    using (ComputeCommandQueue queue = new ComputeCommandQueue(context, GetComputeDevice(), ComputeCommandQueueFlags.None))
+                    using (ComputeProgram program = new ComputeProgram(context, source))
                     { 
                         MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
                         String buildOptions = (Device.Vendor == "AMD" ? "" :
@@ -104,8 +110,8 @@ namespace GatelessGateSharp
 
                         using (ComputeKernel DAGKernel = program.CreateKernel("GenerateDAG"))
                         using (ComputeKernel searchKernel = program.CreateKernel("search"))
-                        using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(Device.Context, ComputeMemoryFlags.ReadWrite, 256))
-                        using (ComputeBuffer<byte> headerBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadOnly, 32))
+                        using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(context, ComputeMemoryFlags.ReadWrite, 256))
+                        using (ComputeBuffer<byte> headerBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadOnly, 32))
                         {
 
                             MarkAsAlive();
@@ -149,8 +155,8 @@ namespace GatelessGateSharp
                                         if (globalWorkSize % mLocalWorkSize > 0)
                                             globalWorkSize += mLocalWorkSize - globalWorkSize % mLocalWorkSize;
 
-                                        ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, cache.GetData().Length, (IntPtr)p);
-                                        DAGBuffer = new ComputeBuffer<byte>(Device.Context, ComputeMemoryFlags.ReadWrite, globalWorkSize * 8 * 64 /* DAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
+                                        ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, cache.GetData().Length, (IntPtr)p);
+                                        DAGBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadWrite, globalWorkSize * 8 * 64 /* DAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
 
                                         DAGKernel.SetValueArgument<UInt32>(0, 0);
                                         DAGKernel.SetMemoryArgument(1, DAGCacheBuffer);

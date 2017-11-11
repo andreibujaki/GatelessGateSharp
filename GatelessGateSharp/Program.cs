@@ -34,19 +34,13 @@ namespace GatelessGateSharp
     {
         private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
-            var w = new Form() { Size = new System.Drawing.Size(0, 0) };
-            Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith((t) => w.Close(), TaskScheduler.FromCurrentSynchronizationContext());
-            w.BringToFront(); 
-            MessageBox.Show(w, "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             Environment.Exit(1);
         }
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            var w = new Form() { Size = new System.Drawing.Size(0, 0) };
-            Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith((t) => w.Close(), TaskScheduler.FromCurrentSynchronizationContext());
-            w.BringToFront();
-            MessageBox.Show(w, "Unhandled Exception: " + ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Exception: " + ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             if (e.ExceptionObject.GetType() == typeof(DllNotFoundException))
             {
                 foreach (var process in Process.GetProcessesByName("GatelessGateSharp"))
@@ -54,6 +48,8 @@ namespace GatelessGateSharp
             }
             Environment.Exit(1);
         }
+
+        static Mutex sMutex = new Mutex(true, "{1D2A713A-A29C-418C-BC62-2E98BD325490}");
 
         /// <summary>
         /// The main entry point for the application.
@@ -63,14 +59,21 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         static void Main()
         {
-            Application.ThreadException += new ThreadExceptionEventHandler(ThreadExceptionHandler);
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
-
-            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
-
-            using (var mutex = new Mutex(true, "GatelessGateSharp.exe"))
+            if (sMutex.WaitOne(TimeSpan.Zero, true))
             {
+                Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable("GPU_MAX_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable("GPU_USE_SYNC_OBJECTS", "1", EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable("GPU_SINGLE_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable("GPU_MAX_HEAP_SIZE", "100", EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable("GPU_FORCE_64BIT_PTR", "0", EnvironmentVariableTarget.Process);
+
+                Application.ThreadException += new ThreadExceptionEventHandler(ThreadExceptionHandler);
+                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
+
+                Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
+
                 Process process = null;
                 try
                 {
@@ -91,8 +94,11 @@ namespace GatelessGateSharp
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm());
+
+                try { process.Kill(); }
+                catch (Exception) { }
                 
-                try { process.Kill(); } catch (Exception) { }
+                sMutex.ReleaseMutex();
             }
         }
     }
