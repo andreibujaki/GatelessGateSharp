@@ -19,12 +19,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Cloo;
-using HashLib;
 
 
 
@@ -55,7 +51,9 @@ namespace GatelessGateSharp
             StartMinerThread();
         }
 
-        override unsafe protected void MinerThread()
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+[System.Security.SecurityCritical]
+override unsafe protected void MinerThread()
         {
             Random r = new Random();
 

@@ -18,14 +18,10 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
-using System.Runtime.ExceptionServices;
+
 
 
 namespace GatelessGateSharp
@@ -55,7 +51,7 @@ namespace GatelessGateSharp
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        [HandleProcessCorruptedStateExceptions]
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         static void Main()
         {
