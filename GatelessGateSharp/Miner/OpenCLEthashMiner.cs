@@ -68,6 +68,7 @@ namespace GatelessGateSharp
             }
             else
             {
+                System.Threading.Thread.Sleep(10000);
                 String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
                 program = new ComputeProgram(Context, source);
                 MainForm.Logger("Loaded ethash program for Device #" + DeviceIndex + ".");

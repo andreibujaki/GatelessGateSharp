@@ -724,12 +724,8 @@ void search3_branch2(__global ulong *states, __global uint *output, uint Target)
     sph_u64 h4h = 0x754D2E7F8996A371UL, h4l = 0x62E27DF70849141DUL, h5h = 0x948F2476F7957627UL, h5l = 0x6C29804757B6D587UL, h6h = 0x6C0D8EAC2D275E5CUL, h6l = 0x0F7A0557C6508451UL, h7h = 0xEA12247067D3E47BUL, h7l = 0x69D71CD313ABE389UL;
     sph_u64 tmp;
 
-#ifdef cl_amd_media_ops2
+#pragma unroll 1
 	for (uint i = 0; i < 5; ++i)
-#else
-#pragma unroll
-	for (uint i = 0; i < 5; ++i)
-#endif
 	{
         ulong input[8];
 

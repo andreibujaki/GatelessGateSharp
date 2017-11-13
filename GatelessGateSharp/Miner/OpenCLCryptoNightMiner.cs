@@ -44,13 +44,26 @@ namespace GatelessGateSharp
         UInt32[] output = new UInt32[outputSize];
         byte[] input = new byte[76];
 
+        private ComputeEventList eventList = null;
+
         Dictionary<long, ComputeProgram> mProgramArray = new Dictionary<long, ComputeProgram>();
-        
+        Dictionary<long, ComputeKernel> mSearchKernel0Array = new Dictionary<long, ComputeKernel>();
+        Dictionary<long, ComputeKernel> mSearchKernel1Array = new Dictionary<long, ComputeKernel>();
+        Dictionary<long, ComputeKernel> mSearchKernel2Array = new Dictionary<long, ComputeKernel>();
+        Dictionary<long, ComputeKernel> mSearchKernel3Array = new Dictionary<long, ComputeKernel>();
+
+        private ComputeBuffer<byte> statesBuffer = null;
+        private ComputeBuffer<byte> inputBuffer = null;
+        private ComputeBuffer<UInt32> outputBuffer = null;
+        private ComputeBuffer<Int32> terminateBuffer = null;
+        private ComputeBuffer<byte> scratchpadsBuffer = null;
+            
         public bool NiceHashMode { get { return mNicehashMode; } }
 
         public OpenCLCryptoNightMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "CryptoNight")
         {
+            ComputeEventList eventList = (aGatelessGateDevice.Vendor == "NVIDIA") ? (new ComputeEventList()) : null;
         }
 
         public void Start(CryptoNightStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
@@ -62,6 +75,12 @@ namespace GatelessGateSharp
                 globalWorkSizeA[0] = globalWorkSizeB[0] = aLocalWorkSize - globalWorkSizeA[0] % aLocalWorkSize;
             mNicehashMode = aNicehashMode;
 
+            if (localWorkSizeA[0] != aLocalWorkSize)
+            {
+                scratchpadsBuffer = null;
+                statesBuffer = null;
+            }
+
             base.Start();
         }
 
@@ -71,27 +90,34 @@ namespace GatelessGateSharp
         {
             Random r = new Random();
             ComputeDevice computeDevice = Device.GetComputeDevice();
+            
             MarkAsAlive();
 
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
             ComputeProgram program;
+            ComputeKernel searchKernel0;
+            ComputeKernel searchKernel1;
+            ComputeKernel searchKernel2;
+            ComputeKernel searchKernel3;
             if (mProgramArray.ContainsKey(localWorkSizeA[0]))
             {
                 program = mProgramArray[localWorkSizeA[0]];
+                searchKernel0 = mSearchKernel0Array[localWorkSizeA[0]];
+                searchKernel1 = mSearchKernel1Array[localWorkSizeA[0]];
+                searchKernel2 = mSearchKernel2Array[localWorkSizeA[0]];
+                searchKernel3 = mSearchKernel3Array[localWorkSizeA[0]];
             } 
             else
             {
+                System.Threading.Thread.Sleep(10000);
                 String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
                 program = new ComputeProgram(Context, source);
                 MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD"
-                                          ? "-O1 "
-                                          : Device.Vendor == "NVIDIA"
-                                              ? ""
-                                              : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                              "")
+                String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " :
+                                       Device.Vendor == "NVIDIA" ? "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                                                   "")
                                       + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];
                 try
                 {
@@ -105,17 +131,18 @@ namespace GatelessGateSharp
                 MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Built options: " + buildOptions);
                 mProgramArray[localWorkSizeA[0]] = program;
+                mSearchKernel0Array[localWorkSizeA[0]] = searchKernel0 = program.CreateKernel("search");
+                mSearchKernel1Array[localWorkSizeA[0]] = searchKernel1 = program.CreateKernel("search1");
+                mSearchKernel2Array[localWorkSizeA[0]] = searchKernel2 = program.CreateKernel("search2");
+                mSearchKernel3Array[localWorkSizeA[0]] = searchKernel3 = program.CreateKernel("search3");
             }
 
-            using (ComputeKernel searchKernel0 = program.CreateKernel("search"))
-            using (ComputeKernel searchKernel1 = program.CreateKernel("search1"))
-            using (ComputeKernel searchKernel2 = program.CreateKernel("search2"))
-            using (ComputeKernel searchKernel3 = program.CreateKernel("search3"))
-            using (ComputeBuffer<byte> statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + globalWorkSizeA[0]))
-            using (ComputeBuffer<byte> inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76))
-            using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize))
-            using (ComputeBuffer<Int32> terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1))
-            using (ComputeBuffer<byte> scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]))
+            if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + globalWorkSizeA[0]);
+            if (inputBuffer == null) inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
+            if (outputBuffer == null) outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
+            if (terminateBuffer == null) terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1);
+            if (scratchpadsBuffer == null) scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
+
             fixed (long* globalWorkOffsetAPtr = globalWorkOffsetA)
             fixed (long* globalWorkOffsetBPtr = globalWorkOffsetB)
             fixed (long* globalWorkSizeAPtr = globalWorkSizeA)
@@ -213,7 +240,6 @@ namespace GatelessGateSharp
                             Queue.Finish(); 
                             if (Stopped)
                                 break;
-                            ComputeEventList eventList = (computeDevice.Vendor == "NVIDIA") ? (new ComputeEventList()) : null;
                             Queue.Execute(searchKernel1, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, eventList);
                             Queue.Flush();
                             while (eventList != null && eventList[0].Status != ComputeCommandExecutionStatus.Complete)
@@ -226,8 +252,11 @@ namespace GatelessGateSharp
                                 Thread.Sleep(10);
                             }
                             if (eventList != null)
+                            {
                                 foreach (var evt in eventList)
                                     evt.Dispose();
+                                eventList.Clear();
+                            }
                             Queue.Finish();
                             if (Stopped)
                                 break;

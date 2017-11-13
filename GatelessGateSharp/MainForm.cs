@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using ATI.ADL;
 using Newtonsoft.Json;
@@ -43,11 +44,11 @@ namespace GatelessGateSharp
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
         public static string appVersion = "0.0.14";
-        public static string appName = shortAppName + " " + appVersion + " alpha";
+        public static string appName = shortAppName + " " + appVersion + " beta";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
-        private static int mLaunchInterval = 1000;
+        private static int mLaunchInterval = 500;
 
         private Stratum mStratum = null;
         private List<Miner> mActiveMiners = new List<Miner>();
@@ -800,13 +801,15 @@ namespace GatelessGateSharp
                 if (MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
                         "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)
                 {
-                    buttonStart_Click(null, null);
+                    timerAutoStart.Enabled = true;
                 }
                 else
                 {
                     try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 }
             }
+
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -1989,7 +1992,7 @@ namespace GatelessGateSharp
             mStratum = null;
         }
 
-        private void buttonStart_Click(object sender, EventArgs e)
+        private void buttonStart_Click(object sender = null, EventArgs e = null)
         {
             UpdateDatabase();
 
@@ -2776,6 +2779,12 @@ namespace GatelessGateSharp
         private void buttonOpenLog_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(logFileName);
+        }
+
+        private void timerAutoStart_Tick(object sender, EventArgs e)
+        {
+            timerAutoStart.Enabled = false;
+            buttonStart_Click();
         }
     }
 }

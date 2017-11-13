@@ -181,6 +181,11 @@
             this.radioButtonEthereum = new System.Windows.Forms.RadioButton();
             this.radioButtonMostProfitable = new System.Windows.Forms.RadioButton();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
+            this.groupBoxHadrwareAcceleration = new System.Windows.Forms.GroupBox();
+            this.label144 = new System.Windows.Forms.Label();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabControlDevices = new System.Windows.Forms.TabControl();
             this.tabPageDevice0 = new System.Windows.Forms.TabPage();
             this.groupBoxDevice0CryptoNight = new System.Windows.Forms.GroupBox();
@@ -489,11 +494,7 @@
             this.timerDevFee = new System.Windows.Forms.Timer(this.components);
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
             this.timerUpdateLog = new System.Windows.Forms.Timer(this.components);
-            this.groupBoxHadrwareAcceleration = new System.Windows.Forms.GroupBox();
-            this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.label144 = new System.Windows.Forms.Label();
+            this.timerAutoStart = new System.Windows.Forms.Timer(this.components);
             this.tabControlMainForm.SuspendLayout();
             this.tabPageStatus.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -504,6 +505,7 @@
             this.groupBoxPoolPriorities.SuspendLayout();
             this.groupBoxCoinsToMine.SuspendLayout();
             this.tabPageDeviceSettings.SuspendLayout();
+            this.groupBoxHadrwareAcceleration.SuspendLayout();
             this.tabControlDevices.SuspendLayout();
             this.tabPageDevice0.SuspendLayout();
             this.groupBoxDevice0CryptoNight.SuspendLayout();
@@ -674,7 +676,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashLocalWorkSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashIntensity)).BeginInit();
             this.tabPageLog.SuspendLayout();
-            this.groupBoxHadrwareAcceleration.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMainForm
@@ -2292,6 +2293,60 @@
             this.tabPageDeviceSettings.Text = "Device Settings";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
             // 
+            // groupBoxHadrwareAcceleration
+            // 
+            this.groupBoxHadrwareAcceleration.Controls.Add(this.label144);
+            this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox3);
+            this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox2);
+            this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBoxEnablePhymem);
+            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(10, 313);
+            this.groupBoxHadrwareAcceleration.Name = "groupBoxHadrwareAcceleration";
+            this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(614, 65);
+            this.groupBoxHadrwareAcceleration.TabIndex = 1;
+            this.groupBoxHadrwareAcceleration.TabStop = false;
+            this.groupBoxHadrwareAcceleration.Text = "Hardware Acceleration";
+            // 
+            // label144
+            // 
+            this.label144.AutoSize = true;
+            this.label144.Location = new System.Drawing.Point(6, 43);
+            this.label144.Name = "label144";
+            this.label144.Size = new System.Drawing.Size(375, 13);
+            this.label144.TabIndex = 31;
+            this.label144.Text = "Note: These features are highly experimental and may cause system instability.";
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Enabled = false;
+            this.checkBox3.Location = new System.Drawing.Point(371, 19);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(235, 17);
+            this.checkBox3.TabIndex = 30;
+            this.checkBox3.Text = "Enable on-the-fly memory timing mods (AMD)";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Enabled = false;
+            this.checkBox2.Location = new System.Drawing.Point(247, 19);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(118, 17);
+            this.checkBox2.TabIndex = 29;
+            this.checkBox2.Text = "Enable GDS (AMD)";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnablePhymem
+            // 
+            this.checkBoxEnablePhymem.AutoSize = true;
+            this.checkBoxEnablePhymem.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxEnablePhymem.Name = "checkBoxEnablePhymem";
+            this.checkBoxEnablePhymem.Size = new System.Drawing.Size(235, 17);
+            this.checkBoxEnablePhymem.TabIndex = 28;
+            this.checkBoxEnablePhymem.Text = "Enable phymem (Application restart required)";
+            this.checkBoxEnablePhymem.UseVisualStyleBackColor = true;
+            // 
             // tabControlDevices
             // 
             this.tabControlDevices.Controls.Add(this.tabPageDevice0);
@@ -2315,7 +2370,7 @@
             this.tabPageDevice0.Location = new System.Drawing.Point(4, 22);
             this.tabPageDevice0.Name = "tabPageDevice0";
             this.tabPageDevice0.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDevice0.Size = new System.Drawing.Size(706, 362);
+            this.tabPageDevice0.Size = new System.Drawing.Size(706, 282);
             this.tabPageDevice0.TabIndex = 0;
             this.tabPageDevice0.Text = "#0";
             this.tabPageDevice0.UseVisualStyleBackColor = true;
@@ -2935,7 +2990,7 @@
             this.tabPageDevice1.Location = new System.Drawing.Point(4, 22);
             this.tabPageDevice1.Name = "tabPageDevice1";
             this.tabPageDevice1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDevice1.Size = new System.Drawing.Size(706, 362);
+            this.tabPageDevice1.Size = new System.Drawing.Size(706, 282);
             this.tabPageDevice1.TabIndex = 1;
             this.tabPageDevice1.Text = "#1";
             this.tabPageDevice1.UseVisualStyleBackColor = true;
@@ -3554,7 +3609,7 @@
             this.tabPageDevice2.Controls.Add(this.groupBoxDevice2Ethash);
             this.tabPageDevice2.Location = new System.Drawing.Point(4, 22);
             this.tabPageDevice2.Name = "tabPageDevice2";
-            this.tabPageDevice2.Size = new System.Drawing.Size(706, 362);
+            this.tabPageDevice2.Size = new System.Drawing.Size(706, 282);
             this.tabPageDevice2.TabIndex = 2;
             this.tabPageDevice2.Text = "#2";
             this.tabPageDevice2.UseVisualStyleBackColor = true;
@@ -4173,7 +4228,7 @@
             this.tabPageDevice3.Controls.Add(this.groupBoxDevice3Ethash);
             this.tabPageDevice3.Location = new System.Drawing.Point(4, 22);
             this.tabPageDevice3.Name = "tabPageDevice3";
-            this.tabPageDevice3.Size = new System.Drawing.Size(706, 362);
+            this.tabPageDevice3.Size = new System.Drawing.Size(706, 282);
             this.tabPageDevice3.TabIndex = 3;
             this.tabPageDevice3.Text = "#3";
             this.tabPageDevice3.UseVisualStyleBackColor = true;
@@ -4792,7 +4847,7 @@
             this.tabPageDevice4.Controls.Add(this.groupBoxDevice4Ethash);
             this.tabPageDevice4.Location = new System.Drawing.Point(4, 22);
             this.tabPageDevice4.Name = "tabPageDevice4";
-            this.tabPageDevice4.Size = new System.Drawing.Size(706, 362);
+            this.tabPageDevice4.Size = new System.Drawing.Size(706, 282);
             this.tabPageDevice4.TabIndex = 4;
             this.tabPageDevice4.Text = "#4";
             this.tabPageDevice4.UseVisualStyleBackColor = true;
@@ -5411,7 +5466,7 @@
             this.tabPageDevice5.Controls.Add(this.groupBoxDevice5Ethash);
             this.tabPageDevice5.Location = new System.Drawing.Point(4, 22);
             this.tabPageDevice5.Name = "tabPageDevice5";
-            this.tabPageDevice5.Size = new System.Drawing.Size(706, 362);
+            this.tabPageDevice5.Size = new System.Drawing.Size(706, 282);
             this.tabPageDevice5.TabIndex = 5;
             this.tabPageDevice5.Text = "#5";
             this.tabPageDevice5.UseVisualStyleBackColor = true;
@@ -6030,7 +6085,7 @@
             this.tabPageDevice6.Controls.Add(this.groupBoxDevice6Ethash);
             this.tabPageDevice6.Location = new System.Drawing.Point(4, 22);
             this.tabPageDevice6.Name = "tabPageDevice6";
-            this.tabPageDevice6.Size = new System.Drawing.Size(706, 362);
+            this.tabPageDevice6.Size = new System.Drawing.Size(706, 282);
             this.tabPageDevice6.TabIndex = 6;
             this.tabPageDevice6.Text = "#6";
             this.tabPageDevice6.UseVisualStyleBackColor = true;
@@ -7345,7 +7400,7 @@
             // timerWatchdog
             // 
             this.timerWatchdog.Enabled = true;
-            this.timerWatchdog.Interval = 1000;
+            this.timerWatchdog.Interval = 2000;
             this.timerWatchdog.Tick += new System.EventHandler(this.timerWatchdog_Tick);
             // 
             // timerUpdateLog
@@ -7354,59 +7409,10 @@
             this.timerUpdateLog.Interval = 10;
             this.timerUpdateLog.Tick += new System.EventHandler(this.timerUpdateLog_Tick);
             // 
-            // groupBoxHadrwareAcceleration
+            // timerAutoStart
             // 
-            this.groupBoxHadrwareAcceleration.Controls.Add(this.label144);
-            this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox3);
-            this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox2);
-            this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBoxEnablePhymem);
-            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(10, 313);
-            this.groupBoxHadrwareAcceleration.Name = "groupBoxHadrwareAcceleration";
-            this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(614, 65);
-            this.groupBoxHadrwareAcceleration.TabIndex = 1;
-            this.groupBoxHadrwareAcceleration.TabStop = false;
-            this.groupBoxHadrwareAcceleration.Text = "Hardware Acceleration";
-            // 
-            // checkBoxEnablePhymem
-            // 
-            this.checkBoxEnablePhymem.AutoSize = true;
-            this.checkBoxEnablePhymem.Location = new System.Drawing.Point(6, 19);
-            this.checkBoxEnablePhymem.Name = "checkBoxEnablePhymem";
-            this.checkBoxEnablePhymem.Size = new System.Drawing.Size(235, 17);
-            this.checkBoxEnablePhymem.TabIndex = 28;
-            this.checkBoxEnablePhymem.Text = "Enable phymem (Application restart required)";
-            this.checkBoxEnablePhymem.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Enabled = false;
-            this.checkBox2.Location = new System.Drawing.Point(247, 19);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(118, 17);
-            this.checkBox2.TabIndex = 29;
-            this.checkBox2.Text = "Enable GDS (AMD)";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Enabled = false;
-            this.checkBox3.Location = new System.Drawing.Point(371, 19);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(235, 17);
-            this.checkBox3.TabIndex = 30;
-            this.checkBox3.Text = "Enable on-the-fly memory timing mods (AMD)";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // label144
-            // 
-            this.label144.AutoSize = true;
-            this.label144.Location = new System.Drawing.Point(6, 43);
-            this.label144.Name = "label144";
-            this.label144.Size = new System.Drawing.Size(375, 13);
-            this.label144.TabIndex = 31;
-            this.label144.Text = "Note: These features are highly experimental and may cause system instability.";
+            this.timerAutoStart.Interval = 1000;
+            this.timerAutoStart.Tick += new System.EventHandler(this.timerAutoStart_Tick);
             // 
             // MainForm
             // 
@@ -7439,6 +7445,8 @@
             this.groupBoxCoinsToMine.ResumeLayout(false);
             this.groupBoxCoinsToMine.PerformLayout();
             this.tabPageDeviceSettings.ResumeLayout(false);
+            this.groupBoxHadrwareAcceleration.ResumeLayout(false);
+            this.groupBoxHadrwareAcceleration.PerformLayout();
             this.tabControlDevices.ResumeLayout(false);
             this.tabPageDevice0.ResumeLayout(false);
             this.groupBoxDevice0CryptoNight.ResumeLayout(false);
@@ -7641,8 +7649,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashLocalWorkSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashIntensity)).EndInit();
             this.tabPageLog.ResumeLayout(false);
-            this.groupBoxHadrwareAcceleration.ResumeLayout(false);
-            this.groupBoxHadrwareAcceleration.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -8113,5 +8119,6 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBoxEnablePhymem;
         private System.Windows.Forms.Label label144;
+        private System.Windows.Forms.Timer timerAutoStart;
     }
 }
