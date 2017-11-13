@@ -15,11 +15,14 @@ uint amd_bfe(uint src0, uint src1, uint src2)
 #endif
 #define BYTE(x, y)	(amd_bfe((x), (y) << 3U, 8U))
 
+
+
 #include "wolf-aes.cl"
 #include "wolf-skein.cl"
 #include "jh.cl"
 #include "blake256.cl"
 #include "groestl256.cl"
+
 
 
 static const __constant ulong keccakf_rndc[24] =
@@ -668,12 +671,8 @@ void search3_branch3(__global ulong *states, __global uint *output, uint Target)
     ulong t[3] = { 0x00UL, 0x7000000000000000UL, 0x00UL };
     ulong8 p, m;
 
-#ifdef cl_amd_media_ops2
+#pragma unroll 1
 	for (uint i = 0; i < 4; ++i)
-#else
-#pragma unroll
-	for (uint i = 0; i < 4; ++i)
-#endif
 	{
         if (i < 3) t[0] += 0x40UL;
         else t[0] += 0x08UL;
@@ -800,7 +799,8 @@ void search3_branch0(__global ulong *states, __global uint *output, uint Target)
 
     ((uint8 *)h)[0] = vload8(0U, c_IV256);
 
-    for (uint i = 0, bitlen = 0; i < 4; ++i)
+#pragma unroll 1
+	for (uint i = 0, bitlen = 0; i < 4; ++i)
     {
         if (i < 3)
         {
@@ -813,7 +813,8 @@ void search3_branch0(__global ulong *states, __global uint *output, uint Target)
             m[1] = SWAP4(((__global uint *)states)[49]);
             m[2] = 0x80000000U;
 
-            for (int i = 3; i < 13; ++i) m[i] = 0x00U;
+#pragma unroll 1
+			for (int i = 3; i < 13; ++i) m[i] = 0x00U;
 
             m[13] = 1U;
             m[14] = 0U;
@@ -830,7 +831,8 @@ void search3_branch0(__global ulong *states, __global uint *output, uint Target)
         v[12] ^= bitlen;
         v[13] ^= bitlen;
 
-        for (int r = 0; r < 14; r++)
+#pragma unroll 1
+		for (int r = 0; r < 14; r++)
         {
             GS(0, 4, 0x8, 0xC, 0x0);
             GS(1, 5, 0x9, 0xD, 0x2);
@@ -845,7 +847,8 @@ void search3_branch0(__global ulong *states, __global uint *output, uint Target)
         ((uint8 *)h)[0] ^= ((uint8 *)v)[0] ^ ((uint8 *)v)[1];
     }
 
-    for (int i = 0; i < 8; ++i) h[i] = SWAP4(h[i]);
+#pragma unroll 1
+	for (int i = 0; i < 8; ++i) h[i] = SWAP4(h[i]);
 
 	//if (h[7] <= Target) output[atomic_inc(output + 0xFF)] = BranchBuf[idx] + get_global_offset(0);
 	if (h[7] <= Target) {
@@ -866,10 +869,12 @@ void search3_branch1(__global ulong *states, __global uint *output, uint Target)
 {
 	ulong State[8];
 
+#pragma unroll 1
 	for (int i = 0; i < 7; ++i) State[i] = 0UL;
 
 	State[7] = 0x0001000000000000UL;
 
+#pragma unroll 1
 	for (uint i = 0; i < 4; ++i)
 	{
 		ulong H[8], M[8];
@@ -888,20 +893,24 @@ void search3_branch1(__global ulong *states, __global uint *output, uint Target)
 			M[7] = 0x0400000000000000UL;
 		}
 
+#pragma unroll 1
 		for (int x = 0; x < 8; ++x) H[x] = M[x] ^ State[x];
 
 		PERM_SMALL_P(H);
 		PERM_SMALL_Q(M);
 
+#pragma unroll 1
 		for (int x = 0; x < 8; ++x) State[x] ^= H[x] ^ M[x];
 	}
 
 	ulong tmp[8];
 
+#pragma unroll 1
 	for (int i = 0; i < 8; ++i) tmp[i] = State[i];
 
 	PERM_SMALL_P(State);
 
+#pragma unroll 1
 	for (int i = 0; i < 8; ++i) State[i] ^= tmp[i];
 
 	//for(int i = 0; i < 4; ++i) output[i] = State[i + 4];
@@ -935,10 +944,10 @@ __kernel void search3(__global ulong *states, __global uint *output, uint target
 		search3_branch1(states, output, target);
 		break;
 	case 2:
-		//search3_branch2(states, output, target);
+		search3_branch2(states, output, target);
 		break;
 	case 3:
-		//search3_branch3(states, output, target); // 90.3%
+		search3_branch3(states, output, target);
 		break;
 	}
 }

@@ -58,10 +58,13 @@ namespace GatelessGateSharp
             Abort();
         }
 
-        protected void StartMinerThread()
+        public void Start()
         {
+            mStopped = false;
+            mDone = false;
+        
             MarkAsAlive();
-            mMinerThread = new System.Threading.Thread(new System.Threading.ThreadStart(MinerThread));
+            mMinerThread = new System.Threading.Thread(MinerThread);
             mMinerThread.IsBackground = true;
             mMinerThread.Start();
         }
@@ -109,7 +112,7 @@ namespace GatelessGateSharp
         {
             if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5)
                 mSpeed = 0;
-            if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 60)
+            if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 15)
             {
                 MainForm.Logger("Miner thread is unresponsive. Restarting...");
                 try
@@ -118,7 +121,7 @@ namespace GatelessGateSharp
                 }
                 catch (Exception) { }
                 mSpeed = 0;
-                StartMinerThread();
+                Start();
             }
         }
     }

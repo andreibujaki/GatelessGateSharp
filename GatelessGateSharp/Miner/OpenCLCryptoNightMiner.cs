@@ -28,52 +28,123 @@ namespace GatelessGateSharp
 {
     class OpenCLCryptoNightMiner : OpenCLMiner
     {
-        private readonly int outputSize = 256 + 255 * 8;
+        private static readonly int outputSize = 256 + 255 * 8;
 
-        private readonly CryptoNightStratum mStratum;
-        private readonly long mLocalWorkSize;
-        private readonly long mGlobalWorkSize;
-        private readonly bool mNicehashMode = false;
+        private CryptoNightStratum mStratum;
+        private bool mNicehashMode = false;
 
-        private Thread mMinerThread = null;
+        long[] globalWorkSizeA = new long[] { 0, 8 };
+        long[] globalWorkSizeB = new long[] { 0 };
+        long[] localWorkSizeA = new long[] { 0, 8 };
+        long[] localWorkSizeB = new long[] { 0 };
+        long[] globalWorkOffsetA = new long[] { 0, 1 };
+        long[] globalWorkOffsetB = new long[] { 0 };
 
+        Int32[] terminate = new Int32[1];
+        UInt32[] output = new UInt32[outputSize];
+        byte[] input = new byte[76];
+
+        Dictionary<long, ComputeProgram> mProgramArray = new Dictionary<long, ComputeProgram>();
+        
         public bool NiceHashMode { get { return mNicehashMode; } }
 
-        public OpenCLCryptoNightMiner(Device aGatelessGateDevice, CryptoNightStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
+        public OpenCLCryptoNightMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "CryptoNight")
         {
+        }
+
+        public void Start(CryptoNightStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
+        {
             mStratum = aStratum;
-            mLocalWorkSize = aLocalWorkSize;
-            mGlobalWorkSize = aIntensity * Device.MaxComputeUnits;
-            if (mGlobalWorkSize % mLocalWorkSize != 0)
-                mGlobalWorkSize = mLocalWorkSize - mGlobalWorkSize % mLocalWorkSize;
+            globalWorkSizeA[0] = globalWorkSizeB[0] = aIntensity * Device.MaxComputeUnits;
+            localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
+            if (globalWorkSizeA[0] % aLocalWorkSize != 0)
+                globalWorkSizeA[0] = globalWorkSizeB[0] = aLocalWorkSize - globalWorkSizeA[0] % aLocalWorkSize;
             mNicehashMode = aNicehashMode;
-            StartMinerThread();
+
+            base.Start();
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-[System.Security.SecurityCritical]
-override unsafe protected void MinerThread()
+        [System.Security.SecurityCritical]
+        override unsafe protected void MinerThread()
         {
             Random r = new Random();
-
-            long[] globalWorkSizeA = new long[] { mGlobalWorkSize, 8 };
-            long[] globalWorkSizeB = new long[] { mGlobalWorkSize };
-
-            long[] localWorkSizeA = new long[] { mLocalWorkSize, 8 };
-            long[] localWorkSizeB = new long[] { mLocalWorkSize };
-
+            ComputeDevice computeDevice = Device.GetComputeDevice();
             MarkAsAlive();
 
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
+            ComputeProgram program;
+            if (mProgramArray.ContainsKey(localWorkSizeA[0]))
+            {
+                program = mProgramArray[localWorkSizeA[0]];
+            } 
+            else
+            {
+                String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
+                program = new ComputeProgram(Context, source);
+                MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
+                String buildOptions = (Device.Vendor == "AMD"
+                                          ? "-O1 "
+                                          : Device.Vendor == "NVIDIA"
+                                              ? ""
+                                              : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                              "")
+                                      + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];
+                try
+                {
+                    program.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                }
+                catch (Exception)
+                {
+                    MainForm.Logger(program.GetBuildLog(computeDevice));
+                    throw;
+                }
+                MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built options: " + buildOptions);
+                mProgramArray[localWorkSizeA[0]] = program;
+            }
+
+            using (ComputeKernel searchKernel0 = program.CreateKernel("search"))
+            using (ComputeKernel searchKernel1 = program.CreateKernel("search1"))
+            using (ComputeKernel searchKernel2 = program.CreateKernel("search2"))
+            using (ComputeKernel searchKernel3 = program.CreateKernel("search3"))
+            using (ComputeBuffer<byte> statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + globalWorkSizeA[0]))
+            using (ComputeBuffer<byte> inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76))
+            using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize))
+            using (ComputeBuffer<Int32> terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1))
+            using (ComputeBuffer<byte> scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]))
+            fixed (long* globalWorkOffsetAPtr = globalWorkOffsetA)
+            fixed (long* globalWorkOffsetBPtr = globalWorkOffsetB)
+            fixed (long* globalWorkSizeAPtr = globalWorkSizeA)
+            fixed (long* globalWorkSizeBPtr = globalWorkSizeB)
+            fixed (long* localWorkSizeAPtr = localWorkSizeA)
+            fixed (long* localWorkSizeBPtr = localWorkSizeB)
+            fixed (Int32* terminatePtr = terminate)
+            fixed (byte* inputPtr = input)
+            fixed (UInt32* outputPtr = output)
             while (!Stopped)
             {
                 MarkAsAlive();
 
                 try
                 {
+                    searchKernel0.SetMemoryArgument(0, inputBuffer);
+                    searchKernel0.SetMemoryArgument(1, scratchpadsBuffer);
+                    searchKernel0.SetMemoryArgument(2, statesBuffer);
+
+                    searchKernel1.SetMemoryArgument(0, scratchpadsBuffer);
+                    searchKernel1.SetMemoryArgument(1, statesBuffer);
+                    searchKernel1.SetMemoryArgument(2, terminateBuffer);
+
+                    searchKernel2.SetMemoryArgument(0, scratchpadsBuffer);
+                    searchKernel2.SetMemoryArgument(1, statesBuffer);
+
+                    searchKernel3.SetMemoryArgument(0, statesBuffer);
+                    searchKernel3.SetMemoryArgument(1, outputBuffer);
+
                     // Wait for the first job to arrive.
                     int elapsedTime = 0;
                     while ((mStratum == null || mStratum.GetJob() == null) && elapsedTime < 5000)
@@ -84,172 +155,113 @@ override unsafe protected void MinerThread()
                     if (mStratum == null || mStratum.GetJob() == null)
                         throw new TimeoutException("Stratum server failed to send a new job.");
 
-                    String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
-List<ComputeDevice> deviceList = new List<ComputeDevice>();
-                    var computeDevice = Device.GetNewComputeDevice();
-                    deviceList.Add(computeDevice);
-                    var contextProperties = new ComputeContextPropertyList(computeDevice.Platform);
+                    System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
+                    CryptoNightStratum.Work work;
 
-                    using (ComputeContext context = new ComputeContext(deviceList, contextProperties, null, IntPtr.Zero))
-                    using (ComputeCommandQueue queue = new ComputeCommandQueue(context, computeDevice, ComputeCommandQueueFlags.None))
-                    using (ComputeProgram program = new ComputeProgram(context, source))
-                    { 
-                        MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
+                    while (!Stopped && (work = mStratum.GetWork()) != null)
+                    {
+                        MarkAsAlive();
 
-                        String buildOptions = (Device.Vendor == "AMD" ? "-O1 " :
-                                               Device.Vendor == "NVIDIA" ? "-cl-nv-opt-level=4 -cl-nv-maxrregcount=128 " :
-                                               "")
-                                             + " -IKernels -DWORKSIZE=" + mLocalWorkSize;
-                        try
+                        var job = work.GetJob();
+                        Array.Copy(Utilities.StringToByteArray(job.Blob), input, 76);
+                        byte localExtranonce = work.LocalExtranonce;
+                        byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
+                        UInt32 startNonce;
+                        if (NiceHashMode)
                         {
-                            program.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                            startNonce = ((UInt32)input[42] << (8 * 3)) | ((UInt32)localExtranonce << (8 * 2)) | (UInt32)(r.Next(0, int.MaxValue) & (0x0000ffffu));
                         }
-                        catch (Exception)
+                        else
                         {
-                            MainForm.Logger(program.GetBuildLog(computeDevice));
-                            throw;
+                            startNonce = ((UInt32)localExtranonce << (8 * 3)) | (UInt32)(r.Next(0, int.MaxValue) & (0x00ffffffu));
                         }
-                        MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
-                        MainForm.Logger("Built options: " + buildOptions);
+                        UInt32 target = ((UInt32)targetByteArray[0] << 0)
+                                        | ((UInt32)targetByteArray[1] << 8)
+                                        | ((UInt32)targetByteArray[2] << 16)
+                                        | ((UInt32)targetByteArray[3] << 24);
+                        searchKernel3.SetValueArgument<UInt32>(2, target);
 
-                        using (ComputeKernel searchKernel0 = program.CreateKernel("search"))
-                        using (ComputeKernel searchKernel1 = program.CreateKernel("search1"))
-                        using (ComputeKernel searchKernel2 = program.CreateKernel("search2"))
-                        using (ComputeKernel searchKernel3 = program.CreateKernel("search3"))
-                        using (ComputeBuffer<byte> scratchpadsBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * mGlobalWorkSize))
-                        using (ComputeBuffer<byte> statesBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadWrite, 200 + mGlobalWorkSize))
-                        using (ComputeBuffer<byte> inputBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadOnly, 76))
-                        using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(context, ComputeMemoryFlags.ReadWrite, outputSize))
-                        using (ComputeBuffer<Int32> terminateBuffer = new ComputeBuffer<Int32>(context, ComputeMemoryFlags.ReadWrite, 1))
-                        { 
-                            System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                            CryptoNightStratum.Work work;
-                            Int32[] terminate = new Int32[1];
-                            UInt32[] output = new UInt32[outputSize];
+                        Queue.Write<byte>(inputBuffer, true, 0, 76, (IntPtr)inputPtr, null);
 
-                            searchKernel0.SetMemoryArgument(0, inputBuffer);
-                            searchKernel0.SetMemoryArgument(1, scratchpadsBuffer);
-                            searchKernel0.SetMemoryArgument(2, statesBuffer);
+                        consoleUpdateStopwatch.Start();
 
-                            searchKernel1.SetMemoryArgument(0, scratchpadsBuffer);
-                            searchKernel1.SetMemoryArgument(1, statesBuffer);
-                            searchKernel1.SetMemoryArgument(2, terminateBuffer);
+                        while (!Stopped && mStratum.GetJob().Equals(job))
+                        {
+                            MarkAsAlive();
 
-                            searchKernel2.SetMemoryArgument(0, scratchpadsBuffer);
-                            searchKernel2.SetMemoryArgument(1, statesBuffer);
+                            globalWorkOffsetA[0] = globalWorkOffsetB[0] = startNonce;
 
-                            searchKernel3.SetMemoryArgument(0, statesBuffer);
-                            searchKernel3.SetMemoryArgument(1, outputBuffer);
-
-                            while (!Stopped && (work = mStratum.GetWork()) != null)
+                            // Get a new local extranonce if necessary.
+                            if (NiceHashMode)
                             {
-                                MarkAsAlive();
+                                if ((startNonce & 0xffff) + (UInt32)globalWorkSizeA[0] >= 0x10000)
+                                    break;
+                            }
+                            else
+                            {
+                                if ((startNonce & 0xffffff) + (UInt32)globalWorkSizeA[0] >= 0x1000000)
+                                    break;
+                            }
 
-                                var job = work.GetJob();
-                                byte[] blobByteArray = Utilities.StringToByteArray(job.Blob);
-                                byte localExtranonce = work.LocalExtranonce;
-                                byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
-                                UInt32 startNonce;
-                                if (NiceHashMode)
+                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                            sw.Start();
+                            output[255] = 0; // output[255] is used as an atomic counter.
+                            Queue.Write<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
+                            terminate[0] = 0;
+                            Queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)terminatePtr, null);
+                            Queue.Execute(searchKernel0, globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
+                            Queue.Finish(); 
+                            if (Stopped)
+                                break;
+                            ComputeEventList eventList = (computeDevice.Vendor == "NVIDIA") ? (new ComputeEventList()) : null;
+                            Queue.Execute(searchKernel1, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, eventList);
+                            Queue.Flush();
+                            while (eventList != null && eventList[0].Status != ComputeCommandExecutionStatus.Complete)
+                            {
+                                if (Stopped && terminate[0] == 0)
                                 {
-                                    startNonce = ((UInt32)blobByteArray[42] << (8 * 3)) | ((UInt32)localExtranonce << (8 * 2)) | (UInt32)(r.Next(0, int.MaxValue) & (0x0000ffffu));
+                                    terminate[0] = 1;
+                                    Queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)terminatePtr, null);
                                 }
-                                else
+                                Thread.Sleep(10);
+                            }
+                            if (eventList != null)
+                                foreach (var evt in eventList)
+                                    evt.Dispose();
+                            Queue.Finish();
+                            if (Stopped)
+                                break;
+                            Queue.Execute(searchKernel2, globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
+                            Queue.Finish(); 
+                            if (Stopped)
+                                break;
+                            Queue.Execute(searchKernel3, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
+                            Queue.Finish(); // Run the above statement before leaving the current local scope.
+                            if (Stopped)
+                                break;
+                            Queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
+                            sw.Stop();
+                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                            {
+                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} h/s", mSpeed));
+                                consoleUpdateStopwatch.Restart();
+                            }
+                            if (mStratum.GetJob().Equals(job))
+                            {
+                                for (int i = 0; i < output[255]; ++i)
                                 {
-                                    startNonce = ((UInt32)localExtranonce << (8 * 3)) | (UInt32)(r.Next(0, int.MaxValue) & (0x00ffffffu));
-                                }
-                                UInt32 target = ((UInt32)targetByteArray[0] << 0)
-                                                | ((UInt32)targetByteArray[1] << 8)
-                                                | ((UInt32)targetByteArray[2] << 16)
-                                                | ((UInt32)targetByteArray[3] << 24);
-                                searchKernel3.SetValueArgument<UInt32>(2, target);
-
-                                fixed (byte* p = blobByteArray)
-                                    queue.Write<byte>(inputBuffer, true, 0, 76, (IntPtr)p, null);
-
-                                consoleUpdateStopwatch.Start();
-
-                                while (!Stopped && mStratum.GetJob().Equals(job))
-                                {
-                                    MarkAsAlive();
-
-                                    long[] globalWorkOffsetA = new long[] { startNonce, 1 };
-                                    long[] globalWorkOffsetB = new long[] { startNonce };
-
-                                    // Get a new local extranonce if necessary.
-                                    if (NiceHashMode)
+                                    String result = "";
+                                    for (int j = 0; j < 8; ++j)
                                     {
-                                        if ((startNonce & 0xffff) + (UInt32)mGlobalWorkSize >= 0x10000)
-                                            break;
+                                        UInt32 word = output[256 + i * 8 + j];
+                                        result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                                     }
-                                    else
-                                    {
-                                        if ((startNonce & 0xffffff) + (UInt32)mGlobalWorkSize >= 0x1000000)
-                                            break;
-                                    }
-
-                                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                    sw.Start();
-                                    output[255] = 0; // output[255] is used as an atomic counter.
-                                    fixed (UInt32* p = output)
-                                        queue.Write<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)p, null);
-                                    terminate[0] = 0;
-                                    fixed (Int32* p = terminate)
-                                        queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)p, null);
-                                    ComputeEventList eventList = new ComputeEventList();
-                                    queue.Execute(searchKernel0, globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
-                                    queue.Finish(); 
-                                    if (Stopped)
-                                        break;
-                                    queue.Execute(searchKernel1, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, eventList);
-                                    queue.Flush();
-                                    while (eventList[0].Status != ComputeCommandExecutionStatus.Complete)
-                                    {
-                                        if (Stopped && terminate[0] == 0)
-                                        {
-                                            terminate[0] = 1;
-                                            fixed (Int32* p = terminate)
-                                                queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)p, null);
-                                        }
-                                        System.Threading.Thread.Sleep(10);
-                                    }
-                                    eventList[0].Dispose();
-                                    if (Stopped)
-                                        break;
-                                    queue.Execute(searchKernel2, globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
-                                    queue.Finish(); 
-                                    if (Stopped)
-                                        break;
-                                    queue.Execute(searchKernel3, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
-                                    queue.Finish(); // Run the above statement before leaving the current local scope.
-                                    if (Stopped)
-                                        break;
-                                    fixed (UInt32* p = output)
-                                        queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)p, null);
-                                    sw.Stop();
-                                    mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
-                                    if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
-                                    {
-                                        MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} h/s", mSpeed));
-                                        consoleUpdateStopwatch.Restart();
-                                    }
-                                    if (mStratum.GetJob().Equals(job))
-                                    {
-                                        for (int i = 0; i < output[255]; ++i)
-                                        {
-                                            String result = "";
-                                            for (int j = 0; j < 8; ++j)
-                                            {
-                                                UInt32 word = output[256 + i * 8 + j];
-                                                result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
-                                            }
-                                            mStratum.Submit(GatelessGateDevice, job, output[i], result);
-                                        }
-                                    }
-                                    startNonce += (UInt32)mGlobalWorkSize;
+                                    mStratum.Submit(GatelessGateDevice, job, output[i], result);
                                 }
                             }
-                        } 
+                            startNonce += (UInt32)globalWorkSizeA[0];
+                        }
                     }
                 } catch (Exception ex) {
                     MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
@@ -261,8 +273,8 @@ List<ComputeDevice> deviceList = new List<ComputeDevice>();
                 if (!Stopped)
                     System.Threading.Thread.Sleep(5000);
             }
-
             MarkAsDone();
         }
     }
 }
+

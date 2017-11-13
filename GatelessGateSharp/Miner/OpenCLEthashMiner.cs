@@ -32,34 +32,68 @@ namespace GatelessGateSharp
 {
     class OpenCLEthashMiner : OpenCLMiner
     {
-        const int EPOCH_LENGTH = 30000;
-
         private EthashStratum mStratum;
-        private Thread mMinerThread = null;
-        private long mLocalWorkSize = 192;
+        private long mLocalWorkSize;
         private long mGlobalWorkSize;
 
-        public OpenCLEthashMiner(Device aGatelessGateDevice, EthashStratum aStratum, int aIntensity, int aLocalWorkSize)
+        Dictionary<long, ComputeProgram> mProgramArray = new Dictionary<long, ComputeProgram>();
+
+        public OpenCLEthashMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "Ethash")
+        {
+        }
+
+        public void Start(EthashStratum aStratum, int aIntensity, int aLocalWorkSize)
         {
             mStratum = aStratum;
             mLocalWorkSize = aLocalWorkSize;
             mGlobalWorkSize = aIntensity * mLocalWorkSize * Device.GetComputeDevice().MaxComputeUnits;
-            
-            StartMinerThread();
+
+            base.Start();
         }
 
         override unsafe protected void MinerThread()
         {
-            UInt32[] output = new UInt32[256];
             Random r = new Random();
-
+            UInt32[] output = new UInt32[256];
+            ComputeDevice computeDevice = Device.GetComputeDevice();
             MarkAsAlive();
 
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-            while (!Stopped) {
+            ComputeProgram program;
+            if (mProgramArray.ContainsKey(mLocalWorkSize))
+            {
+                program = mProgramArray[mLocalWorkSize];
+            }
+            else
+            {
+                String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
+                program = new ComputeProgram(Context, source);
+                MainForm.Logger("Loaded ethash program for Device #" + DeviceIndex + ".");
+                String buildOptions = (Device.Vendor == "AMD"
+                                          ? "-O1 "
+                                          : Device.Vendor == "NVIDIA"
+                                              ? ""
+                                              : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                              "")
+                                      + " -IKernels -DWORKSIZE=" + mLocalWorkSize;
+                try
+                {
+                    program.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                }
+                catch (Exception)
+                {
+                    MainForm.Logger(program.GetBuildLog(computeDevice));
+                    throw;
+                }
+                MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built options: " + buildOptions);
+                mProgramArray[mLocalWorkSize] = program;
+            }
 
+            while (!Stopped)
+            {
                 MarkAsAlive();
 
                 try
@@ -81,146 +115,119 @@ namespace GatelessGateSharp
                     int epoch = -1;
                     long DAGSize = 0;
                     ComputeBuffer<byte> DAGBuffer = null;
-                    String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
 
-                    List<ComputeDevice> deviceList = new List<ComputeDevice>();
-                    var computeDevice = Device.GetNewComputeDevice();
-                    deviceList.Add(computeDevice);
-                    var contextProperties = new ComputeContextPropertyList(computeDevice.Platform);
+                    using (ComputeKernel DAGKernel = program.CreateKernel("GenerateDAG"))
+                    using (ComputeKernel searchKernel = program.CreateKernel("search"))
+                    using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256))
+                    using (ComputeBuffer<byte> headerBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32))
+                    {
 
-                    using (ComputeContext context = new ComputeContext(deviceList, contextProperties, null, IntPtr.Zero))
-                    using (ComputeCommandQueue queue = new ComputeCommandQueue(context, GetComputeDevice(), ComputeCommandQueueFlags.None))
-                    using (ComputeProgram program = new ComputeProgram(context, source))
-                    { 
-                        MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
-                        String buildOptions = (Device.Vendor == "AMD" ? "" :
-                                               Device.Vendor == "NVIDIA" ? "" :
-                                               "")
-                                             + " -IKernels -DWORKSIZE=" + mLocalWorkSize;
-                        try
-                        {
-                            program.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
-                        }
-                        catch (Exception)
-                        {
-                            MainForm.Logger(program.GetBuildLog(Device.GetComputeDevice()));
-                            throw;
-                        }
-                        MainForm.Logger("Built ethash program for Device #" + DeviceIndex + ".");
+                        MarkAsAlive();
 
-                        using (ComputeKernel DAGKernel = program.CreateKernel("GenerateDAG"))
-                        using (ComputeKernel searchKernel = program.CreateKernel("search"))
-                        using (ComputeBuffer<UInt32> outputBuffer = new ComputeBuffer<UInt32>(context, ComputeMemoryFlags.ReadWrite, 256))
-                        using (ComputeBuffer<byte> headerBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadOnly, 32))
-                        {
-
-                            MarkAsAlive();
-
-                            System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                            EthashStratum.Work work;
+                        System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
+                        EthashStratum.Work work;
  
-                            while (!Stopped && (work = mStratum.GetWork()) != null)
+                        while (!Stopped && (work = mStratum.GetWork()) != null)
+                        {
+                            String poolExtranonce = mStratum.PoolExtranonce;
+                            byte[] extranonceByteArray = Utilities.StringToByteArray(poolExtranonce);
+                            byte localExtranonce = work.LocalExtranonce;
+                            UInt64 startNonce = (UInt64)localExtranonce << (8 * (7 - extranonceByteArray.Length));
+                            for (int i = 0; i < extranonceByteArray.Length; ++i)
+                                startNonce |= (UInt64)extranonceByteArray[i] << (8 * (7 - i));
+                            startNonce += (ulong)r.Next(0, int.MaxValue) & (0xfffffffffffffffful >> (extranonceByteArray.Length * 8 + 8));
+                            String jobID = work.GetJob().ID;
+                            String headerhash = work.GetJob().Headerhash;
+                            String seedhash = work.GetJob().Seedhash;
+                            double difficulty = mStratum.Difficulty;
+                            fixed (byte* p = Utilities.StringToByteArray(headerhash))
+                                Queue.Write<byte>(headerBuffer, true, 0, 32, (IntPtr)p, null);
+
+                            if (epoch != work.GetJob().Epoch)
                             {
-                                String poolExtranonce = mStratum.PoolExtranonce;
-                                byte[] extranonceByteArray = Utilities.StringToByteArray(poolExtranonce);
-                                byte localExtranonce = work.LocalExtranonce;
-                                UInt64 startNonce = (UInt64)localExtranonce << (8 * (7 - extranonceByteArray.Length));
-                                for (int i = 0; i < extranonceByteArray.Length; ++i)
-                                    startNonce |= (UInt64)extranonceByteArray[i] << (8 * (7 - i));
-                                startNonce += (ulong)r.Next(0, int.MaxValue) & (0xfffffffffffffffful >> (extranonceByteArray.Length * 8 + 8));
-                                String jobID = work.GetJob().ID;
-                                String headerhash = work.GetJob().Headerhash;
-                                String seedhash = work.GetJob().Seedhash;
-                                double difficulty = mStratum.Difficulty;
-                                fixed (byte* p = Utilities.StringToByteArray(headerhash))
-                                    queue.Write<byte>(headerBuffer, true, 0, 32, (IntPtr)p, null);
-
-                                if (epoch != work.GetJob().Epoch)
+                                if (DAGBuffer != null)
                                 {
-                                    if (DAGBuffer != null)
+                                    DAGBuffer.Dispose();
+                                    DAGBuffer = null;
+                                }
+                                epoch = work.GetJob().Epoch;
+                                DAGCache cache = new DAGCache(epoch, work.GetJob().Seedhash);
+                                DAGSize = Utilities.GetDAGSize(epoch);
+
+                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                                sw.Start();
+                                fixed (byte* p = cache.GetData())
+                                {
+                                    long globalWorkSize = DAGSize / 64;
+                                    globalWorkSize /= 8;
+                                    if (globalWorkSize % mLocalWorkSize > 0)
+                                        globalWorkSize += mLocalWorkSize - globalWorkSize % mLocalWorkSize;
+
+                                    ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, cache.GetData().Length, (IntPtr)p);
+                                    DAGBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, globalWorkSize * 8 * 64 /* DAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
+
+                                    DAGKernel.SetValueArgument<UInt32>(0, 0);
+                                    DAGKernel.SetMemoryArgument(1, DAGCacheBuffer);
+                                    DAGKernel.SetMemoryArgument(2, DAGBuffer);
+                                    DAGKernel.SetValueArgument<UInt32>(3, (UInt32)cache.GetData().Length / 64);
+                                    DAGKernel.SetValueArgument<UInt32>(4, 0xffffffffu);
+
+                                    for (long start = 0; start < DAGSize / 64; start += globalWorkSize)
                                     {
-                                        DAGBuffer.Dispose();
-                                        DAGBuffer = null;
-                                    }
-                                    epoch = work.GetJob().Epoch;
-                                    DAGCache cache = new DAGCache(epoch, work.GetJob().Seedhash);
-                                    DAGSize = Utilities.GetDAGSize(epoch);
-
-                                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                    sw.Start();
-                                    fixed (byte* p = cache.GetData())
-                                    {
-                                        long globalWorkSize = DAGSize / 64;
-                                        globalWorkSize /= 8;
-                                        if (globalWorkSize % mLocalWorkSize > 0)
-                                            globalWorkSize += mLocalWorkSize - globalWorkSize % mLocalWorkSize;
-
-                                        ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer, cache.GetData().Length, (IntPtr)p);
-                                        DAGBuffer = new ComputeBuffer<byte>(context, ComputeMemoryFlags.ReadWrite, globalWorkSize * 8 * 64 /* DAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
-
-                                        DAGKernel.SetValueArgument<UInt32>(0, 0);
-                                        DAGKernel.SetMemoryArgument(1, DAGCacheBuffer);
-                                        DAGKernel.SetMemoryArgument(2, DAGBuffer);
-                                        DAGKernel.SetValueArgument<UInt32>(3, (UInt32)cache.GetData().Length / 64);
-                                        DAGKernel.SetValueArgument<UInt32>(4, 0xffffffffu);
-
-                                        for (long start = 0; start < DAGSize / 64; start += globalWorkSize)
-                                        {
-                                            queue.Execute(DAGKernel, new long[] { start }, new long[] { globalWorkSize }, new long[] { mLocalWorkSize }, null);
-                                            queue.Finish();
-                                            if (Stopped || !mStratum.GetJob().ID.Equals(jobID))
-                                                break;
-                                        }
-                                        DAGCacheBuffer.Dispose();
+                                        Queue.Execute(DAGKernel, new long[] { start }, new long[] { globalWorkSize }, new long[] { mLocalWorkSize }, null);
+                                        Queue.Finish();
                                         if (Stopped || !mStratum.GetJob().ID.Equals(jobID))
                                             break;
                                     }
-                                    sw.Stop();
-                                    MainForm.Logger("Generated DAG for Epoch #" + epoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
-                                }
-
-                                consoleUpdateStopwatch.Start();
-
-                                while (!Stopped && mStratum.GetJob().ID.Equals(jobID) && mStratum.PoolExtranonce.Equals(poolExtranonce))
-                                {
-                                    MarkAsAlive();
-
-                                    // Get a new local extranonce if necessary.
-                                    if ((startNonce & (0xfffffffffffffffful >> (extranonceByteArray.Length * 8 + 8)) + (ulong)mGlobalWorkSize) >= ((ulong)0x1 << (64 - (extranonceByteArray.Length * 8 + 8))))
+                                    DAGCacheBuffer.Dispose();
+                                    if (Stopped || !mStratum.GetJob().ID.Equals(jobID))
                                         break;
-
-                                    UInt64 target = (UInt64)((double)0xffff0000U / difficulty);
-                                    searchKernel.SetMemoryArgument(0, outputBuffer); // g_output
-                                    searchKernel.SetMemoryArgument(1, headerBuffer); // g_header
-                                    searchKernel.SetMemoryArgument(2, DAGBuffer); // _g_dag
-                                    searchKernel.SetValueArgument<UInt32>(3, (UInt32)(DAGSize / 128)); // DAG_SIZE
-                                    searchKernel.SetValueArgument<UInt64>(4, startNonce); // start_nonce
-                                    searchKernel.SetValueArgument<UInt64>(5, target); // target
-                                    searchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
-
-                                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                    sw.Start();
-                                    fixed (UInt32* p = output)
-                                    {
-                                        output[255] = 0; // output[255] is used as an atomic counter.
-                                        queue.Write<UInt32>(outputBuffer, true, 0, 256, (IntPtr)p, null);
-                                        queue.Execute(searchKernel, new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
-                                        queue.Read<UInt32>(outputBuffer, true, 0, 256, (IntPtr)p, null);
-                                    }
-                                    sw.Stop();
-                                    mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
-                                    if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
-                                    {
-                                        MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s", mSpeed / (1000000)));
-                                        consoleUpdateStopwatch.Restart();
-                                    }
-                                    if (mStratum.GetJob().ID.Equals(jobID))
-                                    {
-                                        for (int i = 0; i < output[255]; ++i)
-                                            mStratum.Submit(GatelessGateDevice, work.GetJob(), startNonce + (UInt64)output[i]);
-                                    }
-                                    startNonce += (UInt64)mGlobalWorkSize;
                                 }
+                                sw.Stop();
+                                MainForm.Logger("Generated DAG for Epoch #" + epoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
+                            }
+
+                            consoleUpdateStopwatch.Start();
+
+                            while (!Stopped && mStratum.GetJob().ID.Equals(jobID) && mStratum.PoolExtranonce.Equals(poolExtranonce))
+                            {
+                                MarkAsAlive();
+
+                                // Get a new local extranonce if necessary.
+                                if ((startNonce & (0xfffffffffffffffful >> (extranonceByteArray.Length * 8 + 8)) + (ulong)mGlobalWorkSize) >= ((ulong)0x1 << (64 - (extranonceByteArray.Length * 8 + 8))))
+                                    break;
+
+                                UInt64 target = (UInt64)((double)0xffff0000U / difficulty);
+                                searchKernel.SetMemoryArgument(0, outputBuffer); // g_output
+                                searchKernel.SetMemoryArgument(1, headerBuffer); // g_header
+                                searchKernel.SetMemoryArgument(2, DAGBuffer); // _g_dag
+                                searchKernel.SetValueArgument<UInt32>(3, (UInt32)(DAGSize / 128)); // DAG_SIZE
+                                searchKernel.SetValueArgument<UInt64>(4, startNonce); // start_nonce
+                                searchKernel.SetValueArgument<UInt64>(5, target); // target
+                                searchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
+
+                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                                sw.Start();
+                                fixed (UInt32* p = output)
+                                {
+                                    output[255] = 0; // output[255] is used as an atomic counter.
+                                    Queue.Write<UInt32>(outputBuffer, true, 0, 256, (IntPtr)p, null);
+                                    Queue.Execute(searchKernel, new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
+                                    Queue.Read<UInt32>(outputBuffer, true, 0, 256, (IntPtr)p, null);
+                                }
+                                sw.Stop();
+                                mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
+                                if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                                {
+                                    MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s", mSpeed / (1000000)));
+                                    consoleUpdateStopwatch.Restart();
+                                }
+                                if (mStratum.GetJob().ID.Equals(jobID))
+                                {
+                                    for (int i = 0; i < output[255]; ++i)
+                                        mStratum.Submit(GatelessGateDevice, work.GetJob(), startNonce + (UInt64)output[i]);
+                                }
+                                startNonce += (UInt64)mGlobalWorkSize;
                             }
                         }
                     }

@@ -22,11 +22,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data.SQLite;
-using System.Collections;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Cloo;
 using ATI.ADL;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -44,12 +42,23 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "0.0.13";
-        public static string appName = shortAppName + " " + appVersion + " beta";
+        public static string appVersion = "0.0.14";
+        public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
-        private static int mLaunchInterval = 500;
+        private static int mLaunchInterval = 1000;
+
+        private Stratum mStratum = null;
+        private List<Miner> mActiveMiners = new List<Miner>();
+        private List<Miner> mInactiveMiners = new List<Miner>();
+        private enum ApplicationGlobalState
+        {
+            Idle = 0,
+            Mining = 1,
+            Benchmarking = 2
+        };
+        private ApplicationGlobalState appState = ApplicationGlobalState.Idle;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
         private Control[] labelGPUVendorArray;
@@ -1021,9 +1030,8 @@ namespace GatelessGateSharp
             try
             {
                 double totalSpeed = 0;
-                if (mMiners != null)
-                    foreach (var miner in mMiners)
-                        totalSpeed += miner.Speed;
+                foreach (var miner in mActiveMiners)
+                    totalSpeed += miner.Speed;
 
                 var client = new CustomWebClient();
                 double USDBTC = 0;
@@ -1313,7 +1321,7 @@ namespace GatelessGateSharp
                     labelCurrentPool.Text = (string)listBoxPoolPriorities.Items[0];
                 }
 
-                labelCurrentAlgorithm.Text = appState == ApplicationGlobalState.Mining ? mMiners[0].AlgorithmName : "-"; // TODO
+                labelCurrentAlgorithm.Text = appState == ApplicationGlobalState.Mining ? mActiveMiners[0].AlgorithmName : "-"; // TODO
 
                 for (var i = 0; i < mDevices.Length; ++i)
                 {
@@ -1338,9 +1346,8 @@ namespace GatelessGateSharp
                     labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
 
                 double totalSpeed = 0;
-                if (mMiners != null)
-                    foreach (var miner in mMiners)
-                        totalSpeed += miner.Speed;
+                foreach (var miner in mActiveMiners)
+                    totalSpeed += miner.Speed;
                 labelCurrentSpeed.Text = appState != ApplicationGlobalState.Mining ? "-" : ConvertHashRateToString(totalSpeed);
                 DeviceManagementLibrariesMutex.WaitOne();
                 foreach (var device in mDevices)
@@ -1348,10 +1355,9 @@ namespace GatelessGateSharp
                     var computeDevice = device.GetComputeDevice();
                     var deviceIndex = device.DeviceIndex;
                     double speed = 0;
-                    if (mMiners != null)
-                        foreach (var miner in mMiners)
-                            if (miner.DeviceIndex == deviceIndex)
-                                speed += miner.Speed;
+                    foreach (var miner in mActiveMiners)
+                        if (miner.DeviceIndex == deviceIndex)
+                            speed += miner.Speed;
                     labelGPUSpeedArray[deviceIndex].Text = appState != ApplicationGlobalState.Mining ? "-" : ConvertHashRateToString(speed);
 
                     if (device.AcceptedShares + device.RejectedShares == 0)
@@ -1485,18 +1491,6 @@ namespace GatelessGateSharp
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             } 
         }
-
-        private Stratum mStratum;
-        private List<Miner> mMiners = null;
-
-        private enum ApplicationGlobalState
-        {
-            Idle = 0,
-            Mining = 1,
-            Benchmarking = 2
-        };
-
-        private ApplicationGlobalState appState = ApplicationGlobalState.Idle;
 
         public bool ValidateBitcoinAddress()
         {
@@ -1687,15 +1681,41 @@ namespace GatelessGateSharp
                     username += "." + textBoxRigID.Text; // TODO
                 stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool);
             }
+
             mStratum = (Stratum)stratum;
-            mMiners = new List<Miner>();
             for (var deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
                     for (var i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
-                        mMiners.Add(new OpenCLCryptoNightMiner(mDevices[deviceIndex], stratum, Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightIntensityArray[deviceIndex].Value)), Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceIndex].Value)), niceHashMode));
-                    System.Threading.Thread.Sleep(mLaunchInterval);
+                    {
+                        OpenCLCryptoNightMiner miner = null;
+                        foreach (var inactiveMiner in mInactiveMiners)
+                        {
+                            if (inactiveMiner.GetType() == typeof(OpenCLCryptoNightMiner))
+                            {
+                                miner = (OpenCLCryptoNightMiner) inactiveMiner;
+                                break;
+                            }
+                        }
+                        if (miner != null)
+                        {
+                            mInactiveMiners.Remove((Miner)miner);                            
+                        }
+                        else
+                        {
+                            miner = new OpenCLCryptoNightMiner(mDevices[deviceIndex]);
+                        }
+                        mActiveMiners.Add(miner);
+                        miner.Start(stratum,
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightIntensityArray[deviceIndex]
+                                .Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceIndex]
+                                .Value)), niceHashMode);
+                        System.Threading.Thread.Sleep(mLaunchInterval);
+                    }
                 }
+            }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -1864,14 +1884,39 @@ namespace GatelessGateSharp
             }
 
             mStratum = (Stratum)stratum;
-            mMiners = new List<Miner>();
             for (var deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
                     for (var i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i)
-                        mMiners.Add(new OpenCLEthashMiner(mDevices[deviceIndex], stratum, Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightIntensityArray[deviceIndex].Value)), Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex].Value))));
-                    System.Threading.Thread.Sleep(mLaunchInterval);
+                    {
+                        OpenCLEthashMiner miner = null;
+                        foreach (var inactiveMiner in mInactiveMiners)
+                        {
+                            if (inactiveMiner.GetType() == typeof(OpenCLEthashMiner))
+                            {
+                                miner = (OpenCLEthashMiner) inactiveMiner;
+                                break;
+                            }
+                        }
+                        if (miner != null)
+                        {
+                            mInactiveMiners.Remove((Miner) miner);
+                        }
+                        else
+                        {
+                            miner = new OpenCLEthashMiner(mDevices[deviceIndex]);
+                        }
+                        mActiveMiners.Add(miner);
+                        miner.Start(stratum,
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
+                                .Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex]
+                                .Value)));
+                        System.Threading.Thread.Sleep(mLaunchInterval);
+                    }
                 }
+            }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -1899,22 +1944,22 @@ namespace GatelessGateSharp
                     Logger("Exception: " + ex.Message + ex.StackTrace);
                     //if (mStratum != null)
                     //    mStratum.Stop();
-                    //if (mMiners != null)
-                    //    foreach (Miner miner in mMiners)
+                    //if (mActiveMiners.Any())
+                    //    foreach (Miner miner in mActiveMiners)
                     //        miner.Stop();
                     mStratum = null;
-                    mMiners = null;
+                    mActiveMiners.Clear();
                 }
         }
 
-                [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-private void StopMiners()
+        private void StopMiners()
         {
             try
             {
                 Logger("Stopping miners...");
-                foreach (var miner in mMiners)
+                foreach (var miner in mActiveMiners)
                     miner.Stop();
                 var allDone = false;
                 var counter = 50;
@@ -1922,14 +1967,14 @@ private void StopMiners()
                 {
                     System.Threading.Thread.Sleep(100);
                     allDone = true;
-                    foreach (var miner in mMiners)
+                    foreach (var miner in mActiveMiners)
                         if (!miner.Done)
                         {
                             allDone = false;
                             break;
                         }
                 }
-                foreach (var miner in mMiners)
+                foreach (var miner in mActiveMiners)
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
                 mStratum.Stop();
@@ -1938,7 +1983,9 @@ private void StopMiners()
             {
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             }
-            mMiners = null;
+            foreach (var miner in mActiveMiners)
+                mInactiveMiners.Add(miner);
+            mActiveMiners.Clear();
             mStratum = null;
         }
 
@@ -1981,11 +2028,11 @@ private void StopMiners()
                 }
 
                 mStratum = null;
-                mMiners = null;
+                mActiveMiners.Clear();
 
                 mDevFeeMode = true;
                 LaunchMiners();
-                if (mStratum == null || mMiners == null)
+                if (mStratum == null || !mActiveMiners.Any())
                 {
                     MessageBox.Show("Failed to launch miner.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -2137,7 +2184,7 @@ private void StopMiners()
                     mDevFeeMode = false;
                     timerDevFee.Interval = (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
                     LaunchMiners();
-                    if (mMiners == null || mStratum == null)
+                    if (mActiveMiners.Count() == 0 || mStratum == null)
                     {
                         mDevFeeMode = true;
                         timerDevFee.Interval = 1000;
@@ -2151,7 +2198,7 @@ private void StopMiners()
                     mDevFeeMode = true;
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
                     LaunchMiners();
-                    if (mMiners == null || mStratum == null)
+                    if (mActiveMiners.Count() == 0 || mStratum == null)
                     {
                         mDevFeeMode = false;
                         timerDevFee.Interval = 1000;
@@ -2213,8 +2260,8 @@ private void StopMiners()
         {
             try
             {
-                if (appState == ApplicationGlobalState.Mining && mMiners != null)
-                    foreach (var miner in mMiners)
+                if (appState == ApplicationGlobalState.Mining && mActiveMiners.Any())
+                    foreach (var miner in mActiveMiners)
                         miner.KeepAlive();
             }
             catch (Exception ex)

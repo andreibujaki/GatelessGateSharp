@@ -7,9 +7,6 @@
 #define amd_bitalign(src0, src1, src2) ((uint) (((((long)(src0)) << 32) | (long)(src1)) >> ((src2) & 31)))
 #endif
 
-#ifdef cl_nv_pragma_unroll
-#define as_ulong (ulong)
-#endif
 
 // Vectorized Skein implementation macros and functions by Wolf
 
@@ -38,11 +35,27 @@ static const __constant ulong SKEIN512_256_IV[8] =
 	p.s7 += s; \
 } while(0)
 
+#if defined(cl_amd_media_ops)
 ulong SKEIN_ROT(const uint2 x, const uint y)
 {
-	if(y < 32) return(as_ulong(amd_bitalign(x, x.s10, 32 - y)));
+	if (y < 32) return(as_ulong(amd_bitalign(x, x.s10, 32 - y)));
 	else return(as_ulong(amd_bitalign(x.s10, x, 32 - (y - 32))));
 }
+#elif defined(cl_nv_pragma_unroll)
+ulong SKEIN_ROT(const uint2 x, const uint y)
+{
+	uint2 prod;
+	if (y < 32) prod = amd_bitalign(x, x.s10, 32 - y);
+	else prod = amd_bitalign(x.s10, x, 32 - (y - 32));
+	return ((ulong)prod.s1 << 32) | prod.s0;
+}
+#else
+ulong SKEIN_ROT(const uint2 x, const uint y)
+{
+	if (y < 32) return(as_ulong(amd_bitalign(x, x.s10, 32 - y)));
+	else return(as_ulong(amd_bitalign(x.s10, x, 32 - (y - 32))));
+}
+#endif
 
 void SkeinMix8(ulong4 *pv0, ulong4 *pv1, const uint rc0, const uint rc1, const uint rc2, const uint rc3)
 {
@@ -98,7 +111,7 @@ ulong8 SkeinOddRound(ulong8 p, const ulong8 h, const ulong *t, const uint s)
 
 ulong8 Skein512Block(ulong8 p, ulong8 h, ulong h8, const ulong *t)
 {
-	#pragma unroll
+#pragma unroll 1
 	for(int i = 0; i < 18; ++i)
 	{
 		p = SkeinEvenRound(p, h, t, i);

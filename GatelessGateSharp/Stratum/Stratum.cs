@@ -134,25 +134,32 @@ namespace GatelessGateSharp
 
         public void Connect() 
         {
-            if (Stopped)
-                return;
+            try
+            {
+                if (Stopped)
+                    return;
 
-            MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
+                MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
 
-            mMutex.WaitOne();
+                mMutex.WaitOne();
 
-            mClient = new TcpClient(ServerAddress, ServerPort);
-            mStream = mClient.GetStream();
-            mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
-            mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
+                mClient = new TcpClient(ServerAddress, ServerPort);
+                mStream = mClient.GetStream();
+                mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
+                mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
 
-            mMutex.ReleaseMutex();
+                mMutex.ReleaseMutex();
 
-            Authorize();
+                Authorize();
 
-            mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
-            mStreamReaderThread.IsBackground = true;
-            mStreamReaderThread.Start();
+                mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
+                mStreamReaderThread.IsBackground = true;
+                mStreamReaderThread.Start();
+            }
+            catch (Exception ex)
+            {
+                MainForm.Logger("Exception in Stratum.Connect(): " + ex.ToString());
+            }
         }
 
         protected void WriteLine(String line)
@@ -188,7 +195,7 @@ namespace GatelessGateSharp
             }
             catch (Exception ex)
             {
-                MainForm.Logger("Failed to receive data from stratum server: " + ex.Message);
+                MainForm.Logger("Exception in Stratum.StreamReaderThread(): " + ex.ToString());
             }
 
             try
