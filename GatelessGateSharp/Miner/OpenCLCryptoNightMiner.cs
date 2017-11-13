@@ -116,7 +116,7 @@ namespace GatelessGateSharp
                 program = new ComputeProgram(Context, source);
                 MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
                 String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " :
-                                       Device.Vendor == "NVIDIA" ? "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                       Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];
                 try

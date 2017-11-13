@@ -18,11 +18,6 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cloo;
 
 
 
@@ -112,7 +107,7 @@ namespace GatelessGateSharp
         {
             if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5)
                 mSpeed = 0;
-            if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 15)
+            if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 60)
             {
                 MainForm.Logger("Miner thread is unresponsive. Restarting...");
                 try
