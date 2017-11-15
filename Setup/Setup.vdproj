@@ -81,7 +81,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9D0A99990BF44853934C0E196C6575C4"
+        "MsmKey" = "8:_9BEC596563044616B18C0BB9EAE82869"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -95,6 +95,12 @@
         {
         "MsmKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
         "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D6B3FE9F7F8341D0B2E96927383D9315"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -154,7 +160,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
+        "OwnerKey" = "8:_005BA131E503E55D3259C325B392A218"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -166,13 +172,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_005BA131E503E55D3259C325B392A218"
+        "OwnerKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DFDCB3E1FD61424AB847293197EEA140"
+        "OwnerKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -184,7 +190,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
+        "OwnerKey" = "8:_DFDCB3E1FD61424AB847293197EEA140"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -227,7 +233,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_0.0.15_beta_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_0.0.17_beta_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -289,11 +295,6 @@
             "AssemblyAsmDisplayName" = "8:Cloo, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_005BA131E503E55D3259C325B392A218"
-                    {
-                    "Name" = "8:Cloo.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Cloo.DLL"
             "TargetName" = "8:"
@@ -380,11 +381,6 @@
             "AssemblyAsmDisplayName" = "8:ManagedNvml, Version=8.0.14.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_2A178B97B26AE0AD8808019FC59D99C0"
-                    {
-                    "Name" = "8:ManagedNvml.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ManagedNvml.DLL"
             "TargetName" = "8:"
@@ -431,11 +427,6 @@
             "AssemblyAsmDisplayName" = "8:HashLib, Version=2.1.0.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_41D73E71863A5CF344DE0BC191304925"
-                    {
-                    "Name" = "8:HashLib.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:HashLib.DLL"
             "TargetName" = "8:"
@@ -546,10 +537,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9D0A99990BF44853934C0E196C6575C4"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9BEC596563044616B18C0BB9EAE82869"
             {
-            "SourcePath" = "8:..\\SQLite\\System.Data.SQLite.dll.config"
-            "TargetName" = "8:System.Data.SQLite.dll.config"
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\x64\\SQLite.Interop.dll"
+            "TargetName" = "8:SQLite.Interop.dll"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Condition" = "8:"
@@ -593,11 +584,6 @@
             "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_D5E0043C4E894C579440EACD8A99AF6D"
-                    {
-                    "Name" = "8:Newtonsoft.Json.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Newtonsoft.Json.DLL"
             "TargetName" = "8:"
@@ -615,6 +601,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D6B3FE9F7F8341D0B2E96927383D9315"
+            {
+            "SourcePath" = "8:..\\SQLite\\System.Data.SQLite.DLL.config"
+            "TargetName" = "8:System.Data.SQLite.DLL.config"
+            "Tag" = "8:"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D85DF7B572634F53AFEFDBAE23491216"
@@ -641,14 +647,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_DA26F0A023D7F9002E8409A3798624AE"
-                    {
-                    "Name" = "8:System.Data.SQLite.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.Data.SQLite.DLL"
             "TargetName" = "8:"
@@ -899,15 +900,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
-        "ProductCode" = "8:{206B9108-2278-4903-901B-A67F620884CE}"
-        "PackageCode" = "8:{F0628B17-F5D1-48F1-93C8-DFF42DE2F673}"
+        "ProductCode" = "8:{9C590333-BBFA-4ACC-8C2C-C2F8EA60A461}"
+        "PackageCode" = "8:{FCD052EB-BBA2-4AA4-A34C-3E53C9DFF91E}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.0.15"
+        "ProductVersion" = "8:0.0.17"
         "Manufacturer" = "8:Zawawa Software LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
