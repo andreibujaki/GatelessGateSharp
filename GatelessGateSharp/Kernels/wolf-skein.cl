@@ -35,19 +35,10 @@ static const __constant ulong SKEIN512_256_IV[8] =
 	p.s7 += s; \
 } while(0)
 
-#if defined(cl_amd_media_ops)
+#if defined(cl_nv_pragma_unroll)
 ulong SKEIN_ROT(const uint2 x, const uint y)
 {
-	if (y < 32) return(as_ulong(amd_bitalign(x, x.s10, 32 - y)));
-	else return(as_ulong(amd_bitalign(x.s10, x, 32 - (y - 32))));
-}
-#elif defined(cl_nv_pragma_unroll)
-ulong SKEIN_ROT(const uint2 x, const uint y)
-{
-	uint2 prod;
-	if (y < 32) prod = amd_bitalign(x, x.s10, 32 - y);
-	else prod = amd_bitalign(x.s10, x, 32 - (y - 32));
-	return ((ulong)prod.s1 << 32) | prod.s0;
+	return rotate(((ulong)x.s1 << 32) | x.s0, (ulong)y);
 }
 #else
 ulong SKEIN_ROT(const uint2 x, const uint y)
@@ -111,7 +102,7 @@ ulong8 SkeinOddRound(ulong8 p, const ulong8 h, const ulong *t, const uint s)
 
 ulong8 Skein512Block(ulong8 p, ulong8 h, ulong h8, const ulong *t)
 {
-#pragma unroll 1
+#pragma unroll 2
 	for(int i = 0; i < 18; ++i)
 	{
 		p = SkeinEvenRound(p, h, t, i);

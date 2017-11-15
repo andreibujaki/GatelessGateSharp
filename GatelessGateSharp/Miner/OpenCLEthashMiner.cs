@@ -36,7 +36,8 @@ namespace GatelessGateSharp
         private long mLocalWorkSize;
         private long mGlobalWorkSize;
 
-        Dictionary<long, ComputeProgram> mProgramArray = new Dictionary<long, ComputeProgram>();
+        static Dictionary<long[], ComputeProgram> mProgramArray = new Dictionary<long[], ComputeProgram>();
+        static Mutex mProgramArrayMutex = new Mutex();
 
         public OpenCLEthashMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "Ethash")
@@ -62,13 +63,13 @@ namespace GatelessGateSharp
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
             ComputeProgram program;
-            if (mProgramArray.ContainsKey(mLocalWorkSize))
+            mProgramArrayMutex.WaitOne();
+            if (mProgramArray.ContainsKey(new long[] { DeviceIndex, mLocalWorkSize }))
             {
-                program = mProgramArray[mLocalWorkSize];
+                program = mProgramArray[new long[] { DeviceIndex, mLocalWorkSize }];
             }
             else
             {
-                System.Threading.Thread.Sleep(10000);
                 String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
                 program = new ComputeProgram(Context, source);
                 MainForm.Logger("Loaded ethash program for Device #" + DeviceIndex + ".");
@@ -90,8 +91,9 @@ namespace GatelessGateSharp
                 }
                 MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Built options: " + buildOptions);
-                mProgramArray[mLocalWorkSize] = program;
+                mProgramArray[new long[] { DeviceIndex, mLocalWorkSize }] = program;
             }
+            mProgramArrayMutex.ReleaseMutex();
 
             while (!Stopped)
             {

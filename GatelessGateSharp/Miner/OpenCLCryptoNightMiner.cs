@@ -44,14 +44,30 @@ namespace GatelessGateSharp
         UInt32[] output = new UInt32[outputSize];
         byte[] input = new byte[76];
 
-        private ComputeEventList eventList = null;
+        static Mutex mProgramArrayMutex = new Mutex();
 
-        Dictionary<long, ComputeProgram> mProgramArray = new Dictionary<long, ComputeProgram>();
-        Dictionary<long, ComputeKernel> mSearchKernel0Array = new Dictionary<long, ComputeKernel>();
-        Dictionary<long, ComputeKernel> mSearchKernel1Array = new Dictionary<long, ComputeKernel>();
-        Dictionary<long, ComputeKernel> mSearchKernel2Array = new Dictionary<long, ComputeKernel>();
-        Dictionary<long, ComputeKernel> mSearchKernel3Array = new Dictionary<long, ComputeKernel>();
+        class ProgramArrayIndex
+        {
+            private int mDeviceIndex;
+            private long mLocalWorkSize;
 
+            public ProgramArrayIndex(int aDeviceIndex, long aLocalWorkSize)
+            {
+                mDeviceIndex = aDeviceIndex;
+                mLocalWorkSize = aLocalWorkSize;
+            }
+
+            public bool Equals(ProgramArrayIndex mValue)
+            {
+                return mDeviceIndex == mValue.mDeviceIndex && mLocalWorkSize == mValue.mLocalWorkSize;
+            }
+        }
+        static Dictionary<ProgramArrayIndex, ComputeProgram> mProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
+        ComputeKernel searchKernel0 = null;
+        ComputeKernel searchKernel1 = null;
+        ComputeKernel searchKernel2 = null;
+        ComputeKernel searchKernel3 = null;
+            
         private ComputeBuffer<byte> statesBuffer = null;
         private ComputeBuffer<byte> inputBuffer = null;
         private ComputeBuffer<UInt32> outputBuffer = null;
@@ -63,7 +79,6 @@ namespace GatelessGateSharp
         public OpenCLCryptoNightMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "CryptoNight")
         {
-            ComputeEventList eventList = (aGatelessGateDevice.Vendor == "NVIDIA") ? (new ComputeEventList()) : null;
         }
 
         public void Start(CryptoNightStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
@@ -97,21 +112,13 @@ namespace GatelessGateSharp
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
             ComputeProgram program;
-            ComputeKernel searchKernel0;
-            ComputeKernel searchKernel1;
-            ComputeKernel searchKernel2;
-            ComputeKernel searchKernel3;
-            if (mProgramArray.ContainsKey(localWorkSizeA[0]))
+            mProgramArrayMutex.WaitOne();
+            if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])))
             {
-                program = mProgramArray[localWorkSizeA[0]];
-                searchKernel0 = mSearchKernel0Array[localWorkSizeA[0]];
-                searchKernel1 = mSearchKernel1Array[localWorkSizeA[0]];
-                searchKernel2 = mSearchKernel2Array[localWorkSizeA[0]];
-                searchKernel3 = mSearchKernel3Array[localWorkSizeA[0]];
+                program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
             } 
             else
             {
-                System.Threading.Thread.Sleep(10000);
                 String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
                 program = new ComputeProgram(Context, source);
                 MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
@@ -130,13 +137,14 @@ namespace GatelessGateSharp
                 }
                 MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Built options: " + buildOptions);
-                mProgramArray[localWorkSizeA[0]] = program;
-                mSearchKernel0Array[localWorkSizeA[0]] = searchKernel0 = program.CreateKernel("search");
-                mSearchKernel1Array[localWorkSizeA[0]] = searchKernel1 = program.CreateKernel("search1");
-                mSearchKernel2Array[localWorkSizeA[0]] = searchKernel2 = program.CreateKernel("search2");
-                mSearchKernel3Array[localWorkSizeA[0]] = searchKernel3 = program.CreateKernel("search3");
+                mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = program;
             }
+            mProgramArrayMutex.ReleaseMutex();
 
+            if (searchKernel0 == null) searchKernel0 = program.CreateKernel("search");
+            if (searchKernel1 == null) searchKernel1 = program.CreateKernel("search1");
+            if (searchKernel2 == null) searchKernel2 = program.CreateKernel("search2");
+            if (searchKernel3 == null) searchKernel3 = program.CreateKernel("search3");
             if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + globalWorkSizeA[0]);
             if (inputBuffer == null) inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
             if (outputBuffer == null) outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
@@ -240,23 +248,7 @@ namespace GatelessGateSharp
                             Queue.Finish(); 
                             if (Stopped)
                                 break;
-                            Queue.Execute(searchKernel1, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, eventList);
-                            Queue.Flush();
-                            while (eventList != null && eventList[0].Status != ComputeCommandExecutionStatus.Complete)
-                            {
-                                if (Stopped && terminate[0] == 0)
-                                {
-                                    terminate[0] = 1;
-                                    Queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)terminatePtr, null);
-                                }
-                                Thread.Sleep(10);
-                            }
-                            if (eventList != null)
-                            {
-                                foreach (var evt in eventList)
-                                    evt.Dispose();
-                                eventList.Clear();
-                            }
+                            Queue.Execute(searchKernel1, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
                             Queue.Finish();
                             if (Stopped)
                                 break;
@@ -270,6 +262,12 @@ namespace GatelessGateSharp
                                 break;
                             Queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
                             sw.Stop();
+                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
                             mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {

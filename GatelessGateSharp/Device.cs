@@ -22,6 +22,7 @@ namespace GatelessGateSharp
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
         private List<ComputeDevice> mDeviceList;
 
+
         public String Vendor
         {
             get
@@ -36,7 +37,23 @@ namespace GatelessGateSharp
 
         public String Name { get { return mName; } }
         public List<ComputeDevice> DeviceList { get { return mDeviceList; } }
-        public ComputeContext ComputeContext { get { return mContext; } }
+
+        public ComputeContext Context
+        {
+            get
+            {
+                mMutex.WaitOne();
+                if (mContext == null)
+                {
+                    mDeviceList = new List<ComputeDevice>();
+                    mDeviceList.Add(mComputeDevice);
+                    var contextProperties = new ComputeContextPropertyList(mComputeDevice.Platform);
+                    mContext = new ComputeContext(mDeviceList, contextProperties, null, IntPtr.Zero);
+                }
+                mMutex.ReleaseMutex();
+                return mContext;
+            }
+        }
 
         public int DeviceIndex { get { return mDeviceIndex; } }
         public int AcceptedShares { get { return mAcceptedShares; } }

@@ -18,7 +18,7 @@
 
 
 using System;
-
+using Cloo;
 
 
 namespace GatelessGateSharp
@@ -39,6 +39,7 @@ namespace GatelessGateSharp
         public bool Done { get { return mDone; } }
         public double Speed { get { return mSpeed; } }
         public String AlgorithmName { get { return mAlgorithmName; } }
+        public ComputeContext Context { get { return mDevice.Context; } }
 
         protected Miner(Device aDevice, String aAlgorithmName)
         {

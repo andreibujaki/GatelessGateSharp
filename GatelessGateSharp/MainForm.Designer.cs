@@ -495,6 +495,7 @@
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
             this.timerUpdateLog = new System.Windows.Forms.Timer(this.components);
             this.timerAutoStart = new System.Windows.Forms.Timer(this.components);
+            this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageStatus.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -2063,11 +2064,12 @@
             // 
             // groupBoxAutomation
             // 
+            this.groupBoxAutomation.Controls.Add(this.checkBoxDisableAutoStartPrompt);
             this.groupBoxAutomation.Controls.Add(this.checkBoxAutoStart);
             this.groupBoxAutomation.Controls.Add(this.checkBoxLaunchAtStartup);
             this.groupBoxAutomation.Location = new System.Drawing.Point(9, 280);
             this.groupBoxAutomation.Name = "groupBoxAutomation";
-            this.groupBoxAutomation.Size = new System.Drawing.Size(177, 66);
+            this.groupBoxAutomation.Size = new System.Drawing.Size(193, 95);
             this.groupBoxAutomation.TabIndex = 34;
             this.groupBoxAutomation.TabStop = false;
             this.groupBoxAutomation.Text = "Automation";
@@ -7411,8 +7413,17 @@
             // 
             // timerAutoStart
             // 
-            this.timerAutoStart.Interval = 1000;
             this.timerAutoStart.Tick += new System.EventHandler(this.timerAutoStart_Tick);
+            // 
+            // checkBoxDisableAutoStartPrompt
+            // 
+            this.checkBoxDisableAutoStartPrompt.AutoSize = true;
+            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(8, 65);
+            this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
+            this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
+            this.checkBoxDisableAutoStartPrompt.TabIndex = 29;
+            this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
+            this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -8120,5 +8131,6 @@
         private System.Windows.Forms.CheckBox checkBoxEnablePhymem;
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.Timer timerAutoStart;
+        private System.Windows.Forms.CheckBox checkBoxDisableAutoStartPrompt;
     }
 }

@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "0.0.14";
+        public static string appVersion = "0.0.15";
         public static string appName = shortAppName + " " + appVersion + " beta";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -198,8 +198,6 @@ namespace GatelessGateSharp
                     }
                 }
 
-
-
                 try
                 {
                     sql = "select * from pools";
@@ -321,6 +319,10 @@ namespace GatelessGateSharp
                                 else if (propertyName == "enable_phymem")
                                 {
                                     checkBoxEnablePhymem.Checked = (string)reader["value"] == "true";
+                                }
+                                else if (propertyName == "disable_auto_start_prompt")
+                                {
+                                    checkBoxDisableAutoStartPrompt.Checked = (string)reader["value"] == "true";
                                 }
                             }
                         }
@@ -501,6 +503,13 @@ namespace GatelessGateSharp
                         command.ExecuteNonQuery();
                     }
 
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "disable_auto_start_prompt");
+                        command.Parameters.AddWithValue("@value", checkBoxDisableAutoStartPrompt.Checked ? "true" : "false");
+                        command.ExecuteNonQuery();
+                    }
+                    
                     for (var i = 0; i < mDevices.Length; ++i)
                         using (var command = new SQLiteCommand(sql, conn))
                         {
@@ -798,7 +807,8 @@ namespace GatelessGateSharp
             catch (Exception) { }
             if (autoStart)
             {
-                if (MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
+                if (checkBoxDisableAutoStartPrompt.Checked
+                    || MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
                         "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)
                 {
                     timerAutoStart.Enabled = true;
@@ -1926,6 +1936,17 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void LaunchMiners()
         {
+            GC.Collect();
+            for (int size = 16; size > 0; --size)
+            {
+                try
+                {
+                    GC.TryStartNoGCRegion(size * 1024 * 1024, true);
+                    break;
+                }
+                catch (Exception) { }
+            }
+
             foreach (string pool in listBoxPoolPriorities.Items)
                 try
                 {
@@ -1990,6 +2011,13 @@ namespace GatelessGateSharp
                 mInactiveMiners.Add(miner);
             mActiveMiners.Clear();
             mStratum = null;
+
+            try
+            {
+                GC.EndNoGCRegion();
+            }
+            catch (Exception) { }
+            GC.Collect();
         }
 
         private void buttonStart_Click(object sender = null, EventArgs e = null)
