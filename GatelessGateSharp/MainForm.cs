@@ -43,8 +43,8 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "0.0.17";
-        public static string appName = shortAppName + " " + appVersion + " beta";
+        public static string appVersion = "1.0.0";
+        public static string appName = shortAppName + " " + appVersion + "";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
@@ -142,6 +142,8 @@ namespace GatelessGateSharp
                 Instance.richTextBoxLog.SelectionLength = 0;
                 Instance.richTextBoxLog.SelectionStart = Instance.richTextBoxLog.Text.Length;
                 Instance.richTextBoxLog.ScrollToCaret();
+
+                Instance.toolStripStatusLabel1.Text = loggerBuffer.Split('\n')[0].Replace("\r", "");
             }
             catch (Exception) { }
         }
@@ -177,200 +179,211 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void LoadDatabase()
         {
-            using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;"))
+            try {
+                using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;"))
+                {
+                    conn.Open();
+                    var sql = "select * from wallet_addresses";
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+
+                            while (reader.Read())
+                                if ((string) reader["coin"] == "bitcoin")
+                                    textBoxBitcoinAddress.Text = (string) reader["address"];
+                                else if ((string) reader["coin"] == "ethereum")
+                                    textBoxEthereumAddress.Text = (string) reader["address"];
+                                else if ((string) reader["coin"] == "monero")
+                                    textBoxMoneroAddress.Text = (string) reader["address"];
+                                else if ((string) reader["coin"] == "zcash")
+                                    textBoxZcashAddress.Text = (string) reader["address"];
+                        }
+                    }
+
+                    try
+                    {
+                        sql = "select * from pools";
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                var oldItems = new List<string>();
+                                foreach (string poolName in listBoxPoolPriorities.Items)
+                                    oldItems.Add(poolName);
+                                listBoxPoolPriorities.Items.Clear();
+                                while (reader.Read())
+                                    listBoxPoolPriorities.Items.Add((string) reader["name"]);
+                                foreach (var poolName in oldItems)
+                                    if (!listBoxPoolPriorities.Items.Contains(poolName))
+                                        listBoxPoolPriorities.Items.Add(poolName);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger("Exception: " + ex.Message + ex.StackTrace);
+                    }
+
+                    try
+                    {
+                        sql = "select * from properties";
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    var propertyName = (string) reader["name"];
+                                    if (propertyName == "coin_to_mine")
+                                    {
+                                        var coinToMine = (string) reader["value"];
+                                        if (coinToMine == "ethereum")
+                                        {
+                                            radioButtonEthereum.Checked = true;
+                                            radioButtonMonero.Checked = false;
+                                            radioButtonZcash.Checked = false;
+                                        }
+                                        else if (coinToMine == "monero")
+                                        {
+                                            radioButtonEthereum.Checked = false;
+                                            radioButtonMonero.Checked = true;
+                                            radioButtonZcash.Checked = false;
+                                        }
+                                        else if (coinToMine == "zcash")
+                                        {
+                                            radioButtonEthereum.Checked = false;
+                                            radioButtonMonero.Checked = false;
+                                            radioButtonZcash.Checked = true;
+                                        }
+                                        else
+                                        {
+                                            radioButtonEthereum.Checked = true;
+                                            radioButtonMonero.Checked = false;
+                                            radioButtonZcash.Checked = false;
+                                        }
+                                    }
+                                    else if (propertyName == "pool_rig_id")
+                                    {
+                                        textBoxRigID.Text = (string) reader["value"];
+                                    }
+                                    else if (propertyName == "pool_email")
+                                    {
+                                        textBoxEmail.Text = (string) reader["value"];
+                                    }
+                                    else if (propertyName == "pool_login")
+                                    {
+                                        textBoxLogin.Text = (string) reader["value"];
+                                    }
+                                    else if (propertyName == "pool_password")
+                                    {
+                                        textBoxPassword.Text = (string) reader["value"];
+                                    }
+                                    else if (propertyName == "auto_start")
+                                    {
+                                        checkBoxAutoStart.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "launch_at_startup")
+                                    {
+                                        checkBoxLaunchAtStartup.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_gpu0")
+                                    {
+                                        checkBoxGPU0Enable.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_gpu1")
+                                    {
+                                        checkBoxGPU1Enable.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_gpu2")
+                                    {
+                                        checkBoxGPU2Enable.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_gpu3")
+                                    {
+                                        checkBoxGPU3Enable.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_gpu4")
+                                    {
+                                        checkBoxGPU4Enable.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_gpu5")
+                                    {
+                                        checkBoxGPU5Enable.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_gpu6")
+                                    {
+                                        checkBoxGPU6Enable.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_gpu7")
+                                    {
+                                        checkBoxGPU7Enable.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "enable_phymem")
+                                    {
+                                        checkBoxEnablePhymem.Checked = (string) reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "disable_auto_start_prompt")
+                                    {
+                                        checkBoxDisableAutoStartPrompt.Checked = (string) reader["value"] == "true";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger("Exception: " + ex.Message + ex.StackTrace);
+                    }
+
+                    try
+                    {
+                        sql = "select * from device_parameters";
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    var deviceID = (int) reader["device_id"];
+                                    var deviceVendor = (string) reader["device_vendor"];
+                                    var deviceName = (string) reader["device_name"];
+                                    var name = (string) reader["parameter_name"];
+                                    var value = (string) reader["parameter_value"];
+                                    if (deviceID >= mDevices.Length || deviceVendor != mDevices[deviceID].Vendor ||
+                                        deviceName != mDevices[deviceID].Name)
+                                        continue;
+                                    if (name == "ethash_threads")
+                                        numericUpDownDeviceEthashThreadsArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "ethash_intensity")
+                                        numericUpDownDeviceEthashIntensityArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "ethash_local_work_size")
+                                        numericUpDownDeviceEthashLocalWorkSizeArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "cryptonight_threads")
+                                        numericUpDownDeviceCryptoNightThreadsArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "cryptonight_intensity")
+                                        numericUpDownDeviceCryptoNightIntensityArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "cryptonight_local_work_size")
+                                        numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger("Exception: " + ex.Message + ex.StackTrace);
+                    }
+
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
             {
-                conn.Open();
-                var sql = "select * from wallet_addresses";
-                using (var command = new SQLiteCommand(sql, conn))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-
-                        while (reader.Read())
-                            if ((string)reader["coin"] == "bitcoin")
-                                textBoxBitcoinAddress.Text = (string)reader["address"];
-                            else if ((string)reader["coin"] == "ethereum")
-                                textBoxEthereumAddress.Text = (string)reader["address"];
-                            else if ((string)reader["coin"] == "monero")
-                                textBoxMoneroAddress.Text = (string)reader["address"];
-                            else if ((string)reader["coin"] == "zcash")
-                                textBoxZcashAddress.Text = (string)reader["address"];
-                    }
-                }
-
-                try
-                {
-                    sql = "select * from pools";
-                    using (var command = new SQLiteCommand(sql, conn))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            var oldItems = new List<string>();
-                            foreach (string poolName in listBoxPoolPriorities.Items)
-                                oldItems.Add(poolName);
-                            listBoxPoolPriorities.Items.Clear();
-                            while (reader.Read())
-                                listBoxPoolPriorities.Items.Add((string)reader["name"]);
-                            foreach (var poolName in oldItems)
-                                if (!listBoxPoolPriorities.Items.Contains(poolName))
-                                    listBoxPoolPriorities.Items.Add(poolName);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger("Exception: " + ex.Message + ex.StackTrace);
-                }
-
-                try
-                {
-                    sql = "select * from properties";
-                    using (var command = new SQLiteCommand(sql, conn))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                var propertyName = (string)reader["name"];
-                                if (propertyName == "coin_to_mine")
-                                {
-                                    var coinToMine = (string)reader["value"];
-                                    if (coinToMine == "ethereum")
-                                    {
-                                        radioButtonEthereum.Checked = true;
-                                        radioButtonMonero.Checked = false;
-                                        radioButtonZcash.Checked = false;
-                                    }
-                                    else if (coinToMine == "monero")
-                                    {
-                                        radioButtonEthereum.Checked = false;
-                                        radioButtonMonero.Checked = true;
-                                        radioButtonZcash.Checked = false;
-                                    }
-                                    else if (coinToMine == "zcash")
-                                    {
-                                        radioButtonEthereum.Checked = false;
-                                        radioButtonMonero.Checked = false;
-                                        radioButtonZcash.Checked = true;
-                                    }
-                                    else
-                                    {
-                                        radioButtonEthereum.Checked = true;
-                                        radioButtonMonero.Checked = false;
-                                        radioButtonZcash.Checked = false;
-                                    }
-                                }
-                                else if (propertyName == "pool_rig_id")
-                                {
-                                    textBoxRigID.Text = (string)reader["value"];
-                                }
-                                else if (propertyName == "pool_email")
-                                {
-                                    textBoxEmail.Text = (string)reader["value"];
-                                }
-                                else if (propertyName == "pool_login")
-                                {
-                                    textBoxLogin.Text = (string)reader["value"];
-                                }
-                                else if (propertyName == "pool_password")
-                                {
-                                    textBoxPassword.Text = (string)reader["value"];
-                                }
-                                else if (propertyName == "auto_start")
-                                {
-                                    checkBoxAutoStart.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "launch_at_startup")
-                                {
-                                    checkBoxLaunchAtStartup.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_gpu0")
-                                {
-                                    checkBoxGPU0Enable.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_gpu1")
-                                {
-                                    checkBoxGPU1Enable.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_gpu2")
-                                {
-                                    checkBoxGPU2Enable.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_gpu3")
-                                {
-                                    checkBoxGPU3Enable.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_gpu4")
-                                {
-                                    checkBoxGPU4Enable.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_gpu5")
-                                {
-                                    checkBoxGPU5Enable.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_gpu6")
-                                {
-                                    checkBoxGPU6Enable.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_gpu7")
-                                {
-                                    checkBoxGPU7Enable.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "enable_phymem")
-                                {
-                                    checkBoxEnablePhymem.Checked = (string)reader["value"] == "true";
-                                }
-                                else if (propertyName == "disable_auto_start_prompt")
-                                {
-                                    checkBoxDisableAutoStartPrompt.Checked = (string)reader["value"] == "true";
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger("Exception: " + ex.Message + ex.StackTrace);
-                }
-
-                try
-                {
-                    sql = "select * from device_parameters";
-                    using (var command = new SQLiteCommand(sql, conn))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                var deviceID = (int)reader["device_id"];
-                                var deviceVendor = (string)reader["device_vendor"];
-                                var deviceName = (string)reader["device_name"];
-                                var name = (string)reader["parameter_name"];
-                                var value = (string)reader["parameter_value"];
-                                if (deviceID >= mDevices.Length || deviceVendor != mDevices[deviceID].Vendor || deviceName != mDevices[deviceID].Name)
-                                    continue;
-                                if (name == "ethash_threads")
-                                    numericUpDownDeviceEthashThreadsArray[deviceID].Value = decimal.Parse(value);
-                                else if (name == "ethash_intensity")
-                                    numericUpDownDeviceEthashIntensityArray[deviceID].Value = decimal.Parse(value);
-                                else if (name == "ethash_local_work_size")
-                                    numericUpDownDeviceEthashLocalWorkSizeArray[deviceID].Value = decimal.Parse(value);
-                                else if (name == "cryptonight_threads")
-                                    numericUpDownDeviceCryptoNightThreadsArray[deviceID].Value = decimal.Parse(value);
-                                else if (name == "cryptonight_intensity")
-                                    numericUpDownDeviceCryptoNightIntensityArray[deviceID].Value = decimal.Parse(value);
-                                else if (name == "cryptonight_local_work_size")
-                                    numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceID].Value = decimal.Parse(value);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger("Exception: " + ex.Message + ex.StackTrace);
-                }
-
-                conn.Close();
+                Logger("Exception: " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -1012,12 +1025,12 @@ namespace GatelessGateSharp
                 numericUpDownDeviceCryptoNightIntensityArray[device.DeviceIndex].Value
                     = (decimal)(device.Vendor == "AMD" && device.Name == "Radeon RX 470" ? 24 :
                                 device.Vendor == "AMD" && device.Name == "Radeon RX 570" ? 24 :
-                                device.Vendor == "AMD" && device.Name == "Radeon RX 480" ? 30 :
-                                device.Vendor == "AMD" && device.Name == "Radeon RX 580" ? 30 :
-                                device.Vendor == "AMD" && device.Name == "Radeon R9 Fury X/Nano" ? 14 :
-                                device.Vendor == "AMD" ? 16 :
+                                device.Vendor == "AMD" && device.Name == "Radeon RX 480" ? 28 :
+                                device.Vendor == "AMD" && device.Name == "Radeon RX 580" ? 28 :
+                                device.Vendor == "AMD" && device.Name == "Radeon R9 Fury X/Nano"  ? 14 :
+                                device.Vendor == "AMD"                                            ? 16 :
                                 device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti" ? 32 :
-                                                                                                      16);
+                                                                                                    16);
             }
 
             UpdateStatsWithShortPolling();
@@ -1696,11 +1709,20 @@ namespace GatelessGateSharp
             }
 
             mStratum = (Stratum)stratum;
-            for (var deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            this.Activate();
+            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
+            int deviceIndex, i, minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                    for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
+                        ++minerCount;
+            toolStripMainFormProgressBar.Maximum = minerCount;
+            minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
             {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    for (var i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
                     {
                         OpenCLCryptoNightMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
@@ -1725,7 +1747,12 @@ namespace GatelessGateSharp
                                 .Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceIndex]
                                 .Value)), niceHashMode);
-                        System.Threading.Thread.Sleep(mLaunchInterval);
+                        toolStripMainFormProgressBar.Value = ++minerCount;
+                        for (int j = 0; j < mLaunchInterval; j += 10)
+                        {
+                            Application.DoEvents();
+                            System.Threading.Thread.Sleep(10);
+                        }
                     }
                 }
             }
@@ -1897,11 +1924,20 @@ namespace GatelessGateSharp
             }
 
             mStratum = (Stratum)stratum;
-            for (var deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            this.Activate(); 
+            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
+            int deviceIndex, i, minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                    for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i)
+                        ++minerCount;
+            toolStripMainFormProgressBar.Maximum = minerCount;
+            minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
             {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    for (var i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i)
                     {
                         OpenCLEthashMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
@@ -1926,7 +1962,12 @@ namespace GatelessGateSharp
                                 .Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex]
                                 .Value)));
-                        System.Threading.Thread.Sleep(mLaunchInterval);
+                        toolStripMainFormProgressBar.Value = ++minerCount;
+                        for (int j = 0; j < mLaunchInterval; j += 10)
+                        {
+                            Application.DoEvents();
+                            System.Threading.Thread.Sleep(10);                            
+                        }
                     }
                 }
             }
@@ -1989,7 +2030,8 @@ namespace GatelessGateSharp
                 var counter = 50;
                 while (!allDone && counter-- > 0)
                 {
-                    System.Threading.Thread.Sleep(100);
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(10);
                     allDone = true;
                     foreach (var miner in mActiveMiners)
                         if (!miner.Done)
@@ -2002,6 +2044,7 @@ namespace GatelessGateSharp
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
                 mStratum.Stop();
+                toolStripMainFormProgressBar.Value = 0;
             }
             catch (Exception ex)
             {
@@ -2048,7 +2091,7 @@ namespace GatelessGateSharp
                 return;
             }
 
-            Enabled = false;
+            tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             if (appState == ApplicationGlobalState.Idle)
             {
@@ -2113,7 +2156,7 @@ namespace GatelessGateSharp
                 foreach (var control in groupBoxDeviceCryptoNightArray)
                     control.Enabled = appState == ApplicationGlobalState.Idle;
 
-                Enabled = true;
+                tabControlMainForm.Enabled = buttonStart.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -2210,7 +2253,7 @@ namespace GatelessGateSharp
                 else if (mDevFeeMode)
                 {
                     labelCurrentPool.Text = "Switching...";
-                    Enabled = false;
+                    tabControlMainForm.Enabled = buttonStart.Enabled = false;
                     StopMiners();
                     mDevFeeMode = false;
                     timerDevFee.Interval = (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
@@ -2224,7 +2267,7 @@ namespace GatelessGateSharp
                 else
                 {
                     labelCurrentPool.Text = "Switching...";
-                    Enabled = false;
+                    tabControlMainForm.Enabled = buttonStart.Enabled = false;
                     StopMiners();
                     mDevFeeMode = true;
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
@@ -2237,7 +2280,7 @@ namespace GatelessGateSharp
                 }
 
                 UpdateStatsWithLongPolling();
-                Enabled = true;
+                tabControlMainForm.Enabled = buttonStart.Enabled = true;
             }
             catch (Exception ex)
             {

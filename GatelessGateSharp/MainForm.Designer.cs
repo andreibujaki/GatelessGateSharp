@@ -160,6 +160,7 @@
             this.textBoxZcashAddress = new System.Windows.Forms.TextBox();
             this.buttonViewBalancesAtNiceHash = new System.Windows.Forms.Button();
             this.groupBoxAutomation = new System.Windows.Forms.GroupBox();
+            this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
             this.checkBoxAutoStart = new System.Windows.Forms.CheckBox();
             this.checkBoxLaunchAtStartup = new System.Windows.Forms.CheckBox();
             this.groupBoxPoolParameters = new System.Windows.Forms.GroupBox();
@@ -495,7 +496,9 @@
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
             this.timerUpdateLog = new System.Windows.Forms.Timer(this.components);
             this.timerAutoStart = new System.Windows.Forms.Timer(this.components);
-            this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
+            this.statusStripMainForm = new System.Windows.Forms.StatusStrip();
+            this.toolStripMainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageStatus.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -677,6 +680,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashLocalWorkSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashIntensity)).BeginInit();
             this.tabPageLog.SuspendLayout();
+            this.statusStripMainForm.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMainForm
@@ -2073,6 +2077,16 @@
             this.groupBoxAutomation.TabIndex = 34;
             this.groupBoxAutomation.TabStop = false;
             this.groupBoxAutomation.Text = "Automation";
+            // 
+            // checkBoxDisableAutoStartPrompt
+            // 
+            this.checkBoxDisableAutoStartPrompt.AutoSize = true;
+            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(8, 65);
+            this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
+            this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
+            this.checkBoxDisableAutoStartPrompt.TabIndex = 29;
+            this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
+            this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
             // 
             // checkBoxAutoStart
             // 
@@ -7415,21 +7429,34 @@
             // 
             this.timerAutoStart.Tick += new System.EventHandler(this.timerAutoStart_Tick);
             // 
-            // checkBoxDisableAutoStartPrompt
+            // statusStripMainForm
             // 
-            this.checkBoxDisableAutoStartPrompt.AutoSize = true;
-            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(8, 65);
-            this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
-            this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
-            this.checkBoxDisableAutoStartPrompt.TabIndex = 29;
-            this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
-            this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
+            this.statusStripMainForm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMainFormProgressBar,
+            this.toolStripStatusLabel1});
+            this.statusStripMainForm.Location = new System.Drawing.Point(0, 468);
+            this.statusStripMainForm.Name = "statusStripMainForm";
+            this.statusStripMainForm.Size = new System.Drawing.Size(751, 22);
+            this.statusStripMainForm.TabIndex = 3;
+            // 
+            // toolStripMainFormProgressBar
+            // 
+            this.toolStripMainFormProgressBar.Name = "toolStripMainFormProgressBar";
+            this.toolStripMainFormProgressBar.Size = new System.Drawing.Size(100, 16);
+            this.toolStripMainFormProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(158, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabelMessage";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(751, 469);
+            this.ClientSize = new System.Drawing.Size(751, 490);
+            this.Controls.Add(this.statusStripMainForm);
             this.Controls.Add(this.buttonBenchmark);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.tabControlMainForm);
@@ -7660,7 +7687,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashLocalWorkSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashIntensity)).EndInit();
             this.tabPageLog.ResumeLayout(false);
+            this.statusStripMainForm.ResumeLayout(false);
+            this.statusStripMainForm.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -8132,5 +8162,8 @@
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.Timer timerAutoStart;
         private System.Windows.Forms.CheckBox checkBoxDisableAutoStartPrompt;
+        private System.Windows.Forms.StatusStrip statusStripMainForm;
+        private System.Windows.Forms.ToolStripProgressBar toolStripMainFormProgressBar;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
