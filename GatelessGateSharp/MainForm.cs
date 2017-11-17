@@ -43,8 +43,8 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.0.1";
-        public static string appName = shortAppName + " " + appVersion + "";
+        public static string appVersion = "1.1.0";
+        public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
@@ -787,6 +787,7 @@ namespace GatelessGateSharp
             }
 
             Text = appName; // Set the window title.
+            UpdateControls();
 
             // Do everything to turn off TDR.
             foreach (var controlSet in new string[] { "CurrentControlSet", "ControlSet001" })
@@ -832,7 +833,7 @@ namespace GatelessGateSharp
                 }
             }
 
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+            //Thread.CurrentThread.Priority = ThreadPriority.Highest;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -895,8 +896,12 @@ namespace GatelessGateSharp
                 Array.Resize(ref numericUpDownDeviceCryptoNightLocalWorkSizeArray, mDevices.Length);
                 Array.Resize(ref groupBoxDeviceEthashArray, mDevices.Length);
                 Array.Resize(ref groupBoxDeviceCryptoNightArray, mDevices.Length);
-
             }
+
+            comboBoxCustomPool0Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool1Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool2Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool3Algorithm.SelectedIndex = 0;
 
             var ADLRet = -1;
             var NumberOfAdapters = 0;
@@ -2155,6 +2160,15 @@ namespace GatelessGateSharp
                     control.Enabled = appState == ApplicationGlobalState.Idle;
                 foreach (var control in groupBoxDeviceCryptoNightArray)
                     control.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxCustmPool0.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxCustmPool1.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxCustmPool2.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxCustmPool3.Enabled = appState == ApplicationGlobalState.Idle;
+
+                textBoxCustomPool0Host.Enabled = textBoxCustomPool0Login.Enabled = textBoxCustomPool0Password.Enabled = comboBoxCustomPool0Algorithm.Enabled = numericUpDownCustomPool0Port.Enabled = checkBoxCustomPool0Enable.Checked;
+                textBoxCustomPool1Host.Enabled = textBoxCustomPool1Login.Enabled = textBoxCustomPool1Password.Enabled = comboBoxCustomPool1Algorithm.Enabled = numericUpDownCustomPool1Port.Enabled = checkBoxCustomPool1Enable.Checked;
+                textBoxCustomPool2Host.Enabled = textBoxCustomPool2Login.Enabled = textBoxCustomPool2Password.Enabled = comboBoxCustomPool2Algorithm.Enabled = numericUpDownCustomPool2Port.Enabled = checkBoxCustomPool2Enable.Checked;
+                textBoxCustomPool3Host.Enabled = textBoxCustomPool3Login.Enabled = textBoxCustomPool3Password.Enabled = comboBoxCustomPool3Algorithm.Enabled = numericUpDownCustomPool3Port.Enabled = checkBoxCustomPool3Enable.Checked;
 
                 tabControlMainForm.Enabled = buttonStart.Enabled = true;
             }
@@ -2857,6 +2871,26 @@ namespace GatelessGateSharp
         {
             timerAutoStart.Enabled = false;
             buttonStart_Click();
+        }
+
+        private void checkBoxCustomPool0Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void checkBoxCustomPool1Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void checkBoxCustomPool2Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void checkBoxCustomPool3Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
         }
     }
 }

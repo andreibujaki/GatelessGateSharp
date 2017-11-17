@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
-            this.tabPageStatus = new System.Windows.Forms.TabPage();
+            this.tabPageDashboard = new System.Windows.Forms.TabPage();
             this.labelElapsedTime = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.labelPriceMonth = new System.Windows.Forms.Label();
@@ -159,10 +159,6 @@
             this.buttonEthereumBalance = new System.Windows.Forms.Button();
             this.textBoxZcashAddress = new System.Windows.Forms.TextBox();
             this.buttonViewBalancesAtNiceHash = new System.Windows.Forms.Button();
-            this.groupBoxAutomation = new System.Windows.Forms.GroupBox();
-            this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
-            this.checkBoxAutoStart = new System.Windows.Forms.CheckBox();
-            this.checkBoxLaunchAtStartup = new System.Windows.Forms.CheckBox();
             this.groupBoxPoolParameters = new System.Windows.Forms.GroupBox();
             this.textBoxRigID = new System.Windows.Forms.TextBox();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
@@ -181,6 +177,55 @@
             this.radioButtonMonero = new System.Windows.Forms.RadioButton();
             this.radioButtonEthereum = new System.Windows.Forms.RadioButton();
             this.radioButtonMostProfitable = new System.Windows.Forms.RadioButton();
+            this.tabPageCustomPoolSettings = new System.Windows.Forms.TabPage();
+            this.groupBoxCustmPool1 = new System.Windows.Forms.GroupBox();
+            this.label150 = new System.Windows.Forms.Label();
+            this.checkBoxCustomPool1Enable = new System.Windows.Forms.CheckBox();
+            this.comboBoxCustomPool1Algorithm = new System.Windows.Forms.ComboBox();
+            this.label151 = new System.Windows.Forms.Label();
+            this.numericUpDownCustomPool1Port = new System.Windows.Forms.NumericUpDown();
+            this.textBoxCustomPool1Host = new System.Windows.Forms.TextBox();
+            this.textBoxCustomPool1Password = new System.Windows.Forms.TextBox();
+            this.label152 = new System.Windows.Forms.Label();
+            this.label153 = new System.Windows.Forms.Label();
+            this.textBoxCustomPool1Login = new System.Windows.Forms.TextBox();
+            this.label154 = new System.Windows.Forms.Label();
+            this.groupBoxCustmPool2 = new System.Windows.Forms.GroupBox();
+            this.label155 = new System.Windows.Forms.Label();
+            this.checkBoxCustomPool2Enable = new System.Windows.Forms.CheckBox();
+            this.comboBoxCustomPool2Algorithm = new System.Windows.Forms.ComboBox();
+            this.label156 = new System.Windows.Forms.Label();
+            this.numericUpDownCustomPool2Port = new System.Windows.Forms.NumericUpDown();
+            this.textBoxCustomPool2Host = new System.Windows.Forms.TextBox();
+            this.textBoxCustomPool2Password = new System.Windows.Forms.TextBox();
+            this.label157 = new System.Windows.Forms.Label();
+            this.label158 = new System.Windows.Forms.Label();
+            this.textBoxCustomPool2Login = new System.Windows.Forms.TextBox();
+            this.label159 = new System.Windows.Forms.Label();
+            this.groupBoxCustmPool3 = new System.Windows.Forms.GroupBox();
+            this.label160 = new System.Windows.Forms.Label();
+            this.checkBoxCustomPool3Enable = new System.Windows.Forms.CheckBox();
+            this.comboBoxCustomPool3Algorithm = new System.Windows.Forms.ComboBox();
+            this.label161 = new System.Windows.Forms.Label();
+            this.numericUpDownCustomPool3Port = new System.Windows.Forms.NumericUpDown();
+            this.textBoxCustomPool3Host = new System.Windows.Forms.TextBox();
+            this.textBoxCustomPool3Password = new System.Windows.Forms.TextBox();
+            this.label162 = new System.Windows.Forms.Label();
+            this.label163 = new System.Windows.Forms.Label();
+            this.textBoxCustomPool3Login = new System.Windows.Forms.TextBox();
+            this.label164 = new System.Windows.Forms.Label();
+            this.groupBoxCustmPool0 = new System.Windows.Forms.GroupBox();
+            this.label149 = new System.Windows.Forms.Label();
+            this.checkBoxCustomPool0Enable = new System.Windows.Forms.CheckBox();
+            this.comboBoxCustomPool0Algorithm = new System.Windows.Forms.ComboBox();
+            this.label147 = new System.Windows.Forms.Label();
+            this.numericUpDownCustomPool0Port = new System.Windows.Forms.NumericUpDown();
+            this.textBoxCustomPool0Host = new System.Windows.Forms.TextBox();
+            this.textBoxCustomPool0Password = new System.Windows.Forms.TextBox();
+            this.label145 = new System.Windows.Forms.Label();
+            this.label146 = new System.Windows.Forms.Label();
+            this.textBoxCustomPool0Login = new System.Windows.Forms.TextBox();
+            this.label148 = new System.Windows.Forms.Label();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
             this.groupBoxHadrwareAcceleration = new System.Windows.Forms.GroupBox();
             this.label144 = new System.Windows.Forms.Label();
@@ -484,10 +529,17 @@
             this.label6 = new System.Windows.Forms.Label();
             this.numericUpDownDevice7EthashIntensity = new System.Windows.Forms.NumericUpDown();
             this.labelDevice7EthashIntensity = new System.Windows.Forms.Label();
+            this.tabPageMiscSettings = new System.Windows.Forms.TabPage();
+            this.groupBoxAutomation = new System.Windows.Forms.GroupBox();
+            this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
+            this.checkBoxAutoStart = new System.Windows.Forms.CheckBox();
+            this.checkBoxLaunchAtStartup = new System.Windows.Forms.CheckBox();
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.buttonClearLog = new System.Windows.Forms.Button();
             this.buttonOpenLog = new System.Windows.Forms.Button();
             this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
+            this.tabPageAbout = new System.Windows.Forms.TabPage();
+            this.richTextBoxAbout = new System.Windows.Forms.RichTextBox();
             this.buttonStart = new System.Windows.Forms.Button();
             this.buttonBenchmark = new System.Windows.Forms.Button();
             this.timerDeviceStatusUpdates = new System.Windows.Forms.Timer(this.components);
@@ -500,14 +552,22 @@
             this.toolStripMainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControlMainForm.SuspendLayout();
-            this.tabPageStatus.SuspendLayout();
+            this.tabPageDashboard.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPagePoolSettings.SuspendLayout();
             this.groupBoxWalletAddresses.SuspendLayout();
-            this.groupBoxAutomation.SuspendLayout();
             this.groupBoxPoolParameters.SuspendLayout();
             this.groupBoxPoolPriorities.SuspendLayout();
             this.groupBoxCoinsToMine.SuspendLayout();
+            this.tabPageCustomPoolSettings.SuspendLayout();
+            this.groupBoxCustmPool1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool1Port)).BeginInit();
+            this.groupBoxCustmPool2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool2Port)).BeginInit();
+            this.groupBoxCustmPool3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool3Port)).BeginInit();
+            this.groupBoxCustmPool0.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool0Port)).BeginInit();
             this.tabPageDeviceSettings.SuspendLayout();
             this.groupBoxHadrwareAcceleration.SuspendLayout();
             this.tabControlDevices.SuspendLayout();
@@ -679,16 +739,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashThreads)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashLocalWorkSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashIntensity)).BeginInit();
+            this.tabPageMiscSettings.SuspendLayout();
+            this.groupBoxAutomation.SuspendLayout();
             this.tabPageLog.SuspendLayout();
+            this.tabPageAbout.SuspendLayout();
             this.statusStripMainForm.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControlMainForm
             // 
-            this.tabControlMainForm.Controls.Add(this.tabPageStatus);
+            this.tabControlMainForm.Controls.Add(this.tabPageDashboard);
             this.tabControlMainForm.Controls.Add(this.tabPagePoolSettings);
+            this.tabControlMainForm.Controls.Add(this.tabPageCustomPoolSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageDeviceSettings);
+            this.tabControlMainForm.Controls.Add(this.tabPageMiscSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageLog);
+            this.tabControlMainForm.Controls.Add(this.tabPageAbout);
             this.tabControlMainForm.Location = new System.Drawing.Point(11, 8);
             this.tabControlMainForm.Name = "tabControlMainForm";
             this.tabControlMainForm.SelectedIndex = 0;
@@ -696,29 +762,29 @@
             this.tabControlMainForm.TabIndex = 0;
             this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
             // 
-            // tabPageStatus
+            // tabPageDashboard
             // 
-            this.tabPageStatus.Controls.Add(this.labelElapsedTime);
-            this.tabPageStatus.Controls.Add(this.label4);
-            this.tabPageStatus.Controls.Add(this.labelPriceMonth);
-            this.tabPageStatus.Controls.Add(this.groupBox2);
-            this.tabPageStatus.Controls.Add(this.labelCurrentPool);
-            this.tabPageStatus.Controls.Add(this.label70);
-            this.tabPageStatus.Controls.Add(this.labelPriceWeek);
-            this.tabPageStatus.Controls.Add(this.labelPriceDay);
-            this.tabPageStatus.Controls.Add(this.label10);
-            this.tabPageStatus.Controls.Add(this.labelBalance);
-            this.tabPageStatus.Controls.Add(this.label5);
-            this.tabPageStatus.Controls.Add(this.labelCurrentSpeed);
-            this.tabPageStatus.Controls.Add(this.label3);
-            this.tabPageStatus.Controls.Add(this.labelCurrentAlgorithm);
-            this.tabPageStatus.Controls.Add(this.labelCurrentAlgorithmCaption);
-            this.tabPageStatus.Location = new System.Drawing.Point(4, 22);
-            this.tabPageStatus.Name = "tabPageStatus";
-            this.tabPageStatus.Size = new System.Drawing.Size(720, 394);
-            this.tabPageStatus.TabIndex = 2;
-            this.tabPageStatus.Text = "Status";
-            this.tabPageStatus.UseVisualStyleBackColor = true;
+            this.tabPageDashboard.Controls.Add(this.labelElapsedTime);
+            this.tabPageDashboard.Controls.Add(this.label4);
+            this.tabPageDashboard.Controls.Add(this.labelPriceMonth);
+            this.tabPageDashboard.Controls.Add(this.groupBox2);
+            this.tabPageDashboard.Controls.Add(this.labelCurrentPool);
+            this.tabPageDashboard.Controls.Add(this.label70);
+            this.tabPageDashboard.Controls.Add(this.labelPriceWeek);
+            this.tabPageDashboard.Controls.Add(this.labelPriceDay);
+            this.tabPageDashboard.Controls.Add(this.label10);
+            this.tabPageDashboard.Controls.Add(this.labelBalance);
+            this.tabPageDashboard.Controls.Add(this.label5);
+            this.tabPageDashboard.Controls.Add(this.labelCurrentSpeed);
+            this.tabPageDashboard.Controls.Add(this.label3);
+            this.tabPageDashboard.Controls.Add(this.labelCurrentAlgorithm);
+            this.tabPageDashboard.Controls.Add(this.labelCurrentAlgorithmCaption);
+            this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
+            this.tabPageDashboard.Name = "tabPageDashboard";
+            this.tabPageDashboard.Size = new System.Drawing.Size(720, 394);
+            this.tabPageDashboard.TabIndex = 2;
+            this.tabPageDashboard.Text = "Dashboard";
+            this.tabPageDashboard.UseVisualStyleBackColor = true;
             // 
             // labelElapsedTime
             // 
@@ -1929,7 +1995,6 @@
             // tabPagePoolSettings
             // 
             this.tabPagePoolSettings.Controls.Add(this.groupBoxWalletAddresses);
-            this.tabPagePoolSettings.Controls.Add(this.groupBoxAutomation);
             this.tabPagePoolSettings.Controls.Add(this.groupBoxPoolParameters);
             this.tabPagePoolSettings.Controls.Add(this.groupBoxPoolPriorities);
             this.tabPagePoolSettings.Controls.Add(this.groupBoxCoinsToMine);
@@ -2065,49 +2130,6 @@
             this.buttonViewBalancesAtNiceHash.Text = "View Balance";
             this.buttonViewBalancesAtNiceHash.UseVisualStyleBackColor = true;
             this.buttonViewBalancesAtNiceHash.Click += new System.EventHandler(this.buttonViewBalancesAtNiceHash_Click);
-            // 
-            // groupBoxAutomation
-            // 
-            this.groupBoxAutomation.Controls.Add(this.checkBoxDisableAutoStartPrompt);
-            this.groupBoxAutomation.Controls.Add(this.checkBoxAutoStart);
-            this.groupBoxAutomation.Controls.Add(this.checkBoxLaunchAtStartup);
-            this.groupBoxAutomation.Location = new System.Drawing.Point(9, 280);
-            this.groupBoxAutomation.Name = "groupBoxAutomation";
-            this.groupBoxAutomation.Size = new System.Drawing.Size(193, 95);
-            this.groupBoxAutomation.TabIndex = 34;
-            this.groupBoxAutomation.TabStop = false;
-            this.groupBoxAutomation.Text = "Automation";
-            // 
-            // checkBoxDisableAutoStartPrompt
-            // 
-            this.checkBoxDisableAutoStartPrompt.AutoSize = true;
-            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(8, 65);
-            this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
-            this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
-            this.checkBoxDisableAutoStartPrompt.TabIndex = 29;
-            this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
-            this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAutoStart
-            // 
-            this.checkBoxAutoStart.AutoSize = true;
-            this.checkBoxAutoStart.Location = new System.Drawing.Point(8, 19);
-            this.checkBoxAutoStart.Name = "checkBoxAutoStart";
-            this.checkBoxAutoStart.Size = new System.Drawing.Size(104, 17);
-            this.checkBoxAutoStart.TabIndex = 27;
-            this.checkBoxAutoStart.Text = "Auto-start mining";
-            this.checkBoxAutoStart.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxLaunchAtStartup
-            // 
-            this.checkBoxLaunchAtStartup.AutoSize = true;
-            this.checkBoxLaunchAtStartup.Location = new System.Drawing.Point(8, 42);
-            this.checkBoxLaunchAtStartup.Name = "checkBoxLaunchAtStartup";
-            this.checkBoxLaunchAtStartup.Size = new System.Drawing.Size(163, 17);
-            this.checkBoxLaunchAtStartup.TabIndex = 28;
-            this.checkBoxLaunchAtStartup.Text = "Launch application at startup";
-            this.checkBoxLaunchAtStartup.UseVisualStyleBackColor = true;
-            this.checkBoxLaunchAtStartup.CheckedChanged += new System.EventHandler(this.checkBoxLaunchAtStartup_CheckedChanged);
             // 
             // groupBoxPoolParameters
             // 
@@ -2297,6 +2319,503 @@
             this.radioButtonMostProfitable.Text = "Most profitable";
             this.radioButtonMostProfitable.UseVisualStyleBackColor = true;
             this.radioButtonMostProfitable.CheckedChanged += new System.EventHandler(this.radioButtonMostProfitable_CheckedChanged);
+            // 
+            // tabPageCustomPoolSettings
+            // 
+            this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool1);
+            this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool2);
+            this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool3);
+            this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool0);
+            this.tabPageCustomPoolSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCustomPoolSettings.Name = "tabPageCustomPoolSettings";
+            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(720, 394);
+            this.tabPageCustomPoolSettings.TabIndex = 6;
+            this.tabPageCustomPoolSettings.Text = "Custom Pool Settings";
+            this.tabPageCustomPoolSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxCustmPool1
+            // 
+            this.groupBoxCustmPool1.Controls.Add(this.label150);
+            this.groupBoxCustmPool1.Controls.Add(this.checkBoxCustomPool1Enable);
+            this.groupBoxCustmPool1.Controls.Add(this.comboBoxCustomPool1Algorithm);
+            this.groupBoxCustmPool1.Controls.Add(this.label151);
+            this.groupBoxCustmPool1.Controls.Add(this.numericUpDownCustomPool1Port);
+            this.groupBoxCustmPool1.Controls.Add(this.textBoxCustomPool1Host);
+            this.groupBoxCustmPool1.Controls.Add(this.textBoxCustomPool1Password);
+            this.groupBoxCustmPool1.Controls.Add(this.label152);
+            this.groupBoxCustmPool1.Controls.Add(this.label153);
+            this.groupBoxCustmPool1.Controls.Add(this.textBoxCustomPool1Login);
+            this.groupBoxCustmPool1.Controls.Add(this.label154);
+            this.groupBoxCustmPool1.Location = new System.Drawing.Point(3, 81);
+            this.groupBoxCustmPool1.Name = "groupBoxCustmPool1";
+            this.groupBoxCustmPool1.Size = new System.Drawing.Size(714, 72);
+            this.groupBoxCustmPool1.TabIndex = 45;
+            this.groupBoxCustmPool1.TabStop = false;
+            this.groupBoxCustmPool1.Text = "Custom Pool 1";
+            // 
+            // label150
+            // 
+            this.label150.AutoSize = true;
+            this.label150.Location = new System.Drawing.Point(543, 19);
+            this.label150.Name = "label150";
+            this.label150.Size = new System.Drawing.Size(53, 13);
+            this.label150.TabIndex = 44;
+            this.label150.Text = "Algorithm:";
+            // 
+            // checkBoxCustomPool1Enable
+            // 
+            this.checkBoxCustomPool1Enable.AutoSize = true;
+            this.checkBoxCustomPool1Enable.Location = new System.Drawing.Point(6, 31);
+            this.checkBoxCustomPool1Enable.Name = "checkBoxCustomPool1Enable";
+            this.checkBoxCustomPool1Enable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxCustomPool1Enable.TabIndex = 0;
+            this.checkBoxCustomPool1Enable.Text = "Enable";
+            this.checkBoxCustomPool1Enable.UseVisualStyleBackColor = true;
+            this.checkBoxCustomPool1Enable.CheckedChanged += new System.EventHandler(this.checkBoxCustomPool1Enable_CheckedChanged);
+            // 
+            // comboBoxCustomPool1Algorithm
+            // 
+            this.comboBoxCustomPool1Algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool1Algorithm.FormattingEnabled = true;
+            this.comboBoxCustomPool1Algorithm.Items.AddRange(new object[] {
+            "Ethash",
+            "CryptoNight"});
+            this.comboBoxCustomPool1Algorithm.Location = new System.Drawing.Point(602, 16);
+            this.comboBoxCustomPool1Algorithm.Name = "comboBoxCustomPool1Algorithm";
+            this.comboBoxCustomPool1Algorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool1Algorithm.TabIndex = 43;
+            // 
+            // label151
+            // 
+            this.label151.AutoSize = true;
+            this.label151.Location = new System.Drawing.Point(395, 20);
+            this.label151.Name = "label151";
+            this.label151.Size = new System.Drawing.Size(29, 13);
+            this.label151.TabIndex = 42;
+            this.label151.Text = "Port:";
+            // 
+            // numericUpDownCustomPool1Port
+            // 
+            this.numericUpDownCustomPool1Port.Location = new System.Drawing.Point(457, 16);
+            this.numericUpDownCustomPool1Port.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numericUpDownCustomPool1Port.Name = "numericUpDownCustomPool1Port";
+            this.numericUpDownCustomPool1Port.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDownCustomPool1Port.TabIndex = 2;
+            // 
+            // textBoxCustomPool1Host
+            // 
+            this.textBoxCustomPool1Host.Location = new System.Drawing.Point(115, 17);
+            this.textBoxCustomPool1Host.Name = "textBoxCustomPool1Host";
+            this.textBoxCustomPool1Host.Size = new System.Drawing.Size(274, 20);
+            this.textBoxCustomPool1Host.TabIndex = 35;
+            // 
+            // textBoxCustomPool1Password
+            // 
+            this.textBoxCustomPool1Password.Location = new System.Drawing.Point(457, 41);
+            this.textBoxCustomPool1Password.Name = "textBoxCustomPool1Password";
+            this.textBoxCustomPool1Password.Size = new System.Drawing.Size(248, 20);
+            this.textBoxCustomPool1Password.TabIndex = 41;
+            // 
+            // label152
+            // 
+            this.label152.AutoSize = true;
+            this.label152.Location = new System.Drawing.Point(77, 20);
+            this.label152.Name = "label152";
+            this.label152.Size = new System.Drawing.Size(32, 13);
+            this.label152.TabIndex = 34;
+            this.label152.Text = "Host:";
+            // 
+            // label153
+            // 
+            this.label153.AutoSize = true;
+            this.label153.Location = new System.Drawing.Point(395, 46);
+            this.label153.Name = "label153";
+            this.label153.Size = new System.Drawing.Size(56, 13);
+            this.label153.TabIndex = 40;
+            this.label153.Text = "Password:";
+            // 
+            // textBoxCustomPool1Login
+            // 
+            this.textBoxCustomPool1Login.Location = new System.Drawing.Point(115, 42);
+            this.textBoxCustomPool1Login.Name = "textBoxCustomPool1Login";
+            this.textBoxCustomPool1Login.Size = new System.Drawing.Size(274, 20);
+            this.textBoxCustomPool1Login.TabIndex = 39;
+            // 
+            // label154
+            // 
+            this.label154.AutoSize = true;
+            this.label154.Location = new System.Drawing.Point(77, 44);
+            this.label154.Name = "label154";
+            this.label154.Size = new System.Drawing.Size(36, 13);
+            this.label154.TabIndex = 38;
+            this.label154.Text = "Login:";
+            // 
+            // groupBoxCustmPool2
+            // 
+            this.groupBoxCustmPool2.Controls.Add(this.label155);
+            this.groupBoxCustmPool2.Controls.Add(this.checkBoxCustomPool2Enable);
+            this.groupBoxCustmPool2.Controls.Add(this.comboBoxCustomPool2Algorithm);
+            this.groupBoxCustmPool2.Controls.Add(this.label156);
+            this.groupBoxCustmPool2.Controls.Add(this.numericUpDownCustomPool2Port);
+            this.groupBoxCustmPool2.Controls.Add(this.textBoxCustomPool2Host);
+            this.groupBoxCustmPool2.Controls.Add(this.textBoxCustomPool2Password);
+            this.groupBoxCustmPool2.Controls.Add(this.label157);
+            this.groupBoxCustmPool2.Controls.Add(this.label158);
+            this.groupBoxCustmPool2.Controls.Add(this.textBoxCustomPool2Login);
+            this.groupBoxCustmPool2.Controls.Add(this.label159);
+            this.groupBoxCustmPool2.Location = new System.Drawing.Point(3, 159);
+            this.groupBoxCustmPool2.Name = "groupBoxCustmPool2";
+            this.groupBoxCustmPool2.Size = new System.Drawing.Size(714, 72);
+            this.groupBoxCustmPool2.TabIndex = 45;
+            this.groupBoxCustmPool2.TabStop = false;
+            this.groupBoxCustmPool2.Text = "Custom Pool 2";
+            // 
+            // label155
+            // 
+            this.label155.AutoSize = true;
+            this.label155.Location = new System.Drawing.Point(543, 19);
+            this.label155.Name = "label155";
+            this.label155.Size = new System.Drawing.Size(53, 13);
+            this.label155.TabIndex = 44;
+            this.label155.Text = "Algorithm:";
+            // 
+            // checkBoxCustomPool2Enable
+            // 
+            this.checkBoxCustomPool2Enable.AutoSize = true;
+            this.checkBoxCustomPool2Enable.Location = new System.Drawing.Point(6, 31);
+            this.checkBoxCustomPool2Enable.Name = "checkBoxCustomPool2Enable";
+            this.checkBoxCustomPool2Enable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxCustomPool2Enable.TabIndex = 0;
+            this.checkBoxCustomPool2Enable.Text = "Enable";
+            this.checkBoxCustomPool2Enable.UseVisualStyleBackColor = true;
+            this.checkBoxCustomPool2Enable.CheckedChanged += new System.EventHandler(this.checkBoxCustomPool2Enable_CheckedChanged);
+            // 
+            // comboBoxCustomPool2Algorithm
+            // 
+            this.comboBoxCustomPool2Algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool2Algorithm.FormattingEnabled = true;
+            this.comboBoxCustomPool2Algorithm.Items.AddRange(new object[] {
+            "Ethash",
+            "CryptoNight"});
+            this.comboBoxCustomPool2Algorithm.Location = new System.Drawing.Point(602, 16);
+            this.comboBoxCustomPool2Algorithm.Name = "comboBoxCustomPool2Algorithm";
+            this.comboBoxCustomPool2Algorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool2Algorithm.TabIndex = 43;
+            // 
+            // label156
+            // 
+            this.label156.AutoSize = true;
+            this.label156.Location = new System.Drawing.Point(395, 20);
+            this.label156.Name = "label156";
+            this.label156.Size = new System.Drawing.Size(29, 13);
+            this.label156.TabIndex = 42;
+            this.label156.Text = "Port:";
+            // 
+            // numericUpDownCustomPool2Port
+            // 
+            this.numericUpDownCustomPool2Port.Location = new System.Drawing.Point(457, 16);
+            this.numericUpDownCustomPool2Port.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numericUpDownCustomPool2Port.Name = "numericUpDownCustomPool2Port";
+            this.numericUpDownCustomPool2Port.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDownCustomPool2Port.TabIndex = 2;
+            // 
+            // textBoxCustomPool2Host
+            // 
+            this.textBoxCustomPool2Host.Location = new System.Drawing.Point(115, 17);
+            this.textBoxCustomPool2Host.Name = "textBoxCustomPool2Host";
+            this.textBoxCustomPool2Host.Size = new System.Drawing.Size(274, 20);
+            this.textBoxCustomPool2Host.TabIndex = 35;
+            // 
+            // textBoxCustomPool2Password
+            // 
+            this.textBoxCustomPool2Password.Location = new System.Drawing.Point(457, 41);
+            this.textBoxCustomPool2Password.Name = "textBoxCustomPool2Password";
+            this.textBoxCustomPool2Password.Size = new System.Drawing.Size(248, 20);
+            this.textBoxCustomPool2Password.TabIndex = 41;
+            // 
+            // label157
+            // 
+            this.label157.AutoSize = true;
+            this.label157.Location = new System.Drawing.Point(77, 20);
+            this.label157.Name = "label157";
+            this.label157.Size = new System.Drawing.Size(32, 13);
+            this.label157.TabIndex = 34;
+            this.label157.Text = "Host:";
+            // 
+            // label158
+            // 
+            this.label158.AutoSize = true;
+            this.label158.Location = new System.Drawing.Point(395, 46);
+            this.label158.Name = "label158";
+            this.label158.Size = new System.Drawing.Size(56, 13);
+            this.label158.TabIndex = 40;
+            this.label158.Text = "Password:";
+            // 
+            // textBoxCustomPool2Login
+            // 
+            this.textBoxCustomPool2Login.Location = new System.Drawing.Point(115, 42);
+            this.textBoxCustomPool2Login.Name = "textBoxCustomPool2Login";
+            this.textBoxCustomPool2Login.Size = new System.Drawing.Size(274, 20);
+            this.textBoxCustomPool2Login.TabIndex = 39;
+            // 
+            // label159
+            // 
+            this.label159.AutoSize = true;
+            this.label159.Location = new System.Drawing.Point(77, 44);
+            this.label159.Name = "label159";
+            this.label159.Size = new System.Drawing.Size(36, 13);
+            this.label159.TabIndex = 38;
+            this.label159.Text = "Login:";
+            // 
+            // groupBoxCustmPool3
+            // 
+            this.groupBoxCustmPool3.Controls.Add(this.label160);
+            this.groupBoxCustmPool3.Controls.Add(this.checkBoxCustomPool3Enable);
+            this.groupBoxCustmPool3.Controls.Add(this.comboBoxCustomPool3Algorithm);
+            this.groupBoxCustmPool3.Controls.Add(this.label161);
+            this.groupBoxCustmPool3.Controls.Add(this.numericUpDownCustomPool3Port);
+            this.groupBoxCustmPool3.Controls.Add(this.textBoxCustomPool3Host);
+            this.groupBoxCustmPool3.Controls.Add(this.textBoxCustomPool3Password);
+            this.groupBoxCustmPool3.Controls.Add(this.label162);
+            this.groupBoxCustmPool3.Controls.Add(this.label163);
+            this.groupBoxCustmPool3.Controls.Add(this.textBoxCustomPool3Login);
+            this.groupBoxCustmPool3.Controls.Add(this.label164);
+            this.groupBoxCustmPool3.Location = new System.Drawing.Point(3, 237);
+            this.groupBoxCustmPool3.Name = "groupBoxCustmPool3";
+            this.groupBoxCustmPool3.Size = new System.Drawing.Size(714, 72);
+            this.groupBoxCustmPool3.TabIndex = 45;
+            this.groupBoxCustmPool3.TabStop = false;
+            this.groupBoxCustmPool3.Text = "Custom Pool 3";
+            // 
+            // label160
+            // 
+            this.label160.AutoSize = true;
+            this.label160.Location = new System.Drawing.Point(543, 19);
+            this.label160.Name = "label160";
+            this.label160.Size = new System.Drawing.Size(53, 13);
+            this.label160.TabIndex = 44;
+            this.label160.Text = "Algorithm:";
+            // 
+            // checkBoxCustomPool3Enable
+            // 
+            this.checkBoxCustomPool3Enable.AutoSize = true;
+            this.checkBoxCustomPool3Enable.Location = new System.Drawing.Point(6, 31);
+            this.checkBoxCustomPool3Enable.Name = "checkBoxCustomPool3Enable";
+            this.checkBoxCustomPool3Enable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxCustomPool3Enable.TabIndex = 0;
+            this.checkBoxCustomPool3Enable.Text = "Enable";
+            this.checkBoxCustomPool3Enable.UseVisualStyleBackColor = true;
+            this.checkBoxCustomPool3Enable.CheckedChanged += new System.EventHandler(this.checkBoxCustomPool3Enable_CheckedChanged);
+            // 
+            // comboBoxCustomPool3Algorithm
+            // 
+            this.comboBoxCustomPool3Algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool3Algorithm.FormattingEnabled = true;
+            this.comboBoxCustomPool3Algorithm.Items.AddRange(new object[] {
+            "Ethash",
+            "CryptoNight"});
+            this.comboBoxCustomPool3Algorithm.Location = new System.Drawing.Point(602, 16);
+            this.comboBoxCustomPool3Algorithm.Name = "comboBoxCustomPool3Algorithm";
+            this.comboBoxCustomPool3Algorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool3Algorithm.TabIndex = 43;
+            // 
+            // label161
+            // 
+            this.label161.AutoSize = true;
+            this.label161.Location = new System.Drawing.Point(395, 20);
+            this.label161.Name = "label161";
+            this.label161.Size = new System.Drawing.Size(29, 13);
+            this.label161.TabIndex = 42;
+            this.label161.Text = "Port:";
+            // 
+            // numericUpDownCustomPool3Port
+            // 
+            this.numericUpDownCustomPool3Port.Location = new System.Drawing.Point(457, 16);
+            this.numericUpDownCustomPool3Port.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numericUpDownCustomPool3Port.Name = "numericUpDownCustomPool3Port";
+            this.numericUpDownCustomPool3Port.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDownCustomPool3Port.TabIndex = 2;
+            // 
+            // textBoxCustomPool3Host
+            // 
+            this.textBoxCustomPool3Host.Location = new System.Drawing.Point(115, 17);
+            this.textBoxCustomPool3Host.Name = "textBoxCustomPool3Host";
+            this.textBoxCustomPool3Host.Size = new System.Drawing.Size(274, 20);
+            this.textBoxCustomPool3Host.TabIndex = 35;
+            // 
+            // textBoxCustomPool3Password
+            // 
+            this.textBoxCustomPool3Password.Location = new System.Drawing.Point(457, 41);
+            this.textBoxCustomPool3Password.Name = "textBoxCustomPool3Password";
+            this.textBoxCustomPool3Password.Size = new System.Drawing.Size(248, 20);
+            this.textBoxCustomPool3Password.TabIndex = 41;
+            // 
+            // label162
+            // 
+            this.label162.AutoSize = true;
+            this.label162.Location = new System.Drawing.Point(77, 20);
+            this.label162.Name = "label162";
+            this.label162.Size = new System.Drawing.Size(32, 13);
+            this.label162.TabIndex = 34;
+            this.label162.Text = "Host:";
+            // 
+            // label163
+            // 
+            this.label163.AutoSize = true;
+            this.label163.Location = new System.Drawing.Point(395, 46);
+            this.label163.Name = "label163";
+            this.label163.Size = new System.Drawing.Size(56, 13);
+            this.label163.TabIndex = 40;
+            this.label163.Text = "Password:";
+            // 
+            // textBoxCustomPool3Login
+            // 
+            this.textBoxCustomPool3Login.Location = new System.Drawing.Point(115, 42);
+            this.textBoxCustomPool3Login.Name = "textBoxCustomPool3Login";
+            this.textBoxCustomPool3Login.Size = new System.Drawing.Size(274, 20);
+            this.textBoxCustomPool3Login.TabIndex = 39;
+            // 
+            // label164
+            // 
+            this.label164.AutoSize = true;
+            this.label164.Location = new System.Drawing.Point(77, 44);
+            this.label164.Name = "label164";
+            this.label164.Size = new System.Drawing.Size(36, 13);
+            this.label164.TabIndex = 38;
+            this.label164.Text = "Login:";
+            // 
+            // groupBoxCustmPool0
+            // 
+            this.groupBoxCustmPool0.Controls.Add(this.label149);
+            this.groupBoxCustmPool0.Controls.Add(this.checkBoxCustomPool0Enable);
+            this.groupBoxCustmPool0.Controls.Add(this.comboBoxCustomPool0Algorithm);
+            this.groupBoxCustmPool0.Controls.Add(this.label147);
+            this.groupBoxCustmPool0.Controls.Add(this.numericUpDownCustomPool0Port);
+            this.groupBoxCustmPool0.Controls.Add(this.textBoxCustomPool0Host);
+            this.groupBoxCustmPool0.Controls.Add(this.textBoxCustomPool0Password);
+            this.groupBoxCustmPool0.Controls.Add(this.label145);
+            this.groupBoxCustmPool0.Controls.Add(this.label146);
+            this.groupBoxCustmPool0.Controls.Add(this.textBoxCustomPool0Login);
+            this.groupBoxCustmPool0.Controls.Add(this.label148);
+            this.groupBoxCustmPool0.Location = new System.Drawing.Point(3, 3);
+            this.groupBoxCustmPool0.Name = "groupBoxCustmPool0";
+            this.groupBoxCustmPool0.Size = new System.Drawing.Size(714, 72);
+            this.groupBoxCustmPool0.TabIndex = 1;
+            this.groupBoxCustmPool0.TabStop = false;
+            this.groupBoxCustmPool0.Text = "Custom Pool 0";
+            // 
+            // label149
+            // 
+            this.label149.AutoSize = true;
+            this.label149.Location = new System.Drawing.Point(543, 19);
+            this.label149.Name = "label149";
+            this.label149.Size = new System.Drawing.Size(53, 13);
+            this.label149.TabIndex = 44;
+            this.label149.Text = "Algorithm:";
+            // 
+            // checkBoxCustomPool0Enable
+            // 
+            this.checkBoxCustomPool0Enable.AutoSize = true;
+            this.checkBoxCustomPool0Enable.Location = new System.Drawing.Point(6, 31);
+            this.checkBoxCustomPool0Enable.Name = "checkBoxCustomPool0Enable";
+            this.checkBoxCustomPool0Enable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxCustomPool0Enable.TabIndex = 0;
+            this.checkBoxCustomPool0Enable.Text = "Enable";
+            this.checkBoxCustomPool0Enable.UseVisualStyleBackColor = true;
+            this.checkBoxCustomPool0Enable.CheckedChanged += new System.EventHandler(this.checkBoxCustomPool0Enable_CheckedChanged);
+            // 
+            // comboBoxCustomPool0Algorithm
+            // 
+            this.comboBoxCustomPool0Algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool0Algorithm.FormattingEnabled = true;
+            this.comboBoxCustomPool0Algorithm.Items.AddRange(new object[] {
+            "Ethash",
+            "CryptoNight"});
+            this.comboBoxCustomPool0Algorithm.Location = new System.Drawing.Point(602, 16);
+            this.comboBoxCustomPool0Algorithm.Name = "comboBoxCustomPool0Algorithm";
+            this.comboBoxCustomPool0Algorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool0Algorithm.TabIndex = 43;
+            // 
+            // label147
+            // 
+            this.label147.AutoSize = true;
+            this.label147.Location = new System.Drawing.Point(395, 20);
+            this.label147.Name = "label147";
+            this.label147.Size = new System.Drawing.Size(29, 13);
+            this.label147.TabIndex = 42;
+            this.label147.Text = "Port:";
+            // 
+            // numericUpDownCustomPool0Port
+            // 
+            this.numericUpDownCustomPool0Port.Location = new System.Drawing.Point(457, 16);
+            this.numericUpDownCustomPool0Port.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numericUpDownCustomPool0Port.Name = "numericUpDownCustomPool0Port";
+            this.numericUpDownCustomPool0Port.Size = new System.Drawing.Size(80, 20);
+            this.numericUpDownCustomPool0Port.TabIndex = 2;
+            // 
+            // textBoxCustomPool0Host
+            // 
+            this.textBoxCustomPool0Host.Location = new System.Drawing.Point(115, 17);
+            this.textBoxCustomPool0Host.Name = "textBoxCustomPool0Host";
+            this.textBoxCustomPool0Host.Size = new System.Drawing.Size(274, 20);
+            this.textBoxCustomPool0Host.TabIndex = 35;
+            // 
+            // textBoxCustomPool0Password
+            // 
+            this.textBoxCustomPool0Password.Location = new System.Drawing.Point(457, 41);
+            this.textBoxCustomPool0Password.Name = "textBoxCustomPool0Password";
+            this.textBoxCustomPool0Password.Size = new System.Drawing.Size(248, 20);
+            this.textBoxCustomPool0Password.TabIndex = 41;
+            // 
+            // label145
+            // 
+            this.label145.AutoSize = true;
+            this.label145.Location = new System.Drawing.Point(77, 20);
+            this.label145.Name = "label145";
+            this.label145.Size = new System.Drawing.Size(32, 13);
+            this.label145.TabIndex = 34;
+            this.label145.Text = "Host:";
+            // 
+            // label146
+            // 
+            this.label146.AutoSize = true;
+            this.label146.Location = new System.Drawing.Point(395, 46);
+            this.label146.Name = "label146";
+            this.label146.Size = new System.Drawing.Size(56, 13);
+            this.label146.TabIndex = 40;
+            this.label146.Text = "Password:";
+            // 
+            // textBoxCustomPool0Login
+            // 
+            this.textBoxCustomPool0Login.Location = new System.Drawing.Point(115, 42);
+            this.textBoxCustomPool0Login.Name = "textBoxCustomPool0Login";
+            this.textBoxCustomPool0Login.Size = new System.Drawing.Size(274, 20);
+            this.textBoxCustomPool0Login.TabIndex = 39;
+            // 
+            // label148
+            // 
+            this.label148.AutoSize = true;
+            this.label148.Location = new System.Drawing.Point(77, 44);
+            this.label148.Name = "label148";
+            this.label148.Size = new System.Drawing.Size(36, 13);
+            this.label148.TabIndex = 38;
+            this.label148.Text = "Login:";
             // 
             // tabPageDeviceSettings
             // 
@@ -7333,6 +7852,58 @@
             this.labelDevice7EthashIntensity.TabIndex = 27;
             this.labelDevice7EthashIntensity.Text = "Intensity:";
             // 
+            // tabPageMiscSettings
+            // 
+            this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
+            this.tabPageMiscSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabPageMiscSettings.Name = "tabPageMiscSettings";
+            this.tabPageMiscSettings.Size = new System.Drawing.Size(720, 394);
+            this.tabPageMiscSettings.TabIndex = 4;
+            this.tabPageMiscSettings.Text = "Misc. Settings";
+            this.tabPageMiscSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxAutomation
+            // 
+            this.groupBoxAutomation.Controls.Add(this.checkBoxDisableAutoStartPrompt);
+            this.groupBoxAutomation.Controls.Add(this.checkBoxAutoStart);
+            this.groupBoxAutomation.Controls.Add(this.checkBoxLaunchAtStartup);
+            this.groupBoxAutomation.Location = new System.Drawing.Point(3, 3);
+            this.groupBoxAutomation.Name = "groupBoxAutomation";
+            this.groupBoxAutomation.Size = new System.Drawing.Size(193, 95);
+            this.groupBoxAutomation.TabIndex = 35;
+            this.groupBoxAutomation.TabStop = false;
+            this.groupBoxAutomation.Text = "Automation";
+            // 
+            // checkBoxDisableAutoStartPrompt
+            // 
+            this.checkBoxDisableAutoStartPrompt.AutoSize = true;
+            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(8, 65);
+            this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
+            this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
+            this.checkBoxDisableAutoStartPrompt.TabIndex = 29;
+            this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
+            this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAutoStart
+            // 
+            this.checkBoxAutoStart.AutoSize = true;
+            this.checkBoxAutoStart.Location = new System.Drawing.Point(8, 19);
+            this.checkBoxAutoStart.Name = "checkBoxAutoStart";
+            this.checkBoxAutoStart.Size = new System.Drawing.Size(104, 17);
+            this.checkBoxAutoStart.TabIndex = 27;
+            this.checkBoxAutoStart.Text = "Auto-start mining";
+            this.checkBoxAutoStart.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLaunchAtStartup
+            // 
+            this.checkBoxLaunchAtStartup.AutoSize = true;
+            this.checkBoxLaunchAtStartup.Location = new System.Drawing.Point(8, 42);
+            this.checkBoxLaunchAtStartup.Name = "checkBoxLaunchAtStartup";
+            this.checkBoxLaunchAtStartup.Size = new System.Drawing.Size(163, 17);
+            this.checkBoxLaunchAtStartup.TabIndex = 28;
+            this.checkBoxLaunchAtStartup.Text = "Launch application at startup";
+            this.checkBoxLaunchAtStartup.UseVisualStyleBackColor = true;
+            // 
             // tabPageLog
             // 
             this.tabPageLog.Controls.Add(this.buttonClearLog);
@@ -7377,6 +7948,25 @@
             this.richTextBoxLog.Size = new System.Drawing.Size(627, 382);
             this.richTextBoxLog.TabIndex = 59;
             this.richTextBoxLog.Text = "";
+            // 
+            // tabPageAbout
+            // 
+            this.tabPageAbout.Controls.Add(this.richTextBoxAbout);
+            this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAbout.Name = "tabPageAbout";
+            this.tabPageAbout.Size = new System.Drawing.Size(720, 394);
+            this.tabPageAbout.TabIndex = 5;
+            this.tabPageAbout.Text = "About";
+            this.tabPageAbout.UseVisualStyleBackColor = true;
+            // 
+            // richTextBoxAbout
+            // 
+            this.richTextBoxAbout.Location = new System.Drawing.Point(4, 4);
+            this.richTextBoxAbout.Name = "richTextBoxAbout";
+            this.richTextBoxAbout.ReadOnly = true;
+            this.richTextBoxAbout.Size = new System.Drawing.Size(713, 387);
+            this.richTextBoxAbout.TabIndex = 0;
+            this.richTextBoxAbout.Text = resources.GetString("richTextBoxAbout.Text");
             // 
             // buttonStart
             // 
@@ -7468,20 +8058,31 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControlMainForm.ResumeLayout(false);
-            this.tabPageStatus.ResumeLayout(false);
-            this.tabPageStatus.PerformLayout();
+            this.tabPageDashboard.ResumeLayout(false);
+            this.tabPageDashboard.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPagePoolSettings.ResumeLayout(false);
             this.groupBoxWalletAddresses.ResumeLayout(false);
             this.groupBoxWalletAddresses.PerformLayout();
-            this.groupBoxAutomation.ResumeLayout(false);
-            this.groupBoxAutomation.PerformLayout();
             this.groupBoxPoolParameters.ResumeLayout(false);
             this.groupBoxPoolParameters.PerformLayout();
             this.groupBoxPoolPriorities.ResumeLayout(false);
             this.groupBoxCoinsToMine.ResumeLayout(false);
             this.groupBoxCoinsToMine.PerformLayout();
+            this.tabPageCustomPoolSettings.ResumeLayout(false);
+            this.groupBoxCustmPool1.ResumeLayout(false);
+            this.groupBoxCustmPool1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool1Port)).EndInit();
+            this.groupBoxCustmPool2.ResumeLayout(false);
+            this.groupBoxCustmPool2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool2Port)).EndInit();
+            this.groupBoxCustmPool3.ResumeLayout(false);
+            this.groupBoxCustmPool3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool3Port)).EndInit();
+            this.groupBoxCustmPool0.ResumeLayout(false);
+            this.groupBoxCustmPool0.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool0Port)).EndInit();
             this.tabPageDeviceSettings.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.PerformLayout();
@@ -7686,7 +8287,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashThreads)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashLocalWorkSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice7EthashIntensity)).EndInit();
+            this.tabPageMiscSettings.ResumeLayout(false);
+            this.groupBoxAutomation.ResumeLayout(false);
+            this.groupBoxAutomation.PerformLayout();
             this.tabPageLog.ResumeLayout(false);
+            this.tabPageAbout.ResumeLayout(false);
             this.statusStripMainForm.ResumeLayout(false);
             this.statusStripMainForm.PerformLayout();
             this.ResumeLayout(false);
@@ -7697,7 +8302,7 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabControlMainForm;
-        private System.Windows.Forms.TabPage tabPageStatus;
+        private System.Windows.Forms.TabPage tabPageDashboard;
         private System.Windows.Forms.TabPage tabPageLog;
         private System.Windows.Forms.TabPage tabPagePoolSettings;
         private System.Windows.Forms.Label labelBalance;
@@ -7841,9 +8446,6 @@
         private System.Windows.Forms.TextBox textBoxBitcoinAddress;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Timer timerUpdateLog;
-        private System.Windows.Forms.CheckBox checkBoxLaunchAtStartup;
-        private System.Windows.Forms.CheckBox checkBoxAutoStart;
-        private System.Windows.Forms.GroupBox groupBoxAutomation;
         private System.Windows.Forms.Label labelElapsedTime;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button buttonClearLog;
@@ -8161,9 +8763,64 @@
         private System.Windows.Forms.CheckBox checkBoxEnablePhymem;
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.Timer timerAutoStart;
-        private System.Windows.Forms.CheckBox checkBoxDisableAutoStartPrompt;
         private System.Windows.Forms.StatusStrip statusStripMainForm;
         private System.Windows.Forms.ToolStripProgressBar toolStripMainFormProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.TabPage tabPageCustomPoolSettings;
+        private System.Windows.Forms.GroupBox groupBoxCustmPool0;
+        private System.Windows.Forms.Label label147;
+        private System.Windows.Forms.NumericUpDown numericUpDownCustomPool0Port;
+        private System.Windows.Forms.TextBox textBoxCustomPool0Host;
+        private System.Windows.Forms.TextBox textBoxCustomPool0Password;
+        private System.Windows.Forms.Label label145;
+        private System.Windows.Forms.Label label146;
+        private System.Windows.Forms.TextBox textBoxCustomPool0Login;
+        private System.Windows.Forms.Label label148;
+        private System.Windows.Forms.CheckBox checkBoxCustomPool0Enable;
+        private System.Windows.Forms.TabPage tabPageMiscSettings;
+        private System.Windows.Forms.GroupBox groupBoxAutomation;
+        private System.Windows.Forms.CheckBox checkBoxDisableAutoStartPrompt;
+        private System.Windows.Forms.CheckBox checkBoxAutoStart;
+        private System.Windows.Forms.CheckBox checkBoxLaunchAtStartup;
+        private System.Windows.Forms.TabPage tabPageAbout;
+        private System.Windows.Forms.Label label149;
+        private System.Windows.Forms.ComboBox comboBoxCustomPool0Algorithm;
+        private System.Windows.Forms.GroupBox groupBoxCustmPool1;
+        private System.Windows.Forms.Label label150;
+        private System.Windows.Forms.CheckBox checkBoxCustomPool1Enable;
+        private System.Windows.Forms.ComboBox comboBoxCustomPool1Algorithm;
+        private System.Windows.Forms.Label label151;
+        private System.Windows.Forms.NumericUpDown numericUpDownCustomPool1Port;
+        private System.Windows.Forms.TextBox textBoxCustomPool1Host;
+        private System.Windows.Forms.TextBox textBoxCustomPool1Password;
+        private System.Windows.Forms.Label label152;
+        private System.Windows.Forms.Label label153;
+        private System.Windows.Forms.TextBox textBoxCustomPool1Login;
+        private System.Windows.Forms.Label label154;
+        private System.Windows.Forms.GroupBox groupBoxCustmPool2;
+        private System.Windows.Forms.Label label155;
+        private System.Windows.Forms.CheckBox checkBoxCustomPool2Enable;
+        private System.Windows.Forms.ComboBox comboBoxCustomPool2Algorithm;
+        private System.Windows.Forms.Label label156;
+        private System.Windows.Forms.NumericUpDown numericUpDownCustomPool2Port;
+        private System.Windows.Forms.TextBox textBoxCustomPool2Host;
+        private System.Windows.Forms.TextBox textBoxCustomPool2Password;
+        private System.Windows.Forms.Label label157;
+        private System.Windows.Forms.Label label158;
+        private System.Windows.Forms.TextBox textBoxCustomPool2Login;
+        private System.Windows.Forms.Label label159;
+        private System.Windows.Forms.GroupBox groupBoxCustmPool3;
+        private System.Windows.Forms.Label label160;
+        private System.Windows.Forms.CheckBox checkBoxCustomPool3Enable;
+        private System.Windows.Forms.ComboBox comboBoxCustomPool3Algorithm;
+        private System.Windows.Forms.Label label161;
+        private System.Windows.Forms.NumericUpDown numericUpDownCustomPool3Port;
+        private System.Windows.Forms.TextBox textBoxCustomPool3Host;
+        private System.Windows.Forms.TextBox textBoxCustomPool3Password;
+        private System.Windows.Forms.Label label162;
+        private System.Windows.Forms.Label label163;
+        private System.Windows.Forms.TextBox textBoxCustomPool3Login;
+        private System.Windows.Forms.Label label164;
+        private System.Windows.Forms.RichTextBox richTextBoxAbout;
     }
 }
