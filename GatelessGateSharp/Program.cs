@@ -94,7 +94,7 @@ namespace GatelessGateSharp
                 try { process.Kill(); }
                 catch (Exception) { }
                 
-                sMutex.ReleaseMutex();
+                try { sMutex.ReleaseMutex(); } catch (Exception) { }
             }
         }
     }

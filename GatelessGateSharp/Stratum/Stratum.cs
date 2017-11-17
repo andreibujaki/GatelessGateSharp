@@ -22,16 +22,16 @@ namespace GatelessGateSharp
 
             public Job()
             {
-                mMutex.WaitOne();
+                try { mMutex.WaitOne(); } catch (Exception) { }
                 nextLocalExtranonce = (byte)(r.Next(0, int.MaxValue) & (0xffu));
-                mMutex.ReleaseMutex();
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
             }
 
             public byte GetNewLocalExtranonce()
             {
-                mMutex.WaitOne();
+                try { mMutex.WaitOne(); } catch (Exception) { }
                 byte ret = nextLocalExtranonce++;
-                mMutex.ReleaseMutex();
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
                 return ret;
             }
         }
@@ -83,37 +83,37 @@ namespace GatelessGateSharp
 
         protected void RegisterDeviceWithShare(Device aDevice)
         {
-            mMutex.WaitOne();
+            try { mMutex.WaitOne(); } catch (Exception) { }
             mDevicesWithShare.Add(aDevice);
-            mMutex.ReleaseMutex();
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         protected void ReportShareAcceptance()
         {
             if (MainForm.DevFeeMode)
                 return;
-            mMutex.WaitOne();
+            try { mMutex.WaitOne(); } catch (Exception) { }
             if (mDevicesWithShare.Count > 0)
             {
                 Device device = mDevicesWithShare[0];
                 mDevicesWithShare.RemoveAt(0);
                 device.IncrementAcceptedShares();
             }
-            mMutex.ReleaseMutex();
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         protected void ReportShareRejection()
         {
             if (MainForm.DevFeeMode)
                 return;
-            mMutex.WaitOne();
+            try { mMutex.WaitOne(); } catch (Exception) { }
             if (mDevicesWithShare.Count > 0)
             {
                 Device device = mDevicesWithShare[0];
                 mDevicesWithShare.RemoveAt(0);
                 device.IncrementRejectedShares();
             }
-            mMutex.ReleaseMutex();
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         public void Stop()
@@ -141,14 +141,14 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
 
-                mMutex.WaitOne();
+                try { mMutex.WaitOne(); } catch (Exception) { }
 
                 mClient = new TcpClient(ServerAddress, ServerPort);
                 mStream = mClient.GetStream();
                 mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
                 mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
 
-                mMutex.ReleaseMutex();
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
 
                 Authorize();
 
@@ -164,11 +164,11 @@ namespace GatelessGateSharp
 
         protected void WriteLine(String line)
         {
-            mMutex.WaitOne();
+            try { mMutex.WaitOne(); } catch (Exception) { }
             mStreamWriter.Write(line);
             mStreamWriter.Write("\n");
             mStreamWriter.Flush();
-            mMutex.ReleaseMutex();
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         protected String ReadLine()

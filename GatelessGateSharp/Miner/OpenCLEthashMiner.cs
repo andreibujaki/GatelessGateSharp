@@ -63,7 +63,7 @@ namespace GatelessGateSharp
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
             ComputeProgram program;
-            mProgramArrayMutex.WaitOne();
+            try { mProgramArrayMutex.WaitOne(); } catch (Exception) { }
             if (mProgramArray.ContainsKey(new long[] { DeviceIndex, mLocalWorkSize }))
             {
                 program = mProgramArray[new long[] { DeviceIndex, mLocalWorkSize }];
@@ -93,7 +93,7 @@ namespace GatelessGateSharp
                 MainForm.Logger("Built options: " + buildOptions);
                 mProgramArray[new long[] { DeviceIndex, mLocalWorkSize }] = program;
             }
-            mProgramArrayMutex.ReleaseMutex();
+            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
 
             while (!Stopped)
             {

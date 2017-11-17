@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.0.0";
+        public static string appVersion = "1.0.1";
         public static string appName = shortAppName + " " + appVersion + "";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -110,19 +110,19 @@ namespace GatelessGateSharp
         {
             lines = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff") + " [" + System.Threading.Thread.CurrentThread.ManagedThreadId + "] " + lines + "\r\n";
             Console.Write(lines);
-            Instance.loggerMutex.WaitOne();
+            try { Instance.loggerMutex.WaitOne(); } catch (Exception) { }
             sLoggerBuffer += lines;
-            Instance.loggerMutex.ReleaseMutex();
+            try { Instance.loggerMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         public static void UpdateLog()
         {
-            Instance.loggerMutex.WaitOne();
+            try { Instance.loggerMutex.WaitOne(); } catch (Exception) { }
             var loggerBuffer = sLoggerBuffer;
             sLoggerBuffer = "";
-            Instance.loggerMutex.ReleaseMutex();
+            try { Instance.loggerMutex.ReleaseMutex(); } catch (Exception) { }
 
             if (loggerBuffer == "")
                 return;
@@ -1375,7 +1375,7 @@ namespace GatelessGateSharp
                 foreach (var miner in mActiveMiners)
                     totalSpeed += miner.Speed;
                 labelCurrentSpeed.Text = appState != ApplicationGlobalState.Mining ? "-" : ConvertHashRateToString(totalSpeed);
-                DeviceManagementLibrariesMutex.WaitOne();
+                try { DeviceManagementLibrariesMutex.WaitOne(); } catch (Exception) { }
                 foreach (var device in mDevices)
                 {
                     var computeDevice = device.GetComputeDevice();
@@ -1491,7 +1491,7 @@ namespace GatelessGateSharp
             }
             finally
             {
-                try { DeviceManagementLibrariesMutex.ReleaseMutex(); }
+                try { try { DeviceManagementLibrariesMutex.ReleaseMutex(); } catch (Exception) { } }
                 catch (Exception ex) { }
             }
         }
@@ -2270,6 +2270,7 @@ namespace GatelessGateSharp
                     tabControlMainForm.Enabled = buttonStart.Enabled = false;
                     StopMiners();
                     mDevFeeMode = true;
+                    mDevFeeModeStartTime = DateTime.Now;
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
                     LaunchMiners();
                     if (mActiveMiners.Count() == 0 || mStratum == null)

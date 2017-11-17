@@ -112,7 +112,7 @@ namespace GatelessGateSharp
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
             ComputeProgram program;
-            mProgramArrayMutex.WaitOne();
+            try { mProgramArrayMutex.WaitOne(); } catch (Exception) { }
             if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])))
             {
                 program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
@@ -139,7 +139,7 @@ namespace GatelessGateSharp
                 MainForm.Logger("Built options: " + buildOptions);
                 mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = program;
             }
-            mProgramArrayMutex.ReleaseMutex();
+            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
 
             if (searchKernel0 == null) searchKernel0 = program.CreateKernel("search");
             if (searchKernel1 == null) searchKernel1 = program.CreateKernel("search1");
