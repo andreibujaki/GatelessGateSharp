@@ -271,14 +271,6 @@ namespace GatelessGateSharp
                                     {
                                         textBoxEmail.Text = (string) reader["value"];
                                     }
-                                    else if (propertyName == "pool_login")
-                                    {
-                                        textBoxLogin.Text = (string) reader["value"];
-                                    }
-                                    else if (propertyName == "pool_password")
-                                    {
-                                        textBoxPassword.Text = (string) reader["value"];
-                                    }
                                     else if (propertyName == "auto_start")
                                     {
                                         checkBoxAutoStart.Checked = (string) reader["value"] == "true";
@@ -321,11 +313,127 @@ namespace GatelessGateSharp
                                     }
                                     else if (propertyName == "enable_phymem")
                                     {
-                                        checkBoxEnablePhymem.Checked = (string) reader["value"] == "true";
+                                        checkBoxEnablePhymem.Checked = (string)reader["value"] == "true";
                                     }
-                                    else if (propertyName == "disable_auto_start_prompt")
+                                    else if (propertyName == "custom_pool0_enabled")
                                     {
-                                        checkBoxDisableAutoStartPrompt.Checked = (string) reader["value"] == "true";
+                                        checkBoxCustomPool0Enable.Checked = (string)reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "custom_pool1_enabled")
+                                    {
+                                        checkBoxCustomPool1Enable.Checked = (string)reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "custom_pool2_enabled")
+                                    {
+                                        checkBoxCustomPool2Enable.Checked = (string)reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "custom_pool3_enabled")
+                                    {
+                                        checkBoxCustomPool3Enable.Checked = (string)reader["value"] == "true";
+                                    }
+                                    else if (propertyName == "custom_pool0_host")
+                                    {
+                                        textBoxCustomPool0Host.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool0_login")
+                                    {
+                                        textBoxCustomPool0Login.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool0_password")
+                                    {
+                                        textBoxCustomPool0Password.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool1_host")
+                                    {
+                                        textBoxCustomPool1Host.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool1_login")
+                                    {
+                                        textBoxCustomPool1Login.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool1_password")
+                                    {
+                                        textBoxCustomPool1Password.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool2_host")
+                                    {
+                                        textBoxCustomPool2Host.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool2_login")
+                                    {
+                                        textBoxCustomPool2Login.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool2_password")
+                                    {
+                                        textBoxCustomPool2Password.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool3_host")
+                                    {
+                                        textBoxCustomPool3Host.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool3_login")
+                                    {
+                                        textBoxCustomPool3Login.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool3_password")
+                                    {
+                                        textBoxCustomPool3Password.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool0_port")
+                                    {
+                                        numericUpDownCustomPool0Port.Value = decimal.Parse((string)reader["value"]);
+                                    }
+                                    else if (propertyName == "custom_pool1_port")
+                                    {
+                                        numericUpDownCustomPool1Port.Value = decimal.Parse((string)reader["value"]);
+                                    }
+                                    else if (propertyName == "custom_pool2_port")
+                                    {
+                                        numericUpDownCustomPool2Port.Value = decimal.Parse((string)reader["value"]);
+                                    }
+                                    else if (propertyName == "custom_pool3_port")
+                                    {
+                                        numericUpDownCustomPool3Port.Value = decimal.Parse((string)reader["value"]);
+                                    }
+                                    else if (propertyName == "custom_pool0_algorithm")
+                                    {
+                                        for (int i = 0; i < comboBoxCustomPool0Algorithm.Items.Count; ++i)
+                                        {
+                                            var item = comboBoxCustomPool0Algorithm.Items[i];
+                                            if ((string)item == (string)reader["value"])
+                                                comboBoxCustomPool0Algorithm.SelectedIndex = i;
+                                        }
+
+                                    }
+                                    else if (propertyName == "custom_pool1_algorithm")
+                                    {
+                                        for (int i = 0; i < comboBoxCustomPool1Algorithm.Items.Count; ++i)
+                                        {
+                                            var item = comboBoxCustomPool1Algorithm.Items[i];
+                                            if ((string)item == (string)reader["value"])
+                                                comboBoxCustomPool1Algorithm.SelectedIndex = i;
+                                        }
+
+                                    }
+                                    else if (propertyName == "custom_pool2_algorithm")
+                                    {
+                                        for (int i = 0; i < comboBoxCustomPool2Algorithm.Items.Count; ++i)
+                                        {
+                                            var item = comboBoxCustomPool2Algorithm.Items[i];
+                                            if ((string)item == (string)reader["value"])
+                                                comboBoxCustomPool2Algorithm.SelectedIndex = i;
+                                        }
+
+                                    }
+                                    else if (propertyName == "custom_pool3_algorithm")
+                                    {
+                                        for (int i = 0; i < comboBoxCustomPool3Algorithm.Items.Count; ++i)
+                                        {
+                                            var item = comboBoxCustomPool3Algorithm.Items[i];
+                                            if ((string)item == (string)reader["value"])
+                                                comboBoxCustomPool3Algorithm.SelectedIndex = i;
+                                        }
+
                                     }
                                 }
                             }
@@ -494,28 +602,18 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@value", textBoxEmail.Text);
                         command.ExecuteNonQuery();
                     }
-
-                    using (var command = new SQLiteCommand(sql, conn))
-                    {
-                        command.Parameters.AddWithValue("@name", "pool_login");
-                        command.Parameters.AddWithValue("@value", textBoxLogin.Text);
-                        command.ExecuteNonQuery();
-                    }
-
                     using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@name", "auto_start");
                         command.Parameters.AddWithValue("@value", checkBoxAutoStart.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
                     }
-
                     using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@name", "launch_at_startup");
                         command.Parameters.AddWithValue("@value", checkBoxLaunchAtStartup.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
                     }
-
                     using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@name", "disable_auto_start_prompt");
@@ -556,14 +654,150 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@value", textBoxEmail.Text);
                         command.ExecuteNonQuery();
                     }
-
                     using (var command = new SQLiteCommand(sql, conn))
                     {
-                        command.Parameters.AddWithValue("@name", "pool_login");
-                        command.Parameters.AddWithValue("@value", textBoxLogin.Text);
+                        command.Parameters.AddWithValue("@name", "custom_pool0_host");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool0Host.Text);
                         command.ExecuteNonQuery();
                     }
-
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_login");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool0Login.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_password");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool0Password.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_host");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool1Host.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_login");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool1Login.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_password");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool1Password.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_host");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool2Host.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_login");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool2Login.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_password");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool2Password.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_host");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool3Host.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_login");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool3Login.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_password");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool3Password.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_enabled");
+                        command.Parameters.AddWithValue("@value", checkBoxCustomPool0Enable.Checked ? "true" : "false");
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_enabled");
+                        command.Parameters.AddWithValue("@value", checkBoxCustomPool1Enable.Checked ? "true" : "false");
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_enabled");
+                        command.Parameters.AddWithValue("@value", checkBoxCustomPool2Enable.Checked ? "true" : "false");
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_enabled");
+                        command.Parameters.AddWithValue("@value", checkBoxCustomPool3Enable.Checked ? "true" : "false");
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_port");
+                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool0Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_port");
+                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool1Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_port");
+                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool2Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_port");
+                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool3Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_algorithm");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex]);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_algorithm");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex]);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_algorithm");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex]);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_algorithm");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex]);
+                        command.ExecuteNonQuery();
+                    }
                     using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@name", "auto_start");
@@ -1337,19 +1571,23 @@ namespace GatelessGateSharp
             try
             {
                 // Pool
-                mCurrentPool = (string)listBoxPoolPriorities.Items[0];
+                mCurrentPool = (appState == ApplicationGlobalState.Mining && mStratum != null) ? mStratum.PoolName :
+                               checkBoxCustomPool0Enable.Checked                               ? textBoxCustomPool0Host.Text :
+                               checkBoxCustomPool1Enable.Checked                               ? textBoxCustomPool1Host.Text :
+                               checkBoxCustomPool2Enable.Checked                               ? textBoxCustomPool2Host.Text :
+                               checkBoxCustomPool3Enable.Checked                               ? textBoxCustomPool3Host.Text :
+                                                                                                 (string)listBoxPoolPriorities.Items[0];
                 if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
                 {
                     labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + string.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
                 }
-                else if (appState == ApplicationGlobalState.Mining && mStratum != null)
+                else if (appState == ApplicationGlobalState.Mining && mStratum != null && !CustomPoolEnabled)
                 {
-                    labelCurrentPool.Text = mStratum.PoolName + " (" + mStratum.ServerAddress + ")";
-                    mCurrentPool = mStratum.PoolName;
+                    labelCurrentPool.Text = mCurrentPool + " (" + mStratum.ServerAddress + ")";
                 }
                 else
                 {
-                    labelCurrentPool.Text = (string)listBoxPoolPriorities.Items[0];
+                    labelCurrentPool.Text = mCurrentPool;
                 }
 
                 labelCurrentAlgorithm.Text = appState == ApplicationGlobalState.Mining ? mActiveMiners[0].AlgorithmName : "-"; // TODO
@@ -1713,7 +1951,12 @@ namespace GatelessGateSharp
                 stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool);
             }
 
+            StartOpenCLCryptoNightMiners(stratum, niceHashMode);
             mStratum = (Stratum)stratum;
+        }
+
+        void StartOpenCLCryptoNightMiners(CryptoNightStratum stratum, bool niceHashMode)
+        {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
@@ -1928,7 +2171,12 @@ namespace GatelessGateSharp
                 stratum = new OpenEthereumPoolEthashStratum("eth-uswest.zawawa.net", 4000, textBoxEthereumAddress.Text, "x", pool);
             }
 
+            StartOpenCLEthashMiners(stratum);
             mStratum = (Stratum)stratum;
+        }
+
+        void StartOpenCLEthashMiners(EthashStratum stratum)
+        {
             this.Activate(); 
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
@@ -1978,6 +2226,13 @@ namespace GatelessGateSharp
             }
         }
 
+        bool CustomPoolEnabled
+        {
+            get {
+                return checkBoxCustomPool0Enable.Checked || checkBoxCustomPool1Enable.Checked || checkBoxCustomPool2Enable.Checked || checkBoxCustomPool3Enable.Checked;
+            }
+        }
+
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void LaunchMiners()
@@ -1993,33 +2248,106 @@ namespace GatelessGateSharp
                 catch (Exception) { }
             }
 
-            foreach (string pool in listBoxPoolPriorities.Items)
-                try
+            if (CustomPoolEnabled)
+            {
+                for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++)
                 {
-                    if (radioButtonEthereum.Checked)
+                    try
                     {
-                        Logger("Launching Ethash miners...");
-                        LaunchEthashMiners(pool);
-                        break;
+                        bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
+                                       (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
+                                       (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
+                                                                checkBoxCustomPool3Enable.Checked;
+                        String host = (customPoolIndex == 0) ? textBoxCustomPool0Host.Text :
+                                      (customPoolIndex == 1) ? textBoxCustomPool1Host.Text :
+                                      (customPoolIndex == 2) ? textBoxCustomPool2Host.Text :
+                                                               textBoxCustomPool3Host.Text;
+                        int port = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0Port.Value) :
+                                   (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1Port.Value) :
+                                   (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2Port.Value) :
+                                                            Convert.ToInt32(numericUpDownCustomPool3Port.Value);
+                        String login = (customPoolIndex == 0) ? textBoxCustomPool0Login.Text :
+                                       (customPoolIndex == 1) ? textBoxCustomPool1Login.Text :
+                                       (customPoolIndex == 2) ? textBoxCustomPool2Login.Text :
+                                                                textBoxCustomPool3Login.Text;
+                        String password = (customPoolIndex == 0) ? textBoxCustomPool0Password.Text :
+                                          (customPoolIndex == 1) ? textBoxCustomPool1Password.Text :
+                                          (customPoolIndex == 2) ? textBoxCustomPool2Password.Text :
+                                                                   textBoxCustomPool3Password.Text;
+                        String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
+                                      (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
+                                      (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
+                                                               (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
+
+                        if (!enabled)
+                            continue;
+
+                        if (DevFeeMode && algo == "Ethash")
+                        {
+                            var stratum = new NiceHashEthashStratum("daggerhashimoto.usa.nicehash.com", 3353, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
+                            StartOpenCLEthashMiners(stratum);
+                            mStratum = stratum;
+                            break;
+                        }
+                        else if (DevFeeMode && algo == "CryptoNight")
+                        {
+                            var stratum = new CryptoNightStratum("cryptonight.usa.nicehash.com", 3355, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
+                            StartOpenCLCryptoNightMiners(stratum, true);
+                            mStratum = stratum;
+                            break;
+                        }
+                        else if (algo == "Ethash")
+                        {
+                            var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
+                            StartOpenCLEthashMiners(stratum);
+                            mStratum = stratum;
+                            break;
+                        }
+                        else if (algo == "CryptoNight")
+                        {
+                            var stratum = new CryptoNightStratum(host, port, login, password, host);
+                            StartOpenCLCryptoNightMiners(stratum, false);
+                            mStratum = stratum;
+                            break;
+                        }
                     }
-                    else if (radioButtonMonero.Checked)
+                    catch (Exception ex)
                     {
-                        Logger("Launching CryptoNight miners...");
-                        LaunchCryptoNightMiners(pool);
-                        break;
+                        Logger("Exception: " + ex.Message + ex.StackTrace);
+                        if (mStratum != null)
+                            mStratum.Stop();
+                        foreach (Miner miner in mActiveMiners)
+                            miner.Stop();
                     }
                 }
-                catch (Exception ex)
-                {
-                    Logger("Exception: " + ex.Message + ex.StackTrace);
-                    //if (mStratum != null)
-                    //    mStratum.Stop();
-                    //if (mActiveMiners.Any())
-                    //    foreach (Miner miner in mActiveMiners)
-                    //        miner.Stop();
-                    mStratum = null;
-                    mActiveMiners.Clear();
-                }
+            }
+            else
+            {
+                foreach (string pool in listBoxPoolPriorities.Items)
+                    try
+                    {
+                        if (radioButtonEthereum.Checked)
+                        {
+                            Logger("Launching Ethash miners...");
+                            LaunchEthashMiners(pool);
+                            break;
+                        }
+                        else if (radioButtonMonero.Checked)
+                        {
+                            Logger("Launching CryptoNight miners...");
+                            LaunchCryptoNightMiners(pool);
+                            break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger("Exception: " + ex.Message + ex.StackTrace);
+                        if (mStratum != null)
+                            mStratum.Stop();
+                        foreach (Miner miner in mActiveMiners)
+                            miner.Stop();
+                    }                
+            }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -2148,10 +2476,10 @@ namespace GatelessGateSharp
                 buttonStart.Text = appState == ApplicationGlobalState.Mining ? "Stop" : "Start";
                 buttonBenchmark.Enabled = false;
 
-                groupBoxCoinsToMine.Enabled = appState == ApplicationGlobalState.Idle;
-                groupBoxPoolPriorities.Enabled = appState == ApplicationGlobalState.Idle;
-                groupBoxPoolParameters.Enabled = appState == ApplicationGlobalState.Idle;
-                groupBoxWalletAddresses.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxCoinsToMine.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxPoolPriorities.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxPoolParameters.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxWalletAddresses.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
                 groupBoxAutomation.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxHadrwareAcceleration.Enabled = appState == ApplicationGlobalState.Idle;
                 foreach (var control in checkBoxGPUEnableArray)

@@ -370,7 +370,7 @@ namespace GatelessGateSharp
             IHash hash = HashFactory.Crypto.SHA3.CreateKeccak512();
             byte[] data;
 
-            mMutex.WaitOne();
+            try  { mMutex.WaitOne(); } catch (Exception) { }
             if (sDAGCacheDatabase.ContainsKey(mEpoch))
             {
                 data = sDAGCacheDatabase[mEpoch];
@@ -413,7 +413,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Generated DAG cache for Epoch #" + mEpoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
             }
-            mMutex.ReleaseMutex();
+            try  { mMutex.ReleaseMutex(); } catch (Exception) { }
             return data;
         }
     }

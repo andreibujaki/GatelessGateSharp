@@ -101,12 +101,12 @@ namespace GatelessGateSharp
                         && response["result"] != null
                         && response["result"].GetType() == typeof(JArray))
             {
-                var ID = response["id"];
+                //var ID = response["id"];
                 JArray result = (JArray)response["result"];
                 var oldJob = mJob;
                 if (oldJob == null || ("0x" + oldJob.ID) != (string)result[0])
                 {
-                    mMutex.WaitOne();
+                    try  { mMutex.WaitOne(); } catch (Exception) { }
                     System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^0x");
                     mJob = (EthashStratum.Job)(new Job(
                         regex.Replace((string)result[0], ""), // Use headerhash as job ID.
@@ -114,7 +114,7 @@ namespace GatelessGateSharp
                         regex.Replace((string)result[0], "")));
                     regex = new System.Text.RegularExpressions.Regex(@"^0x(.*)................................................$"); // I don't know about this one...
                     mDifficulty = (double)0xffff0000U / (double)Convert.ToUInt64(regex.Replace((string)result[2], "$1"), 16);
-                    mMutex.ReleaseMutex();
+                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + (string)result[0]);
                 }
             }
@@ -133,7 +133,7 @@ namespace GatelessGateSharp
             {
                 try
                 {
-                    mMutex.WaitOne();
+                    try  { mMutex.WaitOne(); } catch (Exception) { }
 
                     WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                         { "id", mJsonRPCMessageID++ },
@@ -141,7 +141,7 @@ namespace GatelessGateSharp
                         { "method", "eth_getWork" }
                     }));
 
-                    mMutex.ReleaseMutex();
+                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                 }
                 catch (Exception ex)
                 {
@@ -154,7 +154,7 @@ namespace GatelessGateSharp
 
         override protected void Authorize()
         {
-            mMutex.WaitOne();
+            try  { mMutex.WaitOne(); } catch (Exception) { }
 
             WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
@@ -167,7 +167,7 @@ namespace GatelessGateSharp
             var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
             if (response["result"] == null)
             {
-                mMutex.ReleaseMutex();
+                try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                 MainForm.Logger("Authorization failed.");
                 throw new Exception("Authorization failed.");
             }
@@ -178,7 +178,7 @@ namespace GatelessGateSharp
                 { "method", "eth_getWork" }
             }));
 
-            mMutex.ReleaseMutex();
+            try  { mMutex.ReleaseMutex(); } catch (Exception) { }
 
             mPingThread = new Thread(new ThreadStart(PingThread));
             mPingThread.IsBackground = true;
@@ -190,7 +190,7 @@ namespace GatelessGateSharp
             if (Stopped)
                 return;
 
-            mMutex.WaitOne();
+            try  { mMutex.WaitOne(); } catch (Exception) { }
             RegisterDeviceWithShare(aDevice);
             try
             {
@@ -220,7 +220,7 @@ namespace GatelessGateSharp
             {
                 MainForm.Logger("Failed to submit share: " + ex.Message + ex.StackTrace);
             }
-            mMutex.ReleaseMutex();
+            try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         public OpenEthereumPoolEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)

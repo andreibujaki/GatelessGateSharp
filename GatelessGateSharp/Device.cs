@@ -42,7 +42,7 @@ namespace GatelessGateSharp
         {
             get
             {
-                mMutex.WaitOne();
+                try  { mMutex.WaitOne(); } catch (Exception) { }
                 if (mContext == null)
                 {
                     mDeviceList = new List<ComputeDevice>();
@@ -50,7 +50,7 @@ namespace GatelessGateSharp
                     var contextProperties = new ComputeContextPropertyList(mComputeDevice.Platform);
                     mContext = new ComputeContext(mDeviceList, contextProperties, null, IntPtr.Zero);
                 }
-                mMutex.ReleaseMutex();
+                try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                 return mContext;
             }
         }

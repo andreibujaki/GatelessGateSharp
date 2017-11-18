@@ -161,13 +161,9 @@
             this.buttonViewBalancesAtNiceHash = new System.Windows.Forms.Button();
             this.groupBoxPoolParameters = new System.Windows.Forms.GroupBox();
             this.textBoxRigID = new System.Windows.Forms.TextBox();
-            this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.labelPassword = new System.Windows.Forms.Label();
             this.labelEmail = new System.Windows.Forms.Label();
-            this.textBoxLogin = new System.Windows.Forms.TextBox();
             this.textBoxEmail = new System.Windows.Forms.TextBox();
-            this.labelLogin = new System.Windows.Forms.Label();
             this.groupBoxPoolPriorities = new System.Windows.Forms.GroupBox();
             this.buttonPoolPrioritiesDown = new System.Windows.Forms.Button();
             this.buttonPoolPrioritiesUp = new System.Windows.Forms.Button();
@@ -2134,16 +2130,12 @@
             // groupBoxPoolParameters
             // 
             this.groupBoxPoolParameters.Controls.Add(this.textBoxRigID);
-            this.groupBoxPoolParameters.Controls.Add(this.textBoxPassword);
             this.groupBoxPoolParameters.Controls.Add(this.label1);
-            this.groupBoxPoolParameters.Controls.Add(this.labelPassword);
             this.groupBoxPoolParameters.Controls.Add(this.labelEmail);
-            this.groupBoxPoolParameters.Controls.Add(this.textBoxLogin);
             this.groupBoxPoolParameters.Controls.Add(this.textBoxEmail);
-            this.groupBoxPoolParameters.Controls.Add(this.labelLogin);
             this.groupBoxPoolParameters.Location = new System.Drawing.Point(300, 6);
             this.groupBoxPoolParameters.Name = "groupBoxPoolParameters";
-            this.groupBoxPoolParameters.Size = new System.Drawing.Size(414, 134);
+            this.groupBoxPoolParameters.Size = new System.Drawing.Size(414, 78);
             this.groupBoxPoolParameters.TabIndex = 26;
             this.groupBoxPoolParameters.TabStop = false;
             this.groupBoxPoolParameters.Text = "Pool Parameters";
@@ -2155,13 +2147,6 @@
             this.textBoxRigID.Size = new System.Drawing.Size(285, 20);
             this.textBoxRigID.TabIndex = 27;
             // 
-            // textBoxPassword
-            // 
-            this.textBoxPassword.Location = new System.Drawing.Point(116, 97);
-            this.textBoxPassword.Name = "textBoxPassword";
-            this.textBoxPassword.Size = new System.Drawing.Size(285, 20);
-            this.textBoxPassword.TabIndex = 33;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -2170,15 +2155,6 @@
             this.label1.Size = new System.Drawing.Size(86, 13);
             this.label1.TabIndex = 26;
             this.label1.Text = "Rig ID (optional):";
-            // 
-            // labelPassword
-            // 
-            this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(8, 100);
-            this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(102, 13);
-            this.labelPassword.TabIndex = 32;
-            this.labelPassword.Text = "Password (optional):";
             // 
             // labelEmail
             // 
@@ -2189,28 +2165,12 @@
             this.labelEmail.TabIndex = 28;
             this.labelEmail.Text = "Email (optional):";
             // 
-            // textBoxLogin
-            // 
-            this.textBoxLogin.Location = new System.Drawing.Point(116, 71);
-            this.textBoxLogin.Name = "textBoxLogin";
-            this.textBoxLogin.Size = new System.Drawing.Size(285, 20);
-            this.textBoxLogin.TabIndex = 31;
-            // 
             // textBoxEmail
             // 
             this.textBoxEmail.Location = new System.Drawing.Point(116, 45);
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(285, 20);
             this.textBoxEmail.TabIndex = 29;
-            // 
-            // labelLogin
-            // 
-            this.labelLogin.AutoSize = true;
-            this.labelLogin.Location = new System.Drawing.Point(8, 74);
-            this.labelLogin.Name = "labelLogin";
-            this.labelLogin.Size = new System.Drawing.Size(82, 13);
-            this.labelLogin.TabIndex = 30;
-            this.labelLogin.Text = "Login (optional):";
             // 
             // groupBoxPoolPriorities
             // 
@@ -8436,13 +8396,9 @@
         private System.Windows.Forms.Timer timerWatchdog;
         private System.Windows.Forms.GroupBox groupBoxPoolParameters;
         private System.Windows.Forms.TextBox textBoxRigID;
-        private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.Label labelEmail;
-        private System.Windows.Forms.TextBox textBoxLogin;
         private System.Windows.Forms.TextBox textBoxEmail;
-        private System.Windows.Forms.Label labelLogin;
         private System.Windows.Forms.TextBox textBoxBitcoinAddress;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Timer timerUpdateLog;

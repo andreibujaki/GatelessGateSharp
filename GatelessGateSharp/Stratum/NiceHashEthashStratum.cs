@@ -50,23 +50,23 @@ namespace GatelessGateSharp
                 JArray parameters = (JArray)response["params"];
                 if (method.Equals("mining.set_difficulty"))
                 {
-                    mMutex.WaitOne();
+                    try  { mMutex.WaitOne(); } catch (Exception) { }
                     mDifficulty = (double)parameters[0];
-                    mMutex.ReleaseMutex();
+                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                 }
                 else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
                 {
-                    mMutex.WaitOne();
+                    try  { mMutex.WaitOne(); } catch (Exception) { }
                     mJob = (EthashStratum.Job)(new Job((string)parameters[0], (string)parameters[1], (string)parameters[2]));
-                    mMutex.ReleaseMutex();
+                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + parameters[0]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {
-                    mMutex.WaitOne();
+                    try  { mMutex.WaitOne(); } catch (Exception) { }
                     mPoolExtranonce = (String)parameters[0];
-                    mMutex.ReleaseMutex();
+                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new extranonce: " + parameters[0]);
                 }
                 else if (method.Equals("client.reconnect"))
@@ -102,7 +102,7 @@ namespace GatelessGateSharp
 
         override protected void Authorize()
         {
-            mMutex.WaitOne();
+            try  { mMutex.WaitOne(); } catch (Exception) { }
 
             mJsonRPCMessageID = 1;
 
@@ -137,11 +137,11 @@ namespace GatelessGateSharp
             response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
             if (!(bool)response["result"])
             {
-                mMutex.ReleaseMutex();
+                try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                 throw new Exception("Authorization failed.");
             }
 
-            mMutex.ReleaseMutex();
+            try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         override public void Submit(Device aDevice, EthashStratum.Job job, UInt64 output)
@@ -149,7 +149,7 @@ namespace GatelessGateSharp
             if (Stopped)
                 return;
 
-            mMutex.WaitOne();
+            try  { mMutex.WaitOne(); } catch (Exception) { }
             RegisterDeviceWithShare(aDevice);
             try
             {
@@ -173,7 +173,7 @@ namespace GatelessGateSharp
             {
                 MainForm.Logger("Failed to submit share: " + ex.Message);
             }
-            mMutex.ReleaseMutex();
+            try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         public NiceHashEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)

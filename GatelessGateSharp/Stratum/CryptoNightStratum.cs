@@ -70,9 +70,9 @@ namespace GatelessGateSharp
                 JContainer parameters = (JContainer)response["params"];
                 if (method.Equals("job"))
                 {
-                    try { mMutex.WaitOne(); } catch (Exception) { }
+                    try  {  mMutex.WaitOne(); } catch (Exception) { }
                     mJob = new Job((string)parameters["job_id"], (string)parameters["blob"], (string)parameters["target"]);
-                    try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                    try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + parameters["job_id"]);
                 }
                 else
@@ -121,10 +121,10 @@ namespace GatelessGateSharp
             if (status != "OK")
                 throw new Exception("Authorization failed.");
 
-            try { mMutex.WaitOne(); } catch (Exception) { }
+            try  {  mMutex.WaitOne(); } catch (Exception) { }
             mUserID = (String)(result["id"]);
             mJob = new Job((String)(((JContainer)result["job"])["job_id"]), (String)(((JContainer)result["job"])["blob"]), (String)(((JContainer)result["job"])["target"]));
-            try { mMutex.ReleaseMutex(); } catch (Exception) { }
+            try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         public void Submit(Device device, Job job, UInt32 output, String result)
@@ -132,7 +132,7 @@ namespace GatelessGateSharp
             if (Stopped)
                 return;
 
-            try { mMutex.WaitOne(); } catch (Exception) { }
+            try  {  mMutex.WaitOne(); } catch (Exception) { }
             RegisterDeviceWithShare(device);
             try
             {
@@ -152,7 +152,7 @@ namespace GatelessGateSharp
             {
                 MainForm.Logger("Failed to submit share: " + ex.Message);
             }
-            try { mMutex.ReleaseMutex(); } catch (Exception) { }
+            try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         public new Work GetWork()
