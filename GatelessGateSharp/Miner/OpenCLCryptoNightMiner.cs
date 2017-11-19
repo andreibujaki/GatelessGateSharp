@@ -81,10 +81,10 @@ namespace GatelessGateSharp
         {
         }
 
-        public void Start(CryptoNightStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
+        public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false)
         {
             mStratum = aStratum;
-            globalWorkSizeA[0] = globalWorkSizeB[0] = aIntensity * Device.MaxComputeUnits;
+            globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity;
             localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
             if (globalWorkSizeA[0] % aLocalWorkSize != 0)
                 globalWorkSizeA[0] = globalWorkSizeB[0] = aLocalWorkSize - globalWorkSizeA[0] % aLocalWorkSize;
@@ -122,7 +122,7 @@ namespace GatelessGateSharp
                 String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
                 program = new ComputeProgram(Context, source);
                 MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " :
+                String buildOptions = (Device.Vendor == "AMD"    ? "-O5 " : //"-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];

@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.0";
+        public static string appVersion = "1.1.1";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -78,7 +78,7 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceEthashIntensityArray;
         private NumericUpDown[] numericUpDownDeviceEthashLocalWorkSizeArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightThreadsArray;
-        private NumericUpDown[] numericUpDownDeviceCryptoNightIntensityArray;
+        private NumericUpDown[] numericUpDownDeviceCryptoNightRawIntensityArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
         private GroupBox[] groupBoxDeviceEthashArray;
         private GroupBox[] groupBoxDeviceCryptoNightArray;
@@ -435,6 +435,10 @@ namespace GatelessGateSharp
                                         }
 
                                     }
+                                    else if (propertyName == "disable_auto_start_prompt")
+                                    {
+                                        checkBoxDisableAutoStartPrompt.Checked = (string) reader["value"] == "true";
+                                    }
                                 }
                             }
                         }
@@ -472,7 +476,10 @@ namespace GatelessGateSharp
                                         numericUpDownDeviceCryptoNightThreadsArray[deviceID].Value =
                                             decimal.Parse(value);
                                     else if (name == "cryptonight_intensity")
-                                        numericUpDownDeviceCryptoNightIntensityArray[deviceID].Value =
+                                        numericUpDownDeviceCryptoNightRawIntensityArray[deviceID].Value =
+                                            decimal.Parse(value) * mDevices[deviceID].MaxComputeUnits;
+                                    else if (name == "cryptonight_raw_intensity")
+                                        numericUpDownDeviceCryptoNightRawIntensityArray[deviceID].Value =
                                             decimal.Parse(value);
                                     else if (name == "cryptonight_local_work_size")
                                         numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceID].Value =
@@ -889,8 +896,8 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@device_id", i);
                             command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
                             command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
-                            command.Parameters.AddWithValue("@parameter_name", "cryptonight_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightIntensityArray[i].Value.ToString());
+                            command.Parameters.AddWithValue("@parameter_name", "cryptonight_raw_intensity");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightRawIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn))
@@ -972,16 +979,16 @@ namespace GatelessGateSharp
                 numericUpDownDevice6CryptoNightThreads, 
                 numericUpDownDevice7CryptoNightThreads
             };
-            numericUpDownDeviceCryptoNightIntensityArray = new NumericUpDown[]
+            numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[]
             {
-                numericUpDownDevice0CryptoNightIntensity,
-                numericUpDownDevice1CryptoNightIntensity,
-                numericUpDownDevice2CryptoNightIntensity, 
-                numericUpDownDevice3CryptoNightIntensity, 
-                numericUpDownDevice4CryptoNightIntensity,
-                numericUpDownDevice5CryptoNightIntensity,
-                numericUpDownDevice6CryptoNightIntensity, 
-                numericUpDownDevice7CryptoNightIntensity
+                numericUpDownDevice0CryptoNightRawIntensity,
+                numericUpDownDevice1CryptoNightRawIntensity,
+                numericUpDownDevice2CryptoNightRawIntensity, 
+                numericUpDownDevice3CryptoNightRawIntensity, 
+                numericUpDownDevice4CryptoNightRawIntensity,
+                numericUpDownDevice5CryptoNightRawIntensity,
+                numericUpDownDevice6CryptoNightRawIntensity, 
+                numericUpDownDevice7CryptoNightRawIntensity
             };
             numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[]
             {
@@ -1126,7 +1133,7 @@ namespace GatelessGateSharp
                 Array.Resize(ref tabPageDeviceArray, mDevices.Length);
                 Array.Resize(ref numericUpDownDeviceEthashIntensityArray, mDevices.Length);
                 Array.Resize(ref numericUpDownDeviceCryptoNightThreadsArray, mDevices.Length);
-                Array.Resize(ref numericUpDownDeviceCryptoNightIntensityArray, mDevices.Length);
+                Array.Resize(ref numericUpDownDeviceCryptoNightRawIntensityArray, mDevices.Length);
                 Array.Resize(ref numericUpDownDeviceCryptoNightLocalWorkSizeArray, mDevices.Length);
                 Array.Resize(ref groupBoxDeviceEthashArray, mDevices.Length);
                 Array.Resize(ref groupBoxDeviceCryptoNightArray, mDevices.Length);
@@ -1261,15 +1268,15 @@ namespace GatelessGateSharp
                 // CryptoNight
                 numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 2 : 1);
                 numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 8 : 4);
-                numericUpDownDeviceCryptoNightIntensityArray[device.DeviceIndex].Value
-                    = (decimal)(device.Vendor == "AMD" && device.Name == "Radeon RX 470" ? 24 :
-                                device.Vendor == "AMD" && device.Name == "Radeon RX 570" ? 24 :
-                                device.Vendor == "AMD" && device.Name == "Radeon RX 480" ? 28 :
-                                device.Vendor == "AMD" && device.Name == "Radeon RX 580" ? 28 :
-                                device.Vendor == "AMD" && device.Name == "Radeon R9 Fury X/Nano"  ? 14 :
-                                device.Vendor == "AMD"                                            ? 16 :
-                                device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti" ? 32 :
-                                                                                                    16);
+                numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
+                    = (decimal)(device.Vendor == "AMD" && device.Name == "Radeon RX 470" ? 24 * device.MaxComputeUnits :
+                                device.Vendor == "AMD" && device.Name == "Radeon RX 570" ? 24 * device.MaxComputeUnits :
+                                device.Vendor == "AMD" && device.Name == "Radeon RX 480" ? 28 * device.MaxComputeUnits :
+                                device.Vendor == "AMD" && device.Name == "Radeon RX 580" ? 28 * device.MaxComputeUnits :
+                                device.Vendor == "AMD" && device.Name == "Radeon R9 Fury X/Nano"  ? 14 * device.MaxComputeUnits :
+                                device.Vendor == "AMD"                                            ? 16 * device.MaxComputeUnits :
+                                device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti" ? 32 * device.MaxComputeUnits :
+                                                                                                    16 * device.MaxComputeUnits);
             }
 
             UpdateStatsWithShortPolling();
@@ -1793,7 +1800,7 @@ namespace GatelessGateSharp
 
         public bool ValidateMoneroAddress()
         {
-            var regex = new System.Text.RegularExpressions.Regex(@"^4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}(\.([0-9a-fA-F]{16}|[0-9a-fA-F]{64}))?$");
+            var regex = new System.Text.RegularExpressions.Regex(@"^(4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}(\.?(([0-9a-fA-F]{16})|([0-9a-fA-F]{64})))?)|([0-9a-fA-F]{64})?$");
             var match = regex.Match(textBoxMoneroAddress.Text);
             if (match.Success)
             {
@@ -1991,7 +1998,7 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightIntensityArray[deviceIndex]
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightRawIntensityArray[deviceIndex]
                                 .Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceIndex]
                                 .Value)), niceHashMode);
@@ -2360,7 +2367,7 @@ namespace GatelessGateSharp
                 foreach (var miner in mActiveMiners)
                     miner.Stop();
                 var allDone = false;
-                var counter = 50;
+                var counter = 500;
                 while (!allDone && counter-- > 0)
                 {
                     Application.DoEvents();
@@ -2400,19 +2407,24 @@ namespace GatelessGateSharp
         {
             UpdateDatabase();
 
-            if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
-                return;
-            if (textBoxEthereumAddress.Text != "" && !ValidateEthereumAddress())
-                return;
-            if (textBoxMoneroAddress.Text != "" && !ValidateMoneroAddress())
-                return;
-            if (textBoxRigID.Text != "" && !ValidateRigID())
-                return;
-            if (textBoxBitcoinAddress.Text == "" && textBoxEthereumAddress.Text == "" && textBoxMoneroAddress.Text == "")
+            if (!CustomPoolEnabled)
             {
-                MessageBox.Show("Please enter at least one valid wallet address.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                tabControlMainForm.TabIndex = 1;
-                return;
+                if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
+                    return;
+                if (textBoxEthereumAddress.Text != "" && !ValidateEthereumAddress())
+                    return;
+                if (textBoxMoneroAddress.Text != "" && !ValidateMoneroAddress())
+                    return;
+                if (textBoxRigID.Text != "" && !ValidateRigID())
+                    return;
+                if (textBoxBitcoinAddress.Text == "" && textBoxEthereumAddress.Text == "" &&
+                    textBoxMoneroAddress.Text == "")
+                {
+                    MessageBox.Show("Please enter at least one valid wallet address.", appName, MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    tabControlMainForm.TabIndex = 1;
+                    return;
+                }
             }
             var enabled = false;
             foreach (var control in checkBoxGPUEnableArray)
