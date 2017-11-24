@@ -222,7 +222,7 @@ namespace GatelessGateSharp
                                 mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
-                                    MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s", mSpeed / (1000000)));
+                                    MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", mSpeed / (1000000)));
                                     consoleUpdateStopwatch.Restart();
                                 }
                                 if (mStratum.GetJob().ID.Equals(jobID))

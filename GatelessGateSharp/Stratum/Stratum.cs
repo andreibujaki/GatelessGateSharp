@@ -202,7 +202,7 @@ namespace GatelessGateSharp
             {
                 mClient.Close();
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             if (!Stopped)
             {

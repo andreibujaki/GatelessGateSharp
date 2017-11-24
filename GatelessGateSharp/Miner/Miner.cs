@@ -89,7 +89,7 @@ namespace GatelessGateSharp
                 {
                     mMinerThread.Abort();
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
                 mMinerThread = null;
             }
         }

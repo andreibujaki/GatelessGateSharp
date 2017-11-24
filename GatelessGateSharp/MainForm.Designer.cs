@@ -2339,7 +2339,8 @@
             this.comboBoxCustomPool1Algorithm.FormattingEnabled = true;
             this.comboBoxCustomPool1Algorithm.Items.AddRange(new object[] {
             "Ethash",
-            "CryptoNight"});
+            "CryptoNight",
+            "Lbry"});
             this.comboBoxCustomPool1Algorithm.Location = new System.Drawing.Point(602, 16);
             this.comboBoxCustomPool1Algorithm.Name = "comboBoxCustomPool1Algorithm";
             this.comboBoxCustomPool1Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -2460,7 +2461,8 @@
             this.comboBoxCustomPool2Algorithm.FormattingEnabled = true;
             this.comboBoxCustomPool2Algorithm.Items.AddRange(new object[] {
             "Ethash",
-            "CryptoNight"});
+            "CryptoNight",
+            "Lbry"});
             this.comboBoxCustomPool2Algorithm.Location = new System.Drawing.Point(602, 16);
             this.comboBoxCustomPool2Algorithm.Name = "comboBoxCustomPool2Algorithm";
             this.comboBoxCustomPool2Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -2581,7 +2583,8 @@
             this.comboBoxCustomPool3Algorithm.FormattingEnabled = true;
             this.comboBoxCustomPool3Algorithm.Items.AddRange(new object[] {
             "Ethash",
-            "CryptoNight"});
+            "CryptoNight",
+            "Lbry"});
             this.comboBoxCustomPool3Algorithm.Location = new System.Drawing.Point(602, 16);
             this.comboBoxCustomPool3Algorithm.Name = "comboBoxCustomPool3Algorithm";
             this.comboBoxCustomPool3Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -2702,7 +2705,8 @@
             this.comboBoxCustomPool0Algorithm.FormattingEnabled = true;
             this.comboBoxCustomPool0Algorithm.Items.AddRange(new object[] {
             "Ethash",
-            "CryptoNight"});
+            "CryptoNight",
+            "Lbry"});
             this.comboBoxCustomPool0Algorithm.Location = new System.Drawing.Point(602, 16);
             this.comboBoxCustomPool0Algorithm.Name = "comboBoxCustomPool0Algorithm";
             this.comboBoxCustomPool0Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -7955,7 +7959,7 @@
             // 
             // timerCurrencyStatUpdates
             // 
-            this.timerCurrencyStatUpdates.Interval = 20000;
+            this.timerCurrencyStatUpdates.Interval = 300000;
             this.timerCurrencyStatUpdates.Tick += new System.EventHandler(this.timerCurrencyStatUpdates_Tick);
             // 
             // timerDevFee

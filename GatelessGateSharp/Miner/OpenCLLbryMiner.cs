@@ -26,23 +26,19 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class OpenCLCryptoNightMiner : OpenCLMiner
+    class OpenCLLbryMiner : OpenCLMiner
     {
-        private static readonly int outputSize = 256 + 255 * 8;
+        private static readonly int outputSize = 256 + 8 * 255;
 
-        private CryptoNightStratum mStratum;
+        private LbryStratum mStratum;
         private bool mNicehashMode = false;
 
-        long[] globalWorkSizeA = new long[] { 0, 8 };
-        long[] globalWorkSizeB = new long[] { 0 };
-        long[] localWorkSizeA = new long[] { 0, 8 };
-        long[] localWorkSizeB = new long[] { 0 };
-        long[] globalWorkOffsetA = new long[] { 0, 1 };
-        long[] globalWorkOffsetB = new long[] { 0 };
+        long[] globalWorkSizeArray = new long[] { 0 };
+        long[] localWorkSizeArray = new long[] { 0 };
+        long[] globalWorkOffsetArray = new long[] { 0 };
 
-        Int32[] terminate = new Int32[1];
         UInt32[] output = new UInt32[outputSize];
-        byte[] input = new byte[76];
+        byte[] input = new byte[112];
 
         static Mutex mProgramArrayMutex = new Mutex();
 
@@ -50,34 +46,31 @@ namespace GatelessGateSharp
         ComputeKernel searchKernel0 = null;
         ComputeKernel searchKernel1 = null;
         ComputeKernel searchKernel2 = null;
-        ComputeKernel searchKernel3 = null;
+        ComputeKernel combinedSearchKernel = null;
             
-        private ComputeBuffer<byte> statesBuffer = null;
+        private ComputeBuffer<byte> contextBuffer = null;
         private ComputeBuffer<byte> inputBuffer = null;
         private ComputeBuffer<UInt32> outputBuffer = null;
-        private ComputeBuffer<Int32> terminateBuffer = null;
-        private ComputeBuffer<byte> scratchpadsBuffer = null;
             
         public bool NiceHashMode { get { return mNicehashMode; } }
 
-        public OpenCLCryptoNightMiner(Device aGatelessGateDevice)
-            : base(aGatelessGateDevice, "CryptoNight")
+        public OpenCLLbryMiner(Device aGatelessGateDevice)
+            : base(aGatelessGateDevice, "Lbry")
         {
         }
 
-        public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false)
+        public void Start(LbryStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
         {
             mStratum = aStratum;
-            globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity;
-            localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
-            if (globalWorkSizeA[0] % aLocalWorkSize != 0)
-                globalWorkSizeA[0] = globalWorkSizeB[0] = aLocalWorkSize - globalWorkSizeA[0] % aLocalWorkSize;
+            globalWorkSizeArray[0] = aIntensity * Device.MaxComputeUnits;
+            localWorkSizeArray[0] = aLocalWorkSize;
+            if (globalWorkSizeArray[0] % aLocalWorkSize != 0)
+                globalWorkSizeArray[0] = aLocalWorkSize - globalWorkSizeArray[0] % aLocalWorkSize;
             mNicehashMode = aNicehashMode;
 
-            if (localWorkSizeA[0] != aLocalWorkSize)
+            if (localWorkSizeArray[0] != aLocalWorkSize)
             {
-                scratchpadsBuffer = null;
-                statesBuffer = null;
+                contextBuffer = null;
             }
 
             base.Start();
@@ -97,19 +90,19 @@ namespace GatelessGateSharp
 
             ComputeProgram program;
             try { mProgramArrayMutex.WaitOne(); } catch (Exception) { }
-            if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])))
+            if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeArray[0])))
             {
-                program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
+                program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeArray[0])];
             } 
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
+                String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
                 program = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD"    ? "-O5 " : //"-O1 " :
+                MainForm.Logger("Loaded Lbry program for Device #" + DeviceIndex + ".");
+                String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " : //"-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
-                                      + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];
+                                      + " -IKernels -DWORKSIZE=" + localWorkSizeArray[0];
                 try
                 {
                     program.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
@@ -119,29 +112,23 @@ namespace GatelessGateSharp
                     MainForm.Logger(program.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Built options: " + buildOptions);
-                mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = program;
+                mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeArray[0])] = program;
             }
             try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
 
             if (searchKernel0 == null) searchKernel0 = program.CreateKernel("search");
             if (searchKernel1 == null) searchKernel1 = program.CreateKernel("search1");
             if (searchKernel2 == null) searchKernel2 = program.CreateKernel("search2");
-            if (searchKernel3 == null) searchKernel3 = program.CreateKernel("search3");
-            if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + globalWorkSizeA[0]);
-            if (inputBuffer == null) inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
+            if (combinedSearchKernel == null) combinedSearchKernel = program.CreateKernel("search_combined");
+            if (contextBuffer == null) contextBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 32 * globalWorkSizeArray[0]);
+            if (inputBuffer == null) inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
             if (outputBuffer == null) outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
-            if (terminateBuffer == null) terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1);
-            if (scratchpadsBuffer == null) scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
 
-            fixed (long* globalWorkOffsetAPtr = globalWorkOffsetA)
-            fixed (long* globalWorkOffsetBPtr = globalWorkOffsetB)
-            fixed (long* globalWorkSizeAPtr = globalWorkSizeA)
-            fixed (long* globalWorkSizeBPtr = globalWorkSizeB)
-            fixed (long* localWorkSizeAPtr = localWorkSizeA)
-            fixed (long* localWorkSizeBPtr = localWorkSizeB)
-            fixed (Int32* terminatePtr = terminate)
+            fixed (long* globalWorkOffsetArrayPtr = globalWorkOffsetArray)
+            fixed (long* globalWorkSizeArrayPtr = globalWorkSizeArray)
+            fixed (long* localWorkSizeArrayPtr = localWorkSizeArray)
             fixed (byte* inputPtr = input)
             fixed (UInt32* outputPtr = output)
             while (!Stopped)
@@ -151,18 +138,15 @@ namespace GatelessGateSharp
                 try
                 {
                     searchKernel0.SetMemoryArgument(0, inputBuffer);
-                    searchKernel0.SetMemoryArgument(1, scratchpadsBuffer);
-                    searchKernel0.SetMemoryArgument(2, statesBuffer);
+                    searchKernel0.SetMemoryArgument(1, contextBuffer);
 
-                    searchKernel1.SetMemoryArgument(0, scratchpadsBuffer);
-                    searchKernel1.SetMemoryArgument(1, statesBuffer);
-                    searchKernel1.SetMemoryArgument(2, terminateBuffer);
+                    searchKernel1.SetMemoryArgument(0, contextBuffer);
 
-                    searchKernel2.SetMemoryArgument(0, scratchpadsBuffer);
-                    searchKernel2.SetMemoryArgument(1, statesBuffer);
+                    searchKernel2.SetMemoryArgument(0, contextBuffer);
+                    searchKernel2.SetMemoryArgument(1, outputBuffer);
 
-                    searchKernel3.SetMemoryArgument(0, statesBuffer);
-                    searchKernel3.SetMemoryArgument(1, outputBuffer);
+                    combinedSearchKernel.SetMemoryArgument(0, inputBuffer);
+                    combinedSearchKernel.SetMemoryArgument(1, outputBuffer);
 
                     // Wait for the first job to arrive.
                     int elapsedTime = 0;
@@ -175,32 +159,21 @@ namespace GatelessGateSharp
                         throw new TimeoutException("Stratum server failed to send a new job.");
 
                     System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                    CryptoNightStratum.Work work;
+                    LbryStratum.Work work;
 
                     while (!Stopped && (work = mStratum.GetWork()) != null)
                     {
                         MarkAsAlive();
 
-                        var job = work.GetJob();
-                        Array.Copy(Utilities.StringToByteArray(job.Blob), input, 76);
+                        var job = work.Job;
+                        Array.Copy(work.Blob, input, 112);
                         byte localExtranonce = work.LocalExtranonce;
-                        byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
-                        UInt32 startNonce;
-                        if (NiceHashMode)
-                        {
-                            startNonce = ((UInt32)input[42] << (8 * 3)) | ((UInt32)localExtranonce << (8 * 2)) | (UInt32)(r.Next(0, int.MaxValue) & (0x0000ffffu));
-                        }
-                        else
-                        {
-                            startNonce = ((UInt32)localExtranonce << (8 * 3)) | (UInt32)(r.Next(0, int.MaxValue) & (0x00ffffffu));
-                        }
-                        UInt32 target = ((UInt32)targetByteArray[0] << 0)
-                                        | ((UInt32)targetByteArray[1] << 8)
-                                        | ((UInt32)targetByteArray[2] << 16)
-                                        | ((UInt32)targetByteArray[3] << 24);
-                        searchKernel3.SetValueArgument<UInt32>(2, target);
+                        UInt32 startNonce = (UInt32)(r.Next(0, int.MaxValue));
+                        UInt64 target = (UInt64) ((double) 0xffff0000UL / (mStratum.Difficulty / 256));
+                        searchKernel2.SetValueArgument<UInt64>(2, target);
+                        combinedSearchKernel.SetValueArgument<UInt64>(2, target);
 
-                        Queue.Write<byte>(inputBuffer, true, 0, 76, (IntPtr)inputPtr, null);
+                        Queue.Write<byte>(inputBuffer, true, 0, 112, (IntPtr)inputPtr, null);
 
                         consoleUpdateStopwatch.Start();
 
@@ -208,48 +181,39 @@ namespace GatelessGateSharp
                         {
                             MarkAsAlive();
 
-                            globalWorkOffsetA[0] = globalWorkOffsetB[0] = startNonce;
+                            globalWorkOffsetArray[0] = startNonce;
 
                             // Get a new local extranonce if necessary.
-                            if (NiceHashMode)
-                            {
-                                if ((startNonce & 0xffff) + (UInt32)globalWorkSizeA[0] >= 0x10000)
-                                    break;
-                            }
-                            else
-                            {
-                                if ((startNonce & 0xffffff) + (UInt32)globalWorkSizeA[0] >= 0x1000000)
-                                    break;
-                            }
+                            if (0xffffffffu - startNonce < (UInt32)globalWorkSizeArray[0])
+                                break;
 
                             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                             sw.Start();
                             output[255] = 0; // output[255] is used as an atomic counter.
                             Queue.Write<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
-                            terminate[0] = 0;
-                            Queue.Write<Int32>(terminateBuffer, true, 0, 1, (IntPtr)terminatePtr, null);
-                            Queue.Execute(searchKernel0, globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
+
+                            /*
+                            Queue.Execute(searchKernel0, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
                             Queue.Finish(); 
                             if (Stopped)
                                 break;
-                            Queue.Execute(searchKernel1, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
+                            Queue.Execute(searchKernel1, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
                             Queue.Finish();
                             if (Stopped)
                                 break;
-                            Queue.Execute(searchKernel2, globalWorkOffsetA, globalWorkSizeA, localWorkSizeA, null);
+                            Queue.Execute(searchKernel2, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
                             Queue.Finish(); 
                             if (Stopped)
                                 break;
-                            Queue.Execute(searchKernel3, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
-                            Queue.Finish(); // Run the above statement before leaving the current local scope.
-                            if (Stopped)
-                                break;
+                            */
+                            Queue.Execute(combinedSearchKernel, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
+
                             Queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
                             sw.Stop();
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            mSpeed = ((double)globalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("Device #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", mSpeed));
+                                MainForm.Logger("Device #" + DeviceIndex + " (Lbry): " + String.Format("{0:N2} Mh/s", mSpeed / 1000000));
                                 consoleUpdateStopwatch.Restart();
                             }
                             if (mStratum.GetJob().Equals(job))
@@ -262,10 +226,10 @@ namespace GatelessGateSharp
                                         UInt32 word = output[256 + i * 8 + j];
                                         result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                                     }
-                                    mStratum.Submit(GatelessGateDevice, job, output[i], result);
+                                    mStratum.Submit(GatelessGateDevice, work, output[i], result);
                                 }
                             }
-                            startNonce += (UInt32)globalWorkSizeA[0];
+                            startNonce += (UInt32)globalWorkSizeArray[0];
                         }
                     }
                 } catch (Exception ex) {

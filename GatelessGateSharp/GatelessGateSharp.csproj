@@ -110,9 +110,11 @@
   <ItemGroup>
     <Compile Include="ADL.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="Miner\OpenCLLbryMiner.cs" />
     <Compile Include="Miner\OpenCLCryptoNightMiner.cs" />
     <Compile Include="Stratum\EthashStratum.cs" />
     <Compile Include="Stratum\CryptoNightStratum.cs" />
+    <Compile Include="Stratum\LbryStratum.cs" />
     <Compile Include="Stratum\OpenEthereumPoolEthashStratum.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="MainForm.cs">
@@ -148,7 +150,11 @@
     <None Include="Kernels\ethash.cl" />
     <None Include="Kernels\groestl256.cl" />
     <None Include="Kernels\jh.cl" />
+    <None Include="Kernels\lbry.cl" />
+    <None Include="Kernels\ripemd160.cl" />
+    <None Include="Kernels\sha256.cl" />
     <None Include="Kernels\wolf-aes.cl" />
+    <None Include="Kernels\wolf-sha512.cl" />
     <None Include="Kernels\wolf-skein.cl" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

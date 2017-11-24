@@ -31,6 +31,24 @@ namespace GatelessGateSharp
 {
     class OpenCLMiner : Miner
     {
+        public class ProgramArrayIndex
+        {
+            private int mDeviceIndex;
+            private long mLocalWorkSize;
+
+            public ProgramArrayIndex(int aDeviceIndex, long aLocalWorkSize)
+            {
+                mDeviceIndex = aDeviceIndex;
+                mLocalWorkSize = aLocalWorkSize;
+            }
+
+            public bool Equals(ProgramArrayIndex mValue)
+            {
+                return mDeviceIndex == mValue.mDeviceIndex && mLocalWorkSize == mValue.mLocalWorkSize;
+            }
+        }
+
+
         private Device mDevice;
         private List<ComputeDevice> mDeviceList;
         private ComputeCommandQueue mQueue;

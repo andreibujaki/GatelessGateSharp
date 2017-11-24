@@ -50,7 +50,8 @@ namespace GatelessGateSharp
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
         private static int mLaunchInterval = 500;
 
-        private Stratum mStratum = null;
+        private Stratum mPrimaryStratum = null;
+        private Stratum mSecondaryStratum = null;
         private List<Miner> mActiveMiners = new List<Miner>();
         private List<Miner> mInactiveMiners = new List<Miner>();
         private enum ApplicationGlobalState
@@ -1247,7 +1248,7 @@ namespace GatelessGateSharp
                     NVMLInitialized = true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             if (!NVMLInitialized)
@@ -1451,7 +1452,7 @@ namespace GatelessGateSharp
                     {
                         balance = (double)data["unpaid"] * 1e-18;
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                     var averageHashrate = (double)data["averageHashrate"];
                     var coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
@@ -1481,7 +1482,7 @@ namespace GatelessGateSharp
                     {
                         balance = (double)data["balance"];
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
 
                     labelPriceDay.Text = "-";
@@ -1514,7 +1515,7 @@ namespace GatelessGateSharp
                     {
                         balance = double.Parse((string)response["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
 
                     labelPriceDay.Text = "-";
@@ -1530,7 +1531,7 @@ namespace GatelessGateSharp
                     {
                         balance = double.Parse((string)response["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * USDXMR) + " USD)";
 
                     labelPriceDay.Text = "-";
@@ -1578,7 +1579,7 @@ namespace GatelessGateSharp
             try
             {
                 // Pool
-                mCurrentPool = (appState == ApplicationGlobalState.Mining && mStratum != null) ? mStratum.PoolName :
+                mCurrentPool = (appState == ApplicationGlobalState.Mining && mPrimaryStratum != null) ? mPrimaryStratum.PoolName :
                                checkBoxCustomPool0Enable.Checked                               ? textBoxCustomPool0Host.Text :
                                checkBoxCustomPool1Enable.Checked                               ? textBoxCustomPool1Host.Text :
                                checkBoxCustomPool2Enable.Checked                               ? textBoxCustomPool2Host.Text :
@@ -1588,9 +1589,13 @@ namespace GatelessGateSharp
                 {
                     labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + string.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
                 }
-                else if (appState == ApplicationGlobalState.Mining && mStratum != null && !CustomPoolEnabled)
+                else if (appState == ApplicationGlobalState.Mining && !CustomPoolEnabled && mPrimaryStratum != null && mSecondaryStratum != null)
                 {
-                    labelCurrentPool.Text = mCurrentPool + " (" + mStratum.ServerAddress + ")";
+                    labelCurrentPool.Text = mCurrentPool + " (" + mPrimaryStratum.ServerAddress + ", " + mSecondaryStratum.ServerAddress + ")";
+                }
+                else if (appState == ApplicationGlobalState.Mining && !CustomPoolEnabled && mPrimaryStratum != null)
+                {
+                    labelCurrentPool.Text = mCurrentPool + " (" + mPrimaryStratum.ServerAddress + ")";
                 }
                 else
                 {
@@ -1742,7 +1747,7 @@ namespace GatelessGateSharp
             finally
             {
                 try { try { DeviceManagementLibrariesMutex.ReleaseMutex(); } catch (Exception) { } }
-                catch (Exception ex) { }
+                catch (Exception) { }
             }
         }
 
@@ -1842,7 +1847,7 @@ namespace GatelessGateSharp
                 {
                     time = Utilities.MeasurePingRoundtripTime(aName);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     time = -1;
                 }
@@ -1867,7 +1872,7 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        public void LaunchCryptoNightMiners(string pool)
+        public void LaunchCryptoNightMiners(string pool, bool aPrimaryPool = true)
         {
             CryptoNightStratum stratum = null;
             var niceHashMode = false;
@@ -1959,10 +1964,17 @@ namespace GatelessGateSharp
             }
 
             StartOpenCLCryptoNightMiners(stratum, niceHashMode);
-            mStratum = (Stratum)stratum;
+            if (aPrimaryPool)
+            {
+                mPrimaryStratum = (Stratum) stratum;
+            }
+            else
+            {
+                mSecondaryStratum = (Stratum)stratum;
+            }
         }
 
-        void StartOpenCLCryptoNightMiners(CryptoNightStratum stratum, bool niceHashMode)
+        void StartOpenCLCryptoNightMiners(CryptoNightStratum stratum, bool niceHashMode, bool aPrimaryPool = true)
         {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
@@ -2015,7 +2027,7 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        public void LaunchEthashMiners(string pool)
+        public void LaunchEthashMiners(string pool, bool aPrimaryPool = true)
         {
             EthashStratum stratum = null;
 
@@ -2179,12 +2191,19 @@ namespace GatelessGateSharp
             }
 
             StartOpenCLEthashMiners(stratum);
-            mStratum = (Stratum)stratum;
+            if (aPrimaryPool)
+            {
+                mPrimaryStratum = (Stratum)stratum;
+            }
+            else
+            {
+                mSecondaryStratum = (Stratum)stratum;
+            }
         }
 
         void StartOpenCLEthashMiners(EthashStratum stratum)
         {
-            this.Activate(); 
+            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
@@ -2204,13 +2223,13 @@ namespace GatelessGateSharp
                         {
                             if (inactiveMiner.GetType() == typeof(OpenCLEthashMiner))
                             {
-                                miner = (OpenCLEthashMiner) inactiveMiner;
+                                miner = (OpenCLEthashMiner)inactiveMiner;
                                 break;
                             }
                         }
                         if (miner != null)
                         {
-                            mInactiveMiners.Remove((Miner) miner);
+                            mInactiveMiners.Remove((Miner)miner);
                         }
                         else
                         {
@@ -2226,7 +2245,56 @@ namespace GatelessGateSharp
                         for (int j = 0; j < mLaunchInterval; j += 10)
                         {
                             Application.DoEvents();
-                            System.Threading.Thread.Sleep(10);                            
+                            System.Threading.Thread.Sleep(10);
+                        }
+                    }
+                }
+            }
+        }
+
+        void StartOpenCLLbryMiners(LbryStratum stratum)
+        {
+            this.Activate();
+            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
+            int deviceIndex, i, minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                    for (i = 0; i < 2; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
+                        ++minerCount;
+            toolStripMainFormProgressBar.Maximum = minerCount;
+            minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            {
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                {
+                    for (i = 0; i < 2; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
+                    {
+                        OpenCLLbryMiner miner = null;
+                        foreach (var inactiveMiner in mInactiveMiners)
+                        {
+                            if (inactiveMiner.GetType() == typeof(OpenCLLbryMiner))
+                            {
+                                miner = (OpenCLLbryMiner)inactiveMiner;
+                                break;
+                            }
+                        }
+                        if (miner != null)
+                        {
+                            mInactiveMiners.Remove((Miner)miner);
+                        }
+                        else
+                        {
+                            miner = new OpenCLLbryMiner(mDevices[deviceIndex]);
+                        }
+                        mActiveMiners.Add(miner);
+                        miner.Start(stratum,
+                            256 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
+                            256); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
+                        toolStripMainFormProgressBar.Value = ++minerCount;
+                        for (int j = 0; j < mLaunchInterval; j += 10)
+                        {
+                            Application.DoEvents();
+                            System.Threading.Thread.Sleep(10);
                         }
                     }
                 }
@@ -2293,36 +2361,46 @@ namespace GatelessGateSharp
                         {
                             var stratum = new NiceHashEthashStratum("daggerhashimoto.usa.nicehash.com", 3353, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
                             StartOpenCLEthashMiners(stratum);
-                            mStratum = stratum;
+                            mPrimaryStratum = stratum;
                             break;
                         }
                         else if (DevFeeMode && algo == "CryptoNight")
                         {
                             var stratum = new CryptoNightStratum("cryptonight.usa.nicehash.com", 3355, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
                             StartOpenCLCryptoNightMiners(stratum, true);
-                            mStratum = stratum;
+                            mPrimaryStratum = stratum;
                             break;
                         }
                         else if (algo == "Ethash")
                         {
                             var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                             StartOpenCLEthashMiners(stratum);
-                            mStratum = stratum;
+                            mPrimaryStratum = stratum;
                             break;
                         }
                         else if (algo == "CryptoNight")
                         {
                             var stratum = new CryptoNightStratum(host, port, login, password, host);
                             StartOpenCLCryptoNightMiners(stratum, false);
-                            mStratum = stratum;
+                            mPrimaryStratum = stratum;
+                            break;
+                        }
+                        else if (algo == "Lbry")
+                        {
+                            //var stratum1 = new NiceHashEthashStratum("daggerhashimoto.usa.nicehash.com", 3353, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
+                            var stratum2 = new LbryStratum(host, port, login, password, host);
+                            //StartOpenCLEthashMiners(stratum1);
+                            StartOpenCLLbryMiners(stratum2);
+                            mPrimaryStratum = stratum2;
+                           // mSecondaryStratum = stratum2;
                             break;
                         }
                     }
                     catch (Exception ex)
                     {
                         Logger("Exception: " + ex.Message + ex.StackTrace);
-                        if (mStratum != null)
-                            mStratum.Stop();
+                        if (mPrimaryStratum != null)
+                            mPrimaryStratum.Stop();
                         foreach (Miner miner in mActiveMiners)
                             miner.Stop();
                     }
@@ -2349,8 +2427,8 @@ namespace GatelessGateSharp
                     catch (Exception ex)
                     {
                         Logger("Exception: " + ex.Message + ex.StackTrace);
-                        if (mStratum != null)
-                            mStratum.Stop();
+                        if (mPrimaryStratum != null)
+                            mPrimaryStratum.Stop();
                         foreach (Miner miner in mActiveMiners)
                             miner.Stop();
                     }                
@@ -2383,7 +2461,9 @@ namespace GatelessGateSharp
                 foreach (var miner in mActiveMiners)
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
-                mStratum.Stop();
+                mPrimaryStratum.Stop();
+                if (mSecondaryStratum != null)
+                    mSecondaryStratum.Stop();
                 toolStripMainFormProgressBar.Value = 0;
             }
             catch (Exception ex)
@@ -2393,7 +2473,8 @@ namespace GatelessGateSharp
             foreach (var miner in mActiveMiners)
                 mInactiveMiners.Add(miner);
             mActiveMiners.Clear();
-            mStratum = null;
+            mPrimaryStratum = null;
+            mSecondaryStratum = null;
 
             try
             {
@@ -2446,12 +2527,13 @@ namespace GatelessGateSharp
                     labelGPUSharesArray[device.DeviceIndex].Text = "0";
                 }
 
-                mStratum = null;
+                mPrimaryStratum = null;
+                mSecondaryStratum = null;
                 mActiveMiners.Clear();
 
                 mDevFeeMode = true;
                 LaunchMiners();
-                if (mStratum == null || !mActiveMiners.Any())
+                if (mPrimaryStratum == null || !mActiveMiners.Any())
                 {
                     MessageBox.Show("Failed to launch miner.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -2612,7 +2694,7 @@ namespace GatelessGateSharp
                     mDevFeeMode = false;
                     timerDevFee.Interval = (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
                     LaunchMiners();
-                    if (mActiveMiners.Count() == 0 || mStratum == null)
+                    if (mActiveMiners.Count() == 0 || mPrimaryStratum == null)
                     {
                         mDevFeeMode = true;
                         timerDevFee.Interval = 1000;
@@ -2627,7 +2709,7 @@ namespace GatelessGateSharp
                     mDevFeeModeStartTime = DateTime.Now;
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
                     LaunchMiners();
-                    if (mActiveMiners.Count() == 0 || mStratum == null)
+                    if (mActiveMiners.Count() == 0 || mPrimaryStratum == null)
                     {
                         mDevFeeMode = false;
                         timerDevFee.Interval = 1000;
@@ -2750,7 +2832,7 @@ namespace GatelessGateSharp
                 process.StartInfo = startInfo;
                 process.Start();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Failed to complete the operation.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
