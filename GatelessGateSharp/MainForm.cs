@@ -436,6 +436,110 @@ namespace GatelessGateSharp
                                         }
 
                                     }
+                                    else if (propertyName == "custom_pool0_secondary_host")
+                                    {
+                                        textBoxCustomPool0SecondaryHost.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool0_secondary_login")
+                                    {
+                                        textBoxCustomPool0SecondaryLogin.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool0_secondary_password")
+                                    {
+                                        textBoxCustomPool0SecondaryPassword.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool1_secondary_host")
+                                    {
+                                        textBoxCustomPool1SecondaryHost.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool1_secondary_login")
+                                    {
+                                        textBoxCustomPool1SecondaryLogin.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool1_secondary_password")
+                                    {
+                                        textBoxCustomPool1SecondaryPassword.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool2_secondary_host")
+                                    {
+                                        textBoxCustomPool2SecondaryHost.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool2_secondary_login")
+                                    {
+                                        textBoxCustomPool2SecondaryLogin.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool2_secondary_password")
+                                    {
+                                        textBoxCustomPool2SecondaryPassword.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool3_secondary_host")
+                                    {
+                                        textBoxCustomPool3SecondaryHost.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool3_secondary_login")
+                                    {
+                                        textBoxCustomPool3SecondaryLogin.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool3_secondary_password")
+                                    {
+                                        textBoxCustomPool3SecondaryPassword.Text = (string)reader["value"];
+                                    }
+                                    else if (propertyName == "custom_pool0_secondary_port")
+                                    {
+                                        numericUpDownCustomPool0SecondaryPort.Value = decimal.Parse((string)reader["value"]);
+                                    }
+                                    else if (propertyName == "custom_pool1_secondary_port")
+                                    {
+                                        numericUpDownCustomPool1SecondaryPort.Value = decimal.Parse((string)reader["value"]);
+                                    }
+                                    else if (propertyName == "custom_pool2_secondary_port")
+                                    {
+                                        numericUpDownCustomPool2SecondaryPort.Value = decimal.Parse((string)reader["value"]);
+                                    }
+                                    else if (propertyName == "custom_pool3_secondary_port")
+                                    {
+                                        numericUpDownCustomPool3SecondaryPort.Value = decimal.Parse((string)reader["value"]);
+                                    }
+                                    else if (propertyName == "custom_pool0_secondary_algorithm")
+                                    {
+                                        for (int i = 0; i < comboBoxCustomPool0SecondaryAlgorithm.Items.Count; ++i)
+                                        {
+                                            var item = comboBoxCustomPool0SecondaryAlgorithm.Items[i];
+                                            if ((string)item == (string)reader["value"])
+                                                comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = i;
+                                        }
+
+                                    }
+                                    else if (propertyName == "custom_pool1_secondary_algorithm")
+                                    {
+                                        for (int i = 0; i < comboBoxCustomPool1SecondaryAlgorithm.Items.Count; ++i)
+                                        {
+                                            var item = comboBoxCustomPool1SecondaryAlgorithm.Items[i];
+                                            if ((string)item == (string)reader["value"])
+                                                comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = i;
+                                        }
+
+                                    }
+                                    else if (propertyName == "custom_pool2_secondary_algorithm")
+                                    {
+                                        for (int i = 0; i < comboBoxCustomPool2SecondaryAlgorithm.Items.Count; ++i)
+                                        {
+                                            var item = comboBoxCustomPool2SecondaryAlgorithm.Items[i];
+                                            if ((string)item == (string)reader["value"])
+                                                comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = i;
+                                        }
+
+                                    }
+                                    else if (propertyName == "custom_pool3_secondary_algorithm")
+                                    {
+                                        for (int i = 0; i < comboBoxCustomPool3SecondaryAlgorithm.Items.Count; ++i)
+                                        {
+                                            var item = comboBoxCustomPool3SecondaryAlgorithm.Items[i];
+                                            if ((string)item == (string)reader["value"])
+                                                comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = i;
+                                        }
+
+                                    }
                                     else if (propertyName == "disable_auto_start_prompt")
                                     {
                                         checkBoxDisableAutoStartPrompt.Checked = (string) reader["value"] == "true";
@@ -651,19 +755,6 @@ namespace GatelessGateSharp
 
                     using (var command = new SQLiteCommand(sql, conn))
                     {
-                        command.Parameters.AddWithValue("@name", "pool_rig_id");
-                        command.Parameters.AddWithValue("@value", textBoxRigID.Text);
-                        command.ExecuteNonQuery();
-                    }
-
-                    using (var command = new SQLiteCommand(sql, conn))
-                    {
-                        command.Parameters.AddWithValue("@name", "pool_email");
-                        command.Parameters.AddWithValue("@value", textBoxEmail.Text);
-                        command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn))
-                    {
                         command.Parameters.AddWithValue("@name", "custom_pool0_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0Host.Text);
                         command.ExecuteNonQuery();
@@ -804,6 +895,126 @@ namespace GatelessGateSharp
                     {
                         command.Parameters.AddWithValue("@name", "custom_pool3_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex]);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_host");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryHost.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_login");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryLogin.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_password");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryPassword.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_host");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryHost.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_login");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryLogin.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_password");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryPassword.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_host");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryHost.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_login");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryLogin.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_password");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryPassword.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_host");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryHost.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_login");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryLogin.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_password");
+                        command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryPassword.Text);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_port");
+                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool0SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_port");
+                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool1SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_port");
+                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool2SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_port");
+                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool3SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_algorithm");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex]);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_algorithm");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex]);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_algorithm");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex]);
+                        command.ExecuteNonQuery();
+                    }
+                    using (var command = new SQLiteCommand(sql, conn))
+                    {
+                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_algorithm");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
                     }
                     using (var command = new SQLiteCommand(sql, conn))
@@ -1144,6 +1355,11 @@ namespace GatelessGateSharp
             comboBoxCustomPool1Algorithm.SelectedIndex = 0;
             comboBoxCustomPool2Algorithm.SelectedIndex = 0;
             comboBoxCustomPool3Algorithm.SelectedIndex = 0;
+
+            comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
             var ADLRet = -1;
             var NumberOfAdapters = 0;
@@ -2259,7 +2475,7 @@ namespace GatelessGateSharp
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
-                    for (i = 0; i < 2; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < 1; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
@@ -2267,7 +2483,7 @@ namespace GatelessGateSharp
             {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    for (i = 0; i < 2; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < 1; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
                     {
                         OpenCLLbryMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
@@ -2288,8 +2504,8 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            256 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
-                            256); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
+                            32 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
+                            64); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10)
                         {
@@ -2306,6 +2522,41 @@ namespace GatelessGateSharp
             get {
                 return checkBoxCustomPool0Enable.Checked || checkBoxCustomPool1Enable.Checked || checkBoxCustomPool2Enable.Checked || checkBoxCustomPool3Enable.Checked;
             }
+        }
+
+        private Stratum LaunchMinersForCustomPool(string algo, string host, int port, string login, string password)
+        {
+            if (DevFeeMode && algo == "Ethash")
+            {
+                var stratum = new NiceHashEthashStratum("daggerhashimoto.usa.nicehash.com", 3353, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
+                StartOpenCLEthashMiners(stratum);
+                return stratum;
+            }
+            else if (DevFeeMode && algo == "CryptoNight")
+            {
+                var stratum = new CryptoNightStratum("cryptonight.usa.nicehash.com", 3355, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
+                StartOpenCLCryptoNightMiners(stratum, true);
+                return stratum;
+            }
+            else if (algo == "Ethash")
+            {
+                var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
+                StartOpenCLEthashMiners(stratum);
+                return stratum;
+            }
+            else if (algo == "CryptoNight")
+            {
+                var stratum = new CryptoNightStratum(host, port, login, password, host);
+                StartOpenCLCryptoNightMiners(stratum, false);
+                return stratum;
+            }
+            else if (algo == "Lbry")
+            {
+                var stratum = new LbryStratum(host, port, login, password, host);
+                StartOpenCLLbryMiners(stratum);
+                return stratum;
+            }
+            return null;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -2327,82 +2578,47 @@ namespace GatelessGateSharp
             {
                 for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++)
                 {
+                    bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
+                                   (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
+                                   (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
+                                                            checkBoxCustomPool3Enable.Checked;
+                    String host = (customPoolIndex == 0) ? textBoxCustomPool0Host.Text :
+                                  (customPoolIndex == 1) ? textBoxCustomPool1Host.Text :
+                                  (customPoolIndex == 2) ? textBoxCustomPool2Host.Text :
+                                                           textBoxCustomPool3Host.Text;
+                    int port = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0Port.Value) :
+                               (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1Port.Value) :
+                               (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2Port.Value) :
+                                                        Convert.ToInt32(numericUpDownCustomPool3Port.Value);
+                    String login = (customPoolIndex == 0) ? textBoxCustomPool0Login.Text :
+                                   (customPoolIndex == 1) ? textBoxCustomPool1Login.Text :
+                                   (customPoolIndex == 2) ? textBoxCustomPool2Login.Text :
+                                                            textBoxCustomPool3Login.Text;
+                    String password = (customPoolIndex == 0) ? textBoxCustomPool0Password.Text :
+                                      (customPoolIndex == 1) ? textBoxCustomPool1Password.Text :
+                                      (customPoolIndex == 2) ? textBoxCustomPool2Password.Text :
+                                                               textBoxCustomPool3Password.Text;
+                    String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
+                                  (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
+                                  (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
+                                                           (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
+                    String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
+                                   (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
+                                   (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
+                                                            (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
+
+                    if (!enabled)
+                        continue;
+
                     try
                     {
-                        bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
-                                       (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
-                                       (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
-                                                                checkBoxCustomPool3Enable.Checked;
-                        String host = (customPoolIndex == 0) ? textBoxCustomPool0Host.Text :
-                                      (customPoolIndex == 1) ? textBoxCustomPool1Host.Text :
-                                      (customPoolIndex == 2) ? textBoxCustomPool2Host.Text :
-                                                               textBoxCustomPool3Host.Text;
-                        int port = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0Port.Value) :
-                                   (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1Port.Value) :
-                                   (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2Port.Value) :
-                                                            Convert.ToInt32(numericUpDownCustomPool3Port.Value);
-                        String login = (customPoolIndex == 0) ? textBoxCustomPool0Login.Text :
-                                       (customPoolIndex == 1) ? textBoxCustomPool1Login.Text :
-                                       (customPoolIndex == 2) ? textBoxCustomPool2Login.Text :
-                                                                textBoxCustomPool3Login.Text;
-                        String password = (customPoolIndex == 0) ? textBoxCustomPool0Password.Text :
-                                          (customPoolIndex == 1) ? textBoxCustomPool1Password.Text :
-                                          (customPoolIndex == 2) ? textBoxCustomPool2Password.Text :
-                                                                   textBoxCustomPool3Password.Text;
-                        String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
-                                      (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
-                                      (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
-                                                               (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
-
-                        if (!enabled)
-                            continue;
-
-                        if (DevFeeMode && algo == "Ethash")
-                        {
-                            var stratum = new NiceHashEthashStratum("daggerhashimoto.usa.nicehash.com", 3353, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
-                            StartOpenCLEthashMiners(stratum);
-                            mPrimaryStratum = stratum;
-                            break;
-                        }
-                        else if (DevFeeMode && algo == "CryptoNight")
-                        {
-                            var stratum = new CryptoNightStratum("cryptonight.usa.nicehash.com", 3355, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
-                            StartOpenCLCryptoNightMiners(stratum, true);
-                            mPrimaryStratum = stratum;
-                            break;
-                        }
-                        else if (algo == "Ethash")
-                        {
-                            var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
-                            StartOpenCLEthashMiners(stratum);
-                            mPrimaryStratum = stratum;
-                            break;
-                        }
-                        else if (algo == "CryptoNight")
-                        {
-                            var stratum = new CryptoNightStratum(host, port, login, password, host);
-                            StartOpenCLCryptoNightMiners(stratum, false);
-                            mPrimaryStratum = stratum;
-                            break;
-                        }
-                        else if (algo == "Lbry")
-                        {
-                            //var stratum1 = new NiceHashEthashStratum("daggerhashimoto.usa.nicehash.com", 3353, mDevFeeBitcoinAddress + ".DEVFEE", "x", host);
-                            var stratum2 = new LbryStratum(host, port, login, password, host);
-                            //StartOpenCLEthashMiners(stratum1);
-                            StartOpenCLLbryMiners(stratum2);
-                            mPrimaryStratum = stratum2;
-                           // mSecondaryStratum = stratum2;
-                            break;
-                        }
+                        mPrimaryStratum = LaunchMinersForCustomPool(algo, host, port, login, password);
+                        if (algo2 != "")
+                            mSecondaryStratum = LaunchMinersForCustomPool(algo, host, port, login, password);
                     }
                     catch (Exception ex)
                     {
                         Logger("Exception: " + ex.Message + ex.StackTrace);
-                        if (mPrimaryStratum != null)
-                            mPrimaryStratum.Stop();
-                        foreach (Miner miner in mActiveMiners)
-                            miner.Stop();
                     }
                 }
             }
@@ -2587,10 +2803,20 @@ namespace GatelessGateSharp
                 groupBoxCustmPool2.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxCustmPool3.Enabled = appState == ApplicationGlobalState.Idle;
 
-                textBoxCustomPool0Host.Enabled = textBoxCustomPool0Login.Enabled = textBoxCustomPool0Password.Enabled = comboBoxCustomPool0Algorithm.Enabled = numericUpDownCustomPool0Port.Enabled = checkBoxCustomPool0Enable.Checked;
-                textBoxCustomPool1Host.Enabled = textBoxCustomPool1Login.Enabled = textBoxCustomPool1Password.Enabled = comboBoxCustomPool1Algorithm.Enabled = numericUpDownCustomPool1Port.Enabled = checkBoxCustomPool1Enable.Checked;
-                textBoxCustomPool2Host.Enabled = textBoxCustomPool2Login.Enabled = textBoxCustomPool2Password.Enabled = comboBoxCustomPool2Algorithm.Enabled = numericUpDownCustomPool2Port.Enabled = checkBoxCustomPool2Enable.Checked;
-                textBoxCustomPool3Host.Enabled = textBoxCustomPool3Login.Enabled = textBoxCustomPool3Password.Enabled = comboBoxCustomPool3Algorithm.Enabled = numericUpDownCustomPool3Port.Enabled = checkBoxCustomPool3Enable.Checked;
+                textBoxCustomPool0Host.Enabled = textBoxCustomPool0Login.Enabled = textBoxCustomPool0Password.Enabled = comboBoxCustomPool0Algorithm.Enabled = comboBoxCustomPool0SecondaryAlgorithm.Enabled = numericUpDownCustomPool0Port.Enabled = checkBoxCustomPool0Enable.Checked;
+                textBoxCustomPool1Host.Enabled = textBoxCustomPool1Login.Enabled = textBoxCustomPool1Password.Enabled = comboBoxCustomPool1Algorithm.Enabled = comboBoxCustomPool1SecondaryAlgorithm.Enabled = numericUpDownCustomPool1Port.Enabled = checkBoxCustomPool1Enable.Checked;
+                textBoxCustomPool2Host.Enabled = textBoxCustomPool2Login.Enabled = textBoxCustomPool2Password.Enabled = comboBoxCustomPool2Algorithm.Enabled = comboBoxCustomPool2SecondaryAlgorithm.Enabled = numericUpDownCustomPool2Port.Enabled = checkBoxCustomPool2Enable.Checked;
+                textBoxCustomPool3Host.Enabled = textBoxCustomPool3Login.Enabled = textBoxCustomPool3Password.Enabled = comboBoxCustomPool3Algorithm.Enabled = comboBoxCustomPool3SecondaryAlgorithm.Enabled = numericUpDownCustomPool3Port.Enabled = checkBoxCustomPool3Enable.Checked;
+
+                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
+
+                textBoxCustomPool0SecondaryHost.Enabled = textBoxCustomPool0SecondaryLogin.Enabled = textBoxCustomPool0SecondaryPassword.Enabled = numericUpDownCustomPool0SecondaryPort.Enabled = checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0;
+                textBoxCustomPool1SecondaryHost.Enabled = textBoxCustomPool1SecondaryLogin.Enabled = textBoxCustomPool1SecondaryPassword.Enabled = numericUpDownCustomPool1SecondaryPort.Enabled = checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0;
+                textBoxCustomPool2SecondaryHost.Enabled = textBoxCustomPool2SecondaryLogin.Enabled = textBoxCustomPool2SecondaryPassword.Enabled = numericUpDownCustomPool2SecondaryPort.Enabled = checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0;
+                textBoxCustomPool3SecondaryHost.Enabled = textBoxCustomPool3SecondaryLogin.Enabled = textBoxCustomPool3SecondaryPassword.Enabled = numericUpDownCustomPool3SecondaryPort.Enabled = checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0;
 
                 tabControlMainForm.Enabled = buttonStart.Enabled = true;
             }
@@ -3311,6 +3537,46 @@ namespace GatelessGateSharp
         }
 
         private void checkBoxCustomPool3Enable_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void comboBoxCustomPool0Algorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void comboBoxCustomPool0SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void comboBoxCustomPool1Algorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void comboBoxCustomPool1SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void comboBoxCustomPool2Algorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void comboBoxCustomPool2SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void comboBoxCustomPool3Algorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateControls();
+        }
+
+        private void comboBoxCustomPool3SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateControls();
         }
