@@ -230,6 +230,8 @@ namespace GatelessGateSharp
                                 }
                             }
                             startNonce += (UInt32)globalWorkSizeArray[0];
+                            IncrementKernelExecutionCount();
+                            WaitForDualMiningPair();
                         }
                     }
                 } catch (Exception ex) {

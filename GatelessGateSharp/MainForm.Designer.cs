@@ -143,8 +143,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.labelCurrentSpeed = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.labelCurrentAlgorithm = new System.Windows.Forms.Label();
-            this.labelCurrentAlgorithmCaption = new System.Windows.Forms.Label();
             this.tabPagePoolSettings = new System.Windows.Forms.TabPage();
             this.groupBoxWalletAddresses = new System.Windows.Forms.GroupBox();
             this.textBoxBitcoinAddress = new System.Windows.Forms.TextBox();
@@ -814,8 +812,6 @@
             this.tabPageDashboard.Controls.Add(this.label5);
             this.tabPageDashboard.Controls.Add(this.labelCurrentSpeed);
             this.tabPageDashboard.Controls.Add(this.label3);
-            this.tabPageDashboard.Controls.Add(this.labelCurrentAlgorithm);
-            this.tabPageDashboard.Controls.Add(this.labelCurrentAlgorithmCaption);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
             this.tabPageDashboard.Size = new System.Drawing.Size(720, 394);
@@ -842,7 +838,7 @@
             // 
             // labelPriceMonth
             // 
-            this.labelPriceMonth.Location = new System.Drawing.Point(96, 110);
+            this.labelPriceMonth.Location = new System.Drawing.Point(96, 102);
             this.labelPriceMonth.Name = "labelPriceMonth";
             this.labelPriceMonth.Size = new System.Drawing.Size(232, 17);
             this.labelPriceMonth.TabIndex = 141;
@@ -1054,9 +1050,9 @@
             // 
             // labelGPU7Shares
             // 
-            this.labelGPU7Shares.Location = new System.Drawing.Point(309, 195);
+            this.labelGPU7Shares.Location = new System.Drawing.Point(351, 196);
             this.labelGPU7Shares.Name = "labelGPU7Shares";
-            this.labelGPU7Shares.Size = new System.Drawing.Size(96, 14);
+            this.labelGPU7Shares.Size = new System.Drawing.Size(89, 14);
             this.labelGPU7Shares.TabIndex = 229;
             this.labelGPU7Shares.Text = "-";
             this.labelGPU7Shares.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1064,9 +1060,9 @@
             // 
             // labelGPU3Shares
             // 
-            this.labelGPU3Shares.Location = new System.Drawing.Point(309, 108);
+            this.labelGPU3Shares.Location = new System.Drawing.Point(351, 109);
             this.labelGPU3Shares.Name = "labelGPU3Shares";
-            this.labelGPU3Shares.Size = new System.Drawing.Size(96, 14);
+            this.labelGPU3Shares.Size = new System.Drawing.Size(89, 14);
             this.labelGPU3Shares.TabIndex = 228;
             this.labelGPU3Shares.Text = "-";
             this.labelGPU3Shares.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1074,9 +1070,9 @@
             // 
             // labelGPU6Shares
             // 
-            this.labelGPU6Shares.Location = new System.Drawing.Point(309, 173);
+            this.labelGPU6Shares.Location = new System.Drawing.Point(351, 174);
             this.labelGPU6Shares.Name = "labelGPU6Shares";
-            this.labelGPU6Shares.Size = new System.Drawing.Size(96, 14);
+            this.labelGPU6Shares.Size = new System.Drawing.Size(89, 14);
             this.labelGPU6Shares.TabIndex = 227;
             this.labelGPU6Shares.Text = "-";
             this.labelGPU6Shares.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1084,9 +1080,9 @@
             // 
             // labelGPU2Shares
             // 
-            this.labelGPU2Shares.Location = new System.Drawing.Point(309, 86);
+            this.labelGPU2Shares.Location = new System.Drawing.Point(351, 87);
             this.labelGPU2Shares.Name = "labelGPU2Shares";
-            this.labelGPU2Shares.Size = new System.Drawing.Size(96, 14);
+            this.labelGPU2Shares.Size = new System.Drawing.Size(89, 14);
             this.labelGPU2Shares.TabIndex = 226;
             this.labelGPU2Shares.Text = "-";
             this.labelGPU2Shares.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1094,9 +1090,9 @@
             // 
             // labelGPU5Shares
             // 
-            this.labelGPU5Shares.Location = new System.Drawing.Point(309, 152);
+            this.labelGPU5Shares.Location = new System.Drawing.Point(351, 153);
             this.labelGPU5Shares.Name = "labelGPU5Shares";
-            this.labelGPU5Shares.Size = new System.Drawing.Size(96, 14);
+            this.labelGPU5Shares.Size = new System.Drawing.Size(89, 14);
             this.labelGPU5Shares.TabIndex = 224;
             this.labelGPU5Shares.Text = "-";
             this.labelGPU5Shares.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1104,9 +1100,9 @@
             // 
             // labelGPU1Shares
             // 
-            this.labelGPU1Shares.Location = new System.Drawing.Point(309, 65);
+            this.labelGPU1Shares.Location = new System.Drawing.Point(351, 66);
             this.labelGPU1Shares.Name = "labelGPU1Shares";
-            this.labelGPU1Shares.Size = new System.Drawing.Size(96, 14);
+            this.labelGPU1Shares.Size = new System.Drawing.Size(89, 14);
             this.labelGPU1Shares.TabIndex = 225;
             this.labelGPU1Shares.Text = "-";
             this.labelGPU1Shares.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1114,9 +1110,9 @@
             // 
             // labelGPU4Shares
             // 
-            this.labelGPU4Shares.Location = new System.Drawing.Point(309, 130);
+            this.labelGPU4Shares.Location = new System.Drawing.Point(351, 131);
             this.labelGPU4Shares.Name = "labelGPU4Shares";
-            this.labelGPU4Shares.Size = new System.Drawing.Size(96, 15);
+            this.labelGPU4Shares.Size = new System.Drawing.Size(89, 14);
             this.labelGPU4Shares.TabIndex = 222;
             this.labelGPU4Shares.Text = "-";
             this.labelGPU4Shares.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1124,9 +1120,9 @@
             // 
             // labelGPU0Shares
             // 
-            this.labelGPU0Shares.Location = new System.Drawing.Point(309, 44);
+            this.labelGPU0Shares.Location = new System.Drawing.Point(351, 45);
             this.labelGPU0Shares.Name = "labelGPU0Shares";
-            this.labelGPU0Shares.Size = new System.Drawing.Size(96, 15);
+            this.labelGPU0Shares.Size = new System.Drawing.Size(89, 14);
             this.labelGPU0Shares.TabIndex = 223;
             this.labelGPU0Shares.Text = "-";
             this.labelGPU0Shares.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1136,7 +1132,7 @@
             // 
             this.label.AutoSize = true;
             this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label.Location = new System.Drawing.Point(301, 23);
+            this.label.Location = new System.Drawing.Point(361, 23);
             this.label.Name = "label";
             this.label.Size = new System.Drawing.Size(46, 13);
             this.label.TabIndex = 221;
@@ -1324,9 +1320,9 @@
             // 
             // labelGPU7Activity
             // 
-            this.labelGPU7Activity.Location = new System.Drawing.Point(415, 196);
+            this.labelGPU7Activity.Location = new System.Drawing.Point(438, 196);
             this.labelGPU7Activity.Name = "labelGPU7Activity";
-            this.labelGPU7Activity.Size = new System.Drawing.Size(41, 13);
+            this.labelGPU7Activity.Size = new System.Drawing.Size(36, 14);
             this.labelGPU7Activity.TabIndex = 202;
             this.labelGPU7Activity.Text = "99%";
             this.labelGPU7Activity.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1334,9 +1330,9 @@
             // 
             // labelGPU3Activity
             // 
-            this.labelGPU3Activity.Location = new System.Drawing.Point(415, 109);
+            this.labelGPU3Activity.Location = new System.Drawing.Point(438, 109);
             this.labelGPU3Activity.Name = "labelGPU3Activity";
-            this.labelGPU3Activity.Size = new System.Drawing.Size(41, 13);
+            this.labelGPU3Activity.Size = new System.Drawing.Size(36, 14);
             this.labelGPU3Activity.TabIndex = 201;
             this.labelGPU3Activity.Text = "99%";
             this.labelGPU3Activity.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1344,9 +1340,9 @@
             // 
             // labelGPU7Speed
             // 
-            this.labelGPU7Speed.Location = new System.Drawing.Point(232, 195);
+            this.labelGPU7Speed.Location = new System.Drawing.Point(211, 196);
             this.labelGPU7Speed.Name = "labelGPU7Speed";
-            this.labelGPU7Speed.Size = new System.Drawing.Size(62, 13);
+            this.labelGPU7Speed.Size = new System.Drawing.Size(142, 14);
             this.labelGPU7Speed.TabIndex = 200;
             this.labelGPU7Speed.Text = "0 Mh/s";
             this.labelGPU7Speed.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1354,9 +1350,9 @@
             // 
             // labelGPU3Speed
             // 
-            this.labelGPU3Speed.Location = new System.Drawing.Point(232, 108);
+            this.labelGPU3Speed.Location = new System.Drawing.Point(211, 109);
             this.labelGPU3Speed.Name = "labelGPU3Speed";
-            this.labelGPU3Speed.Size = new System.Drawing.Size(62, 13);
+            this.labelGPU3Speed.Size = new System.Drawing.Size(142, 14);
             this.labelGPU3Speed.TabIndex = 199;
             this.labelGPU3Speed.Text = "0 Mh/s";
             this.labelGPU3Speed.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1364,9 +1360,9 @@
             // 
             // labelGPU7Temp
             // 
-            this.labelGPU7Temp.Location = new System.Drawing.Point(459, 196);
+            this.labelGPU7Temp.Location = new System.Drawing.Point(470, 196);
             this.labelGPU7Temp.Name = "labelGPU7Temp";
-            this.labelGPU7Temp.Size = new System.Drawing.Size(37, 13);
+            this.labelGPU7Temp.Size = new System.Drawing.Size(37, 14);
             this.labelGPU7Temp.TabIndex = 198;
             this.labelGPU7Temp.Text = "89°C";
             this.labelGPU7Temp.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1374,9 +1370,9 @@
             // 
             // labelGPU3Temp
             // 
-            this.labelGPU3Temp.Location = new System.Drawing.Point(459, 109);
+            this.labelGPU3Temp.Location = new System.Drawing.Point(470, 109);
             this.labelGPU3Temp.Name = "labelGPU3Temp";
-            this.labelGPU3Temp.Size = new System.Drawing.Size(37, 13);
+            this.labelGPU3Temp.Size = new System.Drawing.Size(37, 14);
             this.labelGPU3Temp.TabIndex = 197;
             this.labelGPU3Temp.Text = "89°C";
             this.labelGPU3Temp.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1404,7 +1400,7 @@
             // 
             // labelGPU7Name
             // 
-            this.labelGPU7Name.Location = new System.Drawing.Point(113, 195);
+            this.labelGPU7Name.Location = new System.Drawing.Point(97, 196);
             this.labelGPU7Name.Name = "labelGPU7Name";
             this.labelGPU7Name.Size = new System.Drawing.Size(115, 14);
             this.labelGPU7Name.TabIndex = 194;
@@ -1413,7 +1409,7 @@
             // 
             // labelGPU3Name
             // 
-            this.labelGPU3Name.Location = new System.Drawing.Point(113, 108);
+            this.labelGPU3Name.Location = new System.Drawing.Point(97, 109);
             this.labelGPU3Name.Name = "labelGPU3Name";
             this.labelGPU3Name.Size = new System.Drawing.Size(115, 14);
             this.labelGPU3Name.TabIndex = 193;
@@ -1422,18 +1418,18 @@
             // 
             // labelGPU7Vendor
             // 
-            this.labelGPU7Vendor.Location = new System.Drawing.Point(53, 195);
+            this.labelGPU7Vendor.Location = new System.Drawing.Point(53, 196);
             this.labelGPU7Vendor.Name = "labelGPU7Vendor";
-            this.labelGPU7Vendor.Size = new System.Drawing.Size(54, 13);
+            this.labelGPU7Vendor.Size = new System.Drawing.Size(45, 14);
             this.labelGPU7Vendor.TabIndex = 191;
             this.labelGPU7Vendor.Text = "AMD";
             this.labelGPU7Vendor.Click += new System.EventHandler(this.labelGPU7Vendor_Click);
             // 
             // labelGPU3Vendor
             // 
-            this.labelGPU3Vendor.Location = new System.Drawing.Point(53, 108);
+            this.labelGPU3Vendor.Location = new System.Drawing.Point(53, 109);
             this.labelGPU3Vendor.Name = "labelGPU3Vendor";
-            this.labelGPU3Vendor.Size = new System.Drawing.Size(54, 13);
+            this.labelGPU3Vendor.Size = new System.Drawing.Size(45, 14);
             this.labelGPU3Vendor.TabIndex = 192;
             this.labelGPU3Vendor.Text = "AMD";
             this.labelGPU3Vendor.Click += new System.EventHandler(this.labelGPU3Vendor_Click);
@@ -1441,7 +1437,7 @@
             // labelGPU7ID
             // 
             this.labelGPU7ID.AutoSize = true;
-            this.labelGPU7ID.Location = new System.Drawing.Point(33, 195);
+            this.labelGPU7ID.Location = new System.Drawing.Point(33, 196);
             this.labelGPU7ID.Name = "labelGPU7ID";
             this.labelGPU7ID.Size = new System.Drawing.Size(13, 13);
             this.labelGPU7ID.TabIndex = 190;
@@ -1451,7 +1447,7 @@
             // labelGPU3ID
             // 
             this.labelGPU3ID.AutoSize = true;
-            this.labelGPU3ID.Location = new System.Drawing.Point(33, 108);
+            this.labelGPU3ID.Location = new System.Drawing.Point(33, 109);
             this.labelGPU3ID.Name = "labelGPU3ID";
             this.labelGPU3ID.Size = new System.Drawing.Size(13, 13);
             this.labelGPU3ID.TabIndex = 189;
@@ -1460,9 +1456,9 @@
             // 
             // labelGPU6Activity
             // 
-            this.labelGPU6Activity.Location = new System.Drawing.Point(415, 174);
+            this.labelGPU6Activity.Location = new System.Drawing.Point(438, 174);
             this.labelGPU6Activity.Name = "labelGPU6Activity";
-            this.labelGPU6Activity.Size = new System.Drawing.Size(41, 13);
+            this.labelGPU6Activity.Size = new System.Drawing.Size(36, 14);
             this.labelGPU6Activity.TabIndex = 188;
             this.labelGPU6Activity.Text = "99%";
             this.labelGPU6Activity.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1470,9 +1466,9 @@
             // 
             // labelGPU2Activity
             // 
-            this.labelGPU2Activity.Location = new System.Drawing.Point(415, 87);
+            this.labelGPU2Activity.Location = new System.Drawing.Point(438, 87);
             this.labelGPU2Activity.Name = "labelGPU2Activity";
-            this.labelGPU2Activity.Size = new System.Drawing.Size(41, 13);
+            this.labelGPU2Activity.Size = new System.Drawing.Size(36, 14);
             this.labelGPU2Activity.TabIndex = 187;
             this.labelGPU2Activity.Text = "99%";
             this.labelGPU2Activity.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1480,9 +1476,9 @@
             // 
             // labelGPU6Speed
             // 
-            this.labelGPU6Speed.Location = new System.Drawing.Point(232, 173);
+            this.labelGPU6Speed.Location = new System.Drawing.Point(211, 174);
             this.labelGPU6Speed.Name = "labelGPU6Speed";
-            this.labelGPU6Speed.Size = new System.Drawing.Size(62, 13);
+            this.labelGPU6Speed.Size = new System.Drawing.Size(142, 14);
             this.labelGPU6Speed.TabIndex = 186;
             this.labelGPU6Speed.Text = "0 Mh/s";
             this.labelGPU6Speed.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1490,9 +1486,9 @@
             // 
             // labelGPU2Speed
             // 
-            this.labelGPU2Speed.Location = new System.Drawing.Point(232, 86);
+            this.labelGPU2Speed.Location = new System.Drawing.Point(211, 87);
             this.labelGPU2Speed.Name = "labelGPU2Speed";
-            this.labelGPU2Speed.Size = new System.Drawing.Size(62, 13);
+            this.labelGPU2Speed.Size = new System.Drawing.Size(142, 14);
             this.labelGPU2Speed.TabIndex = 185;
             this.labelGPU2Speed.Text = "0 Mh/s";
             this.labelGPU2Speed.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1500,9 +1496,9 @@
             // 
             // labelGPU6Temp
             // 
-            this.labelGPU6Temp.Location = new System.Drawing.Point(459, 174);
+            this.labelGPU6Temp.Location = new System.Drawing.Point(470, 174);
             this.labelGPU6Temp.Name = "labelGPU6Temp";
-            this.labelGPU6Temp.Size = new System.Drawing.Size(37, 13);
+            this.labelGPU6Temp.Size = new System.Drawing.Size(37, 14);
             this.labelGPU6Temp.TabIndex = 183;
             this.labelGPU6Temp.Text = "89°C";
             this.labelGPU6Temp.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1510,9 +1506,9 @@
             // 
             // labelGPU2Temp
             // 
-            this.labelGPU2Temp.Location = new System.Drawing.Point(459, 87);
+            this.labelGPU2Temp.Location = new System.Drawing.Point(470, 87);
             this.labelGPU2Temp.Name = "labelGPU2Temp";
-            this.labelGPU2Temp.Size = new System.Drawing.Size(37, 13);
+            this.labelGPU2Temp.Size = new System.Drawing.Size(37, 14);
             this.labelGPU2Temp.TabIndex = 184;
             this.labelGPU2Temp.Text = "89°C";
             this.labelGPU2Temp.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1540,7 +1536,7 @@
             // 
             // labelGPU6Name
             // 
-            this.labelGPU6Name.Location = new System.Drawing.Point(113, 173);
+            this.labelGPU6Name.Location = new System.Drawing.Point(97, 174);
             this.labelGPU6Name.Name = "labelGPU6Name";
             this.labelGPU6Name.Size = new System.Drawing.Size(115, 14);
             this.labelGPU6Name.TabIndex = 180;
@@ -1549,7 +1545,7 @@
             // 
             // labelGPU2Name
             // 
-            this.labelGPU2Name.Location = new System.Drawing.Point(113, 86);
+            this.labelGPU2Name.Location = new System.Drawing.Point(97, 87);
             this.labelGPU2Name.Name = "labelGPU2Name";
             this.labelGPU2Name.Size = new System.Drawing.Size(115, 14);
             this.labelGPU2Name.TabIndex = 179;
@@ -1558,18 +1554,18 @@
             // 
             // labelGPU6Vendor
             // 
-            this.labelGPU6Vendor.Location = new System.Drawing.Point(53, 173);
+            this.labelGPU6Vendor.Location = new System.Drawing.Point(53, 174);
             this.labelGPU6Vendor.Name = "labelGPU6Vendor";
-            this.labelGPU6Vendor.Size = new System.Drawing.Size(54, 13);
+            this.labelGPU6Vendor.Size = new System.Drawing.Size(45, 14);
             this.labelGPU6Vendor.TabIndex = 178;
             this.labelGPU6Vendor.Text = "AMD";
             this.labelGPU6Vendor.Click += new System.EventHandler(this.labelGPU6Vendor_Click);
             // 
             // labelGPU2Vendor
             // 
-            this.labelGPU2Vendor.Location = new System.Drawing.Point(53, 86);
+            this.labelGPU2Vendor.Location = new System.Drawing.Point(53, 87);
             this.labelGPU2Vendor.Name = "labelGPU2Vendor";
-            this.labelGPU2Vendor.Size = new System.Drawing.Size(54, 13);
+            this.labelGPU2Vendor.Size = new System.Drawing.Size(45, 14);
             this.labelGPU2Vendor.TabIndex = 177;
             this.labelGPU2Vendor.Text = "AMD";
             this.labelGPU2Vendor.Click += new System.EventHandler(this.labelGPU2Vendor_Click);
@@ -1577,7 +1573,7 @@
             // labelGPU6ID
             // 
             this.labelGPU6ID.AutoSize = true;
-            this.labelGPU6ID.Location = new System.Drawing.Point(33, 173);
+            this.labelGPU6ID.Location = new System.Drawing.Point(33, 174);
             this.labelGPU6ID.Name = "labelGPU6ID";
             this.labelGPU6ID.Size = new System.Drawing.Size(13, 13);
             this.labelGPU6ID.TabIndex = 176;
@@ -1587,7 +1583,7 @@
             // labelGPU2ID
             // 
             this.labelGPU2ID.AutoSize = true;
-            this.labelGPU2ID.Location = new System.Drawing.Point(33, 86);
+            this.labelGPU2ID.Location = new System.Drawing.Point(33, 87);
             this.labelGPU2ID.Name = "labelGPU2ID";
             this.labelGPU2ID.Size = new System.Drawing.Size(13, 13);
             this.labelGPU2ID.TabIndex = 175;
@@ -1596,9 +1592,9 @@
             // 
             // labelGPU5Activity
             // 
-            this.labelGPU5Activity.Location = new System.Drawing.Point(415, 153);
+            this.labelGPU5Activity.Location = new System.Drawing.Point(438, 153);
             this.labelGPU5Activity.Name = "labelGPU5Activity";
-            this.labelGPU5Activity.Size = new System.Drawing.Size(41, 13);
+            this.labelGPU5Activity.Size = new System.Drawing.Size(36, 14);
             this.labelGPU5Activity.TabIndex = 174;
             this.labelGPU5Activity.Text = "99%";
             this.labelGPU5Activity.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1606,9 +1602,9 @@
             // 
             // labelGPU1Activity
             // 
-            this.labelGPU1Activity.Location = new System.Drawing.Point(415, 66);
+            this.labelGPU1Activity.Location = new System.Drawing.Point(438, 66);
             this.labelGPU1Activity.Name = "labelGPU1Activity";
-            this.labelGPU1Activity.Size = new System.Drawing.Size(41, 13);
+            this.labelGPU1Activity.Size = new System.Drawing.Size(36, 14);
             this.labelGPU1Activity.TabIndex = 173;
             this.labelGPU1Activity.Text = "99%";
             this.labelGPU1Activity.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1616,9 +1612,9 @@
             // 
             // labelGPU5Speed
             // 
-            this.labelGPU5Speed.Location = new System.Drawing.Point(232, 152);
+            this.labelGPU5Speed.Location = new System.Drawing.Point(211, 153);
             this.labelGPU5Speed.Name = "labelGPU5Speed";
-            this.labelGPU5Speed.Size = new System.Drawing.Size(62, 13);
+            this.labelGPU5Speed.Size = new System.Drawing.Size(142, 14);
             this.labelGPU5Speed.TabIndex = 171;
             this.labelGPU5Speed.Text = "0 Mh/s";
             this.labelGPU5Speed.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1626,9 +1622,9 @@
             // 
             // labelGPU1Speed
             // 
-            this.labelGPU1Speed.Location = new System.Drawing.Point(232, 65);
+            this.labelGPU1Speed.Location = new System.Drawing.Point(211, 66);
             this.labelGPU1Speed.Name = "labelGPU1Speed";
-            this.labelGPU1Speed.Size = new System.Drawing.Size(62, 13);
+            this.labelGPU1Speed.Size = new System.Drawing.Size(142, 14);
             this.labelGPU1Speed.TabIndex = 172;
             this.labelGPU1Speed.Text = "0 Mh/s";
             this.labelGPU1Speed.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1636,9 +1632,9 @@
             // 
             // labelGPU5Temp
             // 
-            this.labelGPU5Temp.Location = new System.Drawing.Point(459, 153);
+            this.labelGPU5Temp.Location = new System.Drawing.Point(470, 153);
             this.labelGPU5Temp.Name = "labelGPU5Temp";
-            this.labelGPU5Temp.Size = new System.Drawing.Size(37, 13);
+            this.labelGPU5Temp.Size = new System.Drawing.Size(37, 14);
             this.labelGPU5Temp.TabIndex = 169;
             this.labelGPU5Temp.Text = "89°C";
             this.labelGPU5Temp.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1646,9 +1642,9 @@
             // 
             // labelGPU1Temp
             // 
-            this.labelGPU1Temp.Location = new System.Drawing.Point(459, 66);
+            this.labelGPU1Temp.Location = new System.Drawing.Point(470, 66);
             this.labelGPU1Temp.Name = "labelGPU1Temp";
-            this.labelGPU1Temp.Size = new System.Drawing.Size(37, 13);
+            this.labelGPU1Temp.Size = new System.Drawing.Size(37, 14);
             this.labelGPU1Temp.TabIndex = 170;
             this.labelGPU1Temp.Text = "89°C";
             this.labelGPU1Temp.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1676,7 +1672,7 @@
             // 
             // labelGPU5Name
             // 
-            this.labelGPU5Name.Location = new System.Drawing.Point(113, 152);
+            this.labelGPU5Name.Location = new System.Drawing.Point(97, 153);
             this.labelGPU5Name.Name = "labelGPU5Name";
             this.labelGPU5Name.Size = new System.Drawing.Size(115, 14);
             this.labelGPU5Name.TabIndex = 166;
@@ -1685,7 +1681,7 @@
             // 
             // labelGPU1Name
             // 
-            this.labelGPU1Name.Location = new System.Drawing.Point(113, 65);
+            this.labelGPU1Name.Location = new System.Drawing.Point(97, 66);
             this.labelGPU1Name.Name = "labelGPU1Name";
             this.labelGPU1Name.Size = new System.Drawing.Size(115, 14);
             this.labelGPU1Name.TabIndex = 165;
@@ -1694,18 +1690,18 @@
             // 
             // labelGPU5Vendor
             // 
-            this.labelGPU5Vendor.Location = new System.Drawing.Point(53, 152);
+            this.labelGPU5Vendor.Location = new System.Drawing.Point(53, 153);
             this.labelGPU5Vendor.Name = "labelGPU5Vendor";
-            this.labelGPU5Vendor.Size = new System.Drawing.Size(54, 13);
+            this.labelGPU5Vendor.Size = new System.Drawing.Size(45, 14);
             this.labelGPU5Vendor.TabIndex = 164;
             this.labelGPU5Vendor.Text = "AMD";
             this.labelGPU5Vendor.Click += new System.EventHandler(this.labelGPU5Vendor_Click);
             // 
             // labelGPU1Vendor
             // 
-            this.labelGPU1Vendor.Location = new System.Drawing.Point(53, 65);
+            this.labelGPU1Vendor.Location = new System.Drawing.Point(53, 66);
             this.labelGPU1Vendor.Name = "labelGPU1Vendor";
-            this.labelGPU1Vendor.Size = new System.Drawing.Size(54, 13);
+            this.labelGPU1Vendor.Size = new System.Drawing.Size(45, 14);
             this.labelGPU1Vendor.TabIndex = 163;
             this.labelGPU1Vendor.Text = "AMD";
             this.labelGPU1Vendor.Click += new System.EventHandler(this.labelGPU1Vendor_Click);
@@ -1713,7 +1709,7 @@
             // labelGPU5ID
             // 
             this.labelGPU5ID.AutoSize = true;
-            this.labelGPU5ID.Location = new System.Drawing.Point(33, 152);
+            this.labelGPU5ID.Location = new System.Drawing.Point(33, 153);
             this.labelGPU5ID.Name = "labelGPU5ID";
             this.labelGPU5ID.Size = new System.Drawing.Size(13, 13);
             this.labelGPU5ID.TabIndex = 162;
@@ -1723,7 +1719,7 @@
             // labelGPU1ID
             // 
             this.labelGPU1ID.AutoSize = true;
-            this.labelGPU1ID.Location = new System.Drawing.Point(33, 65);
+            this.labelGPU1ID.Location = new System.Drawing.Point(33, 66);
             this.labelGPU1ID.Name = "labelGPU1ID";
             this.labelGPU1ID.Size = new System.Drawing.Size(13, 13);
             this.labelGPU1ID.TabIndex = 161;
@@ -1732,9 +1728,9 @@
             // 
             // labelGPU4Activity
             // 
-            this.labelGPU4Activity.Location = new System.Drawing.Point(415, 131);
+            this.labelGPU4Activity.Location = new System.Drawing.Point(438, 131);
             this.labelGPU4Activity.Name = "labelGPU4Activity";
-            this.labelGPU4Activity.Size = new System.Drawing.Size(41, 13);
+            this.labelGPU4Activity.Size = new System.Drawing.Size(36, 14);
             this.labelGPU4Activity.TabIndex = 159;
             this.labelGPU4Activity.Text = "99%";
             this.labelGPU4Activity.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1742,9 +1738,9 @@
             // 
             // labelGPU0Activity
             // 
-            this.labelGPU0Activity.Location = new System.Drawing.Point(415, 45);
+            this.labelGPU0Activity.Location = new System.Drawing.Point(438, 45);
             this.labelGPU0Activity.Name = "labelGPU0Activity";
-            this.labelGPU0Activity.Size = new System.Drawing.Size(41, 13);
+            this.labelGPU0Activity.Size = new System.Drawing.Size(36, 14);
             this.labelGPU0Activity.TabIndex = 160;
             this.labelGPU0Activity.Text = "99%";
             this.labelGPU0Activity.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1752,9 +1748,9 @@
             // 
             // labelGPU4Speed
             // 
-            this.labelGPU4Speed.Location = new System.Drawing.Point(232, 130);
+            this.labelGPU4Speed.Location = new System.Drawing.Point(211, 131);
             this.labelGPU4Speed.Name = "labelGPU4Speed";
-            this.labelGPU4Speed.Size = new System.Drawing.Size(62, 13);
+            this.labelGPU4Speed.Size = new System.Drawing.Size(142, 14);
             this.labelGPU4Speed.TabIndex = 157;
             this.labelGPU4Speed.Text = "0 Mh/s";
             this.labelGPU4Speed.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1762,9 +1758,9 @@
             // 
             // labelGPU0Speed
             // 
-            this.labelGPU0Speed.Location = new System.Drawing.Point(232, 44);
+            this.labelGPU0Speed.Location = new System.Drawing.Point(211, 45);
             this.labelGPU0Speed.Name = "labelGPU0Speed";
-            this.labelGPU0Speed.Size = new System.Drawing.Size(62, 13);
+            this.labelGPU0Speed.Size = new System.Drawing.Size(142, 14);
             this.labelGPU0Speed.TabIndex = 158;
             this.labelGPU0Speed.Text = "0 Mh/s";
             this.labelGPU0Speed.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1772,9 +1768,9 @@
             // 
             // labelGPU4Temp
             // 
-            this.labelGPU4Temp.Location = new System.Drawing.Point(459, 131);
+            this.labelGPU4Temp.Location = new System.Drawing.Point(470, 131);
             this.labelGPU4Temp.Name = "labelGPU4Temp";
-            this.labelGPU4Temp.Size = new System.Drawing.Size(37, 13);
+            this.labelGPU4Temp.Size = new System.Drawing.Size(37, 14);
             this.labelGPU4Temp.TabIndex = 156;
             this.labelGPU4Temp.Text = "89°C";
             this.labelGPU4Temp.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1782,9 +1778,9 @@
             // 
             // labelGPU0Temp
             // 
-            this.labelGPU0Temp.Location = new System.Drawing.Point(459, 45);
+            this.labelGPU0Temp.Location = new System.Drawing.Point(470, 45);
             this.labelGPU0Temp.Name = "labelGPU0Temp";
-            this.labelGPU0Temp.Size = new System.Drawing.Size(37, 13);
+            this.labelGPU0Temp.Size = new System.Drawing.Size(37, 14);
             this.labelGPU0Temp.TabIndex = 155;
             this.labelGPU0Temp.Text = "89°C";
             this.labelGPU0Temp.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -1812,7 +1808,7 @@
             // 
             // labelGPU4Name
             // 
-            this.labelGPU4Name.Location = new System.Drawing.Point(113, 130);
+            this.labelGPU4Name.Location = new System.Drawing.Point(97, 131);
             this.labelGPU4Name.Name = "labelGPU4Name";
             this.labelGPU4Name.Size = new System.Drawing.Size(115, 14);
             this.labelGPU4Name.TabIndex = 151;
@@ -1821,7 +1817,7 @@
             // 
             // labelGPU0Name
             // 
-            this.labelGPU0Name.Location = new System.Drawing.Point(113, 44);
+            this.labelGPU0Name.Location = new System.Drawing.Point(97, 45);
             this.labelGPU0Name.Name = "labelGPU0Name";
             this.labelGPU0Name.Size = new System.Drawing.Size(115, 14);
             this.labelGPU0Name.TabIndex = 152;
@@ -1830,9 +1826,9 @@
             // 
             // labelGPU4Vendor
             // 
-            this.labelGPU4Vendor.Location = new System.Drawing.Point(53, 130);
+            this.labelGPU4Vendor.Location = new System.Drawing.Point(53, 131);
             this.labelGPU4Vendor.Name = "labelGPU4Vendor";
-            this.labelGPU4Vendor.Size = new System.Drawing.Size(54, 13);
+            this.labelGPU4Vendor.Size = new System.Drawing.Size(45, 14);
             this.labelGPU4Vendor.TabIndex = 150;
             this.labelGPU4Vendor.Text = "AMD";
             this.labelGPU4Vendor.Click += new System.EventHandler(this.labelGPU4Vendor_Click);
@@ -1840,7 +1836,7 @@
             // labelGPU4ID
             // 
             this.labelGPU4ID.AutoSize = true;
-            this.labelGPU4ID.Location = new System.Drawing.Point(33, 130);
+            this.labelGPU4ID.Location = new System.Drawing.Point(33, 131);
             this.labelGPU4ID.Name = "labelGPU4ID";
             this.labelGPU4ID.Size = new System.Drawing.Size(13, 13);
             this.labelGPU4ID.TabIndex = 148;
@@ -1849,9 +1845,9 @@
             // 
             // labelGPU0Vendor
             // 
-            this.labelGPU0Vendor.Location = new System.Drawing.Point(53, 44);
+            this.labelGPU0Vendor.Location = new System.Drawing.Point(53, 45);
             this.labelGPU0Vendor.Name = "labelGPU0Vendor";
-            this.labelGPU0Vendor.Size = new System.Drawing.Size(54, 13);
+            this.labelGPU0Vendor.Size = new System.Drawing.Size(45, 14);
             this.labelGPU0Vendor.TabIndex = 149;
             this.labelGPU0Vendor.Text = "AMD";
             this.labelGPU0Vendor.Click += new System.EventHandler(this.labelGPU0Vendor_Click);
@@ -1859,7 +1855,7 @@
             // labelGPU0ID
             // 
             this.labelGPU0ID.AutoSize = true;
-            this.labelGPU0ID.Location = new System.Drawing.Point(33, 44);
+            this.labelGPU0ID.Location = new System.Drawing.Point(33, 45);
             this.labelGPU0ID.Name = "labelGPU0ID";
             this.labelGPU0ID.Size = new System.Drawing.Size(13, 13);
             this.labelGPU0ID.TabIndex = 147;
@@ -1870,17 +1866,17 @@
             // 
             this.label26.AutoSize = true;
             this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label26.Location = new System.Drawing.Point(412, 24);
+            this.label26.Location = new System.Drawing.Point(439, 24);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(49, 13);
+            this.label26.Size = new System.Drawing.Size(30, 13);
             this.label26.TabIndex = 146;
-            this.label26.Text = "Activity";
+            this.label26.Text = "Act.";
             // 
             // label25
             // 
             this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(224, 23);
+            this.label25.Location = new System.Drawing.Point(210, 23);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(43, 13);
             this.label25.TabIndex = 145;
@@ -1890,7 +1886,7 @@
             // 
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(459, 24);
+            this.label24.Location = new System.Drawing.Point(470, 24);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(42, 13);
             this.label24.TabIndex = 144;
@@ -1900,7 +1896,7 @@
             // 
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(502, 24);
+            this.label23.Location = new System.Drawing.Point(510, 24);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(28, 13);
             this.label23.TabIndex = 143;
@@ -1910,7 +1906,7 @@
             // 
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(113, 23);
+            this.label21.Location = new System.Drawing.Point(97, 24);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(39, 13);
             this.label21.TabIndex = 142;
@@ -1955,7 +1951,7 @@
             // 
             // labelPriceWeek
             // 
-            this.labelPriceWeek.Location = new System.Drawing.Point(96, 93);
+            this.labelPriceWeek.Location = new System.Drawing.Point(96, 85);
             this.labelPriceWeek.Name = "labelPriceWeek";
             this.labelPriceWeek.Size = new System.Drawing.Size(232, 17);
             this.labelPriceWeek.TabIndex = 17;
@@ -1963,7 +1959,7 @@
             // 
             // labelPriceDay
             // 
-            this.labelPriceDay.Location = new System.Drawing.Point(96, 76);
+            this.labelPriceDay.Location = new System.Drawing.Point(96, 68);
             this.labelPriceDay.Name = "labelPriceDay";
             this.labelPriceDay.Size = new System.Drawing.Size(232, 17);
             this.labelPriceDay.TabIndex = 16;
@@ -1972,7 +1968,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(8, 127);
+            this.label10.Location = new System.Drawing.Point(8, 119);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(49, 13);
             this.label10.TabIndex = 14;
@@ -1980,7 +1976,7 @@
             // 
             // labelBalance
             // 
-            this.labelBalance.Location = new System.Drawing.Point(96, 127);
+            this.labelBalance.Location = new System.Drawing.Point(96, 119);
             this.labelBalance.Name = "labelBalance";
             this.labelBalance.Size = new System.Drawing.Size(158, 13);
             this.labelBalance.TabIndex = 10;
@@ -1989,7 +1985,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 76);
+            this.label5.Location = new System.Drawing.Point(8, 68);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(88, 13);
             this.label5.TabIndex = 9;
@@ -1997,7 +1993,7 @@
             // 
             // labelCurrentSpeed
             // 
-            this.labelCurrentSpeed.Location = new System.Drawing.Point(96, 59);
+            this.labelCurrentSpeed.Location = new System.Drawing.Point(96, 43);
             this.labelCurrentSpeed.Name = "labelCurrentSpeed";
             this.labelCurrentSpeed.Size = new System.Drawing.Size(306, 13);
             this.labelCurrentSpeed.TabIndex = 8;
@@ -2006,28 +2002,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 59);
+            this.label3.Location = new System.Drawing.Point(8, 43);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 13);
+            this.label3.Size = new System.Drawing.Size(52, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Speed:";
-            // 
-            // labelCurrentAlgorithm
-            // 
-            this.labelCurrentAlgorithm.Location = new System.Drawing.Point(96, 42);
-            this.labelCurrentAlgorithm.Name = "labelCurrentAlgorithm";
-            this.labelCurrentAlgorithm.Size = new System.Drawing.Size(232, 17);
-            this.labelCurrentAlgorithm.TabIndex = 6;
-            this.labelCurrentAlgorithm.Text = "-";
-            // 
-            // labelCurrentAlgorithmCaption
-            // 
-            this.labelCurrentAlgorithmCaption.AutoSize = true;
-            this.labelCurrentAlgorithmCaption.Location = new System.Drawing.Point(8, 42);
-            this.labelCurrentAlgorithmCaption.Name = "labelCurrentAlgorithmCaption";
-            this.labelCurrentAlgorithmCaption.Size = new System.Drawing.Size(90, 13);
-            this.labelCurrentAlgorithmCaption.TabIndex = 5;
-            this.labelCurrentAlgorithmCaption.Text = "Current Algorithm:";
+            this.label3.Text = "Speed(s):";
             // 
             // tabPagePoolSettings
             // 
@@ -8705,8 +8684,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label labelCurrentSpeed;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label labelCurrentAlgorithm;
-        private System.Windows.Forms.Label labelCurrentAlgorithmCaption;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label labelPriceDay;
         private System.Windows.Forms.Button buttonStart;

@@ -231,6 +231,8 @@ namespace GatelessGateSharp
                                         mStratum.Submit(GatelessGateDevice, work.GetJob(), startNonce + (UInt64)output[i]);
                                 }
                                 startNonce += (UInt64)mGlobalWorkSize;
+                                IncrementKernelExecutionCount();
+                                WaitForDualMiningPair();
                             }
                         }
                     }

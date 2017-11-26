@@ -29,9 +29,12 @@ namespace GatelessGateSharp
         private bool mStopped = false;
         private bool mDone = false;
         protected double mSpeed = 0;
+        private int mAlgorithmIndex = 0;
         private String mAlgorithmName = "";
         private System.Threading.Thread mMinerThread = null;
         private DateTime mLastAlive = DateTime.Now;
+        private long mKernelExecutionCount = 0;
+        private Miner mDualMiningPair = null;
 
         public Device GatelessGateDevice { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
@@ -40,6 +43,9 @@ namespace GatelessGateSharp
         public double Speed { get { return mSpeed; } }
         public String AlgorithmName { get { return mAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
+        public long KernelExecutionCount { get { return mKernelExecutionCount; } }
+        public Miner DualMiningPair { get { return mDualMiningPair; } }
+        public int AlgorithmIndex { get { return mAlgorithmIndex; } set { mAlgorithmIndex = value; } } // for dual-mining
 
         protected Miner(Device aDevice, String aAlgorithmName)
         {
@@ -119,6 +125,34 @@ namespace GatelessGateSharp
                 mSpeed = 0;
                 Start();
             }
+        }
+        
+        public void ResetKernelExecutionCount()
+        {
+            mKernelExecutionCount = 0;
+        }
+
+        public void IncrementKernelExecutionCount()
+        {
+            ++mKernelExecutionCount;
+        }
+
+        public void RegisterDualMiningPair(Miner aDualMiningPair)
+        {
+            mDualMiningPair = aDualMiningPair;
+        }
+
+        public void UnregisterDualMiningPair()
+        {
+            mDualMiningPair = null;
+        }
+
+        public void WaitForDualMiningPair()
+        {
+            if (mDualMiningPair == null)
+                return;
+            while (!Stopped && !DualMiningPair.Stopped && DualMiningPair.KernelExecutionCount < KernelExecutionCount)
+                System.Threading.Thread.Sleep(1);
         }
     }
 }
