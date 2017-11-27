@@ -50,21 +50,21 @@ namespace GatelessGateSharp
                 JArray parameters = (JArray)response["params"];
                 if (method.Equals("mining.set_difficulty"))
                 {
-                    try  { mMutex.WaitOne(); } catch (Exception) { }
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mDifficulty = (double)parameters[0];
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                 }
                 else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
                 {
-                    try  { mMutex.WaitOne(); } catch (Exception) { }
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mJob = (EthashStratum.Job)(new Job((string)parameters[0], (string)parameters[1], (string)parameters[2]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + parameters[0]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {
-                    try  { mMutex.WaitOne(); } catch (Exception) { }
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mPoolExtranonce = (String)parameters[0];
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new extranonce: " + parameters[0]);
@@ -102,7 +102,7 @@ namespace GatelessGateSharp
 
         override protected void Authorize()
         {
-            try  { mMutex.WaitOne(); } catch (Exception) { }
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
             mJsonRPCMessageID = 1;
 
@@ -149,7 +149,7 @@ namespace GatelessGateSharp
             if (Stopped)
                 return;
 
-            try  { mMutex.WaitOne(); } catch (Exception) { }
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
             RegisterDeviceWithShare(aDevice);
             try
             {

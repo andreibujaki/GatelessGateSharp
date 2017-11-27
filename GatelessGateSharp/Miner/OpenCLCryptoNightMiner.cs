@@ -96,7 +96,7 @@ namespace GatelessGateSharp
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
             ComputeProgram program;
-            try { mProgramArrayMutex.WaitOne(); } catch (Exception) { }
+            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
             if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])))
             {
                 program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];

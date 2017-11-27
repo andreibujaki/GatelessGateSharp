@@ -75,7 +75,7 @@ namespace GatelessGateSharp
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
             ComputeProgram program;
-            try { mProgramArrayMutex.WaitOne(); } catch (Exception) { }
+            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
             if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeArray[0])))
             {
                 program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeArray[0])];

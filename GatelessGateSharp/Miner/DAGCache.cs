@@ -370,7 +370,7 @@ namespace GatelessGateSharp
             IHash hash = HashFactory.Crypto.SHA3.CreateKeccak512();
             byte[] data;
 
-            try  { mMutex.WaitOne(); } catch (Exception) { }
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
             if (sDAGCacheDatabase.ContainsKey(mEpoch))
             {
                 data = sDAGCacheDatabase[mEpoch];

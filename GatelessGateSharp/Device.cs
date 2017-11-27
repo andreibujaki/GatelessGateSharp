@@ -42,7 +42,7 @@ namespace GatelessGateSharp
         {
             get
             {
-                try  { mMutex.WaitOne(); } catch (Exception) { }
+                try  { mMutex.WaitOne(5000); } catch (Exception) { }
                 if (mContext == null)
                 {
                     mDeviceList = new List<ComputeDevice>();

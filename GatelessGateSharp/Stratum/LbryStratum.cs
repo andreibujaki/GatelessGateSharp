@@ -149,21 +149,21 @@ namespace GatelessGateSharp
                 JArray parameters = (JArray)response["params"];
                 if (method.Equals("mining.set_difficulty"))
                 {
-                    try  { mMutex.WaitOne(); } catch (Exception) { }
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mDifficulty = (double)parameters[0];
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                 }
                 else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
                 {
-                    try  { mMutex.WaitOne(); } catch (Exception) { }
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mJob = (new Job(this, (string)parameters[0], (string)parameters[1], (string)parameters[2], (string)parameters[3], (string)parameters[4], Array.ConvertAll(((JArray)parameters[5]).ToArray(), item => (string)item), (string)parameters[6], (string)parameters[7], (string)parameters[8]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + parameters[0]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {
-                    try  { mMutex.WaitOne(); } catch (Exception) { }
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mPoolExtranonce = (String)parameters[0];
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new extranonce: " + parameters[0]);
@@ -204,7 +204,7 @@ namespace GatelessGateSharp
 
         protected override void Authorize()
         {
-            try  { mMutex.WaitOne(); } catch (Exception) { }
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
             mJsonRPCMessageID = 1;
 
@@ -294,7 +294,7 @@ namespace GatelessGateSharp
                 return; // TODO
             }
 
-            try  { mMutex.WaitOne(); } catch (Exception) { }
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
             RegisterDeviceWithShare(aDevice);
             try

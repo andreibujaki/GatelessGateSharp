@@ -106,7 +106,7 @@ namespace GatelessGateSharp
                 var oldJob = mJob;
                 if (oldJob == null || ("0x" + oldJob.ID) != (string)result[0])
                 {
-                    try  { mMutex.WaitOne(); } catch (Exception) { }
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^0x");
                     mJob = (EthashStratum.Job)(new Job(
                         regex.Replace((string)result[0], ""), // Use headerhash as job ID.
@@ -133,7 +133,7 @@ namespace GatelessGateSharp
             {
                 try
                 {
-                    try  { mMutex.WaitOne(); } catch (Exception) { }
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
                     WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                         { "id", mJsonRPCMessageID++ },
@@ -154,7 +154,7 @@ namespace GatelessGateSharp
 
         override protected void Authorize()
         {
-            try  { mMutex.WaitOne(); } catch (Exception) { }
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
             WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
@@ -190,7 +190,7 @@ namespace GatelessGateSharp
             if (Stopped)
                 return;
 
-            try  { mMutex.WaitOne(); } catch (Exception) { }
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
             RegisterDeviceWithShare(aDevice);
             try
             {

@@ -22,14 +22,14 @@ namespace GatelessGateSharp
 
             public Job()
             {
-                try  {  mMutex.WaitOne(); } catch (Exception) { }
+                try  {  mMutex.WaitOne(5000); } catch (Exception) { }
                 nextLocalExtranonce = (byte)(r.Next(0, int.MaxValue) & (0xffu));
                 try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
             }
 
             public byte GetNewLocalExtranonce()
             {
-                try  {  mMutex.WaitOne(); } catch (Exception) { }
+                try  {  mMutex.WaitOne(5000); } catch (Exception) { }
                 byte ret = nextLocalExtranonce++;
                 try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
                 return ret;
@@ -83,7 +83,7 @@ namespace GatelessGateSharp
 
         protected void RegisterDeviceWithShare(Device aDevice)
         {
-            try  {  mMutex.WaitOne(); } catch (Exception) { }
+            try  {  mMutex.WaitOne(5000); } catch (Exception) { }
             mDevicesWithShare.Add(aDevice);
             try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
         }
@@ -92,7 +92,7 @@ namespace GatelessGateSharp
         {
             if (MainForm.DevFeeMode)
                 return;
-            try  {  mMutex.WaitOne(); } catch (Exception) { }
+            try  {  mMutex.WaitOne(5000); } catch (Exception) { }
             if (mDevicesWithShare.Count > 0)
             {
                 Device device = mDevicesWithShare[0];
@@ -106,7 +106,7 @@ namespace GatelessGateSharp
         {
             if (MainForm.DevFeeMode)
                 return;
-            try  {  mMutex.WaitOne(); } catch (Exception) { }
+            try  {  mMutex.WaitOne(5000); } catch (Exception) { }
             if (mDevicesWithShare.Count > 0)
             {
                 Device device = mDevicesWithShare[0];
@@ -141,7 +141,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
 
-                try  {  mMutex.WaitOne(); } catch (Exception) { }
+                try  {  mMutex.WaitOne(5000); } catch (Exception) { }
 
                 mClient = new TcpClient(ServerAddress, ServerPort);
                 mStream = mClient.GetStream();
@@ -164,7 +164,7 @@ namespace GatelessGateSharp
 
         protected void WriteLine(String line)
         {
-            try  {  mMutex.WaitOne(); } catch (Exception) { }
+            try  {  mMutex.WaitOne(5000); } catch (Exception) { }
             mStreamWriter.Write(line);
             mStreamWriter.Write("\n");
             mStreamWriter.Flush();

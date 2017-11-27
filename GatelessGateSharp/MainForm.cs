@@ -111,7 +111,7 @@ namespace GatelessGateSharp
         {
             lines = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff") + " [" + System.Threading.Thread.CurrentThread.ManagedThreadId + "] " + lines + "\r\n";
             Console.Write(lines);
-            try { Instance.loggerMutex.WaitOne(); } catch (Exception) { }
+            try { Instance.loggerMutex.WaitOne(5000); } catch (Exception) { }
             sLoggerBuffer += lines;
             try { Instance.loggerMutex.ReleaseMutex(); } catch (Exception) { }
         }
@@ -120,7 +120,7 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         public static void UpdateLog()
         {
-            try { Instance.loggerMutex.WaitOne(); } catch (Exception) { }
+            try { Instance.loggerMutex.WaitOne(5000); } catch (Exception) { }
             var loggerBuffer = sLoggerBuffer;
             sLoggerBuffer = "";
             try { Instance.loggerMutex.ReleaseMutex(); } catch (Exception) { }
@@ -1862,7 +1862,7 @@ namespace GatelessGateSharp
                     }       
                 }
 
-                try { DeviceManagementLibrariesMutex.WaitOne(); } catch (Exception) { }
+                try { DeviceManagementLibrariesMutex.WaitOne(5000); } catch (Exception) { }
                 foreach (var device in mDevices)
                 {
                     var computeDevice = device.GetComputeDevice();
