@@ -28,10 +28,9 @@ namespace GatelessGateSharp
 {
     class OpenCLLbryMiner : OpenCLMiner
     {
-        private static readonly int outputSize = 256 + 8 * 255;
+        private static readonly int outputSize = 256 + 255 * 8;
 
         private LbryStratum mStratum;
-        private bool mNicehashMode = false;
 
         long[] globalWorkSizeArray = new long[] { 0 };
         long[] localWorkSizeArray = new long[] { 0 };
@@ -43,35 +42,23 @@ namespace GatelessGateSharp
         static Mutex mProgramArrayMutex = new Mutex();
 
         static Dictionary<ProgramArrayIndex, ComputeProgram> mProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
-        ComputeKernel searchKernel0 = null;
-        ComputeKernel searchKernel1 = null;
-        ComputeKernel searchKernel2 = null;
         ComputeKernel combinedSearchKernel = null;
             
-        private ComputeBuffer<byte> contextBuffer = null;
         private ComputeBuffer<byte> inputBuffer = null;
         private ComputeBuffer<UInt32> outputBuffer = null;
             
-        public bool NiceHashMode { get { return mNicehashMode; } }
-
         public OpenCLLbryMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "Lbry")
         {
         }
 
-        public void Start(LbryStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
+        public void Start(LbryStratum aStratum, int aIntensity, int aLocalWorkSize)
         {
             mStratum = aStratum;
             globalWorkSizeArray[0] = aIntensity * Device.MaxComputeUnits;
             localWorkSizeArray[0] = aLocalWorkSize;
             if (globalWorkSizeArray[0] % aLocalWorkSize != 0)
                 globalWorkSizeArray[0] = aLocalWorkSize - globalWorkSizeArray[0] % aLocalWorkSize;
-            mNicehashMode = aNicehashMode;
-
-            if (localWorkSizeArray[0] != aLocalWorkSize)
-            {
-                contextBuffer = null;
-            }
 
             base.Start();
         }
@@ -86,7 +73,6 @@ namespace GatelessGateSharp
             MarkAsAlive();
 
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
-            MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
             ComputeProgram program;
             try { mProgramArrayMutex.WaitOne(); } catch (Exception) { }
@@ -118,11 +104,7 @@ namespace GatelessGateSharp
             }
             try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
 
-            if (searchKernel0 == null) searchKernel0 = program.CreateKernel("search");
-            if (searchKernel1 == null) searchKernel1 = program.CreateKernel("search1");
-            if (searchKernel2 == null) searchKernel2 = program.CreateKernel("search2");
             if (combinedSearchKernel == null) combinedSearchKernel = program.CreateKernel("search_combined");
-            if (contextBuffer == null) contextBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 32 * globalWorkSizeArray[0]);
             if (inputBuffer == null) inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
             if (outputBuffer == null) outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
 
@@ -137,14 +119,6 @@ namespace GatelessGateSharp
 
                 try
                 {
-                    searchKernel0.SetMemoryArgument(0, inputBuffer);
-                    searchKernel0.SetMemoryArgument(1, contextBuffer);
-
-                    searchKernel1.SetMemoryArgument(0, contextBuffer);
-
-                    searchKernel2.SetMemoryArgument(0, contextBuffer);
-                    searchKernel2.SetMemoryArgument(1, outputBuffer);
-
                     combinedSearchKernel.SetMemoryArgument(0, inputBuffer);
                     combinedSearchKernel.SetMemoryArgument(1, outputBuffer);
 
@@ -170,7 +144,6 @@ namespace GatelessGateSharp
                         byte localExtranonce = work.LocalExtranonce;
                         UInt32 startNonce = (UInt32)(r.Next(0, int.MaxValue));
                         UInt64 target = (UInt64) ((double) 0xffff0000UL / (mStratum.Difficulty / 256));
-                        searchKernel2.SetValueArgument<UInt64>(2, target);
                         combinedSearchKernel.SetValueArgument<UInt64>(2, target);
 
                         Queue.Write<byte>(inputBuffer, true, 0, 112, (IntPtr)inputPtr, null);
@@ -179,6 +152,9 @@ namespace GatelessGateSharp
 
                         while (!Stopped && mStratum.GetJob().Equals(job))
                         {
+                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                            sw.Start();
+
                             MarkAsAlive();
 
                             globalWorkOffsetArray[0] = startNonce;
@@ -187,35 +163,10 @@ namespace GatelessGateSharp
                             if (0xffffffffu - startNonce < (UInt32)globalWorkSizeArray[0])
                                 break;
 
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
                             output[255] = 0; // output[255] is used as an atomic counter.
                             Queue.Write<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
-
-                            /*
-                            Queue.Execute(searchKernel0, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
-                            Queue.Finish(); 
-                            if (Stopped)
-                                break;
-                            Queue.Execute(searchKernel1, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
-                            Queue.Finish();
-                            if (Stopped)
-                                break;
-                            Queue.Execute(searchKernel2, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
-                            Queue.Finish(); 
-                            if (Stopped)
-                                break;
-                            */
                             Queue.Execute(combinedSearchKernel, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
-
                             Queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
-                            sw.Stop();
-                            mSpeed = ((double)globalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
-                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
-                            {
-                                MainForm.Logger("Device #" + DeviceIndex + " (Lbry): " + String.Format("{0:N2} Mh/s", mSpeed / 1000000));
-                                consoleUpdateStopwatch.Restart();
-                            }
                             if (mStratum.GetJob().Equals(job))
                             {
                                 for (int i = 0; i < output[255]; ++i)
@@ -231,7 +182,15 @@ namespace GatelessGateSharp
                             }
                             startNonce += (UInt32)globalWorkSizeArray[0];
                             IncrementKernelExecutionCount();
+
                             WaitForDualMiningPair();
+                            sw.Stop();
+                            mSpeed = ((double)globalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                            {
+                                MainForm.Logger("Device #" + DeviceIndex + " (Lbry): " + String.Format("{0:N2} Mh/s", mSpeed / 1000000));
+                                consoleUpdateStopwatch.Restart();
+                            }
                         }
                     }
                 } catch (Exception ex) {

@@ -68,7 +68,6 @@ namespace GatelessGateSharp
             mAcceptedShares = 0;
             mRejectedShares = 0;
             mName = aComputeDevice.Name;
-
         }
 
         public ComputeDevice GetNewComputeDevice()

@@ -244,14 +244,8 @@ namespace GatelessGateSharp
                             Queue.Finish(); // Run the above statement before leaving the current local scope.
                             if (Stopped)
                                 break;
+                            
                             Queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
-                            sw.Stop();
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
-                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
-                            {
-                                MainForm.Logger("Device #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", mSpeed));
-                                consoleUpdateStopwatch.Restart();
-                            }
                             if (mStratum.GetJob().Equals(job))
                             {
                                 for (int i = 0; i < output[255]; ++i)
@@ -266,6 +260,14 @@ namespace GatelessGateSharp
                                 }
                             }
                             startNonce += (UInt32)globalWorkSizeA[0];
+
+                            sw.Stop();
+                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                            {
+                                MainForm.Logger("Device #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", mSpeed));
+                                consoleUpdateStopwatch.Restart();
+                            }
                         }
                     }
                 } catch (Exception ex) {

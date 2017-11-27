@@ -1496,6 +1496,11 @@ namespace GatelessGateSharp
                                                                                                     16 * device.MaxComputeUnits);
             }
 
+            comboBoxCustomPool0Algorithm.SelectedIndex = comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool1Algorithm.SelectedIndex = comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool2Algorithm.SelectedIndex = comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool3Algorithm.SelectedIndex = comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
+
             UpdateStatsWithShortPolling();
             timerDeviceStatusUpdates.Enabled = true;
             UpdateStatsWithLongPolling();
@@ -2509,7 +2514,7 @@ namespace GatelessGateSharp
                     }
                     mActiveMiners.Add(lbryMiner);
                     lbryMiner.Start(stratum2,
-                        64 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
+                        512 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
                         64); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
                     toolStripMainFormProgressBar.Value = ++minerCount;
 
@@ -2618,7 +2623,7 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
+                            256 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
                             64); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10)
@@ -3025,7 +3030,6 @@ namespace GatelessGateSharp
 
         private void tabControlMainForm_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdateDatabase();
         }
 
         private void buttonEthereumBalance_Click(object sender, EventArgs e)

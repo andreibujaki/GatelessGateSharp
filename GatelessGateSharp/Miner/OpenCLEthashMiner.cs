@@ -218,13 +218,6 @@ namespace GatelessGateSharp
                                     Queue.Execute(searchKernel, new long[] { 0 }, new long[] { mGlobalWorkSize }, new long[] { mLocalWorkSize }, null);
                                     Queue.Read<UInt32>(outputBuffer, true, 0, 256, (IntPtr)p, null);
                                 }
-                                sw.Stop();
-                                mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
-                                if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
-                                {
-                                    MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", mSpeed / (1000000)));
-                                    consoleUpdateStopwatch.Restart();
-                                }
                                 if (mStratum.GetJob().ID.Equals(jobID))
                                 {
                                     for (int i = 0; i < output[255]; ++i)
@@ -233,6 +226,14 @@ namespace GatelessGateSharp
                                 startNonce += (UInt64)mGlobalWorkSize;
                                 IncrementKernelExecutionCount();
                                 WaitForDualMiningPair();
+
+                                sw.Stop();
+                                mSpeed = ((double)mGlobalWorkSize) / sw.Elapsed.TotalSeconds;
+                                if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                                {
+                                    MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", mSpeed / (1000000)));
+                                    consoleUpdateStopwatch.Restart();
+                                }
                             }
                         }
                     }
