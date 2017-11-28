@@ -50,7 +50,6 @@ namespace GatelessGateSharp
 
 
         private Device mDevice;
-        private List<ComputeDevice> mDeviceList;
         private ComputeCommandQueue mQueue;
 
         public Device Device { get { return mDevice; } }
@@ -62,7 +61,7 @@ namespace GatelessGateSharp
             : base(aDevice, aAlgorithmName)
         {
             mDevice = aDevice;
-            mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.None);
+            mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.OutOfOrderExecution);
         }
     }
 }

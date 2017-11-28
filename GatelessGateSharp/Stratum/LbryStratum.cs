@@ -21,7 +21,7 @@ namespace GatelessGateSharp
         {
             readonly private Job mJob;
 
-            new public Job Job {
+            public Job Job {
                 get { return mJob; }
             }
 
@@ -124,7 +124,6 @@ namespace GatelessGateSharp
         private int mJsonRPCMessageID = 1;
         private Job mJob = null;
         private Mutex mMutex = new Mutex();
-        private string mSubsciptionID;
         private int mLocalExtranonceSize;
 
         public int LocalExtranonceSize { get { return mLocalExtranonceSize; } }
@@ -134,7 +133,7 @@ namespace GatelessGateSharp
             return mJob;
         }
 
-        public Work GetWork()
+        public new Work GetWork()
         {
             return new Work(mJob);
         }

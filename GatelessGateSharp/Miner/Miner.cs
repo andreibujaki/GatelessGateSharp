@@ -28,7 +28,6 @@ namespace GatelessGateSharp
         private Device mDevice;
         private bool mStopped = false;
         private bool mDone = false;
-        protected double mSpeed = 0;
         private int mAlgorithmIndex = 0;
         private String mAlgorithmName = "";
         private System.Threading.Thread mMinerThread = null;
@@ -40,7 +39,7 @@ namespace GatelessGateSharp
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
         public bool Done { get { return mDone; } }
-        public double Speed { get { return mSpeed; } }
+        public double Speed { get; set; }
         public String AlgorithmName { get { return mAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
         public long KernelExecutionCount { get { return mKernelExecutionCount; } }
@@ -113,7 +112,7 @@ namespace GatelessGateSharp
         public void KeepAlive()
         {
             if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5)
-                mSpeed = 0;
+                Speed = 0;
             if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 60)
             {
                 MainForm.Logger("Miner thread is unresponsive. Restarting...");
@@ -122,37 +121,9 @@ namespace GatelessGateSharp
                     mMinerThread.Abort();
                 }
                 catch (Exception) { }
-                mSpeed = 0;
+                Speed = 0;
                 Start();
             }
-        }
-        
-        public void ResetKernelExecutionCount()
-        {
-            mKernelExecutionCount = 0;
-        }
-
-        public void IncrementKernelExecutionCount()
-        {
-            ++mKernelExecutionCount;
-        }
-
-        public void RegisterDualMiningPair(Miner aDualMiningPair)
-        {
-            mDualMiningPair = aDualMiningPair;
-        }
-
-        public void UnregisterDualMiningPair()
-        {
-            mDualMiningPair = null;
-        }
-
-        public void WaitForDualMiningPair()
-        {
-            if (mDualMiningPair == null)
-                return;
-            while (!Stopped && !DualMiningPair.Stopped && DualMiningPair.KernelExecutionCount < KernelExecutionCount)
-                System.Threading.Thread.Sleep(1);
         }
     }
 }

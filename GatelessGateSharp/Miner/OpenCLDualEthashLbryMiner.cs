@@ -30,9 +30,10 @@ using HashLib;
 
 namespace GatelessGateSharp
 {
-    class OpenCLEthashMiner : OpenCLMiner
+    class OpenCLDualEthashLbryMiner : OpenCLMiner
     {
         private static Mutex mProgramArrayMutex = new Mutex();
+
         private static Dictionary<long[], ComputeProgram> mEthashProgramArray = new Dictionary<long[], ComputeProgram>();
         private static Dictionary<long[], ComputeKernel> mEthashDAGKernelArray = new Dictionary<long[], ComputeKernel>();
         private static Dictionary<long[], ComputeKernel> mEthashSearchKernelArray = new Dictionary<long[], ComputeKernel>();
@@ -45,20 +46,36 @@ namespace GatelessGateSharp
         private long[] mEthashGlobalWorkOffsetArray = new long[1];
         private long[] mEthashGlobalWorkSizeArray = new long[1];
         private long[] mEthashLocalWorkSizeArray = new long[1];
-        
-        public OpenCLEthashMiner(Device aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Ethash")
+        UInt32[] mEthashOutput = new UInt32[256];
+        byte[] mEthashHeaderhash = new byte[32];
+
+        private ComputeBuffer<byte> mLbryInputBuffer = null;
+        private ComputeBuffer<UInt32> mLbryOutputBuffer = null;
+        private LbryStratum mLbryStratum;
+        private static readonly int lbryOutputSize = 256 + 255 * 8;
+        UInt32[] mLbryOutput = new UInt32[lbryOutputSize];
+        byte[] mLbryInput = new byte[112];
+
+
+
+        public OpenCLDualEthashLbryMiner(Device aGatelessGateDevice)
+            : base(aGatelessGateDevice, "Ethash/Lbry")
         {
             mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
             mEthashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32);
+
+            mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
+            mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
         }
 
-        public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize)
+        public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize, LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
         {
             mEthashStratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = aEthashLocalWorkSize;
             mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * Device.GetComputeDevice().MaxComputeUnits;
 
+            mLbryStratum = aLbryStratum;
+            
             base.Start();
         }
 
@@ -76,7 +93,7 @@ namespace GatelessGateSharp
             }
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
+                String source = System.IO.File.ReadAllText(@"Kernels\ethash_lbry.cl");
                 mEthashProgram = new ComputeProgram(Context, source);
                 MainForm.Logger("Loaded ethash mEthashProgram for Device #" + DeviceIndex + ".");
                 String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " :
@@ -105,17 +122,17 @@ namespace GatelessGateSharp
         override unsafe protected void MinerThread()
         {
             Random r = new Random();
-            UInt32[] ethashOutput = new UInt32[256];
-            byte[] ethashHeaderhash = new byte[32];
 
             MarkAsAlive();
 
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+            MainForm.Logger("Dual Ethash/Lbry miner thread for Device #" + DeviceIndex + " started.");
 
             BuildEthashProgram();
 
-            fixed (UInt32* ethashOutputPtr = ethashOutput)
-            fixed (byte* ethashHeaderhashPtr = ethashHeaderhash)
+            fixed (UInt32* ethashOutputPtr = mEthashOutput)
+            fixed (byte* ethashHeaderhashPtr = mEthashHeaderhash)
+            fixed (byte* lbryInputPtr = mLbryInput)
+            fixed (UInt32* lbryOutputPtr = mLbryOutput)
             while (!Stopped)
             {
                 MarkAsAlive();
@@ -128,22 +145,25 @@ namespace GatelessGateSharp
 
                     // Wait for the first job to arrive.
                     int elapsedTime = 0;
-                    while ((mEthashStratum == null || mEthashStratum.GetJob() == null) && elapsedTime < 5000)
+                    while ((mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 5000)
                     {
                         Thread.Sleep(10);
                         elapsedTime += 10;
                     }
-                    if (mEthashStratum == null || mEthashStratum.GetJob() == null)
+                    if (mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null)
                     {
-                        MainForm.Logger("Ethash stratum server failed to send a new job.");
-                        //throw new TimeoutException("Stratum server failed to send a new job.");
+                        MainForm.Logger("Stratum server failed to send a new job.");
                         return;
                     }
                     
                     System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                     EthashStratum.Work ethashWork;
- 
-                    while (!Stopped && (ethashWork = mEthashStratum.GetWork()) != null)
+                    LbryStratum.Work lbryWork;
+
+                    mEthashSearchKernel.SetMemoryArgument(7, mLbryInputBuffer);
+                    mEthashSearchKernel.SetMemoryArgument(8, mLbryOutputBuffer);
+
+                    while (!Stopped && (ethashWork = mEthashStratum.GetWork()) != null && (lbryWork = mLbryStratum.GetWork()) != null)
                     {
                         MarkAsAlive();
 
@@ -157,9 +177,15 @@ namespace GatelessGateSharp
                         String ethashJobID = ethashWork.GetJob().ID;
                         String ethashSeedhash = ethashWork.GetJob().Seedhash;
                         double ethashDifficulty = mEthashStratum.Difficulty;
-
-                        Buffer.BlockCopy(Utilities.StringToByteArray(ethashWork.GetJob().Headerhash), 0, ethashHeaderhash, 0, 32);
+                        Buffer.BlockCopy(Utilities.StringToByteArray(ethashWork.GetJob().Headerhash), 0, mEthashHeaderhash, 0, 32);
                         Queue.Write<byte>(mEthashHeaderBuffer, true, 0, 32, (IntPtr)ethashHeaderhashPtr, null);
+
+                        var lbryJob = lbryWork.Job;
+                        Array.Copy(lbryWork.Blob, mLbryInput, 112);
+                        UInt32 lbryStartNonce = (UInt32)(r.Next(0, int.MaxValue));
+                        UInt64 lbryTarget = (UInt64)((double)0xffff0000UL / (mLbryStratum.Difficulty / 256));
+                        mEthashSearchKernel.SetValueArgument<UInt64>(10, lbryTarget);
+                        Queue.Write<byte>(mLbryInputBuffer, true, 0, 112, (IntPtr)lbryInputPtr, null);
 
                         if (ethashEpoch != ethashWork.GetJob().Epoch)
                         {
@@ -207,12 +233,21 @@ namespace GatelessGateSharp
 
                         consoleUpdateStopwatch.Start();
 
-                        while (!Stopped && mEthashStratum.GetJob().ID.Equals(ethashJobID) && mEthashStratum.PoolExtranonce.Equals(ethashPoolExtranonce))
+                        while (!Stopped && mEthashStratum.GetJob().ID.Equals(ethashJobID) && mEthashStratum.PoolExtranonce.Equals(ethashPoolExtranonce) && mLbryStratum.GetJob().Equals(lbryJob))
                         {
+                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                            sw.Start();
+
                             MarkAsAlive();
 
+                            mEthashGlobalWorkOffsetArray[0] = 0;
+
+                            mEthashSearchKernel.SetValueArgument<UInt32>(9, lbryStartNonce); ;
+
                             // Get a new local extranonce if necessary.
-                            if ((ethashStartNonce & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8)) + (ulong)mEthashGlobalWorkSizeArray[0]) >= ((ulong)0x1 << (64 - (ethashExtranonceByteArray.Length * 8 + 8))))
+                            if ((ethashStartNonce & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8)) + (ulong)mEthashGlobalWorkSizeArray[0] * 3 / 4) >= ((ulong)0x1 << (64 - (ethashExtranonceByteArray.Length * 8 + 8))))
+                                break;
+                            if (0xffffffffu - lbryStartNonce < (UInt32)mEthashGlobalWorkSizeArray[0] / 4)
                                 break;
 
                             UInt64 target = (UInt64)((double)0xffff0000U / ethashDifficulty);
@@ -223,26 +258,44 @@ namespace GatelessGateSharp
                             mEthashSearchKernel.SetValueArgument<UInt64>(4, ethashStartNonce); // start_nonce
                             mEthashSearchKernel.SetValueArgument<UInt64>(5, target); // target
                             mEthashSearchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
-
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
-                            ethashOutput[255] = 0; // ethashOutput[255] is used as an atomic counter.
+                            mEthashOutput[255] = 0; // mEthashOutput[255] is used as an atomic counter.
                             Queue.Write<UInt32>(mEthashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
-                            mEthashGlobalWorkOffsetArray[0] = 0;
+                            
+                            mLbryOutput[255] = 0; // mLbryOutput[255] is used as an atomic counter.
+                            Queue.Write<UInt32>(mLbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
+                            
                             Queue.Execute(mEthashSearchKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
+
                             Queue.Read<UInt32>(mEthashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
                             if (mEthashStratum.GetJob().ID.Equals(ethashJobID))
                             {
-                                for (int i = 0; i < ethashOutput[255]; ++i)
-                                    mEthashStratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
+                                for (int i = 0; i < mEthashOutput[255]; ++i)
+                                    mEthashStratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)mEthashOutput[i]);
                             }
-                            ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
+                            ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0] * 3 / 4;
+
+                            Queue.Read<UInt32>(mLbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
+                            if (mLbryStratum.GetJob().Equals(lbryJob))
+                            {
+                                for (int i = 0; i < mLbryOutput[255]; ++i)
+                                {
+                                    String result = "";
+                                    for (int j = 0; j < 8; ++j)
+                                    {
+                                        UInt32 word = mLbryOutput[256 + i * 8 + j];
+                                        result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
+                                    }
+                                    mLbryStratum.Submit(GatelessGateDevice, lbryWork, mLbryOutput[i], result);
+                                }
+                            }
+                            lbryStartNonce += (UInt32)mEthashGlobalWorkSizeArray[0] / 4;
 
                             sw.Stop();
-                            Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                            Speed = ((double)mEthashGlobalWorkSizeArray[0] * 3 / 4) / sw.Elapsed.TotalSeconds;
+                            double speedSecondary = (((double)mEthashGlobalWorkSizeArray[0] / 4) / sw.Elapsed.TotalSeconds);
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", Speed / (1000000)));
+                                MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s (Ethash), {1:N2} Mh/s (Lbry)", Speed / (1000000), speedSecondary / (1000000)));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }

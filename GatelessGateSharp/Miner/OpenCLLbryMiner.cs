@@ -28,39 +28,78 @@ namespace GatelessGateSharp
 {
     class OpenCLLbryMiner : OpenCLMiner
     {
-        private static readonly int outputSize = 256 + 255 * 8;
-
-        private LbryStratum mStratum;
-
-        long[] globalWorkSizeArray = new long[] { 0 };
-        long[] localWorkSizeArray = new long[] { 0 };
-        long[] globalWorkOffsetArray = new long[] { 0 };
-
-        UInt32[] output = new UInt32[outputSize];
-        byte[] input = new byte[112];
-
         static Mutex mProgramArrayMutex = new Mutex();
 
-        static Dictionary<ProgramArrayIndex, ComputeProgram> mProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
-        ComputeKernel combinedSearchKernel = null;
+        static Dictionary<ProgramArrayIndex, ComputeProgram> mLbryProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
+        static Dictionary<ProgramArrayIndex, ComputeKernel> mLbrySearchKernelArray = new Dictionary<ProgramArrayIndex, ComputeKernel>();
+        ComputeProgram mLbryProgram;
+        ComputeKernel mLbrySearchKernel = null;            
+        private ComputeBuffer<byte> mLbryInputBuffer = null;
+        private ComputeBuffer<UInt32> mLbryOutputBuffer = null;
+        private LbryStratum mLbryStratum;
+        long[] mLbryGlobalWorkSizeArray = new long[] { 0 };
+        long[] mLbryLocalWorkSizeArray = new long[] { 0 };
+        long[] mLbryGlobalWorkOffsetArray = new long[] { 0 };
+        private static readonly int lbryOutputSize = 256 + 255 * 8;
+        UInt32[] mLbryOutput = new UInt32[lbryOutputSize];
+        byte[] mLbryInput = new byte[112];
             
-        private ComputeBuffer<byte> inputBuffer = null;
-        private ComputeBuffer<UInt32> outputBuffer = null;
-            
+
+
         public OpenCLLbryMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "Lbry")
         {
+            mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
+            mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
         }
 
-        public void Start(LbryStratum aStratum, int aIntensity, int aLocalWorkSize)
+        public void Start(LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
         {
-            mStratum = aStratum;
-            globalWorkSizeArray[0] = aIntensity * Device.MaxComputeUnits;
-            localWorkSizeArray[0] = aLocalWorkSize;
-            if (globalWorkSizeArray[0] % aLocalWorkSize != 0)
-                globalWorkSizeArray[0] = aLocalWorkSize - globalWorkSizeArray[0] % aLocalWorkSize;
+            mLbryStratum = aLbryStratum;
+            mLbryGlobalWorkSizeArray[0] = aLbryIntensity * Device.MaxComputeUnits;
+            mLbryLocalWorkSizeArray[0] = aLbryLocalWorkSize;
+            if (mLbryGlobalWorkSizeArray[0] % aLbryLocalWorkSize != 0)
+                mLbryGlobalWorkSizeArray[0] = aLbryLocalWorkSize - mLbryGlobalWorkSizeArray[0] % aLbryLocalWorkSize;
 
             base.Start();
+        }
+
+        public void BuildLbryProgram()
+        {
+            ComputeDevice computeDevice = Device.GetComputeDevice();
+
+            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
+
+            if (mLbryProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])))
+            {
+                mLbryProgram = mLbryProgramArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])];
+                mLbrySearchKernel = mLbrySearchKernelArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])];
+            }
+            else
+            {
+                String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
+                mLbryProgram = new ComputeProgram(Context, source);
+                MainForm.Logger("Loaded Lbry mLbryProgram for Device #" + DeviceIndex + ".");
+                String buildOptions = (Device.Vendor == "AMD" ? "-O1 " : //"-O1 " :
+                                       Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                                                   "")
+                                      + " -IKernels -DWORKSIZE=" + mLbryLocalWorkSizeArray[0];
+                try
+                {
+                    mLbryProgram.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                }
+                catch (Exception)
+                {
+                    MainForm.Logger(mLbryProgram.GetBuildLog(computeDevice));
+                    throw;
+                }
+                MainForm.Logger("Built Lbry mLbryProgram for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built options: " + buildOptions);
+                mLbryProgramArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbryProgram;
+                mLbrySearchKernelArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbrySearchKernel = mLbryProgram.CreateKernel("search_combined");
+            }
+
+            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -68,127 +107,90 @@ namespace GatelessGateSharp
         override unsafe protected void MinerThread()
         {
             Random r = new Random();
-            ComputeDevice computeDevice = Device.GetComputeDevice();
             
             MarkAsAlive();
 
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-            ComputeProgram program;
-            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
-            if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeArray[0])))
-            {
-                program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeArray[0])];
-            } 
-            else
-            {
-                String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
-                program = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded Lbry program for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " : //"-O1 " :
-                                       Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + localWorkSizeArray[0];
-                try
-                {
-                    program.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                    MainForm.Logger(program.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Built options: " + buildOptions);
-                mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeArray[0])] = program;
-            }
-            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
+            BuildLbryProgram();
 
-            if (combinedSearchKernel == null) combinedSearchKernel = program.CreateKernel("search_combined");
-            if (inputBuffer == null) inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
-            if (outputBuffer == null) outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
-
-            fixed (long* globalWorkOffsetArrayPtr = globalWorkOffsetArray)
-            fixed (long* globalWorkSizeArrayPtr = globalWorkSizeArray)
-            fixed (long* localWorkSizeArrayPtr = localWorkSizeArray)
-            fixed (byte* inputPtr = input)
-            fixed (UInt32* outputPtr = output)
+            fixed (long* lbryGlobalWorkOffsetArrayPtr = mLbryGlobalWorkOffsetArray)
+            fixed (long* lbryGlobalWorkSizeArrayPtr = mLbryGlobalWorkSizeArray)
+            fixed (long* lbryLocalWorkSizeArrayPtr = mLbryLocalWorkSizeArray)
+            fixed (byte* lbryInputPtr = mLbryInput)
+            fixed (UInt32* lbryOutputPtr = mLbryOutput)
             while (!Stopped)
             {
                 MarkAsAlive();
 
                 try
                 {
-                    combinedSearchKernel.SetMemoryArgument(0, inputBuffer);
-                    combinedSearchKernel.SetMemoryArgument(1, outputBuffer);
+                    mLbrySearchKernel.SetMemoryArgument(0, mLbryInputBuffer);
+                    mLbrySearchKernel.SetMemoryArgument(1, mLbryOutputBuffer);
 
-                    // Wait for the first job to arrive.
+                    // Wait for the first lbryJob to arrive.
                     int elapsedTime = 0;
-                    while ((mStratum == null || mStratum.GetJob() == null) && elapsedTime < 5000)
+                    while ((mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 5000)
                     {
                         Thread.Sleep(10);
                         elapsedTime += 10;
                     }
-                    if (mStratum == null || mStratum.GetJob() == null)
-                        throw new TimeoutException("Stratum server failed to send a new job.");
+                    if (mLbryStratum == null || mLbryStratum.GetJob() == null)
+                        throw new TimeoutException("Stratum server failed to send a new lbryJob.");
 
                     System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                    LbryStratum.Work work;
+                    LbryStratum.Work lbryWork;
 
-                    while (!Stopped && (work = mStratum.GetWork()) != null)
+                    while (!Stopped && (lbryWork = mLbryStratum.GetWork()) != null)
                     {
                         MarkAsAlive();
 
-                        var job = work.Job;
-                        Array.Copy(work.Blob, input, 112);
-                        byte localExtranonce = work.LocalExtranonce;
-                        UInt32 startNonce = (UInt32)(r.Next(0, int.MaxValue));
-                        UInt64 target = (UInt64) ((double) 0xffff0000UL / (mStratum.Difficulty / 256));
-                        combinedSearchKernel.SetValueArgument<UInt64>(2, target);
-
-                        Queue.Write<byte>(inputBuffer, true, 0, 112, (IntPtr)inputPtr, null);
+                        var lbryJob = lbryWork.Job;
+                        Array.Copy(lbryWork.Blob, mLbryInput, 112);
+                        UInt32 lbryStartNonce = (UInt32)(r.Next(0, int.MaxValue));
+                        UInt64 lbryTarget = (UInt64) ((double) 0xffff0000UL / (mLbryStratum.Difficulty / 256));
+                        mLbrySearchKernel.SetValueArgument<UInt64>(3, lbryTarget);
+                        Queue.Write<byte>(mLbryInputBuffer, true, 0, 112, (IntPtr)lbryInputPtr, null);
 
                         consoleUpdateStopwatch.Start();
 
-                        while (!Stopped && mStratum.GetJob().Equals(job))
+                        while (!Stopped && mLbryStratum.GetJob().Equals(lbryJob))
                         {
                             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                             sw.Start();
 
                             MarkAsAlive();
 
-                            globalWorkOffsetArray[0] = startNonce;
+                            mLbrySearchKernel.SetValueArgument<UInt32>(2, lbryStartNonce);
 
                             // Get a new local extranonce if necessary.
-                            if (0xffffffffu - startNonce < (UInt32)globalWorkSizeArray[0])
+                            if (0xffffffffu - lbryStartNonce < (UInt32)mLbryGlobalWorkSizeArray[0])
                                 break;
 
-                            output[255] = 0; // output[255] is used as an atomic counter.
-                            Queue.Write<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
-                            Queue.Execute(combinedSearchKernel, globalWorkOffsetArray, globalWorkSizeArray, localWorkSizeArray, null);
-                            Queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
-                            if (mStratum.GetJob().Equals(job))
+                            mLbryOutput[255] = 0; // mLbryOutput[255] is used as an atomic counter.
+                            Queue.Write<UInt32>(mLbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
+                            Queue.Execute(mLbrySearchKernel, mLbryGlobalWorkOffsetArray, mLbryGlobalWorkSizeArray, mLbryLocalWorkSizeArray, null);
+                            Queue.Read<UInt32>(mLbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
+                            if (mLbryStratum.GetJob().Equals(lbryJob))
                             {
-                                for (int i = 0; i < output[255]; ++i)
+                                for (int i = 0; i < mLbryOutput[255]; ++i)
                                 {
                                     String result = "";
                                     for (int j = 0; j < 8; ++j)
                                     {
-                                        UInt32 word = output[256 + i * 8 + j];
+                                        UInt32 word = mLbryOutput[256 + i * 8 + j];
                                         result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                                     }
-                                    mStratum.Submit(GatelessGateDevice, work, output[i], result);
+                                    mLbryStratum.Submit(GatelessGateDevice, lbryWork, mLbryOutput[i], result);
                                 }
                             }
-                            startNonce += (UInt32)globalWorkSizeArray[0];
-                            IncrementKernelExecutionCount();
+                            lbryStartNonce += (UInt32)mLbryGlobalWorkSizeArray[0];
 
-                            WaitForDualMiningPair();
                             sw.Stop();
-                            mSpeed = ((double)globalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                            Speed = ((double)mLbryGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("Device #" + DeviceIndex + " (Lbry): " + String.Format("{0:N2} Mh/s", mSpeed / 1000000));
+                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Lbry)", Speed / 1000000));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }
@@ -198,7 +200,7 @@ namespace GatelessGateSharp
                     MainForm.Logger("Restarting miner thread...");
                 }
 
-                mSpeed = 0;
+                Speed = 0;
 
                 if (!Stopped)
                     System.Threading.Thread.Sleep(5000);

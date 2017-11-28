@@ -2261,7 +2261,6 @@ namespace GatelessGateSharp
                         if (miner != null)
                         {
                             mInactiveMiners.Remove((Miner)miner);
-                            miner.UnregisterDualMiningPair();
                         }
                         else
                         {
@@ -2452,14 +2451,14 @@ namespace GatelessGateSharp
             }
         }
 
-        void StartOpenCLEthashAndLbryMiners(EthashStratum stratum, LbryStratum stratum2)
+        void StartOpenCLDualEthashLbryMiners(EthashStratum stratum, LbryStratum stratum2)
         {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
-            int deviceIndex, i, minerCount = 0;
+            int deviceIndex, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
-                    minerCount += 2;
+                    minerCount += 1;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
@@ -2467,63 +2466,33 @@ namespace GatelessGateSharp
             {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    // Ethash
-                    OpenCLEthashMiner ethashMiner = null;
+                    OpenCLDualEthashLbryMiner dualMiner = null;
                     foreach (var inactiveMiner in mInactiveMiners)
                     {
-                        if (inactiveMiner.GetType() == typeof(OpenCLEthashMiner))
+                        if (inactiveMiner.GetType() == typeof(OpenCLDualEthashLbryMiner))
                         {
-                            ethashMiner = (OpenCLEthashMiner)inactiveMiner;
+                            dualMiner = (OpenCLDualEthashLbryMiner)inactiveMiner;
                             break;
                         }
                     }
-                    if (ethashMiner != null)
+                    if (dualMiner != null)
                     {
-                        mInactiveMiners.Remove((Miner)ethashMiner);
-                        ethashMiner.UnregisterDualMiningPair();
+                        mInactiveMiners.Remove((Miner)dualMiner);
                     }
                     else
                     {
-                        ethashMiner = new OpenCLEthashMiner(mDevices[deviceIndex]);
+                        dualMiner = new OpenCLDualEthashLbryMiner(mDevices[deviceIndex]);
                     }
-                    mActiveMiners.Add(ethashMiner);
-                    ethashMiner.Start(stratum,
+                    mActiveMiners.Add(dualMiner);
+                    dualMiner.Start(stratum,
                         Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
                             .Value)),
                         Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex]
-                            .Value)));
+                            .Value)),
+                            stratum2,
+                            2048 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
+                            64);
                     toolStripMainFormProgressBar.Value = ++minerCount;
-
-                    // Lbry
-                    OpenCLLbryMiner lbryMiner = null;
-                    foreach (var inactiveMiner in mInactiveMiners)
-                    {
-                        if (inactiveMiner.GetType() == typeof(OpenCLLbryMiner))
-                        {
-                            lbryMiner = (OpenCLLbryMiner)inactiveMiner;
-                            break;
-                        }
-                    }
-                    if (lbryMiner != null)
-                    {
-                        mInactiveMiners.Remove((Miner)lbryMiner);
-                    }
-                    else
-                    {
-                        lbryMiner = new OpenCLLbryMiner(mDevices[deviceIndex]);
-                    }
-                    mActiveMiners.Add(lbryMiner);
-                    lbryMiner.Start(stratum2,
-                        512 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
-                        64); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
-                    toolStripMainFormProgressBar.Value = ++minerCount;
-
-                    // house-keeping
-                    lbryMiner.AlgorithmIndex = 1;
-                    ethashMiner.ResetKernelExecutionCount();
-                    lbryMiner.ResetKernelExecutionCount();
-                    ethashMiner.RegisterDualMiningPair(lbryMiner);
-                    lbryMiner.RegisterDualMiningPair(ethashMiner);
 
                     for (int j = 0; j < mLaunchInterval; j += 10)
                     {
@@ -2564,7 +2533,6 @@ namespace GatelessGateSharp
                         if (miner != null)
                         {
                             mInactiveMiners.Remove((Miner)miner);
-                            miner.UnregisterDualMiningPair();
                         }
                         else
                         {
@@ -2677,7 +2645,7 @@ namespace GatelessGateSharp
             {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
-                StartOpenCLEthashAndLbryMiners(stratum, stratum2);
+                StartOpenCLDualEthashLbryMiners(stratum, stratum2);
                 mPrimaryStratum = stratum;
                 mSecondaryStratum = stratum2;
             }

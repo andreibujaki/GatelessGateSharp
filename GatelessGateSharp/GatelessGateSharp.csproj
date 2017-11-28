@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="ADL.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="Miner\OpenCLDualEthashLbryMiner.cs" />
     <Compile Include="Miner\OpenCLLbryMiner.cs" />
     <Compile Include="Miner\OpenCLCryptoNightMiner.cs" />
     <Compile Include="Stratum\EthashStratum.cs" />
@@ -148,6 +149,7 @@
     <None Include="Kernels\blake256.cl" />
     <None Include="Kernels\cryptonight.cl" />
     <None Include="Kernels\ethash.cl" />
+    <None Include="Kernels\ethash_lbry.cl" />
     <None Include="Kernels\groestl256.cl" />
     <None Include="Kernels\jh.cl" />
     <None Include="Kernels\lbry.cl" />

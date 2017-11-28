@@ -262,10 +262,10 @@ namespace GatelessGateSharp
                             startNonce += (UInt32)globalWorkSizeA[0];
 
                             sw.Stop();
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            Speed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("Device #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", mSpeed));
+                                MainForm.Logger("Device #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", Speed));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }
@@ -275,7 +275,7 @@ namespace GatelessGateSharp
                     MainForm.Logger("Restarting miner thread...");
                 }
 
-                mSpeed = 0;
+                Speed = 0;
 
                 if (!Stopped)
                     System.Threading.Thread.Sleep(5000);
