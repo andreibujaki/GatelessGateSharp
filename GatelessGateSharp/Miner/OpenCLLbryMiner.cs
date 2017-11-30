@@ -79,7 +79,7 @@ namespace GatelessGateSharp
             {
                 String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
                 mLbryProgram = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded Lbry mLbryProgram for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Loaded Lbry program for Device #" + DeviceIndex + ".");
                 String buildOptions = (Device.Vendor == "AMD" ? "-O1 " : //"-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
@@ -93,7 +93,7 @@ namespace GatelessGateSharp
                     MainForm.Logger(mLbryProgram.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built Lbry mLbryProgram for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Built options: " + buildOptions);
                 mLbryProgramArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbryProgram;
                 mLbrySearchKernelArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbrySearchKernel = mLbryProgram.CreateKernel("search_combined");

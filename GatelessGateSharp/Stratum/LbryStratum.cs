@@ -311,7 +311,7 @@ namespace GatelessGateSharp
                 }}});
                 WriteLine(message);
                 MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
-                MainForm.Logger("message: " + message);
+                //MainForm.Logger("message: " + message);
             }
             catch (Exception ex)
             {

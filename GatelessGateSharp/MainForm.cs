@@ -48,7 +48,7 @@ namespace GatelessGateSharp
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
-        private static int mLaunchInterval = 500;
+        private static int mLaunchInterval = 0;
 
         private Stratum mPrimaryStratum = null;
         private Stratum mSecondaryStratum = null;
@@ -1483,7 +1483,7 @@ namespace GatelessGateSharp
                 numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)2000;
 
                 // CryptoNight
-                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 2 : 1);
+                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 1 : 1); // 2 doesn't work with recent AMD drivers.
                 numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 8 : 4);
                 numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
                     = (decimal)(device.Vendor == "AMD" && device.Name == "Radeon RX 470" ? 24 * device.MaxComputeUnits :
@@ -2252,7 +2252,7 @@ namespace GatelessGateSharp
                         OpenCLCryptoNightMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
                         {
-                            if (inactiveMiner.GetType() == typeof(OpenCLCryptoNightMiner))
+                            if (inactiveMiner.GetType() == typeof(OpenCLCryptoNightMiner) && deviceIndex == inactiveMiner.DeviceIndex)
                             {
                                 miner = (OpenCLCryptoNightMiner) inactiveMiner;
                                 break;
@@ -2469,7 +2469,7 @@ namespace GatelessGateSharp
                     OpenCLDualEthashLbryMiner dualMiner = null;
                     foreach (var inactiveMiner in mInactiveMiners)
                     {
-                        if (inactiveMiner.GetType() == typeof(OpenCLDualEthashLbryMiner))
+                        if (inactiveMiner.GetType() == typeof(OpenCLDualEthashLbryMiner) && deviceIndex == inactiveMiner.DeviceIndex)
                         {
                             dualMiner = (OpenCLDualEthashLbryMiner)inactiveMiner;
                             break;
@@ -2524,7 +2524,7 @@ namespace GatelessGateSharp
                         OpenCLEthashMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
                         {
-                            if (inactiveMiner.GetType() == typeof(OpenCLEthashMiner))
+                            if (inactiveMiner.GetType() == typeof(OpenCLEthashMiner) && deviceIndex == inactiveMiner.DeviceIndex)
                             {
                                 miner = (OpenCLEthashMiner)inactiveMiner;
                                 break;
@@ -2575,7 +2575,7 @@ namespace GatelessGateSharp
                         OpenCLLbryMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
                         {
-                            if (inactiveMiner.GetType() == typeof(OpenCLLbryMiner))
+                            if (inactiveMiner.GetType() == typeof(OpenCLLbryMiner) && deviceIndex == inactiveMiner.DeviceIndex)
                             {
                                 miner = (OpenCLLbryMiner)inactiveMiner;
                                 break;
