@@ -2260,13 +2260,13 @@
             // radioButtonLbry
             // 
             this.radioButtonLbry.AutoSize = true;
-            this.radioButtonLbry.Enabled = false;
             this.radioButtonLbry.Location = new System.Drawing.Point(222, 42);
             this.radioButtonLbry.Name = "radioButtonLbry";
             this.radioButtonLbry.Size = new System.Drawing.Size(45, 17);
             this.radioButtonLbry.TabIndex = 12;
             this.radioButtonLbry.Text = "Lbry";
             this.radioButtonLbry.UseVisualStyleBackColor = true;
+            this.radioButtonLbry.CheckedChanged += new System.EventHandler(this.radioButtonLbry_CheckedChanged);
             // 
             // radioButton4
             // 
@@ -2304,6 +2304,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
+            this.radioButton1.Enabled = false;
             this.radioButton1.Location = new System.Drawing.Point(106, 42);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(95, 17);

@@ -127,9 +127,18 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
 
+Cloo (MIT-licensed)
+Copyright 2009-2011 Fatjon Sakiqi
 
-Cloo
-Copyright 2009-2011 Fatjon Sakiqi (MIT-licensed)</value>
+HashLib (CDDL-licensed and used as an external library)
+Copyright 2013 codefo
+
+managedCUDA (LGPL-licensed and used as an external library)
+Copyright 2012 Michael Kunz
+
+phymem (CPOL-licensed and used as an external library and a kernel-mode driver)
+Copyright 2009 cyb70289
+Copyright 2017 Yurio Miyazawa (a.k.a. zawawa) &lt;me@yurio.net&gt;</value>
   </data>
   <metadata name="timerDeviceStatusUpdates.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

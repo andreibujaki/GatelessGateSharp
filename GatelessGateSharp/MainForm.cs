@@ -43,12 +43,12 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.1";
+        public static string appVersion = "1.1.2";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
-        private static int mLaunchInterval = 0;
+        private static int mLaunchInterval = 1000;
 
         private Stratum mPrimaryStratum = null;
         private Stratum mSecondaryStratum = null;
@@ -95,7 +95,7 @@ namespace GatelessGateSharp
 
         private bool mDevFeeMode = true;
         private int mDevFeePercentage = 1;
-        private int mDevFeeDurationInSeconds = 60;
+        private int mDevFeeDurationInSeconds = 120;
         private string mDevFeeBitcoinAddress = "1BHwDWVerUTiKxhHPf2ubqKKiBMiKQGomZ";
         private DateTime mDevFeeModeStartTime = DateTime.Now; // dummy
 
@@ -242,26 +242,22 @@ namespace GatelessGateSharp
                                         if (coinToMine == "ethereum")
                                         {
                                             radioButtonEthereum.Checked = true;
-                                            radioButtonMonero.Checked = false;
-                                            radioButtonZcash.Checked = false;
                                         }
                                         else if (coinToMine == "monero")
                                         {
-                                            radioButtonEthereum.Checked = false;
                                             radioButtonMonero.Checked = true;
-                                            radioButtonZcash.Checked = false;
                                         }
                                         else if (coinToMine == "zcash")
                                         {
-                                            radioButtonEthereum.Checked = false;
-                                            radioButtonMonero.Checked = false;
                                             radioButtonZcash.Checked = true;
+                                        }
+                                        else if (coinToMine == "lbry")
+                                        {
+                                            radioButtonLbry.Checked = true;
                                         }
                                         else
                                         {
                                             radioButtonEthereum.Checked = true;
-                                            radioButtonMonero.Checked = false;
-                                            radioButtonZcash.Checked = false;
                                         }
                                     }
                                     else if (propertyName == "pool_rig_id")
@@ -698,7 +694,8 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@value",
                                                         radioButtonEthereum.Checked ? "ethereum" :
                                                         radioButtonMonero.Checked ? "monero" :
-                                                        radioButtonMonero.Checked ? "zcash" :
+                                                        radioButtonZcash.Checked ? "zcash" :
+                                                        radioButtonLbry.Checked ? "lbry" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
                     }
@@ -748,7 +745,8 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@value",
                                                         radioButtonEthereum.Checked ? "ethereum" :
                                                         radioButtonMonero.Checked ? "monero" :
-                                                        radioButtonMonero.Checked ? "zcash" :
+                                                        radioButtonZcash.Checked ? "zcash" :
+                                                        radioButtonLbry.Checked ? "lbry" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
                     }
@@ -1135,6 +1133,17 @@ namespace GatelessGateSharp
         private void MainForm_Load(object sender, EventArgs e)
         {
             Logger(appName + " started.");
+
+            comboBoxCustomPool0Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool1Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool2Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool3Algorithm.SelectedIndex = 0;
+
+            comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
+
             labelGPUVendorArray = new Control[] { labelGPU0Vendor, labelGPU1Vendor, labelGPU2Vendor, labelGPU3Vendor, labelGPU4Vendor, labelGPU5Vendor, labelGPU6Vendor, labelGPU7Vendor };
             labelGPUNameArray = new Control[] { labelGPU0Name, labelGPU1Name, labelGPU2Name, labelGPU3Name, labelGPU4Name, labelGPU5Name, labelGPU6Name, labelGPU7Name };
             labelGPUIDArray = new Control[] { labelGPU0ID, labelGPU1ID, labelGPU2ID, labelGPU3ID, labelGPU4ID, labelGPU5ID, labelGPU6ID, labelGPU7ID };
@@ -1351,16 +1360,6 @@ namespace GatelessGateSharp
                 Array.Resize(ref groupBoxDeviceCryptoNightArray, mDevices.Length);
             }
 
-            comboBoxCustomPool0Algorithm.SelectedIndex = 0;
-            comboBoxCustomPool1Algorithm.SelectedIndex = 0;
-            comboBoxCustomPool2Algorithm.SelectedIndex = 0;
-            comboBoxCustomPool3Algorithm.SelectedIndex = 0;
-
-            comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
-
             var ADLRet = -1;
             var NumberOfAdapters = 0;
             ADLAdapterIndexArray = new int[mDevices.Length];
@@ -1483,7 +1482,7 @@ namespace GatelessGateSharp
                 numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)2000;
 
                 // CryptoNight
-                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 1 : 1); // 2 doesn't work with recent AMD drivers.
+                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 2 : 1);
                 numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 8 : 4);
                 numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
                     = (decimal)(device.Vendor == "AMD" && device.Name == "Radeon RX 470" ? 24 * device.MaxComputeUnits :
@@ -1495,11 +1494,6 @@ namespace GatelessGateSharp
                                 device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti" ? 32 * device.MaxComputeUnits :
                                                                                                     16 * device.MaxComputeUnits);
             }
-
-            comboBoxCustomPool0Algorithm.SelectedIndex = comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool1Algorithm.SelectedIndex = comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool2Algorithm.SelectedIndex = comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool3Algorithm.SelectedIndex = comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
             UpdateStatsWithShortPolling();
             timerDeviceStatusUpdates.Enabled = true;
@@ -1625,6 +1619,46 @@ namespace GatelessGateSharp
                             {
                                 if ((double)item["algo"] == 22)
                                     price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000.0;
+                            }
+                            catch (Exception) { }
+                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
+                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
+                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
+                    }
+                    else
+                    {
+                        labelPriceDay.Text = "-";
+                        labelPriceWeek.Text = "-";
+                        labelPriceMonth.Text = "-";
+                    }
+                }
+                else if (mCurrentPool == "NiceHash" && radioButtonLbry.Checked && textBoxBitcoinAddress.Text != "")
+                {
+                    double balance = 0;
+                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var result = (JContainer)response["result"];
+                    var stats = (JArray)result["stats"];
+                    foreach (JContainer item in stats)
+                        try
+                        {
+                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
+                        }
+                        catch (Exception) { }
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
+
+                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode)
+                    {
+                        double price = 0;
+                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
+                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        result = (JContainer)response["result"];
+                        stats = (JArray)result["stats"];
+                        foreach (JContainer item in stats)
+                            try
+                            {
+                                if ((double)item["algo"] == 23)
+                                    price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000000.0;
                             }
                             catch (Exception) { }
                         labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
@@ -2109,6 +2143,20 @@ namespace GatelessGateSharp
 
 #region GetServers
 
+        List<StratumServerInfo> GetNiceHashLbryServers()
+        {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("lbry.usa.nicehash.com", 0),   
+                new StratumServerInfo("lbry.eu.nicehash.com", 0),
+                new StratumServerInfo("lbry.hk.nicehash.com", 150),
+                new StratumServerInfo("lbry.jp.nicehash.com", 100),
+                new StratumServerInfo("lbry.in.nicehash.com", 200),
+                new StratumServerInfo("lbry.br.nicehash.com", 180)
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
         List<StratumServerInfo> GetNiceHashEthashServers()
         {
             var hosts = new List<StratumServerInfo> {
@@ -2141,7 +2189,7 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        public void LaunchCryptoNightMiners(string pool, bool aPrimaryPool = true)
+        public void LaunchCryptoNightMiners(string pool)
         {
             CryptoNightStratum stratum = null;
             var niceHashMode = false;
@@ -2222,17 +2270,10 @@ namespace GatelessGateSharp
             }
 
             StartOpenCLCryptoNightMiners(stratum, niceHashMode);
-            if (aPrimaryPool)
-            {
-                mPrimaryStratum = (Stratum) stratum;
-            }
-            else
-            {
-                mSecondaryStratum = (Stratum)stratum;
-            }
+            mPrimaryStratum = (Stratum) stratum;
         }
 
-        void StartOpenCLCryptoNightMiners(CryptoNightStratum stratum, bool niceHashMode, bool aPrimaryPool = true)
+        void StartOpenCLCryptoNightMiners(CryptoNightStratum stratum, bool niceHashMode)
         {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
@@ -2285,7 +2326,34 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        public void LaunchEthashMiners(string pool, bool aPrimaryPool = true)
+        public void LaunchLbryMiners(string pool)
+        {
+            LbryStratum stratum = null;
+
+            if (pool == "NiceHash" || mDevFeeMode)
+            {
+                var hosts = GetNiceHashLbryServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try
+                        {
+                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
+                            stratum = new LbryStratum(host.name, 3356, mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text, "x", pool);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            }
+
+            StartOpenCLLbryMiners(stratum);
+            mPrimaryStratum = (Stratum)stratum;
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchEthashMiners(string pool)
         {
             EthashStratum stratum = null;
 
@@ -2296,28 +2364,8 @@ namespace GatelessGateSharp
                     if (host.time >= 0)
                         try
                         {
-                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
-                            if (!mDevFeeMode && textBoxRigID.Text != "")
-                                username += "." + textBoxRigID.Text; // TODO
+                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
                             stratum = new NiceHashEthashStratum(host.name, 3353, mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text, "x", pool);
-                            break;
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            }
-            else if (pool == "zawawa.net")
-            {
-                var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("eth-uswest.zawawa.net", 0)
-                            };
-                hosts.Sort();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try
-                        {
-                            stratum = new OpenEthereumPoolEthashStratum(host.name, 4000, textBoxEthereumAddress.Text, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -2441,14 +2489,7 @@ namespace GatelessGateSharp
             }
 
             StartOpenCLEthashMiners(stratum);
-            if (aPrimaryPool)
-            {
-                mPrimaryStratum = (Stratum)stratum;
-            }
-            else
-            {
-                mSecondaryStratum = (Stratum)stratum;
-            }
+            mPrimaryStratum = (Stratum)stratum;
         }
 
         void StartOpenCLDualEthashLbryMiners(EthashStratum stratum, LbryStratum stratum2)
@@ -2763,6 +2804,12 @@ namespace GatelessGateSharp
                         {
                             Logger("Launching CryptoNight miners...");
                             LaunchCryptoNightMiners(pool);
+                            break;
+                        }
+                        else if (radioButtonLbry.Checked)
+                        {
+                            Logger("Launching Lbry miners...");
+                            LaunchLbryMiners(pool);
                             break;
                         }
                     }
@@ -3083,6 +3130,7 @@ namespace GatelessGateSharp
                 radioButtonMostProfitable.Checked = false;
                 radioButtonEthereum.Checked = false;
                 radioButtonZcash.Checked = false;
+                radioButtonLbry.Checked = false;
             }
         }
 
@@ -3093,6 +3141,7 @@ namespace GatelessGateSharp
                 radioButtonMostProfitable.Checked = false;
                 radioButtonMonero.Checked = false;
                 radioButtonZcash.Checked = false;
+                radioButtonLbry.Checked = false;
             }
         }
 
@@ -3103,6 +3152,7 @@ namespace GatelessGateSharp
                 radioButtonMonero.Checked = false;
                 radioButtonEthereum.Checked = false;
                 radioButtonZcash.Checked = false;
+                radioButtonLbry.Checked = false;
             }
         }
 
@@ -3113,6 +3163,18 @@ namespace GatelessGateSharp
                 radioButtonMostProfitable.Checked = false;
                 radioButtonEthereum.Checked = false;
                 radioButtonMonero.Checked = false;
+                radioButtonLbry.Checked = false;
+            }
+        }
+
+        private void radioButtonLbry_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonLbry.Checked)
+            {
+                radioButtonMostProfitable.Checked = false;
+                radioButtonEthereum.Checked = false;
+                radioButtonMonero.Checked = false;
+                radioButtonZcash.Checked = false;
             }
         }
 

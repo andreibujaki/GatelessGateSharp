@@ -55,7 +55,11 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         static void Main()
         {
-            if (sMutex.WaitOne(TimeSpan.Zero, true))
+            bool mutexResult = false;
+
+            try { mutexResult = sMutex.WaitOne(TimeSpan.Zero, true); } catch (Exception ex) {}
+
+            if (mutexResult)
             {
                 Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);
                 Environment.SetEnvironmentVariable("GPU_MAX_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
