@@ -3116,7 +3116,7 @@ namespace GatelessGateSharp
                 mSecondaryStratum = null;
                 mActiveMiners.Clear();
 
-                mDevFeeMode = true;
+                mDevFeeMode = false;
                 LaunchMiners();
                 if (mPrimaryStratum == null || !mActiveMiners.Any())
                 {
@@ -3127,7 +3127,6 @@ namespace GatelessGateSharp
                     appState = ApplicationGlobalState.Mining;
                     tabControlMainForm.SelectedIndex = 0;
                     timerDevFee.Interval = 15 * 60 * 1000;
-                    mDevFeeMode = false;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
