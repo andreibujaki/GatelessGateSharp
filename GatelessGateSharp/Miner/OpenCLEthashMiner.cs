@@ -149,7 +149,7 @@ namespace GatelessGateSharp
 
                         String ethashPoolExtranonce = mEthashStratum.PoolExtranonce;
                         byte[] ethashExtranonceByteArray = Utilities.StringToByteArray(ethashPoolExtranonce);
-                        byte ethashLocalExtranonce = ethashWork.LocalExtranonce;
+                        byte ethashLocalExtranonce = (byte)ethashWork.LocalExtranonce;
                         UInt64 ethashStartNonce = (UInt64)ethashLocalExtranonce << (8 * (7 - ethashExtranonceByteArray.Length));
                         for (int i = 0; i < ethashExtranonceByteArray.Length; ++i)
                             ethashStartNonce |= (UInt64)ethashExtranonceByteArray[i] << (8 * (7 - i));

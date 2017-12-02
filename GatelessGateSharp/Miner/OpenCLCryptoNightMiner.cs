@@ -183,7 +183,7 @@ namespace GatelessGateSharp
 
                         var job = work.GetJob();
                         Array.Copy(Utilities.StringToByteArray(job.Blob), input, 76);
-                        byte localExtranonce = work.LocalExtranonce;
+                        byte localExtranonce = (byte)work.LocalExtranonce;
                         byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
                         UInt32 startNonce;
                         if (NiceHashMode)

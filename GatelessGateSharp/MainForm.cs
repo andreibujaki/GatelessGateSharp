@@ -58,9 +58,10 @@ namespace GatelessGateSharp
         {
             Idle = 0,
             Mining = 1,
-            Benchmarking = 2
+            Benchmarking = 2,
+            Initializing = 3
         };
-        private ApplicationGlobalState appState = ApplicationGlobalState.Idle;
+        private ApplicationGlobalState appState = ApplicationGlobalState.Initializing;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
         private Control[] labelGPUVendorArray;
@@ -154,6 +155,97 @@ namespace GatelessGateSharp
             instance = this;
 
             InitializeComponent();
+
+            comboBoxCustomPool0Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool1Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool2Algorithm.SelectedIndex = 0;
+            comboBoxCustomPool3Algorithm.SelectedIndex = 0;
+
+            comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
+            comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
+
+            labelGPUVendorArray = new Control[] { labelGPU0Vendor, labelGPU1Vendor, labelGPU2Vendor, labelGPU3Vendor, labelGPU4Vendor, labelGPU5Vendor, labelGPU6Vendor, labelGPU7Vendor };
+            labelGPUNameArray = new Control[] { labelGPU0Name, labelGPU1Name, labelGPU2Name, labelGPU3Name, labelGPU4Name, labelGPU5Name, labelGPU6Name, labelGPU7Name };
+            labelGPUIDArray = new Control[] { labelGPU0ID, labelGPU1ID, labelGPU2ID, labelGPU3ID, labelGPU4ID, labelGPU5ID, labelGPU6ID, labelGPU7ID };
+            labelGPUTempArray = new Control[] { labelGPU0Temp, labelGPU1Temp, labelGPU2Temp, labelGPU3Temp, labelGPU4Temp, labelGPU5Temp, labelGPU6Temp, labelGPU7Temp };
+            labelGPUActivityArray = new Control[] { labelGPU0Activity, labelGPU1Activity, labelGPU2Activity, labelGPU3Activity, labelGPU4Activity, labelGPU5Activity, labelGPU6Activity, labelGPU7Activity };
+            labelGPUFanArray = new Control[] { labelGPU0Fan, labelGPU1Fan, labelGPU2Fan, labelGPU3Fan, labelGPU4Fan, labelGPU5Fan, labelGPU6Fan, labelGPU7Fan };
+            labelGPUSpeedArray = new Control[] { labelGPU0Speed, labelGPU1Speed, labelGPU2Speed, labelGPU3Speed, labelGPU4Speed, labelGPU5Speed, labelGPU6Speed, labelGPU7Speed };
+            labelGPUCoreClockArray = new Control[] { labelGPU0CoreClock, labelGPU1CoreClock, labelGPU2CoreClock, labelGPU3CoreClock, labelGPU4CoreClock, labelGPU5CoreClock, labelGPU6CoreClock, labelGPU7CoreClock };
+            labelGPUMemoryClockArray = new Control[] { labelGPU0MemoryClock, labelGPU1MemoryClock, labelGPU2MemoryClock, labelGPU3MemoryClock, labelGPU4MemoryClock, labelGPU5MemoryClock, labelGPU6MemoryClock, labelGPU7MemoryClock };
+            labelGPUSharesArray = new Control[] { labelGPU0Shares, labelGPU1Shares, labelGPU2Shares, labelGPU3Shares, labelGPU4Shares, labelGPU5Shares, labelGPU6Shares, labelGPU7Shares };
+            checkBoxGPUEnableArray = new CheckBox[] { checkBoxGPU0Enable, checkBoxGPU1Enable, checkBoxGPU2Enable, checkBoxGPU3Enable, checkBoxGPU4Enable, checkBoxGPU5Enable, checkBoxGPU6Enable, checkBoxGPU7Enable };
+            tabPageDeviceArray = new TabPage[] { tabPageDevice0, tabPageDevice1, tabPageDevice2, tabPageDevice3, tabPageDevice4, tabPageDevice5, tabPageDevice6, tabPageDevice7 };
+            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashThreads, 
+                numericUpDownDevice1EthashThreads,
+                numericUpDownDevice2EthashThreads,
+                numericUpDownDevice3EthashThreads, 
+                numericUpDownDevice4EthashThreads,
+                numericUpDownDevice5EthashThreads,
+                numericUpDownDevice6EthashThreads, 
+                numericUpDownDevice7EthashThreads
+            };
+            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashIntensity, 
+                numericUpDownDevice1EthashIntensity,
+                numericUpDownDevice2EthashIntensity,
+                numericUpDownDevice3EthashIntensity,
+                numericUpDownDevice4EthashIntensity, 
+                numericUpDownDevice5EthashIntensity,
+                numericUpDownDevice6EthashIntensity,
+                numericUpDownDevice7EthashIntensity
+            };
+            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashLocalWorkSize, 
+                numericUpDownDevice1EthashLocalWorkSize,
+                numericUpDownDevice2EthashLocalWorkSize, 
+                numericUpDownDevice3EthashLocalWorkSize,
+                numericUpDownDevice4EthashLocalWorkSize,
+                numericUpDownDevice5EthashLocalWorkSize,
+                numericUpDownDevice6EthashLocalWorkSize,
+                numericUpDownDevice7EthashLocalWorkSize
+            };
+            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0CryptoNightThreads, 
+                numericUpDownDevice1CryptoNightThreads,
+                numericUpDownDevice2CryptoNightThreads,
+                numericUpDownDevice3CryptoNightThreads,
+                numericUpDownDevice4CryptoNightThreads,
+                numericUpDownDevice5CryptoNightThreads,
+                numericUpDownDevice6CryptoNightThreads, 
+                numericUpDownDevice7CryptoNightThreads
+            };
+            numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0CryptoNightRawIntensity,
+                numericUpDownDevice1CryptoNightRawIntensity,
+                numericUpDownDevice2CryptoNightRawIntensity, 
+                numericUpDownDevice3CryptoNightRawIntensity, 
+                numericUpDownDevice4CryptoNightRawIntensity,
+                numericUpDownDevice5CryptoNightRawIntensity,
+                numericUpDownDevice6CryptoNightRawIntensity, 
+                numericUpDownDevice7CryptoNightRawIntensity
+            };
+            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0CryptoNightLocalWorkSize, 
+                numericUpDownDevice1CryptoNightLocalWorkSize,
+                numericUpDownDevice2CryptoNightLocalWorkSize,
+                numericUpDownDevice3CryptoNightLocalWorkSize,
+                numericUpDownDevice4CryptoNightLocalWorkSize,
+                numericUpDownDevice5CryptoNightLocalWorkSize,
+                numericUpDownDevice6CryptoNightLocalWorkSize,
+                numericUpDownDevice7CryptoNightLocalWorkSize
+            };
+            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice0Ethash, groupBoxDevice1Ethash, groupBoxDevice2Ethash, groupBoxDevice3Ethash, groupBoxDevice4Ethash, groupBoxDevice5Ethash, groupBoxDevice6Ethash, groupBoxDevice7Ethash };
+            groupBoxDeviceCryptoNightArray = new GroupBox[] { groupBoxDevice0CryptoNight, groupBoxDevice1CryptoNight, groupBoxDevice2CryptoNight, groupBoxDevice3CryptoNight, groupBoxDevice4CryptoNight, groupBoxDevice5CryptoNight, groupBoxDevice6CryptoNight, groupBoxDevice7CryptoNight };
         }
 
         private void CreateNewDatabase()
@@ -254,6 +346,10 @@ namespace GatelessGateSharp
                                         else if (coinToMine == "lbry")
                                         {
                                             radioButtonLbry.Checked = true;
+                                        }
+                                        else if (coinToMine == "pascal")
+                                        {
+                                            radioButtonPascal.Checked = true;
                                         }
                                         else
                                         {
@@ -696,6 +792,7 @@ namespace GatelessGateSharp
                                                         radioButtonMonero.Checked ? "monero" :
                                                         radioButtonZcash.Checked ? "zcash" :
                                                         radioButtonLbry.Checked ? "lbry" :
+                                                        radioButtonPascal.Checked ? "lbry" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
                     }
@@ -747,6 +844,7 @@ namespace GatelessGateSharp
                                                         radioButtonMonero.Checked ? "monero" :
                                                         radioButtonZcash.Checked ? "zcash" :
                                                         radioButtonLbry.Checked ? "lbry" :
+                                                        radioButtonPascal.Checked ? "pascal" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
                     }
@@ -1134,97 +1232,6 @@ namespace GatelessGateSharp
         {
             Logger(appName + " started.");
 
-            comboBoxCustomPool0Algorithm.SelectedIndex = 0;
-            comboBoxCustomPool1Algorithm.SelectedIndex = 0;
-            comboBoxCustomPool2Algorithm.SelectedIndex = 0;
-            comboBoxCustomPool3Algorithm.SelectedIndex = 0;
-
-            comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
-            comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
-
-            labelGPUVendorArray = new Control[] { labelGPU0Vendor, labelGPU1Vendor, labelGPU2Vendor, labelGPU3Vendor, labelGPU4Vendor, labelGPU5Vendor, labelGPU6Vendor, labelGPU7Vendor };
-            labelGPUNameArray = new Control[] { labelGPU0Name, labelGPU1Name, labelGPU2Name, labelGPU3Name, labelGPU4Name, labelGPU5Name, labelGPU6Name, labelGPU7Name };
-            labelGPUIDArray = new Control[] { labelGPU0ID, labelGPU1ID, labelGPU2ID, labelGPU3ID, labelGPU4ID, labelGPU5ID, labelGPU6ID, labelGPU7ID };
-            labelGPUTempArray = new Control[] { labelGPU0Temp, labelGPU1Temp, labelGPU2Temp, labelGPU3Temp, labelGPU4Temp, labelGPU5Temp, labelGPU6Temp, labelGPU7Temp };
-            labelGPUActivityArray = new Control[] { labelGPU0Activity, labelGPU1Activity, labelGPU2Activity, labelGPU3Activity, labelGPU4Activity, labelGPU5Activity, labelGPU6Activity, labelGPU7Activity };
-            labelGPUFanArray = new Control[] { labelGPU0Fan, labelGPU1Fan, labelGPU2Fan, labelGPU3Fan, labelGPU4Fan, labelGPU5Fan, labelGPU6Fan, labelGPU7Fan };
-            labelGPUSpeedArray = new Control[] { labelGPU0Speed, labelGPU1Speed, labelGPU2Speed, labelGPU3Speed, labelGPU4Speed, labelGPU5Speed, labelGPU6Speed, labelGPU7Speed };
-            labelGPUCoreClockArray = new Control[] { labelGPU0CoreClock, labelGPU1CoreClock, labelGPU2CoreClock, labelGPU3CoreClock, labelGPU4CoreClock, labelGPU5CoreClock, labelGPU6CoreClock, labelGPU7CoreClock };
-            labelGPUMemoryClockArray = new Control[] { labelGPU0MemoryClock, labelGPU1MemoryClock, labelGPU2MemoryClock, labelGPU3MemoryClock, labelGPU4MemoryClock, labelGPU5MemoryClock, labelGPU6MemoryClock, labelGPU7MemoryClock };
-            labelGPUSharesArray = new Control[] { labelGPU0Shares, labelGPU1Shares, labelGPU2Shares, labelGPU3Shares, labelGPU4Shares, labelGPU5Shares, labelGPU6Shares, labelGPU7Shares };
-            checkBoxGPUEnableArray = new CheckBox[] { checkBoxGPU0Enable, checkBoxGPU1Enable, checkBoxGPU2Enable, checkBoxGPU3Enable, checkBoxGPU4Enable, checkBoxGPU5Enable, checkBoxGPU6Enable, checkBoxGPU7Enable };
-            tabPageDeviceArray = new TabPage[] { tabPageDevice0, tabPageDevice1, tabPageDevice2, tabPageDevice3, tabPageDevice4, tabPageDevice5, tabPageDevice6, tabPageDevice7 };
-            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashThreads, 
-                numericUpDownDevice1EthashThreads,
-                numericUpDownDevice2EthashThreads,
-                numericUpDownDevice3EthashThreads, 
-                numericUpDownDevice4EthashThreads,
-                numericUpDownDevice5EthashThreads,
-                numericUpDownDevice6EthashThreads, 
-                numericUpDownDevice7EthashThreads
-            };
-            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashIntensity, 
-                numericUpDownDevice1EthashIntensity,
-                numericUpDownDevice2EthashIntensity,
-                numericUpDownDevice3EthashIntensity,
-                numericUpDownDevice4EthashIntensity, 
-                numericUpDownDevice5EthashIntensity,
-                numericUpDownDevice6EthashIntensity,
-                numericUpDownDevice7EthashIntensity
-            };
-            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashLocalWorkSize, 
-                numericUpDownDevice1EthashLocalWorkSize,
-                numericUpDownDevice2EthashLocalWorkSize, 
-                numericUpDownDevice3EthashLocalWorkSize,
-                numericUpDownDevice4EthashLocalWorkSize,
-                numericUpDownDevice5EthashLocalWorkSize,
-                numericUpDownDevice6EthashLocalWorkSize,
-                numericUpDownDevice7EthashLocalWorkSize
-            };
-            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0CryptoNightThreads, 
-                numericUpDownDevice1CryptoNightThreads,
-                numericUpDownDevice2CryptoNightThreads,
-                numericUpDownDevice3CryptoNightThreads,
-                numericUpDownDevice4CryptoNightThreads,
-                numericUpDownDevice5CryptoNightThreads,
-                numericUpDownDevice6CryptoNightThreads, 
-                numericUpDownDevice7CryptoNightThreads
-            };
-            numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0CryptoNightRawIntensity,
-                numericUpDownDevice1CryptoNightRawIntensity,
-                numericUpDownDevice2CryptoNightRawIntensity, 
-                numericUpDownDevice3CryptoNightRawIntensity, 
-                numericUpDownDevice4CryptoNightRawIntensity,
-                numericUpDownDevice5CryptoNightRawIntensity,
-                numericUpDownDevice6CryptoNightRawIntensity, 
-                numericUpDownDevice7CryptoNightRawIntensity
-            };
-            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0CryptoNightLocalWorkSize, 
-                numericUpDownDevice1CryptoNightLocalWorkSize,
-                numericUpDownDevice2CryptoNightLocalWorkSize,
-                numericUpDownDevice3CryptoNightLocalWorkSize,
-                numericUpDownDevice4CryptoNightLocalWorkSize,
-                numericUpDownDevice5CryptoNightLocalWorkSize,
-                numericUpDownDevice6CryptoNightLocalWorkSize,
-                numericUpDownDevice7CryptoNightLocalWorkSize
-            };
-            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice0Ethash, groupBoxDevice1Ethash, groupBoxDevice2Ethash, groupBoxDevice3Ethash, groupBoxDevice4Ethash, groupBoxDevice5Ethash, groupBoxDevice6Ethash, groupBoxDevice7Ethash };
-            groupBoxDeviceCryptoNightArray = new GroupBox[] { groupBoxDevice0CryptoNight, groupBoxDevice1CryptoNight, groupBoxDevice2CryptoNight, groupBoxDevice3CryptoNight, groupBoxDevice4CryptoNight, groupBoxDevice5CryptoNight, groupBoxDevice6CryptoNight, groupBoxDevice7CryptoNight };
-
             InitializeDevices();
             if (!System.IO.File.Exists(databaseFileName))
                 CreateNewDatabase();
@@ -1249,7 +1256,6 @@ namespace GatelessGateSharp
             }
 
             Text = appName; // Set the window title.
-            UpdateControls();
 
             // Do everything to turn off TDR.
             foreach (var controlSet in new string[] { "CurrentControlSet", "ControlSet001" })
@@ -1272,6 +1278,9 @@ namespace GatelessGateSharp
                 try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); }
                 catch (Exception) { } // Undocumented but found on Windows 10.
             }
+
+            appState = ApplicationGlobalState.Idle;
+            UpdateControls();
 
             // Auto-start mining if necessary.
             var autoStart = checkBoxAutoStart.Checked;
@@ -1658,6 +1667,46 @@ namespace GatelessGateSharp
                             try
                             {
                                 if ((double)item["algo"] == 23)
+                                    price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000000.0;
+                            }
+                            catch (Exception) { }
+                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
+                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
+                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
+                    }
+                    else
+                    {
+                        labelPriceDay.Text = "-";
+                        labelPriceWeek.Text = "-";
+                        labelPriceMonth.Text = "-";
+                    }
+                }
+                else if (mCurrentPool == "NiceHash" && radioButtonPascal.Checked && textBoxBitcoinAddress.Text != "")
+                {
+                    double balance = 0;
+                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var result = (JContainer)response["result"];
+                    var stats = (JArray)result["stats"];
+                    foreach (JContainer item in stats)
+                        try
+                        {
+                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
+                        }
+                        catch (Exception) { }
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
+
+                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode)
+                    {
+                        double price = 0;
+                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
+                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        result = (JContainer)response["result"];
+                        stats = (JArray)result["stats"];
+                        foreach (JContainer item in stats)
+                            try
+                            {
+                                if ((double)item["algo"] == 25)
                                     price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000000.0;
                             }
                             catch (Exception) { }
@@ -2185,6 +2234,20 @@ namespace GatelessGateSharp
             return hosts;
         }
 
+        List<StratumServerInfo> GetNiceHashPascalServers()
+        {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("pascal.usa.nicehash.com", 0),   
+                new StratumServerInfo("pascal.eu.nicehash.com", 0),
+                new StratumServerInfo("pascal.hk.nicehash.com", 150),
+                new StratumServerInfo("pascal.jp.nicehash.com", 100),
+                new StratumServerInfo("pascal.in.nicehash.com", 200),
+                new StratumServerInfo("pascal.br.nicehash.com", 180)
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
 #endregion
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -2348,6 +2411,33 @@ namespace GatelessGateSharp
             }
 
             StartOpenCLLbryMiners(stratum);
+            mPrimaryStratum = (Stratum)stratum;
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchPascalMiners(string pool)
+        {
+            PascalStratum stratum = null;
+
+            if (pool == "NiceHash" || mDevFeeMode)
+            {
+                var hosts = GetNiceHashPascalServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try
+                        {
+                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
+                            stratum = new PascalStratum(host.name, 3358, mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text, "x", pool);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            }
+
+            StartOpenCLPascalMiners(stratum);
             mPrimaryStratum = (Stratum)stratum;
         }
 
@@ -2633,7 +2723,56 @@ namespace GatelessGateSharp
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
                             256 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
-                            64); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
+                            (miner.Device.Vendor == "NVIDIA") ? 512 : 256); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
+                        toolStripMainFormProgressBar.Value = ++minerCount;
+                        for (int j = 0; j < mLaunchInterval; j += 10)
+                        {
+                            Application.DoEvents();
+                            System.Threading.Thread.Sleep(10);
+                        }
+                    }
+                }
+            }
+        }
+
+        void StartOpenCLPascalMiners(PascalStratum stratum)
+        {
+            this.Activate();
+            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
+            int deviceIndex, i, minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                    for (i = 0; i < 2; ++i) // numericUpDownDevicePascalThreadsArray[deviceIndex].Value; ++i)
+                        ++minerCount;
+            toolStripMainFormProgressBar.Maximum = minerCount;
+            minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            {
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                {
+                    for (i = 0; i < 2; ++i) // numericUpDownDevicePascalThreadsArray[deviceIndex].Value; ++i)
+                    {
+                        OpenCLPascalMiner miner = null;
+                        foreach (var inactiveMiner in mInactiveMiners)
+                        {
+                            if (inactiveMiner.GetType() == typeof(OpenCLPascalMiner) && deviceIndex == inactiveMiner.DeviceIndex)
+                            {
+                                miner = (OpenCLPascalMiner)inactiveMiner;
+                                break;
+                            }
+                        }
+                        if (miner != null)
+                        {
+                            mInactiveMiners.Remove((Miner)miner);
+                        }
+                        else
+                        {
+                            miner = new OpenCLPascalMiner(mDevices[deviceIndex]);
+                        }
+                        mActiveMiners.Add(miner);
+                        miner.Start(stratum,
+                            2048 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDevicePascalIntensityArray[deviceIndex].Value)),
+                            (miner.Device.Vendor == "NVIDIA") ? 512 : 256); //Convert.ToInt32(Math.Round(numericUpDownDevicePascalLocalWorkSizeArray[deviceIndex].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10)
                         {
@@ -2708,6 +2847,12 @@ namespace GatelessGateSharp
                 StartOpenCLLbryMiners(stratum);
                 mPrimaryStratum = stratum;
             }
+            else if (algo == "Pascal")
+            {
+                var stratum = new PascalStratum(host, port, login, password, host);
+                StartOpenCLPascalMiners(stratum);
+                mPrimaryStratum = stratum;
+            }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -2715,15 +2860,6 @@ namespace GatelessGateSharp
         private void LaunchMiners()
         {
             GC.Collect();
-            for (int size = 16; size > 0; --size)
-            {
-                try
-                {
-                    GC.TryStartNoGCRegion(size * 1024 * 1024, true);
-                    break;
-                }
-                catch (Exception) { }
-            }
 
             if (CustomPoolEnabled)
             {
@@ -2812,6 +2948,12 @@ namespace GatelessGateSharp
                             LaunchLbryMiners(pool);
                             break;
                         }
+                        else if (radioButtonPascal.Checked)
+                        {
+                            Logger("Launching Pascal miners...");
+                            LaunchPascalMiners(pool);
+                            break;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -2865,11 +3007,6 @@ namespace GatelessGateSharp
             mPrimaryStratum = null;
             mSecondaryStratum = null;
 
-            try
-            {
-                GC.EndNoGCRegion();
-            }
-            catch (Exception) { }
             GC.Collect();
         }
 
@@ -2954,6 +3091,9 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void UpdateControls()
         {
+            if (appState == ApplicationGlobalState.Initializing)
+                return;
+
             try
             {
                 buttonStart.Text = appState == ApplicationGlobalState.Mining ? "Stop" : "Start";
@@ -3131,6 +3271,7 @@ namespace GatelessGateSharp
                 radioButtonEthereum.Checked = false;
                 radioButtonZcash.Checked = false;
                 radioButtonLbry.Checked = false;
+                radioButtonPascal.Checked = false;
             }
         }
 
@@ -3142,6 +3283,7 @@ namespace GatelessGateSharp
                 radioButtonMonero.Checked = false;
                 radioButtonZcash.Checked = false;
                 radioButtonLbry.Checked = false;
+                radioButtonPascal.Checked = false;
             }
         }
 
@@ -3153,6 +3295,7 @@ namespace GatelessGateSharp
                 radioButtonEthereum.Checked = false;
                 radioButtonZcash.Checked = false;
                 radioButtonLbry.Checked = false;
+                radioButtonPascal.Checked = false;
             }
         }
 
@@ -3164,6 +3307,7 @@ namespace GatelessGateSharp
                 radioButtonEthereum.Checked = false;
                 radioButtonMonero.Checked = false;
                 radioButtonLbry.Checked = false;
+                radioButtonPascal.Checked = false;
             }
         }
 
@@ -3175,6 +3319,19 @@ namespace GatelessGateSharp
                 radioButtonEthereum.Checked = false;
                 radioButtonMonero.Checked = false;
                 radioButtonZcash.Checked = false;
+                radioButtonPascal.Checked = false;
+            }
+        }
+
+        private void radioButtonPascal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonPascal.Checked)
+            {
+                radioButtonMostProfitable.Checked = false;
+                radioButtonEthereum.Checked = false;
+                radioButtonMonero.Checked = false;
+                radioButtonZcash.Checked = false;
+                radioButtonLbry.Checked = false;
             }
         }
 

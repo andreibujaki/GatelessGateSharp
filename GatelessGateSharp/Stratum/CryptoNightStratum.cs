@@ -39,7 +39,8 @@ namespace GatelessGateSharp
             public String Blob { get { return mBlob; } }
             public String Target { get { return mTarget; } }
 
-            public Job(string aID, string aBlob, string aTarget)
+            public Job(Stratum aStratum, string aID, string aBlob, string aTarget)
+                : base(aStratum)
             {
                 mID = aID;
                 mBlob = aBlob;
@@ -71,7 +72,7 @@ namespace GatelessGateSharp
                 if (method.Equals("job"))
                 {
                     try  {  mMutex.WaitOne(5000); } catch (Exception) { }
-                    mJob = new Job((string)parameters["job_id"], (string)parameters["blob"], (string)parameters["target"]);
+                    mJob = new Job(this, (string)parameters["job_id"], (string)parameters["blob"], (string)parameters["target"]);
                     try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + parameters["job_id"]);
                 }
@@ -123,7 +124,7 @@ namespace GatelessGateSharp
 
             try  {  mMutex.WaitOne(5000); } catch (Exception) { }
             mUserID = (String)(result["id"]);
-            mJob = new Job((String)(((JContainer)result["job"])["job_id"]), (String)(((JContainer)result["job"])["blob"]), (String)(((JContainer)result["job"])["target"]));
+            mJob = new Job(this, (String)(((JContainer)result["job"])["job_id"]), (String)(((JContainer)result["job"])["blob"]), (String)(((JContainer)result["job"])["target"]));
             try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 

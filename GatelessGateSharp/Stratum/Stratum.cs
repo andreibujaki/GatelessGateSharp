@@ -18,19 +18,37 @@ namespace GatelessGateSharp
         {
             private Mutex mMutex = new Mutex();
             static Random r = new Random();
-            byte nextLocalExtranonce;
+            UInt64 nextLocalExtranonce;
+            private Stratum mStratum;
 
-            public Job()
+            public Stratum Stratum { get { return mStratum; } }
+
+            public Job(Stratum aStratum)
             {
+                mStratum = aStratum;
                 try  {  mMutex.WaitOne(5000); } catch (Exception) { }
-                nextLocalExtranonce = (byte)(r.Next(0, int.MaxValue) & (0xffu));
-                try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
+                nextLocalExtranonce = 0;
+                for (int i = 0; i < mStratum.LocalExtranonceSize; ++i)
+                    nextLocalExtranonce |= (UInt64)r.Next(32, 255) << (i * 8); // TODO
+                try { mMutex.ReleaseMutex(); }
+                catch (Exception) { }
             }
 
-            public byte GetNewLocalExtranonce()
+            public UInt64 GetNewLocalExtranonce()
             {
+                UInt64 ret;
                 try  {  mMutex.WaitOne(5000); } catch (Exception) { }
-                byte ret = nextLocalExtranonce++;
+                if (mStratum.LocalExtranonceSize == 1)
+                {
+                    // Ethash
+                    ret = nextLocalExtranonce++;
+                }
+                else { 
+                    // The following restrictions are for Pascal.
+                    ret = 0;
+                    for (int i = 0; i < mStratum.LocalExtranonceSize; ++i)
+                        ret |= (UInt64)r.Next(32, 255) << (i * 8); // TODO
+                }
                 try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
                 return ret;
             }
@@ -39,9 +57,34 @@ namespace GatelessGateSharp
         public class Work
         {
             readonly private Job mJob;
-            readonly private byte mLocalExtranonce;
-
-            public byte LocalExtranonce { get { return mLocalExtranonce; } }
+            readonly private UInt64 mLocalExtranonce;
+            
+            public UInt64 LocalExtranonce {
+                get {
+                    return (mJob.Stratum.LocalExtranonceSize == 1) ? (mLocalExtranonce & 0xffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 2) ? (mLocalExtranonce & 0xffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 3) ? (mLocalExtranonce & 0xffffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 4) ? (mLocalExtranonce & 0xffffffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 5) ? (mLocalExtranonce & 0xffffffffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 6) ? (mLocalExtranonce & 0xffffffffffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 7) ? (mLocalExtranonce & 0xffffffffffffffUL) :
+                                                                     (mLocalExtranonce);
+                }
+            }
+            public string LocalExtranonceString
+            {
+                get
+                {
+                    return (mJob.Stratum.LocalExtranonceSize == 1) ? String.Format("{0:x2}", LocalExtranonce & 0xffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 2) ? String.Format("{0:x4}", LocalExtranonce & 0xffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 3) ? String.Format("{0:x6}", LocalExtranonce & 0xffffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 4) ? String.Format("{0:x8}", LocalExtranonce & 0xffffffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 5) ? String.Format("{0:x10}", LocalExtranonce & 0xffffffffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 6) ? String.Format("{0:x12}", LocalExtranonce & 0xffffffffffffUL) :
+                           (mJob.Stratum.LocalExtranonceSize == 7) ? String.Format("{0:x14}", LocalExtranonce & 0xffffffffffffffUL) :
+                                                                     String.Format("{0:x16}", LocalExtranonce);
+                }
+            }
             public Job GetJob() { return mJob; }
 
             protected Work(Job aJob)
@@ -70,8 +113,20 @@ namespace GatelessGateSharp
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
-        private List<Device> mDevicesWithShare = new List<Device>();
+        private List<Device> mDevicesWithShare = new List<Device>(); 
+        private int mLocalExtranonceSize = 1;
 
+        public int LocalExtranonceSize
+        {
+            get
+            {
+                return mLocalExtranonceSize;
+            }
+            set 
+            { 
+                mLocalExtranonceSize = value; 
+            }
+        }
         public bool Stopped { get { return mStopped; } }
         public String ServerAddress { get { return mServerAddress; } }
         public int ServerPort { get { return mServerPort; } }

@@ -19,15 +19,12 @@ namespace GatelessGateSharp
         public new class Work
         {
             readonly private Job mJob;
-            readonly private byte mLocalExtranonce;
 
             public Job CurrentJob { get { return mJob; } }
-            public byte LocalExtranonce { get { return mLocalExtranonce; } }
 
             public Work(Job aJob)
             {
                 mJob = aJob;
-                mLocalExtranonce = mJob.GetNewLocalExtranonce();
             }
         }
 
@@ -37,8 +34,8 @@ namespace GatelessGateSharp
 
             public byte Extranonce { get { return mExtranonce; } }
 
-            public Job(string aID, string aSeedhash, string aHeaderhash) 
-                : base(aID, aSeedhash, aHeaderhash)
+            public Job(Stratum aStratum, string aID, string aSeedhash, string aHeaderhash)
+                : base(aStratum, aID, aSeedhash, aHeaderhash)
             {
             }
         }
@@ -108,7 +105,7 @@ namespace GatelessGateSharp
                 {
                     try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^0x");
-                    mJob = (EthashStratum.Job)(new Job(
+                    mJob = (EthashStratum.Job)(new Job(this,
                         regex.Replace((string)result[0], ""), // Use headerhash as job ID.
                         regex.Replace((string)result[1], ""),
                         regex.Replace((string)result[0], "")));

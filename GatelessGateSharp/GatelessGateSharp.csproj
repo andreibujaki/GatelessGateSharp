@@ -111,10 +111,12 @@
     <Compile Include="ADL.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Miner\OpenCLDualEthashLbryMiner.cs" />
+    <Compile Include="Miner\OpenCLPascalMiner.cs" />
     <Compile Include="Miner\OpenCLLbryMiner.cs" />
     <Compile Include="Miner\OpenCLCryptoNightMiner.cs" />
     <Compile Include="Stratum\EthashStratum.cs" />
     <Compile Include="Stratum\CryptoNightStratum.cs" />
+    <Compile Include="Stratum\PascalStratum.cs" />
     <Compile Include="Stratum\LbryStratum.cs" />
     <Compile Include="Stratum\OpenEthereumPoolEthashStratum.cs" />
     <Compile Include="Utilities.cs" />
@@ -153,6 +155,7 @@
     <None Include="Kernels\groestl256.cl" />
     <None Include="Kernels\jh.cl" />
     <None Include="Kernels\lbry.cl" />
+    <None Include="Kernels\pascal.cl" />
     <None Include="Kernels\ripemd160.cl" />
     <None Include="Kernels\sha256.cl" />
     <None Include="Kernels\wolf-aes.cl" />

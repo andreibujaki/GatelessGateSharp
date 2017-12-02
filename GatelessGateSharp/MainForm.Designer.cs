@@ -167,6 +167,7 @@
             this.buttonPoolPrioritiesUp = new System.Windows.Forms.Button();
             this.listBoxPoolPriorities = new System.Windows.Forms.ListBox();
             this.groupBoxCoinsToMine = new System.Windows.Forms.GroupBox();
+            this.radioButtonPascal = new System.Windows.Forms.RadioButton();
             this.radioButtonLbry = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
@@ -2241,6 +2242,7 @@
             // 
             // groupBoxCoinsToMine
             // 
+            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonPascal);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonLbry);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButton4);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButton3);
@@ -2256,6 +2258,17 @@
             this.groupBoxCoinsToMine.TabIndex = 20;
             this.groupBoxCoinsToMine.TabStop = false;
             this.groupBoxCoinsToMine.Text = "Coin(s) to Mine";
+            // 
+            // radioButtonPascal
+            // 
+            this.radioButtonPascal.AutoSize = true;
+            this.radioButtonPascal.Location = new System.Drawing.Point(222, 65);
+            this.radioButtonPascal.Name = "radioButtonPascal";
+            this.radioButtonPascal.Size = new System.Drawing.Size(57, 17);
+            this.radioButtonPascal.TabIndex = 13;
+            this.radioButtonPascal.Text = "Pascal";
+            this.radioButtonPascal.UseVisualStyleBackColor = true;
+            this.radioButtonPascal.CheckedChanged += new System.EventHandler(this.radioButtonPascal_CheckedChanged);
             // 
             // radioButtonLbry
             // 
@@ -2316,7 +2329,7 @@
             // 
             this.radioButtonZcash.AutoSize = true;
             this.radioButtonZcash.Enabled = false;
-            this.radioButtonZcash.Location = new System.Drawing.Point(222, 65);
+            this.radioButtonZcash.Location = new System.Drawing.Point(222, 88);
             this.radioButtonZcash.Name = "radioButtonZcash";
             this.radioButtonZcash.Size = new System.Drawing.Size(55, 17);
             this.radioButtonZcash.TabIndex = 7;
@@ -2490,7 +2503,8 @@
             this.comboBoxCustomPool1Algorithm.Items.AddRange(new object[] {
             "Ethash",
             "CryptoNight",
-            "Lbry"});
+            "Lbry",
+            "Pascal"});
             this.comboBoxCustomPool1Algorithm.Location = new System.Drawing.Point(71, 16);
             this.comboBoxCustomPool1Algorithm.Name = "comboBoxCustomPool1Algorithm";
             this.comboBoxCustomPool1Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -2694,7 +2708,8 @@
             this.comboBoxCustomPool2Algorithm.Items.AddRange(new object[] {
             "Ethash",
             "CryptoNight",
-            "Lbry"});
+            "Lbry",
+            "Pascal"});
             this.comboBoxCustomPool2Algorithm.Location = new System.Drawing.Point(71, 16);
             this.comboBoxCustomPool2Algorithm.Name = "comboBoxCustomPool2Algorithm";
             this.comboBoxCustomPool2Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -2898,7 +2913,8 @@
             this.comboBoxCustomPool3Algorithm.Items.AddRange(new object[] {
             "Ethash",
             "CryptoNight",
-            "Lbry"});
+            "Lbry",
+            "Pascal"});
             this.comboBoxCustomPool3Algorithm.Location = new System.Drawing.Point(71, 15);
             this.comboBoxCustomPool3Algorithm.Name = "comboBoxCustomPool3Algorithm";
             this.comboBoxCustomPool3Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -3113,7 +3129,8 @@
             this.comboBoxCustomPool0Algorithm.Items.AddRange(new object[] {
             "Ethash",
             "CryptoNight",
-            "Lbry"});
+            "Lbry",
+            "Pascal"});
             this.comboBoxCustomPool0Algorithm.Location = new System.Drawing.Point(71, 16);
             this.comboBoxCustomPool0Algorithm.Name = "comboBoxCustomPool0Algorithm";
             this.comboBoxCustomPool0Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -9229,5 +9246,6 @@
         private System.Windows.Forms.TextBox textBoxCustomPool0SecondaryLogin;
         private System.Windows.Forms.Label label160;
         private System.Windows.Forms.ComboBox comboBoxCustomPool0SecondaryAlgorithm;
+        private System.Windows.Forms.RadioButton radioButtonPascal;
     }
 }

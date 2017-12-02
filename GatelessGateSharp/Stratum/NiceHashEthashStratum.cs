@@ -31,8 +31,8 @@ namespace GatelessGateSharp
 
         public new class Job : EthashStratum.Job
         {
-            public Job(string aID, string aSeedhash, string aHeaderhash) 
-                : base(aID, aSeedhash, aHeaderhash)
+            public Job(Stratum aStratum, string aID, string aSeedhash, string aHeaderhash) 
+                : base(aStratum, aID, aSeedhash, aHeaderhash)
             {
             }
         }
@@ -58,7 +58,7 @@ namespace GatelessGateSharp
                 else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
                 {
                     try  { mMutex.WaitOne(5000); } catch (Exception) { }
-                    mJob = (EthashStratum.Job)(new Job((string)parameters[0], (string)parameters[1], (string)parameters[2]));
+                    mJob = (EthashStratum.Job)(new Job(this, (string)parameters[0], (string)parameters[1], (string)parameters[2]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + parameters[0]);
                 }
