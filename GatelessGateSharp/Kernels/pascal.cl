@@ -209,21 +209,21 @@ static __constant uint8 pad_state =
 
 
 __attribute__((reqd_work_group_size(WORKSIZE, 1, 1)))
-__kernel void search(__global const uchar* restrict input, __global uint* restrict output, const uint start_nonce, const ulong target, __constant uint8* midstate)
+__kernel void search(__global const uchar* restrict pascal_input, __global uint* restrict pascal_output, const uint pascal_start_nonce, const ulong pascal_target, __constant uint8* pascal_midstate)
 {
-	uint nonce = get_global_id(0) + start_nonce;
+	uint nonce = get_global_id(0) + pascal_start_nonce;
 	uint16 in;
 	uint8 state1;
 	in = pad_data;
-	in.s0 = SWAP32(((__global const uint *)input)[48]);
+	in.s0 = SWAP32(((__global const uint *)pascal_input)[48]);
 	in.s1 = SWAP32(nonce);
-	state1 = sha256_Transform(in, *midstate);
+	state1 = sha256_Transform(in, *pascal_midstate);
 	in.lo = state1;
 	in.hi = pad_state;
 	state1 = sha256_Transform(in, H256);
 
-	if (as_ulong(state1.s10) <= target) {
-		output[atomic_inc(output + 0xFF)] = nonce;
+	if (as_ulong(state1.s10) <= pascal_target) {
+		pascal_output[atomic_inc(pascal_output + 0xFF)] = nonce;
 	}
 }
 

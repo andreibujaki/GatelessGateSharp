@@ -2635,6 +2635,57 @@ namespace GatelessGateSharp
             }
         }
 
+        void StartOpenCLDualEthashPascalMiners(EthashStratum stratum, PascalStratum stratum2)
+        {
+            this.Activate();
+            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
+            int deviceIndex, minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                    minerCount += 1;
+            toolStripMainFormProgressBar.Maximum = minerCount;
+            minerCount = 0;
+
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            {
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                {
+                    OpenCLDualEthashPascalMiner dualMiner = null;
+                    foreach (var inactiveMiner in mInactiveMiners)
+                    {
+                        if (inactiveMiner.GetType() == typeof(OpenCLDualEthashPascalMiner) && deviceIndex == inactiveMiner.DeviceIndex)
+                        {
+                            dualMiner = (OpenCLDualEthashPascalMiner)inactiveMiner;
+                            break;
+                        }
+                    }
+                    if (dualMiner != null)
+                    {
+                        mInactiveMiners.Remove((Miner)dualMiner);
+                    }
+                    else
+                    {
+                        dualMiner = new OpenCLDualEthashPascalMiner(mDevices[deviceIndex]);
+                    }
+                    mActiveMiners.Add(dualMiner);
+                    dualMiner.Start(stratum,
+                            stratum2,
+                        Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
+                            .Value)),
+                        Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex]
+                            .Value)));
+                    toolStripMainFormProgressBar.Value = ++minerCount;
+
+                    for (int j = 0; j < mLaunchInterval; j += 10)
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(10);
+                    }
+
+                }
+            }
+        }
+
         void StartOpenCLEthashMiners(EthashStratum stratum)
         {
             this.Activate();
@@ -2826,6 +2877,14 @@ namespace GatelessGateSharp
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
                 StartOpenCLDualEthashLbryMiners(stratum, stratum2);
+                mPrimaryStratum = stratum;
+                mSecondaryStratum = stratum2;
+            }
+            else if (algo == "Ethash" && algo2 == "Pascal")
+            {
+                var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
+                var stratum2 = new PascalStratum(host2, port2, login2, password2, host2);
+                StartOpenCLDualEthashPascalMiners(stratum, stratum2);
                 mPrimaryStratum = stratum;
                 mSecondaryStratum = stratum2;
             }
@@ -3067,7 +3126,8 @@ namespace GatelessGateSharp
                 {
                     appState = ApplicationGlobalState.Mining;
                     tabControlMainForm.SelectedIndex = 0;
-                    timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
+                    timerDevFee.Interval = 15 * 60 * 1000;
+                    mDevFeeMode = false;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;

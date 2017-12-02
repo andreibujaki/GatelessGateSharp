@@ -226,7 +226,7 @@ namespace GatelessGateSharp
             }
             catch (Exception ex)
             {
-                MainForm.Logger("Failed to submit share: " + ex.Message);
+                MainForm.Logger("Failed to submit share: " + ex.Message + ex.StackTrace);
             }
 
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }

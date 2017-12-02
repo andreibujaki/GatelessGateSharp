@@ -28,9 +28,9 @@ namespace GatelessGateSharp
 {
     class OpenCLPascalMiner : OpenCLMiner
     {
-        public static readonly int pascalInputSize = 196;
-        public static readonly int pascalOutputSize = 256;
-        public static readonly int pascalMidstateSize = 32;
+        public static readonly int sPascalInputSize = 196;
+        public static readonly int sPascalOutputSize = 256;
+        public static readonly int sPascalMidstateSize = 32;
 
         static Mutex mProgramArrayMutex = new Mutex();
 
@@ -45,18 +45,18 @@ namespace GatelessGateSharp
         long[] mPascalGlobalWorkSizeArray = new long[] { 0 };
         long[] mPascalLocalWorkSizeArray = new long[] { 0 };
         long[] mPascalGlobalWorkOffsetArray = new long[] { 0 };
-        UInt32[] mPascalOutput = new UInt32[pascalOutputSize];
-        byte[] mPascalInput = new byte[pascalInputSize];
-        byte[] mPascalMidstate = new byte[pascalMidstateSize];
+        UInt32[] mPascalOutput = new UInt32[sPascalOutputSize];
+        byte[] mPascalInput = new byte[sPascalInputSize];
+        byte[] mPascalMidstate = new byte[sPascalMidstateSize];
           
 
 
         public OpenCLPascalMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "Pascal")
         {
-            mPascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, pascalInputSize);
-            mPascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, pascalOutputSize);
-            mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, pascalMidstateSize);
+            mPascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize);
+            mPascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sPascalOutputSize);
+            mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize);
         }
 
         public void Start(PascalStratum aPascalStratum, int aPascalIntensity, int aPascalLocalWorkSize)
@@ -108,7 +108,7 @@ namespace GatelessGateSharp
             try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        // based on HashLib
+        // based on HashLib's SHA256 implementation
         private static readonly uint[] s_K = 
         {
             0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -120,7 +120,7 @@ namespace GatelessGateSharp
             0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
             0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
         };
-        void CalculateMidState()
+        void CalculatePascalMidState()
         {
             uint[] state = new uint[] {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19 };
 
@@ -197,12 +197,12 @@ namespace GatelessGateSharp
 
             BuildPascalProgram();
 
-            fixed (long* PascalGlobalWorkOffsetArrayPtr = mPascalGlobalWorkOffsetArray)
-            fixed (long* PascalGlobalWorkSizeArrayPtr = mPascalGlobalWorkSizeArray)
-            fixed (long* PascalLocalWorkSizeArrayPtr = mPascalLocalWorkSizeArray)
-            fixed (byte* PascalMidstatePtr = mPascalMidstate)
-            fixed (byte* PascalInputPtr = mPascalInput)
-            fixed (UInt32* PascalOutputPtr = mPascalOutput)
+            fixed (long* pascalGlobalWorkOffsetArrayPtr = mPascalGlobalWorkOffsetArray)
+            fixed (long* pascalGlobalWorkSizeArrayPtr = mPascalGlobalWorkSizeArray)
+            fixed (long* pascalLocalWorkSizeArrayPtr = mPascalLocalWorkSizeArray)
+            fixed (byte* pascalMidstatePtr = mPascalMidstate)
+            fixed (byte* pascalInputPtr = mPascalInput)
+            fixed (UInt32* pascalOutputPtr = mPascalOutput)
             while (!Stopped)
             {
                 MarkAsAlive();
@@ -230,18 +230,18 @@ namespace GatelessGateSharp
                     {
                         MarkAsAlive();
 
-                        var PascalJob = pascalWork.Job;
-                        Array.Copy(pascalWork.Blob, mPascalInput, pascalInputSize);
-                        CalculateMidState();
-                        Queue.Write<byte>(mPascalMidstateBuffer, true, 0, pascalMidstateSize, (IntPtr)PascalMidstatePtr, null);
+                        var pascalJob = pascalWork.Job;
+                        Array.Copy(pascalWork.Blob, mPascalInput, sPascalInputSize);
+                        CalculatePascalMidState();
+                        Queue.Write<byte>(mPascalMidstateBuffer, true, 0, sPascalMidstateSize, (IntPtr)pascalMidstatePtr, null);
                         UInt32 pascalStartNonce = (UInt32)(r.Next(0, int.MaxValue));
                         UInt64 PascalTarget = (UInt64) ((double) 0xffff0000UL / mPascalStratum.Difficulty);
                         mPascalSearchKernel.SetValueArgument<UInt64>(3, PascalTarget);
-                        Queue.Write<byte>(mPascalInputBuffer, true, 0, pascalInputSize, (IntPtr)PascalInputPtr, null);
+                        Queue.Write<byte>(mPascalInputBuffer, true, 0, sPascalInputSize, (IntPtr)pascalInputPtr, null);
 
                         consoleUpdateStopwatch.Start();
 
-                        while (!Stopped && mPascalStratum.GetJob().Equals(PascalJob))
+                        while (!Stopped && mPascalStratum.GetJob().Equals(pascalJob))
                         {
                             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                             sw.Start();
@@ -255,29 +255,13 @@ namespace GatelessGateSharp
                                 break;
 
                             mPascalOutput[255] = 0; // mPascalOutput[255] is used as an atomic counter.
-                            Queue.Write<UInt32>(mPascalOutputBuffer, true, 0, pascalOutputSize, (IntPtr)PascalOutputPtr, null);
+                            Queue.Write<UInt32>(mPascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
                             Queue.Execute(mPascalSearchKernel, mPascalGlobalWorkOffsetArray, mPascalGlobalWorkSizeArray, mPascalLocalWorkSizeArray, null);
-                            Queue.Read<UInt32>(mPascalOutputBuffer, true, 0, pascalOutputSize, (IntPtr)PascalOutputPtr, null);
-                            if (mPascalStratum.GetJob().Equals(PascalJob))
+                            Queue.Read<UInt32>(mPascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
+                            if (mPascalStratum.GetJob().Equals(pascalJob))
                             {
                                 for (int i = 0; i < mPascalOutput[255]; ++i)
-                                {
                                     mPascalStratum.Submit(GatelessGateDevice, pascalWork, mPascalOutput[i]);
-                                    byte[] buf = new byte[200];
-                                    Buffer.BlockCopy(mPascalInput, 0, buf, 0, 196);
-                                    buf[196] = (byte)((mPascalOutput[i] >>  0) & 0xff);
-                                    buf[197] = (byte)((mPascalOutput[i] >>  8) & 0xff);
-                                    buf[198] = (byte)((mPascalOutput[i] >> 16) & 0xff);
-                                    buf[199] = (byte)((mPascalOutput[i] >> 24) & 0xff);
-                                    var hash2 = HashLib.HashFactory.Crypto.CreateSHA256();
-                                    /*
-                                     * work_data.block_header[]: 05630200ca02200042b6d71c8bdd83eb6dab79713bcfcff330c4ab5ba2bb7b7c02a30882b54e31e62000ca1ff7b7804ce8bc3afa0c5a7f7f72e372c30a3a3ffac81563c67672781d2dfd40420f00000000000200020091c96c344e616e6f706f6f6c2f353933393431323134343730303030303029202020202020204ad5804b83c98262b4292c08fac845e668057387ee8e30ba9ec99b70a16d9c28c9b7cea45002fcb7cd454135ee35fafff9a23d4288fe3601214eb91bfd5c308065000000
-str_ntime: 5a222ec2
-str_nonce: 60779d7b
-hash: 8fcdbf1075bdb8876b177598e35c1cd52c927b5f2714d893cd03780d00000000
-                                     */
-                                    MainForm.Logger("Result: " + Utilities.ByteArrayToString(hash2.ComputeBytes(hash2.ComputeBytes(buf).GetBytes()).GetBytes()));
-                                }
                             }
                             pascalStartNonce += (UInt32)mPascalGlobalWorkSizeArray[0];
 

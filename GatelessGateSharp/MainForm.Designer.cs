@@ -3104,6 +3104,7 @@
             this.comboBoxCustomPool0SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool0SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
+            "Pascal",
             "Lbry"});
             this.comboBoxCustomPool0SecondaryAlgorithm.Location = new System.Drawing.Point(71, 43);
             this.comboBoxCustomPool0SecondaryAlgorithm.Name = "comboBoxCustomPool0SecondaryAlgorithm";
