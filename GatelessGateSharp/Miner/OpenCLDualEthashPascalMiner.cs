@@ -359,7 +359,7 @@ namespace GatelessGateSharp
                                 for (int i = 0; i < ethashOutput[255]; ++i)
                                     mEthashStratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
                             }
-                            ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
+                            ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0] * 3 / 4;
 
                             Queue.Read<UInt32>(mPascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
                             if (mPascalStratum.GetJob().Equals(pascalJob))
