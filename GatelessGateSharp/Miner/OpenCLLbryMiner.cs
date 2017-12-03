@@ -43,7 +43,7 @@ namespace GatelessGateSharp
         private static readonly int lbryOutputSize = 256 + 255 * 8;
         UInt32[] mLbryOutput = new UInt32[lbryOutputSize];
         byte[] mLbryInput = new byte[112];
-            
+        private int mIterations = 1;
 
 
         public OpenCLLbryMiner(Device aGatelessGateDevice)
@@ -51,6 +51,7 @@ namespace GatelessGateSharp
         {
             mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
             mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
+            mIterations = (aGatelessGateDevice.Vendor == "NVIDIA") ? 8 : 1;
         }
 
         public void Start(LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
@@ -83,7 +84,7 @@ namespace GatelessGateSharp
                 String buildOptions = (Device.Vendor == "AMD" ? "-O1 " : //"-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
-                                      + " -IKernels -DWORKSIZE=" + mLbryLocalWorkSizeArray[0];
+                                      + " -IKernels -DWORKSIZE=" + mLbryLocalWorkSizeArray[0] + " -DITERATIONS=" + mIterations;
                 try
                 {
                     mLbryProgram.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
@@ -164,7 +165,7 @@ namespace GatelessGateSharp
                             mLbrySearchKernel.SetValueArgument<UInt32>(2, lbryStartNonce);
 
                             // Get a new local extranonce if necessary.
-                            if (0xffffffffu - lbryStartNonce < (UInt32)mLbryGlobalWorkSizeArray[0])
+                            if (0xffffffffu - lbryStartNonce < (UInt32)mLbryGlobalWorkSizeArray[0] * mIterations)
                                 break;
 
                             mLbryOutput[255] = 0; // mLbryOutput[255] is used as an atomic counter.
@@ -184,10 +185,10 @@ namespace GatelessGateSharp
                                     mLbryStratum.Submit(GatelessGateDevice, lbryWork, mLbryOutput[i], result);
                                 }
                             }
-                            lbryStartNonce += (UInt32)mLbryGlobalWorkSizeArray[0];
+                            lbryStartNonce += (UInt32)mLbryGlobalWorkSizeArray[0] * (uint)mIterations;
 
                             sw.Stop();
-                            Speed = ((double)mLbryGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                            Speed = ((double)mLbryGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mIterations;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
                                 MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Lbry)", Speed / 1000000));

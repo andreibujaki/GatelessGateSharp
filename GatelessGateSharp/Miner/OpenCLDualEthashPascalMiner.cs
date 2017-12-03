@@ -58,7 +58,7 @@ namespace GatelessGateSharp
         UInt32[] mPascalOutput = new UInt32[sPascalOutputSize];
         byte[] mPascalInput = new byte[sPascalInputSize];
         byte[] mPascalMidstate = new byte[sPascalMidstateSize];
-        private UInt32 mPascalRatio = 6;
+        private UInt32 mPascalRatio = 4;
 
         public OpenCLDualEthashPascalMiner(Device aGatelessGateDevice)
             : base(aGatelessGateDevice, "Ethash")
@@ -71,10 +71,10 @@ namespace GatelessGateSharp
             mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize);
         }
 
-        public void Start(EthashStratum aEthashStratum, PascalStratum aPascalStratum, int aEthashIntensity, int aEthashLocalWorkSize)
+        public void Start(EthashStratum aEthashStratum, PascalStratum aPascalStratum, int aEthashIntensity)
         {
             mEthashStratum = aEthashStratum;
-            mEthashLocalWorkSizeArray[0] = aEthashLocalWorkSize;
+            mEthashLocalWorkSizeArray[0] = 256;
             mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * Device.GetComputeDevice().MaxComputeUnits;
 
             mPascalStratum = aPascalStratum;
@@ -96,9 +96,19 @@ namespace GatelessGateSharp
             }
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\ethash_pascal.cl");
-                mEthashProgram = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded ethash mEthashProgram for Device #" + DeviceIndex + ".");
+                try
+                {
+                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_ethash_pascal.bin";
+                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
+                    mEthashProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
+                }
+                catch (Exception ex)
+                {
+                    String source = System.IO.File.ReadAllText(@"Kernels\ethash_pascal.cl");
+                    mEthashProgram = new ComputeProgram(Context, source);
+                    MainForm.Logger("Loaded ethash_pascal.cl for Device #" + DeviceIndex + ".");
+                }
                 String buildOptions = (Device.Vendor == "AMD"    ? "-O1" :
                                        Device.Vendor == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")

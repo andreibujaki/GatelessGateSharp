@@ -105,7 +105,7 @@ static __constant uint2 const Keccak_f1600_RC[24] = {
 
 #else
 
-#define ROTL64_1(x, y) as_uint2(rotate(as_ulong(x), (ulong)(y)))
+#define ROTL64_1(x, y) (uint2) { (uint)rotate(((ulong)((x).s1) << 32) | (x).s0, (ulong)(y)), (uint)rotate(((ulong)((x).s0) << 32) | (x).s1, (ulong)(y)) }
 #define ROTL64_2(x, y) ROTL64_1(x, (y) + 32)
 
 #endif
@@ -227,18 +227,6 @@ typedef union {
 } compute_hash_share;
 
 
-#ifdef LEGACY
-
-#define MIX(x) \
-do { \
-    if (get_local_id(0) == lane_idx) \
-        buffer[hash_id] = fnv(init0 ^ (a + x), mix.s##x) % ethash_dag_size; \
-    barrier(CLK_LOCAL_MEM_FENCE); \
-    mix = fnv(mix, g_dag[buffer[hash_id]].uint8s[thread_id]); \
-} while(0)
-
-#else
-
 #define MIX(x) \
 do { \
     buffer[get_local_id(0)] = fnv(init0 ^ (a + x), mix.s##x) % ethash_dag_size; \
@@ -246,8 +234,6 @@ do { \
     mix = fnv(mix, g_dag[buffer[lane_idx]].uint8s[thread_id]); \
     mem_fence(CLK_LOCAL_MEM_FENCE); \
 } while(0)
-
-#endif
 
 
 
@@ -257,8 +243,6 @@ do { \
 
 
 #define ROL32(x, n)  rotate(x, (uint) n)
-#define SWAP32(a)    (as_uint(as_uchar4(a).wzyx))
-#define SWAP64(x) as_ulong(as_uchar8(x).s32107654)  /// hmm...
 
 #define SHR(x, n)    ((x) >> n)
 
@@ -440,10 +424,10 @@ __kernel void search(
     uint ethash_dag_size,
     ulong ethash_start_nonce,
     ulong ethash_target,
-    uint ethash_isolate,
+    volatile uint ethash_isolate,
 
-	__global const uchar* restrict pascal_input,
-	__global uint* restrict pascal_output, 
+	__constant const uchar* restrict pascal_input,
+	__global volatile uint* restrict pascal_output, 
 	const uint pascal_start_nonce, 
 	const ulong pascal_target, 
 	__constant uint8* pascal_midstate,
@@ -538,7 +522,7 @@ __kernel void search(
 					}
 					else {
 						in = pad_data;
-						in.s0 = SWAP32(((__global const uint *)pascal_input)[48]);
+						in.s0 = SWAP32(((__constant const uint *)pascal_input)[48]);
 						in.s1 = SWAP32(nonce);
 					}
 					state1 = sha256_Transform(in, pass ? H256 : *pascal_midstate);

@@ -2671,8 +2671,6 @@ namespace GatelessGateSharp
                     dualMiner.Start(stratum,
                             stratum2,
                         Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
-                            .Value)),
-                        Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex]
                             .Value)));
                     toolStripMainFormProgressBar.Value = ++minerCount;
 
@@ -2739,12 +2737,14 @@ namespace GatelessGateSharp
 
         void StartOpenCLLbryMiners(LbryStratum stratum)
         {
+            int numThreads = 1;
+
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
-                    for (i = 0; i < 1; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < numThreads; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
@@ -2752,7 +2752,7 @@ namespace GatelessGateSharp
             {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    for (i = 0; i < 1; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < numThreads; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
                     {
                         OpenCLLbryMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
@@ -2773,7 +2773,7 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            256 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
+                            4096 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
                             (miner.Device.Vendor == "NVIDIA") ? 512 : 256); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10)

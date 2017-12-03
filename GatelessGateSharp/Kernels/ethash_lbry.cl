@@ -354,8 +354,8 @@ __kernel void search(
 #pragma unroll
 			for (int i = 0; i < 16; ++i) SHA256Buf[i] = lbry_input[i];
 
-#pragma unroll
-			for (int i = 0; i < 3; ++i)
+#pragma unroll 1
+			for (volatile int i = 0; i < 3; ++i)
 			{
 				if (i == 1)
 				{
@@ -405,30 +405,38 @@ __kernel void search(
 
 			for (int i = 0; i < 8; ++i) SHA512Out[i] = SWAP64(SHA512Out[i]);
 
-			uint RMD160_0[16] = { 0U };
-			uint RMD160_1[16] = { 0U };
-			uint RMD160_0_Out[5], RMD160_1_Out[5];
+			uint RMD160_0[16];
+			uint RMD160_0_Out[5];
 
+			for (int i = 0; i < 16; ++i)
+				RMD160_0[i] = 0;
 			for (int i = 0; i < 4; ++i)
-			{
 				((ulong *)RMD160_0)[i] = SHA512Out[i];
-				((ulong *)RMD160_1)[i] = SHA512Out[i + 4];
-			}
-
-			RMD160_0[8] = RMD160_1[8] = 0x00000080;
-			RMD160_0[14] = RMD160_1[14] = 0x00000100;
-
-			for (int i = 0; i < 5; ++i)
-			{
+			RMD160_0[8] = 0x00000080;
+			RMD160_0[14] = 0x00000100;
+				for (int i = 0; i < 5; ++i)
 				RMD160_0_Out[i] = RMD160_IV[i];
-				RMD160_1_Out[i] = RMD160_IV[i];
+				
+#pragma unroll 1
+			for (volatile int j = 0; j < 2; ++j)
+			{
+				if (j == 1)
+				{
+					for (int i = 0; i < 5; ++i) SHA256Buf[i] = SWAP32(RMD160_0_Out[i]);
+
+					for (int i = 0; i < 16; ++i)
+						RMD160_0[i] = 0;
+					for (int i = 0; i < 4; ++i)
+						((ulong *)RMD160_0)[i] = SHA512Out[i + 4];
+					RMD160_0[8] = 0x00000080;
+					RMD160_0[14] = 0x00000100;
+					for (int i = 0; i < 5; ++i)
+						RMD160_0_Out[i] = RMD160_IV[i];
+				}
+				RIPEMD160_ROUND_BODY(RMD160_0, RMD160_0_Out);
 			}
 
-			RIPEMD160_ROUND_BODY(RMD160_0, RMD160_0_Out);
-			RIPEMD160_ROUND_BODY(RMD160_1, RMD160_1_Out);
-
-			for (int i = 0; i < 5; ++i) SHA256Buf[i] = SWAP32(RMD160_0_Out[i]);
-			for (int i = 5; i < 10; ++i) SHA256Buf[i] = SWAP32(RMD160_1_Out[i - 5]);
+			for (int i = 5; i < 10; ++i) SHA256Buf[i] = SWAP32(RMD160_0_Out[i - 5]);
 			SHA256Buf[10] = 0x80000000;
 
 			for (int i = 11; i < 15; ++i) SHA256Buf[i] = 0x00000000U;
@@ -436,17 +444,21 @@ __kernel void search(
 			SHA256Buf[15] = 0x00000140;
 
 			outbuf = (uint8)(0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19);
-			outbuf = sha256_round(((uint16 *)SHA256Buf)[0], outbuf);
 
+#pragma unroll 1
+			for (volatile int j = 0; j < 2; ++j)
+			{
+				if (j == 1)
+				{
+					((uint8 *)SHA256Buf)[0] = outbuf;
+					SHA256Buf[8] = 0x80000000;
+					for (int i = 9; i < 15; ++i) SHA256Buf[i] = 0x00000000;
+					SHA256Buf[15] = 0x00000100;
 
-
-			((uint8 *)SHA256Buf)[0] = outbuf;
-			SHA256Buf[8] = 0x80000000;
-			for (int i = 9; i < 15; ++i) SHA256Buf[i] = 0x00000000;
-			SHA256Buf[15] = 0x00000100;
-
-			outbuf = (uint8)(0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19);
-			outbuf = sha256_round(((uint16 *)SHA256Buf)[0], outbuf);
+					outbuf = (uint8)(0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19);
+				}
+				outbuf = sha256_round(((uint16 *)SHA256Buf)[0], outbuf);
+			}
 
 			outbuf.s6 = SWAP32(outbuf.s6);
 			outbuf.s7 = SWAP32(outbuf.s7);
