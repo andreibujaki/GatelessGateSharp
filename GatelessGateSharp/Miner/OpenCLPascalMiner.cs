@@ -85,7 +85,7 @@ namespace GatelessGateSharp
             {
                 String source = System.IO.File.ReadAllText(@"Kernels\pascal.cl");
                 mPascalProgram = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded Pascal program for Device #" + DeviceIndex + ".");
+                MainForm.Logger(@"Loaded Kernels\pascal.cl for Device #" + DeviceIndex + ".");
                 String buildOptions = (Device.Vendor == "AMD" ? "-O1 " : //"-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")

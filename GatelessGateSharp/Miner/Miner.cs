@@ -28,28 +28,31 @@ namespace GatelessGateSharp
         private Device mDevice;
         private bool mStopped = false;
         private bool mDone = false;
-        private int mAlgorithmIndex = 0;
         private String mAlgorithmName = "";
+        private String mFirstAlgorithmName = "";
+        private String mSecondAlgorithmName = "";
         private System.Threading.Thread mMinerThread = null;
         private DateTime mLastAlive = DateTime.Now;
-        private long mKernelExecutionCount = 0;
-        private Miner mDualMiningPair = null;
 
         public Device GatelessGateDevice { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
         public bool Done { get { return mDone; } }
         public double Speed { get; set; }
+        public double SecondSpeed { get; set; }
         public String AlgorithmName { get { return mAlgorithmName; } }
+        public String FirstAlgorithmName { get { return mFirstAlgorithmName; } }
+        public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
-        public long KernelExecutionCount { get { return mKernelExecutionCount; } }
-        public Miner DualMiningPair { get { return mDualMiningPair; } }
-        public int AlgorithmIndex { get { return mAlgorithmIndex; } set { mAlgorithmIndex = value; } } // for dual-mining
 
-        protected Miner(Device aDevice, String aAlgorithmName)
+        protected Miner(Device aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
         {
             mDevice = aDevice;
             mAlgorithmName = aAlgorithmName;
+            mFirstAlgorithmName = (aFirstAlgorithmName == "") ? aAlgorithmName : aFirstAlgorithmName;
+            mSecondAlgorithmName = aSecondAlgorithmName;
+            Speed = 0;
+            SecondSpeed = 0;
         }
 
         ~Miner()
@@ -107,6 +110,8 @@ namespace GatelessGateSharp
         protected void MarkAsDone()
         {
             mDone = true;
+            Speed = 0;
+            SecondSpeed = 0;
         }
 
         public void KeepAlive()

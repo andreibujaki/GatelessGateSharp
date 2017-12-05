@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.2";
+        public static string appVersion = "1.1.3";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -76,14 +76,21 @@ namespace GatelessGateSharp
         private Control[] labelGPUSharesArray;
         private CheckBox[] checkBoxGPUEnableArray;
         private TabPage[] tabPageDeviceArray;
+        private NumericUpDown[] numericUpDownDeviceEthashPascalThreadsArray;
+        private NumericUpDown[] numericUpDownDeviceEthashPascalIntensityArray;
+        private NumericUpDown[] numericUpDownDeviceEthashPascalPascalIterationsArray;
         private NumericUpDown[] numericUpDownDeviceEthashThreadsArray;
         private NumericUpDown[] numericUpDownDeviceEthashIntensityArray;
         private NumericUpDown[] numericUpDownDeviceEthashLocalWorkSizeArray;
+        private NumericUpDown[] numericUpDownDevicePascalThreadsArray;
+        private NumericUpDown[] numericUpDownDevicePascalIntensityArray;
+        private NumericUpDown[] numericUpDownDevicePascalLocalWorkSizeArray;
+        private NumericUpDown[] numericUpDownDeviceLbryThreadsArray;
+        private NumericUpDown[] numericUpDownDeviceLbryIntensityArray;
+        private NumericUpDown[] numericUpDownDeviceLbryLocalWorkSizeArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightThreadsArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightRawIntensityArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
-        private GroupBox[] groupBoxDeviceEthashArray;
-        private GroupBox[] groupBoxDeviceCryptoNightArray;
 
         private Device[] mDevices;
         private const int maxNumDevices = 8; // This depends on MainForm.
@@ -178,6 +185,39 @@ namespace GatelessGateSharp
             labelGPUSharesArray = new Control[] { labelGPU0Shares, labelGPU1Shares, labelGPU2Shares, labelGPU3Shares, labelGPU4Shares, labelGPU5Shares, labelGPU6Shares, labelGPU7Shares };
             checkBoxGPUEnableArray = new CheckBox[] { checkBoxGPU0Enable, checkBoxGPU1Enable, checkBoxGPU2Enable, checkBoxGPU3Enable, checkBoxGPU4Enable, checkBoxGPU5Enable, checkBoxGPU6Enable, checkBoxGPU7Enable };
             tabPageDeviceArray = new TabPage[] { tabPageDevice0, tabPageDevice1, tabPageDevice2, tabPageDevice3, tabPageDevice4, tabPageDevice5, tabPageDevice6, tabPageDevice7 };
+            numericUpDownDeviceEthashPascalThreadsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashPascalThreads, 
+                numericUpDownDevice1EthashPascalThreads,
+                numericUpDownDevice2EthashPascalThreads,
+                numericUpDownDevice3EthashPascalThreads, 
+                numericUpDownDevice4EthashPascalThreads,
+                numericUpDownDevice5EthashPascalThreads,
+                numericUpDownDevice6EthashPascalThreads, 
+                numericUpDownDevice7EthashPascalThreads
+            };
+            numericUpDownDeviceEthashPascalIntensityArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashPascalIntensity, 
+                numericUpDownDevice1EthashPascalIntensity,
+                numericUpDownDevice2EthashPascalIntensity,
+                numericUpDownDevice4EthashPascalIntensity, 
+                numericUpDownDevice4EthashPascalIntensity,
+                numericUpDownDevice5EthashPascalIntensity,
+                numericUpDownDevice6EthashPascalIntensity, 
+                numericUpDownDevice7EthashPascalIntensity
+            };
+            numericUpDownDeviceEthashPascalPascalIterationsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0EthashPascalPascalIterations, 
+                numericUpDownDevice1EthashPascalPascalIterations,
+                numericUpDownDevice2EthashPascalPascalIterations,
+                numericUpDownDevice3EthashPascalPascalIterations, 
+                numericUpDownDevice4EthashPascalPascalIterations,
+                numericUpDownDevice5EthashPascalPascalIterations,
+                numericUpDownDevice6EthashPascalPascalIterations, 
+                numericUpDownDevice7EthashPascalPascalIterations
+            };
             numericUpDownDeviceEthashThreadsArray = new NumericUpDown[]
             {
                 numericUpDownDevice0EthashThreads, 
@@ -244,8 +284,72 @@ namespace GatelessGateSharp
                 numericUpDownDevice6CryptoNightLocalWorkSize,
                 numericUpDownDevice7CryptoNightLocalWorkSize
             };
-            groupBoxDeviceEthashArray = new GroupBox[] { groupBoxDevice0Ethash, groupBoxDevice1Ethash, groupBoxDevice2Ethash, groupBoxDevice3Ethash, groupBoxDevice4Ethash, groupBoxDevice5Ethash, groupBoxDevice6Ethash, groupBoxDevice7Ethash };
-            groupBoxDeviceCryptoNightArray = new GroupBox[] { groupBoxDevice0CryptoNight, groupBoxDevice1CryptoNight, groupBoxDevice2CryptoNight, groupBoxDevice3CryptoNight, groupBoxDevice4CryptoNight, groupBoxDevice5CryptoNight, groupBoxDevice6CryptoNight, groupBoxDevice7CryptoNight };
+            numericUpDownDevicePascalThreadsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0PascalThreads, 
+                numericUpDownDevice1PascalThreads,
+                numericUpDownDevice2PascalThreads,
+                numericUpDownDevice3PascalThreads, 
+                numericUpDownDevice3PascalThreads,
+                numericUpDownDevice5PascalThreads,
+                numericUpDownDevice6PascalThreads, 
+                numericUpDownDevice7PascalThreads
+            };
+            numericUpDownDevicePascalIntensityArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0PascalIntensity, 
+                numericUpDownDevice1PascalIntensity,
+                numericUpDownDevice2PascalIntensity,
+                numericUpDownDevice3PascalIntensity,
+                numericUpDownDevice4PascalIntensity, 
+                numericUpDownDevice5PascalIntensity,
+                numericUpDownDevice6PascalIntensity,
+                numericUpDownDevice7PascalIntensity
+            };
+            numericUpDownDevicePascalLocalWorkSizeArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0PascalLocalWorkSize, 
+                numericUpDownDevice1PascalLocalWorkSize,
+                numericUpDownDevice2PascalLocalWorkSize, 
+                numericUpDownDevice3PascalLocalWorkSize,
+                numericUpDownDevice4PascalLocalWorkSize,
+                numericUpDownDevice5PascalLocalWorkSize,
+                numericUpDownDevice6PascalLocalWorkSize,
+                numericUpDownDevice7PascalLocalWorkSize
+            };
+            numericUpDownDeviceLbryThreadsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0LbryThreads, 
+                numericUpDownDevice1LbryThreads,
+                numericUpDownDevice2LbryThreads,
+                numericUpDownDevice3LbryThreads, 
+                numericUpDownDevice4LbryThreads,
+                numericUpDownDevice5LbryThreads,
+                numericUpDownDevice6LbryThreads, 
+                numericUpDownDevice7LbryThreads
+            };
+            numericUpDownDeviceLbryIntensityArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0LbryIntensity, 
+                numericUpDownDevice1LbryIntensity,
+                numericUpDownDevice2LbryIntensity,
+                numericUpDownDevice3LbryIntensity,
+                numericUpDownDevice4LbryIntensity, 
+                numericUpDownDevice5LbryIntensity,
+                numericUpDownDevice6LbryIntensity,
+                numericUpDownDevice7LbryIntensity
+            };
+            numericUpDownDeviceLbryLocalWorkSizeArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0LbryLocalWorkSize, 
+                numericUpDownDevice1LbryLocalWorkSize,
+                numericUpDownDevice2LbryLocalWorkSize, 
+                numericUpDownDevice3LbryLocalWorkSize,
+                numericUpDownDevice4LbryLocalWorkSize,
+                numericUpDownDevice5LbryLocalWorkSize,
+                numericUpDownDevice6LbryLocalWorkSize,
+                numericUpDownDevice6LbryLocalWorkSize
+            };
         }
 
         private void CreateNewDatabase()
@@ -334,6 +438,10 @@ namespace GatelessGateSharp
                                         if (coinToMine == "ethereum")
                                         {
                                             radioButtonEthereum.Checked = true;
+                                        }
+                                        else if (coinToMine == "ethereum_pascal")
+                                        {
+                                            radioButtonEthereumPascal.Checked = true;
                                         }
                                         else if (coinToMine == "monero")
                                         {
@@ -662,7 +770,28 @@ namespace GatelessGateSharp
                                     if (deviceID >= mDevices.Length || deviceVendor != mDevices[deviceID].Vendor ||
                                         deviceName != mDevices[deviceID].Name)
                                         continue;
-                                    if (name == "ethash_threads")
+                                    if (name == "ethash_pascal_threads")
+                                        numericUpDownDeviceEthashPascalThreadsArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "ethash_pascal_intensity")
+                                        numericUpDownDeviceEthashPascalIntensityArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "ethash_pascal_pascal_iterations")
+                                        numericUpDownDeviceEthashPascalPascalIterationsArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "lbry_threads")
+                                        numericUpDownDeviceLbryThreadsArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "lbry_intensity")
+                                        numericUpDownDeviceLbryIntensityArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "lbry_local_work_size")
+                                        numericUpDownDeviceLbryLocalWorkSizeArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "pascal_threads")
+                                        numericUpDownDevicePascalThreadsArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "pascal_intensity")
+                                        numericUpDownDevicePascalIntensityArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "pascal_local_work_size")
+                                        numericUpDownDevicePascalLocalWorkSizeArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "ethash_threads")
                                         numericUpDownDeviceEthashThreadsArray[deviceID].Value = decimal.Parse(value);
                                     else if (name == "ethash_intensity")
                                         numericUpDownDeviceEthashIntensityArray[deviceID].Value = decimal.Parse(value);
@@ -789,6 +918,7 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@name", "coin_to_mine");
                         command.Parameters.AddWithValue("@value",
                                                         radioButtonEthereum.Checked ? "ethereum" :
+                                                        radioButtonEthereumPascal.Checked ? "ethereum_pascal" :
                                                         radioButtonMonero.Checked ? "monero" :
                                                         radioButtonZcash.Checked ? "zcash" :
                                                         radioButtonLbry.Checked ? "lbry" :
@@ -834,21 +964,6 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@value", checkBoxGPUEnableArray[i].Checked ? "true" : "false");
                             command.ExecuteNonQuery();
                         }
-
-                    sql = "insert into properties (name, value) values (@name, @value)";
-                    using (var command = new SQLiteCommand(sql, conn))
-                    {
-                        command.Parameters.AddWithValue("@name", "coin_to_mine");
-                        command.Parameters.AddWithValue("@value",
-                                                        radioButtonEthereum.Checked ? "ethereum" :
-                                                        radioButtonMonero.Checked ? "monero" :
-                                                        radioButtonZcash.Checked ? "zcash" :
-                                                        radioButtonLbry.Checked ? "lbry" :
-                                                        radioButtonPascal.Checked ? "pascal" :
-                                                                                        "most_profitable");
-                        command.ExecuteNonQuery();
-                    }
-
                     using (var command = new SQLiteCommand(sql, conn))
                     {
                         command.Parameters.AddWithValue("@name", "custom_pool0_host");
@@ -1168,6 +1283,33 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@device_id", i);
                             command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
                             command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_threads");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalThreadsArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_intensity");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalIntensityArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_pascal_iterations");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalPascalIterationsArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
                             command.Parameters.AddWithValue("@parameter_name", "ethash_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
@@ -1188,6 +1330,60 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
                             command.Parameters.AddWithValue("@parameter_name", "ethash_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashLocalWorkSizeArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "lbry_threads");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryThreadsArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "lbry_intensity");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryIntensityArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "lbry_local_work_size");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryLocalWorkSizeArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "pascal_threads");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalThreadsArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "pascal_intensity");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalIntensityArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn))
+                        {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "pascal_local_work_size");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn))
@@ -1344,7 +1540,7 @@ namespace GatelessGateSharp
             }
 
             for (var index = maxNumDevices - 1; index >= mDevices.Length; --index)
-                tabControlDevices.TabPages.RemoveAt(index);
+                tabControlDeviceSettings.TabPages.RemoveAt(index);
 
             for (var index = maxNumDevices - 1; index >= mDevices.Length; --index)
             {
@@ -1365,8 +1561,6 @@ namespace GatelessGateSharp
                 Array.Resize(ref numericUpDownDeviceCryptoNightThreadsArray, mDevices.Length);
                 Array.Resize(ref numericUpDownDeviceCryptoNightRawIntensityArray, mDevices.Length);
                 Array.Resize(ref numericUpDownDeviceCryptoNightLocalWorkSizeArray, mDevices.Length);
-                Array.Resize(ref groupBoxDeviceEthashArray, mDevices.Length);
-                Array.Resize(ref groupBoxDeviceCryptoNightArray, mDevices.Length);
             }
 
             var ADLRet = -1;
@@ -1487,8 +1681,28 @@ namespace GatelessGateSharp
             {
                 tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.Vendor + " " + device.Name;
 
+                // EthashPascal
+                numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
+                numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)2000;
+                numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Maximum = (decimal)(device.Vendor == "NVIDIA" ? 4 : 4);
+
                 // Ethash
+                numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = (decimal)1;
                 numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)2000;
+                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.Vendor == "NVIDIA" ? 512 : 256);
+                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "NVIDIA" ? 192 : 192);
+
+                // Lbry
+                numericUpDownDeviceLbryThreadsArray[device.DeviceIndex].Value = (decimal)1;
+                numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = (decimal)8192;
+                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.Vendor == "NVIDIA" ? 512 : 256);
+                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "NVIDIA" ? 32 : 64);
+
+                // Pasacal
+                numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = (decimal)2;
+                numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = (decimal)8192;
+                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.Vendor == "NVIDIA" ? 512 : 256);
+                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "NVIDIA" ? 256 : 256);
 
                 // CryptoNight
                 numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 2 : 1);
@@ -1529,6 +1743,9 @@ namespace GatelessGateSharp
                 double totalSpeed = 0;
                 foreach (var miner in mActiveMiners)
                     totalSpeed += miner.Speed;
+                double secondaryTotalSpeed = 0;
+                foreach (var miner in mActiveMiners)
+                    secondaryTotalSpeed += miner.SecondSpeed;
 
                 var client = new CustomWebClient();
                 double USDBTC = 0;
@@ -1590,6 +1807,50 @@ namespace GatelessGateSharp
                                     price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000.0;
                             }
                             catch (Exception) { }
+                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
+                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
+                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
+                    }
+                    else
+                    {
+                        labelPriceDay.Text = "-";
+                        labelPriceWeek.Text = "-";
+                        labelPriceMonth.Text = "-";
+                    }
+                }
+                else if (mCurrentPool == "NiceHash" && radioButtonEthereumPascal.Checked && textBoxBitcoinAddress.Text != "")
+                {
+                    double balance = 0;
+                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
+                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    var result = (JContainer)response["result"];
+                    var stats = (JArray)result["stats"];
+                    foreach (JContainer item in stats)
+                        try
+                        {
+                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
+                        }
+                        catch (Exception) { }
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
+
+                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode)
+                    {
+                        double ethereum_price = 0;
+                        double pascal_price = 0;
+                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
+                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        result = (JContainer)response["result"];
+                        stats = (JArray)result["stats"];
+                        foreach (JContainer item in stats)
+                            try
+                            {
+                                if ((double)item["algo"] == 20)
+                                    ethereum_price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000.0;
+                                if ((double)item["algo"] == 25)
+                                    pascal_price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * secondaryTotalSpeed / 1000000000000.0;
+                            }
+                            catch (Exception) { }
+                        double price = ethereum_price + pascal_price;
                         labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
                         labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
                         labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
@@ -1698,7 +1959,7 @@ namespace GatelessGateSharp
 
                     if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode)
                     {
-                        double price = 0;
+                        double pascal_price = 0;
                         jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
                         response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                         result = (JContainer)response["result"];
@@ -1707,12 +1968,12 @@ namespace GatelessGateSharp
                             try
                             {
                                 if ((double)item["algo"] == 25)
-                                    price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000000.0;
+                                    pascal_price = double.Parse((string)item["pascal_price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000000.0;
                             }
                             catch (Exception) { }
-                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
-                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
-                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
+                        labelPriceDay.Text = string.Format("{0:N6}", pascal_price) + " BTC/Day (" + string.Format("{0:N2}", pascal_price * USDBTC) + " USD/Day)";
+                        labelPriceWeek.Text = string.Format("{0:N6}", pascal_price * 7) + " BTC/Week (" + string.Format("{0:N2}", pascal_price * 7 * USDBTC) + " USD/Week)";
+                        labelPriceMonth.Text = string.Format("{0:N6}", pascal_price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", pascal_price * (365.25 / 12) * USDBTC) + " USD/Month)";
                     }
                     else
                     {
@@ -1883,12 +2144,12 @@ namespace GatelessGateSharp
             try
             {
                 // Pool
-                mCurrentPool = (appState == ApplicationGlobalState.Mining && mPrimaryStratum != null) ? mPrimaryStratum.PoolName :
-                               checkBoxCustomPool0Enable.Checked                               ? textBoxCustomPool0Host.Text :
-                               checkBoxCustomPool1Enable.Checked                               ? textBoxCustomPool1Host.Text :
-                               checkBoxCustomPool2Enable.Checked                               ? textBoxCustomPool2Host.Text :
-                               checkBoxCustomPool3Enable.Checked                               ? textBoxCustomPool3Host.Text :
-                                                                                                 (string)listBoxPoolPriorities.Items[0];
+                mCurrentPool = (appState == ApplicationGlobalState.Mining && mPrimaryStratum != null) ? (mPrimaryStratum.PoolName + ((mSecondaryStratum != null && mSecondaryStratum.PoolName != mPrimaryStratum.PoolName) ? ", " + mSecondaryStratum.PoolName : "")) :
+                               checkBoxCustomPool0Enable.Checked ? (textBoxCustomPool0Host.Text + (comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool0SecondaryHost.Text) : "")) :
+                               checkBoxCustomPool1Enable.Checked ? (textBoxCustomPool1Host.Text + (comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool1SecondaryHost.Text) : "")) :
+                               checkBoxCustomPool2Enable.Checked ? (textBoxCustomPool2Host.Text + (comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool2SecondaryHost.Text) : "")) :
+                               checkBoxCustomPool3Enable.Checked ? (textBoxCustomPool3Host.Text + (comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool3SecondaryHost.Text) : "")) :
+                               (string)listBoxPoolPriorities.Items[0];
                 if (appState == ApplicationGlobalState.Mining && mDevFeeMode)
                 {
                     labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + string.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
@@ -1930,10 +2191,19 @@ namespace GatelessGateSharp
 
                 Dictionary<string, double> speeds = new Dictionary<string,double>();
                 foreach (var miner in mActiveMiners) {
-                    if (!speeds.ContainsKey(miner.AlgorithmName)) {
-                        speeds.Add(miner.AlgorithmName, miner.Speed);
+                    if (!speeds.ContainsKey(miner.FirstAlgorithmName)) {
+                        speeds.Add(miner.FirstAlgorithmName, miner.Speed);
                     } else {
-                        speeds[miner.AlgorithmName] += miner.Speed;
+                        speeds[miner.FirstAlgorithmName] += miner.Speed;
+                    }
+                }
+                foreach (var miner in mActiveMiners) {
+                    if (miner.SecondAlgorithmName == null || miner.SecondAlgorithmName == "")
+                        continue;
+                    if (!speeds.ContainsKey(miner.SecondAlgorithmName)) {
+                        speeds.Add(miner.SecondAlgorithmName, miner.SecondSpeed);
+                    } else {
+                        speeds[miner.SecondAlgorithmName] += miner.SecondSpeed;
                     }
                 }
                 labelCurrentSpeed.Text = "-";
@@ -1952,11 +2222,11 @@ namespace GatelessGateSharp
                     var deviceIndex = device.DeviceIndex;
                     double speedPrimary = 0, speedSecondary = 0;
                     foreach (var miner in mActiveMiners)
-                        if (miner.DeviceIndex == device.DeviceIndex && miner.AlgorithmIndex == 0)
+                        if (miner.DeviceIndex == device.DeviceIndex)
                             speedPrimary += miner.Speed;
                     foreach (var miner in mActiveMiners)
-                        if (miner.DeviceIndex == device.DeviceIndex && miner.AlgorithmIndex == 1)
-                            speedSecondary += miner.Speed;
+                        if (miner.DeviceIndex == device.DeviceIndex && miner.SecondAlgorithmName != null && miner.SecondAlgorithmName != "")
+                            speedSecondary += miner.SecondSpeed;
                     labelGPUSpeedArray[deviceIndex].Text = (appState != ApplicationGlobalState.Mining) ? "-" :
                                                            speedSecondary > 0                          ? ConvertHashRateToString(speedPrimary) + ", " + ConvertHashRateToString(speedSecondary) :
                                                                                                          ConvertHashRateToString(speedPrimary);
@@ -2395,13 +2665,13 @@ namespace GatelessGateSharp
 
             if (pool == "NiceHash" || mDevFeeMode)
             {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
                 var hosts = GetNiceHashLbryServers();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try
                         {
-                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
-                            stratum = new LbryStratum(host.name, 3356, mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text, "x", pool);
+                            stratum = new LbryStratum(host.name, 3356, username, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -2416,8 +2686,50 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
+        public void LaunchDualEthashPascalMiners(string pool)
+        {
+            NiceHashEthashStratum ethashStratum = null;
+            PascalStratum pascalStratum = null;
+
+            if (pool == "NiceHash" || mDevFeeMode)
+            {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
+                var ethashHosts = GetNiceHashEthashServers();
+                foreach (var ethashHost in ethashHosts)
+                    if (ethashHost.time >= 0)
+                        try
+                        {
+                            ethashStratum = new NiceHashEthashStratum(ethashHost.name, 3353, username, "x", pool);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+                var pascalHosts = GetNiceHashPascalServers();
+                foreach (var pascalHost in pascalHosts)
+                    if (pascalHost.time >= 0)
+                        try
+                        {
+                            pascalStratum = new PascalStratum(pascalHost.name, 3358, username, "x", pool);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            }
+
+            StartOpenCLDualEthashPascalMiners(ethashStratum, pascalStratum);
+            mPrimaryStratum = (Stratum)ethashStratum;
+            mSecondaryStratum = (Stratum)pascalStratum;
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
         public void LaunchPascalMiners(string pool)
         {
+            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
             PascalStratum stratum = null;
 
             if (pool == "NiceHash" || mDevFeeMode)
@@ -2427,8 +2739,7 @@ namespace GatelessGateSharp
                     if (host.time >= 0)
                         try
                         {
-                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
-                            stratum = new PascalStratum(host.name, 3358, mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text, "x", pool);
+                            stratum = new PascalStratum(host.name, 3358, username, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -2449,13 +2760,13 @@ namespace GatelessGateSharp
 
             if (pool == "NiceHash" || mDevFeeMode)
             {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
                 var hosts = GetNiceHashEthashServers();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try
                         {
-                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
-                            stratum = new NiceHashEthashStratum(host.name, 3353, mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text, "x", pool);
+                            stratum = new NiceHashEthashStratum(host.name, 3353, username, "x", pool);
                             break;
                         }
                         catch (Exception ex)
@@ -2488,7 +2799,7 @@ namespace GatelessGateSharp
                             var username = textBoxEthereumAddress.Text;
                             if (textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
-                            stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool);
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool, true);
                             break;
                         }
                         catch (Exception ex)
@@ -2642,7 +2953,7 @@ namespace GatelessGateSharp
             int deviceIndex, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
-                    minerCount += 1;
+                    minerCount += Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value));
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
@@ -2650,36 +2961,40 @@ namespace GatelessGateSharp
             {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    OpenCLDualEthashPascalMiner dualMiner = null;
-                    foreach (var inactiveMiner in mInactiveMiners)
+                    for (int i = 0; i < numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value; ++i)
                     {
-                        if (inactiveMiner.GetType() == typeof(OpenCLDualEthashPascalMiner) && deviceIndex == inactiveMiner.DeviceIndex)
+                        OpenCLDualEthashPascalMiner dualMiner = null;
+                        foreach (var inactiveMiner in mInactiveMiners)
                         {
-                            dualMiner = (OpenCLDualEthashPascalMiner)inactiveMiner;
-                            break;
+                            if (inactiveMiner.GetType() == typeof(OpenCLDualEthashPascalMiner) && deviceIndex == inactiveMiner.DeviceIndex)
+                            {
+                                dualMiner = (OpenCLDualEthashPascalMiner)inactiveMiner;
+                                break;
+                            }
+                        }
+                        if (dualMiner != null)
+                        {
+                            mInactiveMiners.Remove((Miner)dualMiner);
+                        }
+                        else
+                        {
+                            dualMiner = new OpenCLDualEthashPascalMiner(mDevices[deviceIndex]);
+                        }
+                        mActiveMiners.Add(dualMiner);
+                        dualMiner.Start(stratum,
+                                stratum2,
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalIntensityArray[deviceIndex]
+                                .Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalPascalIterationsArray[deviceIndex]
+                                .Value)));
+                        toolStripMainFormProgressBar.Value = ++minerCount;
+
+                        for (int j = 0; j < mLaunchInterval; j += 10)
+                        {
+                            Application.DoEvents();
+                            System.Threading.Thread.Sleep(10);
                         }
                     }
-                    if (dualMiner != null)
-                    {
-                        mInactiveMiners.Remove((Miner)dualMiner);
-                    }
-                    else
-                    {
-                        dualMiner = new OpenCLDualEthashPascalMiner(mDevices[deviceIndex]);
-                    }
-                    mActiveMiners.Add(dualMiner);
-                    dualMiner.Start(stratum,
-                            stratum2,
-                        Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
-                            .Value)));
-                    toolStripMainFormProgressBar.Value = ++minerCount;
-
-                    for (int j = 0; j < mLaunchInterval; j += 10)
-                    {
-                        Application.DoEvents();
-                        System.Threading.Thread.Sleep(10);
-                    }
-
                 }
             }
         }
@@ -2744,7 +3059,7 @@ namespace GatelessGateSharp
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
-                    for (i = 0; i < numThreads; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
@@ -2752,7 +3067,7 @@ namespace GatelessGateSharp
             {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    for (i = 0; i < numThreads; ++i) // numericUpDownDeviceLbryThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i)
                     {
                         OpenCLLbryMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
@@ -2773,8 +3088,8 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            4096 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
-                            (miner.Device.Vendor == "NVIDIA") ? 512 : 256); //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10)
                         {
@@ -2793,7 +3108,7 @@ namespace GatelessGateSharp
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
-                    for (i = 0; i < 2; ++i) // numericUpDownDevicePascalThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
@@ -2801,7 +3116,7 @@ namespace GatelessGateSharp
             {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
                 {
-                    for (i = 0; i < 2; ++i) // numericUpDownDevicePascalThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i)
                     {
                         OpenCLPascalMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners)
@@ -2822,8 +3137,8 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            2048 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDevicePascalIntensityArray[deviceIndex].Value)),
-                            (miner.Device.Vendor == "NVIDIA") ? 512 : 256); //Convert.ToInt32(Math.Round(numericUpDownDevicePascalLocalWorkSizeArray[deviceIndex].Value)));
+                            Convert.ToInt32(Math.Round(numericUpDownDevicePascalIntensityArray[deviceIndex].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDevicePascalLocalWorkSizeArray[deviceIndex].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10)
                         {
@@ -2989,7 +3304,13 @@ namespace GatelessGateSharp
                 foreach (string pool in listBoxPoolPriorities.Items)
                     try
                     {
-                        if (radioButtonEthereum.Checked)
+                        if (radioButtonEthereumPascal.Checked)
+                        {
+                            Logger("Launching Dual Ethash/Pascal miners...");
+                            LaunchDualEthashPascalMiners(pool);
+                            break;
+                        }
+                        else if (radioButtonEthereum.Checked)
                         {
                             Logger("Launching Ethash miners...");
                             LaunchEthashMiners(pool);
@@ -3142,8 +3463,9 @@ namespace GatelessGateSharp
             }
 
             UpdateStatsWithShortPolling();
-            UpdateStatsWithLongPolling();
+            //UpdateStatsWithLongPolling();
             UpdateControls();
+            timerCurrencyStatUpdates.Interval = 100;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -3165,10 +3487,6 @@ namespace GatelessGateSharp
                 groupBoxAutomation.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxHadrwareAcceleration.Enabled = appState == ApplicationGlobalState.Idle;
                 foreach (var control in checkBoxGPUEnableArray)
-                    control.Enabled = appState == ApplicationGlobalState.Idle;
-                foreach (var control in groupBoxDeviceEthashArray)
-                    control.Enabled = appState == ApplicationGlobalState.Idle;
-                foreach (var control in groupBoxDeviceCryptoNightArray)
                     control.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxCustmPool0.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxCustmPool1.Enabled = appState == ApplicationGlobalState.Idle;
@@ -3204,6 +3522,14 @@ namespace GatelessGateSharp
         {
             try
             {
+                if (appState == ApplicationGlobalState.Mining && (DateTime.Now - mStartTime).Seconds < 180)
+                {
+                    timerCurrencyStatUpdates.Interval = 20 * 1000;
+                }
+                else
+                {
+                    timerCurrencyStatUpdates.Interval = 5 * 60 * 1000;
+                }
                 UpdateStatsWithLongPolling();
             }
             catch (Exception ex)
@@ -3324,74 +3650,26 @@ namespace GatelessGateSharp
 
         private void radioButtonMonero_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonMonero.Checked)
-            {
-                radioButtonMostProfitable.Checked = false;
-                radioButtonEthereum.Checked = false;
-                radioButtonZcash.Checked = false;
-                radioButtonLbry.Checked = false;
-                radioButtonPascal.Checked = false;
-            }
         }
 
         private void radioButtonEthereum_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonEthereum.Checked)
-            {
-                radioButtonMostProfitable.Checked = false;
-                radioButtonMonero.Checked = false;
-                radioButtonZcash.Checked = false;
-                radioButtonLbry.Checked = false;
-                radioButtonPascal.Checked = false;
-            }
         }
 
         private void radioButtonMostProfitable_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonMostProfitable.Checked)
-            {
-                radioButtonMonero.Checked = false;
-                radioButtonEthereum.Checked = false;
-                radioButtonZcash.Checked = false;
-                radioButtonLbry.Checked = false;
-                radioButtonPascal.Checked = false;
-            }
         }
 
         private void radioButtonZcash_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonZcash.Checked)
-            {
-                radioButtonMostProfitable.Checked = false;
-                radioButtonEthereum.Checked = false;
-                radioButtonMonero.Checked = false;
-                radioButtonLbry.Checked = false;
-                radioButtonPascal.Checked = false;
-            }
         }
 
         private void radioButtonLbry_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonLbry.Checked)
-            {
-                radioButtonMostProfitable.Checked = false;
-                radioButtonEthereum.Checked = false;
-                radioButtonMonero.Checked = false;
-                radioButtonZcash.Checked = false;
-                radioButtonPascal.Checked = false;
-            }
         }
 
         private void radioButtonPascal_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButtonPascal.Checked)
-            {
-                radioButtonMostProfitable.Checked = false;
-                radioButtonEthereum.Checked = false;
-                radioButtonMonero.Checked = false;
-                radioButtonZcash.Checked = false;
-                radioButtonLbry.Checked = false;
-            }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]

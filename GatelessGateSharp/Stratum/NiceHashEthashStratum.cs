@@ -43,6 +43,7 @@ namespace GatelessGateSharp
 
         protected override void ProcessLine(String line)
         {
+            //MainForm.Logger("line: " + line);
             Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
             if (response.ContainsKey("method") && response.ContainsKey("params"))
             {
@@ -61,6 +62,7 @@ namespace GatelessGateSharp
                     mJob = (EthashStratum.Job)(new Job(this, (string)parameters[0], (string)parameters[1], (string)parameters[2]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + parameters[0]);
+                    MainForm.Logger("Seedhash: " + parameters[1]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {

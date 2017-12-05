@@ -76,9 +76,22 @@ namespace GatelessGateSharp
             }
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
-                mEthashProgram = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded ethash mEthashProgram for Device #" + DeviceIndex + ".");
+                try
+                {
+                    if (mEthashLocalWorkSizeArray[0] != 192)
+                        throw new Exception("No suitable binary file was found.");
+                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_ethash.bin";
+                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
+                    mEthashProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
+                }
+                catch (Exception ex)
+                {
+                    //MainForm.Logger("ex.message: " + ex.Message);
+                    String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
+                    mEthashProgram = new ComputeProgram(Context, source);
+                    MainForm.Logger(@"Loaded Kernels\ethash.cl for Device #" + DeviceIndex + ".");
+                }
                 String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")

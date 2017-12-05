@@ -59,7 +59,7 @@ namespace GatelessGateSharp
 
 
         public OpenCLDualEthashLbryMiner(Device aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Ethash/Lbry")
+            : base(aGatelessGateDevice, "Ethash/Lbry", "Ethash", "Lbry")
         {
             mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
             mEthashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32);
@@ -95,7 +95,7 @@ namespace GatelessGateSharp
             {
                 String source = System.IO.File.ReadAllText(@"Kernels\ethash_lbry.cl");
                 mEthashProgram = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded ethash mEthashProgram for Device #" + DeviceIndex + ".");
+                MainForm.Logger(@"Loaded Kernels\ethash_lbry.cl for Device #" + DeviceIndex + ".");
                 String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")

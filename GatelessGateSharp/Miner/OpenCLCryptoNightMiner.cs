@@ -103,10 +103,22 @@ namespace GatelessGateSharp
             } 
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
-                program = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " : //"-O1 " :
+                try
+                {
+                    if (localWorkSizeA[0] != 8)
+                        throw new Exception("No suitable binary file was found.");
+                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_cryptonight.bin";
+                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
+                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
+                }
+                catch (Exception ex)
+                {
+                    String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
+                    program = new ComputeProgram(Context, source);
+                    MainForm.Logger(@"Loaded Kernels\cryptonight.cl for Device #" + DeviceIndex + ".");
+                }
+                String buildOptions = (Device.Vendor == "AMD"    ? "-O5 " : //"-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];

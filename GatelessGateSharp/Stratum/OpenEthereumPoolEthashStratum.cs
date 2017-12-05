@@ -42,7 +42,9 @@ namespace GatelessGateSharp
 
         Thread mPingThread;
         int mJsonRPCMessageID = 1;
+        HashSet<string> mShareIDs = new HashSet<string> { };
         private Mutex mMutex = new Mutex();
+        private bool mDwarfpoolMode = false;
 
         protected override void ProcessLine(String line)
         {
@@ -60,14 +62,16 @@ namespace GatelessGateSharp
                 MainForm.Logger("Stratum server responded: " + ((JContainer)response["error"])["message"]);
             }
             else if (response.ContainsKey("result")
-                    && response["result"] == null)
+                    && response["result"] == null
+                    && mShareIDs.Contains(response["id"].ToString()))
             {
                 MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
                 ReportShareRejection();
             }
             else if (response.ContainsKey("result")
                 && response["result"] != null
-                && response["result"].GetType() == typeof(bool))
+                && response["result"].GetType() == typeof(bool)
+                && mShareIDs.Contains(response["id"].ToString()))
             {
                 if ((bool)response["result"] && !MainForm.DevFeeMode)
                 {
@@ -91,7 +95,7 @@ namespace GatelessGateSharp
                 }
                 else 
                 {
-                    MainForm.Logger("Unknown JSON message: " + line);
+                    //MainForm.Logger("Unknown JSON message: " + line);
                 }
             }
             else if (response.ContainsKey("result")
@@ -101,6 +105,8 @@ namespace GatelessGateSharp
                 //var ID = response["id"];
                 JArray result = (JArray)response["result"];
                 var oldJob = mJob;
+                if (mDwarfpoolMode && oldJob != null && ("0x" + oldJob.ID) == (string)result[0])
+                    throw new Exception("Stratum server sent duplicate job.");
                 if (oldJob == null || ("0x" + oldJob.ID) != (string)result[0])
                 {
                     try  { mMutex.WaitOne(5000); } catch (Exception) { }
@@ -117,7 +123,7 @@ namespace GatelessGateSharp
             }
             else
             {
-                MainForm.Logger("Unknown JSON message: " + line);
+                //MainForm.Logger("Unknown JSON message: " + line);
             }
         }
         
@@ -128,21 +134,33 @@ namespace GatelessGateSharp
 
             while (!Stopped)
             {
-                try
+                if (mDwarfpoolMode)
                 {
-                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
-
-                    WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
+                    try
+                    {
+                        try { mMutex.WaitOne(5000); }
+                        catch (Exception) { }
+                        /*
+                        WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
+                            { "id", mJsonRPCMessageID++ },
+                            { "jsonrpc", "2.0" },
+                            { "method", "eth_getWork" }
+                        }));
+                        */
+                        WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                         { "id", mJsonRPCMessageID++ },
                         { "jsonrpc", "2.0" },
-                        { "method", "eth_getWork" }
-                    }));
-
-                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                }
-                catch (Exception ex)
-                {
-                    MainForm.Logger("Exception in ping thread: " + ex.Message + ex.StackTrace);
+                        { "method", "eth_submitLogin" },
+                        { "params", new List<string> {
+                            Username
+                    }}}));
+                        try { mMutex.ReleaseMutex(); }
+                        catch (Exception) { }
+                    }
+                    catch (Exception ex)
+                    {
+                        MainForm.Logger("Exception in ping thread: " + ex.Message + ex.StackTrace);
+                    }
                 }
 
                 System.Threading.Thread.Sleep(5000);
@@ -201,6 +219,7 @@ namespace GatelessGateSharp
                                       ((output >> 40) & 0xff),
                                       ((output >> 48) & 0xff),
                                       ((output >> 56) & 0xff));
+                mShareIDs.Add(mJsonRPCMessageID.ToString());
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
                     { "id", mJsonRPCMessageID++ },
                     { "jsonrpc", "2.0" },
@@ -220,9 +239,10 @@ namespace GatelessGateSharp
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        public OpenEthereumPoolEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
+        public OpenEthereumPoolEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, bool aDwalfpoolMode = false)
             : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
         {
+            mDwarfpoolMode = aDwalfpoolMode;
         }
     }
 }

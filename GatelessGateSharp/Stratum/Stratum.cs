@@ -245,7 +245,8 @@ namespace GatelessGateSharp
                         throw new Exception("Disconnected from stratum server.");
                     if (Stopped)
                         break;
-                    ProcessLine(line);
+                    if (line != "")
+                        ProcessLine(line);
                 }
             }
             catch (Exception ex)

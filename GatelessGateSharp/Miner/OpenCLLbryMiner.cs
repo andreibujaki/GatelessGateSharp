@@ -78,9 +78,21 @@ namespace GatelessGateSharp
             }
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
-                mLbryProgram = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded Lbry program for Device #" + DeviceIndex + ".");
+                try
+                {
+                    if (mLbryLocalWorkSizeArray[0] != 256)
+                        throw new Exception("No suitable binary file was found.");
+                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_lbry.bin";
+                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
+                    mLbryProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
+                }
+                catch (Exception ex)
+                {
+                    String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
+                    mLbryProgram = new ComputeProgram(Context, source);
+                    MainForm.Logger(@"Loaded Kernels\lbry.cl for Device #" + DeviceIndex + ".");
+                }
                 String buildOptions = (Device.Vendor == "AMD" ? "-O1 " : //"-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")

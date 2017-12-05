@@ -57,8 +57,8 @@ namespace GatelessGateSharp
 
         public ComputeDevice ComputeDevice { get { return mDevice.GetComputeDevice(); } }
 
-        protected OpenCLMiner(Device aDevice, String aAlgorithmName)
-            : base(aDevice, aAlgorithmName)
+        protected OpenCLMiner(Device aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
+            : base(aDevice, aAlgorithmName, aFirstAlgorithmName, aSecondAlgorithmName)
         {
             mDevice = aDevice;
             mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.OutOfOrderExecution);

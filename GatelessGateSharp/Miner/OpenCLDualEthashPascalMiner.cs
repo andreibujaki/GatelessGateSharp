@@ -61,7 +61,7 @@ namespace GatelessGateSharp
         private UInt32 mPascalRatio = 4;
 
         public OpenCLDualEthashPascalMiner(Device aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Ethash")
+            : base(aGatelessGateDevice, "Ethash/Pascal", "Ethash", "Pascal")
         {
             mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
             mEthashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32);
@@ -71,13 +71,14 @@ namespace GatelessGateSharp
             mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize);
         }
 
-        public void Start(EthashStratum aEthashStratum, PascalStratum aPascalStratum, int aEthashIntensity)
+        public void Start(EthashStratum aEthashStratum, PascalStratum aPascalStratum, int aEthashIntensity, int aPascalIterations)
         {
             mEthashStratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = 256;
             mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * Device.GetComputeDevice().MaxComputeUnits;
 
             mPascalStratum = aPascalStratum;
+            mPascalRatio = (UInt32)aPascalIterations;
 
             base.Start();
         }
@@ -107,7 +108,7 @@ namespace GatelessGateSharp
                 {
                     String source = System.IO.File.ReadAllText(@"Kernels\ethash_pascal.cl");
                     mEthashProgram = new ComputeProgram(Context, source);
-                    MainForm.Logger("Loaded ethash_pascal.cl for Device #" + DeviceIndex + ".");
+                    MainForm.Logger(@"Loaded Kernels\ethash_pascal.cl for Device #" + DeviceIndex + ".");
                 }
                 String buildOptions = (Device.Vendor == "AMD"    ? "-O1" :
                                        Device.Vendor == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
@@ -381,10 +382,10 @@ namespace GatelessGateSharp
 
                             sw.Stop();
                             Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * 0.75;
-                            double pascalSpeed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mPascalRatio;
+                            SecondSpeed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mPascalRatio;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Ethash), ", Speed / (1000000)) + String.Format("{0:N2} Mh/s (Pascal), ", pascalSpeed / (1000000)));
+                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Ethash), ", Speed / (1000000)) + String.Format("{0:N2} Mh/s (Pascal)", SecondSpeed / (1000000)));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }
