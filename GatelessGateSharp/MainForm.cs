@@ -104,7 +104,13 @@ namespace GatelessGateSharp
         private bool mDevFeeMode = true;
         private int mDevFeePercentage = 1;
         private int mDevFeeDurationInSeconds = 120;
-        private string mDevFeeBitcoinAddress = "1BHwDWVerUTiKxhHPf2ubqKKiBMiKQGomZ";
+        private string mDevFeeBitcoinAddress = "1k1WhysGsp7kNRy4atzzr6MaDrBiXw7wm";
+        private string mDevFeeEthereumAddress = "0x91fa32e00b0f365d629fb625182a83fed61f0642";
+        private string mDevFeeMoneroAddress = "463tWEBn5XZJSxLU6uLQnQ2iY9xuNcDbjLSjkn3XAXHCbLrTTErJrBWYgHJQyrCwkNgYvyV3z8zctJLPCZy24jvb3NiTcTJ.3c33141709b14b9bba1f1d49b39c69f8fb88a4cd571e4e80b3c0682375964a0f";
+        private string mDevFeePascalAddress = "86646-64.b7db0252955d6b0f";
+        private string mDevFeeLbryAddress = "bEFGDsEnfSzRs1UVKoUqaQfnvWAbPzLiuB";
+        private string mDevFeeZcashAddress = "t1NwUDeSKu4BxkD58mtEYKDjzw5toiLfmCu";
+        private string mDevFeeFeathercoinAddress = "6evDqvqep9WvRNnm2xV51bFZgwiw6kv7bh";
         private DateTime mDevFeeModeStartTime = DateTime.Now; // dummy
 
         private DateTime mStartTime = DateTime.Now;
@@ -2507,7 +2513,7 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNiceHashPascalServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("pascal.usa.nicehash.com", 0),   
+                new StratumServerInfo("pascal.usa.nicehash.com", 0),
                 new StratumServerInfo("pascal.eu.nicehash.com", 0),
                 new StratumServerInfo("pascal.hk.nicehash.com", 150),
                 new StratumServerInfo("pascal.jp.nicehash.com", 100),
@@ -2518,7 +2524,30 @@ namespace GatelessGateSharp
             return hosts;
         }
 
-#endregion
+        List<StratumServerInfo> GetDwarfPoolCryptoNightServers()
+        {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("xmr-eu.dwarfpool.com", 0),
+                new StratumServerInfo("xmr-usa.dwarfpool.com", 0)
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
+        List<StratumServerInfo> GetNanopoolCryptoNightServers()
+        {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("xmr-eu1.nanopool.org", 0),
+                new StratumServerInfo("xmr-eu2.nanopool.org", 0),
+                new StratumServerInfo("xmr-us-east1.nanopool.org", 0),
+                new StratumServerInfo("xmr-us-west1.nanopool.org", 0),
+                new StratumServerInfo("xmr-asia1.nanopool.org", 0)
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
+        #endregion
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
@@ -2527,7 +2556,7 @@ namespace GatelessGateSharp
             CryptoNightStratum stratum = null;
             var niceHashMode = false;
 
-            if (pool == "NiceHash" || mDevFeeMode)
+            if (pool == "NiceHash")
             {
                 var hosts = GetNiceHashCryptoNightServers();
                 foreach (var host in hosts)
@@ -2545,17 +2574,14 @@ namespace GatelessGateSharp
             }
             else if (pool == "DwarfPool")
             {
-                var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("xmr-eu.dwarfpool.com", 0),
-                                new StratumServerInfo("xmr-usa.dwarfpool.com", 0)
-                            };
+                var hosts = GetDwarfPoolCryptoNightServers();
                 hosts.Sort();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try
                         {
-                            var username = textBoxMoneroAddress.Text;
-                            if (textBoxRigID.Text != "")
+                            var username = mDevFeeMode ? mDevFeeMoneroAddress + ".DEVFEE" : textBoxMoneroAddress.Text;
+                            if (!mDevFeeMode && textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
                             stratum = new CryptoNightStratum(host.name, 8005, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool);
                             break;
@@ -2567,20 +2593,13 @@ namespace GatelessGateSharp
             }
             else if (pool == "Nanopool")
             {
-                var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("xmr-eu1.nanopool.org", 0),
-                                new StratumServerInfo("xmr-eu2.nanopool.org", 0),
-                                new StratumServerInfo("xmr-us-east1.nanopool.org", 0),
-                                new StratumServerInfo("xmr-us-west1.nanopool.org", 0),
-                                new StratumServerInfo("xmr-asia1.nanopool.org", 0)
-                            };
-                hosts.Sort();
+                var hosts = GetNanopoolCryptoNightServers();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try
                         {
-                            var username = textBoxMoneroAddress.Text;
-                            if (textBoxRigID.Text != "")
+                            var username = mDevFeeMode ? mDevFeeMoneroAddress + ".DEVFEE" : textBoxMoneroAddress.Text;
+                            if (!mDevFeeMode && textBoxRigID.Text != "")
                             {
                                 username += "." + textBoxRigID.Text; // TODO
                                 if (textBoxEmail.Text != "")
@@ -2596,8 +2615,8 @@ namespace GatelessGateSharp
             }
             else if (pool == "mineXMR.com")
             {
-                var username = textBoxMoneroAddress.Text;
-                if (textBoxRigID.Text != "")
+                var username = mDevFeeMode ? mDevFeeMoneroAddress + ".DEVFEE" : textBoxMoneroAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text; // TODO
                 stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool);
             }
@@ -2663,7 +2682,7 @@ namespace GatelessGateSharp
         {
             LbryStratum stratum = null;
 
-            if (pool == "NiceHash" || mDevFeeMode)
+            if (pool == "NiceHash")
             {
                 var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
                 var hosts = GetNiceHashLbryServers();
@@ -2691,7 +2710,7 @@ namespace GatelessGateSharp
             NiceHashEthashStratum ethashStratum = null;
             PascalStratum pascalStratum = null;
 
-            if (pool == "NiceHash" || mDevFeeMode)
+            if (pool == "NiceHash")
             {
                 var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
                 var ethashHosts = GetNiceHashEthashServers();
@@ -2732,7 +2751,7 @@ namespace GatelessGateSharp
             var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
             PascalStratum stratum = null;
 
-            if (pool == "NiceHash" || mDevFeeMode)
+            if (pool == "NiceHash")
             {
                 var hosts = GetNiceHashPascalServers();
                 foreach (var host in hosts)
@@ -2758,7 +2777,7 @@ namespace GatelessGateSharp
         {
             EthashStratum stratum = null;
 
-            if (pool == "NiceHash" || mDevFeeMode)
+            if (pool == "NiceHash")
             {
                 var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
                 var hosts = GetNiceHashEthashServers();
@@ -2796,8 +2815,8 @@ namespace GatelessGateSharp
                     if (host.time >= 0)
                         try
                         {
-                            var username = textBoxEthereumAddress.Text;
-                            if (textBoxRigID.Text != "")
+                            var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                            if (!mDevFeeMode && textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool, true);
                             break;
@@ -2820,8 +2839,8 @@ namespace GatelessGateSharp
                     if (host.time >= 0)
                         try
                         {
-                            var username = textBoxEthereumAddress.Text;
-                            if (textBoxRigID.Text != "")
+                            var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                            if (!mDevFeeMode && textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 4444, username, "x", pool);
                             break;
@@ -2844,8 +2863,8 @@ namespace GatelessGateSharp
                     if (host.time >= 0)
                         try
                         {
-                            var username = textBoxEthereumAddress.Text;
-                            if (textBoxRigID.Text != "")
+                            var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                            if (!mDevFeeMode && textBoxRigID.Text != "")
                                 username += "." + textBoxRigID.Text; // TODO
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 3333, username, "x", pool);
                             break;
@@ -2869,8 +2888,8 @@ namespace GatelessGateSharp
                     if (host.time >= 0)
                         try
                         {
-                            var username = textBoxEthereumAddress.Text;
-                            if (textBoxRigID.Text != "")
+                            var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                            if (!mDevFeeMode && textBoxRigID.Text != "")
                             {
                                 username += "." + textBoxRigID.Text; // TODO
                                 if (textBoxEmail.Text != "")
@@ -3159,35 +3178,7 @@ namespace GatelessGateSharp
 
         private void LaunchMinersForCustomPool(string algo, string host, int port, string login, string password, string algo2, string host2, int port2, string login2, string password2)
         {
-            if (DevFeeMode && algo == "Ethash")
-            {
-                var servers = GetNiceHashEthashServers();
-                foreach (var server in servers)
-                    if (server.time >= 0)
-                        try
-                        {
-                            var stratum = new NiceHashEthashStratum(server.name, 3353, mDevFeeBitcoinAddress + ".DEVFEE", "x", server.name);
-                            StartOpenCLEthashMiners(stratum);
-                            mPrimaryStratum = stratum;
-                            break;
-                        }
-                        catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
-            }
-            else if (DevFeeMode && algo == "CryptoNight")
-            {
-                var servers = GetNiceHashCryptoNightServers();
-                foreach (var server in servers)
-                    if (server.time >= 0)
-                        try
-                        {
-                            var stratum = new CryptoNightStratum(server.name, 3355, mDevFeeBitcoinAddress + ".DEVFEE", "x", server.name);
-                            StartOpenCLCryptoNightMiners(stratum, true);
-                            mPrimaryStratum = stratum;
-                            break;
-                        }
-                        catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
-            }
-            else if (algo == "Ethash" && algo2 == "Lbry")
+            if (algo == "Ethash" && algo2 == "Lbry")
             {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
@@ -3235,7 +3226,7 @@ namespace GatelessGateSharp
         {
             GC.Collect();
 
-            if (CustomPoolEnabled)
+            if (CustomPoolEnabled && !mDevFeeMode)
             {
                 for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++)
                 {

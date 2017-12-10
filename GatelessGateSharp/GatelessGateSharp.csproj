@@ -219,6 +219,7 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
+xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)
 copy $(SolutionDir)SQLite\System.Data.SQLite.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
