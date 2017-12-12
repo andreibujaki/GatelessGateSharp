@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.3";
+        public static string appVersion = "1.1.4";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -754,7 +754,7 @@ namespace GatelessGateSharp
                                                         radioButtonMonero.Checked ? "monero" :
                                                         radioButtonZcash.Checked ? "zcash" :
                                                         radioButtonLbry.Checked ? "lbry" :
-                                                        radioButtonPascal.Checked ? "lbry" :
+                                                        radioButtonPascal.Checked ? "pascal" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
                     }
@@ -1244,6 +1244,8 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void InitializeDevices() {
             mDevices = Device.GetAllDevices();
+            if (mDevices.Length > maxNumDevices)
+                Array.Resize<Device>(ref mDevices, maxNumDevices);
             Logger("Number of Devices: " + mDevices.Length);
 
             foreach (var device in mDevices) {
@@ -1894,7 +1896,7 @@ namespace GatelessGateSharp
                             }
                         }
 
-                        // fan speedPrimary
+                        // fan speed
                         ADLFanSpeedValue OSADLFanSpeedValueData;
                         OSADLFanSpeedValueData = new ADLFanSpeedValue();
                         var fanSpeedValueBuffer = IntPtr.Zero;
@@ -1991,8 +1993,8 @@ namespace GatelessGateSharp
         }
 
         public bool ValidatePascalAddress() {
-            var regex = new System.Text.RegularExpressions.Regex(@"^[-0-9a-zA-Z.]+$");
-            var match = regex.Match(textBoxMoneroAddress.Text);
+            var regex = new System.Text.RegularExpressions.Regex(@"^[\-0-9a-zA-Z\.]+$");
+            var match = regex.Match(textBoxPascalAddress.Text);
             if (match.Success) {
                 return true;
             } else {
@@ -2003,7 +2005,7 @@ namespace GatelessGateSharp
 
         public bool ValidateLbryAddress() {
             var regex = new System.Text.RegularExpressions.Regex(@"^[0-9a-zA-Z]+?$");
-            var match = regex.Match(textBoxMoneroAddress.Text);
+            var match = regex.Match(textBoxLbryAddress.Text);
             if (match.Success) {
                 return true;
             } else {

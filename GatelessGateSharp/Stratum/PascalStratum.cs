@@ -66,7 +66,7 @@ namespace GatelessGateSharp
             public String Coinbase1 { get { return mCoinbase1; } }
             public String Coinbase2 { get { return mCoinbase2; } }
             public String NTime { get { return mNTime; } }
-            public PascalStratum Stratum { get { return mStratum; } }
+            public new PascalStratum Stratum { get { return mStratum; } }
 
             public Job(PascalStratum aStratum, string aID, string aCoinbase1, string aCoinbase2, string aNTime)
                 : base(aStratum)

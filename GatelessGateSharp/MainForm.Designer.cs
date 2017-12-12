@@ -3006,6 +3006,7 @@
             // textBoxLbryAddress
             // 
             this.textBoxLbryAddress.Location = new System.Drawing.Point(448, 43);
+            this.textBoxLbryAddress.MaxLength = 512;
             this.textBoxLbryAddress.Name = "textBoxLbryAddress";
             this.textBoxLbryAddress.Size = new System.Drawing.Size(179, 19);
             this.textBoxLbryAddress.TabIndex = 21;
@@ -3013,6 +3014,7 @@
             // textBoxPascalAddress
             // 
             this.textBoxPascalAddress.Location = new System.Drawing.Point(448, 18);
+            this.textBoxPascalAddress.MaxLength = 512;
             this.textBoxPascalAddress.Name = "textBoxPascalAddress";
             this.textBoxPascalAddress.Size = new System.Drawing.Size(179, 19);
             this.textBoxPascalAddress.TabIndex = 19;
@@ -3039,6 +3041,7 @@
             // textBoxBitcoinAddress
             // 
             this.textBoxBitcoinAddress.Location = new System.Drawing.Point(100, 18);
+            this.textBoxBitcoinAddress.MaxLength = 512;
             this.textBoxBitcoinAddress.Name = "textBoxBitcoinAddress";
             this.textBoxBitcoinAddress.Size = new System.Drawing.Size(179, 19);
             this.textBoxBitcoinAddress.TabIndex = 7;
@@ -3073,6 +3076,7 @@
             // textBoxEthereumAddress
             // 
             this.textBoxEthereumAddress.Location = new System.Drawing.Point(100, 42);
+            this.textBoxEthereumAddress.MaxLength = 512;
             this.textBoxEthereumAddress.Name = "textBoxEthereumAddress";
             this.textBoxEthereumAddress.Size = new System.Drawing.Size(179, 19);
             this.textBoxEthereumAddress.TabIndex = 9;
@@ -3089,6 +3093,7 @@
             // textBoxMoneroAddress
             // 
             this.textBoxMoneroAddress.Location = new System.Drawing.Point(100, 66);
+            this.textBoxMoneroAddress.MaxLength = 512;
             this.textBoxMoneroAddress.Name = "textBoxMoneroAddress";
             this.textBoxMoneroAddress.Size = new System.Drawing.Size(179, 19);
             this.textBoxMoneroAddress.TabIndex = 11;
@@ -3126,6 +3131,7 @@
             // 
             this.textBoxZcashAddress.Enabled = false;
             this.textBoxZcashAddress.Location = new System.Drawing.Point(100, 90);
+            this.textBoxZcashAddress.MaxLength = 512;
             this.textBoxZcashAddress.Name = "textBoxZcashAddress";
             this.textBoxZcashAddress.Size = new System.Drawing.Size(179, 19);
             this.textBoxZcashAddress.TabIndex = 13;

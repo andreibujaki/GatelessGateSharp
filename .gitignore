@@ -214,3 +214,5 @@ Win8.1Debug/phymem_wrapper.lib
 *.exe
 *.msi
 Setup/Sign.bat
+SignBinaries.bat
+*.bat

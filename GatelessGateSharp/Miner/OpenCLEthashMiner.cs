@@ -85,7 +85,7 @@ namespace GatelessGateSharp
                     mEthashProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
                     MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //MainForm.Logger("ex.message: " + ex.Message);
                     String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");

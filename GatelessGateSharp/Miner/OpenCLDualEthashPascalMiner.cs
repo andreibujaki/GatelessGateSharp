@@ -104,7 +104,7 @@ namespace GatelessGateSharp
                     mEthashProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
                     MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     String source = System.IO.File.ReadAllText(@"Kernels\ethash_pascal.cl");
                     mEthashProgram = new ComputeProgram(Context, source);
