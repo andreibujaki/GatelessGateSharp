@@ -87,7 +87,7 @@ namespace GatelessGateSharp
                     mLbryProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
                     MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
                     mLbryProgram = new ComputeProgram(Context, source);

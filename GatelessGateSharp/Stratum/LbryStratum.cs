@@ -98,7 +98,7 @@ namespace GatelessGateSharp
             public String NBits { get { return mNBits; } }
             public String NTime { get { return mNTime; } }
             public String Version { get { return mVersion; } }
-            public LbryStratum Stratum { get { return mStratum; } }
+            public new LbryStratum Stratum { get { return mStratum; } }
 
             public Job(LbryStratum aStratum, string aID, string aPrevHash, string aTrie, string aCoinbase1, string aCoinbase2, string[] aMerkles, string aVersion, string aNBits, string aNTime)
                 : base(aStratum)
