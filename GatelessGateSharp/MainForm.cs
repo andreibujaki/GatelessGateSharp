@@ -2517,8 +2517,8 @@ namespace GatelessGateSharp
                         Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex]
                             .Value)),
                             stratum2,
-                            2048 * (int)mDevices[deviceIndex].MaxComputeUnits, //Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
-                            64);
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
                     toolStripMainFormProgressBar.Value = ++minerCount;
 
                     for (int j = 0; j < mLaunchInterval; j += 10) {
