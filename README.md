@@ -2,7 +2,7 @@
 
 ![Screen Shot](https://i.imgur.com/uIvlDUv.png)
 
-Gateless Gate Sharp is the first oen-source OpenCL dual ETH/XMR/PASC/LIBC miner for Windows operating systems. It focuses on performance, stability, and ease of use.
+Gateless Gate Sharp is the first open-source OpenCL dual ETH/XMR/PASC/LIBC miner for Windows operating systems. It focuses on performance, stability, and ease of use.
 Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), this miner aims at stability with a much simpler design and the managed .NET Framework.
 
 * [Gateless_Gate_Sharp_1.1.4_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.4-alpha/Gateless_Gate_Sharp_1.1.4_alpha_Setup.msi) (Windows x64 Installer)
