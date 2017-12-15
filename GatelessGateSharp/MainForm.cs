@@ -2347,7 +2347,7 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        public void LaunchPascalMiners(string pool) {
+        public void LaunchOpenCLPascalMiners(string pool) {
             PascalStratum stratum = null;
 
             if (pool == "NiceHash") {
@@ -2382,7 +2382,7 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        public void LaunchEthashMiners(string pool) {
+        public void LaunchOpenCLEthashMiners(string pool) {
             EthashStratum stratum = null;
 
             if (pool == "NiceHash") {
@@ -2692,6 +2692,47 @@ namespace GatelessGateSharp
             }
         }
 
+
+        void LaunchOpenCLNeoScryptMinersWithStratum(NeoScryptStratum stratum) {
+            this.Activate();
+            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
+            int deviceIndex, i, minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                    for (i = 0; i < 2; ++i) // Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i)
+                        ++minerCount;
+            toolStripMainFormProgressBar.Maximum = minerCount;
+            minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                    for (i = 0; i < 2; ++i) { // Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i) {
+                        OpenCLNeoScryptMiner miner = null;
+                        foreach (var inactiveMiner in mInactiveMiners) {
+                            if (inactiveMiner.GetType() == typeof(OpenCLNeoScryptMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
+                                miner = (OpenCLNeoScryptMiner)inactiveMiner;
+                                break;
+                            }
+                        }
+                        if (miner != null) {
+                            mInactiveMiners.Remove((Miner)miner);
+                        } else {
+                            miner = new OpenCLNeoScryptMiner(mDevices[deviceIndex]);
+                        }
+                        mActiveMiners.Add(miner);
+                        miner.Start(stratum,
+                            512, // Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptIntensityArray[deviceIndex].Value)),
+                            256    // Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceIndex].Value))
+                            );
+                        toolStripMainFormProgressBar.Value = ++minerCount;
+                        for (int j = 0; j < mLaunchInterval; j += 10) {
+                            Application.DoEvents();
+                            System.Threading.Thread.Sleep(10);
+                        }
+                    }
+                }
+            }
+        }
+
         bool CustomPoolEnabled {
             get {
                 return checkBoxCustomPool0Enable.Checked || checkBoxCustomPool1Enable.Checked || checkBoxCustomPool2Enable.Checked || checkBoxCustomPool3Enable.Checked;
@@ -2722,10 +2763,13 @@ namespace GatelessGateSharp
             } else if (algo == "Lbry") {
                 var stratum = new LbryStratum(host, port, login, password, host);
                 LaunchOpenCLLbryMinersWithStratum(stratum);
-                mPrimaryStratum = stratum;
             } else if (algo == "Pascal") {
                 var stratum = new PascalStratum(host, port, login, password, host);
                 LaunchOpenCLPascalMinersWithStratum(stratum);
+                mPrimaryStratum = stratum;
+            } else if (algo == "NeoScrypt") {
+                var stratum = new NeoScryptStratum(host, port, login, password, host);
+                LaunchOpenCLNeoScryptMinersWithStratum(stratum);
                 mPrimaryStratum = stratum;
             }
         }
@@ -2812,7 +2856,7 @@ namespace GatelessGateSharp
                             LaunchOpenCLDualEthashPascalMiners(pool);
                         } else if (radioButtonEthereum.Checked) {
                             Logger("Launching Ethash miners for " + pool + "...");
-                            LaunchEthashMiners(pool);
+                            LaunchOpenCLEthashMiners(pool);
                         } else if (radioButtonMonero.Checked) {
                             Logger("Launching CryptoNight miners for " + pool + "...");
                             LaunchOpenCLCryptoNightMiners(pool);
@@ -2821,7 +2865,7 @@ namespace GatelessGateSharp
                             LaunchOpenCLLbryMiners(pool);
                         } else if (radioButtonPascal.Checked) {
                             Logger("Launching Pascal miners for " + pool + "...");
-                            LaunchPascalMiners(pool);
+                            LaunchOpenCLPascalMiners(pool);
                         }
                         if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
                             break;
@@ -2992,9 +3036,9 @@ namespace GatelessGateSharp
                 textBoxCustomPool3Host.Enabled = textBoxCustomPool3Login.Enabled = textBoxCustomPool3Password.Enabled = comboBoxCustomPool3Algorithm.Enabled = comboBoxCustomPool3SecondaryAlgorithm.Enabled = numericUpDownCustomPool3Port.Enabled = checkBoxCustomPool3Enable.Checked;
 
                 if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
                 textBoxCustomPool0SecondaryHost.Enabled = textBoxCustomPool0SecondaryLogin.Enabled = textBoxCustomPool0SecondaryPassword.Enabled = numericUpDownCustomPool0SecondaryPort.Enabled = checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0;
                 textBoxCustomPool1SecondaryHost.Enabled = textBoxCustomPool1SecondaryLogin.Enabled = textBoxCustomPool1SecondaryPassword.Enabled = numericUpDownCustomPool1SecondaryPort.Enabled = checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0;

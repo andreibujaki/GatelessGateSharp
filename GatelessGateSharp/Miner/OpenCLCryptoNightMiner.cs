@@ -118,7 +118,7 @@ namespace GatelessGateSharp
                     program = new ComputeProgram(Context, source);
                     MainForm.Logger(@"Loaded Kernels\cryptonight.cl for Device #" + DeviceIndex + ".");
                 }
-                String buildOptions = (Device.Vendor == "AMD"    ? "-O5 " : //"-O1 " :
+                String buildOptions = (Device.Vendor == "AMD"    ? "-O5" : //"-O1 " :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];

@@ -3503,7 +3503,8 @@
             "Ethash",
             "CryptoNight",
             "Lbry",
-            "Pascal"});
+            "Pascal",
+            "NeoScrypt"});
             this.comboBoxCustomPool1Algorithm.Location = new System.Drawing.Point(71, 15);
             this.comboBoxCustomPool1Algorithm.Name = "comboBoxCustomPool1Algorithm";
             this.comboBoxCustomPool1Algorithm.Size = new System.Drawing.Size(103, 20);
@@ -3708,7 +3709,8 @@
             "Ethash",
             "CryptoNight",
             "Lbry",
-            "Pascal"});
+            "Pascal",
+            "NeoScrypt"});
             this.comboBoxCustomPool2Algorithm.Location = new System.Drawing.Point(71, 15);
             this.comboBoxCustomPool2Algorithm.Name = "comboBoxCustomPool2Algorithm";
             this.comboBoxCustomPool2Algorithm.Size = new System.Drawing.Size(103, 20);
@@ -3913,7 +3915,8 @@
             "Ethash",
             "CryptoNight",
             "Lbry",
-            "Pascal"});
+            "Pascal",
+            "NeoScrypt"});
             this.comboBoxCustomPool3Algorithm.Location = new System.Drawing.Point(71, 14);
             this.comboBoxCustomPool3Algorithm.Name = "comboBoxCustomPool3Algorithm";
             this.comboBoxCustomPool3Algorithm.Size = new System.Drawing.Size(103, 20);
@@ -19003,7 +19006,7 @@
             this.richTextBoxAbout.ReadOnly = true;
             this.richTextBoxAbout.Size = new System.Drawing.Size(713, 358);
             this.richTextBoxAbout.TabIndex = 0;
-            this.richTextBoxAbout.Text = resources.GetString("richTextBoxAbout.Text");
+            this.richTextBoxAbout.Text = "3";
             // 
             // buttonStart
             // 

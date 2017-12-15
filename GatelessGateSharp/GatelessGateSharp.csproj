@@ -112,11 +112,13 @@
     <Compile Include="Device.cs" />
     <Compile Include="Miner\OpenCLDualEthashLbryMiner.cs" />
     <Compile Include="Miner\OpenCLDualEthashPascalMiner.cs" />
+    <Compile Include="Miner\OpenCLNeoScryptMiner.cs" />
     <Compile Include="Miner\OpenCLPascalMiner.cs" />
     <Compile Include="Miner\OpenCLLbryMiner.cs" />
     <Compile Include="Miner\OpenCLCryptoNightMiner.cs" />
     <Compile Include="Stratum\EthashStratum.cs" />
     <Compile Include="Stratum\CryptoNightStratum.cs" />
+    <Compile Include="Stratum\NeoScryptStratum.cs" />
     <Compile Include="Stratum\PascalStratum.cs" />
     <Compile Include="Stratum\LbryStratum.cs" />
     <Compile Include="Stratum\OpenEthereumPoolEthashStratum.cs" />
@@ -155,6 +157,7 @@
     <None Include="BinaryKernels\Bonaire_cryptonight.bin" />
     <None Include="BinaryKernels\Bonaire_ethash.bin" />
     <None Include="BinaryKernels\Bonaire_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Capeverde_cryptonight.bin" />
     <None Include="BinaryKernels\Capeverde_ethash.bin" />
     <None Include="BinaryKernels\Capeverde_ethash_pascal.bin" />
     <None Include="BinaryKernels\Carrizo_cryptonight.bin" />
@@ -169,6 +172,7 @@
     <None Include="BinaryKernels\gfx900_cryptonight.bin" />
     <None Include="BinaryKernels\gfx900_ethash.bin" />
     <None Include="BinaryKernels\gfx900_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Hainan_cryptonight.bin" />
     <None Include="BinaryKernels\Hainan_ethash.bin" />
     <None Include="BinaryKernels\Hainan_ethash_pascal.bin" />
     <None Include="BinaryKernels\Hawaii_cryptonight.bin" />
@@ -183,8 +187,10 @@
     <None Include="BinaryKernels\Mullins_cryptonight.bin" />
     <None Include="BinaryKernels\Mullins_ethash.bin" />
     <None Include="BinaryKernels\Mullins_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Oland_cryptonight.bin" />
     <None Include="BinaryKernels\Oland_ethash.bin" />
     <None Include="BinaryKernels\Oland_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Pitcairn_cryptonight.bin" />
     <None Include="BinaryKernels\Pitcairn_ethash.bin" />
     <None Include="BinaryKernels\Pitcairn_ethash_pascal.bin" />
     <None Include="BinaryKernels\Spectre_cryptonight.bin" />
@@ -196,6 +202,7 @@
     <None Include="BinaryKernels\Stoney_cryptonight.bin" />
     <None Include="BinaryKernels\Stoney_ethash.bin" />
     <None Include="BinaryKernels\Stoney_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Tahiti_cryptonight.bin" />
     <None Include="BinaryKernels\Tahiti_ethash.bin" />
     <None Include="BinaryKernels\Tahiti_ethash_pascal.bin" />
     <None Include="BinaryKernels\Tonga_cryptonight.bin" />
@@ -209,6 +216,7 @@
     <None Include="Kernels\groestl256.cl" />
     <None Include="Kernels\jh.cl" />
     <None Include="Kernels\lbry.cl" />
+    <None Include="Kernels\neoscrypt.cl" />
     <None Include="Kernels\pascal.cl" />
     <None Include="Kernels\ripemd160.cl" />
     <None Include="Kernels\sha256.cl" />
