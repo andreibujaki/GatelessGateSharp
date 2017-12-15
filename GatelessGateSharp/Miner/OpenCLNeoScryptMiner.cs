@@ -83,7 +83,7 @@ namespace GatelessGateSharp
                 String source = System.IO.File.ReadAllText(@"Kernels\neoscrypt.cl");
                 mNeoScryptProgram = new ComputeProgram(Context, source);
                 MainForm.Logger(@"Loaded Kernels\neoscrypt.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD" ? "-O5 " : // "-legacy" : //"-O1 " :
+                String buildOptions = (Device.Vendor == "AMD" ? "-O5 " : // "-legacy" :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + mNeoScryptLocalWorkSizeArray[0];

@@ -69,7 +69,7 @@ namespace GatelessGateSharp
                     blob[74] = array[1];
                     blob[75] = array[0];
 
-\                    return blob;
+                    return blob;
                 }
             }
         }
