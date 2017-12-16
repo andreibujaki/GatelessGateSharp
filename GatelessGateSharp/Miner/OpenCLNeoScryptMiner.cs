@@ -46,18 +46,16 @@ namespace GatelessGateSharp
         long[] mNeoScryptGlobalWorkOffsetArray = new long[] { 0 };
         UInt32[] mNeoScryptOutput = new UInt32[sNeoScryptOutputSize];
         byte[] mNeoScryptInput = new byte[sNeoScryptInputSize];
-          
+
 
 
         public OpenCLNeoScryptMiner(Device aGatelessGateDevice)
-            : base(aGatelessGateDevice, "NeoScrypt")
-        {
+            : base(aGatelessGateDevice, "NeoScrypt") {
             mNeoScryptInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sNeoScryptInputSize);
             mNeoScryptOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sNeoScryptOutputSize);
         }
 
-        public void Start(NeoScryptStratum aNeoScryptStratum, int aNeoScryptIntensity, int aNeoScryptLocalWorkSize)
-        {
+        public void Start(NeoScryptStratum aNeoScryptStratum, int aNeoScryptIntensity, int aNeoScryptLocalWorkSize) {
             mNeoScryptStratum = aNeoScryptStratum;
             mNeoScryptGlobalWorkSizeArray[0] = aNeoScryptIntensity * Device.MaxComputeUnits;
             mNeoScryptLocalWorkSizeArray[0] = aNeoScryptLocalWorkSize;
@@ -67,32 +65,25 @@ namespace GatelessGateSharp
             base.Start();
         }
 
-        public void BuildNeoScryptProgram()
-        {
+        public void BuildNeoScryptProgram() {
             ComputeDevice computeDevice = Device.GetComputeDevice();
 
             try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
 
-            if (mNeoScryptProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])))
-            {
+            if (mNeoScryptProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0]))) {
                 mNeoScryptProgram = mNeoScryptProgramArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])];
                 mNeoScryptSearchKernel = mNeoScryptSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])];
-            }
-            else
-            {
+            } else {
                 String source = System.IO.File.ReadAllText(@"Kernels\neoscrypt.cl");
                 mNeoScryptProgram = new ComputeProgram(Context, source);
                 MainForm.Logger(@"Loaded Kernels\neoscrypt.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD" ? "-O5 " : // "-legacy" :
+                String buildOptions = (Device.Vendor == "AMD" ? "-O5 -legacy" : // "-legacy" :
                                        Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + mNeoScryptLocalWorkSizeArray[0];
-                try
-                {
+                try {
                     mNeoScryptProgram.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     MainForm.Logger(mNeoScryptProgram.GetBuildLog(computeDevice));
                     throw;
                 }
@@ -107,10 +98,9 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        override unsafe protected void MinerThread()
-        {
+        override unsafe protected void MinerThread() {
             Random r = new Random();
-            
+
             MarkAsAlive();
 
             MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
@@ -138,7 +128,7 @@ namespace GatelessGateSharp
                                 elapsedTime += 10;
                             }
                             if (mNeoScryptStratum == null || mNeoScryptStratum.GetJob() == null)
-                                throw new TimeoutException("Stratum server failed to send a new NeoScryptJob.");
+                                throw new TimeoutException("Stratum server failed to send a new job.");
 
                             System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                             NeoScryptStratum.Work neoscryptWork;

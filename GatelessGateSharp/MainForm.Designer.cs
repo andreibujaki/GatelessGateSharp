@@ -1189,6 +1189,7 @@
             this.statusStripMainForm = new System.Windows.Forms.StatusStrip();
             this.toolStripMainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.radioButtonFeathercoin = new System.Windows.Forms.RadioButton();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -3242,6 +3243,7 @@
             // 
             // groupBoxCoinsToMine
             // 
+            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonFeathercoin);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonPascal);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonLbry);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButton4);
@@ -3328,7 +3330,7 @@
             // 
             this.radioButtonZcash.AutoSize = true;
             this.radioButtonZcash.Enabled = false;
-            this.radioButtonZcash.Location = new System.Drawing.Point(222, 81);
+            this.radioButtonZcash.Location = new System.Drawing.Point(223, 103);
             this.radioButtonZcash.Name = "radioButtonZcash";
             this.radioButtonZcash.Size = new System.Drawing.Size(54, 16);
             this.radioButtonZcash.TabIndex = 7;
@@ -4133,7 +4135,8 @@
             "Ethash",
             "CryptoNight",
             "Lbry",
-            "Pascal"});
+            "Pascal",
+            "NeoScrypt"});
             this.comboBoxCustomPool0Algorithm.Location = new System.Drawing.Point(71, 15);
             this.comboBoxCustomPool0Algorithm.Name = "comboBoxCustomPool0Algorithm";
             this.comboBoxCustomPool0Algorithm.Size = new System.Drawing.Size(103, 20);
@@ -19081,6 +19084,16 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(158, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabelMessage";
             // 
+            // radioButtonFeathercoin
+            // 
+            this.radioButtonFeathercoin.AutoSize = true;
+            this.radioButtonFeathercoin.Location = new System.Drawing.Point(222, 81);
+            this.radioButtonFeathercoin.Name = "radioButtonFeathercoin";
+            this.radioButtonFeathercoin.Size = new System.Drawing.Size(83, 16);
+            this.radioButtonFeathercoin.TabIndex = 14;
+            this.radioButtonFeathercoin.Text = "Feathercoin";
+            this.radioButtonFeathercoin.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -20920,5 +20933,6 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button buttonLbryBalance;
         private System.Windows.Forms.TextBox textBoxLbryAddress;
+        private System.Windows.Forms.RadioButton radioButtonFeathercoin;
     }
 }

@@ -435,6 +435,8 @@ namespace GatelessGateSharp
                                             radioButtonLbry.Checked = true;
                                         } else if (coinToMine == "pascal") {
                                             radioButtonPascal.Checked = true;
+                                        } else if (coinToMine == "feathercoin") {
+                                            radioButtonFeathercoin.Checked = true;
                                         } else {
                                             radioButtonEthereum.Checked = true;
                                         }
@@ -755,6 +757,7 @@ namespace GatelessGateSharp
                                                         radioButtonZcash.Checked ? "zcash" :
                                                         radioButtonLbry.Checked ? "lbry" :
                                                         radioButtonPascal.Checked ? "pascal" :
+                                                        radioButtonFeathercoin.Checked ? "feathercoin" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
                     }
@@ -2059,6 +2062,19 @@ namespace GatelessGateSharp
 
         #region GetServers
 
+        List<StratumServerInfo> GetNiceHashNeoScryptServers() {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("neoscrypt.usa.nicehash.com", 0),
+                new StratumServerInfo("neoscrypt.eu.nicehash.com", 0),
+                new StratumServerInfo("neoscrypt.hk.nicehash.com", 150),
+                new StratumServerInfo("neoscrypt.jp.nicehash.com", 100),
+                new StratumServerInfo("neoscrypt.in.nicehash.com", 200),
+                new StratumServerInfo("neoscrypt.br.nicehash.com", 180)
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
         List<StratumServerInfo> GetNiceHashLbryServers() {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("lbry.usa.nicehash.com", 0),
@@ -2268,7 +2284,7 @@ namespace GatelessGateSharp
             LbryStratum stratum = null;
             string username = "";
 
-            if (pool == "NiceHash" 
+            if (pool == "NiceHash"
                 && (username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text)).Length > 0) {
                 var hosts = GetNiceHashLbryServers();
                 foreach (var host in hosts)
@@ -2285,6 +2301,33 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 LaunchOpenCLLbryMinersWithStratum(stratum);
+                mPrimaryStratum = (Stratum)stratum;
+            }
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchOpenCLNeoScryptMiners(string pool) {
+            NeoScryptStratum stratum = null;
+            string username = "";
+
+            if (pool == "NiceHash"
+                && (username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text)).Length > 0) {
+                var hosts = GetNiceHashNeoScryptServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new NeoScryptStratum(host.name, 3341, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "zpool" && (username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text).Length > 0) {
+                stratum = new NeoScryptStratum("neoscrypt.mine.zpool.ca", 4233, username, "c=LBC", pool);
+            }
+
+            if (stratum != null) {
+                LaunchOpenCLNeoScryptMinersWithStratum(stratum);
                 mPrimaryStratum = (Stratum)stratum;
             }
         }
@@ -2866,6 +2909,9 @@ namespace GatelessGateSharp
                         } else if (radioButtonPascal.Checked) {
                             Logger("Launching Pascal miners for " + pool + "...");
                             LaunchOpenCLPascalMiners(pool);
+                        } else if (radioButtonFeathercoin.Checked) {
+                            Logger("Launching NeoScrypt miners for " + pool + "...");
+                            LaunchOpenCLNeoScryptMiners(pool);
                         }
                         if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
                             break;
