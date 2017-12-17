@@ -9,3 +9,7 @@ Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), t
 * [Gateless_Gate_Sharp_1.0.1_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.0.1/Gateless_Gate_Sharp_1.0.1_Setup.msi) (Windows x64 Installer)
 
 Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry, and the following major pools: NiceHash, ethermine.org, ethpool.org, DwarfPool, Nanopool, mineXMR.com, and zpool. Support for custom pools has also been added. All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
+
+## About the DEVFEE
+
+This miner has a built-in 1% DEVFEE. I must emphasize that **I absolutely need the DEVFEE in order to continue this project, and I will not provide any support for those who run binaries I did not sign.** This project requires a full-time attention and testing is quite expensive. The DEVFEE is non-negotiable. If you don't like it, please go elsewhere.
