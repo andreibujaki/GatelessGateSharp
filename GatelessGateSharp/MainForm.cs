@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.4";
+        public static string appVersion = "1.1.5";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -82,6 +82,9 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceEthashThreadsArray;
         private NumericUpDown[] numericUpDownDeviceEthashIntensityArray;
         private NumericUpDown[] numericUpDownDeviceEthashLocalWorkSizeArray;
+        private NumericUpDown[] numericUpDownDeviceNeoScryptThreadsArray;
+        private NumericUpDown[] numericUpDownDeviceNeoScryptIntensityArray;
+        private NumericUpDown[] numericUpDownDeviceNeoScryptLocalWorkSizeArray;
         private NumericUpDown[] numericUpDownDevicePascalThreadsArray;
         private NumericUpDown[] numericUpDownDevicePascalIntensityArray;
         private NumericUpDown[] numericUpDownDevicePascalLocalWorkSizeArray;
@@ -250,6 +253,39 @@ namespace GatelessGateSharp
                 numericUpDownDevice5EthashLocalWorkSize,
                 numericUpDownDevice6EthashLocalWorkSize,
                 numericUpDownDevice7EthashLocalWorkSize
+            };
+            numericUpDownDeviceNeoScryptThreadsArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0NeoScryptThreads,
+                numericUpDownDevice1NeoScryptThreads,
+                numericUpDownDevice2NeoScryptThreads,
+                numericUpDownDevice3NeoScryptThreads,
+                numericUpDownDevice4NeoScryptThreads,
+                numericUpDownDevice5NeoScryptThreads,
+                numericUpDownDevice6NeoScryptThreads,
+                numericUpDownDevice7NeoScryptThreads
+            };
+            numericUpDownDeviceNeoScryptIntensityArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0NeoScryptIntensity,
+                numericUpDownDevice1NeoScryptThreads,
+                numericUpDownDevice2NeoScryptIntensity,
+                numericUpDownDevice3NeoScryptIntensity,
+                numericUpDownDevice4NeoScryptIntensity,
+                numericUpDownDevice5NeoScryptIntensity,
+                numericUpDownDevice6NeoScryptIntensity,
+                numericUpDownDevice7NeoScryptIntensity
+            };
+            numericUpDownDeviceNeoScryptLocalWorkSizeArray = new NumericUpDown[]
+            {
+                numericUpDownDevice0NeoScryptLocalWorkSize,
+                numericUpDownDevice1NeoScryptLocalWorkSize,
+                numericUpDownDevice2NeoScryptLocalWorkSize,
+                numericUpDownDevice3NeoScryptLocalWorkSize,
+                numericUpDownDevice4NeoScryptLocalWorkSize,
+                numericUpDownDevice5NeoScryptLocalWorkSize,
+                numericUpDownDevice6NeoScryptLocalWorkSize,
+                numericUpDownDevice7NeoScryptLocalWorkSize
             };
             numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[]
             {
@@ -644,6 +680,13 @@ namespace GatelessGateSharp
                                         numericUpDownDeviceEthashIntensityArray[deviceID].Value = decimal.Parse(value);
                                     else if (name == "ethash_local_work_size")
                                         numericUpDownDeviceEthashLocalWorkSizeArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "neoscrypt_threads")
+                                        numericUpDownDeviceNeoScryptThreadsArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "neoscrypt_intensity")
+                                        numericUpDownDeviceNeoScryptIntensityArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "neoscrypt_local_work_size")
+                                        numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceID].Value =
                                             decimal.Parse(value);
                                     else if (name == "cryptonight_threads")
                                         numericUpDownDeviceCryptoNightThreadsArray[deviceID].Value =
@@ -1099,6 +1142,30 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
                             command.Parameters.AddWithValue("@parameter_name", "ethash_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashLocalWorkSizeArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "neoscrypt_threads");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptThreadsArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "neoscrypt_intensity");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptIntensityArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@parameter_name", "neoscrypt_local_work_size");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
@@ -2742,13 +2809,13 @@ namespace GatelessGateSharp
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if (checkBoxGPUEnableArray[deviceIndex].Checked)
-                    for (i = 0; i < 2; ++i) // Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i)
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if (checkBoxGPUEnableArray[deviceIndex].Checked) {
-                    for (i = 0; i < 2; ++i) { // Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i) {
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i) {
                         OpenCLNeoScryptMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
                             if (inactiveMiner.GetType() == typeof(OpenCLNeoScryptMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
@@ -2763,8 +2830,8 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            512, // Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptIntensityArray[deviceIndex].Value)),
-                            256    // Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceIndex].Value))
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptIntensityArray[deviceIndex].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceIndex].Value))
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -3689,6 +3756,38 @@ namespace GatelessGateSharp
         }
 
         private void buttonLbryBalance_Click(object sender, EventArgs e) {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e) {
+
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e) {
+
+        }
+
+        private void label80_Click(object sender, EventArgs e) {
+
+        }
+
+        private void label90_Click(object sender, EventArgs e) {
+
+        }
+
+        private void label91_Click(object sender, EventArgs e) {
+
+        }
+
+        private void numericUpDown10_ValueChanged(object sender, EventArgs e) {
+
+        }
+
+        private void numericUpDown11_ValueChanged(object sender, EventArgs e) {
+
+        }
+
+        private void groupBox16_Enter(object sender, EventArgs e) {
 
         }
     }

@@ -429,6 +429,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D8EA9190DC5246E99886F694C0D877BB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_DAA38DA6AF0E853DF7B5B75380D45D06"
         "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
@@ -538,13 +544,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_DFDCB3E1FD61424AB847293197EEA140"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DFDCB3E1FD61424AB847293197EEA140"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -585,7 +591,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_1.1.4_alpha_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_1.1.5_alpha_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -617,7 +623,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_1.1.4_alpha_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_1.1.5_alpha_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -1207,7 +1213,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.1.3.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.1.4.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_558AC528A5344188B265CAF48F34D908"
@@ -2107,6 +2113,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D8EA9190DC5246E99886F694C0D877BB"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\neoscrypt.cl"
+            "TargetName" = "8:neoscrypt.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DAA38DA6AF0E853DF7B5B75380D45D06"
             {
             "AssemblyRegister" = "3:1"
@@ -2600,15 +2626,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
-        "ProductCode" = "8:{7FB1C292-7B99-4004-8827-1D958F8EDF89}"
-        "PackageCode" = "8:{99F9D108-1706-4C40-A441-E6E041CCFD3D}"
+        "ProductCode" = "8:{2904FF11-EC61-4D41-A86B-8FF424080B5E}"
+        "PackageCode" = "8:{3DFD6AC2-AD2E-4229-A26C-AAF28156D318}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.4"
+        "ProductVersion" = "8:1.1.5"
         "Manufacturer" = "8:Zawawa Software LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
