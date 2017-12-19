@@ -3788,7 +3788,8 @@
             "CryptoNight",
             "Lbry",
             "Pascal",
-            "NeoScrypt"});
+            "NeoScrypt",
+            "Lyra2REv2"});
             this.comboBoxCustomPool1Algorithm.Location = new System.Drawing.Point(71, 15);
             this.comboBoxCustomPool1Algorithm.Name = "comboBoxCustomPool1Algorithm";
             this.comboBoxCustomPool1Algorithm.Size = new System.Drawing.Size(103, 20);
@@ -3994,7 +3995,8 @@
             "CryptoNight",
             "Lbry",
             "Pascal",
-            "NeoScrypt"});
+            "NeoScrypt",
+            "Lyra2REv2"});
             this.comboBoxCustomPool2Algorithm.Location = new System.Drawing.Point(71, 15);
             this.comboBoxCustomPool2Algorithm.Name = "comboBoxCustomPool2Algorithm";
             this.comboBoxCustomPool2Algorithm.Size = new System.Drawing.Size(103, 20);
@@ -4200,7 +4202,8 @@
             "CryptoNight",
             "Lbry",
             "Pascal",
-            "NeoScrypt"});
+            "NeoScrypt",
+            "Lyra2REv2"});
             this.comboBoxCustomPool3Algorithm.Location = new System.Drawing.Point(71, 14);
             this.comboBoxCustomPool3Algorithm.Name = "comboBoxCustomPool3Algorithm";
             this.comboBoxCustomPool3Algorithm.Size = new System.Drawing.Size(103, 20);

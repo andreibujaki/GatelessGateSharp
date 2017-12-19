@@ -88,7 +88,7 @@ namespace GatelessGateSharp
                     throw;
                 }
                 MainForm.Logger("Built NeoScrypt program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Built options: " + buildOptions);
+                MainForm.Logger("Build options: " + buildOptions);
                 mNeoScryptProgramArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])] = mNeoScryptProgram;
                 mNeoScryptSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])] = mNeoScryptSearchKernel = mNeoScryptProgram.CreateKernel("search");
             }

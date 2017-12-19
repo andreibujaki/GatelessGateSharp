@@ -2802,7 +2802,6 @@ namespace GatelessGateSharp
             }
         }
 
-
         void LaunchOpenCLNeoScryptMinersWithStratum(NeoScryptStratum stratum) {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
@@ -2832,6 +2831,46 @@ namespace GatelessGateSharp
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptIntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceIndex].Value))
+                            );
+                        toolStripMainFormProgressBar.Value = ++minerCount;
+                        for (int j = 0; j < mLaunchInterval; j += 10) {
+                            Application.DoEvents();
+                            System.Threading.Thread.Sleep(10);
+                        }
+                    }
+                }
+            }
+        }
+
+        void LaunchOpenCLLyra2REv2MinersWithStratum(Lyra2REv2Stratum stratum) {
+            this.Activate();
+            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
+            int deviceIndex, i, minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                    for (i = 0; i < 2; ++i) // Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i)
+                        ++minerCount;
+            toolStripMainFormProgressBar.Maximum = minerCount;
+            minerCount = 0;
+            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                    for (i = 0; i < 2; ++i) { // Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i) {
+                        OpenCLLyra2REv2Miner miner = null;
+                        foreach (var inactiveMiner in mInactiveMiners) {
+                            if (inactiveMiner.GetType() == typeof(OpenCLLyra2REv2Miner) && deviceIndex == inactiveMiner.DeviceIndex) {
+                                miner = (OpenCLLyra2REv2Miner)inactiveMiner;
+                                break;
+                            }
+                        }
+                        if (miner != null) {
+                            mInactiveMiners.Remove((Miner)miner);
+                        } else {
+                            miner = new OpenCLLyra2REv2Miner(mDevices[deviceIndex]);
+                        }
+                        mActiveMiners.Add(miner);
+                        miner.Start(stratum,
+                            1024, //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
+                            64  //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -2880,6 +2919,10 @@ namespace GatelessGateSharp
             } else if (algo == "NeoScrypt") {
                 var stratum = new NeoScryptStratum(host, port, login, password, host);
                 LaunchOpenCLNeoScryptMinersWithStratum(stratum);
+                mPrimaryStratum = stratum;
+            } else if (algo == "Lyra2REv2") {
+                var stratum = new Lyra2REv2Stratum(host, port, login, password, host);
+                LaunchOpenCLLyra2REv2MinersWithStratum(stratum);
                 mPrimaryStratum = stratum;
             }
         }

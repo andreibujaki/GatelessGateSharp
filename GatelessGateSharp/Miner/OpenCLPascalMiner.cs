@@ -100,7 +100,7 @@ namespace GatelessGateSharp
                     throw;
                 }
                 MainForm.Logger("Built Pascal program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Built options: " + buildOptions);
+                MainForm.Logger("Build options: " + buildOptions);
                 mPascalProgramArray[new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])] = mPascalProgram;
                 mPascalSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])] = mPascalSearchKernel = mPascalProgram.CreateKernel("search");
             }

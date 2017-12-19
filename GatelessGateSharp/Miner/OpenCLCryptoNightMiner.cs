@@ -132,7 +132,7 @@ namespace GatelessGateSharp
                     throw;
                 }
                 MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Built options: " + buildOptions);
+                MainForm.Logger("Build options: " + buildOptions);
                 mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = program;
             }
             try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }

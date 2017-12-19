@@ -107,7 +107,7 @@ namespace GatelessGateSharp
                     throw;
                 }
                 MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Built options: " + buildOptions);
+                MainForm.Logger("Build options: " + buildOptions);
                 mLbryProgramArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbryProgram;
                 mLbrySearchKernelArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbrySearchKernel = mLbryProgram.CreateKernel("search_combined");
             }
