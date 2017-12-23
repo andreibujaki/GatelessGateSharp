@@ -17,7 +17,7 @@ The minimum requirements for the miner is as follows:
 * Graphics card(s) with the AMD GCN architecture and the NVIDIA Maxwell and Pascal architectures.
 * 64-bit Windows operating system.
 
-Please note that this program has been tested mostly against [AMD Crimson ReLive Beta for Blockchain Workloads](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Crimson-ReLive-Edition-Beta-for-Blockchain-Compute-Release-Notes.aspx) (August 23). Other drivers may or amnodes                     Hardware monitoring/management may not be available with newe] drivers.
+Please note that this program has been tested mostly against [AMD Crimson ReLive Beta for Blockchain Workloads](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Crimson-ReLive-Edition-Beta-for-Blockchain-Compute-Release-Notes.aspx) (August 23). Other drivers may  or may not work. Hardware monitoring/management may not be available with newer drivers.
 
 ## About the DEVFEE
 
