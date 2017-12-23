@@ -516,7 +516,7 @@ __kernel void search6(__global uchar* hashes, __global uint* output, const ulong
 
 	bool result = ( ((ulong*)final_s)[7] <= target);
 	if (result) {
-		output[atomic_inc(output + 0xFF)] = SWAP4(gid);
+		output[atomic_inc(output + 0xFF)] = gid; // SWAP4(gid);
 	}
 
 }

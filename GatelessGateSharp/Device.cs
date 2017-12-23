@@ -90,7 +90,7 @@ namespace GatelessGateSharp
             return (ComputeDevice)computeDeviceArrayList[mDeviceIndex];
         }
 
-        public void SetADLName(String aName)
+        public void SetAMDBoardName(String aName)
         {
             aName = aName.Replace("AMD ", "");
             aName = aName.Replace("(TM)", "");

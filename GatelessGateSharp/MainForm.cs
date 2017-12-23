@@ -1322,7 +1322,9 @@ namespace GatelessGateSharp
                 var openclDevice = device.GetComputeDevice();
                 var index = device.DeviceIndex;
                 labelGPUVendorArray[index].Text = device.Vendor;
-                labelGPUNameArray[index].Text = openclDevice.Name;
+                if (device.Vendor == "AMD")
+                    device.SetAMDBoardName(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD));
+                labelGPUNameArray[index].Text = device.Name;
 
                 labelGPUSpeedArray[index].Text = "-";
                 labelGPUActivityArray[index].Text = "-";
@@ -1386,39 +1388,37 @@ namespace GatelessGateSharp
                     ADLAdapterInfoArray OSAdapterInfoData;
                     OSAdapterInfoData = new ADLAdapterInfoArray();
 
-                    if (null != ADL.ADL_Adapter_AdapterInfo_Get) {
+                    if (null == ADL.ADL_Adapter_AdapterInfo_Get) {
+                        MainForm.Logger("ADL.ADL_Adapter_AdapterInfo_Get() is not available.");
+                    } else {
                         var AdapterBuffer = IntPtr.Zero;
                         var size = Marshal.SizeOf(OSAdapterInfoData);
                         AdapterBuffer = Marshal.AllocCoTaskMem((int)size);
                         Marshal.StructureToPtr(OSAdapterInfoData, AdapterBuffer, false);
 
-                        if (null != ADL.ADL_Adapter_AdapterInfo_Get) {
-                            ADLRet = ADL.ADL_Adapter_AdapterInfo_Get(AdapterBuffer, size);
-                            if (ADL.ADL_SUCCESS == ADLRet) {
-                                OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
-                                var IsActive = 0;
+                        ADLRet = ADL.ADL_Adapter_AdapterInfo_Get(AdapterBuffer, size);
+                        if (ADL.ADL_SUCCESS == ADLRet) {
+                            OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
+                            var IsActive = 0;
 
-                                //int deviceIndex = 0;
-                                int deviceIndex = 0;
-                                foreach (var device in mDevices) {
-                                    var openclDevice = device.GetComputeDevice();
-                                    if (openclDevice.Vendor == "Advanced Micro Devices, Inc.")
-                                        for (var i = 0; i < NumberOfAdapters; i++) {
-                                            if (null != ADL.ADL_Adapter_Active_Get)
-                                                ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
-                                            if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
-                                                && (ADLAdapterIndexArray[deviceIndex] < 0 || IsActive != 0)) {
-                                                ADLAdapterIndexArray[deviceIndex] = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
-                                                device.SetADLName(OSAdapterInfoData.ADLAdapterInfo[i].AdapterName);
-                                                labelGPUNameArray[deviceIndex].Text = device.Name;
-                                            }
+                            int deviceIndex = 0;
+                            foreach (var device in mDevices) {
+                                var openclDevice = device.GetComputeDevice();
+                                if (openclDevice.Vendor == "Advanced Micro Devices, Inc.")
+                                    for (var i = 0; i < NumberOfAdapters; i++) {
+                                        if (null != ADL.ADL_Adapter_Active_Get)
+                                            ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
+                                        if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
+                                            && (ADLAdapterIndexArray[deviceIndex] < 0 || IsActive != 0)) {
+                                            ADLAdapterIndexArray[deviceIndex] = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
                                         }
-                                    ++deviceIndex;
-                                }
-                            } else {
-                                Logger("ADL_Adapter_AdapterInfo_Get() returned error code " + ADLRet.ToString());
+                                    }
+                                ++deviceIndex;
                             }
+                        } else {
+                            Logger("ADL_Adapter_AdapterInfo_Get() returned error code " + ADLRet.ToString());
                         }
+                        
                         // Release the memory for the AdapterInfo structure
                         if (IntPtr.Zero != AdapterBuffer)
                             Marshal.FreeCoTaskMem(AdapterBuffer);
@@ -3831,6 +3831,11 @@ namespace GatelessGateSharp
         }
 
         private void groupBox16_Enter(object sender, EventArgs e) {
+
+        }
+
+        private void richTextBoxAbout_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }

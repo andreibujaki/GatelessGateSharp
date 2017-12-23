@@ -542,6 +542,8 @@ namespace Cloo
         /// <summary></summary>
         public byte[] TopologyAMD { get { return GetByteArrayInfo(ComputeDeviceInfo.CL_DEVICE_TOPOLOGY_AMD); } }
         /// <summary></summary>
+        public byte[] BoardNameAMD { get { return GetByteArrayInfo(ComputeDeviceInfo.CL_DEVICE_BOARD_NAME_AMD); } }
+        /// <summary></summary>
         public byte PciBusIdAMD { get { return TopologyAMD[21]; } }
         /// <summary></summary>
         public Int32 PciBusIdNV { get { return GetInfo<Int32>(ComputeDeviceInfo.CL_DEVICE_PCI_BUS_ID_NV); } }
