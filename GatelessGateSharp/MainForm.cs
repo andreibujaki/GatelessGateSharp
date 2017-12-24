@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.5";
+        public static string appVersion = "1.1.6";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -268,7 +268,7 @@ namespace GatelessGateSharp
             numericUpDownDeviceNeoScryptIntensityArray = new NumericUpDown[]
             {
                 numericUpDownDevice0NeoScryptIntensity,
-                numericUpDownDevice1NeoScryptThreads,
+                numericUpDownDevice1NeoScryptIntensity,
                 numericUpDownDevice2NeoScryptIntensity,
                 numericUpDownDevice3NeoScryptIntensity,
                 numericUpDownDevice4NeoScryptIntensity,
@@ -473,6 +473,8 @@ namespace GatelessGateSharp
                                             radioButtonPascal.Checked = true;
                                         } else if (coinToMine == "feathercoin") {
                                             radioButtonFeathercoin.Checked = true;
+                                        } else if (coinToMine == "monacoin") {
+                                            radioButtonMonacoin.Checked = true;
                                         } else {
                                             radioButtonEthereum.Checked = true;
                                         }
@@ -801,6 +803,7 @@ namespace GatelessGateSharp
                                                         radioButtonLbry.Checked ? "lbry" :
                                                         radioButtonPascal.Checked ? "pascal" :
                                                         radioButtonFeathercoin.Checked ? "feathercoin" :
+                                                        radioButtonMonacoin.Checked ? "monacoin" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
                     }
@@ -2129,6 +2132,19 @@ namespace GatelessGateSharp
 
         #region GetServers
 
+        List<StratumServerInfo> GetNiceHashLyra2REv2Servers() {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("lyra2rev2.usa.nicehash.com", 0),
+                new StratumServerInfo("lyra2rev2.eu.nicehash.com", 0),
+                new StratumServerInfo("lyra2rev2.hk.nicehash.com", 150),
+                new StratumServerInfo("lyra2rev2.jp.nicehash.com", 100),
+                new StratumServerInfo("lyra2rev2.in.nicehash.com", 200),
+                new StratumServerInfo("lyra2rev2.br.nicehash.com", 180)
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
         List<StratumServerInfo> GetNiceHashNeoScryptServers() {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("neoscrypt.usa.nicehash.com", 0),
@@ -2363,7 +2379,7 @@ namespace GatelessGateSharp
                             Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
             } else if (pool == "zpool" && (username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text).Length > 0) {
-                stratum = new LbryStratum("lbry.mine.zpool.ca", 3334, username, "c=LBC", pool);
+                stratum = new LbryStratum("lbry.mine.zpool.ca", 3334, username, "c=BTC", pool);
             }
 
             if (stratum != null) {
@@ -2390,11 +2406,38 @@ namespace GatelessGateSharp
                             Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
             } else if (pool == "zpool" && (username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text).Length > 0) {
-                stratum = new NeoScryptStratum("neoscrypt.mine.zpool.ca", 4233, username, "c=LBC", pool);
+                stratum = new NeoScryptStratum("neoscrypt.mine.zpool.ca", 4233, username, "c=BTC", pool);
             }
 
             if (stratum != null) {
                 LaunchOpenCLNeoScryptMinersWithStratum(stratum);
+                mPrimaryStratum = (Stratum)stratum;
+            }
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchOpenCLLyra2REv2Miners(string pool) {
+            Lyra2REv2Stratum stratum = null;
+            string username = "";
+
+            if (pool == "NiceHash"
+                && (username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text)).Length > 0) {
+                var hosts = GetNiceHashLyra2REv2Servers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new Lyra2REv2Stratum(host.name, 3347, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "zpool" && (username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text).Length > 0) {
+                stratum = new Lyra2REv2Stratum("lyra2v2.mine.zpool.ca", 4533, username, "c=BTC", pool);
+            }
+
+            if (stratum != null) {
+                LaunchOpenCLLyra2REv2MinersWithStratum(stratum);
                 mPrimaryStratum = (Stratum)stratum;
             }
         }
@@ -2870,7 +2913,7 @@ namespace GatelessGateSharp
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
                             1024, //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
-                            64  //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
+                            256  //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -2932,8 +2975,10 @@ namespace GatelessGateSharp
         private void LaunchMiners() {
             GC.Collect();
 
-            if (CustomPoolEnabled && !mDevFeeMode) {
-                for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
+            if (CustomPoolEnabled && !mDevFeeMode)
+            {
+                for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++)
+                {
                     bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
                                    (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
                                    (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
@@ -2982,11 +3027,14 @@ namespace GatelessGateSharp
                     if (!enabled)
                         continue;
 
-                    try {
+                    try
+                    {
                         Logger("Launching miner(s) for Custom Pool " + customPoolIndex + "...");
                         LaunchMinersForCustomPool(algo, host, port, login, password, algo2, host2, port2, login2, password2);
                         break;
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex)
+                    {
                         Logger("Failed to launch miner(s) for Custom Pool " + customPoolIndex + ": " + ex.Message + ex.StackTrace);
                     }
 
@@ -3001,7 +3049,75 @@ namespace GatelessGateSharp
                     mSecondaryStratum = null;
                     mActiveMiners.Clear();
                 }
-            } else {
+            }
+            else if (CustomPoolEnabled && mDevFeeMode)
+            {
+                for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++)
+                {
+                    bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
+                                   (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
+                                   (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
+                                                            checkBoxCustomPool3Enable.Checked;
+                    String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
+                                  (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
+                                  (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
+                                                           (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
+                    String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
+                                   (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
+                                   (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
+                                                            (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
+
+                    if (!enabled)
+                        continue;
+
+                    foreach (string pool in listBoxPoolPriorities.Items) {
+                        try {
+                            if (algo == "Ethash" && algo2 == "Pascal") {
+                                Logger("Launching Dual Ethash/Pascal for DEVFEE...");
+                                LaunchOpenCLDualEthashPascalMiners(pool);
+                            } else if (algo == "Ethash") {
+                                Logger("Launching Ethash miners for DEVFEE...");
+                                LaunchOpenCLEthashMiners(pool);
+                            } else if (algo == "CryptoNight") {
+                                Logger("Launching CryptoNight miners for DEVFEE...");
+                                LaunchOpenCLCryptoNightMiners(pool);
+                            } else if (algo == "Lbry") {
+                                Logger("Launching Lbry miners for DEVFEE...");
+                                LaunchOpenCLLbryMiners(pool);
+                            } else if (algo == "Pascal") {
+                                Logger("Launching Pascal miners for DEVFEE...");
+                                LaunchOpenCLPascalMiners(pool);
+                            } else if (algo == "NeoScrypt") {
+                                Logger("Launching NeoScrypt miners for DEVFEE...");
+                                LaunchOpenCLNeoScryptMiners(pool);
+                            } else if (algo == "Lyra2REv2") {
+                                Logger("Launching Lyra2REv2 miners for DEVFEE...");
+                                LaunchOpenCLLyra2REv2Miners(pool);
+                            }
+                            if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
+                                return;
+                            } else {
+                                Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
+                            }
+                        } catch (Exception ex) {
+                            Logger("Failed to launch miner(s) for  for DEVFEE: " + ex.Message + ex.StackTrace);
+                        }
+
+                        // Clean up the mess.
+                        if (mPrimaryStratum != null)
+                            mPrimaryStratum.Stop();
+                        if (mSecondaryStratum != null)
+                            mSecondaryStratum.Stop();
+                        foreach (Miner miner in mActiveMiners)
+                            miner.Stop();
+                        mPrimaryStratum = null;
+                        mSecondaryStratum = null;
+                        mActiveMiners.Clear();
+                    }
+               }
+            }
+            else
+            {
                 foreach (string pool in listBoxPoolPriorities.Items) {
                     try {
                         if (radioButtonEthereumPascal.Checked) {
@@ -3022,17 +3138,18 @@ namespace GatelessGateSharp
                         } else if (radioButtonFeathercoin.Checked) {
                             Logger("Launching NeoScrypt miners for " + pool + "...");
                             LaunchOpenCLNeoScryptMiners(pool);
+                        } else if (radioButtonMonacoin.Checked) {
+                            Logger("Launching Lyra2REv2 miners for " + pool + "...");
+                            LaunchOpenCLLyra2REv2Miners(pool);
                         }
                         if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
-                            break;
+                            return;
                         } else {
                             Logger("Failed to launch miner(s) for " + pool);
                         }
                     } catch (Exception ex) {
                         Logger("Failed to launch miners for " + pool + ": " + ex.Message + ex.StackTrace);
                     }
-                    if (mPrimaryStratum != null && mActiveMiners.Count > 0)
-                        break;
 
                     // Clean up the mess.
                     if (mPrimaryStratum != null)
@@ -3070,7 +3187,8 @@ namespace GatelessGateSharp
                 foreach (var miner in mActiveMiners)
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
-                mPrimaryStratum.Stop();
+                if (mPrimaryStratum != null)
+                    mPrimaryStratum.Stop();
                 if (mSecondaryStratum != null)
                     mSecondaryStratum.Stop();
                 toolStripMainFormProgressBar.Value = 0;

@@ -1366,6 +1366,7 @@
             this.statusStripMainForm = new System.Windows.Forms.StatusStrip();
             this.toolStripMainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.radioButtonMonacoin = new System.Windows.Forms.RadioButton();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -3514,6 +3515,7 @@
             // 
             // groupBoxCoinsToMine
             // 
+            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMonacoin);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonFeathercoin);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonPascal);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonLbry);
@@ -3611,7 +3613,7 @@
             // 
             this.radioButtonZcash.AutoSize = true;
             this.radioButtonZcash.Enabled = false;
-            this.radioButtonZcash.Location = new System.Drawing.Point(223, 112);
+            this.radioButtonZcash.Location = new System.Drawing.Point(222, 134);
             this.radioButtonZcash.Name = "radioButtonZcash";
             this.radioButtonZcash.Size = new System.Drawing.Size(55, 17);
             this.radioButtonZcash.TabIndex = 7;
@@ -4420,7 +4422,8 @@
             "CryptoNight",
             "Lbry",
             "Pascal",
-            "NeoScrypt"});
+            "NeoScrypt",
+            "Lyra2REv2"});
             this.comboBoxCustomPool0Algorithm.Location = new System.Drawing.Point(71, 16);
             this.comboBoxCustomPool0Algorithm.Name = "comboBoxCustomPool0Algorithm";
             this.comboBoxCustomPool0Algorithm.Size = new System.Drawing.Size(103, 21);
@@ -8924,7 +8927,7 @@
             this.numericUpDownDevice1NeoScryptIntensity.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownDevice1NeoScryptIntensity.TabIndex = 119;
             this.numericUpDownDevice1NeoScryptIntensity.Value = new decimal(new int[] {
-            2048,
+            1024,
             0,
             0,
             0});
@@ -22265,6 +22268,16 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(158, 18);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabelMessage";
             // 
+            // radioButtonMonacoin
+            // 
+            this.radioButtonMonacoin.AutoSize = true;
+            this.radioButtonMonacoin.Location = new System.Drawing.Point(222, 111);
+            this.radioButtonMonacoin.Name = "radioButtonMonacoin";
+            this.radioButtonMonacoin.Size = new System.Drawing.Size(72, 17);
+            this.radioButtonMonacoin.TabIndex = 15;
+            this.radioButtonMonacoin.Text = "Monacoin";
+            this.radioButtonMonacoin.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -24401,5 +24414,6 @@
         private System.Windows.Forms.Label label446;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice2NeoScryptIntensity;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice2NeoScryptThreads;
+        private System.Windows.Forms.RadioButton radioButtonMonacoin;
     }
 }

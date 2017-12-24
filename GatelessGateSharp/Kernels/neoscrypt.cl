@@ -315,18 +315,6 @@ uint16 neoscrypt_chacha(uint16 X) {
 
 
 
-/* For compatibility */
-#if (WORKGROUPSIZE) && !(WORKSIZE)
-#define WORKSIZE WORKGROUPSIZE
-#endif
-
-/* CodeXL only */
-#if !(WORKSIZE)
-#define WORKSIZE 256
-#endif
-
-
-
 __attribute__((reqd_work_group_size(WORKSIZE, 1, 1)))
 __kernel void search(__global const uint4 *restrict input, __global uint *restrict output,
     __global ulong16 *globalcache, const uint target) {

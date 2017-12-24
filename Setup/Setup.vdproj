@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_02DD10C9AFB40B2808ED736ACD1FF2B0"
+        "MsmKey" = "8:_005BA131E503E55D3259C325B392A218"
         "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -57,13 +57,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_149CF4C346E240F9B5A8899CF1177A6D"
+        "MsmKey" = "8:_0F3333C5C6234DEF966F4258D2D9902A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_14DD1FA30154479DB8F255107DE4EAC7"
+        "MsmKey" = "8:_149CF4C346E240F9B5A8899CF1177A6D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -111,20 +111,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_25E6554930BE4CA382B97CA7BE1621DA"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_27A7156DAF1F47C1B09A09932CE18991"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2AC6F005618A47BC925E82024393408D"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -159,7 +153,31 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4130C1162AE044AE9A893D54929F8A3B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_41D73E71863A5CF344DE0BC191304925"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_45D087C3D26C4DFBBDCAC83358943BAD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4DF7E893EDE043909BDCA60D4B398693"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4EED7A82D4BF402B9470B4E7880F49C2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -177,6 +195,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_55C2667EF70641308F03ED199821B14C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_574A5341C23F416EA218A0C924C4A670"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -184,6 +208,12 @@
         "Entry"
         {
         "MsmKey" = "8:_5BAC70687BFA4D518161F15527D94E90"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_60772B3159B349D5B1110245B9430BC1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -225,19 +255,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_75928CBB44EEED3FF433C4C8EEA3E254"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_765FDD30F7794D2E9941175A134E81CC"
+        "MsmKey" = "8:_7B9F676CF8C24F75AF9F57785B348E6A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_7C6762AD635A43BC9E1D4B5A37F677A2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7C8BE1BCE1D44174BE74CE7D49C73516"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -261,7 +291,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8C6B357F6250495F85D5522F8A7B4770"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8DABFD5F5AD14979B4737C96F3A60772"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_905D4587A17E453FA22EDE286B2738F3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -285,13 +327,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_949261D795644D93BFE8E46806A1236C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_95364DFD64C64F05B828854300A2A1B6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_974CBD8C66BB43A0B3B3F0D2BAE4BD89"
+        "MsmKey" = "8:_967193E940C94DC3938FB564EC25658A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -303,8 +351,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9929CD8DEDB4E630DB9F0D0233ECBF30"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "MsmKey" = "8:_97A070589972433ABF04F3BA3CDD9C30"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -357,7 +405,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AD484A9ED7524A4E937DD30F15898BD9"
+        "MsmKey" = "8:_A6C0273723A64BCF9BDAF9FA16CA2D52"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -369,31 +417,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B11F293DA959574ABB4550EAE7D3919D"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B5F84DC8921B43FAB3540633EDB86EA4"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_BAF2E9813EE043E28751B86488629DDC"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BDAB863998164F799A8DE9D1AD8D6ABD"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C13F9DA99E6C4A76AC613865A29E73EB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -401,6 +425,24 @@
         {
         "MsmKey" = "8:_C561A3CFB0314D2BB984F3E950E71029"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C657E4267ADB4FCDA80356E320A8EA86"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CD95E27092854202A173974871284331"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -429,19 +471,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D8EA9190DC5246E99886F694C0D877BB"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DAA38DA6AF0E853DF7B5B75380D45D06"
+        "MsmKey" = "8:_DA26F0A023D7F9002E8409A3798624AE"
         "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_DB4B9587691C4093AE51983BD89C8E79"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DD0215D25C9C4454A36175091436C340"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -465,7 +507,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E3F8ADC5ED2C489AAB20B35F43AC7983"
+        "MsmKey" = "8:_E7D86E64B0C34356A7296324C698D752"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E8C6EFEBE2AC4D41949E72ED3BA4E180"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -477,19 +525,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EA99CDA3EB844093B17E2CFE50397745"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_ED02A217108D44F19BBE7ABBC8BEDE74"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EDE0E5BFBFF346D1B70A8B3E04E90F41"
+        "MsmKey" = "8:_E9FC69A485274DD69618A7A536678FD5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -507,13 +543,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F5381472D95347838CCD9DA0ECD584BF"
+        "MsmKey" = "8:_F6A2FA18F955449E83C7F83DB16E2C23"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F6A2FA18F955449E83C7F83DB16E2C23"
+        "MsmKey" = "8:_F72166FCE0294CEF9508D6B7D9E6E50E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -556,31 +592,31 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DAA38DA6AF0E853DF7B5B75380D45D06"
+        "OwnerKey" = "8:_DA26F0A023D7F9002E8409A3798624AE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_02DD10C9AFB40B2808ED736ACD1FF2B0"
+        "OwnerKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9929CD8DEDB4E630DB9F0D0233ECBF30"
+        "OwnerKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_75928CBB44EEED3FF433C4C8EEA3E254"
+        "OwnerKey" = "8:_41D73E71863A5CF344DE0BC191304925"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B11F293DA959574ABB4550EAE7D3919D"
+        "OwnerKey" = "8:_005BA131E503E55D3259C325B392A218"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -623,7 +659,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_1.1.5_alpha_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_1.1.6_alpha_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -678,20 +714,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_02DD10C9AFB40B2808ED736ACD1FF2B0"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_005BA131E503E55D3259C325B392A218"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_02DD10C9AFB40B2808ED736ACD1FF2B0"
+                    "_005BA131E503E55D3259C325B392A218"
                     {
-                    "Name" = "8:Newtonsoft.Json.DLL"
+                    "Name" = "8:Cloo.DLL"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Newtonsoft.Json.DLL"
+            "SourcePath" = "8:Cloo.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
@@ -829,12 +865,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_149CF4C346E240F9B5A8899CF1177A6D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F3333C5C6234DEF966F4258D2D9902A"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_cryptonight.bin"
-            "TargetName" = "8:Stoney_cryptonight.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\skein256.cl"
+            "TargetName" = "8:skein256.cl"
             "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -849,12 +885,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_14DD1FA30154479DB8F255107DE4EAC7"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_149CF4C346E240F9B5A8899CF1177A6D"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\wolf-aes.cl"
-            "TargetName" = "8:wolf-aes.cl"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_cryptonight.bin"
+            "TargetName" = "8:Stoney_cryptonight.bin"
             "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1009,26 +1045,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_25E6554930BE4CA382B97CA7BE1621DA"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\cryptonight.cl"
-            "TargetName" = "8:cryptonight.cl"
-            "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_27A7156DAF1F47C1B09A09932CE18991"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_ethash_pascal.bin"
@@ -1049,12 +1065,23 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2AC6F005618A47BC925E82024393408D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2A178B97B26AE0AD8808019FC59D99C0"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ethash_pascal.cl"
-            "TargetName" = "8:ethash_pascal.cl"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ManagedNvml, Version=8.0.14.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_2A178B97B26AE0AD8808019FC59D99C0"
+                    {
+                    "Name" = "8:ManagedNvml.DLL"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ManagedNvml.DLL"
+            "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1066,7 +1093,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2EE81B01BEBB47EE9A5BA3AF560970DD"
@@ -1169,12 +1196,103 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4130C1162AE044AE9A893D54929F8A3B"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\jh.cl"
+            "TargetName" = "8:jh.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_41D73E71863A5CF344DE0BC191304925"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:HashLib, Version=2.1.0.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_41D73E71863A5CF344DE0BC191304925"
+                    {
+                    "Name" = "8:HashLib.DLL"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:HashLib.DLL"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_45D087C3D26C4DFBBDCAC83358943BAD"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\pascal.cl"
+            "TargetName" = "8:pascal.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4DF7E893EDE043909BDCA60D4B398693"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_ethash.bin"
             "TargetName" = "8:Ellesmere_ethash.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4EED7A82D4BF402B9470B4E7880F49C2"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\lbry.cl"
+            "TargetName" = "8:lbry.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1213,7 +1331,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.1.4.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.1.5.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_558AC528A5344188B265CAF48F34D908"
@@ -1226,6 +1344,26 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55C2667EF70641308F03ED199821B14C"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ethash_lbry.cl"
+            "TargetName" = "8:ethash_lbry.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1266,6 +1404,26 @@
             "TargetName" = "8:phymem.sys"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60772B3159B349D5B1110245B9430BC1"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\Lyra2v2.cl"
+            "TargetName" = "8:Lyra2v2.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1400,41 +1558,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_75928CBB44EEED3FF433C4C8EEA3E254"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7B9F676CF8C24F75AF9F57785B348E6A"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HashLib, Version=2.1.0.0, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_75928CBB44EEED3FF433C4C8EEA3E254"
-                    {
-                    "Name" = "8:HashLib.DLL"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:HashLib.DLL"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_765FDD30F7794D2E9941175A134E81CC"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ripemd160.cl"
-            "TargetName" = "8:ripemd160.cl"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\sha256.cl"
+            "TargetName" = "8:sha256.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
@@ -1457,6 +1584,26 @@
             "TargetName" = "8:Spooky_ethash_pascal.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7C8BE1BCE1D44174BE74CE7D49C73516"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\cubehash.cl"
+            "TargetName" = "8:cubehash.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1531,12 +1678,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8C6B357F6250495F85D5522F8A7B4770"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\blake256.cl"
+            "TargetName" = "8:blake256.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8DABFD5F5AD14979B4737C96F3A60772"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_cryptonight.bin"
             "TargetName" = "8:Carrizo_cryptonight.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_905D4587A17E453FA22EDE286B2738F3"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\cryptonight.cl"
+            "TargetName" = "8:cryptonight.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1611,6 +1798,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_949261D795644D93BFE8E46806A1236C"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ethash.cl"
+            "TargetName" = "8:ethash.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_95364DFD64C64F05B828854300A2A1B6"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_ethash_pascal.bin"
@@ -1631,7 +1838,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_974CBD8C66BB43A0B3B3F0D2BAE4BD89"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_967193E940C94DC3938FB564EC25658A"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\groestl256.cl"
             "TargetName" = "8:groestl256.cl"
@@ -1671,23 +1878,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9929CD8DEDB4E630DB9F0D0233ECBF30"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_97A070589972433ABF04F3BA3CDD9C30"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ManagedNvml, Version=8.0.14.0, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_9929CD8DEDB4E630DB9F0D0233ECBF30"
-                    {
-                    "Name" = "8:ManagedNvml.DLL"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:ManagedNvml.DLL"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ethash_pascal.cl"
+            "TargetName" = "8:ethash_pascal.cl"
             "Tag" = "8:"
-            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1699,7 +1895,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9ABDA3407C6B4CDDB9C50E2CDD6843D6"
@@ -1862,10 +2058,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AD484A9ED7524A4E937DD30F15898BD9"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A6C0273723A64BCF9BDAF9FA16CA2D52"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\pascal.cl"
-            "TargetName" = "8:pascal.cl"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\keccak1600.cl"
+            "TargetName" = "8:keccak1600.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
@@ -1902,103 +2098,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B11F293DA959574ABB4550EAE7D3919D"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_B11F293DA959574ABB4550EAE7D3919D"
-                    {
-                    "Name" = "8:Cloo.DLL"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Cloo.DLL"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B5F84DC8921B43FAB3540633EDB86EA4"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\sha256.cl"
-            "TargetName" = "8:sha256.cl"
-            "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BAF2E9813EE043E28751B86488629DDC"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_cryptonight.bin"
             "TargetName" = "8:Oland_cryptonight.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BDAB863998164F799A8DE9D1AD8D6ABD"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\blake256.cl"
-            "TargetName" = "8:blake256.cl"
-            "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C13F9DA99E6C4A76AC613865A29E73EB"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ethash_lbry.cl"
-            "TargetName" = "8:ethash_lbry.cl"
-            "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2031,6 +2136,77 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C657E4267ADB4FCDA80356E320A8EA86"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\Lyra2REv2.cl"
+            "TargetName" = "8:Lyra2REv2.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CD95E27092854202A173974871284331"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\neoscrypt.cl"
+            "TargetName" = "8:neoscrypt.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D5E0043C4E894C579440EACD8A99AF6D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D5E0043C4E894C579440EACD8A99AF6D"
+                    {
+                    "Name" = "8:Newtonsoft.Json.DLL"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Newtonsoft.Json.DLL"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D6B3FE9F7F8341D0B2E96927383D9315"
@@ -2113,34 +2289,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D8EA9190DC5246E99886F694C0D877BB"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\neoscrypt.cl"
-            "TargetName" = "8:neoscrypt.cl"
-            "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DAA38DA6AF0E853DF7B5B75380D45D06"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DA26F0A023D7F9002E8409A3798624AE"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_DAA38DA6AF0E853DF7B5B75380D45D06"
+                    "_DA26F0A023D7F9002E8409A3798624AE"
                     {
                     "Name" = "8:System.Data.SQLite.DLL"
                     "Attributes" = "3:512"
@@ -2170,6 +2326,26 @@
             "TargetName" = "8:Spooky_cryptonight.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DD0215D25C9C4454A36175091436C340"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\wolf-sha512.cl"
+            "TargetName" = "8:wolf-sha512.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2255,10 +2431,30 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E3F8ADC5ED2C489AAB20B35F43AC7983"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E7D86E64B0C34356A7296324C698D752"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\wolf-sha512.cl"
-            "TargetName" = "8:wolf-sha512.cl"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ripemd160.cl"
+            "TargetName" = "8:ripemd160.cl"
+            "Tag" = "8:"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E8C6EFEBE2AC4D41949E72ED3BA4E180"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\wolf-aes.cl"
+            "TargetName" = "8:wolf-aes.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
@@ -2295,50 +2491,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA99CDA3EB844093B17E2CFE50397745"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E9FC69A485274DD69618A7A536678FD5"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\Kernels\\ethash.cl"
-            "TargetName" = "8:ethash.cl"
-            "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED02A217108D44F19BBE7ABBC8BEDE74"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\lbry.cl"
-            "TargetName" = "8:lbry.cl"
-            "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EDE0E5BFBFF346D1B70A8B3E04E90F41"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\jh.cl"
-            "TargetName" = "8:jh.cl"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\bmw256.cl"
+            "TargetName" = "8:bmw256.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
@@ -2395,12 +2551,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5381472D95347838CCD9DA0ECD584BF"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F6A2FA18F955449E83C7F83DB16E2C23"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\wolf-skein.cl"
-            "TargetName" = "8:wolf-skein.cl"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Gateless Gate Sharp.ico"
+            "TargetName" = "8:Gateless Gate Sharp.ico"
             "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2415,12 +2571,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F6A2FA18F955449E83C7F83DB16E2C23"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F72166FCE0294CEF9508D6B7D9E6E50E"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Gateless Gate Sharp.ico"
-            "TargetName" = "8:Gateless Gate Sharp.ico"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\wolf-skein.cl"
+            "TargetName" = "8:wolf-skein.cl"
             "Tag" = "8:"
-            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2626,15 +2782,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
-        "ProductCode" = "8:{2904FF11-EC61-4D41-A86B-8FF424080B5E}"
-        "PackageCode" = "8:{3DFD6AC2-AD2E-4229-A26C-AAF28156D318}"
+        "ProductCode" = "8:{48114A64-724F-4532-A356-0B1443EFF2FB}"
+        "PackageCode" = "8:{DC719850-76E5-493E-90F2-F0F89665768A}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.5"
+        "ProductVersion" = "8:1.1.6"
         "Manufacturer" = "8:Zawawa Software LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
