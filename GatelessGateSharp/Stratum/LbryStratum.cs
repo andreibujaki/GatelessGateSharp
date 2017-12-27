@@ -280,7 +280,7 @@ namespace GatelessGateSharp
             return result == hash0String;
         }
 
-        public void Submit(Device aDevice, LbryStratum.Work work, UInt32 aNonce, string result)
+        public void Submit(OpenCLDevice aDevice, LbryStratum.Work work, UInt32 aNonce, string result)
         {
             if (Stopped)
                 return;
@@ -308,12 +308,14 @@ namespace GatelessGateSharp
                         stringNonce
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
+                MainForm.Logger("OpenCLDevice #" + aDevice.DeviceIndex + " submitted a share.");
                 //MainForm.Logger("message: " + message);
             }
             catch (Exception ex)
             {
                 MainForm.Logger("Failed to submit share: " + ex.Message);
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                Reconnect();
             }
 
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }

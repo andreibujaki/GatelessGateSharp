@@ -200,7 +200,7 @@ namespace GatelessGateSharp
             mPingThread.Start();
         }
 
-        override public void Submit(Device aDevice, EthashStratum.Job job, UInt64 output)
+        override public void Submit(OpenCLDevice aDevice, EthashStratum.Job job, UInt64 output)
         {
             if (Stopped)
                 return;
@@ -230,11 +230,13 @@ namespace GatelessGateSharp
                         "0x" + job.GetMixHash(output) // mix digest
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
+                MainForm.Logger("OpenCLDevice #" + aDevice.DeviceIndex + " submitted a share.");
             }
             catch (Exception ex)
             {
                 MainForm.Logger("Failed to submit share: " + ex.Message + ex.StackTrace);
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                Reconnect();
             }
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }

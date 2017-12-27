@@ -49,15 +49,15 @@ namespace GatelessGateSharp
         }
 
 
-        private Device mDevice;
+        private OpenCLDevice mDevice;
         private ComputeCommandQueue mQueue;
 
-        public Device Device { get { return mDevice; } }
+        public OpenCLDevice OpenCLDevice { get { return mDevice; } }
         public ComputeCommandQueue Queue { get { return mQueue; } }
 
         public ComputeDevice ComputeDevice { get { return mDevice.GetComputeDevice(); } }
 
-        protected OpenCLMiner(Device aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
+        protected OpenCLMiner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
             : base(aDevice, aAlgorithmName, aFirstAlgorithmName, aSecondAlgorithmName)
         {
             mDevice = aDevice;

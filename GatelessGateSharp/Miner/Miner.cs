@@ -25,7 +25,7 @@ namespace GatelessGateSharp
 {
     class Miner
     {
-        private Device mDevice;
+        private OpenCLDevice mDevice;
         private bool mStopped = false;
         private bool mDone = false;
         private String mAlgorithmName = "";
@@ -34,7 +34,7 @@ namespace GatelessGateSharp
         private System.Threading.Thread mMinerThread = null;
         private DateTime mLastAlive = DateTime.Now;
 
-        public Device GatelessGateDevice { get { return mDevice; } }
+        public OpenCLDevice GatelessGateDevice { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
         public bool Done { get { return mDone; } }
@@ -45,7 +45,7 @@ namespace GatelessGateSharp
         public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
 
-        protected Miner(Device aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
+        protected Miner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
         {
             mDevice = aDevice;
             mAlgorithmName = aAlgorithmName;

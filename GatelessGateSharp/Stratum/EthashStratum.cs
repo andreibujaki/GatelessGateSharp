@@ -237,6 +237,6 @@ namespace GatelessGateSharp
         {
         }
 
-        public virtual void Submit(Device aDevice, Job job, UInt64 output) { }
+        public virtual void Submit(OpenCLDevice aDevice, Job job, UInt64 output) { }
     }
 }

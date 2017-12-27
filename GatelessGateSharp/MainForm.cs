@@ -64,17 +64,6 @@ namespace GatelessGateSharp
         private ApplicationGlobalState appState = ApplicationGlobalState.Initializing;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
-        private Control[] labelGPUVendorArray;
-        private Control[] labelGPUNameArray;
-        private Control[] labelGPUIDArray;
-        private Control[] labelGPUSpeedArray;
-        private Control[] labelGPUTempArray;
-        private Control[] labelGPUActivityArray;
-        private Control[] labelGPUFanArray;
-        private Control[] labelGPUCoreClockArray;
-        private Control[] labelGPUMemoryClockArray;
-        private Control[] labelGPUSharesArray;
-        private CheckBox[] checkBoxGPUEnableArray;
         private TabPage[] tabPageDeviceArray;
         private NumericUpDown[] numericUpDownDeviceEthashPascalThreadsArray;
         private NumericUpDown[] numericUpDownDeviceEthashPascalIntensityArray;
@@ -95,7 +84,7 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceCryptoNightRawIntensityArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
 
-        private Device[] mDevices;
+        private OpenCLDevice[] mDevices;
         private const int maxNumDevices = 8; // This depends on MainForm.
         private bool ADLInitialized = false;
         private bool NVMLInitialized = false;
@@ -176,17 +165,6 @@ namespace GatelessGateSharp
             comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
             comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
-            labelGPUVendorArray = new Control[] { labelGPU0Vendor, labelGPU1Vendor, labelGPU2Vendor, labelGPU3Vendor, labelGPU4Vendor, labelGPU5Vendor, labelGPU6Vendor, labelGPU7Vendor };
-            labelGPUNameArray = new Control[] { labelGPU0Name, labelGPU1Name, labelGPU2Name, labelGPU3Name, labelGPU4Name, labelGPU5Name, labelGPU6Name, labelGPU7Name };
-            labelGPUIDArray = new Control[] { labelGPU0ID, labelGPU1ID, labelGPU2ID, labelGPU3ID, labelGPU4ID, labelGPU5ID, labelGPU6ID, labelGPU7ID };
-            labelGPUTempArray = new Control[] { labelGPU0Temp, labelGPU1Temp, labelGPU2Temp, labelGPU3Temp, labelGPU4Temp, labelGPU5Temp, labelGPU6Temp, labelGPU7Temp };
-            labelGPUActivityArray = new Control[] { labelGPU0Activity, labelGPU1Activity, labelGPU2Activity, labelGPU3Activity, labelGPU4Activity, labelGPU5Activity, labelGPU6Activity, labelGPU7Activity };
-            labelGPUFanArray = new Control[] { labelGPU0Fan, labelGPU1Fan, labelGPU2Fan, labelGPU3Fan, labelGPU4Fan, labelGPU5Fan, labelGPU6Fan, labelGPU7Fan };
-            labelGPUSpeedArray = new Control[] { labelGPU0Speed, labelGPU1Speed, labelGPU2Speed, labelGPU3Speed, labelGPU4Speed, labelGPU5Speed, labelGPU6Speed, labelGPU7Speed };
-            labelGPUCoreClockArray = new Control[] { labelGPU0CoreClock, labelGPU1CoreClock, labelGPU2CoreClock, labelGPU3CoreClock, labelGPU4CoreClock, labelGPU5CoreClock, labelGPU6CoreClock, labelGPU7CoreClock };
-            labelGPUMemoryClockArray = new Control[] { labelGPU0MemoryClock, labelGPU1MemoryClock, labelGPU2MemoryClock, labelGPU3MemoryClock, labelGPU4MemoryClock, labelGPU5MemoryClock, labelGPU6MemoryClock, labelGPU7MemoryClock };
-            labelGPUSharesArray = new Control[] { labelGPU0Shares, labelGPU1Shares, labelGPU2Shares, labelGPU3Shares, labelGPU4Shares, labelGPU5Shares, labelGPU6Shares, labelGPU7Shares };
-            checkBoxGPUEnableArray = new CheckBox[] { checkBoxGPU0Enable, checkBoxGPU1Enable, checkBoxGPU2Enable, checkBoxGPU3Enable, checkBoxGPU4Enable, checkBoxGPU5Enable, checkBoxGPU6Enable, checkBoxGPU7Enable };
             tabPageDeviceArray = new TabPage[] { tabPageDevice0, tabPageDevice1, tabPageDevice2, tabPageDevice3, tabPageDevice4, tabPageDevice5, tabPageDevice6, tabPageDevice7 };
             numericUpDownDeviceEthashPascalThreadsArray = new NumericUpDown[]
             {
@@ -486,22 +464,9 @@ namespace GatelessGateSharp
                                         checkBoxAutoStart.Checked = (string)reader["value"] == "true";
                                     } else if (propertyName == "launch_at_startup") {
                                         checkBoxLaunchAtStartup.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_gpu0") {
-                                        checkBoxGPU0Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_gpu1") {
-                                        checkBoxGPU1Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_gpu2") {
-                                        checkBoxGPU2Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_gpu3") {
-                                        checkBoxGPU3Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_gpu4") {
-                                        checkBoxGPU4Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_gpu5") {
-                                        checkBoxGPU5Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_gpu6") {
-                                        checkBoxGPU6Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_gpu7") {
-                                        checkBoxGPU7Enable.Checked = (string)reader["value"] == "true";
+                                    } else if ((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Success) {
+                                        int index = int.Parse((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Groups[1].Captures[0].Value);
+                                        dataGridViewDevices.Rows[index].Cells["enabled"].Value = (string)reader["value"] == "true";
                                     } else if (propertyName == "enable_phymem") {
                                         checkBoxEnablePhymem.Checked = (string)reader["value"] == "true";
                                     } else if (propertyName == "custom_pool0_enabled") {
@@ -652,8 +617,8 @@ namespace GatelessGateSharp
                                     var deviceName = (string)reader["device_name"];
                                     var name = (string)reader["parameter_name"];
                                     var value = (string)reader["parameter_value"];
-                                    if (deviceID >= mDevices.Length || deviceVendor != mDevices[deviceID].Vendor ||
-                                        deviceName != mDevices[deviceID].Name)
+                                    if (deviceID >= mDevices.Length || deviceVendor != mDevices[deviceID].GetVendor() ||
+                                        deviceName != mDevices[deviceID].GetName())
                                         continue;
                                     if (name == "ethash_pascal_threads")
                                         numericUpDownDeviceEthashPascalThreadsArray[deviceID].Value = decimal.Parse(value);
@@ -695,7 +660,7 @@ namespace GatelessGateSharp
                                             decimal.Parse(value);
                                     else if (name == "cryptonight_intensity")
                                         numericUpDownDeviceCryptoNightRawIntensityArray[deviceID].Value =
-                                            decimal.Parse(value) * mDevices[deviceID].MaxComputeUnits;
+                                            decimal.Parse(value) * mDevices[deviceID].GetMaxComputeUnits();
                                     else if (name == "cryptonight_raw_intensity")
                                         numericUpDownDeviceCryptoNightRawIntensityArray[deviceID].Value =
                                             decimal.Parse(value);
@@ -833,12 +798,13 @@ namespace GatelessGateSharp
                         command.ExecuteNonQuery();
                     }
 
-                    for (var i = 0; i < mDevices.Length; ++i)
+                    for (var i = 0; i < mDevices.Length; ++i) {
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@name", "enable_gpu" + i);
-                            command.Parameters.AddWithValue("@value", checkBoxGPUEnableArray[i].Checked ? "true" : "false");
+                            command.Parameters.AddWithValue("@value", (bool)(dataGridViewDevices.Rows[i].Cells["enabled"].Value) ? "true" : "false");
                             command.ExecuteNonQuery();
                         }
+                    }
                     using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0Host.Text);
@@ -1059,31 +1025,13 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
                     }
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        command.Parameters.AddWithValue("@name", "auto_start");
-                        command.Parameters.AddWithValue("@value", checkBoxAutoStart.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                    }
-
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        command.Parameters.AddWithValue("@name", "launch_at_startup");
-                        command.Parameters.AddWithValue("@value", checkBoxLaunchAtStartup.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                    }
 
                     using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "enable_phymem");
                         command.Parameters.AddWithValue("@value", checkBoxEnablePhymem.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
                     }
-
-                    for (var i = 0; i < mDevices.Length; ++i)
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@name", "enable_gpu" + i);
-                            command.Parameters.AddWithValue("@value", checkBoxGPUEnableArray[i].Checked ? "true" : "false");
-                            command.ExecuteNonQuery();
-                        }
-
+                    
                     try {
                         sql = "delete from device_parameters";
                         using (var command = new SQLiteCommand(sql, conn)) {
@@ -1101,144 +1049,144 @@ namespace GatelessGateSharp
                     for (var i = 0; i < mDevices.Length; ++i) {
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_pascal_iterations");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalPascalIterationsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "lbry_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "lbry_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "lbry_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "pascal_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "pascal_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_raw_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightRawIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].Vendor);
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].Name);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
@@ -1316,56 +1264,24 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void InitializeDevices() {
-            mDevices = Device.GetAllDevices();
+            mDevices = OpenCLDevice.GetAllOpenCLDevices();
             if (mDevices.Length > maxNumDevices)
-                Array.Resize<Device>(ref mDevices, maxNumDevices);
+                Array.Resize<OpenCLDevice>(ref mDevices, maxNumDevices);
             Logger("Number of Devices: " + mDevices.Length);
 
             foreach (var device in mDevices) {
-                var openclDevice = device.GetComputeDevice();
-                var index = device.DeviceIndex;
-                labelGPUVendorArray[index].Text = device.Vendor;
-                if (device.Vendor == "AMD")
-                    device.SetAMDBoardName(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD));
-                labelGPUNameArray[index].Text = device.Name;
-
-                labelGPUSpeedArray[index].Text = "-";
-                labelGPUActivityArray[index].Text = "-";
-                labelGPUTempArray[index].Text = "-";
-                labelGPUFanArray[index].Text = "-";
-                labelGPUSharesArray[index].Text = "-";
-            }
-
-            for (var index = maxNumDevices - 1; index >= mDevices.Length; --index) {
-                labelGPUVendorArray[index].Visible = false;
-                labelGPUNameArray[index].Visible = false;
-                labelGPUIDArray[index].Visible = false;
-                labelGPUSpeedArray[index].Visible = false;
-                labelGPUActivityArray[index].Visible = false;
-                labelGPUTempArray[index].Visible = false;
-                labelGPUFanArray[index].Visible = false;
-                labelGPUCoreClockArray[index].Visible = false;
-                labelGPUMemoryClockArray[index].Visible = false;
-                labelGPUSharesArray[index].Visible = false;
-                checkBoxGPUEnableArray[index].Visible = false;
+                dataGridViewDevices.Rows.Add(new object[] {
+                    true,
+                    device.DeviceIndex,
+                    device.GetVendor(),
+                    device.GetName()
+                });
             }
 
             for (var index = maxNumDevices - 1; index >= mDevices.Length; --index)
                 tabControlDeviceSettings.TabPages.RemoveAt(index);
 
             for (var index = maxNumDevices - 1; index >= mDevices.Length; --index) {
-                Array.Resize(ref labelGPUVendorArray, mDevices.Length);
-                Array.Resize(ref labelGPUNameArray, mDevices.Length);
-                Array.Resize(ref labelGPUIDArray, mDevices.Length);
-                Array.Resize(ref labelGPUSpeedArray, mDevices.Length);
-                Array.Resize(ref labelGPUActivityArray, mDevices.Length);
-                Array.Resize(ref labelGPUTempArray, mDevices.Length);
-                Array.Resize(ref labelGPUFanArray, mDevices.Length);
-                Array.Resize(ref labelGPUCoreClockArray, mDevices.Length);
-                Array.Resize(ref labelGPUMemoryClockArray, mDevices.Length);
-                Array.Resize(ref labelGPUSharesArray, mDevices.Length);
-                Array.Resize(ref checkBoxGPUEnableArray, mDevices.Length);
-
                 Array.Resize(ref tabPageDeviceArray, mDevices.Length);
                 Array.Resize(ref numericUpDownDeviceEthashIntensityArray, mDevices.Length);
                 Array.Resize(ref numericUpDownDeviceCryptoNightThreadsArray, mDevices.Length);
@@ -1407,7 +1323,7 @@ namespace GatelessGateSharp
                             int deviceIndex = 0;
                             foreach (var device in mDevices) {
                                 var openclDevice = device.GetComputeDevice();
-                                if (openclDevice.Vendor == "Advanced Micro Devices, Inc.")
+                                if (device.GetVendor() == "AMD")
                                     for (var i = 0; i < NumberOfAdapters; i++) {
                                         if (null != ADL.ADL_Adapter_Active_Get)
                                             ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
@@ -1436,7 +1352,7 @@ namespace GatelessGateSharp
                     Logger("Successfully initialized NVIDIA Management Library.");
                     uint nvmlDeviceCount = 0;
                     ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetCount(ref nvmlDeviceCount);
-                    Logger("NVML Device Count: " + nvmlDeviceCount);
+                    Logger("NVML OpenCLDevice Count: " + nvmlDeviceCount);
 
                     nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[mDevices.Length];
                     for (uint i = 0; i < nvmlDeviceCount; ++i) {
@@ -1465,43 +1381,43 @@ namespace GatelessGateSharp
             }
 
             foreach (var device in mDevices) {
-                tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.Vendor + " " + device.Name;
+                tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName();
 
                 // EthashPascal
                 numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
                 numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)2000;
-                numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Maximum = (decimal)(device.Vendor == "NVIDIA" ? 4 : 4);
+                numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 4 : 4);
 
                 // Ethash
                 numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = (decimal)1;
                 numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)2000;
-                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.Vendor == "NVIDIA" ? 512 : 256);
-                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "NVIDIA" ? 192 : 192);
+                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
 
                 // Lbry
                 numericUpDownDeviceLbryThreadsArray[device.DeviceIndex].Value = (decimal)1;
                 numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = (decimal)8192;
-                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.Vendor == "NVIDIA" ? 512 : 256);
-                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "NVIDIA" ? 32 : 64);
+                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
 
                 // Pasacal
                 numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = (decimal)2;
                 numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = (decimal)8192;
-                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.Vendor == "NVIDIA" ? 512 : 256);
-                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "NVIDIA" ? 256 : 256);
+                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
 
                 // CryptoNight
-                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 2 : 1);
-                numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.Vendor == "AMD" ? 8 : 4);
+                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 2 : 1);
+                numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
                 numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
-                    = (decimal)(device.Vendor == "AMD" && device.Name == "Radeon RX 470" ? 24 * device.MaxComputeUnits :
-                                device.Vendor == "AMD" && device.Name == "Radeon RX 570" ? 24 * device.MaxComputeUnits :
-                                device.Vendor == "AMD" && device.Name == "Radeon RX 480" ? 28 * device.MaxComputeUnits :
-                                device.Vendor == "AMD" && device.Name == "Radeon RX 580" ? 28 * device.MaxComputeUnits :
-                                device.Vendor == "AMD" && device.Name == "Radeon R9 Fury X/Nano" ? 14 * device.MaxComputeUnits :
-                                device.Vendor == "AMD" ? 16 * device.MaxComputeUnits :
-                                device.Vendor == "NVIDIA" && device.Name == "GeForce GTX 1080 Ti" ? 32 * device.MaxComputeUnits :
-                                                                                                    16 * device.MaxComputeUnits);
+                    = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 24 * device.GetMaxComputeUnits() :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 24 * device.GetMaxComputeUnits() :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 28 * device.GetMaxComputeUnits() :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 28 * device.GetMaxComputeUnits() :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Fury X/Nano" ? 14 * device.GetMaxComputeUnits() :
+                                device.GetVendor() == "AMD" ? 16 * device.GetMaxComputeUnits() :
+                                device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 32 * device.GetMaxComputeUnits() :
+                                                                                                    16 * device.GetMaxComputeUnits());
             }
 
             UpdateStatsWithShortPolling();
@@ -1860,19 +1776,6 @@ namespace GatelessGateSharp
                     labelCurrentPool.Text = mCurrentPool;
                 }
 
-                for (var i = 0; i < mDevices.Length; ++i) {
-                    var labelColor = checkBoxGPUEnableArray[i].Checked ? Color.Black : Color.Gray;
-                    labelGPUNameArray[i].ForeColor = labelColor;
-                    labelGPUVendorArray[i].ForeColor = labelColor;
-                    labelGPUIDArray[i].ForeColor = labelColor;
-                    labelGPUSpeedArray[i].ForeColor = labelColor;
-                    labelGPUActivityArray[i].ForeColor = labelColor;
-                    labelGPUFanArray[i].ForeColor = labelColor;
-                    labelGPUCoreClockArray[i].ForeColor = labelColor;
-                    labelGPUMemoryClockArray[i].ForeColor = labelColor;
-                    labelGPUSharesArray[i].ForeColor = labelColor;
-                }
-
                 var elapsedTimeInSeconds = (long)(DateTime.Now - mStartTime).TotalSeconds;
                 if (appState != ApplicationGlobalState.Mining)
                     labelElapsedTime.Text = "-";
@@ -1918,17 +1821,18 @@ namespace GatelessGateSharp
                     foreach (var miner in mActiveMiners)
                         if (miner.DeviceIndex == device.DeviceIndex && miner.SecondAlgorithmName != null && miner.SecondAlgorithmName != "")
                             speedSecondary += miner.SecondSpeed;
-                    labelGPUSpeedArray[deviceIndex].Text = (appState != ApplicationGlobalState.Mining) ? "-" :
+                    
+                    dataGridViewDevices.Rows[deviceIndex].Cells["speed"].Value = (appState != ApplicationGlobalState.Mining) ? "-" :
                                                            speedSecondary > 0 ? ConvertHashRateToString(speedPrimary) + ", " + ConvertHashRateToString(speedSecondary) :
                                                                                                          ConvertHashRateToString(speedPrimary);
 
                     if (device.AcceptedShares + device.RejectedShares == 0) {
-                        labelGPUSharesArray[deviceIndex].ForeColor = Color.Black;
-                        labelGPUSharesArray[deviceIndex].Text = appState == ApplicationGlobalState.Mining ? "0" : "-";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = Color.Black;
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = appState == ApplicationGlobalState.Mining ? "0" : "-";
                     } else {
                         var acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
-                        labelGPUSharesArray[deviceIndex].Text = device.AcceptedShares.ToString() + " (" + string.Format("{0:N1}", acceptanceRate * 100) + "%)";
-                        labelGPUSharesArray[deviceIndex].ForeColor = acceptanceRate >= 0.99 ? Color.Green : acceptanceRate >= 0.95 ? Color.Goldenrod : Color.Red; // TODO
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = device.AcceptedShares.ToString() + " (" + string.Format("{0:N1}", acceptanceRate * 100) + "%)";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = acceptanceRate >= 0.99 ? Color.Green : acceptanceRate >= 0.95 ? Color.Goldenrod : Color.Red; // TODO
                     }
 
                     if (ADLAdapterIndexArray[deviceIndex] >= 0) {
@@ -1944,10 +1848,12 @@ namespace GatelessGateSharp
                             var ADLRet = ADL.ADL_Overdrive5_Temperature_Get(ADLAdapterIndexArray[deviceIndex], 0, tempBuffer);
                             if (ADL.ADL_SUCCESS == ADLRet) {
                                 OSADLTemperatureData = (ADLTemperature)Marshal.PtrToStructure(tempBuffer, OSADLTemperatureData.GetType());
-                                labelGPUTempArray[deviceIndex].Text = (OSADLTemperatureData.Temperature / 1000).ToString() + "℃";
-                                labelGPUTempArray[deviceIndex].ForeColor = OSADLTemperatureData.Temperature >= 80000 ? Color.Red :
+                                dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Value = (OSADLTemperatureData.Temperature / 1000).ToString() + "℃";
+                                dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Style.ForeColor =
+                                                                           OSADLTemperatureData.Temperature >= 80000 ? Color.Red :
                                                                            OSADLTemperatureData.Temperature >= 60000 ? Color.Purple :
                                                                                                                          Color.Blue;
+                            
                             }
                         }
 
@@ -1963,9 +1869,9 @@ namespace GatelessGateSharp
                             var ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndexArray[deviceIndex], activityBuffer);
                             if (ADL.ADL_SUCCESS == ADLRet) {
                                 OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                                labelGPUActivityArray[deviceIndex].Text = OSADLPMActivityData.iActivityPercent.ToString() + "%";
-                                labelGPUCoreClockArray[deviceIndex].Text = (OSADLPMActivityData.iEngineClock / 100).ToString() + " MHz";
-                                labelGPUMemoryClockArray[deviceIndex].Text = (OSADLPMActivityData.iMemoryClock / 100).ToString() + " MHz";
+                                dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = OSADLPMActivityData.iActivityPercent.ToString() + "%";
+                                dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = (OSADLPMActivityData.iEngineClock / 100).ToString() + " MHz";
+                                dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = (OSADLPMActivityData.iMemoryClock / 100).ToString() + " MHz";
                             }
                         }
 
@@ -1982,30 +1888,31 @@ namespace GatelessGateSharp
                             var ADLRet = ADL.ADL_Overdrive5_FanSpeed_Get(ADLAdapterIndexArray[deviceIndex], 0, fanSpeedValueBuffer);
                             if (ADL.ADL_SUCCESS == ADLRet) {
                                 OSADLFanSpeedValueData = (ADLFanSpeedValue)Marshal.PtrToStructure(fanSpeedValueBuffer, OSADLFanSpeedValueData.GetType());
-                                labelGPUFanArray[deviceIndex].Text = OSADLFanSpeedValueData.iFanSpeed.ToString() + "%";
+                                dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = OSADLFanSpeedValueData.iFanSpeed.ToString() + "%";
                             }
                         }
                     } else if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation")) {
                         uint temp = 0;
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetTemperature(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlTemperatureSensors.Gpu, ref temp);
-                        labelGPUTempArray[deviceIndex].Text = temp.ToString() + "℃";
-                        labelGPUTempArray[deviceIndex].ForeColor = temp >= 80 ? Color.Red :
+                        dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Value = temp.ToString() + "℃";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Style.ForeColor =
+                                                                   temp >= 80 ? Color.Red :
                                                                    temp >= 60 ? Color.Purple :
                                                                                   Color.Blue;
 
                         uint fanSpeed = 0;
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetFanSpeed(nvmlDeviceArray[deviceIndex], ref fanSpeed);
-                        labelGPUFanArray[deviceIndex].Text = fanSpeed.ToString() + "%";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
 
                         var utilization = new ManagedCuda.Nvml.nvmlUtilization();
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetUtilizationRates(nvmlDeviceArray[deviceIndex], ref utilization);
-                        labelGPUActivityArray[deviceIndex].Text = utilization.gpu.ToString() + "%";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = utilization.gpu.ToString() + "%";
 
                         uint clock = 0;
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetClockInfo(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlClockType.Graphics, ref clock);
-                        labelGPUCoreClockArray[deviceIndex].Text = clock.ToString() + " MHz";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = clock.ToString() + " MHz";
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetClockInfo(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlClockType.Mem, ref clock);
-                        labelGPUMemoryClockArray[deviceIndex].Text = clock.ToString() + " MHz";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = clock.ToString() + " MHz";
                     }
                 }
             } catch (Exception ex) {
@@ -2325,13 +2232,13 @@ namespace GatelessGateSharp
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
-                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i) {
                         OpenCLCryptoNightMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
@@ -2644,13 +2551,13 @@ namespace GatelessGateSharp
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     minerCount += 1;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
-                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     OpenCLDualEthashLbryMiner dualMiner = null;
                     foreach (var inactiveMiner in mInactiveMiners) {
                         if (inactiveMiner.GetType() == typeof(OpenCLDualEthashLbryMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
@@ -2688,13 +2595,13 @@ namespace GatelessGateSharp
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     minerCount += Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value));
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
-                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (int i = 0; i < numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value; ++i) {
                         OpenCLDualEthashPascalMiner dualMiner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
@@ -2731,13 +2638,13 @@ namespace GatelessGateSharp
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
-                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i) {
                         OpenCLEthashMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
@@ -2772,13 +2679,13 @@ namespace GatelessGateSharp
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
-                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i) {
                         OpenCLLbryMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
@@ -2811,13 +2718,13 @@ namespace GatelessGateSharp
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
-                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i) {
                         OpenCLPascalMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
@@ -2850,13 +2757,13 @@ namespace GatelessGateSharp
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
-                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i) {
                         OpenCLNeoScryptMiner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
@@ -2890,13 +2797,13 @@ namespace GatelessGateSharp
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
-                if (checkBoxGPUEnableArray[deviceIndex].Checked)
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < 2; ++i) // Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
-                if (checkBoxGPUEnableArray[deviceIndex].Checked) {
+                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < 2; ++i) { // Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i) {
                         OpenCLLyra2REv2Miner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
@@ -3235,8 +3142,8 @@ namespace GatelessGateSharp
                 }
             }
             var enabled = false;
-            foreach (var control in checkBoxGPUEnableArray)
-                enabled = enabled || control.Checked;
+            foreach (var device in mDevices)
+                enabled = enabled || (bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value);
             if (!enabled) {
                 MessageBox.Show("Please enable at least one device.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 tabControlMainForm.TabIndex = 0;
@@ -3248,7 +3155,7 @@ namespace GatelessGateSharp
             if (appState == ApplicationGlobalState.Idle) {
                 foreach (var device in mDevices) {
                     device.ClearShares();
-                    labelGPUSharesArray[device.DeviceIndex].Text = "0";
+                    //labelGPUSharesArray[device.DeviceIndex].Text = "0";
                 }
 
                 mPrimaryStratum = null;
@@ -3297,8 +3204,7 @@ namespace GatelessGateSharp
                 groupBoxWalletAddresses.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
                 groupBoxAutomation.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxHadrwareAcceleration.Enabled = appState == ApplicationGlobalState.Idle;
-                foreach (var control in checkBoxGPUEnableArray)
-                    control.Enabled = appState == ApplicationGlobalState.Idle;
+                dataGridViewDevices.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxCustmPool0.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxCustmPool1.Enabled = appState == ApplicationGlobalState.Idle;
                 groupBoxCustmPool2.Enabled = appState == ApplicationGlobalState.Idle;
@@ -3531,323 +3437,323 @@ namespace GatelessGateSharp
         }
 
         private void labelGPU0ID_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0Vendor_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0Name_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0Speed_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0Shares_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0Activity_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0Temp_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0Fan_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0CoreClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU0MemoryClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU0Enable.Checked = !checkBoxGPU0Enable.Checked;
+            
         }
 
         private void labelGPU1ID_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1Vendor_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1Name_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1Speed_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1Shares_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1Activity_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1Temp_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1Fan_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1CoreClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU1MemoryClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU1Enable.Checked = !checkBoxGPU1Enable.Checked;
+            
         }
 
         private void labelGPU2ID_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2Vendor_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2Name_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2Speed_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2Shares_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2Activity_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2Temp_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2Fan_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2CoreClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU2MemoryClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU2Enable.Checked = !checkBoxGPU2Enable.Checked;
+            
         }
 
         private void labelGPU3Vendor_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3ID_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3Name_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3Speed_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3Shares_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3Activity_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3Temp_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3Fan_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3CoreClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU3MemoryClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU3Enable.Checked = !checkBoxGPU3Enable.Checked;
+            
         }
 
         private void labelGPU4ID_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4Vendor_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4Name_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4Speed_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4Shares_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4Activity_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4Temp_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4Fan_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4CoreClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU4MemoryClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU4Enable.Checked = !checkBoxGPU4Enable.Checked;
+            
         }
 
         private void labelGPU5ID_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5Vendor_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5Name_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5Speed_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5Shares_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5Activity_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5Temp_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5Fan_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5CoreClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU5MemoryClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU5Enable.Checked = !checkBoxGPU5Enable.Checked;
+            
         }
 
         private void labelGPU6ID_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6Vendor_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6Name_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6Speed_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6Shares_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6Activity_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6Temp_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6Fan_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6CoreClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU6MemoryClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU6Enable.Checked = !checkBoxGPU6Enable.Checked;
+            
         }
 
         private void labelGPU7ID_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7Vendor_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7Name_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7Speed_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7Shares_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7Activity_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7Temp_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7Fan_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7CoreClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void labelGPU7MemoryClock_Click(object sender, EventArgs e) {
-            if (appState == ApplicationGlobalState.Idle) checkBoxGPU7Enable.Checked = !checkBoxGPU7Enable.Checked;
+            
         }
 
         private void buttonClearLog_Click(object sender, EventArgs e) {
@@ -3912,49 +3818,12 @@ namespace GatelessGateSharp
             UpdateControls();
         }
 
-        private void buttonViewPascalBalance_Click(object sender, EventArgs e) {
-
+        private void dataGridViewDevices_SelectionChanged(object sender, EventArgs e) {
+            dataGridViewDevices.ClearSelection();
         }
 
-        private void buttonLbryBalance_Click(object sender, EventArgs e) {
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e) {
-
-        }
-
-        private void numericUpDown3_ValueChanged(object sender, EventArgs e) {
-
-        }
-
-        private void label80_Click(object sender, EventArgs e) {
-
-        }
-
-        private void label90_Click(object sender, EventArgs e) {
-
-        }
-
-        private void label91_Click(object sender, EventArgs e) {
-
-        }
-
-        private void numericUpDown10_ValueChanged(object sender, EventArgs e) {
-
-        }
-
-        private void numericUpDown11_ValueChanged(object sender, EventArgs e) {
-
-        }
-
-        private void groupBox16_Enter(object sender, EventArgs e) {
-
-        }
-
-        private void richTextBoxAbout_TextChanged(object sender, EventArgs e)
-        {
-
+        private void dataGridViewDevices_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+            dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value = !(bool)(dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value);
         }
     }
 }

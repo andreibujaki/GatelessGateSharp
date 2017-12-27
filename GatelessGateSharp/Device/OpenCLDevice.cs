@@ -11,31 +11,26 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class Device
+    class OpenCLDevice : Device
     {
-        private int mDeviceIndex;
         private ComputeDevice mComputeDevice;
-        private int mAcceptedShares;
-        private int mRejectedShares;
-        private String mName;
         private ComputeContext mContext = null;
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
         private List<ComputeDevice> mDeviceList;
+        private String mName;
 
-
-        public String Vendor
-        {
-            get
-            {
-                return (mComputeDevice.Vendor == "Advanced Micro Devices, Inc.") ? "AMD" :
-                       (mComputeDevice.Vendor == "NVIDIA Corporation") ? "NVIDIA" :
-                       (mComputeDevice.Vendor == "Intel Corporation") ? "Intel" :
-                       (mComputeDevice.Vendor == "GenuineIntel") ? "Intel" :
-                       mComputeDevice.Vendor;
-            }
+        public override String GetVendor() {
+            return (mComputeDevice.Vendor == "Advanced Micro Devices, Inc.") ? "AMD" :
+                    (mComputeDevice.Vendor == "NVIDIA Corporation") ? "NVIDIA" :
+                    (mComputeDevice.Vendor == "Intel Corporation") ? "Intel" :
+                    (mComputeDevice.Vendor == "GenuineIntel") ? "Intel" :
+                    mComputeDevice.Vendor;
         }
 
-        public String Name { get { return mName; } }
+        public override String GetName() {
+            return mName;
+        }
+
         public List<ComputeDevice> DeviceList { get { return mDeviceList; } }
 
         public ComputeContext Context
@@ -55,19 +50,30 @@ namespace GatelessGateSharp
             }
         }
 
-        public int DeviceIndex { get { return mDeviceIndex; } }
-        public int AcceptedShares { get { return mAcceptedShares; } }
-        public int RejectedShares { get { return mRejectedShares; } }
-        public long MaxComputeUnits { get { return mComputeDevice.MaxComputeUnits; } }
+        public override long GetMaxComputeUnits() { return mComputeDevice.MaxComputeUnits; }
         public ComputeDevice GetComputeDevice() { return mComputeDevice; }
 
-        public Device(int aDeviceIndex, ComputeDevice aComputeDevice)
+        public OpenCLDevice(int aDeviceIndex, ComputeDevice aComputeDevice)
+            : base(aDeviceIndex)
         {
             mComputeDevice = aComputeDevice;
-            mDeviceIndex = aDeviceIndex;
-            mAcceptedShares = 0;
-            mRejectedShares = 0;
-            mName = aComputeDevice.Name;
+            MainForm.Logger("GetVendor(): " + GetVendor());
+            if (GetVendor() == "AMD") {
+                mName = System.Text.Encoding.ASCII.GetString(mComputeDevice.BoardNameAMD)
+                    .Replace("AMD ", "")
+                    .Replace("(TM)", "")
+                    //.Replace(" Series", "")
+                    .Replace(" Graphics", "")
+                    .Replace("  ", " ");
+                mName = (new Regex("[^a-zA-Z0-9]+$")).Replace(mName, ""); // Drop '\0'
+                if (mName == "Radeon R9 Fury Series" && mComputeDevice.MaxComputeUnits == 64) {
+                    mName = "Radeon R9 Nano";
+                } else if (mName == "Radeon HD 7900 Series" && mComputeDevice.MaxComputeUnits == 32) {
+                    mName = "Radeon HD 7970";
+                }
+            } else {
+                mName = mComputeDevice.Name;
+            }
         }
 
         public ComputeDevice GetNewComputeDevice()
@@ -87,35 +93,7 @@ namespace GatelessGateSharp
                     }
                 }
             }
-            return (ComputeDevice)computeDeviceArrayList[mDeviceIndex];
-        }
-
-        public void SetAMDBoardName(String aName)
-        {
-            aName = aName.Replace("AMD ", "");
-            aName = aName.Replace("(TM)", "");
-            aName = aName.Replace(" Series", "");
-            aName = aName.Replace(" Graphics", "");
-            aName = aName.Replace("  ", " ");
-            if (aName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 64) // TODO
-                aName = "Radeon R9 Fury X/Nano";
-            mName = aName;
-        }
-
-        public int IncrementAcceptedShares()
-        {
-            return ++mAcceptedShares;
-        }
-
-        public int IncrementRejectedShares()
-        {
-            return ++mRejectedShares;
-        }
-
-        public void ClearShares()
-        {
-            mAcceptedShares = 0;
-            mRejectedShares = 0;
+            return (ComputeDevice)computeDeviceArrayList[DeviceIndex];
         }
 
         public static bool IsOpenCLDeviceIgnored(ComputeDevice device)
@@ -123,7 +101,7 @@ namespace GatelessGateSharp
             return Regex.Match(device.Name, "Intel").Success || Regex.Match(device.Vendor, "Intel").Success || device.Type == ComputeDeviceTypes.Cpu;
         }
 
-        public static Device[] GetAllDevices()
+        public static OpenCLDevice[] GetAllOpenCLDevices()
         {
             var computeDeviceArrayList = new ArrayList();
 
@@ -143,11 +121,11 @@ namespace GatelessGateSharp
 
             }
             var computeDevices = Array.ConvertAll(computeDeviceArrayList.ToArray(), item => (ComputeDevice)item);
-            Device[] devices = new Device[computeDevices.Length];
+            OpenCLDevice[] devices = new OpenCLDevice[computeDevices.Length];
             var deviceIndex = 0;
             foreach (var computeDevice in computeDevices)
             {
-                devices[deviceIndex] = new Device(deviceIndex, computeDevice);
+                devices[deviceIndex] = new OpenCLDevice(deviceIndex, computeDevice);
                 deviceIndex++;
             }
 

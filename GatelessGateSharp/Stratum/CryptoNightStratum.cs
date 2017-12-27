@@ -128,7 +128,7 @@ namespace GatelessGateSharp
             try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        public void Submit(Device device, Job job, UInt32 output, String result)
+        public void Submit(OpenCLDevice device, Job job, UInt32 output, String result)
         {
             if (Stopped)
                 return;
@@ -147,11 +147,13 @@ namespace GatelessGateSharp
                         { "result", result }}},
                     { "id", 4 }});
                 WriteLine(message);
-                MainForm.Logger("Device #" + device.DeviceIndex + " submitted a share.");
+                MainForm.Logger("OpenCLDevice #" + device.DeviceIndex + " submitted a share.");
             }
             catch (Exception ex)
             {
                 MainForm.Logger("Failed to submit share: " + ex.Message);
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                Reconnect();
             }
             try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
         }

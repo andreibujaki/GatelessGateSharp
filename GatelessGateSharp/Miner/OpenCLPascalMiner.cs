@@ -51,7 +51,7 @@ namespace GatelessGateSharp
           
 
 
-        public OpenCLPascalMiner(Device aGatelessGateDevice)
+        public OpenCLPascalMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Pascal")
         {
             mPascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize);
@@ -62,7 +62,7 @@ namespace GatelessGateSharp
         public void Start(PascalStratum aPascalStratum, int aPascalIntensity, int aPascalLocalWorkSize)
         {
             mPascalStratum = aPascalStratum;
-            mPascalGlobalWorkSizeArray[0] = aPascalIntensity * Device.MaxComputeUnits;
+            mPascalGlobalWorkSizeArray[0] = aPascalIntensity * OpenCLDevice.GetMaxComputeUnits();
             mPascalLocalWorkSizeArray[0] = aPascalLocalWorkSize;
             if (mPascalGlobalWorkSizeArray[0] % aPascalLocalWorkSize != 0)
                 mPascalGlobalWorkSizeArray[0] = aPascalLocalWorkSize - mPascalGlobalWorkSizeArray[0] % aPascalLocalWorkSize;
@@ -72,7 +72,7 @@ namespace GatelessGateSharp
 
         public void BuildPascalProgram()
         {
-            ComputeDevice computeDevice = Device.GetComputeDevice();
+            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
 
             try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
 
@@ -85,21 +85,21 @@ namespace GatelessGateSharp
             {
                 String source = System.IO.File.ReadAllText(@"Kernels\pascal.cl");
                 mPascalProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\pascal.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD" ? "-O1 " : //"-O1 " :
-                                       Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                MainForm.Logger(@"Loaded Kernels\pascal.cl for OpenCLDevice #" + DeviceIndex + ".");
+                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
+                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + mPascalLocalWorkSizeArray[0];
                 try
                 {
-                    mPascalProgram.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                    mPascalProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
                 }
                 catch (Exception)
                 {
                     MainForm.Logger(mPascalProgram.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built Pascal program for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built Pascal program for OpenCLDevice #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mPascalProgramArray[new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])] = mPascalProgram;
                 mPascalSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])] = mPascalSearchKernel = mPascalProgram.CreateKernel("search");
@@ -193,7 +193,7 @@ namespace GatelessGateSharp
             
             MarkAsAlive();
 
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+            MainForm.Logger("Miner thread for OpenCLDevice #" + DeviceIndex + " started.");
 
             BuildPascalProgram();
 
@@ -269,7 +269,7 @@ namespace GatelessGateSharp
                             Speed = ((double)mPascalGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Pascal)", Speed / 1000000));
+                                MainForm.Logger("OpenCLDevice #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Pascal)", Speed / 1000000));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }

@@ -83,6 +83,8 @@
     <ApplicationIcon>Gateless Gate Sharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -98,6 +100,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -109,7 +112,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADL.cs" />
-    <Compile Include="Device.cs" />
+    <Compile Include="Device\OpenCLDevice.cs" />
+    <Compile Include="Device\Device.cs" />
     <Compile Include="Miner\OpenCLDualEthashLbryMiner.cs" />
     <Compile Include="Miner\OpenCLDualEthashPascalMiner.cs" />
     <Compile Include="Miner\OpenCLLyra2REv2Miner.cs" />
@@ -159,7 +163,6 @@
     <None Include="BinaryKernels\Bonaire_cryptonight.bin" />
     <None Include="BinaryKernels\Bonaire_ethash.bin" />
     <None Include="BinaryKernels\Bonaire_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Capeverde_cryptonight.bin" />
     <None Include="BinaryKernels\Capeverde_ethash.bin" />
     <None Include="BinaryKernels\Capeverde_ethash_pascal.bin" />
     <None Include="BinaryKernels\Carrizo_cryptonight.bin" />
@@ -174,7 +177,6 @@
     <None Include="BinaryKernels\gfx900_cryptonight.bin" />
     <None Include="BinaryKernels\gfx900_ethash.bin" />
     <None Include="BinaryKernels\gfx900_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Hainan_cryptonight.bin" />
     <None Include="BinaryKernels\Hainan_ethash.bin" />
     <None Include="BinaryKernels\Hainan_ethash_pascal.bin" />
     <None Include="BinaryKernels\Hawaii_cryptonight.bin" />
@@ -189,10 +191,8 @@
     <None Include="BinaryKernels\Mullins_cryptonight.bin" />
     <None Include="BinaryKernels\Mullins_ethash.bin" />
     <None Include="BinaryKernels\Mullins_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Oland_cryptonight.bin" />
     <None Include="BinaryKernels\Oland_ethash.bin" />
     <None Include="BinaryKernels\Oland_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Pitcairn_cryptonight.bin" />
     <None Include="BinaryKernels\Pitcairn_ethash.bin" />
     <None Include="BinaryKernels\Pitcairn_ethash_pascal.bin" />
     <None Include="BinaryKernels\Spectre_cryptonight.bin" />
@@ -204,7 +204,6 @@
     <None Include="BinaryKernels\Stoney_cryptonight.bin" />
     <None Include="BinaryKernels\Stoney_ethash.bin" />
     <None Include="BinaryKernels\Stoney_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Tahiti_cryptonight.bin" />
     <None Include="BinaryKernels\Tahiti_ethash.bin" />
     <None Include="BinaryKernels\Tahiti_ethash_pascal.bin" />
     <None Include="BinaryKernels\Tonga_cryptonight.bin" />

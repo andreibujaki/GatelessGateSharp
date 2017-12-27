@@ -60,7 +60,7 @@ namespace GatelessGateSharp
         byte[] mPascalMidstate = new byte[sPascalMidstateSize];
         private UInt32 mPascalRatio = 4;
 
-        public OpenCLDualEthashPascalMiner(Device aGatelessGateDevice)
+        public OpenCLDualEthashPascalMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Ethash/Pascal", "Ethash", "Pascal")
         {
             mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
@@ -75,7 +75,7 @@ namespace GatelessGateSharp
         {
             mEthashStratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = 256;
-            mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * Device.GetComputeDevice().MaxComputeUnits;
+            mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * OpenCLDevice.GetComputeDevice().MaxComputeUnits;
 
             mPascalStratum = aPascalStratum;
             mPascalRatio = (UInt32)aPascalIterations;
@@ -85,7 +85,7 @@ namespace GatelessGateSharp
 
         private void BuildEthashProgram()
         {
-            ComputeDevice computeDevice = Device.GetComputeDevice();
+            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
 
             try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
             
@@ -102,28 +102,28 @@ namespace GatelessGateSharp
                     string fileName = @"BinaryKernels\" + computeDevice.Name + "_ethash_pascal.bin";
                     byte[] binary = System.IO.File.ReadAllBytes(fileName);
                     mEthashProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
+                    MainForm.Logger("Loaded " + fileName + " for OpenCLDevice #" + DeviceIndex + ".");
                 }
                 catch (Exception)
                 {
                     String source = System.IO.File.ReadAllText(@"Kernels\ethash_pascal.cl");
                     mEthashProgram = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\ethash_pascal.cl for Device #" + DeviceIndex + ".");
+                    MainForm.Logger(@"Loaded Kernels\ethash_pascal.cl for OpenCLDevice #" + DeviceIndex + ".");
                 }
-                String buildOptions = (Device.Vendor == "AMD"    ? "-O1" :
-                                       Device.Vendor == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O1" :
+                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + mEthashLocalWorkSizeArray[0];
                 try
                 {
-                    mEthashProgram.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                    mEthashProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
                 }
                 catch (Exception)
                 {
                     MainForm.Logger(mEthashProgram.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built ethash mEthashProgram for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built ethash mEthashProgram for OpenCLDevice #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
                 mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");
@@ -219,7 +219,7 @@ namespace GatelessGateSharp
 
             MarkAsAlive();
 
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+            MainForm.Logger("Miner thread for OpenCLDevice #" + DeviceIndex + " started.");
 
             BuildEthashProgram();
 
@@ -385,7 +385,7 @@ namespace GatelessGateSharp
                             SecondSpeed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mPascalRatio;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Ethash), ", Speed / (1000000)) + String.Format("{0:N2} Mh/s (Pascal)", SecondSpeed / (1000000)));
+                                MainForm.Logger("OpenCLDevice #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Ethash), ", Speed / (1000000)) + String.Format("{0:N2} Mh/s (Pascal)", SecondSpeed / (1000000)));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }

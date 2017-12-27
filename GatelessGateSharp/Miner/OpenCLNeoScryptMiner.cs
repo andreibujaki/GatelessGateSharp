@@ -48,7 +48,7 @@ namespace GatelessGateSharp
 
 
 
-        public OpenCLNeoScryptMiner(Device aGatelessGateDevice)
+        public OpenCLNeoScryptMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "NeoScrypt") {
             mNeoScryptInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sNeoScryptInputSize);
             mNeoScryptOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sNeoScryptOutputSize);
@@ -56,7 +56,7 @@ namespace GatelessGateSharp
 
         public void Start(NeoScryptStratum aNeoScryptStratum, int aNeoScryptIntensity, int aNeoScryptLocalWorkSize) {
             mNeoScryptStratum = aNeoScryptStratum;
-            mNeoScryptGlobalWorkSizeArray[0] = aNeoScryptIntensity * Device.MaxComputeUnits;
+            mNeoScryptGlobalWorkSizeArray[0] = aNeoScryptIntensity * OpenCLDevice.GetMaxComputeUnits();
             mNeoScryptLocalWorkSizeArray[0] = aNeoScryptLocalWorkSize;
             if (mNeoScryptGlobalWorkSizeArray[0] % aNeoScryptLocalWorkSize != 0)
                 mNeoScryptGlobalWorkSizeArray[0] = aNeoScryptLocalWorkSize - mNeoScryptGlobalWorkSizeArray[0] % aNeoScryptLocalWorkSize;
@@ -65,7 +65,7 @@ namespace GatelessGateSharp
         }
 
         public void BuildNeoScryptProgram() {
-            ComputeDevice computeDevice = Device.GetComputeDevice();
+            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
 
             try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
 
@@ -75,18 +75,18 @@ namespace GatelessGateSharp
             } else {
                 String source = System.IO.File.ReadAllText(@"Kernels\neoscrypt.cl");
                 mNeoScryptProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\neoscrypt.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD" ? "-O5 -legacy" : // "-legacy" :
-                                       Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                MainForm.Logger(@"Loaded Kernels\neoscrypt.cl for OpenCLDevice #" + DeviceIndex + ".");
+                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O5 -legacy" : // "-legacy" :
+                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + mNeoScryptLocalWorkSizeArray[0];
                 try {
-                    mNeoScryptProgram.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                    mNeoScryptProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
                 } catch (Exception) {
                     MainForm.Logger(mNeoScryptProgram.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built NeoScrypt program for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built NeoScrypt program for OpenCLDevice #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mNeoScryptProgramArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])] = mNeoScryptProgram;
                 mNeoScryptSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])] = mNeoScryptSearchKernel = mNeoScryptProgram.CreateKernel("search");
@@ -102,7 +102,7 @@ namespace GatelessGateSharp
 
             MarkAsAlive();
 
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+            MainForm.Logger("Miner thread for OpenCLDevice #" + DeviceIndex + " started.");
 
             BuildNeoScryptProgram();
 
@@ -169,7 +169,7 @@ namespace GatelessGateSharp
                             sw.Stop();
                             Speed = ((double)mNeoScryptGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (NeoScrypt)", Speed / 1000));
+                                MainForm.Logger("OpenCLDevice #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (NeoScrypt)", Speed / 1000));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }

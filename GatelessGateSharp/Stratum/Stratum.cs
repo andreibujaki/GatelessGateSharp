@@ -10,12 +10,9 @@ using System.IO;
 
 
 
-namespace GatelessGateSharp
-{
-    class Stratum
-    {
-        public class Job
-        {
+namespace GatelessGateSharp {
+    class Stratum {
+        public class Job {
             private Mutex mMutex = new Mutex();
             static Random r = new Random();
             UInt64 nextLocalExtranonce;
@@ -23,42 +20,36 @@ namespace GatelessGateSharp
 
             public Stratum Stratum { get { return mStratum; } }
 
-            public Job(Stratum aStratum)
-            {
+            public Job(Stratum aStratum) {
                 mStratum = aStratum;
-                try  {  mMutex.WaitOne(5000); } catch (Exception) { }
+                try { mMutex.WaitOne(5000); } catch (Exception) { }
                 nextLocalExtranonce = 0;
                 for (int i = 0; i < mStratum.LocalExtranonceSize; ++i)
                     nextLocalExtranonce |= (UInt64)r.Next(32, 255) << (i * 8); // TODO
-                try { mMutex.ReleaseMutex(); }
-                catch (Exception) { }
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
             }
 
-            public UInt64 GetNewLocalExtranonce()
-            {
+            public UInt64 GetNewLocalExtranonce() {
                 UInt64 ret;
-                try  {  mMutex.WaitOne(5000); } catch (Exception) { }
-                if (mStratum.LocalExtranonceSize == 1)
-                {
+                try { mMutex.WaitOne(5000); } catch (Exception) { }
+                if (mStratum.LocalExtranonceSize == 1) {
                     // Ethash
                     ret = nextLocalExtranonce++;
-                }
-                else { 
+                } else {
                     // The following restrictions are for Pascal.
                     ret = 0;
                     for (int i = 0; i < mStratum.LocalExtranonceSize; ++i)
                         ret |= (UInt64)r.Next(32, 255) << (i * 8); // TODO
                 }
-                try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
                 return ret;
             }
         }
 
-        public class Work
-        {
+        public class Work {
             readonly private Job mJob;
             readonly private UInt64 mLocalExtranonce;
-            
+
             public UInt64 LocalExtranonce {
                 get {
                     return (mJob.Stratum.LocalExtranonceSize == 1) ? (mLocalExtranonce & 0xffUL) :
@@ -71,10 +62,8 @@ namespace GatelessGateSharp
                                                                      (mLocalExtranonce);
                 }
             }
-            public string LocalExtranonceString
-            {
-                get
-                {
+            public string LocalExtranonceString {
+                get {
                     return (mJob.Stratum.LocalExtranonceSize == 1) ? String.Format("{0:x2}", LocalExtranonce & 0xffUL) :
                            (mJob.Stratum.LocalExtranonceSize == 2) ? String.Format("{0:x4}", LocalExtranonce & 0xffffUL) :
                            (mJob.Stratum.LocalExtranonceSize == 3) ? String.Format("{0:x6}", LocalExtranonce & 0xffffffUL) :
@@ -87,15 +76,13 @@ namespace GatelessGateSharp
             }
             public Job GetJob() { return mJob; }
 
-            protected Work(Job aJob)
-            {
+            protected Work(Job aJob) {
                 mJob = aJob;
                 mLocalExtranonce = aJob.GetNewLocalExtranonce();
             }
         }
 
-        protected Work GetWork()
-        {
+        protected Work GetWork() {
             return null;
         }
 
@@ -113,18 +100,15 @@ namespace GatelessGateSharp
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
-        private List<Device> mDevicesWithShare = new List<Device>(); 
+        private List<OpenCLDevice> mDevicesWithShare = new List<OpenCLDevice>();
         private int mLocalExtranonceSize = 1;
 
-        public int LocalExtranonceSize
-        {
-            get
-            {
+        public int LocalExtranonceSize {
+            get {
                 return mLocalExtranonceSize;
             }
-            set 
-            { 
-                mLocalExtranonceSize = value; 
+            set {
+                mLocalExtranonceSize = value;
             }
         }
         public bool Stopped { get { return mStopped; } }
@@ -136,48 +120,41 @@ namespace GatelessGateSharp
         public String PoolName { get { return mPoolName; } }
         public double Difficulty { get { return mDifficulty; } }
 
-        protected void RegisterDeviceWithShare(Device aDevice)
-        {
-            try  {  mMutex.WaitOne(5000); } catch (Exception) { }
+        protected void RegisterDeviceWithShare(OpenCLDevice aDevice) {
+            try { mMutex.WaitOne(5000); } catch (Exception) { }
             mDevicesWithShare.Add(aDevice);
-            try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        protected void ReportShareAcceptance()
-        {
+        protected void ReportShareAcceptance() {
             if (MainForm.DevFeeMode)
                 return;
-            try  {  mMutex.WaitOne(5000); } catch (Exception) { }
-            if (mDevicesWithShare.Count > 0)
-            {
-                Device device = mDevicesWithShare[0];
+            try { mMutex.WaitOne(5000); } catch (Exception) { }
+            if (mDevicesWithShare.Count > 0) {
+                OpenCLDevice device = mDevicesWithShare[0];
                 mDevicesWithShare.RemoveAt(0);
                 device.IncrementAcceptedShares();
             }
-            try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        protected void ReportShareRejection()
-        {
+        protected void ReportShareRejection() {
             if (MainForm.DevFeeMode)
                 return;
-            try  {  mMutex.WaitOne(5000); } catch (Exception) { }
-            if (mDevicesWithShare.Count > 0)
-            {
-                Device device = mDevicesWithShare[0];
+            try { mMutex.WaitOne(5000); } catch (Exception) { }
+            if (mDevicesWithShare.Count > 0) {
+                OpenCLDevice device = mDevicesWithShare[0];
                 mDevicesWithShare.RemoveAt(0);
                 device.IncrementRejectedShares();
             }
-            try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        public void Stop()
-        {
+        public void Stop() {
             mStopped = true;
         }
 
-        public Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-        {
+        public Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName) {
             mServerAddress = aServerAddress;
             mServerPort = aServerPort;
             mUsername = aUsername;
@@ -187,59 +164,68 @@ namespace GatelessGateSharp
             Connect();
         }
 
-        public void Connect() 
-        {
-            try
-            {
+        public void Reconnect() {
+            try {
+                mClient.Close();
+                mClient = null;
+            } catch (Exception) { }
+
+            MainForm.Logger("Reconnecting in 10 seconds...");
+            for (int counter = 0; counter < 100; ++counter) {
+                if (Stopped)
+                    break;
+                System.Threading.Thread.Sleep(100);
+            }
+
+            Thread reconnectThread = new Thread(new ThreadStart(Connect));
+            reconnectThread.IsBackground = true;
+            reconnectThread.Start();
+        }
+
+        public void Connect() {
+            try {
                 if (Stopped)
                     return;
 
                 MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
 
-                try  {  mMutex.WaitOne(5000); } catch (Exception) { }
+                try { mMutex.WaitOne(5000); } catch (Exception) { }
 
                 mClient = new TcpClient(ServerAddress, ServerPort);
                 mStream = mClient.GetStream();
                 mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
                 mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
 
-                try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
 
                 Authorize();
 
                 mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
                 mStreamReaderThread.IsBackground = true;
                 mStreamReaderThread.Start();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MainForm.Logger("Exception in Stratum.Connect(): " + ex.ToString());
             }
         }
 
-        protected void WriteLine(String line)
-        {
-            try  {  mMutex.WaitOne(5000); } catch (Exception) { }
+        protected void WriteLine(String line) {
+            try { mMutex.WaitOne(5000); } catch (Exception) { }
             mStreamWriter.Write(line);
             mStreamWriter.Write("\n");
             mStreamWriter.Flush();
-            try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        protected String ReadLine()
-        {
+        protected String ReadLine() {
             return mStreamReader.ReadLine();
         }
 
         protected virtual void Authorize() { }
         protected virtual void ProcessLine(String line) { }
 
-        private void StreamReaderThread()
-        {
-            try
-            {
-                while (!Stopped)
-                {
+        private void StreamReaderThread() {
+            try {
+                while (!Stopped) {
                     string line;
                     if ((line = mStreamReader.ReadLine()) == null)
                         throw new Exception("Disconnected from stratum server.");
@@ -248,35 +234,17 @@ namespace GatelessGateSharp
                     if (line != "")
                         ProcessLine(line);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MainForm.Logger("Exception in Stratum.StreamReaderThread(): " + ex.ToString());
             }
 
-            try
-            {
+            try {
                 mClient.Close();
-            }
-            catch (Exception) { }
+                mClient = null;
+            } catch (Exception) { }
 
             if (!Stopped)
-            {
-                MainForm.Logger("Connection terminated. Reconnecting in 10 seconds...");
-                for (int counter = 0; counter < 100; ++counter)
-                {
-                    if (Stopped)
-                        break;
-                    System.Threading.Thread.Sleep(100);
-                }
-            }
-
-            if (!Stopped)
-            {
-                Thread reconnectThread = new Thread(new ThreadStart(Connect));
-                reconnectThread.IsBackground = true;
-                reconnectThread.Start();
-            }
+                Reconnect();
         }
     }
 }

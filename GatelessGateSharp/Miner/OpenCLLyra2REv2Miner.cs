@@ -62,7 +62,7 @@ namespace GatelessGateSharp
 
 
 
-        public OpenCLLyra2REv2Miner(Device aGatelessGateDevice)
+        public OpenCLLyra2REv2Miner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Lyra2REv2") {
             mLyra2REv2InputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sLyra2REv2InputSize);
             mLyra2REv2OutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sLyra2REv2OutputSize);
@@ -70,7 +70,7 @@ namespace GatelessGateSharp
 
         public void Start(Lyra2REv2Stratum aLyra2REv2Stratum, int aLyra2REv2Intensity, int aLyra2REv2LocalWorkSize) {
             mLyra2REv2Stratum = aLyra2REv2Stratum;
-            mLyra2REv2GlobalWorkSizeArray[0] = aLyra2REv2Intensity * Device.MaxComputeUnits;
+            mLyra2REv2GlobalWorkSizeArray[0] = aLyra2REv2Intensity * OpenCLDevice.GetMaxComputeUnits();
             mLyra2REv2LocalWorkSizeArray[0] = aLyra2REv2LocalWorkSize;
             if (mLyra2REv2GlobalWorkSizeArray[0] % aLyra2REv2LocalWorkSize != 0)
                 mLyra2REv2GlobalWorkSizeArray[0] = aLyra2REv2LocalWorkSize - mLyra2REv2GlobalWorkSizeArray[0] % aLyra2REv2LocalWorkSize;
@@ -79,7 +79,7 @@ namespace GatelessGateSharp
         }
 
         public void BuildLyra2REv2Program() {
-            ComputeDevice computeDevice = Device.GetComputeDevice();
+            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
 
             try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
 
@@ -95,19 +95,19 @@ namespace GatelessGateSharp
             } else {
                 String source = System.IO.File.ReadAllText(@"Kernels\lyra2rev2.cl");
                 mLyra2REv2Program = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\lyra2rev2.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD" ? "-O5" : // "-legacy" :
-                                       Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                MainForm.Logger(@"Loaded Kernels\lyra2rev2.cl for OpenCLDevice #" + DeviceIndex + ".");
+                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O5" : // "-legacy" :
+                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + mLyra2REv2LocalWorkSizeArray[0] 
                                       + " -DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0]; // TODO
                 try {
-                    mLyra2REv2Program.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                    mLyra2REv2Program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
                 } catch (Exception) {
                     MainForm.Logger(mLyra2REv2Program.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built Lyra2REv2 program for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built Lyra2REv2 program for OpenCLDevice #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mLyra2REv2ProgramArray[new ProgramArrayIndex(DeviceIndex, mLyra2REv2LocalWorkSizeArray[0])] = mLyra2REv2Program;
                 mLyra2REv2SearchKernelArray[new ProgramArrayIndex(DeviceIndex, mLyra2REv2LocalWorkSizeArray[0])] = mLyra2REv2SearchKernel = mLyra2REv2Program.CreateKernel("search");
@@ -1211,7 +1211,7 @@ namespace GatelessGateSharp
 
             MarkAsAlive();
 
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+            MainForm.Logger("Miner thread for OpenCLDevice #" + DeviceIndex + " started.");
 
             BuildLyra2REv2Program();
 
@@ -1299,7 +1299,7 @@ namespace GatelessGateSharp
                             sw.Stop();
                             Speed = ((double)mLyra2REv2GlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (Lyra2REv2)", Speed / 1000));
+                                MainForm.Logger("OpenCLDevice #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (Lyra2REv2)", Speed / 1000));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }

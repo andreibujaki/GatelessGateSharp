@@ -57,7 +57,7 @@ namespace GatelessGateSharp
         {
             bool mutexResult = false;
 
-            try { mutexResult = sMutex.WaitOne(TimeSpan.Zero, true); } catch (Exception ex) {}
+            try { mutexResult = sMutex.WaitOne(TimeSpan.Zero, true); } catch (Exception) {}
 
             if (mutexResult)
             {
