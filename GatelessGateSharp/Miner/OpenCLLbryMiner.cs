@@ -85,13 +85,13 @@ namespace GatelessGateSharp
                     string fileName = @"BinaryKernels\" + computeDevice.Name + "_lbry.bin";
                     byte[] binary = System.IO.File.ReadAllBytes(fileName);
                     mLbryProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    MainForm.Logger("Loaded " + fileName + " for OpenCLDevice #" + DeviceIndex + ".");
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
                 }
                 catch (Exception)
                 {
                     String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
                     mLbryProgram = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\lbry.cl for OpenCLDevice #" + DeviceIndex + ".");
+                    MainForm.Logger(@"Loaded Kernels\lbry.cl for Device #" + DeviceIndex + ".");
                 }
                 String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
@@ -106,7 +106,7 @@ namespace GatelessGateSharp
                     MainForm.Logger(mLbryProgram.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built Lbry program for OpenCLDevice #" + DeviceIndex + ".");
+                MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mLbryProgramArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbryProgram;
                 mLbrySearchKernelArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbrySearchKernel = mLbryProgram.CreateKernel("search_combined");
@@ -123,7 +123,7 @@ namespace GatelessGateSharp
             
             MarkAsAlive();
 
-            MainForm.Logger("Miner thread for OpenCLDevice #" + DeviceIndex + " started.");
+            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
             BuildLbryProgram();
 
@@ -203,7 +203,7 @@ namespace GatelessGateSharp
                             Speed = ((double)mLbryGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mIterations;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("OpenCLDevice #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Lbry)", Speed / 1000000));
+                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Lbry)", Speed / 1000000));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }

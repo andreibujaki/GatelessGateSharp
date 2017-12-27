@@ -230,7 +230,7 @@ namespace GatelessGateSharp
                         "0x" + job.GetMixHash(output) // mix digest
                 }}});
                 WriteLine(message);
-                MainForm.Logger("OpenCLDevice #" + aDevice.DeviceIndex + " submitted a share.");
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
             }
             catch (Exception ex)
             {

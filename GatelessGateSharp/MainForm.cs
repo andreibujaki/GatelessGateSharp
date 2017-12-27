@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.6";
+        public static string appVersion = "1.1.7";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -85,7 +85,6 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
 
         private OpenCLDevice[] mDevices;
-        private const int maxNumDevices = 8; // This depends on MainForm.
         private bool ADLInitialized = false;
         private bool NVMLInitialized = false;
         private int[] ADLAdapterIndexArray;
@@ -165,205 +164,6 @@ namespace GatelessGateSharp
             comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
             comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
-            tabPageDeviceArray = new TabPage[] { tabPageDevice0, tabPageDevice1, tabPageDevice2, tabPageDevice3, tabPageDevice4, tabPageDevice5, tabPageDevice6, tabPageDevice7 };
-            numericUpDownDeviceEthashPascalThreadsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashPascalThreads,
-                numericUpDownDevice1EthashPascalThreads,
-                numericUpDownDevice2EthashPascalThreads,
-                numericUpDownDevice3EthashPascalThreads,
-                numericUpDownDevice4EthashPascalThreads,
-                numericUpDownDevice5EthashPascalThreads,
-                numericUpDownDevice6EthashPascalThreads,
-                numericUpDownDevice7EthashPascalThreads
-            };
-            numericUpDownDeviceEthashPascalIntensityArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashPascalIntensity,
-                numericUpDownDevice1EthashPascalIntensity,
-                numericUpDownDevice2EthashPascalIntensity,
-                numericUpDownDevice4EthashPascalIntensity,
-                numericUpDownDevice4EthashPascalIntensity,
-                numericUpDownDevice5EthashPascalIntensity,
-                numericUpDownDevice6EthashPascalIntensity,
-                numericUpDownDevice7EthashPascalIntensity
-            };
-            numericUpDownDeviceEthashPascalPascalIterationsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashPascalPascalIterations,
-                numericUpDownDevice1EthashPascalPascalIterations,
-                numericUpDownDevice2EthashPascalPascalIterations,
-                numericUpDownDevice3EthashPascalPascalIterations,
-                numericUpDownDevice4EthashPascalPascalIterations,
-                numericUpDownDevice5EthashPascalPascalIterations,
-                numericUpDownDevice6EthashPascalPascalIterations,
-                numericUpDownDevice7EthashPascalPascalIterations
-            };
-            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashThreads,
-                numericUpDownDevice1EthashThreads,
-                numericUpDownDevice2EthashThreads,
-                numericUpDownDevice3EthashThreads,
-                numericUpDownDevice4EthashThreads,
-                numericUpDownDevice5EthashThreads,
-                numericUpDownDevice6EthashThreads,
-                numericUpDownDevice7EthashThreads
-            };
-            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashIntensity,
-                numericUpDownDevice1EthashIntensity,
-                numericUpDownDevice2EthashIntensity,
-                numericUpDownDevice3EthashIntensity,
-                numericUpDownDevice4EthashIntensity,
-                numericUpDownDevice5EthashIntensity,
-                numericUpDownDevice6EthashIntensity,
-                numericUpDownDevice7EthashIntensity
-            };
-            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0EthashLocalWorkSize,
-                numericUpDownDevice1EthashLocalWorkSize,
-                numericUpDownDevice2EthashLocalWorkSize,
-                numericUpDownDevice3EthashLocalWorkSize,
-                numericUpDownDevice4EthashLocalWorkSize,
-                numericUpDownDevice5EthashLocalWorkSize,
-                numericUpDownDevice6EthashLocalWorkSize,
-                numericUpDownDevice7EthashLocalWorkSize
-            };
-            numericUpDownDeviceNeoScryptThreadsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0NeoScryptThreads,
-                numericUpDownDevice1NeoScryptThreads,
-                numericUpDownDevice2NeoScryptThreads,
-                numericUpDownDevice3NeoScryptThreads,
-                numericUpDownDevice4NeoScryptThreads,
-                numericUpDownDevice5NeoScryptThreads,
-                numericUpDownDevice6NeoScryptThreads,
-                numericUpDownDevice7NeoScryptThreads
-            };
-            numericUpDownDeviceNeoScryptIntensityArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0NeoScryptIntensity,
-                numericUpDownDevice1NeoScryptIntensity,
-                numericUpDownDevice2NeoScryptIntensity,
-                numericUpDownDevice3NeoScryptIntensity,
-                numericUpDownDevice4NeoScryptIntensity,
-                numericUpDownDevice5NeoScryptIntensity,
-                numericUpDownDevice6NeoScryptIntensity,
-                numericUpDownDevice7NeoScryptIntensity
-            };
-            numericUpDownDeviceNeoScryptLocalWorkSizeArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0NeoScryptLocalWorkSize,
-                numericUpDownDevice1NeoScryptLocalWorkSize,
-                numericUpDownDevice2NeoScryptLocalWorkSize,
-                numericUpDownDevice3NeoScryptLocalWorkSize,
-                numericUpDownDevice4NeoScryptLocalWorkSize,
-                numericUpDownDevice5NeoScryptLocalWorkSize,
-                numericUpDownDevice6NeoScryptLocalWorkSize,
-                numericUpDownDevice7NeoScryptLocalWorkSize
-            };
-            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0CryptoNightThreads,
-                numericUpDownDevice1CryptoNightThreads,
-                numericUpDownDevice2CryptoNightThreads,
-                numericUpDownDevice3CryptoNightThreads,
-                numericUpDownDevice4CryptoNightThreads,
-                numericUpDownDevice5CryptoNightThreads,
-                numericUpDownDevice6CryptoNightThreads,
-                numericUpDownDevice7CryptoNightThreads
-            };
-            numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0CryptoNightRawIntensity,
-                numericUpDownDevice1CryptoNightRawIntensity,
-                numericUpDownDevice2CryptoNightRawIntensity,
-                numericUpDownDevice3CryptoNightRawIntensity,
-                numericUpDownDevice4CryptoNightRawIntensity,
-                numericUpDownDevice5CryptoNightRawIntensity,
-                numericUpDownDevice6CryptoNightRawIntensity,
-                numericUpDownDevice7CryptoNightRawIntensity
-            };
-            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0CryptoNightLocalWorkSize,
-                numericUpDownDevice1CryptoNightLocalWorkSize,
-                numericUpDownDevice2CryptoNightLocalWorkSize,
-                numericUpDownDevice3CryptoNightLocalWorkSize,
-                numericUpDownDevice4CryptoNightLocalWorkSize,
-                numericUpDownDevice5CryptoNightLocalWorkSize,
-                numericUpDownDevice6CryptoNightLocalWorkSize,
-                numericUpDownDevice7CryptoNightLocalWorkSize
-            };
-            numericUpDownDevicePascalThreadsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0PascalThreads,
-                numericUpDownDevice1PascalThreads,
-                numericUpDownDevice2PascalThreads,
-                numericUpDownDevice3PascalThreads,
-                numericUpDownDevice3PascalThreads,
-                numericUpDownDevice5PascalThreads,
-                numericUpDownDevice6PascalThreads,
-                numericUpDownDevice7PascalThreads
-            };
-            numericUpDownDevicePascalIntensityArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0PascalIntensity,
-                numericUpDownDevice1PascalIntensity,
-                numericUpDownDevice2PascalIntensity,
-                numericUpDownDevice3PascalIntensity,
-                numericUpDownDevice4PascalIntensity,
-                numericUpDownDevice5PascalIntensity,
-                numericUpDownDevice6PascalIntensity,
-                numericUpDownDevice7PascalIntensity
-            };
-            numericUpDownDevicePascalLocalWorkSizeArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0PascalLocalWorkSize,
-                numericUpDownDevice1PascalLocalWorkSize,
-                numericUpDownDevice2PascalLocalWorkSize,
-                numericUpDownDevice3PascalLocalWorkSize,
-                numericUpDownDevice4PascalLocalWorkSize,
-                numericUpDownDevice5PascalLocalWorkSize,
-                numericUpDownDevice6PascalLocalWorkSize,
-                numericUpDownDevice7PascalLocalWorkSize
-            };
-            numericUpDownDeviceLbryThreadsArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0LbryThreads,
-                numericUpDownDevice1LbryThreads,
-                numericUpDownDevice2LbryThreads,
-                numericUpDownDevice3LbryThreads,
-                numericUpDownDevice4LbryThreads,
-                numericUpDownDevice5LbryThreads,
-                numericUpDownDevice6LbryThreads,
-                numericUpDownDevice7LbryThreads
-            };
-            numericUpDownDeviceLbryIntensityArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0LbryIntensity,
-                numericUpDownDevice1LbryIntensity,
-                numericUpDownDevice2LbryIntensity,
-                numericUpDownDevice3LbryIntensity,
-                numericUpDownDevice4LbryIntensity,
-                numericUpDownDevice5LbryIntensity,
-                numericUpDownDevice6LbryIntensity,
-                numericUpDownDevice7LbryIntensity
-            };
-            numericUpDownDeviceLbryLocalWorkSizeArray = new NumericUpDown[]
-            {
-                numericUpDownDevice0LbryLocalWorkSize,
-                numericUpDownDevice1LbryLocalWorkSize,
-                numericUpDownDevice2LbryLocalWorkSize,
-                numericUpDownDevice3LbryLocalWorkSize,
-                numericUpDownDevice4LbryLocalWorkSize,
-                numericUpDownDevice5LbryLocalWorkSize,
-                numericUpDownDevice6LbryLocalWorkSize,
-                numericUpDownDevice6LbryLocalWorkSize
-            };
         }
 
         private void CreateNewDatabase() {
@@ -1257,16 +1057,12 @@ namespace GatelessGateSharp
                     try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 }
             }
-
-            //Thread.CurrentThread.Priority = ThreadPriority.Highest;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void InitializeDevices() {
             mDevices = OpenCLDevice.GetAllOpenCLDevices();
-            if (mDevices.Length > maxNumDevices)
-                Array.Resize<OpenCLDevice>(ref mDevices, maxNumDevices);
             Logger("Number of Devices: " + mDevices.Length);
 
             foreach (var device in mDevices) {
@@ -1278,15 +1074,75 @@ namespace GatelessGateSharp
                 });
             }
 
-            for (var index = maxNumDevices - 1; index >= mDevices.Length; --index)
-                tabControlDeviceSettings.TabPages.RemoveAt(index);
+            tabPageDeviceArray = new TabPage[mDevices.Length];
+            numericUpDownDeviceEthashPascalThreadsArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceEthashPascalIntensityArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceEthashPascalPascalIterationsArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceNeoScryptThreadsArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceNeoScryptIntensityArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceNeoScryptLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDevicePascalThreadsArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDevicePascalIntensityArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDevicePascalLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceLbryThreadsArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceLbryIntensityArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceLbryLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
+            
+            for (var i = 0; i < mDevices.Length; ++i) {
+                DeviceSettingsUserControl.DeviceSettingsUserControl uc = new DeviceSettingsUserControl.DeviceSettingsUserControl();
+                TabPage tp = new TabPage();
+                tp.Controls.Add(uc);
+                this.tabControlDeviceSettings.TabPages.Add(tp);
 
-            for (var index = maxNumDevices - 1; index >= mDevices.Length; --index) {
-                Array.Resize(ref tabPageDeviceArray, mDevices.Length);
-                Array.Resize(ref numericUpDownDeviceEthashIntensityArray, mDevices.Length);
-                Array.Resize(ref numericUpDownDeviceCryptoNightThreadsArray, mDevices.Length);
-                Array.Resize(ref numericUpDownDeviceCryptoNightRawIntensityArray, mDevices.Length);
-                Array.Resize(ref numericUpDownDeviceCryptoNightLocalWorkSizeArray, mDevices.Length);
+                tabPageDeviceArray[i] = tp;
+                foreach (var tabPage in uc.Controls[0].Controls) {
+                    foreach (var control in ((TabPage)tabPage).Controls) {
+                        var tag = control.GetType().GetProperty("Tag").GetValue(control);
+                        if (tag != null && (string)tag == "ethash_pascal_threads") {
+                            numericUpDownDeviceEthashPascalThreadsArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "ethash_pascal_intensity") {
+                            numericUpDownDeviceEthashPascalIntensityArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "ethash_pascal_pascal_iterations") {
+                            numericUpDownDeviceEthashPascalPascalIterationsArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "ethash_threads") {
+                            numericUpDownDeviceEthashThreadsArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "ethash_intensity") {
+                            numericUpDownDeviceEthashIntensityArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "ethash_local_work_size") {
+                            numericUpDownDeviceEthashLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "neoscrypt_threads") {
+                            numericUpDownDeviceNeoScryptThreadsArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "neoscrypt_intensity") {
+                            numericUpDownDeviceNeoScryptIntensityArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "neoscrypt_local_work_size") {
+                            numericUpDownDeviceNeoScryptLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "cryptonight_threads") {
+                            numericUpDownDeviceCryptoNightThreadsArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "cryptonight_raw_intensity") {
+                            numericUpDownDeviceCryptoNightRawIntensityArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "cryptonight_local_work_size") {
+                            numericUpDownDeviceCryptoNightLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "pascal_threads") {
+                            numericUpDownDevicePascalThreadsArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "pascal_intensity") {
+                            numericUpDownDevicePascalIntensityArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "pascal_local_work_size") {
+                            numericUpDownDevicePascalLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "lbry_threads") {
+                            numericUpDownDeviceLbryThreadsArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "lbry_intensity") {
+                            numericUpDownDeviceLbryIntensityArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "lbry_local_work_size") {
+                            numericUpDownDeviceLbryLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        }
+                    }
+                }
             }
 
             var ADLRet = -1;
@@ -1352,7 +1208,7 @@ namespace GatelessGateSharp
                     Logger("Successfully initialized NVIDIA Management Library.");
                     uint nvmlDeviceCount = 0;
                     ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetCount(ref nvmlDeviceCount);
-                    Logger("NVML OpenCLDevice Count: " + nvmlDeviceCount);
+                    Logger("NVML Device Count: " + nvmlDeviceCount);
 
                     nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[mDevices.Length];
                     for (uint i = 0; i < nvmlDeviceCount; ++i) {
@@ -1382,7 +1238,7 @@ namespace GatelessGateSharp
 
             foreach (var device in mDevices) {
                 tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName();
-
+                
                 // EthashPascal
                 numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
                 numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)2000;

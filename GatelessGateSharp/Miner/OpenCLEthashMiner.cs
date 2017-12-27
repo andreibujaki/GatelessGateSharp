@@ -83,14 +83,14 @@ namespace GatelessGateSharp
                     string fileName = @"BinaryKernels\" + computeDevice.Name + "_ethash.bin";
                     byte[] binary = System.IO.File.ReadAllBytes(fileName);
                     mEthashProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    MainForm.Logger("Loaded " + fileName + " for OpenCLDevice #" + DeviceIndex + ".");
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
                 }
                 catch (Exception)
                 {
                     //MainForm.Logger("ex.message: " + ex.Message);
                     String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
                     mEthashProgram = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\ethash.cl for OpenCLDevice #" + DeviceIndex + ".");
+                    MainForm.Logger(@"Loaded Kernels\ethash.cl for Device #" + DeviceIndex + ".");
                 }
                 String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O1 " :
                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
@@ -105,7 +105,7 @@ namespace GatelessGateSharp
                     MainForm.Logger(mEthashProgram.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built ethash mEthashProgram for OpenCLDevice #" + DeviceIndex + ".");
+                MainForm.Logger("Built ethash mEthashProgram for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
                 mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");
@@ -123,7 +123,7 @@ namespace GatelessGateSharp
 
             MarkAsAlive();
 
-            MainForm.Logger("Miner thread for OpenCLDevice #" + DeviceIndex + " started.");
+            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
             BuildEthashProgram();
 
@@ -255,7 +255,7 @@ namespace GatelessGateSharp
                             Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("OpenCLDevice #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", Speed / (1000000)));
+                                MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", Speed / (1000000)));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }

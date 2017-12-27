@@ -92,7 +92,7 @@ namespace GatelessGateSharp
             
             MarkAsAlive();
 
-            MainForm.Logger("Miner thread for OpenCLDevice #" + DeviceIndex + " started.");
+            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
             ComputeProgram program;
@@ -110,13 +110,13 @@ namespace GatelessGateSharp
                     string fileName = @"BinaryKernels\" + computeDevice.Name + "_cryptonight.bin";
                     byte[] binary = System.IO.File.ReadAllBytes(fileName);
                     program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    MainForm.Logger("Loaded " + fileName + " for OpenCLDevice #" + DeviceIndex + ".");
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
                 }
                 catch (Exception)
                 {
                     String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
                     program = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\cryptonight.cl for OpenCLDevice #" + DeviceIndex + ".");
+                    MainForm.Logger(@"Loaded Kernels\cryptonight.cl for Device #" + DeviceIndex + ".");
                 }
                 String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O5" : //"-O1 " :
                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
@@ -131,7 +131,7 @@ namespace GatelessGateSharp
                     MainForm.Logger(program.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built cryptonight program for OpenCLDevice #" + DeviceIndex + ".");
+                MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = program;
             }
@@ -277,7 +277,7 @@ namespace GatelessGateSharp
                             Speed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("OpenCLDevice #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", Speed));
+                                MainForm.Logger("Device #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", Speed));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }

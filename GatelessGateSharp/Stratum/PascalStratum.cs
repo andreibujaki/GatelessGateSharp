@@ -221,7 +221,7 @@ namespace GatelessGateSharp
                         stringNonce
                 }}});
                 WriteLine(message);
-                MainForm.Logger("OpenCLDevice #" + aDevice.DeviceIndex + " submitted a share.");
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
                 //MainForm.Logger("message: " + message);
             }
             catch (Exception ex)

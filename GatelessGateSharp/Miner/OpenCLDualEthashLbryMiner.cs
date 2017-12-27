@@ -95,7 +95,7 @@ namespace GatelessGateSharp
             {
                 String source = System.IO.File.ReadAllText(@"Kernels\ethash_lbry.cl");
                 mEthashProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\ethash_lbry.cl for OpenCLDevice #" + DeviceIndex + ".");
+                MainForm.Logger(@"Loaded Kernels\ethash_lbry.cl for Device #" + DeviceIndex + ".");
                 String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O1 " :
                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
@@ -109,7 +109,7 @@ namespace GatelessGateSharp
                     MainForm.Logger(mEthashProgram.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built ethash mEthashProgram for OpenCLDevice #" + DeviceIndex + ".");
+                MainForm.Logger("Built ethash mEthashProgram for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
                 mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");
@@ -125,7 +125,7 @@ namespace GatelessGateSharp
 
             MarkAsAlive();
 
-            MainForm.Logger("Dual Ethash/Lbry miner thread for OpenCLDevice #" + DeviceIndex + " started.");
+            MainForm.Logger("Dual Ethash/Lbry miner thread for Device #" + DeviceIndex + " started.");
 
             BuildEthashProgram();
 
@@ -295,7 +295,7 @@ namespace GatelessGateSharp
                             double speedSecondary = (((double)mEthashGlobalWorkSizeArray[0] / 4) / sw.Elapsed.TotalSeconds);
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {
-                                MainForm.Logger("OpenCLDevice #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s (Ethash), {1:N2} Mh/s (Lbry)", Speed / (1000000), speedSecondary / (1000000)));
+                                MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s (Ethash), {1:N2} Mh/s (Lbry)", Speed / (1000000), speedSecondary / (1000000)));
                                 consoleUpdateStopwatch.Restart();
                             }
                         }
