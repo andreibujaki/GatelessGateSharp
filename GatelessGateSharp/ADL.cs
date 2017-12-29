@@ -260,11 +260,11 @@ namespace ATI.ADL
         /// <summary> Define the maximum path</summary>
         internal const int ADL_MAX_PATH = 256;
         /// <summary> Define the maximum adapters</summary>
-        internal const int ADL_MAX_ADAPTERS = 40 /* 150 */;
+        internal const int ADL_MAX_ADAPTERS = 1024; // 40 /* 150 */;
         /// <summary> Define the maximum displays</summary>
-        internal const int ADL_MAX_DISPLAYS = 40 /* 150 */;
+        internal const int ADL_MAX_DISPLAYS = 1024; // 40 /* 150 */;
         /// <summary> Define the maximum device name length</summary>
-        internal const int ADL_MAX_DEVICENAME = 32;
+        internal const int ADL_MAX_DEVICENAME = 256;
         /// <summary> Define the successful</summary>
         internal const int ADL_SUCCESS = 0;
         /// <summary> Define the failure</summary>

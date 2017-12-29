@@ -1960,6 +1960,7 @@
             this.checkBoxLaunchAtStartup.TabIndex = 28;
             this.checkBoxLaunchAtStartup.Text = "Launch application at startup";
             this.checkBoxLaunchAtStartup.UseVisualStyleBackColor = true;
+            this.checkBoxLaunchAtStartup.CheckedChanged += new System.EventHandler(this.checkBoxLaunchAtStartup_CheckedChanged);
             // 
             // tabPageLog
             // 

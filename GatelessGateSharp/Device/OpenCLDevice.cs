@@ -57,7 +57,6 @@ namespace GatelessGateSharp
             : base(aDeviceIndex)
         {
             mComputeDevice = aComputeDevice;
-            MainForm.Logger("GetVendor(): " + GetVendor());
             if (GetVendor() == "AMD") {
                 mName = System.Text.Encoding.ASCII.GetString(mComputeDevice.BoardNameAMD)
                     .Replace("AMD ", "")

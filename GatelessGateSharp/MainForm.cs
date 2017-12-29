@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.7";
+        public static string appVersion = "1.1.8";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1003,10 +1003,23 @@ namespace GatelessGateSharp
         private void MainForm_Load(object sender, EventArgs e) {
             Logger(appName + " started.");
 
-            InitializeDevices();
-            if (!System.IO.File.Exists(databaseFileName))
-                CreateNewDatabase();
-            LoadDatabase();
+            try {
+                InitializeDevices();
+            } catch (Exception ex) {
+                Logger("Exception in InitializeDevices(): " + ex.Message + ex.StackTrace);
+            }
+
+            try {
+                if (!System.IO.File.Exists(databaseFileName))
+                    CreateNewDatabase();
+            } catch (Exception ex) {
+                Logger("Exception in CreateNewDatabase(): " + ex.Message + ex.StackTrace);
+            }
+            try {
+                LoadDatabase();
+            } catch (Exception ex) {
+                Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
+            }
 
             if (checkBoxEnablePhymem.Checked) {
                 if (LoadPhyMemDriver() != 0) {
@@ -1031,13 +1044,13 @@ namespace GatelessGateSharp
                 @"HKEY_LOCAL_MACHINE\System\" + controlSet + @"\Control\GraphicsDrivers",
                 @"HKEY_LOCAL_MACHINE\System\" + controlSet + @"\Control\GraphicsDrivers\TdrWatch"
             }) {
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLevel", 0); } catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrDelay", 60); } catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrDdiDelay", 60); } catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitTime", 60); } catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitCount", 256); } catch (Exception) { }
-                    try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); } catch (Exception) { } // Undocumented but found on Windows 10.
-                }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrLevel", 0); } catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrDelay", 60); } catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrDdiDelay", 60); } catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitTime", 60); } catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitCount", 256); } catch (Exception) { }
+                try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); } catch (Exception) { } // Undocumented but found on Windows 10.
+            }
 
             appState = ApplicationGlobalState.Idle;
             UpdateControls();
@@ -1062,7 +1075,13 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void InitializeDevices() {
-            mDevices = OpenCLDevice.GetAllOpenCLDevices();
+            try {
+                mDevices = OpenCLDevice.GetAllOpenCLDevices();
+            } catch (Exception ex) {
+                Logger("Exception in OpenCLDevice.GetAllOpenCLDevices(): " + ex.Message + ex.StackTrace);
+                MessageBox.Show("Failed to initialize OpenCL devices. Please install appropriate device driver(s) for your graphics cards.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
             Logger("Number of Devices: " + mDevices.Length);
 
             foreach (var device in mDevices) {
@@ -1174,21 +1193,71 @@ namespace GatelessGateSharp
                         ADLRet = ADL.ADL_Adapter_AdapterInfo_Get(AdapterBuffer, size);
                         if (ADL.ADL_SUCCESS == ADLRet) {
                             OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
-                            var IsActive = 0;
-
-                            int deviceIndex = 0;
+                            for (var i = 0; i < NumberOfAdapters; i++) {
+                                var IsActive = 0;
+                                if (null != ADL.ADL_Adapter_Active_Get)
+                                    ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
+                                MainForm.Logger("ADL Adapter #" + OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex + ": ");
+                                MainForm.Logger("    AdapterName:    " + OSAdapterInfoData.ADLAdapterInfo[i].AdapterName);
+                                MainForm.Logger("    OSDisplayIndex: " + OSAdapterInfoData.ADLAdapterInfo[i].OSDisplayIndex);
+                                MainForm.Logger("    BusNumber:      " + OSAdapterInfoData.ADLAdapterInfo[i].BusNumber);
+                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                    i++;
+                            }
+                            Dictionary<string, int> sameBoardCounters = new Dictionary<string, int> { };
+                            int[] sameBoardIndexArray = new int[mDevices.Length];
                             foreach (var device in mDevices) {
                                 var openclDevice = device.GetComputeDevice();
-                                if (device.GetVendor() == "AMD")
+                                if (device.GetVendor() == "AMD" && openclDevice.PciBusIdAMD <= 0) {
+                                    string boardName = (new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9]+$")).Replace(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD), ""); // Drop '\0'
+                                    if (!sameBoardCounters.ContainsKey(boardName))
+                                        sameBoardCounters[boardName] = 0;
+                                    sameBoardIndexArray[device.DeviceIndex] = sameBoardCounters[boardName];
+                                    sameBoardCounters[boardName] = sameBoardCounters[boardName] + 1;
+                                }
+                            }
+                            foreach (var device in mDevices) {
+                                var openclDevice = device.GetComputeDevice();
+                                if (device.GetVendor() == "AMD" && openclDevice.PciBusIdAMD > 0) {
+                                    // Use openclDevice.PciBusIdAMD for matching.
                                     for (var i = 0; i < NumberOfAdapters; i++) {
+                                        var IsActive = 0;
                                         if (null != ADL.ADL_Adapter_Active_Get)
                                             ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
                                         if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
-                                            && (ADLAdapterIndexArray[deviceIndex] < 0 || IsActive != 0)) {
-                                            ADLAdapterIndexArray[deviceIndex] = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
+                                            && (ADLAdapterIndexArray[device.DeviceIndex] < 0 || IsActive != 0)) {
+                                            ADLAdapterIndexArray[device.DeviceIndex] = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
                                         }
                                     }
-                                ++deviceIndex;
+                                } else if (device.GetVendor() == "AMD" && openclDevice.PciBusIdAMD <= 0) {
+                                    // workaround for Adrenalin drivers as PciBusIdAMD does not work properly.
+                                    string boardName = (new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9]+$")).Replace(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD), ""); // Drop '\0'
+                                    List<int> adapterIndexList = new List<int> { };
+                                    List<int> OSDisplayIndexList = new List<int> { };
+                                    for (var i = 0; i < NumberOfAdapters - 1; ++i) {
+                                        if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName) {
+                                            adapterIndexList.Add(i);
+                                            OSDisplayIndexList.Add(OSAdapterInfoData.ADLAdapterInfo[i].OSDisplayIndex);
+                                        }
+                                        while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                            ++i;
+                                    }
+                                    for (var i = 0; i < adapterIndexList.Count; ++i) {
+                                        int pos = 0;
+                                        int adapterIndex = adapterIndexList[i];
+                                        int OSDisplayIndex = OSDisplayIndexList[i];
+                                        foreach (var j in adapterIndexList) {
+                                            if (OSAdapterInfoData.ADLAdapterInfo[j].OSDisplayIndex < OSDisplayIndex
+                                                || (OSAdapterInfoData.ADLAdapterInfo[j].OSDisplayIndex == OSDisplayIndex
+                                                    && OSAdapterInfoData.ADLAdapterInfo[j].BusNumber < OSAdapterInfoData.ADLAdapterInfo[adapterIndex].BusNumber))
+                                                ++pos;
+                                        }
+                                        if (pos == sameBoardIndexArray[device.DeviceIndex]) {
+                                            ADLAdapterIndexArray[device.DeviceIndex] = adapterIndex;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                         } else {
                             Logger("ADL_Adapter_AdapterInfo_Get() returned error code " + ADLRet.ToString());
@@ -3250,7 +3319,7 @@ namespace GatelessGateSharp
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
                 if (checkBoxLaunchAtStartup.Checked)
-                    startInfo.Arguments = "/C schtasks /create /sc onlogon /tn GatelessGateSharp /rl highest /tr \"" + Application.ExecutablePath + "\"";
+                    startInfo.Arguments = "/C schtasks /create /sc onlogon /tn GatelessGateSharp /rl highest /tr \"\\\"" + Application.ExecutablePath + "\\\"\"";
                 else
                     startInfo.Arguments = "/C schtasks /delete /f /tn GatelessGateSharp";
                 process.StartInfo = startInfo;
