@@ -5,12 +5,12 @@
 Gateless Gate Sharp is the first open-source OpenCL dual ETH/XMR/PASC/LBC/FTC miner for Windows operating systems. It focuses on performance, stability, and ease of use.
 Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), this miner aims at stability with a much simpler design and the managed .NET Framework.
 
-* [Gateless_Gate_Sharp_1.1.7_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.7-alpha/Gateless_Gate_Sharp_1.1.7_alpha_Setup.msi) (Windows x64 Installer)
-* [Gateless_Gate_Sharp_1.1.7_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.7-alpha/Gateless_Gate_Sharp_1.1.7_alpha.7z)
-* [Gateless_Gate_Sharp_1.1.7_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.7-alpha/Gateless_Gate_Sharp_1.1.7_alpha.zip)
+* [Gateless_Gate_Sharp_1.1.8_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.8-alpha/Gateless_Gate_Sharp_1.1.8_alpha_Setup.msi) (Windows x64 Installer)
+* [Gateless_Gate_Sharp_1.1.8_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.8-alpha/Gateless_Gate_Sharp_1.1.8_alpha.7z)
+* [Gateless_Gate_Sharp_1.1.8_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.8-alpha/Gateless_Gate_Sharp_1.1.8_alpha.zip)
 * Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).
 
-Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry, and the following major pools: NiceHash, ethermine.org, ethpool.org, DwarfPool, Nanopool, mineXMR.com, and zpool. Support for custom pools has also been added. All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
+Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry, Lyra2REv2, and the following major anonymous pools by default: NiceHash, ethermine.org, ethpool.org, DwarfPool, Nanopool, mineXMR.com, and zpool. Support for custom pools has also been added. All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ The minimum requirements for the miner is as follows:
 * Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.
 * 64-bit Windows operating system.
 
-Please note that this program has been tested mostly against [AMD Crimson ReLive Beta for Blockchain Workloads (August 23)](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Crimson-ReLive-Edition-Beta-for-Blockchain-Compute-Release-Notes.aspx). Other drivers may  or may not work. Hardware monitoring/management may not be available with newer drivers.
+Please note that this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 17.12.2](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire and choose Compute for GPU Workload in Radeon Settings.**
 
 ## About the DEVFEE
 
