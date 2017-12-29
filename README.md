@@ -10,7 +10,7 @@ Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), t
 * [Gateless_Gate_Sharp_1.1.8_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.8-alpha/Gateless_Gate_Sharp_1.1.8_alpha.zip)
 * Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).
 
-Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry, Lyra2REv2, and the following major anonymous pools by default: NiceHash, ethermine.org, ethpool.org, DwarfPool, Nanopool, mineXMR.com, and zpool. Support for custom pools has also been added. All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
+Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry, Lyra2REv2, NeoScrypt, and the following major anonymous pools by default: NiceHash, ethermine.org, ethpool.org, DwarfPool, Nanopool, mineXMR.com, and zpool. Support for custom pools has also been added. All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
 
 ## Prerequisites
 
