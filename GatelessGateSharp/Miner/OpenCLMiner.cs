@@ -31,20 +31,37 @@ namespace GatelessGateSharp
 {
     class OpenCLMiner : Miner
     {
-        private Device mDevice;
-        private List<ComputeDevice> mDeviceList;
+        public class ProgramArrayIndex
+        {
+            private int mDeviceIndex;
+            private long mLocalWorkSize;
+
+            public ProgramArrayIndex(int aDeviceIndex, long aLocalWorkSize)
+            {
+                mDeviceIndex = aDeviceIndex;
+                mLocalWorkSize = aLocalWorkSize;
+            }
+
+            public bool Equals(ProgramArrayIndex mValue)
+            {
+                return mDeviceIndex == mValue.mDeviceIndex && mLocalWorkSize == mValue.mLocalWorkSize;
+            }
+        }
+
+
+        private OpenCLDevice mDevice;
         private ComputeCommandQueue mQueue;
 
-        public Device Device { get { return mDevice; } }
+        public OpenCLDevice OpenCLDevice { get { return mDevice; } }
         public ComputeCommandQueue Queue { get { return mQueue; } }
 
         public ComputeDevice ComputeDevice { get { return mDevice.GetComputeDevice(); } }
 
-        protected OpenCLMiner(Device aDevice, String aAlgorithmName)
-            : base(aDevice, aAlgorithmName)
+        protected OpenCLMiner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
+            : base(aDevice, aAlgorithmName, aFirstAlgorithmName, aSecondAlgorithmName)
         {
             mDevice = aDevice;
-            mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.None);
+            mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.OutOfOrderExecution);
         }
     }
 }

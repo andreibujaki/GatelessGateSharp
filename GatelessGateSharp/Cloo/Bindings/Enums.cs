@@ -1074,4 +1074,13 @@ namespace Cloo
         EnqueueAcquireGLObjects,
         EnqueueReleaseGLObjects,
     }
+
+    public enum cl_device_partition_property : uint
+    {
+        /// <summary> </summary>
+        CL_DEVICE_PARTITION_EQUALLY                 = 0x1086,
+        CL_DEVICE_PARTITION_BY_COUNTS               = 0x1087,
+        CL_DEVICE_PARTITION_BY_COUNTS_LIST_END      = 0x0,
+        CL_DEVICE_PARTITION_BY_AFFINITY_DOMAIN      = 0x1088,
+    }
 }

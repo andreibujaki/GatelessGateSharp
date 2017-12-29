@@ -25,26 +25,34 @@ namespace GatelessGateSharp
 {
     class Miner
     {
-        private Device mDevice;
+        private OpenCLDevice mDevice;
         private bool mStopped = false;
         private bool mDone = false;
-        protected double mSpeed = 0;
         private String mAlgorithmName = "";
+        private String mFirstAlgorithmName = "";
+        private String mSecondAlgorithmName = "";
         private System.Threading.Thread mMinerThread = null;
         private DateTime mLastAlive = DateTime.Now;
 
-        public Device GatelessGateDevice { get { return mDevice; } }
+        public OpenCLDevice GatelessGateDevice { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
         public bool Done { get { return mDone; } }
-        public double Speed { get { return mSpeed; } }
+        public double Speed { get; set; }
+        public double SecondSpeed { get; set; }
         public String AlgorithmName { get { return mAlgorithmName; } }
+        public String FirstAlgorithmName { get { return mFirstAlgorithmName; } }
+        public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
 
-        protected Miner(Device aDevice, String aAlgorithmName)
+        protected Miner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
         {
             mDevice = aDevice;
             mAlgorithmName = aAlgorithmName;
+            mFirstAlgorithmName = (aFirstAlgorithmName == "") ? aAlgorithmName : aFirstAlgorithmName;
+            mSecondAlgorithmName = aSecondAlgorithmName;
+            Speed = 0;
+            SecondSpeed = 0;
         }
 
         ~Miner()
@@ -89,7 +97,7 @@ namespace GatelessGateSharp
                 {
                     mMinerThread.Abort();
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
                 mMinerThread = null;
             }
         }
@@ -102,12 +110,14 @@ namespace GatelessGateSharp
         protected void MarkAsDone()
         {
             mDone = true;
+            Speed = 0;
+            SecondSpeed = 0;
         }
 
         public void KeepAlive()
         {
             if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5)
-                mSpeed = 0;
+                Speed = 0;
             if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 60)
             {
                 MainForm.Logger("Miner thread is unresponsive. Restarting...");
@@ -116,7 +126,7 @@ namespace GatelessGateSharp
                     mMinerThread.Abort();
                 }
                 catch (Exception) { }
-                mSpeed = 0;
+                Speed = 0;
                 Start();
             }
         }

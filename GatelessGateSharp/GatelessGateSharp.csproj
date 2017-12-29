@@ -83,6 +83,8 @@
     <ApplicationIcon>Gateless Gate Sharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -98,6 +100,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -109,10 +112,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADL.cs" />
-    <Compile Include="Device.cs" />
+    <Compile Include="Device\OpenCLDevice.cs" />
+    <Compile Include="Device\Device.cs" />
+    <Compile Include="Miner\OpenCLDualEthashLbryMiner.cs" />
+    <Compile Include="Miner\OpenCLDualEthashPascalMiner.cs" />
+    <Compile Include="Miner\OpenCLLyra2REv2Miner.cs" />
+    <Compile Include="Miner\OpenCLNeoScryptMiner.cs" />
+    <Compile Include="Miner\OpenCLPascalMiner.cs" />
+    <Compile Include="Miner\OpenCLLbryMiner.cs" />
     <Compile Include="Miner\OpenCLCryptoNightMiner.cs" />
     <Compile Include="Stratum\EthashStratum.cs" />
     <Compile Include="Stratum\CryptoNightStratum.cs" />
+    <Compile Include="Stratum\Lyra2REv2Stratum.cs" />
+    <Compile Include="Stratum\NeoScryptStratum.cs" />
+    <Compile Include="Stratum\PascalStratum.cs" />
+    <Compile Include="Stratum\LbryStratum.cs" />
     <Compile Include="Stratum\OpenEthereumPoolEthashStratum.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="MainForm.cs">
@@ -143,12 +157,78 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="BinaryKernels\Baffin_cryptonight.bin" />
+    <None Include="BinaryKernels\Baffin_ethash.bin" />
+    <None Include="BinaryKernels\Baffin_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Bonaire_cryptonight.bin" />
+    <None Include="BinaryKernels\Bonaire_ethash.bin" />
+    <None Include="BinaryKernels\Bonaire_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Capeverde_ethash.bin" />
+    <None Include="BinaryKernels\Capeverde_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Carrizo_cryptonight.bin" />
+    <None Include="BinaryKernels\Carrizo_ethash.bin" />
+    <None Include="BinaryKernels\Carrizo_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Ellesmere_cryptonight.bin" />
+    <None Include="BinaryKernels\Ellesmere_ethash.bin" />
+    <None Include="BinaryKernels\Ellesmere_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Fiji_cryptonight.bin" />
+    <None Include="BinaryKernels\Fiji_ethash.bin" />
+    <None Include="BinaryKernels\Fiji_ethash_pascal.bin" />
+    <None Include="BinaryKernels\gfx900_cryptonight.bin" />
+    <None Include="BinaryKernels\gfx900_ethash.bin" />
+    <None Include="BinaryKernels\gfx900_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Hainan_ethash.bin" />
+    <None Include="BinaryKernels\Hainan_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Hawaii_cryptonight.bin" />
+    <None Include="BinaryKernels\Hawaii_ethash.bin" />
+    <None Include="BinaryKernels\Hawaii_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Iceland_cryptonight.bin" />
+    <None Include="BinaryKernels\Iceland_ethash.bin" />
+    <None Include="BinaryKernels\Iceland_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Kalindi_cryptonight.bin" />
+    <None Include="BinaryKernels\Kalindi_ethash.bin" />
+    <None Include="BinaryKernels\Kalindi_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Mullins_cryptonight.bin" />
+    <None Include="BinaryKernels\Mullins_ethash.bin" />
+    <None Include="BinaryKernels\Mullins_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Oland_ethash.bin" />
+    <None Include="BinaryKernels\Oland_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Pitcairn_ethash.bin" />
+    <None Include="BinaryKernels\Pitcairn_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Spectre_cryptonight.bin" />
+    <None Include="BinaryKernels\Spectre_ethash.bin" />
+    <None Include="BinaryKernels\Spectre_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Spooky_cryptonight.bin" />
+    <None Include="BinaryKernels\Spooky_ethash.bin" />
+    <None Include="BinaryKernels\Spooky_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Stoney_cryptonight.bin" />
+    <None Include="BinaryKernels\Stoney_ethash.bin" />
+    <None Include="BinaryKernels\Stoney_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Tahiti_ethash.bin" />
+    <None Include="BinaryKernels\Tahiti_ethash_pascal.bin" />
+    <None Include="BinaryKernels\Tonga_cryptonight.bin" />
+    <None Include="BinaryKernels\Tonga_ethash.bin" />
+    <None Include="BinaryKernels\Tonga_ethash_pascal.bin" />
     <None Include="Kernels\blake256.cl" />
+    <None Include="Kernels\bmw256.cl" />
     <None Include="Kernels\cryptonight.cl" />
+    <None Include="Kernels\cubehash.cl" />
     <None Include="Kernels\ethash.cl" />
+    <None Include="Kernels\ethash_pascal.cl" />
+    <None Include="Kernels\ethash_lbry.cl" />
     <None Include="Kernels\groestl256.cl" />
     <None Include="Kernels\jh.cl" />
+    <None Include="Kernels\keccak1600.cl" />
+    <None Include="Kernels\lbry.cl" />
+    <None Include="Kernels\Lyra2REv2.cl" />
+    <None Include="Kernels\Lyra2v2.cl" />
+    <None Include="Kernels\neoscrypt.cl" />
+    <None Include="Kernels\pascal.cl" />
+    <None Include="Kernels\ripemd160.cl" />
+    <None Include="Kernels\sha256.cl" />
+    <None Include="Kernels\skein256.cl" />
     <None Include="Kernels\wolf-aes.cl" />
+    <None Include="Kernels\wolf-sha512.cl" />
     <None Include="Kernels\wolf-skein.cl" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -165,6 +245,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DeviceSettingsUserControl\DeviceSettingsUserControl.csproj">
+      <Project>{6881a75e-d845-41df-b544-1f2dff67498d}</Project>
+      <Name>DeviceSettingsUserControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HashLib\HashLib.csproj">
       <Project>{31880fb6-5b86-42b8-ab92-864045b5d7a2}</Project>
       <Name>HashLib</Name>
@@ -206,7 +290,9 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
+xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)
 copy $(SolutionDir)SQLite\System.Data.SQLite.dll $(TargetDir)
+copy $(SolutionDir)SQLite\System.Data.SQLite.dll.config $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)

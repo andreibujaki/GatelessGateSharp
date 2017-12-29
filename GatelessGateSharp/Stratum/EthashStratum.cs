@@ -52,7 +52,8 @@ namespace GatelessGateSharp
             public string Seedhash { get { return mSeedhash; } }
             public string Headerhash { get { return mHeaderhash; } }
 
-            public Job(string aID, string aSeedhash, string aHeaderhash) 
+            public Job(Stratum aStratum, string aID, string aSeedhash, string aHeaderhash) 
+                : base(aStratum)
             {
                 mID = aID;
                 mSeedhash = aSeedhash;
@@ -236,6 +237,6 @@ namespace GatelessGateSharp
         {
         }
 
-        public virtual void Submit(Device aDevice, Job job, UInt64 output) { }
+        public virtual void Submit(OpenCLDevice aDevice, Job job, UInt64 output) { }
     }
 }

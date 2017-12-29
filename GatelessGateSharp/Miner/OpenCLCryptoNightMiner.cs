@@ -46,22 +46,6 @@ namespace GatelessGateSharp
 
         static Mutex mProgramArrayMutex = new Mutex();
 
-        class ProgramArrayIndex
-        {
-            private int mDeviceIndex;
-            private long mLocalWorkSize;
-
-            public ProgramArrayIndex(int aDeviceIndex, long aLocalWorkSize)
-            {
-                mDeviceIndex = aDeviceIndex;
-                mLocalWorkSize = aLocalWorkSize;
-            }
-
-            public bool Equals(ProgramArrayIndex mValue)
-            {
-                return mDeviceIndex == mValue.mDeviceIndex && mLocalWorkSize == mValue.mLocalWorkSize;
-            }
-        }
         static Dictionary<ProgramArrayIndex, ComputeProgram> mProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
         ComputeKernel searchKernel0 = null;
         ComputeKernel searchKernel1 = null;
@@ -76,15 +60,15 @@ namespace GatelessGateSharp
             
         public bool NiceHashMode { get { return mNicehashMode; } }
 
-        public OpenCLCryptoNightMiner(Device aGatelessGateDevice)
+        public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "CryptoNight")
         {
         }
 
-        public void Start(CryptoNightStratum aStratum, int aIntensity, int aLocalWorkSize, bool aNicehashMode = false)
+        public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false)
         {
             mStratum = aStratum;
-            globalWorkSizeA[0] = globalWorkSizeB[0] = aIntensity * Device.MaxComputeUnits;
+            globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity;
             localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
             if (globalWorkSizeA[0] % aLocalWorkSize != 0)
                 globalWorkSizeA[0] = globalWorkSizeB[0] = aLocalWorkSize - globalWorkSizeA[0] % aLocalWorkSize;
@@ -104,7 +88,7 @@ namespace GatelessGateSharp
         override unsafe protected void MinerThread()
         {
             Random r = new Random();
-            ComputeDevice computeDevice = Device.GetComputeDevice();
+            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
             
             MarkAsAlive();
 
@@ -112,23 +96,35 @@ namespace GatelessGateSharp
             MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
             ComputeProgram program;
-            try { mProgramArrayMutex.WaitOne(); } catch (Exception) { }
+            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
             if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])))
             {
                 program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
             } 
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
-                program = new ComputeProgram(Context, source);
-                MainForm.Logger("Loaded cryptonight program for Device #" + DeviceIndex + ".");
-                String buildOptions = (Device.Vendor == "AMD"    ? "-O1 " :
-                                       Device.Vendor == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                try
+                {
+                    if (localWorkSizeA[0] != 8)
+                        throw new Exception("No suitable binary file was found.");
+                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_cryptonight.bin";
+                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
+                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
+                }
+                catch (Exception)
+                {
+                    String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
+                    program = new ComputeProgram(Context, source);
+                    MainForm.Logger(@"Loaded Kernels\cryptonight.cl for Device #" + DeviceIndex + ".");
+                }
+                String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O5" : //"-O1 " :
+                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
                                                                    "")
                                       + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];
                 try
                 {
-                    program.Build(Device.DeviceList, buildOptions, null, IntPtr.Zero);
+                    program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
                 }
                 catch (Exception)
                 {
@@ -136,7 +132,7 @@ namespace GatelessGateSharp
                     throw;
                 }
                 MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Built options: " + buildOptions);
+                MainForm.Logger("Build options: " + buildOptions);
                 mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = program;
             }
             try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
@@ -199,7 +195,7 @@ namespace GatelessGateSharp
 
                         var job = work.GetJob();
                         Array.Copy(Utilities.StringToByteArray(job.Blob), input, 76);
-                        byte localExtranonce = work.LocalExtranonce;
+                        byte localExtranonce = (byte)work.LocalExtranonce;
                         byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
                         UInt32 startNonce;
                         if (NiceHashMode)
@@ -260,20 +256,8 @@ namespace GatelessGateSharp
                             Queue.Finish(); // Run the above statement before leaving the current local scope.
                             if (Stopped)
                                 break;
+                            
                             Queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
-                            sw.Stop();
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
-                            mSpeed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
-                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
-                            {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} h/s", mSpeed));
-                                consoleUpdateStopwatch.Restart();
-                            }
                             if (mStratum.GetJob().Equals(job))
                             {
                                 for (int i = 0; i < output[255]; ++i)
@@ -288,6 +272,14 @@ namespace GatelessGateSharp
                                 }
                             }
                             startNonce += (UInt32)globalWorkSizeA[0];
+
+                            sw.Stop();
+                            Speed = ((double)globalWorkSizeA[0]) / sw.Elapsed.TotalSeconds;
+                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                            {
+                                MainForm.Logger("Device #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", Speed));
+                                consoleUpdateStopwatch.Restart();
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -295,7 +287,7 @@ namespace GatelessGateSharp
                     MainForm.Logger("Restarting miner thread...");
                 }
 
-                mSpeed = 0;
+                Speed = 0;
 
                 if (!Stopped)
                     System.Threading.Thread.Sleep(5000);

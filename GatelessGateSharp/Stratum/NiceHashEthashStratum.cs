@@ -31,8 +31,8 @@ namespace GatelessGateSharp
 
         public new class Job : EthashStratum.Job
         {
-            public Job(string aID, string aSeedhash, string aHeaderhash) 
-                : base(aID, aSeedhash, aHeaderhash)
+            public Job(Stratum aStratum, string aID, string aSeedhash, string aHeaderhash) 
+                : base(aStratum, aID, aSeedhash, aHeaderhash)
             {
             }
         }
@@ -43,6 +43,7 @@ namespace GatelessGateSharp
 
         protected override void ProcessLine(String line)
         {
+            //MainForm.Logger("line: " + line);
             Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
             if (response.ContainsKey("method") && response.ContainsKey("params"))
             {
@@ -50,23 +51,24 @@ namespace GatelessGateSharp
                 JArray parameters = (JArray)response["params"];
                 if (method.Equals("mining.set_difficulty"))
                 {
-                    mMutex.WaitOne();
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mDifficulty = (double)parameters[0];
-                    mMutex.ReleaseMutex();
+                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                 }
                 else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
                 {
-                    mMutex.WaitOne();
-                    mJob = (EthashStratum.Job)(new Job((string)parameters[0], (string)parameters[1], (string)parameters[2]));
-                    mMutex.ReleaseMutex();
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
+                    mJob = (EthashStratum.Job)(new Job(this, (string)parameters[0], (string)parameters[1], (string)parameters[2]));
+                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new job: " + parameters[0]);
+                    //MainForm.Logger("Seedhash: " + parameters[1]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {
-                    mMutex.WaitOne();
+                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mPoolExtranonce = (String)parameters[0];
-                    mMutex.ReleaseMutex();
+                    try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Received new extranonce: " + parameters[0]);
                 }
                 else if (method.Equals("client.reconnect"))
@@ -102,7 +104,7 @@ namespace GatelessGateSharp
 
         override protected void Authorize()
         {
-            mMutex.WaitOne();
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
             mJsonRPCMessageID = 1;
 
@@ -137,19 +139,19 @@ namespace GatelessGateSharp
             response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
             if (!(bool)response["result"])
             {
-                mMutex.ReleaseMutex();
+                try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                 throw new Exception("Authorization failed.");
             }
 
-            mMutex.ReleaseMutex();
+            try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        override public void Submit(Device aDevice, EthashStratum.Job job, UInt64 output)
+        override public void Submit(OpenCLDevice aDevice, EthashStratum.Job job, UInt64 output)
         {
             if (Stopped)
                 return;
 
-            mMutex.WaitOne();
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
             RegisterDeviceWithShare(aDevice);
             try
             {
@@ -172,8 +174,10 @@ namespace GatelessGateSharp
             catch (Exception ex)
             {
                 MainForm.Logger("Failed to submit share: " + ex.Message);
+                try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                Reconnect();
             }
-            mMutex.ReleaseMutex();
+            try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         public NiceHashEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)

@@ -97,6 +97,7 @@ namespace Cloo
         [DebuggerBrowsable(DebuggerBrowsableState.Never)] private readonly string vendor;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)] private readonly long vendorId;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)] private readonly string version;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private ComputeDevice[] subDevices;
 
         #endregion
 
@@ -541,6 +542,8 @@ namespace Cloo
         /// <summary></summary>
         public byte[] TopologyAMD { get { return GetByteArrayInfo(ComputeDeviceInfo.CL_DEVICE_TOPOLOGY_AMD); } }
         /// <summary></summary>
+        public byte[] BoardNameAMD { get { return GetByteArrayInfo(ComputeDeviceInfo.CL_DEVICE_BOARD_NAME_AMD); } }
+        /// <summary></summary>
         public byte PciBusIdAMD { get { return TopologyAMD[21]; } }
         /// <summary></summary>
         public Int32 PciBusIdNV { get { return GetInfo<Int32>(ComputeDeviceInfo.CL_DEVICE_PCI_BUS_ID_NV); } }
@@ -634,6 +637,28 @@ namespace Cloo
             return GetArrayInfo<CLDeviceHandle, ComputeDeviceInfo, byte>(Handle, paramName, CL10.GetDeviceInfo);
         }
 
+        #endregion
+
+        #region Public methods
+        public ReadOnlyCollection<ComputeDevice> CreateSubDevices(uint num_devices)
+        {
+            CLDeviceHandle[] handles = new CLDeviceHandle[num_devices];
+            cl_device_partition_property[] properties = new cl_device_partition_property[] { 
+                cl_device_partition_property.CL_DEVICE_PARTITION_EQUALLY,
+                (cl_device_partition_property)(uint)(MaxComputeUnits / num_devices),
+                0
+            };
+            ComputeErrorCode error = CL12.CreateSubDevices(Handle, num_devices, properties, handles, out num_devices);
+            ComputeException.ThrowOnError(error);
+
+            ComputeDevice[] subDevices = new ComputeDevice[num_devices];
+            for (int i = 0; i < num_devices; i++)
+                subDevices[i] = new ComputeDevice(this.Platform, handles[i]);
+
+            this.subDevices = subDevices;
+
+            return new ReadOnlyCollection < ComputeDevice > (this.subDevices);
+        }
         #endregion
     }
 }
