@@ -1003,6 +1003,10 @@ namespace GatelessGateSharp
         private void MainForm_Load(object sender, EventArgs e) {
             Logger(appName + " started.");
 
+            SplashScreen splashScreen = new SplashScreen();
+            splashScreen.Show();
+            Application.DoEvents();
+
             try {
                 InitializeDevices();
             } catch (Exception ex) {
@@ -1070,6 +1074,8 @@ namespace GatelessGateSharp
                     try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 }
             }
+
+            splashScreen.Dispose();
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -1164,113 +1170,7 @@ namespace GatelessGateSharp
                 }
             }
 
-            var ADLRet = -1;
-            var NumberOfAdapters = 0;
-            ADLAdapterIndexArray = new int[mDevices.Length];
-            for (var i = 0; i < mDevices.Length; i++)
-                ADLAdapterIndexArray[i] = -1;
-            if (null != ADL.ADL_Main_Control_Create)
-                ADLRet = ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1);
-            if (ADL.ADL_SUCCESS == ADLRet) {
-                Logger("Successfully initialized AMD Display Library.");
-                ADLInitialized = true;
-                if (null != ADL.ADL_Adapter_NumberOfAdapters_Get)
-                    ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
-                Logger("Number of ADL Adapters: " + NumberOfAdapters.ToString());
-
-                if (0 < NumberOfAdapters) {
-                    ADLAdapterInfoArray OSAdapterInfoData;
-                    OSAdapterInfoData = new ADLAdapterInfoArray();
-
-                    if (null == ADL.ADL_Adapter_AdapterInfo_Get) {
-                        MainForm.Logger("ADL.ADL_Adapter_AdapterInfo_Get() is not available.");
-                    } else {
-                        var AdapterBuffer = IntPtr.Zero;
-                        var size = Marshal.SizeOf(OSAdapterInfoData);
-                        AdapterBuffer = Marshal.AllocCoTaskMem((int)size);
-                        Marshal.StructureToPtr(OSAdapterInfoData, AdapterBuffer, false);
-
-                        ADLRet = ADL.ADL_Adapter_AdapterInfo_Get(AdapterBuffer, size);
-                        if (ADL.ADL_SUCCESS == ADLRet) {
-                            OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
-                            for (var i = 0; i < NumberOfAdapters; i++) {
-                                var IsActive = 0;
-                                if (null != ADL.ADL_Adapter_Active_Get)
-                                    ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
-                                MainForm.Logger("ADL Adapter #" + OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex + ": ");
-                                MainForm.Logger("    AdapterName:    " + OSAdapterInfoData.ADLAdapterInfo[i].AdapterName);
-                                MainForm.Logger("    OSDisplayIndex: " + OSAdapterInfoData.ADLAdapterInfo[i].OSDisplayIndex);
-                                MainForm.Logger("    BusNumber:      " + OSAdapterInfoData.ADLAdapterInfo[i].BusNumber);
-                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
-                                    i++;
-                            }
-                            Dictionary<string, int> sameBoardCounters = new Dictionary<string, int> { };
-                            int[] sameBoardIndexArray = new int[mDevices.Length];
-                            foreach (var device in mDevices) {
-                                var openclDevice = device.GetComputeDevice();
-                                if (device.GetVendor() == "AMD" && openclDevice.PciBusIdAMD <= 0) {
-                                    string boardName = (new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9]+$")).Replace(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD), ""); // Drop '\0'
-                                    if (!sameBoardCounters.ContainsKey(boardName))
-                                        sameBoardCounters[boardName] = 0;
-                                    sameBoardIndexArray[device.DeviceIndex] = sameBoardCounters[boardName];
-                                    sameBoardCounters[boardName] = sameBoardCounters[boardName] + 1;
-                                }
-                            }
-                            foreach (var device in mDevices) {
-                                var openclDevice = device.GetComputeDevice();
-                                if (device.GetVendor() == "AMD" && openclDevice.PciBusIdAMD > 0) {
-                                    // Use openclDevice.PciBusIdAMD for matching.
-                                    for (var i = 0; i < NumberOfAdapters; i++) {
-                                        var IsActive = 0;
-                                        if (null != ADL.ADL_Adapter_Active_Get)
-                                            ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
-                                        if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
-                                            && (ADLAdapterIndexArray[device.DeviceIndex] < 0 || IsActive != 0)) {
-                                            ADLAdapterIndexArray[device.DeviceIndex] = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
-                                        }
-                                    }
-                                } else if (device.GetVendor() == "AMD" && openclDevice.PciBusIdAMD <= 0) {
-                                    // workaround for Adrenalin drivers as PciBusIdAMD does not work properly.
-                                    string boardName = (new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9]+$")).Replace(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD), ""); // Drop '\0'
-                                    List<int> adapterIndexList = new List<int> { };
-                                    List<int> OSDisplayIndexList = new List<int> { };
-                                    for (var i = 0; i < NumberOfAdapters - 1; ++i) {
-                                        if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName) {
-                                            adapterIndexList.Add(i);
-                                            OSDisplayIndexList.Add(OSAdapterInfoData.ADLAdapterInfo[i].OSDisplayIndex);
-                                        }
-                                        while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
-                                            ++i;
-                                    }
-                                    for (var i = 0; i < adapterIndexList.Count; ++i) {
-                                        int pos = 0;
-                                        int adapterIndex = adapterIndexList[i];
-                                        int OSDisplayIndex = OSDisplayIndexList[i];
-                                        foreach (var j in adapterIndexList) {
-                                            if (OSAdapterInfoData.ADLAdapterInfo[j].OSDisplayIndex < OSDisplayIndex
-                                                || (OSAdapterInfoData.ADLAdapterInfo[j].OSDisplayIndex == OSDisplayIndex
-                                                    && OSAdapterInfoData.ADLAdapterInfo[j].BusNumber < OSAdapterInfoData.ADLAdapterInfo[adapterIndex].BusNumber))
-                                                ++pos;
-                                        }
-                                        if (pos == sameBoardIndexArray[device.DeviceIndex]) {
-                                            ADLAdapterIndexArray[device.DeviceIndex] = adapterIndex;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            Logger("ADL_Adapter_AdapterInfo_Get() returned error code " + ADLRet.ToString());
-                        }
-                        
-                        // Release the memory for the AdapterInfo structure
-                        if (IntPtr.Zero != AdapterBuffer)
-                            Marshal.FreeCoTaskMem(AdapterBuffer);
-                    }
-                }
-            } else {
-                Logger("Failed to initialize AMD Display Library.");
-            }
+            InitializeADL();
 
             try {
                 if (ManagedCuda.Nvml.NvmlNativeMethods.nvmlInit() == 0) {
@@ -1349,6 +1249,137 @@ namespace GatelessGateSharp
             timerDeviceStatusUpdates.Enabled = true;
             UpdateStatsWithLongPolling();
             timerCurrencyStatUpdates.Enabled = true;
+        }
+
+
+        private void InitializeADL() {
+            var ADLRet = -1;
+            var NumberOfAdapters = 0;
+            ADLAdapterIndexArray = new int[mDevices.Length];
+            for (var i = 0; i < mDevices.Length; i++)
+                ADLAdapterIndexArray[i] = -1;
+            if (null != ADL.ADL_Main_Control_Create)
+                ADLRet = ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1);
+            if (ADL.ADL_SUCCESS == ADLRet) {
+                Logger("Successfully initialized AMD Display Library.");
+                ADLInitialized = true;
+                if (null != ADL.ADL_Adapter_NumberOfAdapters_Get)
+                    ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
+                Logger("Number of ADL Adapters: " + NumberOfAdapters.ToString());
+
+                if (0 < NumberOfAdapters) {
+                    ADLAdapterInfoArray OSAdapterInfoData;
+                    OSAdapterInfoData = new ADLAdapterInfoArray();
+
+                    if (null == ADL.ADL_Adapter_AdapterInfo_Get) {
+                        MainForm.Logger("ADL.ADL_Adapter_AdapterInfo_Get() is not available.");
+                    } else {
+                        var AdapterBuffer = IntPtr.Zero;
+                        var size = Marshal.SizeOf(OSAdapterInfoData);
+                        AdapterBuffer = Marshal.AllocCoTaskMem((int)size);
+                        Marshal.StructureToPtr(OSAdapterInfoData, AdapterBuffer, false);
+
+                        ADLRet = ADL.ADL_Adapter_AdapterInfo_Get(AdapterBuffer, size);
+                        if (ADL.ADL_SUCCESS == ADLRet) {
+                            OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
+                            bool adrenalineWorkaroundRequired = false;
+                            foreach (var device in mDevices) {
+                                var openclDevice = device.GetComputeDevice();
+                                if (device.GetVendor() == "AMD" && openclDevice.PciBusIdAMD <= 0)
+                                    adrenalineWorkaroundRequired = true;
+                            }
+                            if (adrenalineWorkaroundRequired) {
+                                // workaround for Adrenalin drivers as PciBusIdAMD does not work properly.
+                                Logger("Manually matching OpenCL devices with ADL devices...");
+                                bool[] taken = new bool[NumberOfAdapters];
+                                for (var i = 0; i < NumberOfAdapters; ++i)
+                                    taken[i] = false;
+                                foreach (var device in mDevices) {
+                                    var openclDevice = device.GetComputeDevice();
+                                    if (device.GetVendor() == "AMD") {
+                                        string boardName = (new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9]+$")).Replace(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD), ""); // Drop '\0'
+                                        int boardCounter = 0;
+                                        for (var i = 0; i < NumberOfAdapters; ++i) {
+                                            if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName)
+                                                boardCounter++;
+                                            while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                                ++i;
+                                        }
+                                        if (boardCounter <= 1) {
+                                            for (var i = 0; i < NumberOfAdapters; ++i) {
+                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName) {
+                                                    ADLAdapterIndexArray[device.DeviceIndex] = i;
+                                                    taken[i] = true;
+                                                }
+                                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                                    ++i;
+                                            }
+                                        } else {
+                                            OpenCLDummyLbryMiner dummyMiner = new OpenCLDummyLbryMiner(device);
+                                            dummyMiner.Start();
+                                            System.Threading.Thread.Sleep(3000);
+                                            int candidate = -1;
+                                            int candidateActivity = 0;
+                                            for (var i = 0; i < NumberOfAdapters; ++i) {
+                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken[i]) {
+                                                    ADLPMActivity OSADLPMActivityData;
+                                                    OSADLPMActivityData = new ADLPMActivity();
+                                                    var activityBuffer = IntPtr.Zero;
+                                                    size = Marshal.SizeOf(OSADLPMActivityData);
+                                                    activityBuffer = Marshal.AllocCoTaskMem((int)size);
+                                                    Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
+
+                                                    if (null != ADL.ADL_Overdrive5_CurrentActivity_Get) {
+                                                        ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(i, activityBuffer);
+                                                        if (ADL.ADL_SUCCESS == ADLRet) {
+                                                            OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
+                                                            if (OSADLPMActivityData.iActivityPercent > candidateActivity) {
+                                                                candidateActivity = OSADLPMActivityData.iActivityPercent;
+                                                                candidate = i;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                                    ++i;
+                                            }
+                                            if (candidate >= 0) {
+                                                taken[candidate] = true;
+                                                ADLAdapterIndexArray[device.DeviceIndex] = candidate;
+                                            }
+                                            dummyMiner.Stop();
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Use openclDevice.PciBusIdAMD for matching.
+                                foreach (var device in mDevices) {
+                                    var openclDevice = device.GetComputeDevice();
+                                    if (device.GetVendor() == "AMD") {
+                                        for (var i = 0; i < NumberOfAdapters; i++) {
+                                            var IsActive = 0;
+                                            if (null != ADL.ADL_Adapter_Active_Get)
+                                                ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
+                                            if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
+                                                && (ADLAdapterIndexArray[device.DeviceIndex] < 0 || IsActive != 0)) {
+                                                ADLAdapterIndexArray[device.DeviceIndex] = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            Logger("ADL_Adapter_AdapterInfo_Get() returned error code " + ADLRet.ToString());
+                        }
+
+                        // Release the memory for the AdapterInfo structure
+                        if (IntPtr.Zero != AdapterBuffer)
+                            Marshal.FreeCoTaskMem(AdapterBuffer);
+                    }
+                }
+            } else {
+                Logger("Failed to initialize AMD Display Library.");
+            }
         }
 
         private class CustomWebClient : System.Net.WebClient
