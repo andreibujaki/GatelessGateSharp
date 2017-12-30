@@ -1060,6 +1060,8 @@ namespace GatelessGateSharp
             UpdateControls();
 
             // Auto-start mining if necessary.
+            splashScreen.Dispose();
+            Application.DoEvents();
             var autoStart = checkBoxAutoStart.Checked;
             try {
                 if (System.IO.File.ReadAllLines(mAppStateFileName)[0] == "Mining")
@@ -1074,8 +1076,6 @@ namespace GatelessGateSharp
                     try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 }
             }
-
-            splashScreen.Dispose();
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
