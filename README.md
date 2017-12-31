@@ -14,7 +14,7 @@ Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry,
 
 ## Prerequisites
 
-The minimum requirements for the miner is as follows:
+The minimum requirements for the miner are as follows:
 
 * Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.
 * 64-bit Windows operating system.
