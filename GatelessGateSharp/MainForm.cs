@@ -84,6 +84,12 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceCryptoNightRawIntensityArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
 
+        private CheckBox[] checkBoxDeviceFanControlEnabledArray;
+        private NumericUpDown[] numericUpDownDeviceFanControlTargetTemperatureArray;
+        private NumericUpDown[] numericUpDownDeviceFanControlMaximumTemperatureArray;
+        private NumericUpDown[] numericUpDownDeviceFanControlMinimumFanSpeedArray;
+        private NumericUpDown[] numericUpDownDeviceFanControlMaximumFanSpeedArray;
+
         private OpenCLDevice[] mDevices;
         private bool ADLInitialized = false;
         private bool NVMLInitialized = false;
@@ -466,6 +472,21 @@ namespace GatelessGateSharp
                                             decimal.Parse(value);
                                     else if (name == "cryptonight_local_work_size")
                                         numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "fan_control_enabled")
+                                        checkBoxDeviceFanControlEnabledArray[deviceID].Checked =
+                                            (value == "true" ? true : false);
+                                    else if (name == "fan_control_target_temperature")
+                                        numericUpDownDeviceFanControlTargetTemperatureArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "fan_control_maximum_temperature")
+                                        numericUpDownDeviceFanControlMaximumTemperatureArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "fan_control_minimum_fan_speed")
+                                        numericUpDownDeviceFanControlMinimumFanSpeedArray[deviceID].Value =
+                                            decimal.Parse(value);
+                                    else if (name == "fan_control_maximum_fan_speed")
+                                        numericUpDownDeviceFanControlMaximumFanSpeedArray[deviceID].Value =
                                             decimal.Parse(value);
                                 }
                             }
@@ -991,6 +1012,46 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                         }
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                            command.Parameters.AddWithValue("@parameter_name", "fan_control_enabled");
+                            command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceFanControlEnabledArray[i].Checked ? "true" : "false");
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                            command.Parameters.AddWithValue("@parameter_name", "fan_control_target_temperature");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlTargetTemperatureArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                            command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_temperature");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumTemperatureArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                            command.Parameters.AddWithValue("@parameter_name", "fan_control_minimum_fan_speed");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMinimumFanSpeedArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            command.Parameters.AddWithValue("@device_id", i);
+                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                            command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_fan_speed");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumFanSpeedArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                        }
                     }
                 }
             } catch (Exception ex) {
@@ -1119,6 +1180,12 @@ namespace GatelessGateSharp
             numericUpDownDeviceLbryIntensityArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceLbryLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
             
+            checkBoxDeviceFanControlEnabledArray = new CheckBox[mDevices.Length];
+            numericUpDownDeviceFanControlTargetTemperatureArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceFanControlMaximumTemperatureArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceFanControlMinimumFanSpeedArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceFanControlMaximumFanSpeedArray = new NumericUpDown[mDevices.Length];
+            
             for (var i = 0; i < mDevices.Length; ++i) {
                 DeviceSettingsUserControl.DeviceSettingsUserControl uc = new DeviceSettingsUserControl.DeviceSettingsUserControl();
                 TabPage tp = new TabPage();
@@ -1165,6 +1232,16 @@ namespace GatelessGateSharp
                             numericUpDownDeviceLbryIntensityArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "lbry_local_work_size") {
                             numericUpDownDeviceLbryLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "fan_control_enabled") {
+                            checkBoxDeviceFanControlEnabledArray[i] = (CheckBox)control;
+                        } else if (tag != null && (string)tag == "fan_control_target_temperature") {
+                            numericUpDownDeviceFanControlTargetTemperatureArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "fan_control_maximum_temperature") {
+                            numericUpDownDeviceFanControlMaximumTemperatureArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "fan_control_minimum_fan_speed") {
+                            numericUpDownDeviceFanControlMinimumFanSpeedArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "fan_control_maximum_fan_speed") {
+                            numericUpDownDeviceFanControlMaximumFanSpeedArray[i] = (NumericUpDown)control;
                         }
                     }
                 }

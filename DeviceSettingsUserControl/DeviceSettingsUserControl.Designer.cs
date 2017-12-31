@@ -1110,28 +1110,29 @@
             this.label188.AutoSize = true;
             this.label188.Location = new System.Drawing.Point(71, 21);
             this.label188.Name = "label188";
-            this.label188.Size = new System.Drawing.Size(113, 13);
+            this.label188.Size = new System.Drawing.Size(124, 13);
             this.label188.TabIndex = 41;
-            this.label188.Text = "Min. Temperature (℃):";
+            this.label188.Text = "Target Temperature (℃):";
             // 
             // numericUpDown52
             // 
             this.numericUpDown52.Location = new System.Drawing.Point(200, 19);
             this.numericUpDown52.Maximum = new decimal(new int[] {
-            120,
+            90,
             0,
             0,
             0});
             this.numericUpDown52.Minimum = new decimal(new int[] {
-            80,
+            60,
             0,
             0,
             0});
             this.numericUpDown52.Name = "numericUpDown52";
             this.numericUpDown52.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown52.TabIndex = 42;
+            this.numericUpDown52.Tag = "fan_control_target_temperature";
             this.numericUpDown52.Value = new decimal(new int[] {
-            100,
+            75,
             0,
             0,
             0});
@@ -1139,11 +1140,13 @@
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
-            this.checkBox5.Enabled = false;
+            this.checkBox5.Checked = true;
+            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox5.Location = new System.Drawing.Point(6, 32);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(59, 17);
             this.checkBox5.TabIndex = 231;
+            this.checkBox5.Tag = "fan_control_enabled";
             this.checkBox5.Text = "Enable";
             this.checkBox5.UseVisualStyleBackColor = true;
             // 
@@ -1158,7 +1161,6 @@
             this.groupBox13.Controls.Add(this.checkBox5);
             this.groupBox13.Controls.Add(this.numericUpDown52);
             this.groupBox13.Controls.Add(this.label188);
-            this.groupBox13.Enabled = false;
             this.groupBox13.Location = new System.Drawing.Point(7, 4);
             this.groupBox13.Name = "groupBox13";
             this.groupBox13.Size = new System.Drawing.Size(443, 75);
@@ -2216,20 +2218,21 @@
             // 
             this.numericUpDown26.Location = new System.Drawing.Point(200, 45);
             this.numericUpDown26.Maximum = new decimal(new int[] {
-            120,
+            90,
             0,
             0,
             0});
             this.numericUpDown26.Minimum = new decimal(new int[] {
-            80,
+            60,
             0,
             0,
             0});
             this.numericUpDown26.Name = "numericUpDown26";
             this.numericUpDown26.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown26.TabIndex = 233;
+            this.numericUpDown26.Tag = "fan_control_maximum_temperature";
             this.numericUpDown26.Value = new decimal(new int[] {
-            100,
+            85,
             0,
             0,
             0});
@@ -2241,26 +2244,23 @@
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(116, 13);
             this.label27.TabIndex = 232;
+            this.label27.Tag = "";
             this.label27.Text = "Max. Temperature (℃):";
             // 
             // numericUpDown27
             // 
             this.numericUpDown27.Location = new System.Drawing.Point(376, 19);
-            this.numericUpDown27.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
             this.numericUpDown27.Minimum = new decimal(new int[] {
-            80,
+            20,
             0,
             0,
             0});
             this.numericUpDown27.Name = "numericUpDown27";
             this.numericUpDown27.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown27.TabIndex = 235;
+            this.numericUpDown27.Tag = "fan_control_minimum_fan_speed";
             this.numericUpDown27.Value = new decimal(new int[] {
-            100,
+            20,
             0,
             0,
             0});
@@ -2277,19 +2277,15 @@
             // numericUpDown28
             // 
             this.numericUpDown28.Location = new System.Drawing.Point(376, 45);
-            this.numericUpDown28.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
             this.numericUpDown28.Minimum = new decimal(new int[] {
-            80,
+            20,
             0,
             0,
             0});
             this.numericUpDown28.Name = "numericUpDown28";
             this.numericUpDown28.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown28.TabIndex = 237;
+            this.numericUpDown28.Tag = "fan_control_maximum_fan_speed";
             this.numericUpDown28.Value = new decimal(new int[] {
             100,
             0,
@@ -2303,6 +2299,7 @@
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(105, 13);
             this.label29.TabIndex = 236;
+            this.label29.Tag = "";
             this.label29.Text = "Max. Fan Speed (%):";
             // 
             // DeviceSettingsUserControl
