@@ -1247,7 +1247,7 @@ namespace GatelessGateSharp
                 }
             }
 
-            InitializeADL();
+            ADLInitialized = OpenCLDevice.InitializeADL(mDevices);
 
             try {
                 if (ManagedCuda.Nvml.NvmlNativeMethods.nvmlInit() == 0) {
@@ -1326,137 +1326,6 @@ namespace GatelessGateSharp
             timerDeviceStatusUpdates.Enabled = true;
             UpdateStatsWithLongPolling();
             timerCurrencyStatUpdates.Enabled = true;
-        }
-
-
-        private void InitializeADL() {
-            var ADLRet = -1;
-            var NumberOfAdapters = 0;
-            ADLAdapterIndexArray = new int[mDevices.Length];
-            for (var i = 0; i < mDevices.Length; i++)
-                ADLAdapterIndexArray[i] = -1;
-            if (null != ADL.ADL_Main_Control_Create)
-                ADLRet = ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1);
-            if (ADL.ADL_SUCCESS == ADLRet) {
-                Logger("Successfully initialized AMD Display Library.");
-                ADLInitialized = true;
-                if (null != ADL.ADL_Adapter_NumberOfAdapters_Get)
-                    ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
-                Logger("Number of ADL Adapters: " + NumberOfAdapters.ToString());
-
-                if (0 < NumberOfAdapters) {
-                    ADLAdapterInfoArray OSAdapterInfoData;
-                    OSAdapterInfoData = new ADLAdapterInfoArray();
-
-                    if (null == ADL.ADL_Adapter_AdapterInfo_Get) {
-                        MainForm.Logger("ADL.ADL_Adapter_AdapterInfo_Get() is not available.");
-                    } else {
-                        var AdapterBuffer = IntPtr.Zero;
-                        var size = Marshal.SizeOf(OSAdapterInfoData);
-                        AdapterBuffer = Marshal.AllocCoTaskMem((int)size);
-                        Marshal.StructureToPtr(OSAdapterInfoData, AdapterBuffer, false);
-
-                        ADLRet = ADL.ADL_Adapter_AdapterInfo_Get(AdapterBuffer, size);
-                        if (ADL.ADL_SUCCESS == ADLRet) {
-                            OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
-                            bool adrenalineWorkaroundRequired = false;
-                            foreach (var device in mDevices) {
-                                var openclDevice = device.GetComputeDevice();
-                                if (device.GetVendor() == "AMD" && openclDevice.PciBusIdAMD <= 0)
-                                    adrenalineWorkaroundRequired = true;
-                            }
-                            if (adrenalineWorkaroundRequired) {
-                                // workaround for Adrenalin drivers as PciBusIdAMD does not work properly.
-                                Logger("Manually matching OpenCL devices with ADL devices...");
-                                bool[] taken = new bool[NumberOfAdapters];
-                                for (var i = 0; i < NumberOfAdapters; ++i)
-                                    taken[i] = false;
-                                foreach (var device in mDevices) {
-                                    var openclDevice = device.GetComputeDevice();
-                                    if (device.GetVendor() == "AMD") {
-                                        string boardName = (new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9]+$")).Replace(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD), ""); // Drop '\0'
-                                        int boardCounter = 0;
-                                        for (var i = 0; i < NumberOfAdapters; ++i) {
-                                            if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName)
-                                                boardCounter++;
-                                            while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
-                                                ++i;
-                                        }
-                                        if (boardCounter <= 1) {
-                                            for (var i = 0; i < NumberOfAdapters; ++i) {
-                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName) {
-                                                    ADLAdapterIndexArray[device.DeviceIndex] = i;
-                                                    taken[i] = true;
-                                                }
-                                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
-                                                    ++i;
-                                            }
-                                        } else {
-                                            OpenCLDummyLbryMiner dummyMiner = new OpenCLDummyLbryMiner(device);
-                                            dummyMiner.Start();
-                                            System.Threading.Thread.Sleep(3000);
-                                            int candidate = -1;
-                                            int candidateActivity = 0;
-                                            for (var i = 0; i < NumberOfAdapters; ++i) {
-                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken[i]) {
-                                                    ADLPMActivity OSADLPMActivityData;
-                                                    OSADLPMActivityData = new ADLPMActivity();
-                                                    var activityBuffer = IntPtr.Zero;
-                                                    size = Marshal.SizeOf(OSADLPMActivityData);
-                                                    activityBuffer = Marshal.AllocCoTaskMem((int)size);
-                                                    Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
-
-                                                    if (null != ADL.ADL_Overdrive5_CurrentActivity_Get) {
-                                                        ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(i, activityBuffer);
-                                                        if (ADL.ADL_SUCCESS == ADLRet) {
-                                                            OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                                                            if (OSADLPMActivityData.iActivityPercent > candidateActivity) {
-                                                                candidateActivity = OSADLPMActivityData.iActivityPercent;
-                                                                candidate = i;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
-                                                    ++i;
-                                            }
-                                            if (candidate >= 0) {
-                                                taken[candidate] = true;
-                                                ADLAdapterIndexArray[device.DeviceIndex] = candidate;
-                                            }
-                                            dummyMiner.Stop();
-                                        }
-                                    }
-                                }
-                            } else {
-                                // Use openclDevice.PciBusIdAMD for matching.
-                                foreach (var device in mDevices) {
-                                    var openclDevice = device.GetComputeDevice();
-                                    if (device.GetVendor() == "AMD") {
-                                        for (var i = 0; i < NumberOfAdapters; i++) {
-                                            var IsActive = 0;
-                                            if (null != ADL.ADL_Adapter_Active_Get)
-                                                ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
-                                            if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
-                                                && (ADLAdapterIndexArray[device.DeviceIndex] < 0 || IsActive != 0)) {
-                                                ADLAdapterIndexArray[device.DeviceIndex] = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            Logger("ADL_Adapter_AdapterInfo_Get() returned error code " + ADLRet.ToString());
-                        }
-
-                        // Release the memory for the AdapterInfo structure
-                        if (IntPtr.Zero != AdapterBuffer)
-                            Marshal.FreeCoTaskMem(AdapterBuffer);
-                    }
-                }
-            } else {
-                Logger("Failed to initialize AMD Display Library.");
-            }
         }
 
         private class CustomWebClient : System.Net.WebClient
@@ -1868,63 +1737,30 @@ namespace GatelessGateSharp
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = acceptanceRate >= 0.99 ? Color.Green : acceptanceRate >= 0.95 ? Color.Goldenrod : Color.Red; // TODO
                     }
 
-                    if (ADLAdapterIndexArray[deviceIndex] >= 0) {
-                        // temperature
-                        ADLTemperature OSADLTemperatureData;
-                        OSADLTemperatureData = new ADLTemperature();
-                        var tempBuffer = IntPtr.Zero;
-                        var size = Marshal.SizeOf(OSADLTemperatureData);
-                        tempBuffer = Marshal.AllocCoTaskMem((int)size);
-                        Marshal.StructureToPtr(OSADLTemperatureData, tempBuffer, false);
+                    // hardware monitoring
+                    int temperature = device.Temperature;
+                    if (temperature >= 0) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Value = temperature.ToString() + "℃";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Style.ForeColor =
+                                                                   temperature >= 80 ? Color.Red :
+                                                                   temperature >= 60 ? Color.Purple :
+                                                                                       Color.Blue;
 
-                        if (null != ADL.ADL_Overdrive5_Temperature_Get) {
-                            var ADLRet = ADL.ADL_Overdrive5_Temperature_Get(ADLAdapterIndexArray[deviceIndex], 0, tempBuffer);
-                            if (ADL.ADL_SUCCESS == ADLRet) {
-                                OSADLTemperatureData = (ADLTemperature)Marshal.PtrToStructure(tempBuffer, OSADLTemperatureData.GetType());
-                                dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Value = (OSADLTemperatureData.Temperature / 1000).ToString() + "℃";
-                                dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Style.ForeColor =
-                                                                           OSADLTemperatureData.Temperature >= 80000 ? Color.Red :
-                                                                           OSADLTemperatureData.Temperature >= 60000 ? Color.Purple :
-                                                                                                                         Color.Blue;
-                            
-                            }
-                        }
+                    }
+                    int fanSpeed = device.FanSpeed;
+                    if (fanSpeed >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
+                    int activity = device.Activity;
+                    if (activity >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = activity.ToString() + "%";
+                    int coreClock = device.CoreClock;
+                    if (coreClock >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() + " MHz";
+                    int memoryClock = device.MemoryClock;
+                    if (activity >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
 
-                        // activity
-                        ADLPMActivity OSADLPMActivityData;
-                        OSADLPMActivityData = new ADLPMActivity();
-                        var activityBuffer = IntPtr.Zero;
-                        size = Marshal.SizeOf(OSADLPMActivityData);
-                        activityBuffer = Marshal.AllocCoTaskMem((int)size);
-                        Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
-
-                        if (null != ADL.ADL_Overdrive5_CurrentActivity_Get) {
-                            var ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndexArray[deviceIndex], activityBuffer);
-                            if (ADL.ADL_SUCCESS == ADLRet) {
-                                OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                                dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = OSADLPMActivityData.iActivityPercent.ToString() + "%";
-                                dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = (OSADLPMActivityData.iEngineClock / 100).ToString() + " MHz";
-                                dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = (OSADLPMActivityData.iMemoryClock / 100).ToString() + " MHz";
-                            }
-                        }
-
-                        // fan speed
-                        ADLFanSpeedValue OSADLFanSpeedValueData;
-                        OSADLFanSpeedValueData = new ADLFanSpeedValue();
-                        var fanSpeedValueBuffer = IntPtr.Zero;
-                        size = Marshal.SizeOf(OSADLFanSpeedValueData);
-                        OSADLFanSpeedValueData.iSpeedType = 1;
-                        fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)size);
-                        Marshal.StructureToPtr(OSADLFanSpeedValueData, fanSpeedValueBuffer, false);
-
-                        if (null != ADL.ADL_Overdrive5_FanSpeed_Get) {
-                            var ADLRet = ADL.ADL_Overdrive5_FanSpeed_Get(ADLAdapterIndexArray[deviceIndex], 0, fanSpeedValueBuffer);
-                            if (ADL.ADL_SUCCESS == ADLRet) {
-                                OSADLFanSpeedValueData = (ADLFanSpeedValue)Marshal.PtrToStructure(fanSpeedValueBuffer, OSADLFanSpeedValueData.GetType());
-                                dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = OSADLFanSpeedValueData.iFanSpeed.ToString() + "%";
-                            }
-                        }
-                    } else if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation")) {
+                    if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation")) {
                         uint temp = 0;
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetTemperature(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlTemperatureSensors.Gpu, ref temp);
                         dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Value = temp.ToString() + "℃";
@@ -1933,9 +1769,9 @@ namespace GatelessGateSharp
                                                                    temp >= 60 ? Color.Purple :
                                                                                   Color.Blue;
 
-                        uint fanSpeed = 0;
-                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetFanSpeed(nvmlDeviceArray[deviceIndex], ref fanSpeed);
-                        dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
+                        uint nvmlFanSpeed = 0;
+                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetFanSpeed(nvmlDeviceArray[deviceIndex], ref nvmlFanSpeed);
+                        dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = nvmlFanSpeed.ToString() + "%";
 
                         var utilization = new ManagedCuda.Nvml.nvmlUtilization();
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetUtilizationRates(nvmlDeviceArray[deviceIndex], ref utilization);
@@ -3857,6 +3693,11 @@ namespace GatelessGateSharp
 
         private void dataGridViewDevices_CellContentClick(object sender, DataGridViewCellEventArgs e) {
             dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value = !(bool)(dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value);
+        }
+
+        private void timerFanControl_Tick(object sender, EventArgs e) {
+            foreach (var device in mDevices) {
+            }
         }
     }
 }
