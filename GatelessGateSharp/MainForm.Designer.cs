@@ -207,14 +207,14 @@
             this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.tabPageAbout = new System.Windows.Forms.TabPage();
             this.richTextBoxAbout = new System.Windows.Forms.RichTextBox();
-            this.buttonStart = new System.Windows.Forms.Button();
-            this.buttonBenchmark = new System.Windows.Forms.Button();
             this.timerDeviceStatusUpdates = new System.Windows.Forms.Timer(this.components);
             this.timerCurrencyStatUpdates = new System.Windows.Forms.Timer(this.components);
             this.timerDevFee = new System.Windows.Forms.Timer(this.components);
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
             this.timerUpdateLog = new System.Windows.Forms.Timer(this.components);
             this.timerAutoStart = new System.Windows.Forms.Timer(this.components);
+            this.buttonBenchmark = new System.Windows.Forms.Button();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.statusStripMainForm = new System.Windows.Forms.StatusStrip();
             this.toolStripMainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -250,6 +250,9 @@
             // 
             // tabControlMainForm
             // 
+            this.tabControlMainForm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMainForm.Controls.Add(this.tabPageDashboard);
             this.tabControlMainForm.Controls.Add(this.tabPagePoolSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageCustomPoolSettings);
@@ -260,7 +263,7 @@
             this.tabControlMainForm.Location = new System.Drawing.Point(11, 8);
             this.tabControlMainForm.Name = "tabControlMainForm";
             this.tabControlMainForm.SelectedIndex = 0;
-            this.tabControlMainForm.Size = new System.Drawing.Size(728, 420);
+            this.tabControlMainForm.Size = new System.Drawing.Size(731, 421);
             this.tabControlMainForm.TabIndex = 0;
             this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
             // 
@@ -281,7 +284,7 @@
             this.tabPageDashboard.Controls.Add(this.label3);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
-            this.tabPageDashboard.Size = new System.Drawing.Size(720, 394);
+            this.tabPageDashboard.Size = new System.Drawing.Size(723, 395);
             this.tabPageDashboard.TabIndex = 2;
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
@@ -294,8 +297,13 @@
             this.dataGridViewDevices.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
             this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewDevices.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewDevices.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDevices.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dataGridViewDevices.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -321,7 +329,7 @@
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
-            this.dataGridViewDevices.Size = new System.Drawing.Size(698, 237);
+            this.dataGridViewDevices.Size = new System.Drawing.Size(698, 238);
             this.dataGridViewDevices.TabIndex = 144;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
             this.dataGridViewDevices.SelectionChanged += new System.EventHandler(this.dataGridViewDevices_SelectionChanged);
@@ -555,7 +563,7 @@
             this.tabPagePoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPagePoolSettings.Name = "tabPagePoolSettings";
             this.tabPagePoolSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePoolSettings.Size = new System.Drawing.Size(720, 394);
+            this.tabPagePoolSettings.Size = new System.Drawing.Size(723, 395);
             this.tabPagePoolSettings.TabIndex = 0;
             this.tabPagePoolSettings.Text = "Default Pools";
             this.tabPagePoolSettings.UseVisualStyleBackColor = true;
@@ -1002,7 +1010,7 @@
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool0);
             this.tabPageCustomPoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustomPoolSettings.Name = "tabPageCustomPoolSettings";
-            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(720, 394);
+            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(723, 395);
             this.tabPageCustomPoolSettings.TabIndex = 6;
             this.tabPageCustomPoolSettings.Text = "Custom Pools";
             this.tabPageCustomPoolSettings.UseVisualStyleBackColor = true;
@@ -1842,7 +1850,7 @@
             this.tabPageDeviceSettings.Controls.Add(this.tabControlDeviceSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
-            this.tabPageDeviceSettings.Size = new System.Drawing.Size(720, 394);
+            this.tabPageDeviceSettings.Size = new System.Drawing.Size(723, 395);
             this.tabPageDeviceSettings.TabIndex = 3;
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
@@ -1914,7 +1922,7 @@
             this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
             this.tabPageMiscSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageMiscSettings.Name = "tabPageMiscSettings";
-            this.tabPageMiscSettings.Size = new System.Drawing.Size(720, 394);
+            this.tabPageMiscSettings.Size = new System.Drawing.Size(723, 395);
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
@@ -1970,13 +1978,14 @@
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
             this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(720, 394);
+            this.tabPageLog.Size = new System.Drawing.Size(723, 395);
             this.tabPageLog.TabIndex = 1;
             this.tabPageLog.Text = "Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
             // 
             // buttonClearLog
             // 
+            this.buttonClearLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonClearLog.Location = new System.Drawing.Point(639, 35);
             this.buttonClearLog.Name = "buttonClearLog";
             this.buttonClearLog.Size = new System.Drawing.Size(75, 23);
@@ -1987,6 +1996,7 @@
             // 
             // buttonOpenLog
             // 
+            this.buttonOpenLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonOpenLog.Location = new System.Drawing.Point(639, 7);
             this.buttonOpenLog.Name = "buttonOpenLog";
             this.buttonOpenLog.Size = new System.Drawing.Size(75, 23);
@@ -1997,6 +2007,9 @@
             // 
             // richTextBoxLog
             // 
+            this.richTextBoxLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxLog.BackColor = System.Drawing.Color.Black;
             this.richTextBoxLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBoxLog.ForeColor = System.Drawing.Color.Lime;
@@ -2012,39 +2025,22 @@
             this.tabPageAbout.Controls.Add(this.richTextBoxAbout);
             this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
             this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Size = new System.Drawing.Size(720, 394);
+            this.tabPageAbout.Size = new System.Drawing.Size(723, 395);
             this.tabPageAbout.TabIndex = 5;
             this.tabPageAbout.Text = "About";
             this.tabPageAbout.UseVisualStyleBackColor = true;
             // 
             // richTextBoxAbout
             // 
+            this.richTextBoxAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxAbout.Location = new System.Drawing.Point(4, 4);
             this.richTextBoxAbout.Name = "richTextBoxAbout";
             this.richTextBoxAbout.ReadOnly = true;
             this.richTextBoxAbout.Size = new System.Drawing.Size(713, 388);
             this.richTextBoxAbout.TabIndex = 0;
             this.richTextBoxAbout.Text = resources.GetString("richTextBoxAbout.Text");
-            // 
-            // buttonStart
-            // 
-            this.buttonStart.Location = new System.Drawing.Point(664, 434);
-            this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(75, 23);
-            this.buttonStart.TabIndex = 1;
-            this.buttonStart.Text = "Start";
-            this.buttonStart.UseVisualStyleBackColor = true;
-            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
-            // 
-            // buttonBenchmark
-            // 
-            this.buttonBenchmark.Enabled = false;
-            this.buttonBenchmark.Location = new System.Drawing.Point(583, 434);
-            this.buttonBenchmark.Name = "buttonBenchmark";
-            this.buttonBenchmark.Size = new System.Drawing.Size(75, 23);
-            this.buttonBenchmark.TabIndex = 2;
-            this.buttonBenchmark.Text = "Benchmark";
-            this.buttonBenchmark.UseVisualStyleBackColor = true;
             // 
             // timerDeviceStatusUpdates
             // 
@@ -2077,15 +2073,36 @@
             // 
             this.timerAutoStart.Tick += new System.EventHandler(this.timerAutoStart_Tick);
             // 
+            // buttonBenchmark
+            // 
+            this.buttonBenchmark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBenchmark.Enabled = false;
+            this.buttonBenchmark.Location = new System.Drawing.Point(586, 435);
+            this.buttonBenchmark.Name = "buttonBenchmark";
+            this.buttonBenchmark.Size = new System.Drawing.Size(75, 23);
+            this.buttonBenchmark.TabIndex = 146;
+            this.buttonBenchmark.Text = "Benchmark";
+            this.buttonBenchmark.UseVisualStyleBackColor = true;
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonStart.Location = new System.Drawing.Point(667, 435);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(75, 23);
+            this.buttonStart.TabIndex = 145;
+            this.buttonStart.Text = "Start";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            // 
             // statusStripMainForm
             // 
             this.statusStripMainForm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMainFormProgressBar,
             this.toolStripStatusLabel1});
-            this.statusStripMainForm.Location = new System.Drawing.Point(0, 467);
+            this.statusStripMainForm.Location = new System.Drawing.Point(0, 468);
             this.statusStripMainForm.Name = "statusStripMainForm";
-            this.statusStripMainForm.Size = new System.Drawing.Size(751, 23);
-            this.statusStripMainForm.TabIndex = 3;
+            this.statusStripMainForm.Size = new System.Drawing.Size(754, 23);
+            this.statusStripMainForm.TabIndex = 5;
             // 
             // toolStripMainFormProgressBar
             // 
@@ -2103,15 +2120,18 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(751, 490);
-            this.Controls.Add(this.statusStripMainForm);
+            this.ClientSize = new System.Drawing.Size(754, 491);
             this.Controls.Add(this.buttonBenchmark);
+            this.Controls.Add(this.statusStripMainForm);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.tabControlMainForm);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(32767, 32767);
+            this.MinimumSize = new System.Drawing.Size(770, 530);
             this.Name = "MainForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Gateless Gate Sharp";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -2171,7 +2191,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label labelPriceDay;
-        private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Label labelPriceWeek;
         private System.Windows.Forms.TextBox textBoxZcashAddress;
         private System.Windows.Forms.Label label16;
@@ -2183,7 +2202,6 @@
         private System.Windows.Forms.Button buttonMoneroBalance;
         private System.Windows.Forms.Button buttonEthereumBalance;
         private System.Windows.Forms.Button buttonViewBalancesAtNiceHash;
-        private System.Windows.Forms.Button buttonBenchmark;
         private System.Windows.Forms.GroupBox groupBoxCoinsToMine;
         private System.Windows.Forms.RadioButton radioButtonZcash;
         private System.Windows.Forms.RadioButton radioButtonMonero;
@@ -2222,9 +2240,6 @@
         private System.Windows.Forms.CheckBox checkBoxEnablePhymem;
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.Timer timerAutoStart;
-        private System.Windows.Forms.StatusStrip statusStripMainForm;
-        private System.Windows.Forms.ToolStripProgressBar toolStripMainFormProgressBar;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.TabPage tabPageCustomPoolSettings;
         private System.Windows.Forms.GroupBox groupBoxCustmPool0;
         private System.Windows.Forms.Label label147;
@@ -2339,5 +2354,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn fan;
         private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
+        private System.Windows.Forms.Button buttonBenchmark;
+        private System.Windows.Forms.Button buttonStart;
+        private System.Windows.Forms.StatusStrip statusStripMainForm;
+        private System.Windows.Forms.ToolStripProgressBar toolStripMainFormProgressBar;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
