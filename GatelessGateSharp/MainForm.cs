@@ -40,10 +40,30 @@ namespace GatelessGateSharp
         public static extern int LoadPhyMemDriver();
         [DllImport("phymem_wrapper.dll")]
         public static extern void UnloadPhyMemDriver();
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, EntryPoint = "GlobalMemoryStatusEx", SetLastError = true)]
+        static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal class MemoryStatusEx {
+            public uint dwLength;
+            public uint dwMemoryLoad;
+            public UInt64 ullTotalPhys;
+            public UInt64 ullAvailPhys;
+            public UInt64 ullTotalPageFile;
+            public UInt64 ullAvailPageFile;
+            public UInt64 ullTotalVirtual;
+            public UInt64 ullAvailVirtual;
+            public UInt64 ullAvailExtendedVirtual;
+            public MemoryStatusEx()
+            {
+                this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
+            }
+        }
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.9";
+        public static string appVersion = "1.1.10";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -153,6 +173,65 @@ namespace GatelessGateSharp
 
                 Instance.toolStripStatusLabel1.Text = loggerBuffer.Split('\n')[0].Replace("\r", "");
             } catch (Exception) { }
+        }
+
+        private static bool CheckVirtualMemorySize() {
+            var status = new MemoryStatusEx();
+
+            GlobalMemoryStatusEx(status);
+            /*
+            MainForm.Logger("dwLength: " + (ulong)status.dwLength);
+            MainForm.Logger("dwMemoryLoad: " + (ulong)status.dwMemoryLoad);
+            MainForm.Logger("ullTotalPhys: " + (ulong)status.ullTotalPhys);
+            MainForm.Logger("ullAvailPhys: " + (ulong)status.ullAvailPhys);
+            MainForm.Logger("ullTotalPageFile: " + (ulong)status.ullTotalPageFile);
+            MainForm.Logger("ullAvailPageFile: " + (ulong)status.ullAvailPageFile);
+            MainForm.Logger("ullTotalVirtual: " + (ulong)status.ullTotalVirtual);
+            MainForm.Logger("ullAvailVirtual: " + (ulong)status.ullAvailVirtual);
+            */
+            if ((ulong)status.ullTotalPageFile - status.ullTotalPhys < (ulong)24 * 1024 * 1024 * 1024) {
+                var w = new Form() { Size = new System.Drawing.Size(0, 0) };
+                Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
+                    TaskScheduler.FromCurrentSynchronizationContext());
+                w.BringToFront();
+                var result = MessageBox.Show(w, "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                if (result == DialogResult.Yes) {
+                    try {
+                        var process = new System.Diagnostics.Process();
+                        var startInfo = new System.Diagnostics.ProcessStartInfo();
+                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+                        startInfo.FileName = "wmic";
+                        startInfo.Arguments = "computersystem set AutomaticManagedPagefile=False";
+                        process.StartInfo = startInfo;
+                        process.Start();
+                        process.WaitForExit();
+
+                        startInfo.FileName = "wmic";
+                        startInfo.Arguments = "pagefileset create name=\"C:\\pagefile.sys\"";
+                        process.StartInfo = startInfo;
+                        process.Start();
+                        process.WaitForExit();
+
+                        startInfo.FileName = "wmic";
+                        startInfo.Arguments = "pagefileset set InitialSize=24576,MaximumSize=24576";
+                        process.StartInfo = startInfo;
+                        process.Start();
+                        process.WaitForExit();
+                        
+                        startInfo.FileName = "shutdown";
+                        startInfo.Arguments = "/r /t 0";
+                        process.StartInfo = startInfo;
+                        process.Start();
+
+                        Application.Exit();
+                    } catch (Exception ex) {
+                        MainForm.Logger("Failed to increase the total size of page files: " + ex.Message + ex.StackTrace);
+                    }
+                }
+                return false;
+            }
+            return true;
         }
 
         public MainForm() {
@@ -1063,6 +1142,8 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void MainForm_Load(object sender, EventArgs e) {
             Logger(appName + " started.");
+
+            CheckVirtualMemorySize();
 
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();

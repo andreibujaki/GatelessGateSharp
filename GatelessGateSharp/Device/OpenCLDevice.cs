@@ -65,15 +65,55 @@ namespace GatelessGateSharp
                 mName = System.Text.Encoding.ASCII.GetString(mComputeDevice.BoardNameAMD)
                     .Replace("AMD ", "")
                     .Replace("(TM)", "")
-                    //.Replace(" Series", "")
+                    .Replace(" Series", "")
                     .Replace(" Graphics", "")
                     .Replace("  ", " ");
                 mName = (new Regex("[^a-zA-Z0-9]+$")).Replace(mName, ""); // Drop '\0'
-                if (mName == "Radeon R9 Fury Series" && mComputeDevice.MaxComputeUnits == 64) {
-                    mName = "Radeon R9 Nano";
-                } else if (mName == "Radeon HD 7900 Series" && mComputeDevice.MaxComputeUnits == 32) {
-                    mName = "Radeon HD 7970";
-                }
+                
+                if      (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 6)  { mName = "Radeon HD 7730"; } 
+                else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 8)  { mName = "Radeon HD 7750"; }
+                else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 10) { mName = "Radeon HD 7770"; } 
+                else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 14) { mName = "Radeon HD 7790"; } 
+                else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 16) { mName = "Radeon HD 7850"; } 
+                else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 20) { mName = "Radeon HD 7870"; }
+                else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 24) { mName = "Radeon HD 7870 XT"; }
+                else if (mName == "Radeon HD 7900" && mComputeDevice.MaxComputeUnits == 28) { mName = "Radeon HD 7950"; }
+                else if (mName == "Radeon HD 7900" && mComputeDevice.MaxComputeUnits == 32) { mName = "Radeon HD 7970"; } 
+                
+                else if (mName == "Radeon R5 200" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R5 240"; }
+                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R7 240"; }
+                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 250"; }
+                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 512 / 64) { mName = "Radeon R7 250E"; }
+                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 640 / 64) { mName = "Radeon R7 250X"; }
+                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R7 260"; }
+                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 896 / 64) { mName = "Radeon R7 260X"; } 
+                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R7 265"; } 
+                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 270"; } 
+                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 270X"; } 
+                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 280"; } 
+                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2048 / 64) { mName = "Radeon R9 280X"; } 
+                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 285"; } 
+                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2560 / 64) { mName = "Radeon R9 290"; } 
+                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2816 / 64) { mName = "Radeon R9 290X"; }
+                
+                else if (mName == "Radeon R5 300" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R5 330"; }
+                else if (mName == "Radeon R5 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R5 340"; } 
+                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 340"; } 
+                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 350"; }
+                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 512 / 64) { mName = "Radeon R7 350"; }
+                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R7 360"; }
+                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R9 360"; }
+                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R7 370"; } 
+                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R9 370"; } 
+                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 370X"; }
+                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 380"; } 
+                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 380"; } 
+                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2048 / 64) { mName = "Radeon R9 380X"; }
+                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2560 / 64) { mName = "Radeon R9 390"; } 
+                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2816 / 64) { mName = "Radeon R9 390X"; } 
+                else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 3584 / 64) { mName = "Radeon R9 Fury"; } 
+                else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 4096 / 64) { mName = "Radeon R9 Nano"; } 
+                else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 4096 / 64) { mName = "Radeon R9 Fury X"; }
             } else {
                 mName = mComputeDevice.Name;
             }
@@ -170,25 +210,24 @@ namespace GatelessGateSharp
                             if (adrenalineWorkaroundRequired) {
                                 // workaround for Adrenalin drivers as PciBusIdAMD does not work properly.
                                 MainForm.Logger("Manually matching OpenCL devices with ADL devices...");
-                                bool[] taken = new bool[NumberOfAdapters];
-                                for (var i = 0; i < NumberOfAdapters; ++i)
-                                    taken[i] = false;
+                                List<int> taken = new List<int> { };
                                 foreach (var device in mDevices) {
                                     var openclDevice = device.GetComputeDevice();
                                     if (device.GetVendor() == "AMD") {
                                         string boardName = (new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9]+$")).Replace(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD), ""); // Drop '\0'
                                         int boardCounter = 0;
                                         for (var i = 0; i < NumberOfAdapters; ++i) {
-                                            if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName)
+                                            if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber))
                                                 boardCounter++;
                                             while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
                                                 ++i;
                                         }
                                         if (boardCounter <= 1) {
                                             for (var i = 0; i < NumberOfAdapters; ++i) {
-                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName) {
+                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
                                                     device.ADLAdapterIndex = i;
-                                                    taken[i] = true;
+                                                    taken.Add(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber);
+                                                    break;
                                                 }
                                                 while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
                                                     ++i;
@@ -200,7 +239,7 @@ namespace GatelessGateSharp
                                             int candidate = -1;
                                             int candidateActivity = 0;
                                             for (var i = 0; i < NumberOfAdapters; ++i) {
-                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken[i]) {
+                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
                                                     ADLPMActivity OSADLPMActivityData;
                                                     OSADLPMActivityData = new ADLPMActivity();
                                                     var activityBuffer = IntPtr.Zero;
@@ -223,8 +262,8 @@ namespace GatelessGateSharp
                                                     ++i;
                                             }
                                             if (candidate >= 0) {
-                                                taken[candidate] = true;
                                                 device.ADLAdapterIndex = candidate;
+                                                taken.Add(OSAdapterInfoData.ADLAdapterInfo[candidate].BusNumber);
                                             }
                                             dummyMiner.Stop();
                                         }
