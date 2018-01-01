@@ -110,6 +110,16 @@ namespace ATI.ADL
     /// <returns>return ADL Error Code</returns>
     internal delegate int ADL_Overdrive5_CurrentActivity_Get(int adapterIndex, IntPtr activity);
 
+    /// <summary>Set fan speed.</summary>
+    /// <param name="adapterIndex">Adapter Index</param>
+    /// <returns>return ADL Error Code</returns>
+    internal delegate int ADL_Overdrive5_FanSpeed_Set(int adapterIndex, int iThermalControllerIndex, IntPtr fanSpeedValue);
+
+    /// <summary>Set fan speed to default value.</summary>
+    /// <param name="adapterIndex">Adapter Index</param>
+    /// <returns>return ADL Error Code</returns>
+    internal delegate int ADL_Overdrive5_FanSpeedToDefault_Set(int adapterIndex, int iThermalControllerIndex);
+
     #endregion Export Delegates
 
     #region Export Struct
@@ -327,6 +337,12 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Overdrive5_FanSpeed_Get(int adapterIndex, int iThermalControllerIndex, IntPtr fanSpeedValue);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Overdrive5_FanSpeed_Set(int adapterIndex, int iThermalControllerIndex, IntPtr fanSpeedValue);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Overdrive5_FanSpeedToDefault_Set(int adapterIndex, int iThermalControllerIndex);
             
             #endregion DLLImport
         }
@@ -641,6 +657,52 @@ namespace ATI.ADL
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL_Overdrive5_FanSpeed_Get_Check = false;
         #endregion ADL_Overdrive5_FanSpeed_Get
+
+        #region ADL_Overdrive5_FanSpeed_Set
+        /// <summary> ADL_Overdrive5_FanSpeed_Set Delegates</summary>
+        internal static ADL_Overdrive5_FanSpeed_Set ADL_Overdrive5_FanSpeed_Set
+        {
+            get
+            {
+                if (!ADL_Overdrive5_FanSpeed_Set_Check && null == ADL_Overdrive5_FanSpeed_Set_)
+                {
+                    ADL_Overdrive5_FanSpeed_Set_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_FanSpeed_Set"))
+                    {
+                        ADL_Overdrive5_FanSpeed_Set_ = ADLImport.ADL_Overdrive5_FanSpeed_Set;
+                    }
+                }
+                return ADL_Overdrive5_FanSpeed_Set_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Overdrive5_FanSpeed_Set ADL_Overdrive5_FanSpeed_Set_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Overdrive5_FanSpeed_Set_Check = false;
+        #endregion ADL_Overdrive5_FanSpeed_Set
+
+        #region ADL_Overdrive5_FanSpeedToDefault_Set
+        /// <summary> ADL_Overdrive5_FanSpeedToDefault_Set Delegates</summary>
+        internal static ADL_Overdrive5_FanSpeedToDefault_Set ADL_Overdrive5_FanSpeedToDefault_Set
+        {
+            get
+            {
+                if (!ADL_Overdrive5_FanSpeedToDefault_Set_Check && null == ADL_Overdrive5_FanSpeedToDefault_Set_)
+                {
+                    ADL_Overdrive5_FanSpeedToDefault_Set_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_FanSpeedToDefault_Set"))
+                    {
+                        ADL_Overdrive5_FanSpeedToDefault_Set_ = ADLImport.ADL_Overdrive5_FanSpeedToDefault_Set;
+                    }
+                }
+                return ADL_Overdrive5_FanSpeedToDefault_Set_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Overdrive5_FanSpeedToDefault_Set ADL_Overdrive5_FanSpeedToDefault_Set_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Overdrive5_FanSpeedToDefault_Set_Check = false;
+        #endregion ADL_Overdrive5_FanSpeedToDefault_Set
 
         #endregion Export Functions
     }

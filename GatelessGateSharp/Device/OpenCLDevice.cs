@@ -299,6 +299,26 @@ namespace GatelessGateSharp
                 OSADLFanSpeedValueData = (ADLFanSpeedValue)Marshal.PtrToStructure(fanSpeedValueBuffer, OSADLFanSpeedValueData.GetType());
                 return OSADLFanSpeedValueData.iFanSpeed;
             }
+
+            set {
+                if (ADLAdapterIndex < 0 || null == ADL.ADL_Overdrive5_FanSpeed_Set)
+                    return;
+
+                if (value < 0) {
+                    ADL.ADL_Overdrive5_FanSpeedToDefault_Set(ADLAdapterIndex, 0);
+                } else {
+                    ADLFanSpeedValue OSADLFanSpeedValueData;
+                    OSADLFanSpeedValueData = new ADLFanSpeedValue();
+                    var fanSpeedValueBuffer = IntPtr.Zero;
+                    var size = Marshal.SizeOf(OSADLFanSpeedValueData);
+                    OSADLFanSpeedValueData.iSpeedType = 1;
+                    OSADLFanSpeedValueData.iFanSpeed = value;
+                    OSADLFanSpeedValueData.iFlags = 0;
+                    fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)size);
+                    Marshal.StructureToPtr(OSADLFanSpeedValueData, fanSpeedValueBuffer, false);
+                    ADL.ADL_Overdrive5_FanSpeed_Set(ADLAdapterIndex, 0, fanSpeedValueBuffer);
+                }
+            }
         }
 
         public int Activity {

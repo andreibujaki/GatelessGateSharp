@@ -2120,7 +2120,7 @@
             // 
             // timerFanControl
             // 
-            this.timerFanControl.Interval = 1000;
+            this.timerFanControl.Interval = 5000;
             this.timerFanControl.Tick += new System.EventHandler(this.timerFanControl_Tick);
             // 
             // MainForm

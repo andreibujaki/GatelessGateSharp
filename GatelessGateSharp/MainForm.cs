@@ -43,7 +43,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.8";
+        public static string appVersion = "1.1.9";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1119,6 +1119,7 @@ namespace GatelessGateSharp
 
             appState = ApplicationGlobalState.Idle;
             UpdateControls();
+            timerFanControl.Enabled = true;
 
             // Auto-start mining if necessary.
             splashScreen.Dispose();
@@ -1232,17 +1233,22 @@ namespace GatelessGateSharp
                             numericUpDownDeviceLbryIntensityArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "lbry_local_work_size") {
                             numericUpDownDeviceLbryLocalWorkSizeArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "fan_control_enabled") {
-                            checkBoxDeviceFanControlEnabledArray[i] = (CheckBox)control;
-                        } else if (tag != null && (string)tag == "fan_control_target_temperature") {
-                            numericUpDownDeviceFanControlTargetTemperatureArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "fan_control_maximum_temperature") {
-                            numericUpDownDeviceFanControlMaximumTemperatureArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "fan_control_minimum_fan_speed") {
-                            numericUpDownDeviceFanControlMinimumFanSpeedArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "fan_control_maximum_fan_speed") {
-                            numericUpDownDeviceFanControlMaximumFanSpeedArray[i] = (NumericUpDown)control;
                         }
+                    }
+                }
+
+                foreach (var control in ((GroupBox)uc.Controls[1]).Controls) {
+                    var tag = control.GetType().GetProperty("Tag").GetValue(control);
+                    if (tag != null && (string)tag == "fan_control_enabled") {
+                        checkBoxDeviceFanControlEnabledArray[i] = (CheckBox)control;
+                    } else if (tag != null && (string)tag == "fan_control_target_temperature") {
+                        numericUpDownDeviceFanControlTargetTemperatureArray[i] = (NumericUpDown)control;
+                    } else if (tag != null && (string)tag == "fan_control_maximum_temperature") {
+                        numericUpDownDeviceFanControlMaximumTemperatureArray[i] = (NumericUpDown)control;
+                    } else if (tag != null && (string)tag == "fan_control_minimum_fan_speed") {
+                        numericUpDownDeviceFanControlMinimumFanSpeedArray[i] = (NumericUpDown)control;
+                    } else if (tag != null && (string)tag == "fan_control_maximum_fan_speed") {
+                        numericUpDownDeviceFanControlMaximumFanSpeedArray[i] = (NumericUpDown)control;
                     }
                 }
             }
@@ -1794,8 +1800,13 @@ namespace GatelessGateSharp
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             UpdateDatabase();
             UnloadPhyMemDriver();
-            if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy)
+            timerFanControl.Enabled = false;
+            if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy) {
+                foreach (var device in mDevices)
+                    if (device.ADLAdapterIndex >= 0)
+                        device.FanSpeed = -1;
                 ADL.ADL_Main_Control_Destroy();
+            }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -3095,6 +3106,14 @@ namespace GatelessGateSharp
                 textBoxCustomPool3SecondaryHost.Enabled = textBoxCustomPool3SecondaryLogin.Enabled = textBoxCustomPool3SecondaryPassword.Enabled = numericUpDownCustomPool3SecondaryPort.Enabled = checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0;
 
                 tabControlMainForm.Enabled = buttonStart.Enabled = true;
+
+                foreach (var device in mDevices) {
+                    checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle);
+                    numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                }
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
             }
@@ -3697,6 +3716,30 @@ namespace GatelessGateSharp
 
         private void timerFanControl_Tick(object sender, EventArgs e) {
             foreach (var device in mDevices) {
+                if (!checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
+                    continue;
+                
+                int currentTemperature = device.Temperature;
+                int targetTemperature = decimal.ToInt32(numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value);
+                int maxTemperature = decimal.ToInt32(numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value);
+                int currentFanSpeed = device.FanSpeed;
+                int maxFanSpeed = decimal.ToInt32(numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value);
+                int minFanSpeed = decimal.ToInt32(numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value);
+                int newFanSpeed = currentFanSpeed;
+
+                if (currentTemperature > targetTemperature + 5)
+                    newFanSpeed += 5;
+                else if (currentTemperature > targetTemperature)
+                    ++newFanSpeed;
+                else if (currentTemperature < targetTemperature - 5)
+                    newFanSpeed -= 5;
+                else if (currentTemperature < targetTemperature)
+                    --newFanSpeed;
+                if (currentTemperature > maxTemperature)
+                    newFanSpeed = maxFanSpeed;
+                if (newFanSpeed < minFanSpeed)
+                    newFanSpeed = minFanSpeed;
+                device.FanSpeed = newFanSpeed;
             }
         }
     }
