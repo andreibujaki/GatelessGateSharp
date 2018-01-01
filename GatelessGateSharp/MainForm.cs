@@ -179,7 +179,7 @@ namespace GatelessGateSharp
             var status = new MemoryStatusEx();
 
             GlobalMemoryStatusEx(status);
-            /*
+            
             MainForm.Logger("dwLength: " + (ulong)status.dwLength);
             MainForm.Logger("dwMemoryLoad: " + (ulong)status.dwMemoryLoad);
             MainForm.Logger("ullTotalPhys: " + (ulong)status.ullTotalPhys);
@@ -188,7 +188,7 @@ namespace GatelessGateSharp
             MainForm.Logger("ullAvailPageFile: " + (ulong)status.ullAvailPageFile);
             MainForm.Logger("ullTotalVirtual: " + (ulong)status.ullTotalVirtual);
             MainForm.Logger("ullAvailVirtual: " + (ulong)status.ullAvailVirtual);
-            */
+            
             if ((ulong)status.ullTotalPageFile - status.ullTotalPhys < (ulong)24 * 1024 * 1024 * 1024) {
                 var w = new Form() { Size = new System.Drawing.Size(0, 0) };
                 Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
@@ -220,7 +220,7 @@ namespace GatelessGateSharp
                         process.WaitForExit();
                         
                         startInfo.FileName = "shutdown";
-                        startInfo.Arguments = "/r /t 0";
+                        startInfo.Arguments = "/r";
                         process.StartInfo = startInfo;
                         process.Start();
 
