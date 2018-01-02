@@ -5,9 +5,9 @@
 Gateless Gate Sharp is the first open-source OpenCL dual ETH/XMR/PASC/LBC/FTC miner for Windows operating systems. It focuses on performance, stability, and ease of use.
 Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), this miner aims at stability with a much simpler design and the managed .NET Framework.
 
-* [Gateless_Gate_Sharp_1.1.9_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.9-alpha/Gateless_Gate_Sharp_1.1.9_alpha_Setup.msi) (Windows x64 Installer)
-* [Gateless_Gate_Sharp_1.1.9_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.9-alpha/Gateless_Gate_Sharp_1.1.9_alpha.7z)
-* [Gateless_Gate_Sharp_1.1.9_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.9-alpha/Gateless_Gate_Sharp_1.1.9_alpha.zip)
+* [Gateless_Gate_Sharp_1.1.10_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.10-alpha/Gateless_Gate_Sharp_1.1.10_alpha_Setup.msi) (Windows x64 Installer)
+* [Gateless_Gate_Sharp_1.1.10_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.10-alpha/Gateless_Gate_Sharp_1.1.10_alpha.7z)
+* [Gateless_Gate_Sharp_1.1.10_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.10-alpha/Gateless_Gate_Sharp_1.1.10_alpha.zip)
 * (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
 Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry, Lyra2REv2, NeoScrypt, and the following major anonymous pools by default: NiceHash, ethermine.org, ethpool.org, DwarfPool, Nanopool, mineXMR.com, and zpool. Support for custom pools has also been added. All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
