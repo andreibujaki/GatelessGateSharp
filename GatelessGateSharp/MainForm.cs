@@ -43,7 +43,9 @@ namespace GatelessGateSharp
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, EntryPoint = "GlobalMemoryStatusEx", SetLastError = true)]
         static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
-
+        [DllImport("kernel32.dll")]
+        public static extern uint SetThreadExecutionState(uint esFlags);
+         
         [StructLayout(LayoutKind.Sequential)]
         internal class MemoryStatusEx {
             public uint dwLength;
@@ -59,11 +61,15 @@ namespace GatelessGateSharp
             {
                 this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
             }
-        }
-
+        } 
+        
+        public const uint ES_CONTINUOUS = 0x80000000;
+        public const uint ES_SYSTEM_REQUIRED = 0x00000001;
+        public const uint ES_AWAYMODE_REQUIRED = 0x00000040;
+        
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.10";
+        public static string appVersion = "1.1.12";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -194,7 +200,7 @@ namespace GatelessGateSharp
                 Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
                     TaskScheduler.FromCurrentSynchronizationContext());
                 w.BringToFront();
-                var result = MessageBox.Show(w, "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                var result = MessageBox.Show(w, "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
                 if (result == DialogResult.Yes) {
                     try {
                         var process = new System.Diagnostics.Process();
@@ -1144,6 +1150,8 @@ namespace GatelessGateSharp
             Logger(appName + " started.");
 
             CheckVirtualMemorySize();
+
+            SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
 
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
@@ -3822,6 +3830,78 @@ namespace GatelessGateSharp
                     newFanSpeed = minFanSpeed;
                 device.FanSpeed = newFanSpeed;
             }
+        }
+
+        private void buttonConfigureAutomaticLogin_Click(object sender, EventArgs e) {
+            var process = new System.Diagnostics.Process();
+            var startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+            startInfo.FileName = "netplwiz";
+            startInfo.Arguments = "";
+            process.StartInfo = startInfo;
+            process.Start();
+            //process.WaitForExit();
+        }
+
+        private void buttonDisableAuomaticRepair_Click(object sender, EventArgs e) {
+            var process = new System.Diagnostics.Process();
+            var startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+            startInfo.FileName = "bcdedit";
+            startInfo.Arguments = "/set recoveryenabled NO";
+            process.StartInfo = startInfo;
+            process.Start();
+            //process.WaitForExit();
+
+            MessageBox.Show("Automatic Repair has been disabled.", appName, MessageBoxButtons.OK);
+        }
+
+        private void buttonDisableDriverInstallation_Click(object sender, EventArgs e) {
+            try {
+                Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata", "PreventDeviceMetadataFromNetwork", 1);
+                MessageBox.Show("Automatic driver installation has been disabled.", appName, MessageBoxButtons.OK);
+            } catch (Exception) { }
+        }
+
+        private void buttonDeviceInstallationSettings_Click(object sender, EventArgs e) {
+            var process = new System.Diagnostics.Process();
+            var startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+            startInfo.FileName = "rundll32";
+            startInfo.Arguments = "newdev.dll,DeviceInternetSettingUi 2";
+            process.StartInfo = startInfo;
+            process.Start();
+            //process.WaitForExit();
+        }
+
+        private void buttonInstallRecommendedAMDDriver_Click(object sender, EventArgs e) {
+            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx");
+        }
+
+        private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e) {
+            System.Diagnostics.Process.Start("http://www.guru3d.com/files-details/display-driver-uninstaller-download.html");
+        }
+
+        private void buttonUserAccountControlSettings_Click(object sender, EventArgs e) {
+            var process = new System.Diagnostics.Process();
+            var startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+            startInfo.FileName = "useraccountcontrolsettings";
+            startInfo.Arguments = "";
+            process.StartInfo = startInfo;
+            process.Start();
+            //process.WaitForExit();
+        }
+
+        private void buttonDisableUserAccountControl_Click(object sender, EventArgs e) {
+            try {
+                Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableLUA", 1);
+                MessageBox.Show("User Account Control has been disabled.", appName, MessageBoxButtons.OK);
+            } catch (Exception) { }
         }
     }
 }

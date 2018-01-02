@@ -175,6 +175,8 @@ namespace GatelessGateSharp
             return devices;
         }
 
+        static List<OpenCLDummyLbryMiner> sDummyMinerList = new List<OpenCLDummyLbryMiner> { }; // Keep everything until the miner quits.
+                                            
         public static bool InitializeADL(OpenCLDevice[] mDevices) {
             var ADLRet = -1;
             var NumberOfAdapters = 0;
@@ -234,6 +236,7 @@ namespace GatelessGateSharp
                                             }
                                         } else {
                                             OpenCLDummyLbryMiner dummyMiner = new OpenCLDummyLbryMiner(device);
+                                            sDummyMinerList.Add(dummyMiner);
                                             dummyMiner.Start();
                                             System.Threading.Thread.Sleep(3000);
                                             int candidate = -1;

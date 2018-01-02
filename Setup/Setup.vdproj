@@ -562,31 +562,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_005BA131E503E55D3259C325B392A218"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_ADA849628BC355DC41F4B2D4F6ACE3E5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_41D73E71863A5CF344DE0BC191304925"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
+        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -598,7 +574,31 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_41D73E71863A5CF344DE0BC191304925"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_ADA849628BC355DC41F4B2D4F6ACE3E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_005BA131E503E55D3259C325B392A218"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -641,7 +641,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_1.1.10_alpha_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_1.1.12_alpha_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -700,9 +700,14 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.1.12.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_005BA131E503E55D3259C325B392A218"
+                    {
+                    "Name" = "8:Cloo.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Cloo.DLL"
             "TargetName" = "8:"
@@ -1046,9 +1051,14 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ManagedNvml, Version=8.0.14.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:ManagedNvml, Version=8.0.14.1, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_2A178B97B26AE0AD8808019FC59D99C0"
+                    {
+                    "Name" = "8:ManagedNvml.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:ManagedNvml.DLL"
             "TargetName" = "8:"
@@ -1192,9 +1202,14 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HashLib, Version=2.1.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:HashLib, Version=2.1.0.1, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_41D73E71863A5CF344DE0BC191304925"
+                    {
+                    "Name" = "8:HashLib.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:HashLib.DLL"
             "TargetName" = "8:"
@@ -1298,7 +1313,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.1.9.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.1.12.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_558AC528A5344188B265CAF48F34D908"
@@ -2009,9 +2024,14 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.1.12.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_ADA849628BC355DC41F4B2D4F6ACE3E5"
+                    {
+                    "Name" = "8:DeviceSettingsUserControl.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:DeviceSettingsUserControl.DLL"
             "TargetName" = "8:"
@@ -2098,6 +2118,11 @@
             "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_D5E0043C4E894C579440EACD8A99AF6D"
+                    {
+                    "Name" = "8:Newtonsoft.Json.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Newtonsoft.Json.DLL"
             "TargetName" = "8:"
@@ -2184,6 +2209,11 @@
             "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_DA26F0A023D7F9002E8409A3798624AE"
+                    {
+                    "Name" = "8:System.Data.SQLite.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:System.Data.SQLite.DLL"
             "TargetName" = "8:"
@@ -2267,7 +2297,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.1.9.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.1.12.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_DFDCB3E1FD61424AB847293197EEA140"
@@ -2665,15 +2695,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
-        "ProductCode" = "8:{8F44CEE5-7D33-442D-84B8-D0B180D6B89E}"
-        "PackageCode" = "8:{2E707776-AAF2-4633-9A8A-FF9E83DF21BF}"
+        "ProductCode" = "8:{94AC181C-235E-4B44-9870-A03A9CA5A059}"
+        "PackageCode" = "8:{6D60E953-7444-4975-B68C-F91C02F7886F}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.10"
+        "ProductVersion" = "8:1.1.12"
         "Manufacturer" = "8:Zawawa Software LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

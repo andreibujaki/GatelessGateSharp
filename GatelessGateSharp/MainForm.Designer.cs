@@ -197,6 +197,15 @@
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabControlDeviceSettings = new System.Windows.Forms.TabControl();
             this.tabPageMiscSettings = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonDisableUserAccountControl = new System.Windows.Forms.Button();
+            this.buttonDisableUserAccountControlSettings = new System.Windows.Forms.Button();
+            this.buttonDownloadDisplayDriverUninstaller = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.buttonConfigureAutomaticLogin = new System.Windows.Forms.Button();
+            this.buttonInstallRecommendedAMDDriver = new System.Windows.Forms.Button();
+            this.buttonDisableAuomaticRepair = new System.Windows.Forms.Button();
+            this.buttonDisableDriverInstallation = new System.Windows.Forms.Button();
             this.groupBoxAutomation = new System.Windows.Forms.GroupBox();
             this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
             this.checkBoxAutoStart = new System.Windows.Forms.CheckBox();
@@ -243,6 +252,7 @@
             this.tabPageDeviceSettings.SuspendLayout();
             this.groupBoxHadrwareAcceleration.SuspendLayout();
             this.tabPageMiscSettings.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBoxAutomation.SuspendLayout();
             this.tabPageLog.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
@@ -1920,6 +1930,7 @@
             // 
             // tabPageMiscSettings
             // 
+            this.tabPageMiscSettings.Controls.Add(this.groupBox1);
             this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
             this.tabPageMiscSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageMiscSettings.Name = "tabPageMiscSettings";
@@ -1927,6 +1938,103 @@
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonDisableUserAccountControl);
+            this.groupBox1.Controls.Add(this.buttonDisableUserAccountControlSettings);
+            this.groupBox1.Controls.Add(this.buttonDownloadDisplayDriverUninstaller);
+            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.buttonConfigureAutomaticLogin);
+            this.groupBox1.Controls.Add(this.buttonInstallRecommendedAMDDriver);
+            this.groupBox1.Controls.Add(this.buttonDisableAuomaticRepair);
+            this.groupBox1.Controls.Add(this.buttonDisableDriverInstallation);
+            this.groupBox1.Location = new System.Drawing.Point(203, 4);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(261, 253);
+            this.groupBox1.TabIndex = 41;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "System Configurations";
+            // 
+            // buttonDisableUserAccountControl
+            // 
+            this.buttonDisableUserAccountControl.Location = new System.Drawing.Point(6, 222);
+            this.buttonDisableUserAccountControl.Name = "buttonDisableUserAccountControl";
+            this.buttonDisableUserAccountControl.Size = new System.Drawing.Size(249, 23);
+            this.buttonDisableUserAccountControl.TabIndex = 43;
+            this.buttonDisableUserAccountControl.Text = "Disable User Account Control";
+            this.buttonDisableUserAccountControl.UseVisualStyleBackColor = true;
+            this.buttonDisableUserAccountControl.Click += new System.EventHandler(this.buttonDisableUserAccountControl_Click);
+            // 
+            // buttonDisableUserAccountControlSettings
+            // 
+            this.buttonDisableUserAccountControlSettings.Location = new System.Drawing.Point(6, 193);
+            this.buttonDisableUserAccountControlSettings.Name = "buttonDisableUserAccountControlSettings";
+            this.buttonDisableUserAccountControlSettings.Size = new System.Drawing.Size(249, 23);
+            this.buttonDisableUserAccountControlSettings.TabIndex = 42;
+            this.buttonDisableUserAccountControlSettings.Text = "User Account Control Settings";
+            this.buttonDisableUserAccountControlSettings.UseVisualStyleBackColor = true;
+            this.buttonDisableUserAccountControlSettings.Click += new System.EventHandler(this.buttonUserAccountControlSettings_Click);
+            // 
+            // buttonDownloadDisplayDriverUninstaller
+            // 
+            this.buttonDownloadDisplayDriverUninstaller.Location = new System.Drawing.Point(6, 77);
+            this.buttonDownloadDisplayDriverUninstaller.Name = "buttonDownloadDisplayDriverUninstaller";
+            this.buttonDownloadDisplayDriverUninstaller.Size = new System.Drawing.Size(249, 23);
+            this.buttonDownloadDisplayDriverUninstaller.TabIndex = 41;
+            this.buttonDownloadDisplayDriverUninstaller.Text = "Download Display Driver Uninstaller";
+            this.buttonDownloadDisplayDriverUninstaller.UseVisualStyleBackColor = true;
+            this.buttonDownloadDisplayDriverUninstaller.Click += new System.EventHandler(this.buttonDownloadDisplayDriverUninstaller_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 19);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(249, 23);
+            this.button1.TabIndex = 40;
+            this.button1.Text = "Driver Installation Settings";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.buttonDeviceInstallationSettings_Click);
+            // 
+            // buttonConfigureAutomaticLogin
+            // 
+            this.buttonConfigureAutomaticLogin.Location = new System.Drawing.Point(6, 135);
+            this.buttonConfigureAutomaticLogin.Name = "buttonConfigureAutomaticLogin";
+            this.buttonConfigureAutomaticLogin.Size = new System.Drawing.Size(249, 23);
+            this.buttonConfigureAutomaticLogin.TabIndex = 36;
+            this.buttonConfigureAutomaticLogin.Text = "Configure Automatic Login";
+            this.buttonConfigureAutomaticLogin.UseVisualStyleBackColor = true;
+            this.buttonConfigureAutomaticLogin.Click += new System.EventHandler(this.buttonConfigureAutomaticLogin_Click);
+            // 
+            // buttonInstallRecommendedAMDDriver
+            // 
+            this.buttonInstallRecommendedAMDDriver.Location = new System.Drawing.Point(6, 106);
+            this.buttonInstallRecommendedAMDDriver.Name = "buttonInstallRecommendedAMDDriver";
+            this.buttonInstallRecommendedAMDDriver.Size = new System.Drawing.Size(249, 23);
+            this.buttonInstallRecommendedAMDDriver.TabIndex = 39;
+            this.buttonInstallRecommendedAMDDriver.Text = "Download Recommended AMD Driver";
+            this.buttonInstallRecommendedAMDDriver.UseVisualStyleBackColor = true;
+            this.buttonInstallRecommendedAMDDriver.Click += new System.EventHandler(this.buttonInstallRecommendedAMDDriver_Click);
+            // 
+            // buttonDisableAuomaticRepair
+            // 
+            this.buttonDisableAuomaticRepair.Location = new System.Drawing.Point(6, 164);
+            this.buttonDisableAuomaticRepair.Name = "buttonDisableAuomaticRepair";
+            this.buttonDisableAuomaticRepair.Size = new System.Drawing.Size(249, 23);
+            this.buttonDisableAuomaticRepair.TabIndex = 37;
+            this.buttonDisableAuomaticRepair.Text = "Disable Automatic Repair";
+            this.buttonDisableAuomaticRepair.UseVisualStyleBackColor = true;
+            this.buttonDisableAuomaticRepair.Click += new System.EventHandler(this.buttonDisableAuomaticRepair_Click);
+            // 
+            // buttonDisableDriverInstallation
+            // 
+            this.buttonDisableDriverInstallation.Location = new System.Drawing.Point(6, 48);
+            this.buttonDisableDriverInstallation.Name = "buttonDisableDriverInstallation";
+            this.buttonDisableDriverInstallation.Size = new System.Drawing.Size(249, 23);
+            this.buttonDisableDriverInstallation.TabIndex = 38;
+            this.buttonDisableDriverInstallation.Text = "Disable Driver Installation";
+            this.buttonDisableDriverInstallation.UseVisualStyleBackColor = true;
+            this.buttonDisableDriverInstallation.Click += new System.EventHandler(this.buttonDisableDriverInstallation_Click);
             // 
             // groupBoxAutomation
             // 
@@ -2175,6 +2283,7 @@
             this.groupBoxHadrwareAcceleration.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.PerformLayout();
             this.tabPageMiscSettings.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.groupBoxAutomation.ResumeLayout(false);
             this.groupBoxAutomation.PerformLayout();
             this.tabPageLog.ResumeLayout(false);
@@ -2367,5 +2476,14 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripMainFormProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Timer timerFanControl;
+        private System.Windows.Forms.Button buttonConfigureAutomaticLogin;
+        private System.Windows.Forms.Button buttonDisableAuomaticRepair;
+        private System.Windows.Forms.Button buttonDisableDriverInstallation;
+        private System.Windows.Forms.Button buttonInstallRecommendedAMDDriver;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonDownloadDisplayDriverUninstaller;
+        private System.Windows.Forms.Button buttonDisableUserAccountControl;
+        private System.Windows.Forms.Button buttonDisableUserAccountControlSettings;
     }
 }

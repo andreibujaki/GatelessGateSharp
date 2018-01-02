@@ -20,7 +20,6 @@ namespace GatelessGateSharp
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
         private List<ComputeDevice> mDeviceList;
 
-
         public virtual String GetVendor() { return ""; }
         public virtual String GetName() { return ""; }
         
