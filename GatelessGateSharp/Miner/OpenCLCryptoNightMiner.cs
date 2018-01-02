@@ -47,6 +47,10 @@ namespace GatelessGateSharp
         static Mutex mProgramArrayMutex = new Mutex();
 
         static Dictionary<ProgramArrayIndex, ComputeProgram> mProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
+        static Dictionary<ProgramArrayIndex, ComputeKernel> mSearchKernel0Array = new Dictionary<ProgramArrayIndex, ComputeKernel>();
+        static Dictionary<ProgramArrayIndex, ComputeKernel> mSearchKernel1Array = new Dictionary<ProgramArrayIndex, ComputeKernel>();
+        static Dictionary<ProgramArrayIndex, ComputeKernel> mSearchKernel2Array = new Dictionary<ProgramArrayIndex, ComputeKernel>();
+        static Dictionary<ProgramArrayIndex, ComputeKernel> mSearchKernel3Array = new Dictionary<ProgramArrayIndex, ComputeKernel>();
         ComputeKernel searchKernel0 = null;
         ComputeKernel searchKernel1 = null;
         ComputeKernel searchKernel2 = null;
@@ -63,6 +67,9 @@ namespace GatelessGateSharp
         public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "CryptoNight")
         {
+            inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
+            outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
+            terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1);
         }
 
         public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false)
@@ -73,12 +80,6 @@ namespace GatelessGateSharp
             if (globalWorkSizeA[0] % aLocalWorkSize != 0)
                 globalWorkSizeA[0] = globalWorkSizeB[0] = aLocalWorkSize - globalWorkSizeA[0] % aLocalWorkSize;
             mNicehashMode = aNicehashMode;
-
-            if (localWorkSizeA[0] != aLocalWorkSize)
-            {
-                scratchpadsBuffer = null;
-                statesBuffer = null;
-            }
 
             base.Start();
         }
@@ -100,6 +101,10 @@ namespace GatelessGateSharp
             if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])))
             {
                 program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
+                searchKernel0 = mSearchKernel0Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
+                searchKernel1 = mSearchKernel1Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
+                searchKernel2 = mSearchKernel2Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
+                searchKernel3 = mSearchKernel3Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
             } 
             else
             {
@@ -131,22 +136,18 @@ namespace GatelessGateSharp
                     MainForm.Logger(program.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built cryptonight program for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built CryptoNight program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = program;
+                mSearchKernel0Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = searchKernel0 = program.CreateKernel("search");
+                mSearchKernel1Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = searchKernel1 = program.CreateKernel("search1");
+                mSearchKernel2Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = searchKernel2 = program.CreateKernel("search2");
+                mSearchKernel3Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = searchKernel3 = program.CreateKernel("search3");
             }
             try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
 
-            if (searchKernel0 == null) searchKernel0 = program.CreateKernel("search");
-            if (searchKernel1 == null) searchKernel1 = program.CreateKernel("search1");
-            if (searchKernel2 == null) searchKernel2 = program.CreateKernel("search2");
-            if (searchKernel3 == null) searchKernel3 = program.CreateKernel("search3");
-            if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + globalWorkSizeA[0]);
-            if (inputBuffer == null) inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
-            if (outputBuffer == null) outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
-            if (terminateBuffer == null) terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1);
-            if (scratchpadsBuffer == null) scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
-
+            using (var statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + globalWorkSizeA[0]))
+            using (var scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]))
             fixed (long* globalWorkOffsetAPtr = globalWorkOffsetA)
             fixed (long* globalWorkOffsetBPtr = globalWorkOffsetB)
             fixed (long* globalWorkSizeAPtr = globalWorkSizeA)

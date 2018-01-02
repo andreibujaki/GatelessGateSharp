@@ -105,7 +105,7 @@ namespace GatelessGateSharp
                     MainForm.Logger(mEthashProgram.GetBuildLog(computeDevice));
                     throw;
                 }
-                MainForm.Logger("Built ethash mEthashProgram for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Built Ethash program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
                 mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
                 mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");

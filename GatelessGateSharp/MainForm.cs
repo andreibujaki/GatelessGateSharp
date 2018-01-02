@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.12";
+        public static string appVersion = "1.1.13";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1156,6 +1156,13 @@ namespace GatelessGateSharp
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
             Application.DoEvents();
+
+
+            try {
+                RunNGen();
+            } catch (Exception ex) {
+                Logger("Exception in RunNGen(): " + ex.Message + ex.StackTrace);
+            }
 
             try {
                 InitializeDevices();
@@ -3908,6 +3915,49 @@ namespace GatelessGateSharp
                 Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableLUA", 1);
                 MessageBox.Show("User Account Control has been disabled.", appName, MessageBoxButtons.OK);
             } catch (Exception) { }
+        }
+
+        private void RunNGen() {
+            var process = new System.Diagnostics.Process();
+            var startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+            startInfo.FileName = @"C:\Windows\Microsoft.Net\Framework64\v4.0.30319\ngen.exe";
+
+            startInfo.Arguments = "install GatelessGateSharp.exe";
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+
+            startInfo.Arguments = "install GatelessGateSharpMonitor.exe";
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+
+            startInfo.Arguments = "install Cloo.dll";
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+
+            startInfo.Arguments = "install DeviceSettingsUserControl.dll";
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+
+            startInfo.Arguments = "install HashLib.dll";
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+
+            startInfo.Arguments = "install ManagedCuda.dll";
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+
+            startInfo.Arguments = "install Nvml.dll";
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
         }
     }
 }
