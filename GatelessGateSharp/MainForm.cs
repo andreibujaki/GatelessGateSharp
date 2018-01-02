@@ -1173,6 +1173,12 @@ namespace GatelessGateSharp
                 LoadDatabase();
             } catch (Exception ex) {
                 Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
+                try {
+                    System.IO.File.Delete(databaseFileName);
+                    CreateNewDatabase();
+                } catch (Exception ex2) {
+                    Logger("Exception: " + ex2.Message + ex2.StackTrace);
+                }
             }
 
             if (checkBoxEnablePhymem.Checked) {
