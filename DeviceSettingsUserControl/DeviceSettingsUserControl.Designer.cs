@@ -153,6 +153,9 @@
             this.label28 = new System.Windows.Forms.Label();
             this.numericUpDown26 = new System.Windows.Forms.NumericUpDown();
             this.label27 = new System.Windows.Forms.Label();
+            this.buttonResetToDefault = new System.Windows.Forms.Button();
+            this.buttonCopyToOthers = new System.Windows.Forms.Button();
+            this.buttonResetAll = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -2210,14 +2213,14 @@
             this.groupBox13.Controls.Add(this.label188);
             this.groupBox13.Location = new System.Drawing.Point(7, 4);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(443, 75);
+            this.groupBox13.Size = new System.Drawing.Size(484, 75);
             this.groupBox13.TabIndex = 65;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Fan Control";
             // 
             // numericUpDown28
             // 
-            this.numericUpDown28.Location = new System.Drawing.Point(376, 45);
+            this.numericUpDown28.Location = new System.Drawing.Point(389, 45);
             this.numericUpDown28.Minimum = new decimal(new int[] {
             20,
             0,
@@ -2236,7 +2239,7 @@
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(263, 47);
+            this.label29.Location = new System.Drawing.Point(276, 47);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(105, 13);
             this.label29.TabIndex = 236;
@@ -2245,7 +2248,7 @@
             // 
             // numericUpDown27
             // 
-            this.numericUpDown27.Location = new System.Drawing.Point(376, 19);
+            this.numericUpDown27.Location = new System.Drawing.Point(389, 19);
             this.numericUpDown27.Minimum = new decimal(new int[] {
             20,
             0,
@@ -2264,7 +2267,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(263, 21);
+            this.label28.Location = new System.Drawing.Point(276, 21);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(102, 13);
             this.label28.TabIndex = 234;
@@ -2303,14 +2306,47 @@
             this.label27.Tag = "";
             this.label27.Text = "Max. Temperature (℃):";
             // 
+            // buttonResetToDefault
+            // 
+            this.buttonResetToDefault.Location = new System.Drawing.Point(497, 38);
+            this.buttonResetToDefault.Name = "buttonResetToDefault";
+            this.buttonResetToDefault.Size = new System.Drawing.Size(130, 23);
+            this.buttonResetToDefault.TabIndex = 66;
+            this.buttonResetToDefault.Text = "Reset to Default";
+            this.buttonResetToDefault.UseVisualStyleBackColor = true;
+            this.buttonResetToDefault.Click += new System.EventHandler(this.buttonResetToDefault_Click);
+            // 
+            // buttonCopyToOthers
+            // 
+            this.buttonCopyToOthers.Location = new System.Drawing.Point(497, 9);
+            this.buttonCopyToOthers.Name = "buttonCopyToOthers";
+            this.buttonCopyToOthers.Size = new System.Drawing.Size(130, 23);
+            this.buttonCopyToOthers.TabIndex = 67;
+            this.buttonCopyToOthers.Text = "Copy to Similar Devices";
+            this.buttonCopyToOthers.UseVisualStyleBackColor = true;
+            this.buttonCopyToOthers.Click += new System.EventHandler(this.buttonCopyToOthers_Click);
+            // 
+            // buttonResetAll
+            // 
+            this.buttonResetAll.Location = new System.Drawing.Point(497, 67);
+            this.buttonResetAll.Name = "buttonResetAll";
+            this.buttonResetAll.Size = new System.Drawing.Size(130, 23);
+            this.buttonResetAll.TabIndex = 68;
+            this.buttonResetAll.Text = "Reset All";
+            this.buttonResetAll.UseVisualStyleBackColor = true;
+            this.buttonResetAll.Click += new System.EventHandler(this.buttonResetAll_Click);
+            // 
             // DeviceSettingsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonResetAll);
+            this.Controls.Add(this.buttonCopyToOthers);
+            this.Controls.Add(this.buttonResetToDefault);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBox13);
             this.Name = "DeviceSettingsUserControl";
-            this.Size = new System.Drawing.Size(698, 274);
+            this.Size = new System.Drawing.Size(635, 258);
             this.tabControl1.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
@@ -2521,5 +2557,8 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.NumericUpDown numericUpDown26;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Button buttonResetToDefault;
+        private System.Windows.Forms.Button buttonCopyToOthers;
+        private System.Windows.Forms.Button buttonResetAll;
     }
 }

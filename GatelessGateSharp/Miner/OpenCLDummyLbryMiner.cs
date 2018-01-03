@@ -53,7 +53,7 @@ namespace GatelessGateSharp
             mIterations = (aGatelessGateDevice.GetVendor() == "NVIDIA") ? 8 : 1;
         }
 
-        public void Start(int aLbryIntensity = 1024, int aLbryLocalWorkSize = 256)
+        public void Start(int aLbryIntensity = 1, int aLbryLocalWorkSize = 256)
         {
             mLbryGlobalWorkSizeArray[0] = aLbryIntensity * OpenCLDevice.GetMaxComputeUnits();
             mLbryLocalWorkSizeArray[0] = aLbryLocalWorkSize;
@@ -170,26 +170,19 @@ namespace GatelessGateSharp
                         }
                     }
                 } catch (Exception ex) {
-                    MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    MainForm.Logger("Restarting miner thread...");
+                    MainForm.Logger("Exception in dummy miner thread: " + ex.Message + ex.StackTrace);
+                    MainForm.Logger("Restarting dummy miner thread...");
                 }
-
-                Speed = 0;
-
-                if (!Stopped)
-                    System.Threading.Thread.Sleep(5000);
             }
-            MarkAsDone();
-        }
 
-        ~OpenCLDummyLbryMiner()   
-        {
             mLbryInputBuffer.Dispose();
             mLbryOutputBuffer.Dispose();
-            foreach (var pair in mLbrySearchKernelArray)
-                pair.Value.Dispose();
+            //foreach (var pair in mLbrySearchKernelArray)
+            //    pair.Value.Dispose();
             foreach (var pair in mLbryProgramArray)
                 pair.Value.Dispose();
+
+            MarkAsDone();
         }
     }
 }

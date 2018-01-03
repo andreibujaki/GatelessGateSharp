@@ -60,6 +60,7 @@ namespace GatelessGateSharp
         public OpenCLDevice(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex)
         {
+            ADLAdapterIndex = -1;
             mComputeDevice = aComputeDevice;
             if (GetVendor() == "AMD") {
                 mName = System.Text.Encoding.ASCII.GetString(mComputeDevice.BoardNameAMD)
@@ -175,8 +176,6 @@ namespace GatelessGateSharp
             return devices;
         }
 
-        static List<OpenCLDummyLbryMiner> sDummyMinerList = new List<OpenCLDummyLbryMiner> { }; // Keep everything until the miner quits.
-                                            
         public static bool InitializeADL(OpenCLDevice[] mDevices) {
             var ADLRet = -1;
             var NumberOfAdapters = 0;
@@ -211,6 +210,8 @@ namespace GatelessGateSharp
                             }
                             if (adrenalineWorkaroundRequired) {
                                 // workaround for Adrenalin drivers as PciBusIdAMD does not work properly.
+                                List<OpenCLDummyLbryMiner> dummyMinerList = new List<OpenCLDummyLbryMiner> { }; // Keep everything until the miner quits.
+
                                 MainForm.Logger("Manually matching OpenCL devices with ADL devices...");
                                 List<int> taken = new List<int> { };
                                 foreach (var device in mDevices) {
@@ -236,9 +237,9 @@ namespace GatelessGateSharp
                                             }
                                         } else {
                                             OpenCLDummyLbryMiner dummyMiner = new OpenCLDummyLbryMiner(device);
-                                            sDummyMinerList.Add(dummyMiner);
+                                            dummyMinerList.Add(dummyMiner);
                                             dummyMiner.Start();
-                                            System.Threading.Thread.Sleep(3000);
+                                            System.Threading.Thread.Sleep(1000);
                                             int candidate = -1;
                                             int candidateActivity = 0;
                                             for (var i = 0; i < NumberOfAdapters; ++i) {
@@ -268,7 +269,17 @@ namespace GatelessGateSharp
                                                 device.ADLAdapterIndex = candidate;
                                                 taken.Add(OSAdapterInfoData.ADLAdapterInfo[candidate].BusNumber);
                                             }
+
                                             dummyMiner.Stop();
+                                            for (int i = 0; i < 50; ++i) {
+                                                if (dummyMiner.Stopped)
+                                                    break;
+                                                System.Threading.Thread.Sleep(100);
+                                            }
+                                            if (!dummyMiner.Stopped) {
+                                                MainForm.Logger("Failed at matching OpenCL devices with ADL devices. Restarting...");
+                                                System.Windows.Forms.Application.Exit();
+                                            }
                                         }
                                     }
                                 }

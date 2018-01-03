@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.13";
+        public static string appVersion = "1.1.14";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -115,6 +115,10 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceFanControlMaximumTemperatureArray;
         private NumericUpDown[] numericUpDownDeviceFanControlMinimumFanSpeedArray;
         private NumericUpDown[] numericUpDownDeviceFanControlMaximumFanSpeedArray;
+
+        private Button[] buttonDeviceResetToDefaultArray;
+        private Button[] buttonDeviceResetAllArray;
+        private Button[] buttonDeviceCopyToOthersArray;
 
         private OpenCLDevice[] mDevices;
         private bool ADLInitialized = false;
@@ -1288,15 +1292,28 @@ namespace GatelessGateSharp
             numericUpDownDeviceFanControlMaximumTemperatureArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceFanControlMinimumFanSpeedArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceFanControlMaximumFanSpeedArray = new NumericUpDown[mDevices.Length];
+
+            buttonDeviceResetToDefaultArray = new Button[mDevices.Length];
+            buttonDeviceResetAllArray = new Button[mDevices.Length];
+            buttonDeviceCopyToOthersArray = new Button[mDevices.Length];
             
             for (var i = 0; i < mDevices.Length; ++i) {
                 DeviceSettingsUserControl.DeviceSettingsUserControl uc = new DeviceSettingsUserControl.DeviceSettingsUserControl();
+
+                uc.GetType().GetProperty("Tag").SetValue(uc, i);
                 TabPage tp = new TabPage();
                 tp.Controls.Add(uc);
                 this.tabControlDeviceSettings.TabPages.Add(tp);
 
+                buttonDeviceResetToDefaultArray[i] = (Button)uc.Controls[0];
+                buttonDeviceResetAllArray[i] = (Button)uc.Controls[2];
+                buttonDeviceCopyToOthersArray[i] = (Button)uc.Controls[1];
+                uc.ButtonResetToDefaultClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetToDefaultClicked);
+                uc.ButtonResetAllClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetAllClicked);
+                uc.ButtonCopyToOthersClicked += new EventHandler(DeviceSettingsUserControl_ButtonCopyToOthersClicked);
+
                 tabPageDeviceArray[i] = tp;
-                foreach (var tabPage in uc.Controls[0].Controls) {
+                foreach (var tabPage in uc.Controls[3].Controls) {
                     foreach (var control in ((TabPage)tabPage).Controls) {
                         var tag = control.GetType().GetProperty("Tag").GetValue(control);
                         if (tag != null && (string)tag == "ethash_pascal_threads") {
@@ -1339,7 +1356,7 @@ namespace GatelessGateSharp
                     }
                 }
 
-                foreach (var control in ((GroupBox)uc.Controls[1]).Controls) {
+                foreach (var control in ((GroupBox)uc.Controls[4]).Controls) {
                     var tag = control.GetType().GetProperty("Tag").GetValue(control);
                     if (tag != null && (string)tag == "fan_control_enabled") {
                         checkBoxDeviceFanControlEnabledArray[i] = (CheckBox)control;
@@ -1390,50 +1407,115 @@ namespace GatelessGateSharp
             } else {
             }
 
-            foreach (var device in mDevices) {
-                tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName();
-                
-                // EthashPascal
-                numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
-                numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)2000;
-                numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 4 : 4);
-
-                // Ethash
-                numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = (decimal)1;
-                numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)2000;
-                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
-
-                // Lbry
-                numericUpDownDeviceLbryThreadsArray[device.DeviceIndex].Value = (decimal)1;
-                numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = (decimal)8192;
-                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
-
-                // Pasacal
-                numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = (decimal)2;
-                numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = (decimal)8192;
-                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
-
-                // CryptoNight
-                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 2 : 1);
-                numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
-                numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
-                    = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 24 * device.GetMaxComputeUnits() :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 24 * device.GetMaxComputeUnits() :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 28 * device.GetMaxComputeUnits() :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 28 * device.GetMaxComputeUnits() :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Fury X/Nano" ? 14 * device.GetMaxComputeUnits() :
-                                device.GetVendor() == "AMD" ? 16 * device.GetMaxComputeUnits() :
-                                device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 32 * device.GetMaxComputeUnits() :
-                                                                                                    16 * device.GetMaxComputeUnits());
-            }
+            foreach (var device in mDevices)
+                ResetDeviceSettings(device);
 
             UpdateStatsWithShortPolling();
             timerDeviceStatusUpdates.Enabled = true;
             UpdateStatsWithLongPolling();
             timerCurrencyStatUpdates.Enabled = true;
+        }
+
+        void DeviceSettingsUserControl_ButtonResetToDefaultClicked(object sender, EventArgs e) {
+            int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
+            ResetDeviceSettings(mDevices[deviceIndex]);
+        }
+
+        void DeviceSettingsUserControl_ButtonResetAllClicked(object sender, EventArgs e) {
+            foreach (var device in mDevices)
+                ResetDeviceSettings(device);
+        }
+
+        void DeviceSettingsUserControl_ButtonCopyToOthersClicked(object sender, EventArgs e) {
+            int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
+            CopyDeviceSettings(deviceIndex);
+        }
+
+        private void ResetDeviceSettings(Device device) {
+            tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName();
+
+            numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)80;
+            numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)90;
+            numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)20;
+            numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = (decimal)100;
+
+            // EthashPascal
+            numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
+            numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)2000;
+            numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 4 : 4);
+
+            // Ethash
+            numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = (decimal)1;
+            numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)2000;
+            numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
+
+            // Lbry
+            numericUpDownDeviceLbryThreadsArray[device.DeviceIndex].Value = (decimal)1;
+            numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = (decimal)8192;
+            numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
+
+            // Pasacal
+            numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = (decimal)2;
+            numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = (decimal)8192;
+            numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
+
+            // CryptoNight
+            numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 2 : 1);
+            numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
+            numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
+                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 24 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 24 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 28 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 28 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 14 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 14 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" ? 14 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 32 * device.GetMaxComputeUnits() :
+                                                                                                16 * device.GetMaxComputeUnits());
+        }
+
+        private void CopyDeviceSettings(int sourceDeviceIndex) {
+            foreach (var device in mDevices) {
+                if (sourceDeviceIndex == device.DeviceIndex)
+                    continue;
+
+                numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlTargetTemperatureArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlMaximumTemperatureArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlMinimumFanSpeedArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlMaximumFanSpeedArray[sourceDeviceIndex].Value;
+
+                // EthashPascal
+                numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceEthashPascalThreadsArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceEthashPascalIntensityArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Value = numericUpDownDeviceEthashPascalPascalIterationsArray[sourceDeviceIndex].Value;
+
+                // Ethash
+                numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceEthashThreadsArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceEthashIntensityArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceEthashLocalWorkSizeArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceEthashLocalWorkSizeArray[sourceDeviceIndex].Value;
+
+                // Lbry
+                numericUpDownDeviceLbryThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceLbryThreadsArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceLbryIntensityArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceLbryLocalWorkSizeArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceLbryLocalWorkSizeArray[sourceDeviceIndex].Value;
+
+                // Pasacal
+                numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = numericUpDownDevicePascalThreadsArray[sourceDeviceIndex].Value;
+                numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = numericUpDownDevicePascalIntensityArray[sourceDeviceIndex].Value;
+                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDevicePascalLocalWorkSizeArray[sourceDeviceIndex].Value;
+                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDevicePascalLocalWorkSizeArray[sourceDeviceIndex].Value;
+
+                // CryptoNight
+                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightThreadsArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightLocalWorkSizeArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightRawIntensityArray[sourceDeviceIndex].Value;
+
+            }
         }
 
         private class CustomWebClient : System.Net.WebClient

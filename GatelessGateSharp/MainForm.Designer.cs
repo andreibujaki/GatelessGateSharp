@@ -574,7 +574,7 @@
             this.tabPagePoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPagePoolSettings.Name = "tabPagePoolSettings";
             this.tabPagePoolSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePoolSettings.Size = new System.Drawing.Size(723, 395);
+            this.tabPagePoolSettings.Size = new System.Drawing.Size(723, 456);
             this.tabPagePoolSettings.TabIndex = 0;
             this.tabPagePoolSettings.Text = "Default Pools";
             this.tabPagePoolSettings.UseVisualStyleBackColor = true;
@@ -1021,7 +1021,7 @@
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool0);
             this.tabPageCustomPoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustomPoolSettings.Name = "tabPageCustomPoolSettings";
-            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(723, 395);
+            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(723, 456);
             this.tabPageCustomPoolSettings.TabIndex = 6;
             this.tabPageCustomPoolSettings.Text = "Custom Pools";
             this.tabPageCustomPoolSettings.UseVisualStyleBackColor = true;
@@ -1861,7 +1861,7 @@
             this.tabPageDeviceSettings.Controls.Add(this.tabControlDeviceSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
-            this.tabPageDeviceSettings.Size = new System.Drawing.Size(723, 395);
+            this.tabPageDeviceSettings.Size = new System.Drawing.Size(723, 456);
             this.tabPageDeviceSettings.TabIndex = 3;
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
@@ -1872,9 +1872,9 @@
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox3);
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox2);
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBoxEnablePhymem);
-            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(10, 313);
+            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(3, 294);
             this.groupBoxHadrwareAcceleration.Name = "groupBoxHadrwareAcceleration";
-            this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(614, 65);
+            this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(641, 65);
             this.groupBoxHadrwareAcceleration.TabIndex = 1;
             this.groupBoxHadrwareAcceleration.TabStop = false;
             this.groupBoxHadrwareAcceleration.Text = "Hardware Acceleration";
@@ -1925,7 +1925,7 @@
             this.tabControlDeviceSettings.Location = new System.Drawing.Point(3, 3);
             this.tabControlDeviceSettings.Name = "tabControlDeviceSettings";
             this.tabControlDeviceSettings.SelectedIndex = 0;
-            this.tabControlDeviceSettings.Size = new System.Drawing.Size(714, 308);
+            this.tabControlDeviceSettings.Size = new System.Drawing.Size(643, 285);
             this.tabControlDeviceSettings.TabIndex = 0;
             // 
             // tabPageMiscSettings
@@ -1934,7 +1934,7 @@
             this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
             this.tabPageMiscSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageMiscSettings.Name = "tabPageMiscSettings";
-            this.tabPageMiscSettings.Size = new System.Drawing.Size(723, 395);
+            this.tabPageMiscSettings.Size = new System.Drawing.Size(723, 456);
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
@@ -2087,7 +2087,7 @@
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
             this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(723, 395);
+            this.tabPageLog.Size = new System.Drawing.Size(723, 456);
             this.tabPageLog.TabIndex = 1;
             this.tabPageLog.Text = "Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -2134,7 +2134,7 @@
             this.tabPageAbout.Controls.Add(this.richTextBoxAbout);
             this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
             this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Size = new System.Drawing.Size(723, 395);
+            this.tabPageAbout.Size = new System.Drawing.Size(723, 456);
             this.tabPageAbout.TabIndex = 5;
             this.tabPageAbout.Text = "About";
             this.tabPageAbout.UseVisualStyleBackColor = true;
