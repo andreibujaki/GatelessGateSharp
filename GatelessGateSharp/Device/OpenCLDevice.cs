@@ -176,6 +176,8 @@ namespace GatelessGateSharp
             return devices;
         }
 
+        static List<OpenCLDummyLbryMiner> dummyMinerList = new List<OpenCLDummyLbryMiner> { }; // Keep everything until the miner quits.
+
         public static bool InitializeADL(OpenCLDevice[] mDevices) {
             var ADLRet = -1;
             var NumberOfAdapters = 0;
@@ -210,8 +212,6 @@ namespace GatelessGateSharp
                             }
                             if (adrenalineWorkaroundRequired) {
                                 // workaround for Adrenalin drivers as PciBusIdAMD does not work properly.
-                                List<OpenCLDummyLbryMiner> dummyMinerList = new List<OpenCLDummyLbryMiner> { }; // Keep everything until the miner quits.
-
                                 MainForm.Logger("Manually matching OpenCL devices with ADL devices...");
                                 List<int> taken = new List<int> { };
                                 foreach (var device in mDevices) {

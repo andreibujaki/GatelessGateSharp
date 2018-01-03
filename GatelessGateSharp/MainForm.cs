@@ -1479,7 +1479,9 @@ namespace GatelessGateSharp
 
         private void CopyDeviceSettings(int sourceDeviceIndex) {
             foreach (var device in mDevices) {
-                if (sourceDeviceIndex == device.DeviceIndex)
+                if (sourceDeviceIndex == device.DeviceIndex
+                    || device.GetVendor() != mDevices[sourceDeviceIndex].GetVendor()
+                    || device.GetName() != mDevices[sourceDeviceIndex].GetName())
                     continue;
 
                 numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlTargetTemperatureArray[sourceDeviceIndex].Value;

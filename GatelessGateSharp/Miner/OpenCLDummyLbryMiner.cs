@@ -175,12 +175,12 @@ namespace GatelessGateSharp
                 }
             }
 
-            mLbryInputBuffer.Dispose();
-            mLbryOutputBuffer.Dispose();
+            //mLbryInputBuffer.Dispose();
+            //mLbryOutputBuffer.Dispose();
             //foreach (var pair in mLbrySearchKernelArray)
             //    pair.Value.Dispose();
-            foreach (var pair in mLbryProgramArray)
-                pair.Value.Dispose();
+            //foreach (var pair in mLbryProgramArray)
+            //   pair.Value.Dispose();
 
             MarkAsDone();
         }
