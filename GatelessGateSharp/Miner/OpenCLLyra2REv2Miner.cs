@@ -70,10 +70,8 @@ namespace GatelessGateSharp
 
         public void Start(Lyra2REv2Stratum aLyra2REv2Stratum, int aLyra2REv2Intensity, int aLyra2REv2LocalWorkSize) {
             mLyra2REv2Stratum = aLyra2REv2Stratum;
-            mLyra2REv2GlobalWorkSizeArray[0] = aLyra2REv2Intensity * OpenCLDevice.GetMaxComputeUnits();
+            mLyra2REv2GlobalWorkSizeArray[0] = aLyra2REv2Intensity * OpenCLDevice.GetMaxComputeUnits() * aLyra2REv2LocalWorkSize;
             mLyra2REv2LocalWorkSizeArray[0] = aLyra2REv2LocalWorkSize;
-            if (mLyra2REv2GlobalWorkSizeArray[0] % aLyra2REv2LocalWorkSize != 0)
-                mLyra2REv2GlobalWorkSizeArray[0] = aLyra2REv2LocalWorkSize - mLyra2REv2GlobalWorkSizeArray[0] % aLyra2REv2LocalWorkSize;
 
             base.Start();
         }

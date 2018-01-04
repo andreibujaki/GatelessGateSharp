@@ -57,10 +57,8 @@ namespace GatelessGateSharp
         public void Start(LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
         {
             mLbryStratum = aLbryStratum;
-            mLbryGlobalWorkSizeArray[0] = aLbryIntensity * OpenCLDevice.GetMaxComputeUnits();
+            mLbryGlobalWorkSizeArray[0] = aLbryIntensity * OpenCLDevice.GetMaxComputeUnits() * aLbryLocalWorkSize;
             mLbryLocalWorkSizeArray[0] = aLbryLocalWorkSize;
-            if (mLbryGlobalWorkSizeArray[0] % aLbryLocalWorkSize != 0)
-                mLbryGlobalWorkSizeArray[0] = aLbryLocalWorkSize - mLbryGlobalWorkSizeArray[0] % aLbryLocalWorkSize;
 
             base.Start();
         }

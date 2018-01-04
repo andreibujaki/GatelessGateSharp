@@ -22,11 +22,13 @@ namespace GatelessGateSharp
 
         public virtual String GetVendor() { return ""; }
         public virtual String GetName() { return ""; }
-        
+        public virtual long GetMemorySize() { return 0; }
+        public virtual long GetMaxComputeUnits() { return 0; }
+
         public int DeviceIndex { get { return mDeviceIndex; } }
+        public long MemorySize { get { return GetMemorySize(); } }
         public int AcceptedShares { get { return mAcceptedShares; } }
         public int RejectedShares { get { return mRejectedShares; } }
-        public virtual long GetMaxComputeUnits()  { return 0; }
 
         public Device(int aDeviceIndex)
         {

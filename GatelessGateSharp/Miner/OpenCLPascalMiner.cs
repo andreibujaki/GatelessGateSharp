@@ -62,10 +62,8 @@ namespace GatelessGateSharp
         public void Start(PascalStratum aPascalStratum, int aPascalIntensity, int aPascalLocalWorkSize)
         {
             mPascalStratum = aPascalStratum;
-            mPascalGlobalWorkSizeArray[0] = aPascalIntensity * OpenCLDevice.GetMaxComputeUnits();
+            mPascalGlobalWorkSizeArray[0] = aPascalIntensity * OpenCLDevice.GetMaxComputeUnits() * aPascalLocalWorkSize;
             mPascalLocalWorkSizeArray[0] = aPascalLocalWorkSize;
-            if (mPascalGlobalWorkSizeArray[0] % aPascalLocalWorkSize != 0)
-                mPascalGlobalWorkSizeArray[0] = aPascalLocalWorkSize - mPascalGlobalWorkSizeArray[0] % aPascalLocalWorkSize;
 
             base.Start();
         }

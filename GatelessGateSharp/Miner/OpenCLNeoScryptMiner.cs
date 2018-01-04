@@ -56,10 +56,8 @@ namespace GatelessGateSharp
 
         public void Start(NeoScryptStratum aNeoScryptStratum, int aNeoScryptIntensity, int aNeoScryptLocalWorkSize) {
             mNeoScryptStratum = aNeoScryptStratum;
-            mNeoScryptGlobalWorkSizeArray[0] = aNeoScryptIntensity * OpenCLDevice.GetMaxComputeUnits();
+            mNeoScryptGlobalWorkSizeArray[0] = aNeoScryptIntensity * OpenCLDevice.GetMaxComputeUnits() * aNeoScryptLocalWorkSize;
             mNeoScryptLocalWorkSizeArray[0] = aNeoScryptLocalWorkSize;
-            if (mNeoScryptGlobalWorkSizeArray[0] % aNeoScryptLocalWorkSize != 0)
-                mNeoScryptGlobalWorkSizeArray[0] = aNeoScryptLocalWorkSize - mNeoScryptGlobalWorkSizeArray[0] % aNeoScryptLocalWorkSize;
 
             base.Start();
         }

@@ -74,12 +74,18 @@ namespace GatelessGateSharp
 
         public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false)
         {
+            var prevGlobalWorkSize = globalWorkSizeA[0];
+
             mStratum = aStratum;
-            globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity;
+            globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity * aLocalWorkSize;
             localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
-            if (globalWorkSizeA[0] % aLocalWorkSize != 0)
-                globalWorkSizeA[0] = globalWorkSizeB[0] = aLocalWorkSize - globalWorkSizeA[0] % aLocalWorkSize;
             mNicehashMode = aNicehashMode;
+
+            if (prevGlobalWorkSize != 0 && prevGlobalWorkSize != globalWorkSizeA[0])
+                Environment.Exit(1);
+
+            if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]);
+            if (scratchpadsBuffer == null) scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
 
             base.Start();
         }
@@ -146,8 +152,6 @@ namespace GatelessGateSharp
             }
             try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
 
-            using (var statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 + globalWorkSizeA[0]))
-            using (var scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0])) {
             fixed (long* globalWorkOffsetAPtr = globalWorkOffsetA)
             fixed (long* globalWorkOffsetBPtr = globalWorkOffsetB)
             fixed (long* globalWorkSizeAPtr = globalWorkSizeA)
@@ -156,7 +160,7 @@ namespace GatelessGateSharp
             fixed (long* localWorkSizeBPtr = localWorkSizeB)
             fixed (Int32* terminatePtr = terminate)
             fixed (byte* inputPtr = input)
-            fixed (UInt32* outputPtr = output)
+            fixed (UInt32* outputPtr = output) {
                 while (!Stopped) {
                     MarkAsAlive();
 
@@ -278,8 +282,8 @@ namespace GatelessGateSharp
                     if (!Stopped)
                         System.Threading.Thread.Sleep(5000);
                 }
-                ((Cloo.ComputeResource)statesBuffer).Dispose();
-                ((Cloo.ComputeResource)scratchpadsBuffer).Dispose();
+                //((Cloo.ComputeResource)statesBuffer).Dispose();
+                //((Cloo.ComputeResource)scratchpadsBuffer).Dispose();
             }
             MarkAsDone();
         }

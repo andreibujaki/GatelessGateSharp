@@ -53,12 +53,10 @@ namespace GatelessGateSharp
             mIterations = (aGatelessGateDevice.GetVendor() == "NVIDIA") ? 8 : 1;
         }
 
-        public void Start(int aLbryIntensity = 1, int aLbryLocalWorkSize = 256)
+        public void Start(int aLbryIntensity = 256, int aLbryLocalWorkSize = 256)
         {
-            mLbryGlobalWorkSizeArray[0] = aLbryIntensity * OpenCLDevice.GetMaxComputeUnits();
+            mLbryGlobalWorkSizeArray[0] = aLbryIntensity * OpenCLDevice.GetMaxComputeUnits() * aLbryLocalWorkSize;
             mLbryLocalWorkSizeArray[0] = aLbryLocalWorkSize;
-            if (mLbryGlobalWorkSizeArray[0] % aLbryLocalWorkSize != 0)
-                mLbryGlobalWorkSizeArray[0] = aLbryLocalWorkSize - mLbryGlobalWorkSizeArray[0] % aLbryLocalWorkSize;
 
             base.Start();
         }

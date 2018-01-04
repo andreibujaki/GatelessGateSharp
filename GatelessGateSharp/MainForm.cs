@@ -74,7 +74,7 @@ namespace GatelessGateSharp
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
-        private static int mLaunchInterval = 1000;
+        private static int mLaunchInterval = 100;
 
         private Stratum mPrimaryStratum = null;
         private Stratum mSecondaryStratum = null;
@@ -282,6 +282,7 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void LoadDatabase() {
+            int databaseVersion = 0;
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;")) {
                     conn.Open();
@@ -330,7 +331,9 @@ namespace GatelessGateSharp
                             using (var reader = command.ExecuteReader()) {
                                 while (reader.Read()) {
                                     var propertyName = (string)reader["name"];
-                                    if (propertyName == "coin_to_mine") {
+                                    if (propertyName == "database_version") {
+                                        databaseVersion = int.Parse((string)reader["value"]);
+                                    } else if (propertyName == "coin_to_mine") {
                                         var coinToMine = (string)reader["value"];
                                         if (coinToMine == "ethereum") {
                                             radioButtonEthereum.Checked = true;
@@ -589,6 +592,13 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             }
+
+            if (databaseVersion == 0) {
+                // Values of intensity were reinterpreted at v1.1.14.
+                foreach (var device in mDevices)
+                    ResetDeviceSettings(device);
+                checkBoxDisableAutoStartPrompt.Checked = true;
+            }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -668,6 +678,11 @@ namespace GatelessGateSharp
                     }
 
                     sql = "insert into properties (name, value) values (@name, @value)";
+                    using (var command = new SQLiteCommand(sql, conn)) {
+                        command.Parameters.AddWithValue("@name", "database_version");
+                        command.Parameters.AddWithValue("@value", "1"); // starting at v1.1.14
+                        command.ExecuteNonQuery();
+                    }
                     using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "coin_to_mine");
                         command.Parameters.AddWithValue("@value",
@@ -1441,40 +1456,47 @@ namespace GatelessGateSharp
 
             // EthashPascal
             numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)2000;
+            numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)1024;
             numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 4 : 4);
 
             // Ethash
             numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)2000;
+            numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)1024;
             numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
 
             // Lbry
             numericUpDownDeviceLbryThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = (decimal)8192;
+            numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = (decimal)32;
             numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
 
             // Pasacal
             numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = (decimal)2;
-            numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = (decimal)8192;
+            numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = (decimal)32;
             numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
+
+            // Pasacal
+            numericUpDownDeviceNeoScryptThreadsArray[device.DeviceIndex].Value = (decimal)1;
+            numericUpDownDeviceNeoScryptIntensityArray[device.DeviceIndex].Value = (decimal)1;
+            numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
 
             // CryptoNight
             numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 2 : 1);
             numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
             numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
-                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 24 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 24 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 28 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 28 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 14 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 14 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" ? 14 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 32 * device.GetMaxComputeUnits() :
-                                                                                                16 * device.GetMaxComputeUnits());
+                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 96 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 96 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize < 4L * 1024 * 1024 * 1024 ? 126 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 128 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 112 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 64 :
+                            device.GetVendor() == "AMD"                                         ? 2 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
+                                                                                                          2 * device.GetMaxComputeUnits());
         }
 
         private void CopyDeviceSettings(int sourceDeviceIndex) {
@@ -1853,6 +1875,8 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void UpdateStatsWithShortPolling() {
             try {
+                KillInterferingProcesses();
+
                 // Pool
                 mCurrentPool = (appState == ApplicationGlobalState.Mining && mPrimaryStratum != null) ? (mPrimaryStratum.PoolName + ((mSecondaryStratum != null && mSecondaryStratum.PoolName != mPrimaryStratum.PoolName) ? ", " + mSecondaryStratum.PoolName : "")) :
                                checkBoxCustomPool0Enable.Checked ? (textBoxCustomPool0Host.Text + (comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool0SecondaryHost.Text) : "")) :
@@ -2947,6 +2971,7 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void LaunchMiners() {
             GC.Collect();
+            GC.WaitForPendingFinalizers();
 
             if (CustomPoolEnabled && !mDevFeeMode)
             {
@@ -3229,17 +3254,17 @@ namespace GatelessGateSharp
                 mActiveMiners.Clear();
 
                 mDevFeeMode = false;
+                try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Mining"); } catch (Exception) { }
                 LaunchMiners();
                 if (mPrimaryStratum == null || !mActiveMiners.Any()) {
                     MessageBox.Show("Failed to launch miner.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 } else {
                     appState = ApplicationGlobalState.Mining;
                     tabControlMainForm.SelectedIndex = 0;
-                    timerDevFee.Interval = 15 * 60 * 1000;
+                    timerDevFee.Interval = 1 * 60 * 1000;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
-                    try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Mining"); } catch (Exception) { }
                 }
             } else if (appState == ApplicationGlobalState.Mining) {
                 timerDevFee.Enabled = false;
@@ -3379,6 +3404,7 @@ namespace GatelessGateSharp
                     StopMiners();
                     mDevFeeMode = false;
                     timerDevFee.Interval = (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
+                    System.Threading.Thread.Sleep(1000);
                     LaunchMiners();
                     if (mActiveMiners.Count() == 0 || mPrimaryStratum == null) {
                         mDevFeeMode = true;
@@ -3391,6 +3417,7 @@ namespace GatelessGateSharp
                     mDevFeeMode = true;
                     mDevFeeModeStartTime = DateTime.Now;
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
+                    System.Threading.Thread.Sleep(1000);
                     LaunchMiners();
                     if (mActiveMiners.Count() == 0 || mPrimaryStratum == null) {
                         mDevFeeMode = false;
@@ -3428,8 +3455,12 @@ namespace GatelessGateSharp
         private void timerWatchdog_Tick(object sender, EventArgs e) {
             try {
                 if (appState == ApplicationGlobalState.Mining && mActiveMiners.Any())
-                    foreach (var miner in mActiveMiners)
-                        miner.KeepAlive();
+                    foreach (var miner in mActiveMiners) { 
+                        if (!miner.Alive) {
+                            MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting...");
+                            Environment.Exit(1);
+                        }
+                    }
             } catch (Exception ex) {
                 Logger("Exception in timerWatchdog_Tick(): " + ex.Message + ex.StackTrace);
             }
@@ -4042,6 +4073,13 @@ namespace GatelessGateSharp
             process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();
+        }
+
+        static void KillInterferingProcesses()
+        {
+            foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" })
+                foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
+                    try { process.Kill(); } catch (Exception) { }
         }
     }
 }
