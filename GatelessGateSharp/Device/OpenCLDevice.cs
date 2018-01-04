@@ -56,6 +56,7 @@ namespace GatelessGateSharp
 
         public override long GetMaxComputeUnits() { return mComputeDevice.MaxComputeUnits; }
         public ComputeDevice GetComputeDevice() { return mComputeDevice; }
+        public long          GetMemorySize() { return mComputeDevice.GlobalMemorySize; }
 
         public OpenCLDevice(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex)
@@ -239,36 +240,47 @@ namespace GatelessGateSharp
                                             OpenCLDummyLbryMiner dummyMiner = new OpenCLDummyLbryMiner(device);
                                             dummyMinerList.Add(dummyMiner);
                                             dummyMiner.Start();
-                                            System.Threading.Thread.Sleep(1000);
+
+                                            int[] activityTotalArray = new int[NumberOfAdapters];
+                                            for (var i = 0; i < NumberOfAdapters; ++i)
+                                                activityTotalArray[i] = 0;
+                                            for (var j = 0; j < 10; ++j) {
+                                                for (var i = 0; i < NumberOfAdapters; ++i) {
+                                                    if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
+                                                        ADLPMActivity OSADLPMActivityData;
+                                                        OSADLPMActivityData = new ADLPMActivity();
+                                                        var activityBuffer = IntPtr.Zero;
+                                                        size = Marshal.SizeOf(OSADLPMActivityData);
+                                                        activityBuffer = Marshal.AllocCoTaskMem((int)size);
+                                                        Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
+
+                                                        if (null != ADL.ADL_Overdrive5_CurrentActivity_Get) {
+                                                            ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(i, activityBuffer);
+                                                            if (ADL.ADL_SUCCESS == ADLRet) {
+                                                                OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
+                                                                activityTotalArray[i] += OSADLPMActivityData.iActivityPercent;
+                                                            }
+                                                        }
+                                                    }
+                                                    while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                                        ++i;
+                                                }
+                                                System.Threading.Thread.Sleep(100);
+                                            }
                                             int candidate = -1;
                                             int candidateActivity = 0;
                                             for (var i = 0; i < NumberOfAdapters; ++i) {
                                                 if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
-                                                    ADLPMActivity OSADLPMActivityData;
-                                                    OSADLPMActivityData = new ADLPMActivity();
-                                                    var activityBuffer = IntPtr.Zero;
-                                                    size = Marshal.SizeOf(OSADLPMActivityData);
-                                                    activityBuffer = Marshal.AllocCoTaskMem((int)size);
-                                                    Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
-
-                                                    if (null != ADL.ADL_Overdrive5_CurrentActivity_Get) {
-                                                        ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(i, activityBuffer);
-                                                        if (ADL.ADL_SUCCESS == ADLRet) {
-                                                            OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                                                            if (OSADLPMActivityData.iActivityPercent > candidateActivity) {
-                                                                candidateActivity = OSADLPMActivityData.iActivityPercent;
-                                                                candidate = i;
-                                                            }
-                                                        }
+                                                    if (candidate < 0 || activityTotalArray[i] > candidateActivity) {
+                                                        candidateActivity = activityTotalArray[i];
+                                                        candidate = i;
                                                     }
                                                 }
                                                 while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
                                                     ++i;
                                             }
-                                            if (candidate >= 0) {
-                                                device.ADLAdapterIndex = candidate;
-                                                taken.Add(OSAdapterInfoData.ADLAdapterInfo[candidate].BusNumber);
-                                            }
+                                            device.ADLAdapterIndex = candidate;
+                                            taken.Add(OSAdapterInfoData.ADLAdapterInfo[candidate].BusNumber);
 
                                             dummyMiner.Stop();
                                             for (int i = 0; i < 50; ++i) {
