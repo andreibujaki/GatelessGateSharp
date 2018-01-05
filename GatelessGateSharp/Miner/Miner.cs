@@ -44,6 +44,7 @@ namespace GatelessGateSharp
         public String FirstAlgorithmName { get { return mFirstAlgorithmName; } }
         public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
+        public UnrecoverableException UnrecoverableException { get; set; }
 
         protected Miner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
         {
@@ -66,6 +67,7 @@ namespace GatelessGateSharp
         {
             mStopped = false;
             mDone = false;
+            UnrecoverableException = null;
         
             MarkAsAlive();
             mMinerThread = new System.Threading.Thread(MinerThread);

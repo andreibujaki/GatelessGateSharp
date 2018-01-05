@@ -116,11 +116,16 @@ namespace GatelessGateSharp
 
             if ((line = ReadLine()) == null)
                 throw new Exception("Disconnected from stratum server.");
-            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
-            var result = ((JContainer)response["result"]);
-            var status = (String)(result["status"]);
-            if (status != "OK")
-                throw new Exception("Authorization failed.");
+            JContainer result;
+            try {
+                Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
+                result = ((JContainer)response["result"]);
+                var status = (String)(result["status"]);
+                if (status != "OK")
+                    throw new Exception("Authorization failed.");
+            } catch (Exception) {
+                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+            }
 
             try  {  mMutex.WaitOne(5000); } catch (Exception) { }
             mUserID = (String)(result["id"]);

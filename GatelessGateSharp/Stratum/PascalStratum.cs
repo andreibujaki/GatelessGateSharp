@@ -143,7 +143,7 @@ namespace GatelessGateSharp
 
                 if (ID == "3" && !result)
                 {
-                    throw new Exception("Authorization failed.");
+                    throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
                 }
                 else if ((ID != "1" && ID != "2" && ID != "3") && result && !MainForm.DevFeeMode)
                 {

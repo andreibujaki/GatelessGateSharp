@@ -184,7 +184,7 @@ namespace GatelessGateSharp
             {
                 try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                 MainForm.Logger("Authorization failed.");
-                throw new Exception("Authorization failed.");
+                throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
             }
 
             WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {

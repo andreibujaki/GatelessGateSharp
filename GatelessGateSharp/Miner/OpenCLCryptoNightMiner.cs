@@ -67,9 +67,13 @@ namespace GatelessGateSharp
         public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "CryptoNight")
         {
-            inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
-            outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
-            terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1);
+            try {
+                inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
+                outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
+                terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1);
+            } catch (Exception ex) {
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
         }
 
         public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false)
@@ -84,8 +88,12 @@ namespace GatelessGateSharp
             if (prevGlobalWorkSize != 0 && prevGlobalWorkSize != globalWorkSizeA[0])
                 Environment.Exit(1);
 
-            if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]);
-            if (scratchpadsBuffer == null) scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
+            try {
+                if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]);
+                if (scratchpadsBuffer == null) scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
+            } catch (Exception ex) {
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
 
             base.Start();
         }
@@ -282,9 +290,8 @@ namespace GatelessGateSharp
                     if (!Stopped)
                         System.Threading.Thread.Sleep(5000);
                 }
-                //((Cloo.ComputeResource)statesBuffer).Dispose();
-                //((Cloo.ComputeResource)scratchpadsBuffer).Dispose();
             }
+
             MarkAsDone();
         }
     }

@@ -138,6 +138,7 @@
     <Compile Include="Stratum\PascalStratum.cs" />
     <Compile Include="Stratum\LbryStratum.cs" />
     <Compile Include="Stratum\OpenEthereumPoolEthashStratum.cs" />
+    <Compile Include="UnrecoverableException.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

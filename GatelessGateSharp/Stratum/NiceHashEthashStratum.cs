@@ -140,7 +140,7 @@ namespace GatelessGateSharp
             if (!(bool)response["result"])
             {
                 try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                throw new Exception("Authorization failed.");
+                throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
             }
 
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }

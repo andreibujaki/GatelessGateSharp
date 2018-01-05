@@ -100,6 +100,7 @@ namespace GatelessGateSharp {
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
+        Thread mReconnectThread;
         private List<OpenCLDevice> mDevicesWithShare = new List<OpenCLDevice>();
         private int mLocalExtranonceSize = 1;
 
@@ -119,6 +120,7 @@ namespace GatelessGateSharp {
         public String PoolExtranonce { get { return mPoolExtranonce; } }
         public String PoolName { get { return mPoolName; } }
         public double Difficulty { get { return mDifficulty; } }
+        public UnrecoverableException UnrecoverableException { get; set; }
 
         protected void RegisterDeviceWithShare(OpenCLDevice aDevice) {
             try { mMutex.WaitOne(5000); } catch (Exception) { }
@@ -177,9 +179,9 @@ namespace GatelessGateSharp {
                 System.Threading.Thread.Sleep(100);
             }
 
-            Thread reconnectThread = new Thread(new ThreadStart(Connect));
-            reconnectThread.IsBackground = true;
-            reconnectThread.Start();
+            mReconnectThread = new Thread(new ThreadStart(Connect));
+            mReconnectThread.IsBackground = true;
+            mReconnectThread.Start();
         }
 
         public void Connect() {
@@ -191,6 +193,7 @@ namespace GatelessGateSharp {
 
                 try { mMutex.WaitOne(5000); } catch (Exception) { }
 
+                UnrecoverableException = null;
                 mClient = new TcpClient(ServerAddress, ServerPort);
                 mStream = mClient.GetStream();
                 mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
@@ -236,6 +239,10 @@ namespace GatelessGateSharp {
                 }
             } catch (Exception ex) {
                 MainForm.Logger("Exception in Stratum.StreamReaderThread(): " + ex.ToString());
+                if (ex.Message == "An established connection was aborted by the software in your host machine. ---> System.Net.Sockets.SocketException: An established connection was aborted by the software in your host machine") {
+                    MainForm.Logger("Exception seems fatal. Restarting the application...");
+                    Environment.Exit(1);
+                }
             }
 
             try {
@@ -243,7 +250,7 @@ namespace GatelessGateSharp {
                 mClient = null;
             } catch (Exception) { }
 
-            if (!Stopped)
+            if (!Stopped && UnrecoverableException == null)
                 Reconnect();
         }
     }

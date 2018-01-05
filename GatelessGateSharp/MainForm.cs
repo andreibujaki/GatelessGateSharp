@@ -1238,6 +1238,11 @@ namespace GatelessGateSharp
                 try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); } catch (Exception) { } // Undocumented but found on Windows 10.
             }
 
+            // Not ideal but absolutely necessary.
+            try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "ForceQueue", 1); } catch (Exception) { }
+            try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 1); } catch (Exception) { }
+            try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1); } catch (Exception) { }
+
             appState = ApplicationGlobalState.Idle;
             UpdateControls();
             timerFanControl.Enabled = true;
@@ -1489,7 +1494,7 @@ namespace GatelessGateSharp
             numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 96 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 96 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize < 4L * 1024 * 1024 * 1024 ? 126 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 90 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 112 :
@@ -3025,14 +3030,13 @@ namespace GatelessGateSharp
                     if (!enabled)
                         continue;
 
-                    try
-                    {
+                    try {
                         Logger("Launching miner(s) for Custom Pool " + customPoolIndex + "...");
                         LaunchMinersForCustomPool(algo, host, port, login, password, algo2, host2, port2, login2, password2);
                         break;
-                    }
-                    catch (Exception ex)
-                    {
+                    } catch (UnrecoverableException ex) {
+                        throw ex;
+                    } catch (Exception ex) {
                         Logger("Failed to launch miner(s) for Custom Pool " + customPoolIndex + ": " + ex.Message + ex.StackTrace);
                     }
 
@@ -3097,8 +3101,10 @@ namespace GatelessGateSharp
                             } else {
                                 Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
                             }
+                        } catch (UnrecoverableException ex) {
+                            throw ex;
                         } catch (Exception ex) {
-                            Logger("Failed to launch miner(s) for  for DEVFEE: " + ex.Message + ex.StackTrace);
+                            Logger("Failed to launch miner(s) for DEVFEE: " + ex.Message + ex.StackTrace);
                         }
 
                         // Clean up the mess.
@@ -3145,6 +3151,8 @@ namespace GatelessGateSharp
                         } else {
                             Logger("Failed to launch miner(s) for " + pool);
                         }
+                    } catch (UnrecoverableException ex) {
+                        throw ex;
                     } catch (Exception ex) {
                         Logger("Failed to launch miners for " + pool + ": " + ex.Message + ex.StackTrace);
                     }
@@ -3255,13 +3263,19 @@ namespace GatelessGateSharp
 
                 mDevFeeMode = false;
                 try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Mining"); } catch (Exception) { }
-                LaunchMiners();
-                if (mPrimaryStratum == null || !mActiveMiners.Any()) {
-                    MessageBox.Show("Failed to launch miner.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Exception unrecoverableException = null;
+                try {
+                    LaunchMiners();
+                } catch (Exception ex) { 
+                    unrecoverableException = ex;
+                }
+                if (unrecoverableException != null || mPrimaryStratum == null || !mActiveMiners.Any()) {
+                    MessageBox.Show((unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner."), appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 } else {
                     appState = ApplicationGlobalState.Mining;
                     tabControlMainForm.SelectedIndex = 0;
-                    timerDevFee.Interval = 1 * 60 * 1000;
+                    timerDevFee.Interval = 15 * 60 * 1000;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
@@ -3454,13 +3468,41 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void timerWatchdog_Tick(object sender, EventArgs e) {
             try {
-                if (appState == ApplicationGlobalState.Mining && mActiveMiners.Any())
-                    foreach (var miner in mActiveMiners) { 
-                        if (!miner.Alive) {
-                            MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting...");
-                            Environment.Exit(1);
+                if (appState == ApplicationGlobalState.Mining && mActiveMiners.Any()) {
+                    Exception ex = null;
+                    if (mPrimaryStratum != null && mPrimaryStratum.UnrecoverableException != null) {
+                        ex = mPrimaryStratum.UnrecoverableException;
+                        mPrimaryStratum.UnrecoverableException = null;
+                    }
+                    if (mSecondaryStratum != null && mSecondaryStratum.UnrecoverableException != null) {
+                        ex = mSecondaryStratum.UnrecoverableException;
+                        mSecondaryStratum.UnrecoverableException = null;
+                    }
+                    foreach (var miner in mActiveMiners) {
+                        if (miner.UnrecoverableException != null) {
+                            ex = miner.UnrecoverableException;
+                            miner.UnrecoverableException = null;
                         }
                     }
+                    if (ex != null) {
+                        StopMiners();
+                        appState = ApplicationGlobalState.Idle;
+                        try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                        UpdateStatsWithShortPolling();
+                        //UpdateStatsWithLongPolling();
+                        UpdateControls();
+                        timerCurrencyStatUpdates.Interval = 100;
+ 
+                        MessageBox.Show(ex.Message, appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    } else {
+                        foreach (var miner in mActiveMiners) {
+                            if (!miner.Alive) {
+                                MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
+                                Environment.Exit(1);
+                            }
+                        }
+                    }
+                }
             } catch (Exception ex) {
                 Logger("Exception in timerWatchdog_Tick(): " + ex.Message + ex.StackTrace);
             }
