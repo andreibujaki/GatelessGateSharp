@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.14";
+        public static string appVersion = "1.1.15";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -84,8 +84,7 @@ namespace GatelessGateSharp
         {
             Idle = 0,
             Mining = 1,
-            Benchmarking = 2,
-            Initializing = 3
+            Initializing = 2
         };
         private ApplicationGlobalState appState = ApplicationGlobalState.Initializing;
 
@@ -598,6 +597,13 @@ namespace GatelessGateSharp
                 foreach (var device in mDevices)
                     ResetDeviceSettings(device);
                 checkBoxDisableAutoStartPrompt.Checked = true;
+            } 
+            if (databaseVersion < 2) {
+                foreach (var device in mDevices) {
+                    numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
+                    numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
+                    numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
+                }
             }
         }
 
@@ -680,7 +686,7 @@ namespace GatelessGateSharp
                     sql = "insert into properties (name, value) values (@name, @value)";
                     using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "database_version");
-                        command.Parameters.AddWithValue("@value", "1"); // starting at v1.1.14
+                        command.Parameters.AddWithValue("@value", "2"); // starting at v1.1.15
                         command.ExecuteNonQuery();
                     }
                     using (var command = new SQLiteCommand(sql, conn)) {
@@ -1454,9 +1460,9 @@ namespace GatelessGateSharp
         private void ResetDeviceSettings(Device device) {
             tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName();
 
-            numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)80;
-            numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)90;
-            numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)20;
+            numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
+            numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
+            numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
             numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = (decimal)100;
 
             // EthashPascal
@@ -1492,7 +1498,8 @@ namespace GatelessGateSharp
             numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 2 : 1);
             numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
             numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
-                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 96 :
+                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 40 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 96 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 96 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 90 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 128 :
@@ -1595,164 +1602,19 @@ namespace GatelessGateSharp
                 }
 
                 if (mCurrentPool == "NiceHash" && radioButtonEthereum.Checked && textBoxBitcoinAddress.Text != "") {
-                    double balance = 0;
-                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var result = (JContainer)response["result"];
-                    var stats = (JArray)result["stats"];
-                    foreach (JContainer item in stats)
-                        try {
-                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
-                        } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
-
-                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
-                        double price = 0;
-                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                        result = (JContainer)response["result"];
-                        stats = (JArray)result["stats"];
-                        foreach (JContainer item in stats)
-                            try {
-                                if ((double)item["algo"] == 20)
-                                    price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000.0;
-                            } catch (Exception) { }
-                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
-                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
-                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
-                    } else {
-                        labelPriceDay.Text = "-";
-                        labelPriceWeek.Text = "-";
-                        labelPriceMonth.Text = "-";
-                    }
+                    UpdateProfitabilityInfoForNiceHash(USDBTC, 20, totalSpeed, 1000000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonEthereumPascal.Checked && textBoxBitcoinAddress.Text != "") {
-                    double balance = 0;
-                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var result = (JContainer)response["result"];
-                    var stats = (JArray)result["stats"];
-                    foreach (JContainer item in stats)
-                        try {
-                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
-                        } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
-
-                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
-                        double ethereum_price = 0;
-                        double pascal_price = 0;
-                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                        result = (JContainer)response["result"];
-                        stats = (JArray)result["stats"];
-                        foreach (JContainer item in stats)
-                            try {
-                                if ((double)item["algo"] == 20)
-                                    ethereum_price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000.0;
-                                if ((double)item["algo"] == 25)
-                                    pascal_price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * secondaryTotalSpeed / 1000000000000.0;
-                            } catch (Exception) { }
-                        double price = ethereum_price + pascal_price;
-                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
-                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
-                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
-                    } else {
-                        labelPriceDay.Text = "-";
-                        labelPriceWeek.Text = "-";
-                        labelPriceMonth.Text = "-";
-                    }
+                    UpdateProfitabilityInfoForNiceHash(USDBTC, 20, totalSpeed, 1000000000.0, 25, secondaryTotalSpeed, 1000000000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonMonero.Checked && textBoxBitcoinAddress.Text != "") {
-                    double balance = 0;
-                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var result = (JContainer)response["result"];
-                    var stats = (JArray)result["stats"];
-                    foreach (JContainer item in stats)
-                        try {
-                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
-                        } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
-
-                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
-                        double price = 0;
-                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                        result = (JContainer)response["result"];
-                        stats = (JArray)result["stats"];
-                        foreach (JContainer item in stats)
-                            try {
-                                if ((double)item["algo"] == 22)
-                                    price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000.0;
-                            } catch (Exception) { }
-                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
-                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
-                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
-                    } else {
-                        labelPriceDay.Text = "-";
-                        labelPriceWeek.Text = "-";
-                        labelPriceMonth.Text = "-";
-                    }
+                    UpdateProfitabilityInfoForNiceHash(USDBTC, 22, totalSpeed, 1000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonLbry.Checked && textBoxBitcoinAddress.Text != "") {
-                    double balance = 0;
-                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var result = (JContainer)response["result"];
-                    var stats = (JArray)result["stats"];
-                    foreach (JContainer item in stats)
-                        try {
-                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
-                        } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
-
-                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
-                        double price = 0;
-                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                        result = (JContainer)response["result"];
-                        stats = (JArray)result["stats"];
-                        foreach (JContainer item in stats)
-                            try {
-                                if ((double)item["algo"] == 23)
-                                    price = double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000000.0;
-                            } catch (Exception) { }
-                        labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
-                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
-                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
-                    } else {
-                        labelPriceDay.Text = "-";
-                        labelPriceWeek.Text = "-";
-                        labelPriceMonth.Text = "-";
-                    }
+                    UpdateProfitabilityInfoForNiceHash(USDBTC, 23, totalSpeed, 1000000000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonPascal.Checked && textBoxBitcoinAddress.Text != "") {
-                    double balance = 0;
-                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var result = (JContainer)response["result"];
-                    var stats = (JArray)result["stats"];
-                    foreach (JContainer item in stats)
-                        try {
-                            balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
-                        } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
-
-                    if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
-                        double pascal_price = 0;
-                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                        response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                        result = (JContainer)response["result"];
-                        stats = (JArray)result["stats"];
-                        foreach (JContainer item in stats)
-                            try {
-                                if ((double)item["algo"] == 25)
-                                    pascal_price = double.Parse((string)item["pascal_price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / 1000000000000.0;
-                            } catch (Exception) { }
-                        labelPriceDay.Text = string.Format("{0:N6}", pascal_price) + " BTC/Day (" + string.Format("{0:N2}", pascal_price * USDBTC) + " USD/Day)";
-                        labelPriceWeek.Text = string.Format("{0:N6}", pascal_price * 7) + " BTC/Week (" + string.Format("{0:N2}", pascal_price * 7 * USDBTC) + " USD/Week)";
-                        labelPriceMonth.Text = string.Format("{0:N6}", pascal_price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", pascal_price * (365.25 / 12) * USDBTC) + " USD/Month)";
-                    } else {
-                        labelPriceDay.Text = "-";
-                        labelPriceWeek.Text = "-";
-                        labelPriceMonth.Text = "-";
-                    }
+                    UpdateProfitabilityInfoForNiceHash(USDBTC, 58 - 33, totalSpeed, 1000000000000.0);
+                } else if (mCurrentPool == "NiceHash" && radioButtonFeathercoin.Checked && textBoxBitcoinAddress.Text != "") {
+                    UpdateProfitabilityInfoForNiceHash(USDBTC, 41 - 33, totalSpeed, 1000000000.0);
+                } else if (mCurrentPool == "NiceHash" && radioButtonMonacoin.Checked && textBoxBitcoinAddress.Text != "") {
+                    UpdateProfitabilityInfoForNiceHash(USDBTC, 47 - 33, totalSpeed, 1000000000000.0);
                 } else if (mCurrentPool == "ethermine.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "") {
                     var jsonString = client.DownloadString("https://api.ethermine.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
                     var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
@@ -1854,6 +1716,42 @@ namespace GatelessGateSharp
                 }
             } catch (Exception ex) {
                 Logger("Exception: " + ex.Message + ex.StackTrace);
+            }
+        }
+
+        private void UpdateProfitabilityInfoForNiceHash(double USDBTC, int algo, double totalSpeed, double speedDivisor, int secondaryAlgo = -1, double secondaryTotalSpeed = 0, double secondarySpeedDivisor = 1) {
+            double balance = 0;
+            var client = new CustomWebClient();
+            var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
+            var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+            var result = (JContainer)response["result"];
+            var stats = (JArray)result["stats"];
+            foreach (JContainer item in stats)
+                try {
+                    balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
+                } catch (Exception) { }
+            labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
+
+            if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
+                double price = 0;
+                jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
+                response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                result = (JContainer)response["result"];
+                stats = (JArray)result["stats"];
+                foreach (JContainer item in stats)
+                    try {
+                        if ((double)item["algo"] == algo)
+                            price += double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * totalSpeed / speedDivisor;
+                        else if ((double)item["algo"] == secondaryAlgo)
+                            price += double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * secondaryTotalSpeed / secondarySpeedDivisor;
+                    } catch (Exception) { }
+                labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
+                labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
+                labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
+            } else {
+                labelPriceDay.Text = "-";
+                labelPriceWeek.Text = "-";
+                labelPriceMonth.Text = "-";
             }
         }
 
@@ -1963,8 +1861,8 @@ namespace GatelessGateSharp
                     if (temperature >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Value = temperature.ToString() + "℃";
                         dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Style.ForeColor =
-                                                                   temperature >= 80 ? Color.Red :
-                                                                   temperature >= 60 ? Color.Purple :
+                                                                   temperature >= 85 ? Color.Red :
+                                                                   temperature >= 75 ? Color.Purple :
                                                                                        Color.Blue;
 
                     }
@@ -2267,57 +2165,354 @@ namespace GatelessGateSharp
             CryptoNightStratum stratum = null;
             var niceHashMode = false;
 
-            if (pool == "NiceHash") {
+            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
                 var hosts = GetNiceHashCryptoNightServers();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
-                            if (!mDevFeeMode && textBoxRigID.Text != "")
-                                username += "." + textBoxRigID.Text; // TODO
                             stratum = new CryptoNightStratum(host.name, 3355, username, "x", pool);
                             break;
                         } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
                 niceHashMode = true;
-            } else if (pool == "DwarfPool") {
+            } else if (pool == "DwarfPool" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeMoneroAddress + ".DEVFEE" : textBoxMoneroAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var password = textBoxEmail.Text != "" ? textBoxEmail.Text : "x";
                 var hosts = GetDwarfPoolCryptoNightServers();
                 hosts.Sort();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            var username = mDevFeeMode ? mDevFeeMoneroAddress : textBoxMoneroAddress.Text;
-                            //if (!mDevFeeMode && textBoxRigID.Text != "")
-                            //    username += "." + textBoxRigID.Text; // TODO
-                            stratum = new CryptoNightStratum(host.name, 8005, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool);
+                            stratum = new CryptoNightStratum(host.name, 8005, username, password, pool);
                             break;
                         } catch (Exception ex) {
                             Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-            } else if (pool == "Nanopool") {
+            } else if (pool == "Nanopool" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeMoneroAddress : textBoxMoneroAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "") {
+                    username += "." + textBoxRigID.Text;
+                    if (textBoxEmail.Text != "")
+                        username += "/" + textBoxEmail.Text;
+                }
                 var hosts = GetNanopoolCryptoNightServers();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            var username = mDevFeeMode ? mDevFeeMoneroAddress : textBoxMoneroAddress.Text;
-                            //if (!mDevFeeMode && textBoxRigID.Text != "") {
-                            //    username += "." + textBoxRigID.Text; // TODO
-                            //    if (textBoxEmail.Text != "")
-                            //        username += "/" + textBoxEmail.Text;
-                            //}
                             stratum = new CryptoNightStratum(host.name, 14444, username, "x", pool);
                             break;
                         } catch (Exception ex) {
                             Logger("Exception: " + ex.Message + ex.StackTrace);
                         }
-            } else if (pool == "mineXMR.com") {
-                var username = mDevFeeMode ? mDevFeeMoneroAddress : textBoxMoneroAddress.Text;
-                //if (!mDevFeeMode && textBoxRigID.Text != "")
-                //    username += "." + textBoxRigID.Text; // TODO
+            } else if (pool == "mineXMR.com" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeMoneroAddress + ".DEVFEE" : textBoxMoneroAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
                 stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool);
             }
 
             if (stratum != null) {
                 LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
+                mPrimaryStratum = (Stratum)stratum;
+            }
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchOpenCLLbryMiners(string pool) {
+            LbryStratum stratum = null;
+
+            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var hosts = GetNiceHashLbryServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new LbryStratum(host.name, 3356, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
+                stratum = new LbryStratum("lbry.mine.zpool.ca", 3334, username, "c=BTC", pool);
+            }
+
+            if (stratum != null) {
+                LaunchOpenCLLbryMinersWithStratum(stratum);
+                mPrimaryStratum = (Stratum)stratum;
+            }
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchOpenCLNeoScryptMiners(string pool) {
+            NeoScryptStratum stratum = null;
+
+            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var hosts = GetNiceHashNeoScryptServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new NeoScryptStratum(host.name, 3341, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
+                stratum = new NeoScryptStratum("neoscrypt.mine.zpool.ca", 4233, username, "c=BTC", pool);
+            }
+
+            if (stratum != null) {
+                LaunchOpenCLNeoScryptMinersWithStratum(stratum);
+                mPrimaryStratum = (Stratum)stratum;
+            }
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchOpenCLLyra2REv2Miners(string pool) {
+            Lyra2REv2Stratum stratum = null;
+
+            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var hosts = GetNiceHashLyra2REv2Servers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new Lyra2REv2Stratum(host.name, 3347, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
+                stratum = new Lyra2REv2Stratum("lyra2v2.mine.zpool.ca", 4533, username, "c=BTC", pool);
+            }
+
+            if (stratum != null) {
+                LaunchOpenCLLyra2REv2MinersWithStratum(stratum);
+                mPrimaryStratum = (Stratum)stratum;
+            }
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchOpenCLDualEthashPascalMiners(string pool) {
+            EthashStratum ethashStratum = null;
+            PascalStratum pascalStratum = null;
+
+            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var ethashHosts = GetNiceHashEthashServers();
+                foreach (var ethashHost in ethashHosts)
+                    if (ethashHost.time >= 0)
+                        try {
+                            ethashStratum = new NiceHashEthashStratum(ethashHost.name, 3353, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+                var pascalHosts = GetNiceHashPascalServers();
+                foreach (var pascalHost in pascalHosts)
+                    if (pascalHost.time >= 0)
+                        try {
+                            pascalStratum = new PascalStratum(pascalHost.name, 3358, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "Nanopool" && (mDevFeeMode || (textBoxEthereumAddress.Text.Length > 0 && textBoxPascalAddress.Text.Length > 0))) {
+                var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var ethashHosts = GetNanopoolEthashServers();
+                foreach (var ethashHost in ethashHosts)
+                    if (ethashHost.time >= 0)
+                        try {
+                            ethashStratum = new OpenEthereumPoolEthashStratum(ethashHost.name, 9999, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+                username = mDevFeeMode ? mDevFeePascalAddress + ".DEVFEE" : textBoxPascalAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var pascalHosts = GetNanopoolPascalServers();
+                foreach (var pascalHost in pascalHosts)
+                    if (pascalHost.time >= 0)
+                        try {
+                            pascalStratum = new PascalStratum(pascalHost.name, 15555, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            }
+
+            if (ethashStratum != null && pascalStratum != null) {
+                LaunchOpenCLDualEthashPascalMinersWithStratum(ethashStratum, pascalStratum);
+                mPrimaryStratum = (Stratum)ethashStratum;
+                mSecondaryStratum = (Stratum)pascalStratum;
+            }
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchOpenCLPascalMiners(string pool) {
+            PascalStratum stratum = null;
+
+            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var hosts = GetNiceHashPascalServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new PascalStratum(host.name, 3358, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "Nanopool" && (mDevFeeMode || textBoxPascalAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeePascalAddress + ".DEVFEE" : textBoxPascalAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var hosts = GetNanopoolPascalServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new PascalStratum(host.name, 15555, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            }
+
+            if (stratum != null) {
+                LaunchOpenCLPascalMinersWithStratum(stratum);
+                mPrimaryStratum = (Stratum)stratum;
+            }
+        }
+
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        public void LaunchOpenCLEthashMiners(string pool) {
+            EthashStratum stratum = null;
+
+            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : textBoxBitcoinAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                var hosts = GetNiceHashEthashServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new NiceHashEthashStratum(host.name, 3353, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "DwarfPool" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
+                var hosts = new List<StratumServerInfo> {
+                                new StratumServerInfo("eth-eu.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-us.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-us2.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-ru.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-asia.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-cn.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-cn2.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-sg.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-au.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-ru2.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-hk.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-br.dwarfpool.com", 0),
+                                new StratumServerInfo("eth-ar.dwarfpool.com", 0)
+                            };
+                var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                hosts.Sort();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool, true);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "ethermine.org" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
+                var hosts = new List<StratumServerInfo> {
+                                new StratumServerInfo("us1.ethermine.org", 0),
+                                new StratumServerInfo("us2.ethermine.org", 0),
+                                new StratumServerInfo("eu1.ethermine.org", 0),
+                                new StratumServerInfo("asia1.ethermine.org", 0)
+                            };
+                var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                hosts.Sort();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 4444, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "ethpool.org" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
+                var hosts = new List<StratumServerInfo> {
+                                new StratumServerInfo("us1.ethpool.org", 0),
+                                new StratumServerInfo("us2.ethpool.org", 0),
+                                new StratumServerInfo("eu1.ethpool.org", 0),
+                                new StratumServerInfo("asia1.ethpool.org", 0)
+                            };
+                var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "")
+                    username += "." + textBoxRigID.Text;
+                hosts.Sort();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 3333, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            } else if (pool == "Nanopool" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
+                if (!mDevFeeMode && textBoxRigID.Text != "") {
+                    username += "." + textBoxRigID.Text;
+                    if (textBoxEmail.Text != "")
+                        username += "/" + textBoxEmail.Text;
+                }
+                var hosts = GetNanopoolEthashServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new OpenEthereumPoolEthashStratum(host.name, 9999, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                        }
+            }
+
+            if (stratum != null) {
+                LaunchOpenCLEthashMinersWithStratum(stratum);
                 mPrimaryStratum = (Stratum)stratum;
             }
         }
@@ -2357,287 +2552,9 @@ namespace GatelessGateSharp
                         for (int j = 0; j < mLaunchInterval; j += 10) {
                             Application.DoEvents();
                             System.Threading.Thread.Sleep(10);
-                        } 
+                        }
                     }
                 }
-            }
-        }
-
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        public void LaunchOpenCLLbryMiners(string pool) {
-            LbryStratum stratum = null;
-            string username = "";
-
-            if (pool == "NiceHash"
-                && (username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text)).Length > 0) {
-                var hosts = GetNiceHashLbryServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            stratum = new LbryStratum(host.name, 3356, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "zpool" && (username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text).Length > 0) {
-                stratum = new LbryStratum("lbry.mine.zpool.ca", 3334, username, "c=BTC", pool);
-            }
-
-            if (stratum != null) {
-                LaunchOpenCLLbryMinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
-            }
-        }
-
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        public void LaunchOpenCLNeoScryptMiners(string pool) {
-            NeoScryptStratum stratum = null;
-            string username = "";
-
-            if (pool == "NiceHash"
-                && (username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text)).Length > 0) {
-                var hosts = GetNiceHashNeoScryptServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            stratum = new NeoScryptStratum(host.name, 3341, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "zpool" && (username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text).Length > 0) {
-                stratum = new NeoScryptStratum("neoscrypt.mine.zpool.ca", 4233, username, "c=BTC", pool);
-            }
-
-            if (stratum != null) {
-                LaunchOpenCLNeoScryptMinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
-            }
-        }
-
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        public void LaunchOpenCLLyra2REv2Miners(string pool) {
-            Lyra2REv2Stratum stratum = null;
-            string username = "";
-
-            if (pool == "NiceHash"
-                && (username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text)).Length > 0) {
-                var hosts = GetNiceHashLyra2REv2Servers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            stratum = new Lyra2REv2Stratum(host.name, 3347, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "zpool" && (username = mDevFeeMode ? mDevFeeBitcoinAddress : textBoxBitcoinAddress.Text).Length > 0) {
-                stratum = new Lyra2REv2Stratum("lyra2v2.mine.zpool.ca", 4533, username, "c=BTC", pool);
-            }
-
-            if (stratum != null) {
-                LaunchOpenCLLyra2REv2MinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
-            }
-        }
-
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        public void LaunchOpenCLDualEthashPascalMiners(string pool) {
-            EthashStratum ethashStratum = null;
-            PascalStratum pascalStratum = null;
-
-            if (pool == "NiceHash") {
-                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
-                var ethashHosts = GetNiceHashEthashServers();
-                foreach (var ethashHost in ethashHosts)
-                    if (ethashHost.time >= 0)
-                        try {
-                            ethashStratum = new NiceHashEthashStratum(ethashHost.name, 3353, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-                var pascalHosts = GetNiceHashPascalServers();
-                foreach (var pascalHost in pascalHosts)
-                    if (pascalHost.time >= 0)
-                        try {
-                            pascalStratum = new PascalStratum(pascalHost.name, 3358, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "Nanopool") {
-                var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxEthereumAddress.Text + "." + textBoxRigID.Text) : textBoxEthereumAddress.Text);
-                var ethashHosts = GetNanopoolEthashServers();
-                foreach (var ethashHost in ethashHosts)
-                    if (ethashHost.time >= 0)
-                        try {
-                            ethashStratum = new OpenEthereumPoolEthashStratum(ethashHost.name, 9999, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-                username = mDevFeeMode ? mDevFeePascalAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxPascalAddress.Text + "." + textBoxRigID.Text) : textBoxPascalAddress.Text);
-                var pascalHosts = GetNanopoolPascalServers();
-                foreach (var pascalHost in pascalHosts)
-                    if (pascalHost.time >= 0)
-                        try {
-                            pascalStratum = new PascalStratum(pascalHost.name, 15555, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            }
-
-            if (ethashStratum != null && pascalStratum != null) {
-                LaunchOpenCLDualEthashPascalMinersWithStratum(ethashStratum, pascalStratum);
-                mPrimaryStratum = (Stratum)ethashStratum;
-                mSecondaryStratum = (Stratum)pascalStratum;
-            }
-        }
-
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        public void LaunchOpenCLPascalMiners(string pool) {
-            PascalStratum stratum = null;
-
-            if (pool == "NiceHash") {
-                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + "." + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
-                var hosts = GetNiceHashPascalServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            stratum = new PascalStratum(host.name, 3358, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "Nanopool") {
-                var username = mDevFeeMode ? mDevFeePascalAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxPascalAddress.Text + "." + textBoxRigID.Text) : textBoxPascalAddress.Text);
-                var hosts = GetNanopoolPascalServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            stratum = new PascalStratum(host.name, 15555, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            }
-
-            if (stratum != null) {
-                LaunchOpenCLPascalMinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
-            }
-        }
-
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        public void LaunchOpenCLEthashMiners(string pool) {
-            EthashStratum stratum = null;
-
-            if (pool == "NiceHash") {
-                var username = mDevFeeMode ? mDevFeeBitcoinAddress + ".DEVFEE" : (textBoxRigID.Text != "" ? (textBoxBitcoinAddress.Text + textBoxRigID.Text) : textBoxBitcoinAddress.Text);
-                var hosts = GetNiceHashEthashServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            stratum = new NiceHashEthashStratum(host.name, 3353, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "DwarfPool") {
-                var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("eth-eu.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-us.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-us2.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-ru.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-asia.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-cn.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-cn2.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-sg.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-au.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-ru2.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-hk.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-br.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-ar.dwarfpool.com", 0)
-                            };
-                hosts.Sort();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
-                            if (!mDevFeeMode && textBoxRigID.Text != "")
-                                username += "." + textBoxRigID.Text; // TODO
-                            stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool, true);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "ethermine.org") {
-                var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("us1.ethermine.org", 0),
-                                new StratumServerInfo("us2.ethermine.org", 0),
-                                new StratumServerInfo("eu1.ethermine.org", 0),
-                                new StratumServerInfo("asia1.ethermine.org", 0)
-                            };
-                hosts.Sort();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
-                            if (!mDevFeeMode && textBoxRigID.Text != "")
-                                username += "." + textBoxRigID.Text; // TODO
-                            stratum = new OpenEthereumPoolEthashStratum(host.name, 4444, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "ethpool.org") {
-                var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("us1.ethpool.org", 0),
-                                new StratumServerInfo("us2.ethpool.org", 0),
-                                new StratumServerInfo("eu1.ethpool.org", 0),
-                                new StratumServerInfo("asia1.ethpool.org", 0)
-                            };
-                hosts.Sort();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
-                            if (!mDevFeeMode && textBoxRigID.Text != "")
-                                username += "." + textBoxRigID.Text; // TODO
-                            stratum = new OpenEthereumPoolEthashStratum(host.name, 3333, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            } else if (pool == "Nanopool") {
-                var hosts = GetNanopoolEthashServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            var username = mDevFeeMode ? mDevFeeEthereumAddress + ".DEVFEE" : textBoxEthereumAddress.Text;
-                            if (!mDevFeeMode && textBoxRigID.Text != "") {
-                                username += "." + textBoxRigID.Text; // TODO
-                                if (textBoxEmail.Text != "")
-                                    username += "/" + textBoxEmail.Text;
-                            }
-                            stratum = new OpenEthereumPoolEthashStratum(host.name, 9999, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
-                        }
-            }
-
-            if (stratum != null) {
-                LaunchOpenCLEthashMinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
             }
         }
 
@@ -2914,7 +2831,7 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            1024, //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
+                            4, //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
                             256  //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
@@ -3975,9 +3892,11 @@ namespace GatelessGateSharp
 
         private void timerFanControl_Tick(object sender, EventArgs e) {
             foreach (var device in mDevices) {
-                if (!checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
+                if (!checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked || appState != ApplicationGlobalState.Mining) {
+                    device.FanSpeed = -1;
                     continue;
-                
+                }
+
                 int currentTemperature = device.Temperature;
                 int targetTemperature = decimal.ToInt32(numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value);
                 int maxTemperature = decimal.ToInt32(numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value);

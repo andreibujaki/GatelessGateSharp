@@ -63,12 +63,16 @@ namespace GatelessGateSharp
         public OpenCLDualEthashPascalMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Ethash/Pascal", "Ethash", "Pascal")
         {
-            mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
-            mEthashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32);
+            try {
+                mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
+                mEthashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32);
 
-            mPascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize);
-            mPascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sPascalOutputSize);
-            mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize);
+                mPascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize);
+                mPascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sPascalOutputSize);
+                mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize);
+            } catch (Exception ex) {
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
         }
 
         public void Start(EthashStratum aEthashStratum, PascalStratum aPascalStratum, int aEthashIntensity, int aPascalIterations)
@@ -396,11 +400,16 @@ namespace GatelessGateSharp
                         ethashDAGBuffer.Dispose();
                         ethashDAGBuffer = null;
                     }
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    MainForm.Logger("Restarting miner thread...");
+                    Speed = 0;
+                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                        Stop();
+                    } else {
+                        MainForm.Logger("Restarting miner thread...");
+                        System.Threading.Thread.Sleep(5000);
+                    }
                 }
             }
 

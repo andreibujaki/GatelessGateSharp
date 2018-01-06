@@ -61,11 +61,15 @@ namespace GatelessGateSharp
         public OpenCLDualEthashLbryMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Ethash/Lbry", "Ethash", "Lbry")
         {
-            mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
-            mEthashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32);
+            try {
+                mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
+                mEthashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32);
 
-            mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
-            mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
+                mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
+                mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
+            } catch (Exception ex) {
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
         }
 
         public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize, LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
@@ -306,11 +310,16 @@ namespace GatelessGateSharp
                         ethashDAGBuffer.Dispose();
                         ethashDAGBuffer = null;
                     }
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    MainForm.Logger("Restarting miner thread...");
+                    Speed = 0;
+                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                        Stop();
+                    } else {
+                        MainForm.Logger("Restarting miner thread...");
+                        System.Threading.Thread.Sleep(5000);
+                    }
                 }
             }
 
