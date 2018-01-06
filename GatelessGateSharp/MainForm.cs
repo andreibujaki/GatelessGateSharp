@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.15";
+        public static string appVersion = "1.1.16";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1220,7 +1220,7 @@ namespace GatelessGateSharp
                 } else {
                     Logger("Failed to load phymem.");
                     var w = new Form() { Size = new System.Drawing.Size(0, 0) };
-                    Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith((t) => w.Close(),
+                    Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
                         TaskScheduler.FromCurrentSynchronizationContext());
                     w.BringToFront();
                     MessageBox.Show(w, "Failed to load phymem.", "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
@@ -2944,6 +2944,8 @@ namespace GatelessGateSharp
                                    (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
                                                             (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
 
+
+
                     if (!enabled)
                         continue;
 
@@ -3187,6 +3189,7 @@ namespace GatelessGateSharp
                     unrecoverableException = ex;
                 }
                 if (unrecoverableException != null || mPrimaryStratum == null || !mActiveMiners.Any()) {
+                    StopMiners();
                     MessageBox.Show((unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner."), appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 } else {
@@ -3409,8 +3412,13 @@ namespace GatelessGateSharp
                         //UpdateStatsWithLongPolling();
                         UpdateControls();
                         timerCurrencyStatUpdates.Interval = 100;
- 
-                        MessageBox.Show(ex.Message, appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        var w = new Form() { Size = new System.Drawing.Size(0, 0) };
+                        Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
+                            TaskScheduler.FromCurrentSynchronizationContext());
+                        w.BringToFront();
+                        if (MessageBox.Show(w, ex.Message + "\n\nMining will automatically resume in 20 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes)
+                            timerAutoStart.Enabled = true;
                     } else {
                         foreach (var miner in mActiveMiners) {
                             if (!miner.Alive) {
