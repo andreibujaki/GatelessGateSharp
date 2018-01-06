@@ -282,13 +282,18 @@ namespace GatelessGateSharp
                         }
                     } catch (Exception ex) {
                         MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                        MainForm.Logger("Restarting miner thread...");
+                        if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                            this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                            Stop();
+                        }
                     }
 
                     Speed = 0;
 
-                    if (!Stopped)
+                    if (!Stopped) {
+                        MainForm.Logger("Restarting miner thread...");
                         System.Threading.Thread.Sleep(5000);
+                    }
                 }
             }
 

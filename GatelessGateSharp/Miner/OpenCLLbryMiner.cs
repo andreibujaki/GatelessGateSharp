@@ -49,8 +49,12 @@ namespace GatelessGateSharp
         public OpenCLLbryMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Lbry")
         {
-            mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
-            mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
+            try {
+                mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
+                mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
+            } catch (Exception ex) {
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
             mIterations = (aGatelessGateDevice.GetVendor() == "NVIDIA") ? 8 : 1;
         }
 
@@ -208,13 +212,18 @@ namespace GatelessGateSharp
                     }
                 } catch (Exception ex) {
                     MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    MainForm.Logger("Restarting miner thread...");
+                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                        Stop();
+                    }
                 }
 
                 Speed = 0;
 
-                if (!Stopped)
+                if (!Stopped) {
+                    MainForm.Logger("Restarting miner thread...");
                     System.Threading.Thread.Sleep(5000);
+                }
             }
             MarkAsDone();
         }

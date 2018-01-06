@@ -54,9 +54,13 @@ namespace GatelessGateSharp
         public OpenCLPascalMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Pascal")
         {
-            mPascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize);
-            mPascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sPascalOutputSize);
-            mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize);
+            try {
+                mPascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize);
+                mPascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sPascalOutputSize);
+                mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize);
+            } catch (Exception ex) {
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
         }
 
         public void Start(PascalStratum aPascalStratum, int aPascalIntensity, int aPascalLocalWorkSize)
@@ -274,13 +278,18 @@ namespace GatelessGateSharp
                     }
                 } catch (Exception ex) {
                     MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    MainForm.Logger("Restarting miner thread...");
+                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                        Stop();
+                    }
                 }
 
                 Speed = 0;
 
-                if (!Stopped)
+                if (!Stopped) {
+                    MainForm.Logger("Restarting miner thread...");
                     System.Threading.Thread.Sleep(5000);
+                }
             }
             MarkAsDone();
         }

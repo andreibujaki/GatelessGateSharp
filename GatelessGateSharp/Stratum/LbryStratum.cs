@@ -211,11 +211,15 @@ namespace GatelessGateSharp
                 { "params", new List<string> {
             }}}));
 
-            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object> >(ReadLine());
-            //mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
-            mPoolExtranonce = (string)(((JArray)(response["result"]))[1]);
-            LocalExtranonceSize = (int)(((JArray)(response["result"]))[2]);
-            //MainForm.Logger("mLocalExtranonceSize: " + mLocalExtranonceSize);
+            try {
+                Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+                //mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
+                mPoolExtranonce = (string)(((JArray)(response["result"]))[1]);
+                LocalExtranonceSize = (int)(((JArray)(response["result"]))[2]);
+                //MainForm.Logger("mLocalExtranonceSize: " + mLocalExtranonceSize);
+            } catch (Exception) {
+                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+            }
             
             // mining.extranonce.subscribe
             WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {

@@ -170,7 +170,6 @@ namespace GatelessGateSharp
         override protected void Authorize()
         {
             try  { mMutex.WaitOne(5000); } catch (Exception) { }
-
             WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "jsonrpc", "2.0" },
@@ -178,21 +177,22 @@ namespace GatelessGateSharp
                 { "params", new List<string> {
                     Username
             }}}));
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
 
-            var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
-            if (response["result"] == null)
-            {
-                try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                MainForm.Logger("Authorization failed.");
-                throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
+            try {
+                var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+                if (response["result"] == null)
+                    throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
+            } catch (Exception) {
+                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
             }
 
+            try { mMutex.WaitOne(5000); } catch (Exception) { }
             WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "jsonrpc", "2.0" },
                 { "method", "eth_getWork" }
             }));
-
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }
 
             mPingThread = new Thread(new ThreadStart(PingThread));

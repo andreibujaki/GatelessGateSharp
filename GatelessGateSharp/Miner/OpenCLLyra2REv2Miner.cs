@@ -64,8 +64,12 @@ namespace GatelessGateSharp
 
         public OpenCLLyra2REv2Miner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Lyra2REv2") {
-            mLyra2REv2InputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sLyra2REv2InputSize);
-            mLyra2REv2OutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sLyra2REv2OutputSize);
+            try {
+                mLyra2REv2InputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sLyra2REv2InputSize);
+                mLyra2REv2OutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sLyra2REv2OutputSize);
+            } catch (Exception ex) {
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
         }
 
         public void Start(Lyra2REv2Stratum aLyra2REv2Stratum, int aLyra2REv2Intensity, int aLyra2REv2LocalWorkSize) {
@@ -1218,99 +1222,105 @@ namespace GatelessGateSharp
             fixed (long* lyra2rev2LocalWorkSizeArrayPtr = mLyra2REv2LocalWorkSizeArray)
             fixed (byte* lyra2rev2InputPtr = mLyra2REv2Input)
             fixed (UInt32* lyra2rev2OutputPtr = mLyra2REv2Output)
-            using (mLyra2REv2GlobalCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, (mLyra2REv2GlobalWorkSizeArray[0] * 32)))
-            using (mLyra2REv2PadBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, (mLyra2REv2GlobalWorkSizeArray[0] * 32768)))
             while (!Stopped) {
                 MarkAsAlive();
 
                 try {
-                    mLyra2REv2SearchKernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
+                    using (mLyra2REv2GlobalCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, (mLyra2REv2GlobalWorkSizeArray[0] * 32)))
+                    using (mLyra2REv2PadBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, (mLyra2REv2GlobalWorkSizeArray[0] * 32768))) {
+                        mLyra2REv2SearchKernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
 
-                    mLyra2REv2Search1Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
+                        mLyra2REv2Search1Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
 
-                    mLyra2REv2Search2Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
+                        mLyra2REv2Search2Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
 
-                    mLyra2REv2Search3Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
-                    mLyra2REv2Search3Kernel.SetMemoryArgument(1, mLyra2REv2PadBuffer);
+                        mLyra2REv2Search3Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
+                        mLyra2REv2Search3Kernel.SetMemoryArgument(1, mLyra2REv2PadBuffer);
 
-                    mLyra2REv2Search4Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
+                        mLyra2REv2Search4Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
 
-                    mLyra2REv2Search5Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
+                        mLyra2REv2Search5Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
 
-                    mLyra2REv2Search6Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
-                    mLyra2REv2Search6Kernel.SetMemoryArgument(1, mLyra2REv2OutputBuffer);
+                        mLyra2REv2Search6Kernel.SetMemoryArgument(0, mLyra2REv2GlobalCacheBuffer);
+                        mLyra2REv2Search6Kernel.SetMemoryArgument(1, mLyra2REv2OutputBuffer);
 
-                    // Wait for the first job to arrive.
-                    int elapsedTime = 0;
-                    while ((mLyra2REv2Stratum == null || mLyra2REv2Stratum.GetJob() == null) && elapsedTime < 10000) {
-                        Thread.Sleep(10);
-                        elapsedTime += 10;
-                    }
-                    if (mLyra2REv2Stratum == null || mLyra2REv2Stratum.GetJob() == null)
-                        throw new TimeoutException("Stratum server failed to send a new job.");
+                        // Wait for the first job to arrive.
+                        int elapsedTime = 0;
+                        while ((mLyra2REv2Stratum == null || mLyra2REv2Stratum.GetJob() == null) && elapsedTime < 10000) {
+                            Thread.Sleep(10);
+                            elapsedTime += 10;
+                        }
+                        if (mLyra2REv2Stratum == null || mLyra2REv2Stratum.GetJob() == null)
+                            throw new TimeoutException("Stratum server failed to send a new job.");
 
-                    System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                    Lyra2REv2Stratum.Work lyra2rev2Work;
+                        System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
+                        Lyra2REv2Stratum.Work lyra2rev2Work;
 
-                    while (!Stopped && (lyra2rev2Work = mLyra2REv2Stratum.GetWork()) != null) {
-                        MarkAsAlive();
-
-                        var lyra2rev2Job = lyra2rev2Work.Job;
-                        Array.Copy(lyra2rev2Work.Blob, mLyra2REv2Input, sLyra2REv2InputSize);
-                        UInt32 lyra2rev2StartNonce = (UInt32)(r.Next(0, int.MaxValue));
-                        Queue.Write<byte>(mLyra2REv2InputBuffer, true, 0, sLyra2REv2InputSize, (IntPtr)lyra2rev2InputPtr, null);
-
-                        consoleUpdateStopwatch.Start();
-
-                        while (!Stopped && mLyra2REv2Stratum.GetJob().Equals(lyra2rev2Job)) {
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
-
+                        while (!Stopped && (lyra2rev2Work = mLyra2REv2Stratum.GetWork()) != null) {
                             MarkAsAlive();
 
-                            UInt64 lyra2REv2Target = (UInt64)((double)0xffff0000U / (mLyra2REv2Stratum.Difficulty / 256));
-                            mLyra2REv2Search6Kernel.SetValueArgument<UInt64>(2, lyra2REv2Target);
-                            mLyra2REv2GlobalWorkOffsetArray[0] = lyra2rev2StartNonce;
+                            var lyra2rev2Job = lyra2rev2Work.Job;
+                            Array.Copy(lyra2rev2Work.Blob, mLyra2REv2Input, sLyra2REv2InputSize);
+                            UInt32 lyra2rev2StartNonce = (UInt32)(r.Next(0, int.MaxValue));
+                            Queue.Write<byte>(mLyra2REv2InputBuffer, true, 0, sLyra2REv2InputSize, (IntPtr)lyra2rev2InputPtr, null);
 
-                            // Get a new local extranonce if necessary.
-                            if (0xffffffffu - lyra2rev2StartNonce < (UInt32)mLyra2REv2GlobalWorkSizeArray[0])
-                                break;
+                            consoleUpdateStopwatch.Start();
 
-                            PrecalcMidstate();
+                            while (!Stopped && mLyra2REv2Stratum.GetJob().Equals(lyra2rev2Job)) {
+                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                                sw.Start();
 
-                            mLyra2REv2Output[255] = 0; // mLyra2REv2Output[255] is used as an atomic counter.
-                            Queue.Write<UInt32>(mLyra2REv2OutputBuffer, true, 0, sLyra2REv2OutputSize, (IntPtr)lyra2rev2OutputPtr, null);
-                            Queue.Execute(mLyra2REv2SearchKernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
-                            Queue.Execute(mLyra2REv2Search1Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
-                            Queue.Execute(mLyra2REv2Search2Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
-                            Queue.Execute(mLyra2REv2Search3Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
-                            Queue.Execute(mLyra2REv2Search4Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
-                            Queue.Execute(mLyra2REv2Search5Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
-                            Queue.Execute(mLyra2REv2Search6Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
-                            Queue.Read<UInt32>(mLyra2REv2OutputBuffer, true, 0, sLyra2REv2OutputSize, (IntPtr)lyra2rev2OutputPtr, null);
-                            if (mLyra2REv2Stratum.GetJob().Equals(lyra2rev2Job)) {
-                                for (int i = 0; i < mLyra2REv2Output[255]; ++i)
-                                    mLyra2REv2Stratum.Submit(GatelessGateDevice, lyra2rev2Work, mLyra2REv2Output[i]);
-                            }
-                            lyra2rev2StartNonce += (UInt32)mLyra2REv2GlobalWorkSizeArray[0];
+                                MarkAsAlive();
 
-                            sw.Stop();
-                            Speed = ((double)mLyra2REv2GlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
-                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (Lyra2REv2)", Speed / 1000));
-                                consoleUpdateStopwatch.Restart();
+                                UInt64 lyra2REv2Target = (UInt64)((double)0xffff0000U / (mLyra2REv2Stratum.Difficulty / 256));
+                                mLyra2REv2Search6Kernel.SetValueArgument<UInt64>(2, lyra2REv2Target);
+                                mLyra2REv2GlobalWorkOffsetArray[0] = lyra2rev2StartNonce;
+
+                                // Get a new local extranonce if necessary.
+                                if (0xffffffffu - lyra2rev2StartNonce < (UInt32)mLyra2REv2GlobalWorkSizeArray[0])
+                                    break;
+
+                                PrecalcMidstate();
+
+                                mLyra2REv2Output[255] = 0; // mLyra2REv2Output[255] is used as an atomic counter.
+                                Queue.Write<UInt32>(mLyra2REv2OutputBuffer, true, 0, sLyra2REv2OutputSize, (IntPtr)lyra2rev2OutputPtr, null);
+                                Queue.Execute(mLyra2REv2SearchKernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
+                                Queue.Execute(mLyra2REv2Search1Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
+                                Queue.Execute(mLyra2REv2Search2Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
+                                Queue.Execute(mLyra2REv2Search3Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
+                                Queue.Execute(mLyra2REv2Search4Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
+                                Queue.Execute(mLyra2REv2Search5Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
+                                Queue.Execute(mLyra2REv2Search6Kernel, mLyra2REv2GlobalWorkOffsetArray, mLyra2REv2GlobalWorkSizeArray, mLyra2REv2LocalWorkSizeArray, null); Queue.Finish();
+                                Queue.Read<UInt32>(mLyra2REv2OutputBuffer, true, 0, sLyra2REv2OutputSize, (IntPtr)lyra2rev2OutputPtr, null);
+                                if (mLyra2REv2Stratum.GetJob().Equals(lyra2rev2Job)) {
+                                    for (int i = 0; i < mLyra2REv2Output[255]; ++i)
+                                        mLyra2REv2Stratum.Submit(GatelessGateDevice, lyra2rev2Work, mLyra2REv2Output[i]);
+                                }
+                                lyra2rev2StartNonce += (UInt32)mLyra2REv2GlobalWorkSizeArray[0];
+
+                                sw.Stop();
+                                Speed = ((double)mLyra2REv2GlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                                if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
+                                    MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (Lyra2REv2)", Speed / 1000));
+                                    consoleUpdateStopwatch.Restart();
+                                }
                             }
                         }
                     }
                 } catch (Exception ex) {
                     MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    MainForm.Logger("Restarting miner thread...");
+                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                        Stop();
+                    }
                 }
 
                 Speed = 0;
 
-                if (!Stopped)
+                if (!Stopped) {
+                    MainForm.Logger("Restarting miner thread...");
                     System.Threading.Thread.Sleep(5000);
+                }
             }
 
             MarkAsDone();

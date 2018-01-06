@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace GatelessGateSharp {
     class UnrecoverableException : Exception {
         public static bool IsUnrecoverableException(Exception ex) {
-            if (ex.Message == "OpenCL error code detected: InvalidBufferSize.")
+            if (ex.Message == "OpenCL error code detected: InvalidBufferSize."
+                || ex.Message == "OpenCL error code detected: MemoryObjectAllocationFailure.")
                 return true;
             return false;
         }
@@ -18,6 +19,7 @@ namespace GatelessGateSharp {
 
         public UnrecoverableException(Exception ex, Device device)
             : base(ex.Message == "OpenCL error code detected: InvalidBufferSize." ? "Not enough memory on Device #" + device.DeviceIndex + " (" + device.GetVendor() + " " + device.GetName() + ").\nIntensity may be too high." :
+                   ex.Message == "OpenCL error code detected: MemoryObjectAllocationFailure." ? "Not enough memory on Device #" + device.DeviceIndex + " (" + device.GetVendor() + " " + device.GetName() + ").\nIntensity may be too high." :
                                                                                     ex.Message) {
         }
     }

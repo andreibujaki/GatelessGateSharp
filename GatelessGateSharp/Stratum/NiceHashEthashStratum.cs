@@ -116,9 +116,14 @@ namespace GatelessGateSharp
                     "EthereumStratum/1.0.0"
             }}}));
 
-            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object> >(ReadLine());
-            mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
-            mPoolExtranonce = (string)(((JArray)(response["result"]))[1]);
+            Dictionary<String, Object> response;
+            try {
+                response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+                mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
+                mPoolExtranonce = (string)(((JArray)(response["result"]))[1]);
+            } catch (Exception) {
+                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+            }
 
             // mining.extranonce.subscribe
             WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {
@@ -126,7 +131,11 @@ namespace GatelessGateSharp
                 { "method", "mining.extranonce.subscribe" },
                 { "params", new List<string> {
             }}}));
-            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+            try {
+                response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+            } catch (Exception) {
+                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+            }
             //MainForm.Logger("mining.extranonce.subscribe: " + response["result"]); // TODO
             
             WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {
