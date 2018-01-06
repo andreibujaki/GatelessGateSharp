@@ -7,7 +7,7 @@ Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), t
 
 * [Gateless_Gate_Sharp_1.1.15_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.15-alpha/Gateless_Gate_Sharp_1.1.15_alpha_Setup.msi) (Windows x64 Installer)
 * [Gateless_Gate_Sharp_1.1.15_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.15-alpha/Gateless_Gate_Sharp_1.1.15_alpha.7z)
-* [Gateless_Gate_Sharp_1.1.14_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.15-alpha/Gateless_Gate_Sharp_1.1.15_alpha.zip)
+* [Gateless_Gate_Sharp_1.1.15_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.15-alpha/Gateless_Gate_Sharp_1.1.15_alpha.zip)
 
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
