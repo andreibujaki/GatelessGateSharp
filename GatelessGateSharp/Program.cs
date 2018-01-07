@@ -56,50 +56,50 @@ namespace GatelessGateSharp
         static void Main()
         {
             bool mutexResult = false;
-
             try { mutexResult = sMutex.WaitOne(TimeSpan.Zero, true); } catch (Exception) {}
+            if (!mutexResult)
+                return;
 
-            if (mutexResult)
+            Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable("GPU_MAX_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable("GPU_USE_SYNC_OBJECTS", "1", EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable("GPU_SINGLE_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable("GPU_MAX_HEAP_SIZE", "100", EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable("GPU_FORCE_64BIT_PTR", "0", EnvironmentVariableTarget.Process);
+
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadExceptionHandler);
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
+
+            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
+
+            foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharpMonitor"))
+                try { process.Kill(); } catch (Exception) { } 
+            Process monitor = null;
+            try
             {
-                Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);
-                Environment.SetEnvironmentVariable("GPU_MAX_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
-                Environment.SetEnvironmentVariable("GPU_USE_SYNC_OBJECTS", "1", EnvironmentVariableTarget.Process);
-                Environment.SetEnvironmentVariable("GPU_SINGLE_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
-                Environment.SetEnvironmentVariable("GPU_MAX_HEAP_SIZE", "100", EnvironmentVariableTarget.Process);
-                Environment.SetEnvironmentVariable("GPU_FORCE_64BIT_PTR", "0", EnvironmentVariableTarget.Process);
-
-                Application.ThreadException += new ThreadExceptionEventHandler(ThreadExceptionHandler);
-                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
-
-                Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
-
-                Process process = null;
-                try
-                {
-                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                    startInfo.FileName = "GatelessGateSharpMonitor.exe";
-                    //startInfo.Arguments = args;
-                    startInfo.RedirectStandardOutput = true;
-                    startInfo.RedirectStandardError = true;
-                    startInfo.UseShellExecute = false;
-                    startInfo.CreateNoWindow = true;
-                    process = new Process();
-                    process.StartInfo = startInfo;
-                    process.EnableRaisingEvents = true;
-                    process.Start();
-                }
-                catch (Exception) { }
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm());
-
-                try { process.Kill(); }
-                catch (Exception) { }
-                
-                try { sMutex.ReleaseMutex(); } catch (Exception) { }
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = "GatelessGateSharpMonitor.exe";
+                //startInfo.Arguments = args;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
+                monitor = new Process();
+                monitor.StartInfo = startInfo;
+                monitor.EnableRaisingEvents = true;
+                monitor.Start();
             }
+            catch (Exception) { }
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
+
+            try { monitor.Kill(); }
+            catch (Exception) { }
+                
+            try { sMutex.ReleaseMutex(); } catch (Exception) { }
         }
     }
 }
