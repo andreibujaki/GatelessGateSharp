@@ -13,23 +13,23 @@ namespace GatelessGateSharpMonitor
             while (true) {
                 try {
                     int counter = 0;
-                    for (counter = 0; counter < 600; ++counter) {
+                    for (counter = 0; counter < 60; ++counter) {
                         bool unresponsive = false;
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharp"))
                             if (!process.Responding)
                                 unresponsive = true;
                         if (!unresponsive)
                             break;
-                        Thread.Sleep(100);
+                        Thread.Sleep(1000);
                     }
-                    if (counter >= 600) {
+                    if (counter >= 60) {
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharp"))
                             try { process.Kill(); } catch (Exception) { }
                     }
                     if (System.Diagnostics.Process.GetProcessesByName("GatelessGateSharp").Length == 0)
                         Process.Start("GatelessGateSharp.exe");
-                    Thread.Sleep(100);
                 } catch (Exception) { }
+                Thread.Sleep(1000);
             }
         }
     }
