@@ -178,16 +178,19 @@ namespace GatelessGateSharp
         }
 
         static List<OpenCLDummyLbryMiner> dummyMinerList = new List<OpenCLDummyLbryMiner> { }; // Keep everything until the miner quits.
+        static IntPtr ADL2Context = IntPtr.Zero;
 
         public static bool InitializeADL(OpenCLDevice[] mDevices) {
             var ADLRet = -1;
             var NumberOfAdapters = 0;
-            if (null != ADL.ADL_Main_Control_Create)
-                ADLRet = ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1);
-            if (ADL.ADL_SUCCESS == ADLRet) {
+            if (null == ADL.ADL2_Main_Control_Create
+                || null == ADL.ADL_Main_Control_Create
+                || null == ADL.ADL_Adapter_NumberOfAdapters_Get)
+                return false;
+            if (ADL.ADL_SUCCESS == ADL.ADL2_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1, ref ADL2Context)
+                && ADL.ADL_SUCCESS == ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1)) {
                 MainForm.Logger("Successfully initialized AMD Display Library.");
-                if (null != ADL.ADL_Adapter_NumberOfAdapters_Get)
-                    ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
+                ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
                 MainForm.Logger("Number of ADL Adapters: " + NumberOfAdapters.ToString());
 
                 if (0 < NumberOfAdapters) {
@@ -405,7 +408,7 @@ namespace GatelessGateSharp
                 return OSADLPMActivityData.iActivityPercent;
             }
         }
-        
+
         public int CoreClock {
             get {
                 if (ADLAdapterIndex < 0 || null == ADL.ADL_Overdrive5_CurrentActivity_Get)
@@ -423,6 +426,38 @@ namespace GatelessGateSharp
                     return -1;
                 OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
                 return OSADLPMActivityData.iEngineClock / 100;
+            }
+        }
+
+        public int CoreVoltage {
+            get {
+                if (ADLAdapterIndex < 0 || null == ADL.ADL_Overdrive5_CurrentActivity_Get)
+                    return -1;
+
+                // activity
+                ADLPMActivity OSADLPMActivityData;
+                OSADLPMActivityData = new ADLPMActivity();
+                var activityBuffer = IntPtr.Zero;
+                var size = Marshal.SizeOf(OSADLPMActivityData);
+                activityBuffer = Marshal.AllocCoTaskMem((int)size);
+                Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
+                if (ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) != ADL.ADL_SUCCESS)
+                    return -1;
+                OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
+                if (OSADLPMActivityData.iVddc > 1)
+                    return OSADLPMActivityData.iVddc;
+
+                // activity
+                ADLODNPerformanceStatus OSADLODNPerformanceStatusData;
+                OSADLODNPerformanceStatusData = new ADLODNPerformanceStatus();
+                var statusBuffer = IntPtr.Zero;
+                size = Marshal.SizeOf(OSADLODNPerformanceStatusData);
+                statusBuffer = Marshal.AllocCoTaskMem((int)size);
+                Marshal.StructureToPtr(OSADLODNPerformanceStatusData, statusBuffer, false);
+                if (ADL.ADL2_OverdriveN_PerformanceStatus_Get(ADL2Context, ADLAdapterIndex, statusBuffer) != ADL.ADL_SUCCESS)
+                    return -1;
+                OSADLODNPerformanceStatusData = (ADLODNPerformanceStatus)Marshal.PtrToStructure(statusBuffer, OSADLODNPerformanceStatusData.GetType());
+                return OSADLODNPerformanceStatusData.iCoreClock;
             }
         }
 

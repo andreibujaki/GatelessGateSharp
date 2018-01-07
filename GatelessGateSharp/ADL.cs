@@ -64,10 +64,12 @@ namespace ATI.ADL
     /// <param name="enumConnectedAdapters">If it is 1, then ADL will only retuen the physical exist adapters </param>
     ///// <returns> retrun ADL Error Code</returns>
     internal delegate int ADL_Main_Control_Create(ADL_Main_Memory_Alloc callback, int enumConnectedAdapters);
+    internal delegate int ADL2_Main_Control_Create(ADL_Main_Memory_Alloc callback, int enumConnectedAdapters, ref IntPtr context);
 
     /// <summary> ADL Destroy Function to free up ADL Data</summary>
     /// <returns> retrun ADL Error Code</returns>
-    internal delegate int ADL_Main_Control_Destroy ();
+    internal delegate int ADL_Main_Control_Destroy();
+    internal delegate int ADL2_Main_Control_Destroy(IntPtr context);
 
     /// <summary> ADL Function to get the number of adapters</summary>
     /// <param name="numAdapters">return number of adapters</param>
@@ -119,6 +121,8 @@ namespace ATI.ADL
     /// <param name="adapterIndex">Adapter Index</param>
     /// <returns>return ADL Error Code</returns>
     internal delegate int ADL_Overdrive5_FanSpeedToDefault_Set(int adapterIndex, int iThermalControllerIndex);
+
+    internal delegate int ADL2_OverdriveN_PerformanceStatus_Get(IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceStatus);
 
     #endregion Export Delegates
 
@@ -260,6 +264,30 @@ namespace ATI.ADL
         internal int 	iFanSpeed;
         internal int 	iFlags;
     }
+
+    /// <summary> ADLODNPerformanceStatus Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODNPerformanceStatus {
+        /// <summary> </summary>
+        internal int iCoreClock;
+        internal int iMemoryClock;
+        internal int iDCEFClock;
+        internal int iGFXClock;
+        internal int iUVDClock;
+        internal int iVCEClock;
+        internal int iGPUActivityPercent;
+        internal int iCurrentCorePerformanceLevel;
+        internal int iCurrentMemoryPerformanceLevel;
+        internal int iCurrentDCEFPerformanceLevel;
+        internal int iCurrentGFXPerformanceLevel;
+        internal int iUVDPerformanceLevel;
+        internal int iVCEPerformanceLevel;
+        internal int iCurrentBusSpeed;
+        internal int iCurrentBusLanes;
+        internal int iMaximumBusLanes;
+        internal int iVDDC;
+        internal int iVDDCI;
+    }
     #endregion Export Struct
 
     #region ADL Class
@@ -306,10 +334,16 @@ namespace ATI.ADL
             internal static extern HMODULE GetModuleHandle (string moduleName);
 
             [DllImport(Atiadlxx_FileName)]
-            internal static extern int ADL_Main_Control_Create (ADL_Main_Memory_Alloc callback, int enumConnectedAdapters);
+            internal static extern int ADL_Main_Control_Create(ADL_Main_Memory_Alloc callback, int enumConnectedAdapters);
 
             [DllImport(Atiadlxx_FileName)]
-            internal static extern int ADL_Main_Control_Destroy ();
+            internal static extern int ADL2_Main_Control_Create(ADL_Main_Memory_Alloc callback, int enumConnectedAdapters, ref IntPtr context);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Main_Control_Destroy();
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_Main_Control_Destroy(IntPtr context);
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Main_Control_IsFunctionValid (HMODULE module, string procName);
@@ -343,6 +377,9 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Overdrive5_FanSpeedToDefault_Set(int adapterIndex, int iThermalControllerIndex);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_PerformanceStatus_Get(IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceStatus);
             
             #endregion DLLImport
         }
@@ -453,15 +490,11 @@ namespace ATI.ADL
 
         #region ADL_Main_Control_Create
         /// <summary> ADL_Main_Control_Create Delegates</summary>
-        internal static ADL_Main_Control_Create ADL_Main_Control_Create
-        {
-            get
-            {
-                if (!ADL_Main_Control_Create_Check && null == ADL_Main_Control_Create_)
-                {
+        internal static ADL_Main_Control_Create ADL_Main_Control_Create {
+            get {
+                if (!ADL_Main_Control_Create_Check && null == ADL_Main_Control_Create_) {
                     ADL_Main_Control_Create_Check = true;
-                    if (ADLCheckLibrary.IsFunctionValid("ADL_Main_Control_Create"))
-                    {
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Main_Control_Create")) {
                         ADL_Main_Control_Create_ = ADLImport.ADL_Main_Control_Create;
                     }
                 }
@@ -472,19 +505,31 @@ namespace ATI.ADL
         private static ADL_Main_Control_Create ADL_Main_Control_Create_ = null;
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL_Main_Control_Create_Check = false;
+        /// <summary> ADL2_Main_Control_Create Delegates</summary>
+        internal static ADL2_Main_Control_Create ADL2_Main_Control_Create {
+            get {
+                if (!ADL2_Main_Control_Create_Check && null == ADL2_Main_Control_Create_) {
+                    ADL2_Main_Control_Create_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_Main_Control_Create")) {
+                        ADL2_Main_Control_Create_ = ADLImport.ADL2_Main_Control_Create;
+                    }
+                }
+                return ADL2_Main_Control_Create_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_Main_Control_Create ADL2_Main_Control_Create_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_Main_Control_Create_Check = false;
         #endregion ADL_Main_Control_Create
 
         #region ADL_Main_Control_Destroy
         /// <summary> ADL_Main_Control_Destroy Delegates</summary>
-        internal static ADL_Main_Control_Destroy ADL_Main_Control_Destroy
-        {
-            get
-            {
-                if (!ADL_Main_Control_Destroy_Check && null == ADL_Main_Control_Destroy_)
-                {
+        internal static ADL_Main_Control_Destroy ADL_Main_Control_Destroy {
+            get {
+                if (!ADL_Main_Control_Destroy_Check && null == ADL_Main_Control_Destroy_) {
                     ADL_Main_Control_Destroy_Check = true;
-                    if (ADLCheckLibrary.IsFunctionValid("ADL_Main_Control_Destroy"))
-                    {
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Main_Control_Destroy")) {
                         ADL_Main_Control_Destroy_ = ADLImport.ADL_Main_Control_Destroy;
                     }
                 }
@@ -495,6 +540,22 @@ namespace ATI.ADL
         private static ADL_Main_Control_Destroy ADL_Main_Control_Destroy_ = null;
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL_Main_Control_Destroy_Check = false;
+        /// <summary> ADL2_Main_Control_Destroy Delegates</summary>
+        internal static ADL2_Main_Control_Destroy ADL2_Main_Control_Destroy {
+            get {
+                if (!ADL2_Main_Control_Destroy_Check && null == ADL2_Main_Control_Destroy_) {
+                    ADL2_Main_Control_Destroy_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_Main_Control_Destroy")) {
+                        ADL2_Main_Control_Destroy_ = ADLImport.ADL2_Main_Control_Destroy;
+                    }
+                }
+                return ADL2_Main_Control_Destroy_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_Main_Control_Destroy ADL2_Main_Control_Destroy_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_Main_Control_Destroy_Check = false;
         #endregion ADL_Main_Control_Destroy
 
         #region ADL_Adapter_NumberOfAdapters_Get
@@ -683,15 +744,11 @@ namespace ATI.ADL
 
         #region ADL_Overdrive5_FanSpeedToDefault_Set
         /// <summary> ADL_Overdrive5_FanSpeedToDefault_Set Delegates</summary>
-        internal static ADL_Overdrive5_FanSpeedToDefault_Set ADL_Overdrive5_FanSpeedToDefault_Set
-        {
-            get
-            {
-                if (!ADL_Overdrive5_FanSpeedToDefault_Set_Check && null == ADL_Overdrive5_FanSpeedToDefault_Set_)
-                {
+        internal static ADL_Overdrive5_FanSpeedToDefault_Set ADL_Overdrive5_FanSpeedToDefault_Set {
+            get {
+                if (!ADL_Overdrive5_FanSpeedToDefault_Set_Check && null == ADL_Overdrive5_FanSpeedToDefault_Set_) {
                     ADL_Overdrive5_FanSpeedToDefault_Set_Check = true;
-                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_FanSpeedToDefault_Set"))
-                    {
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_FanSpeedToDefault_Set")) {
                         ADL_Overdrive5_FanSpeedToDefault_Set_ = ADLImport.ADL_Overdrive5_FanSpeedToDefault_Set;
                     }
                 }
@@ -703,6 +760,25 @@ namespace ATI.ADL
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL_Overdrive5_FanSpeedToDefault_Set_Check = false;
         #endregion ADL_Overdrive5_FanSpeedToDefault_Set
+
+        #region ADL2_OverdriveN_PerformanceStatus_Get
+        /// <summary> ADL2_OverdriveN_PerformanceStatus_Get Delegates</summary>
+        internal static ADL2_OverdriveN_PerformanceStatus_Get ADL2_OverdriveN_PerformanceStatus_Get {
+            get {
+                if (!ADL2_OverdriveN_PerformanceStatus_Get_Check && null == ADL2_OverdriveN_PerformanceStatus_Get_) {
+                    ADL2_OverdriveN_PerformanceStatus_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_OverdriveN_PerformanceStatus_Get")) {
+                        ADL2_OverdriveN_PerformanceStatus_Get_ = ADLImport.ADL2_OverdriveN_PerformanceStatus_Get;
+                    }
+                }
+                return ADL2_OverdriveN_PerformanceStatus_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_OverdriveN_PerformanceStatus_Get ADL2_OverdriveN_PerformanceStatus_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_OverdriveN_PerformanceStatus_Get_Check = false;
+        #endregion ADL2_OverdriveN_PerformanceStatus_Get
 
         #endregion Export Functions
     }
