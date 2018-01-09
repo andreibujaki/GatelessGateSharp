@@ -154,13 +154,16 @@ namespace GatelessGateSharp
             {
                 IList<ComputeDevice> openclDevices = platform.Devices;
                 var properties = new ComputeContextPropertyList(platform);
+                bool doneWithAMD = false;
                 using (var context = new ComputeContext(openclDevices, properties, null, IntPtr.Zero))
                 {
                     foreach (var openclDevice in context.Devices)
                     {
-                        if (IsOpenCLDeviceIgnored(openclDevice))
+                        if (IsOpenCLDeviceIgnored(openclDevice) || (openclDevice.Name == "Advanced Micro Devices, Inc." && doneWithAMD))
                             continue;
                         computeDeviceArrayList.Add(openclDevice);
+                        if (openclDevice.Name == "Advanced Micro Devices, Inc.")
+                            doneWithAMD = true;
                     }
                 }
 
