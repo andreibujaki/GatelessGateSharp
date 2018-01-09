@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.20";
+        public static string appVersion = "1.1.21";
         public static string appName = shortAppName + " " + appVersion + " beta";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1918,7 +1918,7 @@ namespace GatelessGateSharp
             timerFanControl.Enabled = false;
             if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy) {
                 foreach (var device in mDevices)
-                    if (device.ADLAdapterIndex >= 0)
+                    if (device.ADLAdapterIndex >= 0 && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
                         device.FanSpeed = -1;
                 ADL.ADL_Main_Control_Destroy();
             }
@@ -3902,7 +3902,10 @@ namespace GatelessGateSharp
 
         private void timerFanControl_Tick(object sender, EventArgs e) {
             foreach (var device in mDevices) {
-                if (!checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked || appState != ApplicationGlobalState.Mining) {
+                if (!checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
+                    continue;
+
+                if (appState != ApplicationGlobalState.Mining) {
                     device.FanSpeed = -1;
                     continue;
                 }
