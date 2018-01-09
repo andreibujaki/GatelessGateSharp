@@ -217,10 +217,9 @@ namespace GatelessGateSharp
 
                     // Wait for the first PascalJob to arrive.
                     int elapsedTime = 0;
-                    while ((mPascalStratum == null || mPascalStratum.GetJob() == null) && elapsedTime < 5000)
-                    {
-                        Thread.Sleep(10);
-                        elapsedTime += 10;
+                    while ((mPascalStratum == null || mPascalStratum.GetJob() == null) && elapsedTime < 60000) {
+                        Thread.Sleep(100);
+                        elapsedTime += 100;
                     }
                     if (mPascalStratum == null || mPascalStratum.GetJob() == null)
                         throw new TimeoutException("Stratum server failed to send a new PascalJob.");

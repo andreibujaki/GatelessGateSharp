@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.19";
+        public static string appVersion = "1.1.20";
         public static string appName = shortAppName + " " + appVersion + " beta";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -189,6 +189,7 @@ namespace GatelessGateSharp
 
             GlobalMemoryStatusEx(status);
             
+            /*
             MainForm.Logger("dwLength: " + (ulong)status.dwLength);
             MainForm.Logger("dwMemoryLoad: " + (ulong)status.dwMemoryLoad);
             MainForm.Logger("ullTotalPhys: " + (ulong)status.ullTotalPhys);
@@ -197,6 +198,7 @@ namespace GatelessGateSharp
             MainForm.Logger("ullAvailPageFile: " + (ulong)status.ullAvailPageFile);
             MainForm.Logger("ullTotalVirtual: " + (ulong)status.ullTotalVirtual);
             MainForm.Logger("ullAvailVirtual: " + (ulong)status.ullAvailVirtual);
+            */
             
             if ((ulong)status.ullTotalPageFile - status.ullTotalPhys < (ulong)24 * 1024 * 1024 * 1024) {
                 var w = new Form() { Size = new System.Drawing.Size(0, 0) };

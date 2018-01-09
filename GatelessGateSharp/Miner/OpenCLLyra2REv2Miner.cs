@@ -1246,9 +1246,9 @@ namespace GatelessGateSharp
 
                         // Wait for the first job to arrive.
                         int elapsedTime = 0;
-                        while ((mLyra2REv2Stratum == null || mLyra2REv2Stratum.GetJob() == null) && elapsedTime < 10000) {
-                            Thread.Sleep(10);
-                            elapsedTime += 10;
+                        while ((mLyra2REv2Stratum == null || mLyra2REv2Stratum.GetJob() == null) && elapsedTime < 60000) {
+                            Thread.Sleep(100);
+                            elapsedTime += 100;
                         }
                         if (mLyra2REv2Stratum == null || mLyra2REv2Stratum.GetJob() == null)
                             throw new TimeoutException("Stratum server failed to send a new job.");

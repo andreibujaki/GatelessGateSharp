@@ -124,9 +124,9 @@ namespace GatelessGateSharp
 
                     // Wait for the first NeoScryptJob to arrive.
                     int elapsedTime = 0;
-                    while ((mNeoScryptStratum == null || mNeoScryptStratum.GetJob() == null) && elapsedTime < 5000) {
-                        Thread.Sleep(10);
-                        elapsedTime += 10;
+                    while ((mNeoScryptStratum == null || mNeoScryptStratum.GetJob() == null) && elapsedTime < 60000) {
+                        Thread.Sleep(100);
+                        elapsedTime += 100;
                     }
                     if (mNeoScryptStratum == null || mNeoScryptStratum.GetJob() == null)
                         throw new TimeoutException("Stratum server failed to send a new job.");
