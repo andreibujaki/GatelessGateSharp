@@ -122,7 +122,21 @@ namespace ATI.ADL
     /// <returns>return ADL Error Code</returns>
     internal delegate int ADL_Overdrive5_FanSpeedToDefault_Set(int adapterIndex, int iThermalControllerIndex);
 
-    internal delegate int ADL2_OverdriveN_PerformanceStatus_Get(IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceStatus);
+    internal delegate int ADL_Overdrive5_ODParameters_Get(int iAdapterIndex, IntPtr lpOdParameters);
+    internal delegate int ADL_Overdrive5_ODPerformanceLevels_Get(int iAdapterIndex, int iDefault, IntPtr lpODPerformanceLevels);
+    internal delegate int ADL_Overdrive5_ODPerformanceLevels_Set(int iAdapterIndex, IntPtr lpODPerformanceLevels);
+
+    internal delegate int ADL2_OverdriveN_Capabilities_Get(IntPtr context, int iAdapterIndex, IntPtr lpODCapabilities);
+    internal delegate int 	ADL2_OverdriveN_SystemClocks_Get (IntPtr context, int iAdapterIndex, IntPtr pODPerformanceLevels);
+    internal delegate int 	ADL2_OverdriveN_SystemClocks_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+    internal delegate int 	ADL2_OverdriveN_MemoryClocks_Get (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+    internal delegate int 	ADL2_OverdriveN_MemoryClocks_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+    internal delegate int 	ADL2_OverdriveN_FanControl_Get (IntPtr context, int iAdapterIndex, IntPtr lpODFanSpeed);
+    internal delegate int 	ADL2_OverdriveN_FanControl_Set (IntPtr context, int iAdapterIndex, IntPtr lpODFanControl);
+    internal delegate int 	ADL2_OverdriveN_PowerLimit_Get (IntPtr context, int iAdapterIndex, IntPtr lpODPowerLimit);
+    internal delegate int 	ADL2_OverdriveN_PowerLimit_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPowerLimit);
+    internal delegate int 	ADL2_OverdriveN_Temperature_Get (IntPtr context, int iAdapterIndex, int iTemperatureType, ref int iTemperature);
+    internal delegate int 	ADL2_OverdriveN_PerformanceStatus_Get (IntPtr context, int iAdapterIndex, IntPtr pODPerformanceStatus);
 
     #endregion Export Delegates
 
@@ -288,6 +302,102 @@ namespace ATI.ADL
         internal int iVDDC;
         internal int iVDDCI;
     }
+
+    /// <summary> ADLODNCapabilities Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODNCapabilities {
+        /// <summary> </summary>
+        internal int iMaximumNumberOfPerformanceLevels;
+        internal ADLODNParameterRange sEngineClockRange;
+        internal ADLODNParameterRange sMemoryClockRange;
+        internal ADLODNParameterRange svddcRange;
+        internal ADLODNParameterRange power;
+        internal ADLODNParameterRange powerTuneTemperature;
+        internal ADLODNParameterRange fanTemperature;
+        internal ADLODNParameterRange fanSpeed;
+        internal ADLODNParameterRange minimumPerformanceClock;
+    }
+
+    /// <summary> ADLODCapabilities Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    struct ADLODParameters {
+        /// <summary> </summary>
+        internal int iSize;
+        internal int iNumberOfPerformanceLevels;
+        internal int iActivityReportingSupported;
+        internal int iDiscretePerformanceLevels;
+        internal int iReserved;
+        internal ADLODParameterRange sEngineClockRange;
+        internal ADLODParameterRange sMemoryClockRange;
+        internal ADLODParameterRange sVddc;
+    }
+
+    enum ADLODNControlType {
+        ODNControlType_Current = 0,
+        ODNControlType_Default,
+        ODNControlType_Auto,
+        ODNControlType_Manual
+    };
+
+    /// <summary> ADLODNParameterRange Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODNParameterRange {
+        /// <summary> </summary>
+        internal int iMode;
+        internal int iMin;
+        internal int iMax;
+        internal int iStep;
+        internal int iDefault;
+    }
+
+    /// <summary> ADLODNPerformanceLevels Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODNPerformanceLevels {
+        /// <summary> </summary>
+        internal int iSize;
+        internal int iMode;
+        internal int iNumberOfPerformanceLevels;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS)]
+        internal ADLODNPerformanceLevel[] aLevels;
+    }
+
+    /// <summary> ADLODNPerformanceLevel Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODNPerformanceLevel {
+        /// <summary> </summary>
+        internal int iClock;
+        internal int iVddc;
+        internal int iEnabled;
+    }
+
+    /// <summary> ADLODParameterRange Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODParameterRange {
+        /// <summary> </summary>
+        internal int iMin;
+        internal int iMax;
+        internal int iStep;
+    }
+
+    /// <summary> ADLODPerformanceLevels Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODPerformanceLevels {
+        /// <summary> </summary>
+        internal int iSize;
+        internal int iReserved;
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5)]
+        internal ADLODPerformanceLevel[] aLevels;
+    }
+
+    /// <summary> ADLODPerformanceLevel Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODPerformanceLevel {
+        /// <summary> </summary>
+        internal int iEngineClock;
+        internal int iMemoryClock;
+        internal int iVddc;
+    }
+
     #endregion Export Struct
 
     #region ADL Class
@@ -314,7 +424,11 @@ namespace ATI.ADL
         /// <summary> Maximum number of GL-Sync ports on the GL-Sync module </summary>
         internal const int ADL_MAX_GLSYNC_PORT_LEDS = 8;
         /// <summary> Maximum number of ADLMOdes for the adapter </summary>
-        internal const int ADL_MAX_NUM_DISPLAYMODES = 1024; 
+        internal const int ADL_MAX_NUM_DISPLAYMODES = 1024;
+
+        internal const int ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 = 2;
+        internal const int ADL_MAX_NUM_PERFORMANCE_LEVELS = 8;
+
 
         #endregion Internal Constant
 
@@ -363,6 +477,7 @@ namespace ATI.ADL
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Display_DisplayInfo_Get(int adapterIndex, ref int numDisplays, out IntPtr displayInfoArray, int forceDetect);
 
+
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Overdrive5_Temperature_Get(int adapterIndex, int thermalControllerIndex, IntPtr temperature);
 
@@ -379,7 +494,47 @@ namespace ATI.ADL
             internal static extern int ADL_Overdrive5_FanSpeedToDefault_Set(int adapterIndex, int iThermalControllerIndex);
 
             [DllImport(Atiadlxx_FileName)]
-            internal static extern int ADL2_OverdriveN_PerformanceStatus_Get(IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceStatus);
+            internal static extern int ADL_Overdrive5_ODParameters_Get(int iAdapterIndex, IntPtr lpOdParameters);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Overdrive5_ODPerformanceLevels_Get(int iAdapterIndex, int iDefault, IntPtr lpODPerformanceLevels);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Overdrive5_ODPerformanceLevels_Set(int iAdapterIndex, IntPtr lpODPerformanceLevels);
+
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_Capabilities_Get(IntPtr context, int iAdapterIndex, IntPtr lpODCapabilities);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_SystemClocks_Get(IntPtr context, int iAdapterIndex, IntPtr pODPerformanceLevels);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_SystemClocks_Set(IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_MemoryClocks_Get(IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_MemoryClocks_Set(IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_FanControl_Get(IntPtr context, int iAdapterIndex, IntPtr lpODFanSpeed);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_FanControl_Set(IntPtr context, int iAdapterIndex, IntPtr lpODFanControl);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_PowerLimit_Get(IntPtr context, int iAdapterIndex, IntPtr lpODPowerLimit);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_PowerLimit_Set(IntPtr context, int iAdapterIndex, IntPtr lpODPowerLimit);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_Temperature_Get(IntPtr context, int iAdapterIndex, int iTemperatureType, ref int iTemperature);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_OverdriveN_PerformanceStatus_Get(IntPtr context, int iAdapterIndex, IntPtr pODPerformanceStatus);
             
             #endregion DLLImport
         }
@@ -721,15 +876,11 @@ namespace ATI.ADL
 
         #region ADL_Overdrive5_FanSpeed_Set
         /// <summary> ADL_Overdrive5_FanSpeed_Set Delegates</summary>
-        internal static ADL_Overdrive5_FanSpeed_Set ADL_Overdrive5_FanSpeed_Set
-        {
-            get
-            {
-                if (!ADL_Overdrive5_FanSpeed_Set_Check && null == ADL_Overdrive5_FanSpeed_Set_)
-                {
+        internal static ADL_Overdrive5_FanSpeed_Set ADL_Overdrive5_FanSpeed_Set {
+            get {
+                if (!ADL_Overdrive5_FanSpeed_Set_Check && null == ADL_Overdrive5_FanSpeed_Set_) {
                     ADL_Overdrive5_FanSpeed_Set_Check = true;
-                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_FanSpeed_Set"))
-                    {
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_FanSpeed_Set")) {
                         ADL_Overdrive5_FanSpeed_Set_ = ADLImport.ADL_Overdrive5_FanSpeed_Set;
                     }
                 }
@@ -741,6 +892,63 @@ namespace ATI.ADL
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL_Overdrive5_FanSpeed_Set_Check = false;
         #endregion ADL_Overdrive5_FanSpeed_Set
+
+        #region ADL_Overdrive5_ODParameters_Get
+        /// <summary> ADL_Overdrive5_ODParameters_Get Delegates</summary>
+        internal static ADL_Overdrive5_ODParameters_Get ADL_Overdrive5_ODParameters_Get {
+            get {
+                if (!ADL_Overdrive5_ODParameters_Get_Check && null == ADL_Overdrive5_ODParameters_Get_) {
+                    ADL_Overdrive5_ODParameters_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_ODParameters_Get")) {
+                        ADL_Overdrive5_ODParameters_Get_ = ADLImport.ADL_Overdrive5_ODParameters_Get;
+                    }
+                }
+                return ADL_Overdrive5_ODParameters_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Overdrive5_ODParameters_Get ADL_Overdrive5_ODParameters_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Overdrive5_ODParameters_Get_Check = false;
+        #endregion ADL_Overdrive5_ODParameters_Get
+
+        #region ADL_Overdrive5_ODPerformanceLevels_Get
+        /// <summary> ADL_Overdrive5_ODPerformanceLevels_Get Delegates</summary>
+        internal static ADL_Overdrive5_ODPerformanceLevels_Get ADL_Overdrive5_ODPerformanceLevels_Get {
+            get {
+                if (!ADL_Overdrive5_ODPerformanceLevels_Get_Check && null == ADL_Overdrive5_ODPerformanceLevels_Get_) {
+                    ADL_Overdrive5_ODPerformanceLevels_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_ODPerformanceLevels_Get")) {
+                        ADL_Overdrive5_ODPerformanceLevels_Get_ = ADLImport.ADL_Overdrive5_ODPerformanceLevels_Get;
+                    }
+                }
+                return ADL_Overdrive5_ODPerformanceLevels_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Overdrive5_ODPerformanceLevels_Get ADL_Overdrive5_ODPerformanceLevels_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Overdrive5_ODPerformanceLevels_Get_Check = false;
+        #endregion ADL_Overdrive5_ODPerformanceLevels_Get
+
+        #region ADL_Overdrive5_ODPerformanceLevels_Set
+        /// <summary> ADL_Overdrive5_ODPerformanceLevels_Set Delegates</summary>
+        internal static ADL_Overdrive5_ODPerformanceLevels_Set ADL_Overdrive5_ODPerformanceLevels_Set {
+            get {
+                if (!ADL_Overdrive5_ODPerformanceLevels_Set_Check && null == ADL_Overdrive5_ODPerformanceLevels_Set_) {
+                    ADL_Overdrive5_ODPerformanceLevels_Set_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive5_ODPerformanceLevels_Set")) {
+                        ADL_Overdrive5_ODPerformanceLevels_Set_ = ADLImport.ADL_Overdrive5_ODPerformanceLevels_Set;
+                    }
+                }
+                return ADL_Overdrive5_ODPerformanceLevels_Set_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Overdrive5_ODPerformanceLevels_Set ADL_Overdrive5_ODPerformanceLevels_Set_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Overdrive5_ODPerformanceLevels_Set_Check = false;
+        #endregion ADL_Overdrive5_ODPerformanceLevels_Set
 
         #region ADL_Overdrive5_FanSpeedToDefault_Set
         /// <summary> ADL_Overdrive5_FanSpeedToDefault_Set Delegates</summary>
@@ -779,6 +987,101 @@ namespace ATI.ADL
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL2_OverdriveN_PerformanceStatus_Get_Check = false;
         #endregion ADL2_OverdriveN_PerformanceStatus_Get
+
+        #region ADL2_OverdriveN_Capabilities_Get
+        /// <summary> ADL2_OverdriveN_Capabilities_Get Delegates</summary>
+        internal static ADL2_OverdriveN_Capabilities_Get ADL2_OverdriveN_Capabilities_Get {
+            get {
+                if (!ADL2_OverdriveN_Capabilities_Get_Check && null == ADL2_OverdriveN_Capabilities_Get_) {
+                    ADL2_OverdriveN_Capabilities_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_OverdriveN_Capabilities_Get")) {
+                        ADL2_OverdriveN_Capabilities_Get_ = ADLImport.ADL2_OverdriveN_Capabilities_Get;
+                    }
+                }
+                return ADL2_OverdriveN_Capabilities_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_OverdriveN_Capabilities_Get ADL2_OverdriveN_Capabilities_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_OverdriveN_Capabilities_Get_Check = false;
+        #endregion ADL2_OverdriveN_Capabilities_Get
+
+        #region ADL2_OverdriveN_MemoryClocks_Get
+        /// <summary> ADL2_OverdriveN_MemoryClocks_Get Delegates</summary>
+        internal static ADL2_OverdriveN_MemoryClocks_Get ADL2_OverdriveN_MemoryClocks_Get {
+            get {
+                if (!ADL2_OverdriveN_MemoryClocks_Get_Check && null == ADL2_OverdriveN_MemoryClocks_Get_) {
+                    ADL2_OverdriveN_MemoryClocks_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_OverdriveN_MemoryClocks_Get")) {
+                        ADL2_OverdriveN_MemoryClocks_Get_ = ADLImport.ADL2_OverdriveN_MemoryClocks_Get;
+                    }
+                }
+                return ADL2_OverdriveN_MemoryClocks_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_OverdriveN_MemoryClocks_Get ADL2_OverdriveN_MemoryClocks_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_OverdriveN_MemoryClocks_Get_Check = false;
+        #endregion ADL2_OverdriveN_MemoryClocks_Get
+
+        #region ADL2_OverdriveN_MemoryClocks_Set
+        /// <summary> ADL2_OverdriveN_MemoryClocks_Set Delegates</summary>
+        internal static ADL2_OverdriveN_MemoryClocks_Set ADL2_OverdriveN_MemoryClocks_Set {
+            get {
+                if (!ADL2_OverdriveN_MemoryClocks_Set_Check && null == ADL2_OverdriveN_MemoryClocks_Set_) {
+                    ADL2_OverdriveN_MemoryClocks_Set_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_OverdriveN_MemoryClocks_Set")) {
+                        ADL2_OverdriveN_MemoryClocks_Set_ = ADLImport.ADL2_OverdriveN_MemoryClocks_Set;
+                    }
+                }
+                return ADL2_OverdriveN_MemoryClocks_Set_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_OverdriveN_MemoryClocks_Set ADL2_OverdriveN_MemoryClocks_Set_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_OverdriveN_MemoryClocks_Set_Check = false;
+        #endregion ADL2_OverdriveN_MemoryClocks_Set
+
+        #region ADL2_OverdriveN_SystemClocks_Get
+        /// <summary> ADL2_OverdriveN_SystemClocks_Get Delegates</summary>
+        internal static ADL2_OverdriveN_SystemClocks_Get ADL2_OverdriveN_SystemClocks_Get {
+            get {
+                if (!ADL2_OverdriveN_SystemClocks_Get_Check && null == ADL2_OverdriveN_SystemClocks_Get_) {
+                    ADL2_OverdriveN_SystemClocks_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_OverdriveN_SystemClocks_Get")) {
+                        ADL2_OverdriveN_SystemClocks_Get_ = ADLImport.ADL2_OverdriveN_SystemClocks_Get;
+                    }
+                }
+                return ADL2_OverdriveN_SystemClocks_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_OverdriveN_SystemClocks_Get ADL2_OverdriveN_SystemClocks_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_OverdriveN_SystemClocks_Get_Check = false;
+        #endregion ADL2_OverdriveN_SystemClocks_Get
+
+        #region ADL2_OverdriveN_SystemClocks_Set
+        /// <summary> ADL2_OverdriveN_SystemClocks_Set Delegates</summary>
+        internal static ADL2_OverdriveN_SystemClocks_Set ADL2_OverdriveN_SystemClocks_Set {
+            get {
+                if (!ADL2_OverdriveN_SystemClocks_Set_Check && null == ADL2_OverdriveN_SystemClocks_Set_) {
+                    ADL2_OverdriveN_SystemClocks_Set_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_OverdriveN_SystemClocks_Set")) {
+                        ADL2_OverdriveN_SystemClocks_Set_ = ADLImport.ADL2_OverdriveN_SystemClocks_Set;
+                    }
+                }
+                return ADL2_OverdriveN_SystemClocks_Set_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_OverdriveN_SystemClocks_Set ADL2_OverdriveN_SystemClocks_Set_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_OverdriveN_SystemClocks_Set_Check = false;
+        #endregion ADL2_OverdriveN_SystemClocks_Set
 
         #endregion Export Functions
     }

@@ -3171,6 +3171,7 @@ namespace GatelessGateSharp
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             if (appState == ApplicationGlobalState.Idle) {
+                UpdateOverClockingSettings();
                 foreach (var device in mDevices) {
                     device.ClearShares();
                     //labelGPUSharesArray[device.DeviceIndex].Text = "0";
@@ -4049,6 +4050,25 @@ namespace GatelessGateSharp
             foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" })
                 foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
                     try { process.Kill(); } catch (Exception) { }
+        }
+
+        void UpdateOverClockingSettings() {
+            foreach (var device in mDevices) {
+                device.CoreClock = 500;
+                device.MemoryClock = 500;
+            }
+        }
+
+        static public int DeviceCount {
+            get {
+                return Instance.mDevices.Length;
+            }
+        }
+
+        static public OpenCLDevice[] Devices {
+            get {
+                return Instance.mDevices;
+            }
         }
     }
 }
