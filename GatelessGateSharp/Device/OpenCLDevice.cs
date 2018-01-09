@@ -651,7 +651,7 @@ namespace GatelessGateSharp
             }
         }
 
-        static public void SaveOverclockingSettings() {
+        static public void RestoreOverclockingSettings() {
             for (int i = 0; i < MainForm.DeviceCount; ++i) {
                 int ret;
 
