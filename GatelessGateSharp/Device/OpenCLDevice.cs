@@ -149,9 +149,13 @@ namespace GatelessGateSharp
         public static OpenCLDevice[] GetAllOpenCLDevices()
         {
             var computeDeviceArrayList = new ArrayList();
-
+            bool doneWithAMD = false;
+                
             foreach (var platform in ComputePlatform.Platforms)
             {
+                if (platform.Name == "AMD Accelerated Parallel Processing" && doneWithAMD)
+                    continue;
+
                 IList<ComputeDevice> openclDevices = platform.Devices;
                 var properties = new ComputeContextPropertyList(platform);
                 using (var context = new ComputeContext(openclDevices, properties, null, IntPtr.Zero))
@@ -164,6 +168,8 @@ namespace GatelessGateSharp
                     }
                 }
 
+                if (platform.Name == "AMD Accelerated Parallel Processing")
+                    doneWithAMD = true;
             }
             var computeDevices = Array.ConvertAll(computeDeviceArrayList.ToArray(), item => (ComputeDevice)item);
             OpenCLDevice[] devices = new OpenCLDevice[computeDevices.Length];

@@ -145,10 +145,9 @@ namespace GatelessGateSharp
 
                     // Wait for the first lbryJob to arrive.
                     int elapsedTime = 0;
-                    while ((mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 5000)
-                    {
-                        Thread.Sleep(10);
-                        elapsedTime += 10;
+                    while ((mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 60000) {
+                        Thread.Sleep(100);
+                        elapsedTime += 100;
                     }
                     if (mLbryStratum == null || mLbryStratum.GetJob() == null)
                         throw new TimeoutException("Stratum server failed to send a new lbryJob.");

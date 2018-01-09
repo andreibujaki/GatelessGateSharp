@@ -675,6 +675,7 @@
             this.button5.TabIndex = 17;
             this.button5.Text = "Balance";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Visible = false;
             // 
             // label13
             // 
@@ -737,6 +738,7 @@
             this.label16.Size = new System.Drawing.Size(70, 13);
             this.label16.TabIndex = 12;
             this.label16.Text = "Zcash (ZEC):";
+            this.label16.Visible = false;
             // 
             // buttonEthereumBalance
             // 
@@ -756,6 +758,7 @@
             this.textBoxZcashAddress.Name = "textBoxZcashAddress";
             this.textBoxZcashAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxZcashAddress.TabIndex = 13;
+            this.textBoxZcashAddress.Visible = false;
             // 
             // buttonViewBalancesAtNiceHash
             // 
@@ -976,6 +979,7 @@
             this.radioButtonZcash.TabIndex = 7;
             this.radioButtonZcash.Text = "Zcash";
             this.radioButtonZcash.UseVisualStyleBackColor = true;
+            this.radioButtonZcash.Visible = false;
             this.radioButtonZcash.CheckedChanged += new System.EventHandler(this.radioButtonZcash_CheckedChanged);
             // 
             // radioButtonMonero
