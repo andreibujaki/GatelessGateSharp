@@ -30,9 +30,18 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.numericUpDown22 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.numericUpDownDevice0EthashPascalMemoryVoltage = new System.Windows.Forms.NumericUpDown();
+            this.label22 = new System.Windows.Forms.Label();
+            this.numericUpDownDevice0EthashPascalMemoryClock = new System.Windows.Forms.NumericUpDown();
             this.label23 = new System.Windows.Forms.Label();
-            this.numericUpDown23 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownDevice0EthashPascalPowerLimit = new System.Windows.Forms.NumericUpDown();
+            this.label24 = new System.Windows.Forms.Label();
+            this.numericUpDown24 = new System.Windows.Forms.NumericUpDown();
+            this.label25 = new System.Windows.Forms.Label();
+            this.numericUpDownDevice0EthashPascalCoreClock = new System.Windows.Forms.NumericUpDown();
+            this.label26 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.numericUpDownDevice0EthashPascalPascalIterations = new System.Windows.Forms.NumericUpDown();
             this.label194 = new System.Windows.Forms.Label();
@@ -97,18 +106,6 @@
             this.numericUpDownDevice0LbryIntensity = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownDevice0LbryThreads = new System.Windows.Forms.NumericUpDown();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown16 = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
-            this.numericUpDown17 = new System.Windows.Forms.NumericUpDown();
-            this.label18 = new System.Windows.Forms.Label();
-            this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
-            this.label19 = new System.Windows.Forms.Label();
-            this.numericUpDown19 = new System.Windows.Forms.NumericUpDown();
-            this.label20 = new System.Windows.Forms.Label();
-            this.numericUpDown20 = new System.Windows.Forms.NumericUpDown();
-            this.label21 = new System.Windows.Forms.Label();
             this.label202 = new System.Windows.Forms.Label();
             this.label203 = new System.Windows.Forms.Label();
             this.label204 = new System.Windows.Forms.Label();
@@ -118,18 +115,6 @@
             this.tabPage41 = new System.Windows.Forms.TabPage();
             this.label474 = new System.Windows.Forms.Label();
             this.numericUpDownDevice0NeoScryptLocalWorkSize = new System.Windows.Forms.NumericUpDown();
-            this.groupBox97 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown171 = new System.Windows.Forms.NumericUpDown();
-            this.label476 = new System.Windows.Forms.Label();
-            this.numericUpDown178 = new System.Windows.Forms.NumericUpDown();
-            this.label477 = new System.Windows.Forms.Label();
-            this.numericUpDown179 = new System.Windows.Forms.NumericUpDown();
-            this.label478 = new System.Windows.Forms.Label();
-            this.numericUpDown180 = new System.Windows.Forms.NumericUpDown();
-            this.label479 = new System.Windows.Forms.Label();
-            this.numericUpDown190 = new System.Windows.Forms.NumericUpDown();
-            this.label480 = new System.Windows.Forms.Label();
             this.label481 = new System.Windows.Forms.Label();
             this.label482 = new System.Windows.Forms.Label();
             this.numericUpDownDevice0NeoScryptIntensity = new System.Windows.Forms.NumericUpDown();
@@ -147,20 +132,57 @@
             this.buttonResetToDefault = new System.Windows.Forms.Button();
             this.buttonCopyToOthers = new System.Windows.Forms.Button();
             this.buttonResetAll = new System.Windows.Forms.Button();
-            this.label26 = new System.Windows.Forms.Label();
-            this.numericUpDown25 = new System.Windows.Forms.NumericUpDown();
-            this.label25 = new System.Windows.Forms.Label();
-            this.numericUpDown24 = new System.Windows.Forms.NumericUpDown();
-            this.label24 = new System.Windows.Forms.Label();
-            this.numericUpDown23 = new System.Windows.Forms.NumericUpDown();
-            this.label23 = new System.Windows.Forms.Label();
-            this.numericUpDown22 = new System.Windows.Forms.NumericUpDown();
-            this.label22 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown16 = new System.Windows.Forms.NumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
+            this.numericUpDown17 = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
+            this.label19 = new System.Windows.Forms.Label();
+            this.numericUpDown19 = new System.Windows.Forms.NumericUpDown();
+            this.label20 = new System.Windows.Forms.Label();
+            this.numericUpDown20 = new System.Windows.Forms.NumericUpDown();
+            this.label21 = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.numericUpDown21 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.numericUpDown22 = new System.Windows.Forms.NumericUpDown();
+            this.label31 = new System.Windows.Forms.Label();
+            this.numericUpDown23 = new System.Windows.Forms.NumericUpDown();
+            this.label32 = new System.Windows.Forms.Label();
+            this.numericUpDown25 = new System.Windows.Forms.NumericUpDown();
+            this.label33 = new System.Windows.Forms.Label();
+            this.numericUpDown29 = new System.Windows.Forms.NumericUpDown();
+            this.label34 = new System.Windows.Forms.Label();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown30 = new System.Windows.Forms.NumericUpDown();
+            this.label35 = new System.Windows.Forms.Label();
+            this.numericUpDown31 = new System.Windows.Forms.NumericUpDown();
+            this.label36 = new System.Windows.Forms.Label();
+            this.numericUpDown32 = new System.Windows.Forms.NumericUpDown();
+            this.label37 = new System.Windows.Forms.Label();
+            this.numericUpDown33 = new System.Windows.Forms.NumericUpDown();
+            this.label38 = new System.Windows.Forms.Label();
+            this.numericUpDown34 = new System.Windows.Forms.NumericUpDown();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.numericUpDown35 = new System.Windows.Forms.NumericUpDown();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.numericUpDown36 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown37 = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage5.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalMemoryVoltage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalMemoryClock)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalPowerLimit)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown24)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalCoreClock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalPascalIterations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalThreads)).BeginInit();
@@ -195,23 +217,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0LbryIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0LbryThreads)).BeginInit();
             this.tabPage4.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown19)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown20)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0PascalLocalWorkSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0PascalIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0PascalThreads)).BeginInit();
             this.tabPage41.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptLocalWorkSize)).BeginInit();
-            this.groupBox97.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown171)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown178)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown179)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown180)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown190)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptThreads)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown52)).BeginInit();
@@ -219,12 +229,28 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown28)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown27)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown26)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown25)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown24)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown23)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown22)).BeginInit();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown19)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown20)).BeginInit();
+            this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown21)).BeginInit();
-            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown22)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown23)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown25)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown29)).BeginInit();
+            this.tabPage6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown30)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown31)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown32)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown33)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown34)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown35)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown36)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown37)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -235,11 +261,13 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage41);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Location = new System.Drawing.Point(7, 85);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(488, 166);
             this.tabControl1.TabIndex = 33;
+            this.tabControl1.Tag = "neoscrypt_overclocking_power_limit";
             // 
             // tabPage5
             // 
@@ -256,6 +284,218 @@
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Ethash/Pascal";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.checkBox7);
+            this.groupBox5.Controls.Add(this.numericUpDownDevice0EthashPascalMemoryVoltage);
+            this.groupBox5.Controls.Add(this.label22);
+            this.groupBox5.Controls.Add(this.numericUpDownDevice0EthashPascalMemoryClock);
+            this.groupBox5.Controls.Add(this.label23);
+            this.groupBox5.Controls.Add(this.numericUpDownDevice0EthashPascalPowerLimit);
+            this.groupBox5.Controls.Add(this.label24);
+            this.groupBox5.Controls.Add(this.numericUpDown24);
+            this.groupBox5.Controls.Add(this.label25);
+            this.groupBox5.Controls.Add(this.numericUpDownDevice0EthashPascalCoreClock);
+            this.groupBox5.Controls.Add(this.label26);
+            this.groupBox5.Location = new System.Drawing.Point(158, 7);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(314, 123);
+            this.groupBox5.TabIndex = 123;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Tag = "overclocking";
+            this.groupBox5.Text = "Overclocking/Underclocking";
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.Location = new System.Drawing.Point(6, 19);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.Size = new System.Drawing.Size(59, 17);
+            this.checkBox7.TabIndex = 232;
+            this.checkBox7.Tag = "ethash_pascal_overclocking_enabled";
+            this.checkBox7.Text = "Enable";
+            this.checkBox7.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDownDevice0EthashPascalMemoryVoltage
+            // 
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Location = new System.Drawing.Point(249, 94);
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Minimum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Name = "numericUpDownDevice0EthashPascalMemoryVoltage";
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.TabIndex = 46;
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Tag = "ethash_pascal_overclocking_memory_voltage";
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(159, 96);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(81, 13);
+            this.label22.TabIndex = 45;
+            this.label22.Text = "Mem. Vol. (mV):";
+            // 
+            // numericUpDownDevice0EthashPascalMemoryClock
+            // 
+            this.numericUpDownDevice0EthashPascalMemoryClock.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalMemoryClock.Location = new System.Drawing.Point(96, 94);
+            this.numericUpDownDevice0EthashPascalMemoryClock.Maximum = new decimal(new int[] {
+            2400,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalMemoryClock.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalMemoryClock.Name = "numericUpDownDevice0EthashPascalMemoryClock";
+            this.numericUpDownDevice0EthashPascalMemoryClock.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashPascalMemoryClock.TabIndex = 44;
+            this.numericUpDownDevice0EthashPascalMemoryClock.Tag = "ethash_pascal_overclocking_memory_clock";
+            this.numericUpDownDevice0EthashPascalMemoryClock.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(6, 96);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(88, 13);
+            this.label23.TabIndex = 43;
+            this.label23.Text = "Mem. Clk. (MHz):";
+            // 
+            // numericUpDownDevice0EthashPascalPowerLimit
+            // 
+            this.numericUpDownDevice0EthashPascalPowerLimit.Location = new System.Drawing.Point(96, 42);
+            this.numericUpDownDevice0EthashPascalPowerLimit.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalPowerLimit.Minimum = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalPowerLimit.Name = "numericUpDownDevice0EthashPascalPowerLimit";
+            this.numericUpDownDevice0EthashPascalPowerLimit.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashPascalPowerLimit.TabIndex = 42;
+            this.numericUpDownDevice0EthashPascalPowerLimit.Tag = "ethash_pascal_overclocking_power_limit";
+            this.numericUpDownDevice0EthashPascalPowerLimit.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(6, 44);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(81, 13);
+            this.label24.TabIndex = 41;
+            this.label24.Text = "Power Limit (%):";
+            // 
+            // numericUpDown24
+            // 
+            this.numericUpDown24.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown24.Location = new System.Drawing.Point(249, 70);
+            this.numericUpDown24.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.numericUpDown24.Minimum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.numericUpDown24.Name = "numericUpDown24";
+            this.numericUpDown24.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown24.TabIndex = 40;
+            this.numericUpDown24.Tag = "ethash_pascal_overclocking_core_voltage";
+            this.numericUpDown24.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(159, 72);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(77, 13);
+            this.label25.TabIndex = 39;
+            this.label25.Text = "Core Vol. (mV):";
+            // 
+            // numericUpDownDevice0EthashPascalCoreClock
+            // 
+            this.numericUpDownDevice0EthashPascalCoreClock.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalCoreClock.Location = new System.Drawing.Point(96, 68);
+            this.numericUpDownDevice0EthashPascalCoreClock.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalCoreClock.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalCoreClock.Name = "numericUpDownDevice0EthashPascalCoreClock";
+            this.numericUpDownDevice0EthashPascalCoreClock.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashPascalCoreClock.TabIndex = 38;
+            this.numericUpDownDevice0EthashPascalCoreClock.Tag = "ethash_pascal_overclocking_core_clock";
+            this.numericUpDownDevice0EthashPascalCoreClock.Value = new decimal(new int[] {
+            1280,
+            0,
+            0,
+            0});
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(6, 70);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(84, 13);
+            this.label26.TabIndex = 37;
+            this.label26.Text = "Core Clk. (MHz):";
             // 
             // label7
             // 
@@ -383,22 +623,22 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.numericUpDown5);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(158, 7);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(314, 123);
             this.groupBox1.TabIndex = 123;
             this.groupBox1.TabStop = false;
+            this.groupBox1.Tag = "overclocking";
             this.groupBox1.Text = "Overclocking/Underclocking";
             // 
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Enabled = false;
             this.checkBox2.Location = new System.Drawing.Point(6, 19);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(59, 17);
             this.checkBox2.TabIndex = 232;
+            this.checkBox2.Tag = "ethash_overclocking_enabled";
             this.checkBox2.Text = "Enable";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
@@ -423,6 +663,7 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown1.TabIndex = 46;
+            this.numericUpDown1.Tag = "ethash_overclocking_memory_voltage";
             this.numericUpDown1.Value = new decimal(new int[] {
             1000,
             0,
@@ -459,6 +700,7 @@
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown2.TabIndex = 44;
+            this.numericUpDown2.Tag = "ethash_overclocking_memory_clock";
             this.numericUpDown2.Value = new decimal(new int[] {
             2000,
             0,
@@ -490,6 +732,7 @@
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown3.TabIndex = 42;
+            this.numericUpDown3.Tag = "ethash_overclocking_power_limit";
             this.numericUpDown3.Value = new decimal(new int[] {
             100,
             0,
@@ -526,6 +769,7 @@
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown4.TabIndex = 40;
+            this.numericUpDown4.Tag = "ethash_overclocking_core_voltage";
             this.numericUpDown4.Value = new decimal(new int[] {
             1000,
             0,
@@ -562,6 +806,7 @@
             this.numericUpDown5.Name = "numericUpDown5";
             this.numericUpDown5.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown5.TabIndex = 38;
+            this.numericUpDown5.Tag = "ethash_overclocking_core_clock";
             this.numericUpDown5.Value = new decimal(new int[] {
             1280,
             0,
@@ -703,22 +948,22 @@
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.numericUpDown10);
             this.groupBox2.Controls.Add(this.label11);
-            this.groupBox2.Enabled = false;
             this.groupBox2.Location = new System.Drawing.Point(158, 7);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(314, 123);
             this.groupBox2.TabIndex = 123;
             this.groupBox2.TabStop = false;
+            this.groupBox2.Tag = "overclocking";
             this.groupBox2.Text = "Overclocking/Underclocking";
             // 
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Enabled = false;
             this.checkBox3.Location = new System.Drawing.Point(6, 19);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(59, 17);
             this.checkBox3.TabIndex = 232;
+            this.checkBox3.Tag = "cryptonight_overclocking_enabled";
             this.checkBox3.Text = "Enable";
             this.checkBox3.UseVisualStyleBackColor = true;
             // 
@@ -743,6 +988,7 @@
             this.numericUpDown6.Name = "numericUpDown6";
             this.numericUpDown6.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown6.TabIndex = 46;
+            this.numericUpDown6.Tag = "cryptonight_overclocking_memory_voltage";
             this.numericUpDown6.Value = new decimal(new int[] {
             1000,
             0,
@@ -779,6 +1025,7 @@
             this.numericUpDown7.Name = "numericUpDown7";
             this.numericUpDown7.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown7.TabIndex = 44;
+            this.numericUpDown7.Tag = "cryptonight_overclocking_memory_clock";
             this.numericUpDown7.Value = new decimal(new int[] {
             2000,
             0,
@@ -810,6 +1057,7 @@
             this.numericUpDown8.Name = "numericUpDown8";
             this.numericUpDown8.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown8.TabIndex = 42;
+            this.numericUpDown8.Tag = "cryptonight_overclocking_power_limit";
             this.numericUpDown8.Value = new decimal(new int[] {
             100,
             0,
@@ -846,6 +1094,7 @@
             this.numericUpDown9.Name = "numericUpDown9";
             this.numericUpDown9.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown9.TabIndex = 40;
+            this.numericUpDown9.Tag = "cryptonight_overclocking_core_voltage";
             this.numericUpDown9.Value = new decimal(new int[] {
             1000,
             0,
@@ -882,6 +1131,7 @@
             this.numericUpDown10.Name = "numericUpDown10";
             this.numericUpDown10.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown10.TabIndex = 38;
+            this.numericUpDown10.Tag = "cryptonight_overclocking_core_clock";
             this.numericUpDown10.Value = new decimal(new int[] {
             1280,
             0,
@@ -1022,22 +1272,22 @@
             this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.numericUpDown15);
             this.groupBox3.Controls.Add(this.label16);
-            this.groupBox3.Enabled = false;
             this.groupBox3.Location = new System.Drawing.Point(158, 7);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(314, 123);
             this.groupBox3.TabIndex = 123;
             this.groupBox3.TabStop = false;
+            this.groupBox3.Tag = "overclocking";
             this.groupBox3.Text = "Overclocking/Underclocking";
             // 
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Enabled = false;
             this.checkBox4.Location = new System.Drawing.Point(6, 19);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(59, 17);
             this.checkBox4.TabIndex = 232;
+            this.checkBox4.Tag = "lbry_overclocking_enabled";
             this.checkBox4.Text = "Enable";
             this.checkBox4.UseVisualStyleBackColor = true;
             // 
@@ -1062,6 +1312,7 @@
             this.numericUpDown11.Name = "numericUpDown11";
             this.numericUpDown11.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown11.TabIndex = 46;
+            this.numericUpDown11.Tag = "lbry_overclocking_memory_voltage";
             this.numericUpDown11.Value = new decimal(new int[] {
             1000,
             0,
@@ -1098,6 +1349,7 @@
             this.numericUpDown12.Name = "numericUpDown12";
             this.numericUpDown12.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown12.TabIndex = 44;
+            this.numericUpDown12.Tag = "lbry_overclocking_memory_clock";
             this.numericUpDown12.Value = new decimal(new int[] {
             2000,
             0,
@@ -1129,6 +1381,7 @@
             this.numericUpDown13.Name = "numericUpDown13";
             this.numericUpDown13.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown13.TabIndex = 42;
+            this.numericUpDown13.Tag = "lbry_overclocking_power_limit";
             this.numericUpDown13.Value = new decimal(new int[] {
             100,
             0,
@@ -1165,6 +1418,7 @@
             this.numericUpDown14.Name = "numericUpDown14";
             this.numericUpDown14.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown14.TabIndex = 40;
+            this.numericUpDown14.Tag = "lbry_overclocking_core_voltage";
             this.numericUpDown14.Value = new decimal(new int[] {
             1000,
             0,
@@ -1201,6 +1455,7 @@
             this.numericUpDown15.Name = "numericUpDown15";
             this.numericUpDown15.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown15.TabIndex = 38;
+            this.numericUpDown15.Tag = "lbry_overclocking_core_clock";
             this.numericUpDown15.Value = new decimal(new int[] {
             1280,
             0,
@@ -1328,213 +1583,6 @@
             this.tabPage4.Text = "Pascal";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.checkBox6);
-            this.groupBox4.Controls.Add(this.numericUpDown16);
-            this.groupBox4.Controls.Add(this.label17);
-            this.groupBox4.Controls.Add(this.numericUpDown17);
-            this.groupBox4.Controls.Add(this.label18);
-            this.groupBox4.Controls.Add(this.numericUpDown18);
-            this.groupBox4.Controls.Add(this.label19);
-            this.groupBox4.Controls.Add(this.numericUpDown19);
-            this.groupBox4.Controls.Add(this.label20);
-            this.groupBox4.Controls.Add(this.numericUpDown20);
-            this.groupBox4.Controls.Add(this.label21);
-            this.groupBox4.Enabled = false;
-            this.groupBox4.Location = new System.Drawing.Point(158, 7);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(314, 123);
-            this.groupBox4.TabIndex = 123;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Overclocking/Underclocking";
-            // 
-            // checkBox6
-            // 
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.Enabled = false;
-            this.checkBox6.Location = new System.Drawing.Point(6, 19);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(59, 17);
-            this.checkBox6.TabIndex = 232;
-            this.checkBox6.Text = "Enable";
-            this.checkBox6.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown16
-            // 
-            this.numericUpDown16.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown16.Location = new System.Drawing.Point(249, 94);
-            this.numericUpDown16.Maximum = new decimal(new int[] {
-            1200,
-            0,
-            0,
-            0});
-            this.numericUpDown16.Minimum = new decimal(new int[] {
-            800,
-            0,
-            0,
-            0});
-            this.numericUpDown16.Name = "numericUpDown16";
-            this.numericUpDown16.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown16.TabIndex = 46;
-            this.numericUpDown16.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(159, 96);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(81, 13);
-            this.label17.TabIndex = 45;
-            this.label17.Text = "Mem. Vol. (mV):";
-            // 
-            // numericUpDown17
-            // 
-            this.numericUpDown17.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown17.Location = new System.Drawing.Point(96, 94);
-            this.numericUpDown17.Maximum = new decimal(new int[] {
-            2400,
-            0,
-            0,
-            0});
-            this.numericUpDown17.Minimum = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
-            this.numericUpDown17.Name = "numericUpDown17";
-            this.numericUpDown17.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown17.TabIndex = 44;
-            this.numericUpDown17.Value = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 96);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(88, 13);
-            this.label18.TabIndex = 43;
-            this.label18.Text = "Mem. Clk. (MHz):";
-            // 
-            // numericUpDown18
-            // 
-            this.numericUpDown18.Location = new System.Drawing.Point(96, 42);
-            this.numericUpDown18.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.numericUpDown18.Minimum = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            this.numericUpDown18.Name = "numericUpDown18";
-            this.numericUpDown18.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown18.TabIndex = 42;
-            this.numericUpDown18.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(6, 44);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(81, 13);
-            this.label19.TabIndex = 41;
-            this.label19.Text = "Power Limit (%):";
-            // 
-            // numericUpDown19
-            // 
-            this.numericUpDown19.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown19.Location = new System.Drawing.Point(249, 70);
-            this.numericUpDown19.Maximum = new decimal(new int[] {
-            1200,
-            0,
-            0,
-            0});
-            this.numericUpDown19.Minimum = new decimal(new int[] {
-            800,
-            0,
-            0,
-            0});
-            this.numericUpDown19.Name = "numericUpDown19";
-            this.numericUpDown19.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown19.TabIndex = 40;
-            this.numericUpDown19.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(159, 72);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(77, 13);
-            this.label20.TabIndex = 39;
-            this.label20.Text = "Core Vol. (mV):";
-            // 
-            // numericUpDown20
-            // 
-            this.numericUpDown20.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown20.Location = new System.Drawing.Point(96, 68);
-            this.numericUpDown20.Maximum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.numericUpDown20.Minimum = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
-            this.numericUpDown20.Name = "numericUpDown20";
-            this.numericUpDown20.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown20.TabIndex = 38;
-            this.numericUpDown20.Value = new decimal(new int[] {
-            1280,
-            0,
-            0,
-            0});
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(6, 70);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(84, 13);
-            this.label21.TabIndex = 37;
-            this.label21.Text = "Core Clk. (MHz):";
-            // 
             // label202
             // 
             this.label202.AutoSize = true;
@@ -1633,9 +1681,9 @@
             // 
             // tabPage41
             // 
+            this.tabPage41.Controls.Add(this.groupBox6);
             this.tabPage41.Controls.Add(this.label474);
             this.tabPage41.Controls.Add(this.numericUpDownDevice0NeoScryptLocalWorkSize);
-            this.tabPage41.Controls.Add(this.groupBox97);
             this.tabPage41.Controls.Add(this.label481);
             this.tabPage41.Controls.Add(this.label482);
             this.tabPage41.Controls.Add(this.numericUpDownDevice0NeoScryptIntensity);
@@ -1678,213 +1726,6 @@
             0,
             0,
             0});
-            // 
-            // groupBox97
-            // 
-            this.groupBox97.Controls.Add(this.checkBox1);
-            this.groupBox97.Controls.Add(this.numericUpDown171);
-            this.groupBox97.Controls.Add(this.label476);
-            this.groupBox97.Controls.Add(this.numericUpDown178);
-            this.groupBox97.Controls.Add(this.label477);
-            this.groupBox97.Controls.Add(this.numericUpDown179);
-            this.groupBox97.Controls.Add(this.label478);
-            this.groupBox97.Controls.Add(this.numericUpDown180);
-            this.groupBox97.Controls.Add(this.label479);
-            this.groupBox97.Controls.Add(this.numericUpDown190);
-            this.groupBox97.Controls.Add(this.label480);
-            this.groupBox97.Enabled = false;
-            this.groupBox97.Location = new System.Drawing.Point(158, 7);
-            this.groupBox97.Name = "groupBox97";
-            this.groupBox97.Size = new System.Drawing.Size(314, 123);
-            this.groupBox97.TabIndex = 122;
-            this.groupBox97.TabStop = false;
-            this.groupBox97.Text = "Overclocking/Underclocking";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Enabled = false;
-            this.checkBox1.Location = new System.Drawing.Point(6, 19);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(59, 17);
-            this.checkBox1.TabIndex = 232;
-            this.checkBox1.Text = "Enable";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown171
-            // 
-            this.numericUpDown171.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown171.Location = new System.Drawing.Point(249, 94);
-            this.numericUpDown171.Maximum = new decimal(new int[] {
-            1200,
-            0,
-            0,
-            0});
-            this.numericUpDown171.Minimum = new decimal(new int[] {
-            800,
-            0,
-            0,
-            0});
-            this.numericUpDown171.Name = "numericUpDown171";
-            this.numericUpDown171.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown171.TabIndex = 46;
-            this.numericUpDown171.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            // 
-            // label476
-            // 
-            this.label476.AutoSize = true;
-            this.label476.Location = new System.Drawing.Point(159, 96);
-            this.label476.Name = "label476";
-            this.label476.Size = new System.Drawing.Size(81, 13);
-            this.label476.TabIndex = 45;
-            this.label476.Text = "Mem. Vol. (mV):";
-            // 
-            // numericUpDown178
-            // 
-            this.numericUpDown178.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown178.Location = new System.Drawing.Point(96, 94);
-            this.numericUpDown178.Maximum = new decimal(new int[] {
-            2400,
-            0,
-            0,
-            0});
-            this.numericUpDown178.Minimum = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
-            this.numericUpDown178.Name = "numericUpDown178";
-            this.numericUpDown178.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown178.TabIndex = 44;
-            this.numericUpDown178.Value = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            // 
-            // label477
-            // 
-            this.label477.AutoSize = true;
-            this.label477.Location = new System.Drawing.Point(6, 96);
-            this.label477.Name = "label477";
-            this.label477.Size = new System.Drawing.Size(88, 13);
-            this.label477.TabIndex = 43;
-            this.label477.Text = "Mem. Clk. (MHz):";
-            // 
-            // numericUpDown179
-            // 
-            this.numericUpDown179.Location = new System.Drawing.Point(96, 42);
-            this.numericUpDown179.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.numericUpDown179.Minimum = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            this.numericUpDown179.Name = "numericUpDown179";
-            this.numericUpDown179.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown179.TabIndex = 42;
-            this.numericUpDown179.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // label478
-            // 
-            this.label478.AutoSize = true;
-            this.label478.Location = new System.Drawing.Point(6, 44);
-            this.label478.Name = "label478";
-            this.label478.Size = new System.Drawing.Size(81, 13);
-            this.label478.TabIndex = 41;
-            this.label478.Text = "Power Limit (%):";
-            // 
-            // numericUpDown180
-            // 
-            this.numericUpDown180.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown180.Location = new System.Drawing.Point(249, 70);
-            this.numericUpDown180.Maximum = new decimal(new int[] {
-            1200,
-            0,
-            0,
-            0});
-            this.numericUpDown180.Minimum = new decimal(new int[] {
-            800,
-            0,
-            0,
-            0});
-            this.numericUpDown180.Name = "numericUpDown180";
-            this.numericUpDown180.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown180.TabIndex = 40;
-            this.numericUpDown180.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            // 
-            // label479
-            // 
-            this.label479.AutoSize = true;
-            this.label479.Location = new System.Drawing.Point(159, 72);
-            this.label479.Name = "label479";
-            this.label479.Size = new System.Drawing.Size(77, 13);
-            this.label479.TabIndex = 39;
-            this.label479.Text = "Core Vol. (mV):";
-            // 
-            // numericUpDown190
-            // 
-            this.numericUpDown190.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown190.Location = new System.Drawing.Point(96, 68);
-            this.numericUpDown190.Maximum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.numericUpDown190.Minimum = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
-            this.numericUpDown190.Name = "numericUpDown190";
-            this.numericUpDown190.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown190.TabIndex = 38;
-            this.numericUpDown190.Value = new decimal(new int[] {
-            1280,
-            0,
-            0,
-            0});
-            // 
-            // label480
-            // 
-            this.label480.AutoSize = true;
-            this.label480.Location = new System.Drawing.Point(6, 70);
-            this.label480.Name = "label480";
-            this.label480.Size = new System.Drawing.Size(84, 13);
-            this.label480.TabIndex = 37;
-            this.label480.Text = "Core Clk. (MHz):";
             // 
             // label481
             // 
@@ -2132,153 +1973,249 @@
             this.buttonResetAll.UseVisualStyleBackColor = true;
             this.buttonResetAll.Click += new System.EventHandler(this.buttonResetAll_Click);
             // 
-            // label26
+            // groupBox4
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(6, 70);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(84, 13);
-            this.label26.TabIndex = 37;
-            this.label26.Text = "Core Clk. (MHz):";
+            this.groupBox4.Controls.Add(this.checkBox5);
+            this.groupBox4.Controls.Add(this.numericUpDown16);
+            this.groupBox4.Controls.Add(this.label17);
+            this.groupBox4.Controls.Add(this.numericUpDown17);
+            this.groupBox4.Controls.Add(this.label18);
+            this.groupBox4.Controls.Add(this.numericUpDown18);
+            this.groupBox4.Controls.Add(this.label19);
+            this.groupBox4.Controls.Add(this.numericUpDown19);
+            this.groupBox4.Controls.Add(this.label20);
+            this.groupBox4.Controls.Add(this.numericUpDown20);
+            this.groupBox4.Controls.Add(this.label21);
+            this.groupBox4.Location = new System.Drawing.Point(158, 7);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(314, 123);
+            this.groupBox4.TabIndex = 124;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Tag = "overclocking";
+            this.groupBox4.Text = "Overclocking/Underclocking";
             // 
-            // numericUpDown25
+            // checkBox5
             // 
-            this.numericUpDown25.Increment = new decimal(new int[] {
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(6, 19);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(59, 17);
+            this.checkBox5.TabIndex = 232;
+            this.checkBox5.Tag = "pascal_overclocking_enabled";
+            this.checkBox5.Text = "Enable";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown16
+            // 
+            this.numericUpDown16.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.numericUpDown25.Location = new System.Drawing.Point(96, 68);
-            this.numericUpDown25.Maximum = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.numericUpDown25.Minimum = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
-            this.numericUpDown25.Name = "numericUpDown25";
-            this.numericUpDown25.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown25.TabIndex = 38;
-            this.numericUpDown25.Value = new decimal(new int[] {
-            1280,
-            0,
-            0,
-            0});
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(159, 72);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(77, 13);
-            this.label25.TabIndex = 39;
-            this.label25.Text = "Core Vol. (mV):";
-            // 
-            // numericUpDown24
-            // 
-            this.numericUpDown24.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown24.Location = new System.Drawing.Point(249, 70);
-            this.numericUpDown24.Maximum = new decimal(new int[] {
+            this.numericUpDown16.Location = new System.Drawing.Point(249, 94);
+            this.numericUpDown16.Maximum = new decimal(new int[] {
             1200,
             0,
             0,
             0});
-            this.numericUpDown24.Minimum = new decimal(new int[] {
+            this.numericUpDown16.Minimum = new decimal(new int[] {
             800,
             0,
             0,
             0});
-            this.numericUpDown24.Name = "numericUpDown24";
-            this.numericUpDown24.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown24.TabIndex = 40;
-            this.numericUpDown24.Value = new decimal(new int[] {
+            this.numericUpDown16.Name = "numericUpDown16";
+            this.numericUpDown16.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown16.TabIndex = 46;
+            this.numericUpDown16.Tag = "pascal_overclocking_memory_voltage";
+            this.numericUpDown16.Value = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             // 
-            // label24
+            // label17
             // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(6, 44);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(81, 13);
-            this.label24.TabIndex = 41;
-            this.label24.Text = "Power Limit (%):";
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(159, 96);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(81, 13);
+            this.label17.TabIndex = 45;
+            this.label17.Text = "Mem. Vol. (mV):";
             // 
-            // numericUpDown23
+            // numericUpDown17
             // 
-            this.numericUpDown23.Location = new System.Drawing.Point(96, 42);
-            this.numericUpDown23.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.numericUpDown23.Minimum = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            this.numericUpDown23.Name = "numericUpDown23";
-            this.numericUpDown23.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown23.TabIndex = 42;
-            this.numericUpDown23.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(6, 96);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(88, 13);
-            this.label23.TabIndex = 43;
-            this.label23.Text = "Mem. Clk. (MHz):";
-            // 
-            // numericUpDown22
-            // 
-            this.numericUpDown22.Increment = new decimal(new int[] {
+            this.numericUpDown17.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.numericUpDown22.Location = new System.Drawing.Point(96, 94);
-            this.numericUpDown22.Maximum = new decimal(new int[] {
+            this.numericUpDown17.Location = new System.Drawing.Point(96, 94);
+            this.numericUpDown17.Maximum = new decimal(new int[] {
             2400,
             0,
             0,
             0});
-            this.numericUpDown22.Minimum = new decimal(new int[] {
+            this.numericUpDown17.Minimum = new decimal(new int[] {
             300,
             0,
             0,
             0});
-            this.numericUpDown22.Name = "numericUpDown22";
-            this.numericUpDown22.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown22.TabIndex = 44;
-            this.numericUpDown22.Value = new decimal(new int[] {
+            this.numericUpDown17.Name = "numericUpDown17";
+            this.numericUpDown17.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown17.TabIndex = 44;
+            this.numericUpDown17.Tag = "pascal_overclocking_memory_clock";
+            this.numericUpDown17.Value = new decimal(new int[] {
             2000,
             0,
             0,
             0});
             // 
-            // label22
+            // label18
             // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(159, 96);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(81, 13);
-            this.label22.TabIndex = 45;
-            this.label22.Text = "Mem. Vol. (mV):";
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(6, 96);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(88, 13);
+            this.label18.TabIndex = 43;
+            this.label18.Text = "Mem. Clk. (MHz):";
+            // 
+            // numericUpDown18
+            // 
+            this.numericUpDown18.Location = new System.Drawing.Point(96, 42);
+            this.numericUpDown18.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.numericUpDown18.Minimum = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.numericUpDown18.Name = "numericUpDown18";
+            this.numericUpDown18.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown18.TabIndex = 42;
+            this.numericUpDown18.Tag = "pascal_overclocking_power_limit";
+            this.numericUpDown18.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(6, 44);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(81, 13);
+            this.label19.TabIndex = 41;
+            this.label19.Text = "Power Limit (%):";
+            // 
+            // numericUpDown19
+            // 
+            this.numericUpDown19.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown19.Location = new System.Drawing.Point(249, 70);
+            this.numericUpDown19.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.numericUpDown19.Minimum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.numericUpDown19.Name = "numericUpDown19";
+            this.numericUpDown19.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown19.TabIndex = 40;
+            this.numericUpDown19.Tag = "pascal_overclocking_core_voltage";
+            this.numericUpDown19.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(159, 72);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(77, 13);
+            this.label20.TabIndex = 39;
+            this.label20.Text = "Core Vol. (mV):";
+            // 
+            // numericUpDown20
+            // 
+            this.numericUpDown20.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown20.Location = new System.Drawing.Point(96, 68);
+            this.numericUpDown20.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numericUpDown20.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUpDown20.Name = "numericUpDown20";
+            this.numericUpDown20.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown20.TabIndex = 38;
+            this.numericUpDown20.Tag = "pascal_overclocking_core_clock";
+            this.numericUpDown20.Value = new decimal(new int[] {
+            1280,
+            0,
+            0,
+            0});
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(6, 70);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(84, 13);
+            this.label21.TabIndex = 37;
+            this.label21.Text = "Core Clk. (MHz):";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.checkBox1);
+            this.groupBox6.Controls.Add(this.numericUpDown21);
+            this.groupBox6.Controls.Add(this.label30);
+            this.groupBox6.Controls.Add(this.numericUpDown22);
+            this.groupBox6.Controls.Add(this.label31);
+            this.groupBox6.Controls.Add(this.numericUpDown23);
+            this.groupBox6.Controls.Add(this.label32);
+            this.groupBox6.Controls.Add(this.numericUpDown25);
+            this.groupBox6.Controls.Add(this.label33);
+            this.groupBox6.Controls.Add(this.numericUpDown29);
+            this.groupBox6.Controls.Add(this.label34);
+            this.groupBox6.Location = new System.Drawing.Point(158, 7);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(314, 123);
+            this.groupBox6.TabIndex = 126;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Tag = "overclocking";
+            this.groupBox6.Text = "Overclocking/Underclocking";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(6, 19);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(59, 17);
+            this.checkBox1.TabIndex = 232;
+            this.checkBox1.Tag = "neoscrypt_overclocking_enabled";
+            this.checkBox1.Text = "Enable";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // numericUpDown21
             // 
@@ -2301,44 +2238,488 @@
             this.numericUpDown21.Name = "numericUpDown21";
             this.numericUpDown21.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown21.TabIndex = 46;
+            this.numericUpDown21.Tag = "neoscrypt_overclocking_memory_voltage";
             this.numericUpDown21.Value = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             // 
-            // checkBox7
+            // label30
             // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.Enabled = false;
-            this.checkBox7.Location = new System.Drawing.Point(6, 19);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(59, 17);
-            this.checkBox7.TabIndex = 232;
-            this.checkBox7.Text = "Enable";
-            this.checkBox7.UseVisualStyleBackColor = true;
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(159, 96);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(81, 13);
+            this.label30.TabIndex = 45;
+            this.label30.Text = "Mem. Vol. (mV):";
             // 
-            // groupBox5
+            // numericUpDown22
             // 
-            this.groupBox5.Controls.Add(this.checkBox7);
-            this.groupBox5.Controls.Add(this.numericUpDown21);
-            this.groupBox5.Controls.Add(this.label22);
-            this.groupBox5.Controls.Add(this.numericUpDown22);
-            this.groupBox5.Controls.Add(this.label23);
-            this.groupBox5.Controls.Add(this.numericUpDown23);
-            this.groupBox5.Controls.Add(this.label24);
-            this.groupBox5.Controls.Add(this.numericUpDown24);
-            this.groupBox5.Controls.Add(this.label25);
-            this.groupBox5.Controls.Add(this.numericUpDown25);
-            this.groupBox5.Controls.Add(this.label26);
-            this.groupBox5.Enabled = false;
-            this.groupBox5.Location = new System.Drawing.Point(158, 7);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(314, 123);
-            this.groupBox5.TabIndex = 123;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Overclocking/Underclocking";
-            this.groupBox5.Visible = false;
+            this.numericUpDown22.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown22.Location = new System.Drawing.Point(96, 94);
+            this.numericUpDown22.Maximum = new decimal(new int[] {
+            2400,
+            0,
+            0,
+            0});
+            this.numericUpDown22.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUpDown22.Name = "numericUpDown22";
+            this.numericUpDown22.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown22.TabIndex = 44;
+            this.numericUpDown22.Tag = "neoscrypt_overclocking_memory_clock";
+            this.numericUpDown22.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(6, 96);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(88, 13);
+            this.label31.TabIndex = 43;
+            this.label31.Text = "Mem. Clk. (MHz):";
+            // 
+            // numericUpDown23
+            // 
+            this.numericUpDown23.Location = new System.Drawing.Point(96, 42);
+            this.numericUpDown23.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.numericUpDown23.Minimum = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.numericUpDown23.Name = "numericUpDown23";
+            this.numericUpDown23.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown23.TabIndex = 42;
+            this.numericUpDown23.Tag = "neoscrypt_overclocking_power_limit";
+            this.numericUpDown23.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(6, 44);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(81, 13);
+            this.label32.TabIndex = 41;
+            this.label32.Text = "Power Limit (%):";
+            // 
+            // numericUpDown25
+            // 
+            this.numericUpDown25.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown25.Location = new System.Drawing.Point(249, 70);
+            this.numericUpDown25.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.numericUpDown25.Minimum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.numericUpDown25.Name = "numericUpDown25";
+            this.numericUpDown25.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown25.TabIndex = 40;
+            this.numericUpDown25.Tag = "neoscrypt_overclocking_core_voltage";
+            this.numericUpDown25.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(159, 72);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(77, 13);
+            this.label33.TabIndex = 39;
+            this.label33.Text = "Core Vol. (mV):";
+            // 
+            // numericUpDown29
+            // 
+            this.numericUpDown29.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown29.Location = new System.Drawing.Point(96, 68);
+            this.numericUpDown29.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numericUpDown29.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUpDown29.Name = "numericUpDown29";
+            this.numericUpDown29.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown29.TabIndex = 38;
+            this.numericUpDown29.Tag = "neoscrypt_overclocking_core_clock";
+            this.numericUpDown29.Value = new decimal(new int[] {
+            1280,
+            0,
+            0,
+            0});
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(6, 70);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(84, 13);
+            this.label34.TabIndex = 37;
+            this.label34.Text = "Core Clk. (MHz):";
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.groupBox7);
+            this.tabPage6.Controls.Add(this.label40);
+            this.tabPage6.Controls.Add(this.numericUpDown35);
+            this.tabPage6.Controls.Add(this.label41);
+            this.tabPage6.Controls.Add(this.label42);
+            this.tabPage6.Controls.Add(this.numericUpDown36);
+            this.tabPage6.Controls.Add(this.numericUpDown37);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(480, 140);
+            this.tabPage6.TabIndex = 6;
+            this.tabPage6.Text = "Lyra2REv2";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.checkBox6);
+            this.groupBox7.Controls.Add(this.numericUpDown30);
+            this.groupBox7.Controls.Add(this.label35);
+            this.groupBox7.Controls.Add(this.numericUpDown31);
+            this.groupBox7.Controls.Add(this.label36);
+            this.groupBox7.Controls.Add(this.numericUpDown32);
+            this.groupBox7.Controls.Add(this.label37);
+            this.groupBox7.Controls.Add(this.numericUpDown33);
+            this.groupBox7.Controls.Add(this.label38);
+            this.groupBox7.Controls.Add(this.numericUpDown34);
+            this.groupBox7.Controls.Add(this.label39);
+            this.groupBox7.Location = new System.Drawing.Point(158, 7);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(314, 123);
+            this.groupBox7.TabIndex = 133;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Tag = "overclocking";
+            this.groupBox7.Text = "Overclocking/Underclocking";
+            // 
+            // checkBox6
+            // 
+            this.checkBox6.AutoSize = true;
+            this.checkBox6.Location = new System.Drawing.Point(6, 19);
+            this.checkBox6.Name = "checkBox6";
+            this.checkBox6.Size = new System.Drawing.Size(59, 17);
+            this.checkBox6.TabIndex = 232;
+            this.checkBox6.Tag = "lyra2rev2_overclocking_enabled";
+            this.checkBox6.Text = "Enable";
+            this.checkBox6.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown30
+            // 
+            this.numericUpDown30.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown30.Location = new System.Drawing.Point(249, 94);
+            this.numericUpDown30.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.numericUpDown30.Minimum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.numericUpDown30.Name = "numericUpDown30";
+            this.numericUpDown30.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown30.TabIndex = 46;
+            this.numericUpDown30.Tag = "lyra2rev2_overclocking_memory_voltage";
+            this.numericUpDown30.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(159, 96);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(81, 13);
+            this.label35.TabIndex = 45;
+            this.label35.Text = "Mem. Vol. (mV):";
+            // 
+            // numericUpDown31
+            // 
+            this.numericUpDown31.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown31.Location = new System.Drawing.Point(96, 94);
+            this.numericUpDown31.Maximum = new decimal(new int[] {
+            2400,
+            0,
+            0,
+            0});
+            this.numericUpDown31.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUpDown31.Name = "numericUpDown31";
+            this.numericUpDown31.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown31.TabIndex = 44;
+            this.numericUpDown31.Tag = "lyra2rev2_overclocking_memory_clock";
+            this.numericUpDown31.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(6, 96);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(88, 13);
+            this.label36.TabIndex = 43;
+            this.label36.Text = "Mem. Clk. (MHz):";
+            // 
+            // numericUpDown32
+            // 
+            this.numericUpDown32.Location = new System.Drawing.Point(96, 42);
+            this.numericUpDown32.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.numericUpDown32.Minimum = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.numericUpDown32.Name = "numericUpDown32";
+            this.numericUpDown32.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown32.TabIndex = 42;
+            this.numericUpDown32.Tag = "lyra2rev2_overclocking_power_limit";
+            this.numericUpDown32.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(6, 44);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(81, 13);
+            this.label37.TabIndex = 41;
+            this.label37.Text = "Power Limit (%):";
+            // 
+            // numericUpDown33
+            // 
+            this.numericUpDown33.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown33.Location = new System.Drawing.Point(249, 70);
+            this.numericUpDown33.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.numericUpDown33.Minimum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.numericUpDown33.Name = "numericUpDown33";
+            this.numericUpDown33.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown33.TabIndex = 40;
+            this.numericUpDown33.Tag = "lyra2rev2_overclocking_core_voltage";
+            this.numericUpDown33.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(159, 72);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(77, 13);
+            this.label38.TabIndex = 39;
+            this.label38.Text = "Core Vol. (mV):";
+            // 
+            // numericUpDown34
+            // 
+            this.numericUpDown34.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown34.Location = new System.Drawing.Point(96, 68);
+            this.numericUpDown34.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numericUpDown34.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUpDown34.Name = "numericUpDown34";
+            this.numericUpDown34.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown34.TabIndex = 38;
+            this.numericUpDown34.Tag = "lyra2rev2_overclocking_core_clock";
+            this.numericUpDown34.Value = new decimal(new int[] {
+            1280,
+            0,
+            0,
+            0});
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(6, 70);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(84, 13);
+            this.label39.TabIndex = 37;
+            this.label39.Text = "Core Clk. (MHz):";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(6, 61);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(88, 13);
+            this.label40.TabIndex = 131;
+            this.label40.Text = "Local Work Size:";
+            // 
+            // numericUpDown35
+            // 
+            this.numericUpDown35.Location = new System.Drawing.Point(95, 59);
+            this.numericUpDown35.Maximum = new decimal(new int[] {
+            512,
+            0,
+            0,
+            0});
+            this.numericUpDown35.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown35.Name = "numericUpDown35";
+            this.numericUpDown35.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown35.TabIndex = 132;
+            this.numericUpDown35.Tag = "neoscrypt_local_work_size";
+            this.numericUpDown35.Value = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(6, 8);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(49, 13);
+            this.label41.TabIndex = 129;
+            this.label41.Text = "Threads:";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(6, 34);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(49, 13);
+            this.label42.TabIndex = 127;
+            this.label42.Text = "Intensity:";
+            // 
+            // numericUpDown36
+            // 
+            this.numericUpDown36.Location = new System.Drawing.Point(95, 33);
+            this.numericUpDown36.Maximum = new decimal(new int[] {
+            8192,
+            0,
+            0,
+            0});
+            this.numericUpDown36.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown36.Name = "numericUpDown36";
+            this.numericUpDown36.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown36.TabIndex = 128;
+            this.numericUpDown36.Tag = "neoscrypt_intensity";
+            this.numericUpDown36.Value = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown37
+            // 
+            this.numericUpDown37.Location = new System.Drawing.Point(95, 7);
+            this.numericUpDown37.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.numericUpDown37.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown37.Name = "numericUpDown37";
+            this.numericUpDown37.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown37.TabIndex = 130;
+            this.numericUpDown37.Tag = "neoscrypt_threads";
+            this.numericUpDown37.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // DeviceSettingsUserControl
             // 
@@ -2354,6 +2735,13 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalMemoryVoltage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalMemoryClock)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalPowerLimit)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown24)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalCoreClock)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalPascalIterations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalIntensity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalThreads)).EndInit();
@@ -2395,26 +2783,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0LbryThreads)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown19)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown20)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0PascalLocalWorkSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0PascalIntensity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0PascalThreads)).EndInit();
             this.tabPage41.ResumeLayout(false);
             this.tabPage41.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptLocalWorkSize)).EndInit();
-            this.groupBox97.ResumeLayout(false);
-            this.groupBox97.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown171)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown178)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown179)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown180)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown190)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptIntensity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptThreads)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown52)).EndInit();
@@ -2423,13 +2797,32 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown28)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown27)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown26)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown25)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown24)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown23)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown22)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown19)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown20)).EndInit();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown21)).EndInit();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown22)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown23)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown25)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown29)).EndInit();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown30)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown31)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown32)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown33)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown34)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown35)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown36)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown37)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2475,17 +2868,6 @@
         private System.Windows.Forms.TabPage tabPage41;
         private System.Windows.Forms.Label label474;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice0NeoScryptLocalWorkSize;
-        private System.Windows.Forms.GroupBox groupBox97;
-        private System.Windows.Forms.NumericUpDown numericUpDown171;
-        private System.Windows.Forms.Label label476;
-        private System.Windows.Forms.NumericUpDown numericUpDown178;
-        private System.Windows.Forms.Label label477;
-        private System.Windows.Forms.NumericUpDown numericUpDown179;
-        private System.Windows.Forms.Label label478;
-        private System.Windows.Forms.NumericUpDown numericUpDown180;
-        private System.Windows.Forms.Label label479;
-        private System.Windows.Forms.NumericUpDown numericUpDown190;
-        private System.Windows.Forms.Label label480;
         private System.Windows.Forms.Label label481;
         private System.Windows.Forms.Label label482;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice0NeoScryptIntensity;
@@ -2494,7 +2876,6 @@
         private System.Windows.Forms.CheckBox fanControlEnabled;
         private System.Windows.Forms.NumericUpDown numericUpDown52;
         private System.Windows.Forms.Label label188;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
@@ -2531,18 +2912,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown numericUpDown15;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.CheckBox checkBox6;
-        private System.Windows.Forms.NumericUpDown numericUpDown16;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.NumericUpDown numericUpDown17;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.NumericUpDown numericUpDown18;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.NumericUpDown numericUpDown19;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.NumericUpDown numericUpDown20;
-        private System.Windows.Forms.Label label21;
         private System.Windows.Forms.NumericUpDown numericUpDown28;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.NumericUpDown numericUpDown27;
@@ -2554,15 +2923,58 @@
         private System.Windows.Forms.Button buttonResetAll;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.CheckBox checkBox7;
-        private System.Windows.Forms.NumericUpDown numericUpDown21;
+        private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalMemoryVoltage;
         private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.NumericUpDown numericUpDown22;
+        private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalMemoryClock;
         private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.NumericUpDown numericUpDown23;
+        private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalPowerLimit;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.NumericUpDown numericUpDown24;
         private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.NumericUpDown numericUpDown25;
+        private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalCoreClock;
         private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.NumericUpDown numericUpDown16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.NumericUpDown numericUpDown17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.NumericUpDown numericUpDown18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.NumericUpDown numericUpDown19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.NumericUpDown numericUpDown20;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.NumericUpDown numericUpDown21;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.NumericUpDown numericUpDown22;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.NumericUpDown numericUpDown23;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.NumericUpDown numericUpDown25;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.NumericUpDown numericUpDown29;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.NumericUpDown numericUpDown30;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.NumericUpDown numericUpDown31;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.NumericUpDown numericUpDown32;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.NumericUpDown numericUpDown33;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.NumericUpDown numericUpDown34;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.NumericUpDown numericUpDown35;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.NumericUpDown numericUpDown36;
+        private System.Windows.Forms.NumericUpDown numericUpDown37;
     }
 }
