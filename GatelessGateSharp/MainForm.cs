@@ -4060,10 +4060,8 @@ namespace GatelessGateSharp
         }
 
         void UpdateOverClockingSettings() {
-            foreach (var device in mDevices) {
-                device.CoreClock = 500;
-                device.MemoryClock = 1000;
-            }
+                mDevices[0].CoreClock = 1288;
+                mDevices[0].MemoryClock = 2050;
         }
 
         static public int DeviceCount {

@@ -486,8 +486,10 @@ namespace GatelessGateSharp
                 //
                 OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
                 if (!reset) {
-                    for (int i = 1; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                    for (int i = 1; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i) {
                         OSADLODNPerformanceLevelsData.aLevels[i].iClock = value * 100;
+                        OSADLODNPerformanceLevelsData.aLevels[i].iVddc = OSADLODNPerformanceLevelsData.aLevels[OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels - 1].iVddc;
+                    }
                 }
                 Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
                 if (ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
@@ -585,8 +587,10 @@ namespace GatelessGateSharp
                 //
                 OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
                 if (!reset) {
-                    for (int i = 1; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                    for (int i = 1; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i) {
                         OSADLODNPerformanceLevelsData.aLevels[i].iClock = value * 100;
+                        OSADLODNPerformanceLevelsData.aLevels[i].iVddc = OSADLODNPerformanceLevelsData.aLevels[1].iVddc;
+                    }
                 }
                 Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
                 if (ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
