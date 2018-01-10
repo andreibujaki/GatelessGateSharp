@@ -3173,6 +3173,7 @@ namespace GatelessGateSharp
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             if (appState == ApplicationGlobalState.Idle) {
+                OpenCLDevice.SaveOverclockingSettings();
                 UpdateOverClockingSettings();
                 foreach (var device in mDevices) {
                     device.ClearShares();
@@ -3207,6 +3208,7 @@ namespace GatelessGateSharp
                 timerDevFee.Enabled = false;
                 StopMiners();
                 appState = ApplicationGlobalState.Idle;
+                OpenCLDevice.RestoreOverclockingSettings();
                 try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
             }
 
@@ -4060,7 +4062,7 @@ namespace GatelessGateSharp
         void UpdateOverClockingSettings() {
             foreach (var device in mDevices) {
                 device.CoreClock = 500;
-                device.MemoryClock = 500;
+                device.MemoryClock = 1000;
             }
         }
 
