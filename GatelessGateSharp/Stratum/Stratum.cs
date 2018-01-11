@@ -95,6 +95,7 @@ namespace GatelessGateSharp {
         protected double mDifficulty = 1.0;
         protected String mPoolExtranonce = "";
         protected String mPoolName = "";
+        protected String mAlgorithm = "";
         TcpClient mClient;
         NetworkStream mStream;
         StreamReader mStreamReader;
@@ -119,6 +120,7 @@ namespace GatelessGateSharp {
         public String Password { get { return mPassword; } }
         public String PoolExtranonce { get { return mPoolExtranonce; } }
         public String PoolName { get { return mPoolName; } }
+        public String Algorithm { get { return mAlgorithm; } }
         public double Difficulty { get { return mDifficulty; } }
         public UnrecoverableException UnrecoverableException { get; set; }
 
@@ -156,12 +158,13 @@ namespace GatelessGateSharp {
             mStopped = true;
         }
 
-        public Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName) {
+        public Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, String aAlgorithm) {
             mServerAddress = aServerAddress;
             mServerPort = aServerPort;
             mUsername = aUsername;
             mPassword = aPassword;
             mPoolName = aPoolName;
+            mAlgorithm = aAlgorithm;
 
             Connect();
         }

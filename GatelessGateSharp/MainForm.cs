@@ -115,6 +115,13 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceFanControlMinimumFanSpeedArray;
         private NumericUpDown[] numericUpDownDeviceFanControlMaximumFanSpeedArray;
 
+        private Dictionary<Tuple<int, string>, CheckBox> checkBoxDeviceOverclockingEnabledArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingPowerLimitArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingCoreClockArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingCoreVoltageArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingMemoryClockArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingMemoryVoltageArray;
+
         private Button[] buttonDeviceResetToDefaultArray;
         private Button[] buttonDeviceResetAllArray;
         private Button[] buttonDeviceCopyToOthersArray;
@@ -1321,6 +1328,13 @@ namespace GatelessGateSharp
             numericUpDownDeviceFanControlMinimumFanSpeedArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceFanControlMaximumFanSpeedArray = new NumericUpDown[mDevices.Length];
 
+            checkBoxDeviceOverclockingEnabledArray = new Dictionary<Tuple<int, string>, CheckBox> { };
+            numericUpDownDeviceOverclockingPowerLimitArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+            numericUpDownDeviceOverclockingCoreClockArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+            numericUpDownDeviceOverclockingCoreVoltageArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+            numericUpDownDeviceOverclockingMemoryClockArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+            numericUpDownDeviceOverclockingMemoryVoltageArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+
             buttonDeviceResetToDefaultArray = new Button[mDevices.Length];
             buttonDeviceResetAllArray = new Button[mDevices.Length];
             buttonDeviceCopyToOthersArray = new Button[mDevices.Length];
@@ -1380,6 +1394,29 @@ namespace GatelessGateSharp
                             numericUpDownDeviceLbryIntensityArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "lbry_local_work_size") {
                             numericUpDownDeviceLbryLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "overclocking") {
+                            foreach (var controlOC in ((GroupBox)control).Controls) {
+                                var tagOC = (string)(controlOC.GetType().GetProperty("Tag").GetValue(controlOC));
+                                if (tagOC == null || tagOC == "")
+                                    continue;
+                                var regex = new System.Text.RegularExpressions.Regex(@"(ethash_pascal|ethash|pascal|cryptonight|neoscrypt|lyra2rev2|lbry)_overclocking_(enabled|power_limit|core_clock|core_voltage|memory_clock|memory_voltage)");
+                                var match = regex.Match(tagOC);
+                                var algorithm = match.Success ? match.Groups[1].Value : null;
+                                var parameter = match.Success ? match.Groups[2].Value : null;
+                                if (parameter == "enabled") {
+                                    checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(i, algorithm)] = ((CheckBox)controlOC);
+                                } else if (parameter == "power_limit") {
+                                    numericUpDownDeviceOverclockingPowerLimitArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                } else if (parameter == "core_clock") {
+                                    numericUpDownDeviceOverclockingCoreClockArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                } else if (parameter == "core_voltage") {
+                                    numericUpDownDeviceOverclockingCoreVoltageArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                } else if (parameter == "memory_clock") {
+                                    numericUpDownDeviceOverclockingMemoryClockArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                } else if (parameter == "memory_voltage") {
+                                    numericUpDownDeviceOverclockingMemoryVoltageArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                }
+                            }
                         }
                     }
                 }
@@ -1511,6 +1548,15 @@ namespace GatelessGateSharp
                             device.GetVendor() == "AMD"                                         ? 2 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
                                                                                                           2 * device.GetMaxComputeUnits());
+        
+            // Overclocking
+            Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, "cryptonight");
+            int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock;
+            if (defaultCoreClock > 0)
+                numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = defaultCoreClock;
+            int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock;
+            if (defaultMemoryClock > 0)
+                numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = defaultMemoryClock;
         }
 
         private void CopyDeviceSettings(int sourceDeviceIndex) {
@@ -2218,8 +2264,9 @@ namespace GatelessGateSharp
             }
 
             if (stratum != null) {
-                LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
                 mPrimaryStratum = (Stratum)stratum;
+                UpdateOverClockingSettings();
+                LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
             }
         }
 
@@ -3174,7 +3221,6 @@ namespace GatelessGateSharp
 
             if (appState == ApplicationGlobalState.Idle) {
                 OpenCLDevice.SaveOverclockingSettings();
-                UpdateOverClockingSettings();
                 foreach (var device in mDevices) {
                     device.ClearShares();
                     //labelGPUSharesArray[device.DeviceIndex].Text = "0";
@@ -4060,8 +4106,16 @@ namespace GatelessGateSharp
         }
 
         void UpdateOverClockingSettings() {
-                mDevices[0].CoreClock = 1288;
-                mDevices[0].MemoryClock = 2050;
+            string algorithm = mPrimaryStratum.Algorithm;
+            if (mSecondaryStratum != null)
+                algorithm += "_" + mSecondaryStratum.Algorithm;
+            foreach (var device in mDevices) {
+                Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                if (!checkBoxDeviceOverclockingEnabledArray[tuple].Checked)
+                    continue;
+                device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
+                device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
+            }
         }
 
         static public int DeviceCount {

@@ -233,7 +233,7 @@ namespace GatelessGateSharp
         }
 
         public EthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "ethash")
         {
         }
 

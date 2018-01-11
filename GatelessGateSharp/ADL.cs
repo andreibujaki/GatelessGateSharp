@@ -357,7 +357,7 @@ namespace ATI.ADL
         internal int iSize;
         internal int iMode;
         internal int iNumberOfPerformanceLevels;
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS)]
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN)]
         internal ADLODNPerformanceLevel[] aLevels;
     }
 
@@ -427,7 +427,7 @@ namespace ATI.ADL
         internal const int ADL_MAX_NUM_DISPLAYMODES = 1024;
 
         internal const int ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 = 2;
-        internal const int ADL_MAX_NUM_PERFORMANCE_LEVELS = 8;
+        internal const int ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN = 8;
 
 
         #endregion Internal Constant
