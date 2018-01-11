@@ -1500,11 +1500,6 @@ namespace GatelessGateSharp
         private void ResetDeviceSettings(Device device) {
             tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName();
 
-            numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
-            numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
-            numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
-            numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = (decimal)100;
-
             // EthashPascal
             numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
             numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)1024;
@@ -1541,15 +1536,28 @@ namespace GatelessGateSharp
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 60 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 96 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 96 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 90 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 128 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && (device.MemorySize <= 4L * 1024 * 1024 * 1024) ? 90 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 112 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 64 :
-                            device.GetVendor() == "AMD"                                         ? 2 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" ? 2 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
                                                                                                           2 * device.GetMaxComputeUnits());
-        
+
+            ResetDeviceFanControlSettings(device);
+            ResetDeviceOverclockingSettings(device);
+        }
+
+        private void ResetDeviceFanControlSettings(Device device) {
+            checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked = true;
+            numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
+            numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
+            numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
+            numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = (decimal)100;
+        }
+
+        private void ResetDeviceOverclockingSettings(Device device) {
             // Overclocking
             foreach (var algorithm in sAlgorithmList) {
                 Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
@@ -1557,41 +1565,48 @@ namespace GatelessGateSharp
                 int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock;
                 int minCoreClock = ((OpenCLDevice)device).MinCoreClock;
                 int coreClockStep = ((OpenCLDevice)device).CoreClockStep;
+                checkBoxDeviceOverclockingEnabledArray[tuple].Checked = false;
                 if (defaultCoreClock > 0 && maxCoreClock > 0 && minCoreClock > 0 && coreClockStep > 0) {
-                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = true;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Visible = true;
                     numericUpDownDeviceOverclockingCoreClockArray[tuple].Maximum = maxCoreClock;
                     numericUpDownDeviceOverclockingCoreClockArray[tuple].Minimum = minCoreClock;
                     numericUpDownDeviceOverclockingCoreClockArray[tuple].Increment = coreClockStep;
                     numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = defaultCoreClock;
                 } else {
-                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = false;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Visible = false;
                 }
                 int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock;
                 int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock;
                 int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock;
                 int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep;
                 if (defaultMemoryClock > 0 && maxMemoryClock > 0 && minMemoryClock > 0 && memoryClockStep > 0) {
-                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = true;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Visible = true;
                     numericUpDownDeviceOverclockingMemoryClockArray[tuple].Maximum = maxMemoryClock;
                     numericUpDownDeviceOverclockingMemoryClockArray[tuple].Minimum = minMemoryClock;
                     numericUpDownDeviceOverclockingMemoryClockArray[tuple].Increment = memoryClockStep;
                     numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = defaultMemoryClock;
                 } else {
-                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = false;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Visible = false;
                 }
                 int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage;
                 if (defaultCoreVoltage > 0) {
-                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = true;
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Visible = true;
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Maximum = 2000;
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Minimum = 0;
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Increment = 1;
                     numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = defaultCoreVoltage;
                 } else {
-                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = false;
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Visible = false;
                 }
                 int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage;
                 if (defaultMemoryVoltage > 0) {
-                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = true;
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Visible = true;
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Maximum = 2000;
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Minimum = 0;
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Increment = 1;
                     numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = defaultMemoryVoltage;
                 } else {
-                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = false;
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Visible = false;
                 }
             }
         }
@@ -1957,6 +1972,9 @@ namespace GatelessGateSharp
                     int activity = device.Activity;
                     if (activity >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = activity.ToString() + "%";
+                    int powerLimit = device.PowerLimit;
+                    if (powerLimit >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["power_limit"].Value = powerLimit.ToString() + "%";
                     int coreClock = device.CoreClock;
                     if (coreClock >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() +  " MHz";
@@ -4155,6 +4173,8 @@ namespace GatelessGateSharp
                     continue;
                 device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
                 device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
+                device.CoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
+                device.MemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
             }
         }
 
@@ -4167,6 +4187,28 @@ namespace GatelessGateSharp
         static public OpenCLDevice[] Devices {
             get {
                 return Instance.mDevices;
+            }
+        }
+
+        private void buttonResetAllSettings_Click(object sender, EventArgs e) {
+            foreach (var device in mDevices) {
+                ResetDeviceSettings(device);
+                device.ResetFanControlSettings();
+                device.ResetOverclockingSettings();
+            }
+        }
+
+        private void buttonResetFanControlSettings_Click(object sender, EventArgs e) {
+            foreach (var device in mDevices) {
+                ResetDeviceFanControlSettings(device);
+                device.ResetFanControlSettings();
+            }
+        }
+
+        private void buttonResetOverclockingSettings_Click(object sender, EventArgs e) {
+            foreach (var device in mDevices) {
+                ResetDeviceOverclockingSettings(device);
+                device.ResetOverclockingSettings();
             }
         }
     }

@@ -52,5 +52,8 @@ namespace GatelessGateSharp
             mAcceptedShares = 0;
             mRejectedShares = 0;
         }
+
+        public virtual void ResetFanControlSettings() { }
+        public virtual void ResetOverclockingSettings() { }
     }
 }

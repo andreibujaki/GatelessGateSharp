@@ -41,6 +41,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
             this.dataGridViewDevices = new System.Windows.Forms.DataGridView();
@@ -180,6 +181,9 @@
             this.textBoxCustomPool0Login = new System.Windows.Forms.TextBox();
             this.label148 = new System.Windows.Forms.Label();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
+            this.buttonResetFanControlSettings = new System.Windows.Forms.Button();
+            this.buttonResetAllSettings = new System.Windows.Forms.Button();
+            this.buttonResetOverclockingSettings = new System.Windows.Forms.Button();
             this.groupBoxHadrwareAcceleration = new System.Windows.Forms.GroupBox();
             this.label144 = new System.Windows.Forms.Label();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
@@ -228,6 +232,7 @@
             this.activity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.temperature = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fan = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.power_limit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.core_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.core_voltage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.memory_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -277,7 +282,7 @@
             this.tabControlMainForm.Location = new System.Drawing.Point(11, 8);
             this.tabControlMainForm.Name = "tabControlMainForm";
             this.tabControlMainForm.SelectedIndex = 0;
-            this.tabControlMainForm.Size = new System.Drawing.Size(791, 421);
+            this.tabControlMainForm.Size = new System.Drawing.Size(826, 421);
             this.tabControlMainForm.TabIndex = 0;
             this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
             // 
@@ -298,7 +303,7 @@
             this.tabPageDashboard.Controls.Add(this.label3);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
-            this.tabPageDashboard.Size = new System.Drawing.Size(783, 395);
+            this.tabPageDashboard.Size = new System.Drawing.Size(818, 395);
             this.tabPageDashboard.TabIndex = 2;
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
@@ -337,6 +342,7 @@
             this.activity,
             this.temperature,
             this.fan,
+            this.power_limit,
             this.core_clock,
             this.core_voltage,
             this.memory_clock});
@@ -344,7 +350,7 @@
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
-            this.dataGridViewDevices.Size = new System.Drawing.Size(758, 238);
+            this.dataGridViewDevices.Size = new System.Drawing.Size(793, 238);
             this.dataGridViewDevices.TabIndex = 144;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
             this.dataGridViewDevices.SelectionChanged += new System.EventHandler(this.dataGridViewDevices_SelectionChanged);
@@ -1746,6 +1752,9 @@
             // 
             // tabPageDeviceSettings
             // 
+            this.tabPageDeviceSettings.Controls.Add(this.buttonResetFanControlSettings);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonResetAllSettings);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonResetOverclockingSettings);
             this.tabPageDeviceSettings.Controls.Add(this.groupBoxHadrwareAcceleration);
             this.tabPageDeviceSettings.Controls.Add(this.tabControlDeviceSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
@@ -1754,6 +1763,35 @@
             this.tabPageDeviceSettings.TabIndex = 3;
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
+            // 
+            // buttonResetFanControlSettings
+            // 
+            this.buttonResetFanControlSettings.Location = new System.Drawing.Point(652, 10);
+            this.buttonResetFanControlSettings.Name = "buttonResetFanControlSettings";
+            this.buttonResetFanControlSettings.Size = new System.Drawing.Size(119, 35);
+            this.buttonResetFanControlSettings.TabIndex = 4;
+            this.buttonResetFanControlSettings.Text = "Reset Fan-Control Settings";
+            this.buttonResetFanControlSettings.UseVisualStyleBackColor = true;
+            this.buttonResetFanControlSettings.Click += new System.EventHandler(this.buttonResetFanControlSettings_Click);
+            // 
+            // buttonResetAllSettings
+            // 
+            this.buttonResetAllSettings.Location = new System.Drawing.Point(652, 92);
+            this.buttonResetAllSettings.Name = "buttonResetAllSettings";
+            this.buttonResetAllSettings.Size = new System.Drawing.Size(119, 35);
+            this.buttonResetAllSettings.TabIndex = 3;
+            this.buttonResetAllSettings.Text = "Reset All Settings";
+            this.buttonResetAllSettings.UseVisualStyleBackColor = true;
+            this.buttonResetAllSettings.Click += new System.EventHandler(this.buttonResetAllSettings_Click);
+            // 
+            // buttonResetOverclockingSettings
+            // 
+            this.buttonResetOverclockingSettings.Location = new System.Drawing.Point(652, 51);
+            this.buttonResetOverclockingSettings.Name = "buttonResetOverclockingSettings";
+            this.buttonResetOverclockingSettings.Size = new System.Drawing.Size(119, 35);
+            this.buttonResetOverclockingSettings.TabIndex = 2;
+            this.buttonResetOverclockingSettings.Text = "Reset Overclocking Settings";
+            this.buttonResetOverclockingSettings.UseVisualStyleBackColor = true;
             // 
             // groupBoxHadrwareAcceleration
             // 
@@ -2077,7 +2115,7 @@
             // 
             this.buttonBenchmark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonBenchmark.Enabled = false;
-            this.buttonBenchmark.Location = new System.Drawing.Point(646, 436);
+            this.buttonBenchmark.Location = new System.Drawing.Point(681, 436);
             this.buttonBenchmark.Name = "buttonBenchmark";
             this.buttonBenchmark.Size = new System.Drawing.Size(75, 23);
             this.buttonBenchmark.TabIndex = 146;
@@ -2087,7 +2125,7 @@
             // buttonStart
             // 
             this.buttonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonStart.Location = new System.Drawing.Point(727, 436);
+            this.buttonStart.Location = new System.Drawing.Point(762, 436);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(75, 23);
             this.buttonStart.TabIndex = 145;
@@ -2102,7 +2140,7 @@
             this.toolStripStatusLabel1});
             this.statusStripMainForm.Location = new System.Drawing.Point(0, 468);
             this.statusStripMainForm.Name = "statusStripMainForm";
-            this.statusStripMainForm.Size = new System.Drawing.Size(814, 23);
+            this.statusStripMainForm.Size = new System.Drawing.Size(849, 23);
             this.statusStripMainForm.TabIndex = 5;
             // 
             // toolStripMainFormProgressBar
@@ -2223,10 +2261,21 @@
             this.fan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fan.Width = 45;
             // 
-            // core_clock
+            // power_limit
             // 
             dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle9;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle9;
+            this.power_limit.HeaderText = "Power";
+            this.power_limit.Name = "power_limit";
+            this.power_limit.ReadOnly = true;
+            this.power_limit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.power_limit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.power_limit.Width = 45;
+            // 
+            // core_clock
+            // 
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle10;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
             this.core_clock.ReadOnly = true;
@@ -2236,19 +2285,19 @@
             // 
             // core_voltage
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle11;
             this.core_voltage.HeaderText = "";
             this.core_voltage.Name = "core_voltage";
             this.core_voltage.ReadOnly = true;
             this.core_voltage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.core_voltage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.core_voltage.Width = 60;
+            this.core_voltage.Width = 50;
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle12;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
             this.memory_clock.ReadOnly = true;
@@ -2260,7 +2309,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(814, 491);
+            this.ClientSize = new System.Drawing.Size(849, 491);
             this.Controls.Add(this.buttonBenchmark);
             this.Controls.Add(this.statusStripMainForm);
             this.Controls.Add(this.buttonStart);
@@ -2269,7 +2318,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(32767, 32767);
-            this.MinimumSize = new System.Drawing.Size(770, 530);
+            this.MinimumSize = new System.Drawing.Size(865, 530);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Gateless Gate Sharp";
@@ -2500,6 +2549,9 @@
         private System.Windows.Forms.Button buttonDisableUserAccountControl;
         private System.Windows.Forms.Button buttonDisableUserAccountControlSettings;
         private System.Windows.Forms.Timer timerOverClocking;
+        private System.Windows.Forms.Button buttonResetFanControlSettings;
+        private System.Windows.Forms.Button buttonResetAllSettings;
+        private System.Windows.Forms.Button buttonResetOverclockingSettings;
         private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
@@ -2509,6 +2561,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn activity;
         private System.Windows.Forms.DataGridViewTextBoxColumn temperature;
         private System.Windows.Forms.DataGridViewTextBoxColumn fan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
         private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
         private System.Windows.Forms.DataGridViewTextBoxColumn core_voltage;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
