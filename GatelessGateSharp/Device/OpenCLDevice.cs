@@ -185,10 +185,11 @@ namespace GatelessGateSharp
 
         static List<OpenCLDummyLbryMiner> dummyMinerList = new List<OpenCLDummyLbryMiner> { }; // Keep everything until the miner quits.
         static IntPtr ADL2Context = IntPtr.Zero;
+        static int sNumADLAdapters = 0;
+        static ADLAdapterInfoArray sADLAdapterInfo = new ADLAdapterInfoArray();
 
         public static bool InitializeADL(OpenCLDevice[] mDevices) {
             var ADLRet = -1;
-            var NumberOfAdapters = 0;
             if (null == ADL.ADL2_Main_Control_Create
                 || null == ADL.ADL_Main_Control_Create
                 || null == ADL.ADL_Adapter_NumberOfAdapters_Get)
@@ -196,24 +197,21 @@ namespace GatelessGateSharp
             if (ADL.ADL_SUCCESS == ADL.ADL2_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1, ref ADL2Context)
                 && ADL.ADL_SUCCESS == ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1)) {
                 MainForm.Logger("Successfully initialized AMD Display Library.");
-                ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
-                MainForm.Logger("Number of ADL Adapters: " + NumberOfAdapters.ToString());
+                ADL.ADL_Adapter_NumberOfAdapters_Get(ref sNumADLAdapters);
+                MainForm.Logger("Number of ADL Adapters: " + sNumADLAdapters.ToString());
 
-                if (0 < NumberOfAdapters) {
-                    ADLAdapterInfoArray OSAdapterInfoData;
-                    OSAdapterInfoData = new ADLAdapterInfoArray();
-
+                if (0 < sNumADLAdapters) {
                     if (null == ADL.ADL_Adapter_AdapterInfo_Get) {
                         MainForm.Logger("ADL.ADL_Adapter_AdapterInfo_Get() is not available.");
                     } else {
                         var AdapterBuffer = IntPtr.Zero;
-                        var size = Marshal.SizeOf(OSAdapterInfoData);
+                        var size = Marshal.SizeOf(sADLAdapterInfo);
                         AdapterBuffer = Marshal.AllocCoTaskMem((int)size);
-                        Marshal.StructureToPtr(OSAdapterInfoData, AdapterBuffer, false);
+                        Marshal.StructureToPtr(sADLAdapterInfo, AdapterBuffer, false);
 
                         ADLRet = ADL.ADL_Adapter_AdapterInfo_Get(AdapterBuffer, size);
                         if (ADL.ADL_SUCCESS == ADLRet) {
-                            OSAdapterInfoData = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, OSAdapterInfoData.GetType());
+                            sADLAdapterInfo = (ADLAdapterInfoArray)Marshal.PtrToStructure(AdapterBuffer, sADLAdapterInfo.GetType());
                             bool adrenalineWorkaroundRequired = false;
                             foreach (var device in mDevices) {
                                 var openclDevice = device.GetComputeDevice();
@@ -229,20 +227,20 @@ namespace GatelessGateSharp
                                     if (device.GetVendor() == "AMD") {
                                         string boardName = (new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9]+$")).Replace(System.Text.Encoding.ASCII.GetString(openclDevice.BoardNameAMD), ""); // Drop '\0'
                                         int boardCounter = 0;
-                                        for (var i = 0; i < NumberOfAdapters; ++i) {
-                                            if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber))
+                                        for (var i = 0; i < sNumADLAdapters; ++i) {
+                                            if (sADLAdapterInfo.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(sADLAdapterInfo.ADLAdapterInfo[i].BusNumber))
                                                 boardCounter++;
-                                            while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                            while (i + 1 < sNumADLAdapters && sADLAdapterInfo.ADLAdapterInfo[i].BusNumber == sADLAdapterInfo.ADLAdapterInfo[i + 1].BusNumber)
                                                 ++i;
                                         }
                                         if (boardCounter <= 1) {
-                                            for (var i = 0; i < NumberOfAdapters; ++i) {
-                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
+                                            for (var i = 0; i < sNumADLAdapters; ++i) {
+                                                if (sADLAdapterInfo.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(sADLAdapterInfo.ADLAdapterInfo[i].BusNumber)) {
                                                     device.ADLAdapterIndex = i;
-                                                    taken.Add(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber);
+                                                    taken.Add(sADLAdapterInfo.ADLAdapterInfo[i].BusNumber);
                                                     break;
                                                 }
-                                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                                while (i + 1 < sNumADLAdapters && sADLAdapterInfo.ADLAdapterInfo[i].BusNumber == sADLAdapterInfo.ADLAdapterInfo[i + 1].BusNumber)
                                                     ++i;
                                             }
                                         } else {
@@ -250,12 +248,12 @@ namespace GatelessGateSharp
                                             dummyMinerList.Add(dummyMiner);
                                             dummyMiner.Start();
 
-                                            int[] activityTotalArray = new int[NumberOfAdapters];
-                                            for (var i = 0; i < NumberOfAdapters; ++i)
+                                            int[] activityTotalArray = new int[sNumADLAdapters];
+                                            for (var i = 0; i < sNumADLAdapters; ++i)
                                                 activityTotalArray[i] = 0;
                                             for (var j = 0; j < 20; ++j) {
-                                                for (var i = 0; i < NumberOfAdapters; ++i) {
-                                                    if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
+                                                for (var i = 0; i < sNumADLAdapters; ++i) {
+                                                    if (sADLAdapterInfo.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(sADLAdapterInfo.ADLAdapterInfo[i].BusNumber)) {
                                                         ADLPMActivity OSADLPMActivityData;
                                                         OSADLPMActivityData = new ADLPMActivity();
                                                         var activityBuffer = IntPtr.Zero;
@@ -271,25 +269,25 @@ namespace GatelessGateSharp
                                                             }
                                                         }
                                                     }
-                                                    while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                                    while (i + 1 < sNumADLAdapters && sADLAdapterInfo.ADLAdapterInfo[i].BusNumber == sADLAdapterInfo.ADLAdapterInfo[i + 1].BusNumber)
                                                         ++i;
                                                 }
                                                 System.Threading.Thread.Sleep(100);
                                             }
                                             int candidate = -1;
                                             int candidateActivity = 0;
-                                            for (var i = 0; i < NumberOfAdapters; ++i) {
-                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
+                                            for (var i = 0; i < sNumADLAdapters; ++i) {
+                                                if (sADLAdapterInfo.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(sADLAdapterInfo.ADLAdapterInfo[i].BusNumber)) {
                                                     if (candidate < 0 || activityTotalArray[i] > candidateActivity) {
                                                         candidateActivity = activityTotalArray[i];
                                                         candidate = i;
                                                     }
                                                 }
-                                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                                while (i + 1 < sNumADLAdapters && sADLAdapterInfo.ADLAdapterInfo[i].BusNumber == sADLAdapterInfo.ADLAdapterInfo[i + 1].BusNumber)
                                                     ++i;
                                             }
                                             device.ADLAdapterIndex = candidate;
-                                            taken.Add(OSAdapterInfoData.ADLAdapterInfo[candidate].BusNumber);
+                                            taken.Add(sADLAdapterInfo.ADLAdapterInfo[candidate].BusNumber);
 
                                             dummyMiner.Stop();
                                             for (int i = 0; i < 50; ++i) {
@@ -309,13 +307,13 @@ namespace GatelessGateSharp
                                 foreach (var device in mDevices) {
                                     var openclDevice = device.GetComputeDevice();
                                     if (device.GetVendor() == "AMD") {
-                                        for (var i = 0; i < NumberOfAdapters; i++) {
+                                        for (var i = 0; i < sNumADLAdapters; i++) {
                                             var IsActive = 0;
                                             if (null != ADL.ADL_Adapter_Active_Get)
-                                                ADLRet = ADL.ADL_Adapter_Active_Get(OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
-                                            if (OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
+                                                ADLRet = ADL.ADL_Adapter_Active_Get(sADLAdapterInfo.ADLAdapterInfo[i].AdapterIndex, ref IsActive);
+                                            if (sADLAdapterInfo.ADLAdapterInfo[i].BusNumber == openclDevice.PciBusIdAMD
                                                 && (device.ADLAdapterIndex < 0 || IsActive != 0)) {
-                                                device.ADLAdapterIndex = OSAdapterInfoData.ADLAdapterInfo[i].AdapterIndex;
+                                                device.ADLAdapterIndex = sADLAdapterInfo.ADLAdapterInfo[i].AdapterIndex;
                                             }
                                         }
                                     }
