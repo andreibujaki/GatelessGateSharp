@@ -1959,7 +1959,10 @@ namespace GatelessGateSharp
                         dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = activity.ToString() + "%";
                     int coreClock = device.CoreClock;
                     if (coreClock >= 0)
-                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() + " MHz (" + device.CoreVoltage.ToString() + "mV)";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() +  " MHz";
+                    int coreVoltage = device.CoreVoltage;
+                    if (coreVoltage >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = device.CoreVoltage.ToString() + " mV";
                     int memoryClock = device.MemoryClock;
                     if (activity >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
