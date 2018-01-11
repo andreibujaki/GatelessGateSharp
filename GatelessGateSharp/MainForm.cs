@@ -75,6 +75,7 @@ namespace GatelessGateSharp
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
         private static int mLaunchInterval = 100;
+        public static readonly string[] sAlgorithmList = new string[] { "ethash_pascal", "ethash", "pascal", "neoscrypt", "cryptonight", "lyra2rev2", "lbry" };
 
         private Stratum mPrimaryStratum = null;
         private Stratum mSecondaryStratum = null;
@@ -1537,7 +1538,7 @@ namespace GatelessGateSharp
             numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 2 : 1);
             numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
             numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
-                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 40 :
+                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 60 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 96 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 96 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 90 :
@@ -1550,19 +1551,21 @@ namespace GatelessGateSharp
                                                                                                           2 * device.GetMaxComputeUnits());
         
             // Overclocking
-            Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, "cryptonight");
-            int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock;
-            if (defaultCoreClock > 0)
-                numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = defaultCoreClock;
-            int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock;
-            if (defaultMemoryClock > 0)
-                numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = defaultMemoryClock;
-            int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage;
-            if (defaultCoreVoltage > 0)
-                numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = defaultCoreVoltage;
-            int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage;
-            if (defaultMemoryVoltage > 0)
-                numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = defaultMemoryVoltage;
+            foreach (var algorithm in sAlgorithmList) {
+                Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock;
+                if (defaultCoreClock > 0)
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = defaultCoreClock;
+                int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock;
+                if (defaultMemoryClock > 0)
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = defaultMemoryClock;
+                int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage;
+                if (defaultCoreVoltage > 0)
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = defaultCoreVoltage;
+                int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage;
+                if (defaultMemoryVoltage > 0)
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = defaultMemoryVoltage;
+            }
         }
 
         private void CopyDeviceSettings(int sourceDeviceIndex) {
