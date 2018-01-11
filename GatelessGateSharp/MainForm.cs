@@ -213,7 +213,7 @@ namespace GatelessGateSharp
                 Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
                     TaskScheduler.FromCurrentSynchronizationContext());
                 w.BringToFront();
-                var result = MessageBox.Show(w, "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                var result = MessageBox.Show(w, "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
                 if (result == DialogResult.Yes) {
                     try {
                         var process = new System.Diagnostics.Process();
@@ -1554,17 +1554,45 @@ namespace GatelessGateSharp
             foreach (var algorithm in sAlgorithmList) {
                 Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
                 int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock;
-                if (defaultCoreClock > 0)
+                int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock;
+                int minCoreClock = ((OpenCLDevice)device).MinCoreClock;
+                int coreClockStep = ((OpenCLDevice)device).CoreClockStep;
+                if (defaultCoreClock > 0 && maxCoreClock > 0 && minCoreClock > 0 && coreClockStep > 0) {
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = true;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Maximum = maxCoreClock;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Minimum = minCoreClock;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Increment = coreClockStep;
                     numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = defaultCoreClock;
+                } else {
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = false;
+                }
                 int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock;
-                if (defaultMemoryClock > 0)
+                int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock;
+                int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock;
+                int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep;
+                if (defaultMemoryClock > 0 && maxMemoryClock > 0 && minMemoryClock > 0 && memoryClockStep > 0) {
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = true;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Maximum = maxMemoryClock;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Minimum = minMemoryClock;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Increment = memoryClockStep;
                     numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = defaultMemoryClock;
+                } else {
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = false;
+                }
                 int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage;
-                if (defaultCoreVoltage > 0)
+                if (defaultCoreVoltage > 0) {
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = true;
                     numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = defaultCoreVoltage;
+                } else {
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = false;
+                }
                 int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage;
-                if (defaultMemoryVoltage > 0)
+                if (defaultMemoryVoltage > 0) {
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = true;
                     numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = defaultMemoryVoltage;
+                } else {
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = false;
+                }
             }
         }
 
