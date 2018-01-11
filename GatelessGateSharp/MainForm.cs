@@ -1557,6 +1557,12 @@ namespace GatelessGateSharp
             int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock;
             if (defaultMemoryClock > 0)
                 numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = defaultMemoryClock;
+            int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage;
+            if (defaultCoreVoltage > 0)
+                numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = defaultCoreVoltage;
+            int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage;
+            if (defaultMemoryVoltage > 0)
+                numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = defaultMemoryVoltage;
         }
 
         private void CopyDeviceSettings(int sourceDeviceIndex) {
