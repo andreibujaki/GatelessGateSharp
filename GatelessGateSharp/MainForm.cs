@@ -1271,14 +1271,14 @@ namespace GatelessGateSharp
                 if (System.IO.File.ReadAllLines(mAppStateFileName)[0] == "Mining")
                     autoStart = true;
             } catch (Exception) { }
-            if (autoStart) {
-                if (checkBoxDisableAutoStartPrompt.Checked
+            if (autoStart
+                && (checkBoxDisableAutoStartPrompt.Checked
                     || MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
-                        "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel) {
-                    timerAutoStart.Enabled = true;
-                } else {
-                    try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
-                }
+                        "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
+                timerAutoStart.Enabled = true;
+            } else {
+                try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                buttonStart.Enabled = true;
             }
         }
 
