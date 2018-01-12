@@ -76,6 +76,7 @@ namespace GatelessGateSharp
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
         private static int mLaunchInterval = 100;
         public static readonly string[] sAlgorithmList = new string[] { "ethash_pascal", "ethash", "pascal", "neoscrypt", "cryptonight", "lyra2rev2", "lbry" };
+        public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|pascal|cryptonight|neoscrypt|lyra2rev2|lbry";
 
         private Stratum mPrimaryStratum = null;
         private Stratum mSecondaryStratum = null;
@@ -620,6 +621,9 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void UpdateDatabase() {
+            try { System.IO.File.Delete(databaseFileName); } catch (Exception) {  }
+            try { CreateNewDatabase(); } catch (Exception) { }
+
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;")) {
                     conn.Open();
@@ -992,182 +996,79 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@device_id", i);
                             command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
                             command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_pascal_iterations");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalPascalIterationsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                         
                             command.Parameters.AddWithValue("@parameter_name", "ethash_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+
                             command.Parameters.AddWithValue("@parameter_name", "lbry_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "lbry_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "lbry_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                        
                             command.Parameters.AddWithValue("@parameter_name", "pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "pascal_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "pascal_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                        
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_raw_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightRawIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                        
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_enabled");
                             command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceFanControlEnabledArray[i].Checked ? "true" : "false");
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_target_temperature");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlTargetTemperatureArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_temperature");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumTemperatureArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_minimum_fan_speed");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMinimumFanSpeedArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_fan_speed");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumFanSpeedArray[i].Value.ToString());
                             command.ExecuteNonQuery();
@@ -1215,12 +1116,6 @@ namespace GatelessGateSharp
                 LoadDatabase();
             } catch (Exception ex) {
                 Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
-                try {
-                    System.IO.File.Delete(databaseFileName);
-                    CreateNewDatabase();
-                } catch (Exception ex2) {
-                    Logger("Exception: " + ex2.Message + ex2.StackTrace);
-                }
             }
 
             if (checkBoxEnablePhymem.Checked) {
@@ -1401,7 +1296,7 @@ namespace GatelessGateSharp
                                 var tagOC = (string)(controlOC.GetType().GetProperty("Tag").GetValue(controlOC));
                                 if (tagOC == null || tagOC == "")
                                     continue;
-                                var regex = new System.Text.RegularExpressions.Regex(@"(ethash_pascal|ethash|pascal|cryptonight|neoscrypt|lyra2rev2|lbry)_overclocking_(enabled|power_limit|core_clock|core_voltage|memory_clock|memory_voltage)");
+                                var regex = new System.Text.RegularExpressions.Regex(@"(" + sAlgorithmListRegexPattern + @")_overclocking_(enabled|power_limit|core_clock|core_voltage|memory_clock|memory_voltage)");
                                 var match = regex.Match(tagOC);
                                 var algorithm = match.Success ? match.Groups[1].Value : null;
                                 var parameter = match.Success ? match.Groups[2].Value : null;
@@ -1959,6 +1854,9 @@ namespace GatelessGateSharp
                     int fanSpeed = device.FanSpeed;
                     if (fanSpeed >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
+                    int powerLimit = device.PowerLimit;
+                    if (powerLimit >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["power_limit"].Value = powerLimit.ToString() + "%";
                     int activity = device.Activity;
                     if (activity >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = activity.ToString() + "%";
@@ -4167,6 +4065,7 @@ namespace GatelessGateSharp
                 Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
                 if (!checkBoxDeviceOverclockingEnabledArray[tuple].Checked)
                     continue;
+                if (device.PowerLimit >= 0) device.PowerLimit = Decimal.ToInt32(numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value);
                 if (device.CoreClock >= 0) device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
                 if (device.MemoryClock >= 0) device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
                 if (device.CoreVoltage >= 0) device.CoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
