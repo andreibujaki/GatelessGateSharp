@@ -2208,7 +2208,6 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 mPrimaryStratum = (Stratum)stratum;
-                UpdateOverClockingSettings();
                 LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
             }
         }
@@ -3104,6 +3103,13 @@ namespace GatelessGateSharp
                 foreach (var miner in mActiveMiners)
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
+                string algorithm = mPrimaryStratum.Algorithm;
+                if (mSecondaryStratum != null)
+                    algorithm += "_" + mSecondaryStratum.Algorithm;
+                foreach (var device in mDevices) {
+                    if (checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(device.DeviceIndex, algorithm)].Checked)
+                        device.RestoreOverclockingSettings();
+                }
                 if (mPrimaryStratum != null)
                     mPrimaryStratum.Stop();
                 if (mSecondaryStratum != null)
@@ -3163,7 +3169,6 @@ namespace GatelessGateSharp
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             if (appState == ApplicationGlobalState.Idle) {
-                OpenCLDevice.SaveOverclockingSettings();
                 foreach (var device in mDevices) {
                     device.ClearShares();
                     //labelGPUSharesArray[device.DeviceIndex].Text = "0";
@@ -3192,12 +3197,21 @@ namespace GatelessGateSharp
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
+
+                    string algorithm = mPrimaryStratum.Algorithm;
+                    if (mSecondaryStratum != null)
+                        algorithm += "_" + mSecondaryStratum.Algorithm;
+                    foreach (var device in mDevices) {
+                        if (checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(device.DeviceIndex, algorithm)].Checked) {
+                            device.SaveOverclockingSettings();
+                            UpdateOverclockingSettings(device);
+                        }
+                    }
                 }
             } else if (appState == ApplicationGlobalState.Mining) {
                 timerDevFee.Enabled = false;
                 StopMiners();
                 appState = ApplicationGlobalState.Idle;
-                OpenCLDevice.RestoreOverclockingSettings();
                 try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
             }
 
@@ -4057,20 +4071,18 @@ namespace GatelessGateSharp
                     try { process.Kill(); } catch (Exception) { }
         }
 
-        void UpdateOverClockingSettings() {
+        void UpdateOverclockingSettings(OpenCLDevice device) {
             string algorithm = mPrimaryStratum.Algorithm;
             if (mSecondaryStratum != null)
                 algorithm += "_" + mSecondaryStratum.Algorithm;
-            foreach (var device in mDevices) {
-                Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
-                if (!checkBoxDeviceOverclockingEnabledArray[tuple].Checked)
-                    continue;
-                if (device.PowerLimit >= 0) device.PowerLimit = Decimal.ToInt32(numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value);
-                if (device.CoreClock >= 0) device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
-                if (device.MemoryClock >= 0) device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
-                if (device.CoreVoltage >= 0) device.CoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
-                if (device.MemoryVoltage >= 0) device.MemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
-            }
+            Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+            if (!checkBoxDeviceOverclockingEnabledArray[tuple].Checked)
+                return;
+            if (device.PowerLimit >= 0) device.PowerLimit = Decimal.ToInt32(numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value);
+            if (device.CoreClock >= 0) device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
+            if (device.MemoryClock >= 0) device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
+            if (device.CoreVoltage >= 0) device.CoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
+            if (device.MemoryVoltage >= 0) device.MemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
         }
 
         static public int DeviceCount {
