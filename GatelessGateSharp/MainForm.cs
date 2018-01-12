@@ -1099,6 +1099,8 @@ namespace GatelessGateSharp
                     autoStart = true;
             } catch (Exception) { }
             if (autoStart
+                && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
+                && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift)
                 && (checkBoxDisableAutoStartPrompt.Checked
                     || MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
                         "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
