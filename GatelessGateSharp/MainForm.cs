@@ -1391,6 +1391,7 @@ namespace GatelessGateSharp
                 Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
 
                 checkBoxDeviceOverclockingEnabledArray[tuple].Checked = false;
+                numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = 100;
 
                 int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock;
                 int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock;
@@ -1479,7 +1480,7 @@ namespace GatelessGateSharp
                     checkBoxDeviceOverclockingEnabledArray[tuple].Checked = checkBoxDeviceOverclockingEnabledArray[source].Checked;
                     numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = numericUpDownDeviceOverclockingCoreClockArray[source].Value;
                     numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = numericUpDownDeviceOverclockingMemoryClockArray[source].Value;
-                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = numericUpDownDeviceOverclockingMemoryClockArray[source].Value;
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = numericUpDownDeviceOverclockingCoreVoltageArray[source].Value;
                     numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = numericUpDownDeviceOverclockingMemoryVoltageArray[source].Value;
                 }
             }
@@ -2835,190 +2836,11 @@ namespace GatelessGateSharp
             GC.WaitForPendingFinalizers();
 
             if (CustomPoolEnabled && !mDevFeeMode) {
-                for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
-                    bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
-                                   (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
-                                   (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
-                                                            checkBoxCustomPool3Enable.Checked;
-                    String host = (customPoolIndex == 0) ? textBoxCustomPool0Host.Text :
-                                  (customPoolIndex == 1) ? textBoxCustomPool1Host.Text :
-                                  (customPoolIndex == 2) ? textBoxCustomPool2Host.Text :
-                                                           textBoxCustomPool3Host.Text;
-                    int port = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0Port.Value) :
-                               (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1Port.Value) :
-                               (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2Port.Value) :
-                                                        Convert.ToInt32(numericUpDownCustomPool3Port.Value);
-                    String login = (customPoolIndex == 0) ? textBoxCustomPool0Login.Text :
-                                   (customPoolIndex == 1) ? textBoxCustomPool1Login.Text :
-                                   (customPoolIndex == 2) ? textBoxCustomPool2Login.Text :
-                                                            textBoxCustomPool3Login.Text;
-                    String password = (customPoolIndex == 0) ? textBoxCustomPool0Password.Text :
-                                      (customPoolIndex == 1) ? textBoxCustomPool1Password.Text :
-                                      (customPoolIndex == 2) ? textBoxCustomPool2Password.Text :
-                                                               textBoxCustomPool3Password.Text;
-                    String host2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryHost.Text :
-                                   (customPoolIndex == 1) ? textBoxCustomPool1SecondaryHost.Text :
-                                   (customPoolIndex == 2) ? textBoxCustomPool2SecondaryHost.Text :
-                                                            textBoxCustomPool3SecondaryHost.Text;
-                    int port2 = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0SecondaryPort.Value) :
-                                (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1SecondaryPort.Value) :
-                                (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2SecondaryPort.Value) :
-                                                         Convert.ToInt32(numericUpDownCustomPool3SecondaryPort.Value);
-                    String login2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryLogin.Text :
-                                    (customPoolIndex == 1) ? textBoxCustomPool1SecondaryLogin.Text :
-                                    (customPoolIndex == 2) ? textBoxCustomPool2SecondaryLogin.Text :
-                                                             textBoxCustomPool3SecondaryLogin.Text;
-                    String password2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryPassword.Text :
-                                       (customPoolIndex == 1) ? textBoxCustomPool1SecondaryPassword.Text :
-                                       (customPoolIndex == 2) ? textBoxCustomPool2SecondaryPassword.Text :
-                                                                textBoxCustomPool3SecondaryPassword.Text;
-                    String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
-                                  (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
-                                  (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
-                                                           (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
-                    String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
-                                   (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
-                                   (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
-                                                            (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
-
-
-
-                    if (!enabled)
-                        continue;
-
-                    try {
-                        Logger("Launching miner(s) for Custom Pool " + customPoolIndex + "...");
-                        LaunchMinersForCustomPool(algo, host, port, login, password, algo2, host2, port2, login2, password2);
-                        break;
-                    } catch (UnrecoverableException ex) {
-                        throw ex;
-                    } catch (Exception ex) {
-                        Logger("Failed to launch miner(s) for Custom Pool " + customPoolIndex + ": " + ex.Message + ex.StackTrace);
-                    }
-
-                    // Clean up the mess.
-                    if (mPrimaryStratum != null)
-                        mPrimaryStratum.Stop();
-                    if (mSecondaryStratum != null)
-                        mSecondaryStratum.Stop();
-                    foreach (Miner miner in mActiveMiners)
-                        miner.Stop();
-                    mPrimaryStratum = null;
-                    mSecondaryStratum = null;
-                    mActiveMiners.Clear();
-                }
+                LaunchMinersForCustomPools();
             } else if (CustomPoolEnabled && mDevFeeMode) {
-                for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
-                    bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
-                                   (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
-                                   (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
-                                                            checkBoxCustomPool3Enable.Checked;
-                    String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
-                                  (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
-                                  (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
-                                                           (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
-                    String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
-                                   (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
-                                   (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
-                                                            (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
-
-                    if (!enabled)
-                        continue;
-
-                    foreach (string pool in listBoxPoolPriorities.Items) {
-                        try {
-                            if (algo == "Ethash" && algo2 == "Pascal") {
-                                Logger("Launching Dual Ethash/Pascal for DEVFEE...");
-                                LaunchOpenCLDualEthashPascalMiners(pool);
-                            } else if (algo == "Ethash") {
-                                Logger("Launching Ethash miners for DEVFEE...");
-                                LaunchOpenCLEthashMiners(pool);
-                            } else if (algo == "CryptoNight") {
-                                Logger("Launching CryptoNight miners for DEVFEE...");
-                                LaunchOpenCLCryptoNightMiners(pool);
-                            } else if (algo == "Lbry") {
-                                Logger("Launching Lbry miners for DEVFEE...");
-                                LaunchOpenCLLbryMiners(pool);
-                            } else if (algo == "Pascal") {
-                                Logger("Launching Pascal miners for DEVFEE...");
-                                LaunchOpenCLPascalMiners(pool);
-                            } else if (algo == "NeoScrypt") {
-                                Logger("Launching NeoScrypt miners for DEVFEE...");
-                                LaunchOpenCLNeoScryptMiners(pool);
-                            } else if (algo == "Lyra2REv2") {
-                                Logger("Launching Lyra2REv2 miners for DEVFEE...");
-                                LaunchOpenCLLyra2REv2Miners(pool);
-                            }
-                            if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
-                                return;
-                            } else {
-                                Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
-                            }
-                        } catch (UnrecoverableException ex) {
-                            throw ex;
-                        } catch (Exception ex) {
-                            Logger("Failed to launch miner(s) for DEVFEE: " + ex.Message + ex.StackTrace);
-                        }
-
-                        // Clean up the mess.
-                        if (mPrimaryStratum != null)
-                            mPrimaryStratum.Stop();
-                        if (mSecondaryStratum != null)
-                            mSecondaryStratum.Stop();
-                        foreach (Miner miner in mActiveMiners)
-                            miner.Stop();
-                        mPrimaryStratum = null;
-                        mSecondaryStratum = null;
-                        mActiveMiners.Clear();
-                    }
-                }
+                LaunchMinersForCustomPoolsInDevFeeMode();
             } else {
-                foreach (string pool in listBoxPoolPriorities.Items) {
-                    try {
-                        if (radioButtonEthereumPascal.Checked) {
-                            Logger("Launching Dual Ethash/Pascal for " + pool + "...");
-                            LaunchOpenCLDualEthashPascalMiners(pool);
-                        } else if (radioButtonEthereum.Checked) {
-                            Logger("Launching Ethash miners for " + pool + "...");
-                            LaunchOpenCLEthashMiners(pool);
-                        } else if (radioButtonMonero.Checked) {
-                            Logger("Launching CryptoNight miners for " + pool + "...");
-                            LaunchOpenCLCryptoNightMiners(pool);
-                        } else if (radioButtonLbry.Checked) {
-                            Logger("Launching Lbry miners for " + pool + "...");
-                            LaunchOpenCLLbryMiners(pool);
-                        } else if (radioButtonPascal.Checked) {
-                            Logger("Launching Pascal miners for " + pool + "...");
-                            LaunchOpenCLPascalMiners(pool);
-                        } else if (radioButtonFeathercoin.Checked) {
-                            Logger("Launching NeoScrypt miners for " + pool + "...");
-                            LaunchOpenCLNeoScryptMiners(pool);
-                        } else if (radioButtonMonacoin.Checked) {
-                            Logger("Launching Lyra2REv2 miners for " + pool + "...");
-                            LaunchOpenCLLyra2REv2Miners(pool);
-                        }
-                        if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
-                            return;
-                        } else {
-                            Logger("Failed to launch miner(s) for " + pool);
-                        }
-                    } catch (UnrecoverableException ex) {
-                        throw ex;
-                    } catch (Exception ex) {
-                        Logger("Failed to launch miners for " + pool + ": " + ex.Message + ex.StackTrace);
-                    }
-
-                    // Clean up the mess.
-                    if (mPrimaryStratum != null)
-                        mPrimaryStratum.Stop();
-                    if (mSecondaryStratum != null)
-                        mSecondaryStratum.Stop();
-                    foreach (Miner miner in mActiveMiners)
-                        miner.Stop();
-                    mPrimaryStratum = null;
-                    mSecondaryStratum = null;
-                    mActiveMiners.Clear();
-                }
+                LaunchMinersForDefaultPools();
             }
 
             if (mPrimaryStratum != null) {
@@ -3034,6 +2856,197 @@ namespace GatelessGateSharp
             }
         }
 
+        private void LaunchMinersForDefaultPools() {
+            foreach (string pool in listBoxPoolPriorities.Items) {
+                try {
+                    if (radioButtonEthereumPascal.Checked) {
+                        Logger("Launching Dual Ethash/Pascal for " + pool + "...");
+                        LaunchOpenCLDualEthashPascalMiners(pool);
+                    } else if (radioButtonEthereum.Checked) {
+                        Logger("Launching Ethash miners for " + pool + "...");
+                        LaunchOpenCLEthashMiners(pool);
+                    } else if (radioButtonMonero.Checked) {
+                        Logger("Launching CryptoNight miners for " + pool + "...");
+                        LaunchOpenCLCryptoNightMiners(pool);
+                    } else if (radioButtonLbry.Checked) {
+                        Logger("Launching Lbry miners for " + pool + "...");
+                        LaunchOpenCLLbryMiners(pool);
+                    } else if (radioButtonPascal.Checked) {
+                        Logger("Launching Pascal miners for " + pool + "...");
+                        LaunchOpenCLPascalMiners(pool);
+                    } else if (radioButtonFeathercoin.Checked) {
+                        Logger("Launching NeoScrypt miners for " + pool + "...");
+                        LaunchOpenCLNeoScryptMiners(pool);
+                    } else if (radioButtonMonacoin.Checked) {
+                        Logger("Launching Lyra2REv2 miners for " + pool + "...");
+                        LaunchOpenCLLyra2REv2Miners(pool);
+                    }
+                    if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
+                        return;
+                    } else {
+                        Logger("Failed to launch miner(s) for " + pool);
+                    }
+                } catch (UnrecoverableException ex) {
+                    throw ex;
+                } catch (Exception ex) {
+                    Logger("Failed to launch miners for " + pool + ": " + ex.Message + ex.StackTrace);
+                }
+
+                // Clean up the mess.
+                if (mPrimaryStratum != null)
+                    mPrimaryStratum.Stop();
+                if (mSecondaryStratum != null)
+                    mSecondaryStratum.Stop();
+                foreach (Miner miner in mActiveMiners)
+                    miner.Stop();
+                mPrimaryStratum = null;
+                mSecondaryStratum = null;
+                mActiveMiners.Clear();
+            }
+        }
+        
+        private void LaunchMinersForCustomPools() {
+            for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
+                bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
+                               (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
+                               (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
+                                                        checkBoxCustomPool3Enable.Checked;
+                String host = (customPoolIndex == 0) ? textBoxCustomPool0Host.Text :
+                              (customPoolIndex == 1) ? textBoxCustomPool1Host.Text :
+                              (customPoolIndex == 2) ? textBoxCustomPool2Host.Text :
+                                                       textBoxCustomPool3Host.Text;
+                int port = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0Port.Value) :
+                           (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1Port.Value) :
+                           (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2Port.Value) :
+                                                    Convert.ToInt32(numericUpDownCustomPool3Port.Value);
+                String login = (customPoolIndex == 0) ? textBoxCustomPool0Login.Text :
+                               (customPoolIndex == 1) ? textBoxCustomPool1Login.Text :
+                               (customPoolIndex == 2) ? textBoxCustomPool2Login.Text :
+                                                        textBoxCustomPool3Login.Text;
+                String password = (customPoolIndex == 0) ? textBoxCustomPool0Password.Text :
+                                  (customPoolIndex == 1) ? textBoxCustomPool1Password.Text :
+                                  (customPoolIndex == 2) ? textBoxCustomPool2Password.Text :
+                                                           textBoxCustomPool3Password.Text;
+                String host2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryHost.Text :
+                               (customPoolIndex == 1) ? textBoxCustomPool1SecondaryHost.Text :
+                               (customPoolIndex == 2) ? textBoxCustomPool2SecondaryHost.Text :
+                                                        textBoxCustomPool3SecondaryHost.Text;
+                int port2 = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0SecondaryPort.Value) :
+                            (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1SecondaryPort.Value) :
+                            (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2SecondaryPort.Value) :
+                                                     Convert.ToInt32(numericUpDownCustomPool3SecondaryPort.Value);
+                String login2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryLogin.Text :
+                                (customPoolIndex == 1) ? textBoxCustomPool1SecondaryLogin.Text :
+                                (customPoolIndex == 2) ? textBoxCustomPool2SecondaryLogin.Text :
+                                                         textBoxCustomPool3SecondaryLogin.Text;
+                String password2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryPassword.Text :
+                                   (customPoolIndex == 1) ? textBoxCustomPool1SecondaryPassword.Text :
+                                   (customPoolIndex == 2) ? textBoxCustomPool2SecondaryPassword.Text :
+                                                            textBoxCustomPool3SecondaryPassword.Text;
+                String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
+                              (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
+                              (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
+                                                       (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
+                String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
+                               (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
+                               (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
+                                                        (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
+
+
+
+                if (!enabled)
+                    continue;
+
+                try {
+                    Logger("Launching miner(s) for Custom Pool " + customPoolIndex + "...");
+                    LaunchMinersForCustomPool(algo, host, port, login, password, algo2, host2, port2, login2, password2);
+                    break;
+                } catch (UnrecoverableException ex) {
+                    throw ex;
+                } catch (Exception ex) {
+                    Logger("Failed to launch miner(s) for Custom Pool " + customPoolIndex + ": " + ex.Message + ex.StackTrace);
+                }
+
+                // Clean up the mess.
+                if (mPrimaryStratum != null)
+                    mPrimaryStratum.Stop();
+                if (mSecondaryStratum != null)
+                    mSecondaryStratum.Stop();
+                foreach (Miner miner in mActiveMiners)
+                    miner.Stop();
+                mPrimaryStratum = null;
+                mSecondaryStratum = null;
+                mActiveMiners.Clear();
+            }
+        }
+
+        private void LaunchMinersForCustomPoolsInDevFeeMode() {
+            for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
+                bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
+                               (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
+                               (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
+                                                        checkBoxCustomPool3Enable.Checked;
+                String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
+                              (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
+                              (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
+                                                       (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
+                String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
+                               (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
+                               (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
+                                                        (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
+
+                if (!enabled)
+                    continue;
+
+                foreach (string pool in listBoxPoolPriorities.Items) {
+                    try {
+                        if (algo == "Ethash" && algo2 == "Pascal") {
+                            Logger("Launching Dual Ethash/Pascal for DEVFEE...");
+                            LaunchOpenCLDualEthashPascalMiners(pool);
+                        } else if (algo == "Ethash") {
+                            Logger("Launching Ethash miners for DEVFEE...");
+                            LaunchOpenCLEthashMiners(pool);
+                        } else if (algo == "CryptoNight") {
+                            Logger("Launching CryptoNight miners for DEVFEE...");
+                            LaunchOpenCLCryptoNightMiners(pool);
+                        } else if (algo == "Lbry") {
+                            Logger("Launching Lbry miners for DEVFEE...");
+                            LaunchOpenCLLbryMiners(pool);
+                        } else if (algo == "Pascal") {
+                            Logger("Launching Pascal miners for DEVFEE...");
+                            LaunchOpenCLPascalMiners(pool);
+                        } else if (algo == "NeoScrypt") {
+                            Logger("Launching NeoScrypt miners for DEVFEE...");
+                            LaunchOpenCLNeoScryptMiners(pool);
+                        } else if (algo == "Lyra2REv2") {
+                            Logger("Launching Lyra2REv2 miners for DEVFEE...");
+                            LaunchOpenCLLyra2REv2Miners(pool);
+                        }
+                        if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
+                            return;
+                        } else {
+                            Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
+                        }
+                    } catch (UnrecoverableException ex) {
+                        throw ex;
+                    } catch (Exception ex) {
+                        Logger("Failed to launch miner(s) for DEVFEE: " + ex.Message + ex.StackTrace);
+                    }
+
+                    // Clean up the mess.
+                    if (mPrimaryStratum != null)
+                        mPrimaryStratum.Stop();
+                    if (mSecondaryStratum != null)
+                        mSecondaryStratum.Stop();
+                    foreach (Miner miner in mActiveMiners)
+                        miner.Stop();
+                    mPrimaryStratum = null;
+                    mSecondaryStratum = null;
+                    mActiveMiners.Clear();
+                }
+            }
+        }
+        
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void StopMiners() {
