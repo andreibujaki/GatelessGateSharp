@@ -291,7 +291,7 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        private void LoadDatabase() {
+        private void LoadSettingsFromDatabase() {
             int databaseVersion = 0;
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;")) {
@@ -590,6 +590,25 @@ namespace GatelessGateSharp
                                     else if (name == "fan_control_maximum_fan_speed")
                                         numericUpDownDeviceFanControlMaximumFanSpeedArray[deviceID].Value =
                                             decimal.Parse(value);
+
+                                    var regex = new System.Text.RegularExpressions.Regex(@"(" + sAlgorithmListRegexPattern + @")_overclocking_(enabled|power_limit|core_clock|core_voltage|memory_clock|memory_voltage)");
+                                    var match = regex.Match(name);
+                                    var algorithm = match.Success ? match.Groups[1].Value : null;
+                                    var parameter = match.Success ? match.Groups[2].Value : null;
+                                    var tuple = new Tuple<int, string>(deviceID, algorithm);
+                                    if (parameter == "enabled") {
+                                        checkBoxDeviceOverclockingEnabledArray[tuple].Checked = (value == "true");
+                                    } else if (parameter == "power_limit") {
+                                        numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = decimal.Parse(value);
+                                    } else if (parameter == "core_clock") {
+                                        numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = decimal.Parse(value);
+                                    } else if (parameter == "core_voltage") {
+                                        numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = decimal.Parse(value);
+                                    } else if (parameter == "memory_clock") {
+                                        numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = decimal.Parse(value);
+                                    } else if (parameter == "memory_voltage") {
+                                        numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = decimal.Parse(value);
+                                    }
                                 }
                             }
                         }
@@ -620,7 +639,8 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        private void UpdateDatabase() {
+        private void SaveSettingsToDatabase() {
+            // Delete the old database in case it is corrupt.
             try { System.IO.File.Delete(databaseFileName); } catch (Exception) {  }
             try { CreateNewDatabase(); } catch (Exception) { }
 
@@ -637,28 +657,18 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@coin", "bitcoin");
                         command.Parameters.AddWithValue("@address", textBoxBitcoinAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "ethereum");
                         command.Parameters.AddWithValue("@address", textBoxEthereumAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "monero");
                         command.Parameters.AddWithValue("@address", textBoxMoneroAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "zcash");
                         command.Parameters.AddWithValue("@address", textBoxZcashAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "pascal");
                         command.Parameters.AddWithValue("@address", textBoxPascalAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "lbry");
                         command.Parameters.AddWithValue("@address", textBoxLbryAddress.Text);
                         command.ExecuteNonQuery();
@@ -678,11 +688,12 @@ namespace GatelessGateSharp
                     }
 
                     sql = "insert into pools (name) values (@name)";
-                    foreach (string poolName in listBoxPoolPriorities.Items)
-                        using (var command = new SQLiteCommand(sql, conn)) {
+                    using (var command = new SQLiteCommand(sql, conn)) {
+                        foreach (string poolName in listBoxPoolPriorities.Items) {
                             command.Parameters.AddWithValue("@name", poolName);
                             command.ExecuteNonQuery();
                         }
+                    }
 
                     try {
                         sql = "delete from properties";
@@ -702,8 +713,6 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@name", "database_version");
                         command.Parameters.AddWithValue("@value", "2"); // starting at v1.1.15
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "coin_to_mine");
                         command.Parameters.AddWithValue("@value",
                                                         radioButtonEthereum.Checked ? "ethereum" :
@@ -716,33 +725,22 @@ namespace GatelessGateSharp
                                                         radioButtonMonacoin.Checked ? "monacoin" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "pool_rig_id");
                         command.Parameters.AddWithValue("@value", textBoxRigID.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "pool_email");
                         command.Parameters.AddWithValue("@value", textBoxEmail.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "auto_start");
                         command.Parameters.AddWithValue("@value", checkBoxAutoStart.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "launch_at_startup");
                         command.Parameters.AddWithValue("@value", checkBoxLaunchAtStartup.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "disable_auto_start_prompt");
                         command.Parameters.AddWithValue("@value", checkBoxDisableAutoStartPrompt.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
                     }
-
                     for (var i = 0; i < mDevices.Length; ++i) {
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@name", "enable_gpu" + i);
@@ -754,224 +752,136 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@name", "custom_pool0_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0Host.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0Login.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0Password.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1Host.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1Login.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1Password.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2Host.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2Login.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2Password.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3Host.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3Login.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3Password.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_enabled");
                         command.Parameters.AddWithValue("@value", checkBoxCustomPool0Enable.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_enabled");
                         command.Parameters.AddWithValue("@value", checkBoxCustomPool1Enable.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_enabled");
                         command.Parameters.AddWithValue("@value", checkBoxCustomPool2Enable.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_enabled");
                         command.Parameters.AddWithValue("@value", checkBoxCustomPool3Enable.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool0Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool1Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool2Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool3Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryHost.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryLogin.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryPassword.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryHost.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryLogin.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryPassword.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryHost.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryLogin.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryPassword.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryHost.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryLogin.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryPassword.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool0SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool1SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool2SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool3SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
 
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "enable_phymem");
                         command.Parameters.AddWithValue("@value", checkBoxEnablePhymem.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
@@ -1072,6 +982,28 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_fan_speed");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumFanSpeedArray[i].Value.ToString());
                             command.ExecuteNonQuery();
+
+                            foreach (var algorithm in sAlgorithmList) {
+                                var tuple = new Tuple<int, string>(i, algorithm);
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_enabled");
+                                command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceOverclockingEnabledArray[tuple].Checked ? "true" : "false");
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_power_limit");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_core_clock");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingCoreClockArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_core_voltage");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_memory_clock");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_memory_voltage");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                            }
                         }
                     }
                 }
@@ -1113,7 +1045,7 @@ namespace GatelessGateSharp
                 Logger("Exception in CreateNewDatabase(): " + ex.Message + ex.StackTrace);
             }
             try {
-                LoadDatabase();
+                LoadSettingsFromDatabase();
             } catch (Exception ex) {
                 Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
             }
@@ -1918,7 +1850,7 @@ namespace GatelessGateSharp
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            UpdateDatabase();
+            SaveSettingsToDatabase();
             UnloadPhyMemDriver();
             timerFanControl.Enabled = false;
             if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy) {
@@ -3150,7 +3082,7 @@ namespace GatelessGateSharp
         }
 
         private void buttonStart_Click(object sender = null, EventArgs e = null) {
-            UpdateDatabase();
+            SaveSettingsToDatabase();
 
             if (!CustomPoolEnabled) {
                 if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
