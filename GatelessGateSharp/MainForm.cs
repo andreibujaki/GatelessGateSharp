@@ -4167,8 +4167,10 @@ namespace GatelessGateSharp
                 Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
                 if (!checkBoxDeviceOverclockingEnabledArray[tuple].Checked)
                     continue;
-                device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
-                device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
+                if (device.CoreClock >= 0) device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
+                if (device.MemoryClock >= 0) device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
+                if (device.CoreVoltage >= 0) device.CoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
+                if (device.MemoryVoltage >= 0) device.MemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
             }
         }
 
