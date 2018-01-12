@@ -15,18 +15,16 @@ namespace DeviceSettingsUserControl
         public event EventHandler ButtonResetToDefaultClicked;
         public event EventHandler ButtonResetAllClicked;
         public event EventHandler ButtonCopyToOthersClicked;
+        public event EventHandler CheckedChanged;
 
         public DeviceSettingsUserControl()
         {
             InitializeComponent();
         }
 
-        private void checkBox5_CheckedChanged(object sender, EventArgs e) {
-            foreach (var control in ((CheckBox)sender).Parent.Controls) {
-                var tag = control.GetType().GetProperty("Tag").GetValue(control);
-                if (tag != null && tag != "" && tag != "fan_control_enabled")
-                    ((NumericUpDown)control).Enabled = ((CheckBox)sender).Checked;
-            }
+        private void checkBoxFanControlEnabled_CheckedChanged(object sender, EventArgs e) {
+            if (this.CheckedChanged != null)
+                this.CheckedChanged(this, new EventArgs());
         }
 
         private void buttonResetToDefault_Click(object sender, EventArgs e) {
@@ -42,6 +40,41 @@ namespace DeviceSettingsUserControl
         private void buttonCopyToOthers_Click(object sender, EventArgs e) {
             if (this.ButtonCopyToOthersClicked != null)
                 this.ButtonCopyToOthersClicked(this, new EventArgs());
+        }
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e) {
+            if (this.CheckedChanged != null)
+                this.CheckedChanged(this, new EventArgs());
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e) {
+            if (this.CheckedChanged != null)
+                this.CheckedChanged(this, new EventArgs());
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e) {
+            if (this.CheckedChanged != null)
+                this.CheckedChanged(this, new EventArgs());
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e) {
+            if (this.CheckedChanged != null)
+                this.CheckedChanged(this, new EventArgs());
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e) {
+            if (this.CheckedChanged != null)
+                this.CheckedChanged(this, new EventArgs());
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e) {
+            if (this.CheckedChanged != null)
+                this.CheckedChanged(this, new EventArgs());
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e) {
+            if (this.CheckedChanged != null)
+                this.CheckedChanged(this, new EventArgs());
         }
     }
 }

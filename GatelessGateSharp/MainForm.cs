@@ -1354,6 +1354,7 @@ namespace GatelessGateSharp
                 uc.ButtonResetToDefaultClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetToDefaultClicked);
                 uc.ButtonResetAllClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetAllClicked);
                 uc.ButtonCopyToOthersClicked += new EventHandler(DeviceSettingsUserControl_ButtonCopyToOthersClicked);
+                uc.CheckedChanged += new EventHandler(DeviceSettingsUserControl_CheckedChanged);
 
                 tabPageDeviceArray[i] = tp;
                 foreach (var tabPage in uc.Controls[3].Controls) {
@@ -1495,6 +1496,10 @@ namespace GatelessGateSharp
         void DeviceSettingsUserControl_ButtonCopyToOthersClicked(object sender, EventArgs e) {
             int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
             CopyDeviceSettings(deviceIndex);
+        }
+
+        void DeviceSettingsUserControl_CheckedChanged(object sender, EventArgs e) {
+            UpdateControls();
         }
 
         private void ResetDeviceSettings(Device device) {
@@ -1962,7 +1967,7 @@ namespace GatelessGateSharp
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() +  " MHz";
                     int coreVoltage = device.CoreVoltage;
                     if (coreVoltage >= 0)
-                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = device.CoreVoltage.ToString() + " mV";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = coreVoltage.ToString() + " mV";
                     int memoryClock = device.MemoryClock;
                     if (activity >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
@@ -3349,6 +3354,15 @@ namespace GatelessGateSharp
                     numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
                     numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
                     numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+
+                    foreach (var algorithm in sAlgorithmList) {
+                        var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                        numericUpDownDeviceOverclockingPowerLimitArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).PowerLimit >= 0;
+                        numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).CoreClock >= 0;
+                        numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).MemoryClock >= 0;
+                        numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).CoreVoltage >= 0;
+                        numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).DefaultMemoryVoltage >= 0;
+                    }
                 }
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
@@ -3514,7 +3528,7 @@ namespace GatelessGateSharp
                         foreach (var miner in mActiveMiners) {
                             if (!miner.Alive) {
                                 MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
-                                Environment.Exit(1);
+                                Application.Exit();
                             }
                         }
                     }

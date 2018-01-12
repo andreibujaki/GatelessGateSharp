@@ -86,7 +86,7 @@ namespace GatelessGateSharp
             mNicehashMode = aNicehashMode;
 
             if (prevGlobalWorkSize != 0 && prevGlobalWorkSize != globalWorkSizeA[0])
-                Environment.Exit(1);
+                System.Windows.Forms.Application.Exit();
 
             try {
                 if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]);

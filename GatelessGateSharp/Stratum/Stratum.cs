@@ -244,7 +244,7 @@ namespace GatelessGateSharp {
                 MainForm.Logger("Exception in Stratum.StreamReaderThread(): " + ex.ToString());
                 if (ex.Message == "An established connection was aborted by the software in your host machine. ---> System.Net.Sockets.SocketException: An established connection was aborted by the software in your host machine") {
                     MainForm.Logger("Exception seems fatal. Restarting the application...");
-                    Environment.Exit(1);
+                    System.Windows.Forms.Application.Exit();
                 }
             }
 

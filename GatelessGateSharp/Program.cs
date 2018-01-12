@@ -31,7 +31,7 @@ namespace GatelessGateSharp
         private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
             MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            Environment.Exit(1);
+            Application.Exit();
         }
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
@@ -42,7 +42,7 @@ namespace GatelessGateSharp
                 foreach (var process in Process.GetProcessesByName("GatelessGateSharp"))
                     process.Kill();
             }
-            Environment.Exit(1);
+            Application.Exit();
         }
 
         static Mutex sMutex = new Mutex(true, "{1D2A713A-A29C-418C-BC62-2E98BD325490}");
