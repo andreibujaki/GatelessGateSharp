@@ -303,7 +303,7 @@ namespace GatelessGateSharp
                                             }
                                             if (!dummyMiner.Stopped) {
                                                 MainForm.Logger("Failed at matching OpenCL devices with ADL devices. Restarting...");
-                                                System.Windows.Forms.Application.Exit();
+                                                Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
                                             }
                                         }
                                     }

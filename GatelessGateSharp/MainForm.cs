@@ -244,7 +244,7 @@ namespace GatelessGateSharp
                         process.StartInfo = startInfo;
                         process.Start();
 
-                        Application.Exit();
+                        Program.KillMonitor = true; Application.Exit();
                     } catch (Exception ex) {
                         MainForm.Logger("Failed to increase the total size of page files: " + ex.Message + ex.StackTrace);
                     }
@@ -1119,7 +1119,7 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 Logger("Exception in OpenCLDevice.GetAllOpenCLDevices(): " + ex.Message + ex.StackTrace);
                 MessageBox.Show("Failed to initialize OpenCL devices. Please install appropriate device driver(s) for your graphics cards.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
+                Program.KillMonitor = true; Application.Exit();
             }
             Logger("Number of Devices: " + mDevices.Length);
 
@@ -3396,7 +3396,7 @@ namespace GatelessGateSharp
                         foreach (var miner in mActiveMiners) {
                             if (!miner.Alive) {
                                 MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
-                                Application.Exit();
+                                Program.KillMonitor = false; Application.Exit();
                             }
                         }
                     }
