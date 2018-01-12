@@ -11,7 +11,7 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class Device
+    public class Device
     {
         private int mDeviceIndex;
         private int mAcceptedShares;

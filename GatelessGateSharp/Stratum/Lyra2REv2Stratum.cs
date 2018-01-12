@@ -268,7 +268,7 @@ namespace GatelessGateSharp
         }
 
         public Lyra2REv2Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "lyra2rev2")
         {
         }
     }

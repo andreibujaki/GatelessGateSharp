@@ -75,6 +75,8 @@ namespace GatelessGateSharp
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
         private static int mLaunchInterval = 100;
+        public static readonly string[] sAlgorithmList = new string[] { "ethash_pascal", "ethash", "pascal", "neoscrypt", "cryptonight", "lyra2rev2", "lbry" };
+        public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|pascal|cryptonight|neoscrypt|lyra2rev2|lbry";
 
         private Stratum mPrimaryStratum = null;
         private Stratum mSecondaryStratum = null;
@@ -114,6 +116,13 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceFanControlMaximumTemperatureArray;
         private NumericUpDown[] numericUpDownDeviceFanControlMinimumFanSpeedArray;
         private NumericUpDown[] numericUpDownDeviceFanControlMaximumFanSpeedArray;
+
+        private Dictionary<Tuple<int, string>, CheckBox> checkBoxDeviceOverclockingEnabledArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingPowerLimitArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingCoreClockArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingCoreVoltageArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingMemoryClockArray;
+        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingMemoryVoltageArray;
 
         private Button[] buttonDeviceResetToDefaultArray;
         private Button[] buttonDeviceResetAllArray;
@@ -205,7 +214,7 @@ namespace GatelessGateSharp
                 Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
                     TaskScheduler.FromCurrentSynchronizationContext());
                 w.BringToFront();
-                var result = MessageBox.Show(w, "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                var result = MessageBox.Show(w, "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
                 if (result == DialogResult.Yes) {
                     try {
                         var process = new System.Diagnostics.Process();
@@ -235,7 +244,7 @@ namespace GatelessGateSharp
                         process.StartInfo = startInfo;
                         process.Start();
 
-                        Application.Exit();
+                        Program.KillMonitor = true; Application.Exit();
                     } catch (Exception ex) {
                         MainForm.Logger("Failed to increase the total size of page files: " + ex.Message + ex.StackTrace);
                     }
@@ -282,7 +291,7 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        private void LoadDatabase() {
+        private void LoadSettingsFromDatabase() {
             int databaseVersion = 0;
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;")) {
@@ -581,6 +590,25 @@ namespace GatelessGateSharp
                                     else if (name == "fan_control_maximum_fan_speed")
                                         numericUpDownDeviceFanControlMaximumFanSpeedArray[deviceID].Value =
                                             decimal.Parse(value);
+
+                                    var regex = new System.Text.RegularExpressions.Regex(@"(" + sAlgorithmListRegexPattern + @")_overclocking_(enabled|power_limit|core_clock|core_voltage|memory_clock|memory_voltage)");
+                                    var match = regex.Match(name);
+                                    var algorithm = match.Success ? match.Groups[1].Value : null;
+                                    var parameter = match.Success ? match.Groups[2].Value : null;
+                                    var tuple = new Tuple<int, string>(deviceID, algorithm);
+                                    if (parameter == "enabled") {
+                                        checkBoxDeviceOverclockingEnabledArray[tuple].Checked = (value == "true");
+                                    } else if (parameter == "power_limit") {
+                                        numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = decimal.Parse(value);
+                                    } else if (parameter == "core_clock") {
+                                        numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = decimal.Parse(value);
+                                    } else if (parameter == "core_voltage") {
+                                        numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = decimal.Parse(value);
+                                    } else if (parameter == "memory_clock") {
+                                        numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = decimal.Parse(value);
+                                    } else if (parameter == "memory_voltage") {
+                                        numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = decimal.Parse(value);
+                                    }
                                 }
                             }
                         }
@@ -611,7 +639,11 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        private void UpdateDatabase() {
+        private void SaveSettingsToDatabase() {
+            // Delete the old database in case it is corrupt.
+            try { System.IO.File.Delete(databaseFileName); } catch (Exception) {  }
+            try { CreateNewDatabase(); } catch (Exception) { }
+
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;")) {
                     conn.Open();
@@ -625,28 +657,18 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@coin", "bitcoin");
                         command.Parameters.AddWithValue("@address", textBoxBitcoinAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "ethereum");
                         command.Parameters.AddWithValue("@address", textBoxEthereumAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "monero");
                         command.Parameters.AddWithValue("@address", textBoxMoneroAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "zcash");
                         command.Parameters.AddWithValue("@address", textBoxZcashAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "pascal");
                         command.Parameters.AddWithValue("@address", textBoxPascalAddress.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "lbry");
                         command.Parameters.AddWithValue("@address", textBoxLbryAddress.Text);
                         command.ExecuteNonQuery();
@@ -666,11 +688,12 @@ namespace GatelessGateSharp
                     }
 
                     sql = "insert into pools (name) values (@name)";
-                    foreach (string poolName in listBoxPoolPriorities.Items)
-                        using (var command = new SQLiteCommand(sql, conn)) {
+                    using (var command = new SQLiteCommand(sql, conn)) {
+                        foreach (string poolName in listBoxPoolPriorities.Items) {
                             command.Parameters.AddWithValue("@name", poolName);
                             command.ExecuteNonQuery();
                         }
+                    }
 
                     try {
                         sql = "delete from properties";
@@ -690,8 +713,6 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@name", "database_version");
                         command.Parameters.AddWithValue("@value", "2"); // starting at v1.1.15
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "coin_to_mine");
                         command.Parameters.AddWithValue("@value",
                                                         radioButtonEthereum.Checked ? "ethereum" :
@@ -704,33 +725,22 @@ namespace GatelessGateSharp
                                                         radioButtonMonacoin.Checked ? "monacoin" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "pool_rig_id");
                         command.Parameters.AddWithValue("@value", textBoxRigID.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "pool_email");
                         command.Parameters.AddWithValue("@value", textBoxEmail.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "auto_start");
                         command.Parameters.AddWithValue("@value", checkBoxAutoStart.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "launch_at_startup");
                         command.Parameters.AddWithValue("@value", checkBoxLaunchAtStartup.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "disable_auto_start_prompt");
                         command.Parameters.AddWithValue("@value", checkBoxDisableAutoStartPrompt.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
                     }
-
                     for (var i = 0; i < mDevices.Length; ++i) {
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@name", "enable_gpu" + i);
@@ -742,224 +752,136 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@name", "custom_pool0_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0Host.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0Login.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0Password.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1Host.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1Login.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1Password.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2Host.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2Login.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2Password.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3Host.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3Login.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3Password.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_enabled");
                         command.Parameters.AddWithValue("@value", checkBoxCustomPool0Enable.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_enabled");
                         command.Parameters.AddWithValue("@value", checkBoxCustomPool1Enable.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_enabled");
                         command.Parameters.AddWithValue("@value", checkBoxCustomPool2Enable.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_enabled");
                         command.Parameters.AddWithValue("@value", checkBoxCustomPool3Enable.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool0Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool1Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool2Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool3Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryHost.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryLogin.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryPassword.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryHost.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryLogin.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryPassword.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryHost.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryLogin.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryPassword.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_host");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryHost.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_login");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryLogin.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_password");
                         command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryPassword.Text);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool0SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool1SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool2SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_port");
                         command.Parameters.AddWithValue("@value", numericUpDownCustomPool3SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool0_secondary_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool1_secondary_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool2_secondary_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "custom_pool3_secondary_algorithm");
                         command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex]);
                         command.ExecuteNonQuery();
-                    }
 
-                    using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "enable_phymem");
                         command.Parameters.AddWithValue("@value", checkBoxEnablePhymem.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
@@ -984,185 +906,104 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@device_id", i);
                             command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
                             command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_pascal_iterations");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalPascalIterationsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                         
                             command.Parameters.AddWithValue("@parameter_name", "ethash_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "ethash_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+
                             command.Parameters.AddWithValue("@parameter_name", "lbry_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "lbry_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "lbry_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                        
                             command.Parameters.AddWithValue("@parameter_name", "pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "pascal_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "pascal_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                        
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_raw_intensity");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightRawIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                        
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_enabled");
                             command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceFanControlEnabledArray[i].Checked ? "true" : "false");
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_target_temperature");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlTargetTemperatureArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_temperature");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumTemperatureArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_minimum_fan_speed");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMinimumFanSpeedArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        }
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_fan_speed");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumFanSpeedArray[i].Value.ToString());
                             command.ExecuteNonQuery();
+
+                            foreach (var algorithm in sAlgorithmList) {
+                                var tuple = new Tuple<int, string>(i, algorithm);
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_enabled");
+                                command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceOverclockingEnabledArray[tuple].Checked ? "true" : "false");
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_power_limit");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_core_clock");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingCoreClockArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_core_voltage");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_memory_clock");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_memory_voltage");
+                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value.ToString());
+                                command.ExecuteNonQuery();
+                            }
                         }
                     }
                 }
@@ -1204,15 +1045,9 @@ namespace GatelessGateSharp
                 Logger("Exception in CreateNewDatabase(): " + ex.Message + ex.StackTrace);
             }
             try {
-                LoadDatabase();
+                LoadSettingsFromDatabase();
             } catch (Exception ex) {
                 Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
-                try {
-                    System.IO.File.Delete(databaseFileName);
-                    CreateNewDatabase();
-                } catch (Exception ex2) {
-                    Logger("Exception: " + ex2.Message + ex2.StackTrace);
-                }
             }
 
             if (checkBoxEnablePhymem.Checked) {
@@ -1263,16 +1098,20 @@ namespace GatelessGateSharp
                 if (System.IO.File.ReadAllLines(mAppStateFileName)[0] == "Mining")
                     autoStart = true;
             } catch (Exception) { }
-            if (autoStart) {
-                if (checkBoxDisableAutoStartPrompt.Checked
+            if (autoStart
+                && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
+                && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift)
+                && (checkBoxDisableAutoStartPrompt.Checked
                     || MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
-                        "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel) {
-                    timerAutoStart.Enabled = true;
-                } else {
-                    try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
-                }
+                        "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
+                timerAutoStart.Enabled = true;
+            } else {
+                try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                buttonStart.Enabled = true;
             }
         }
+
+        #region Devices
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
@@ -1282,7 +1121,7 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 Logger("Exception in OpenCLDevice.GetAllOpenCLDevices(): " + ex.Message + ex.StackTrace);
                 MessageBox.Show("Failed to initialize OpenCL devices. Please install appropriate device driver(s) for your graphics cards.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
+                Program.KillMonitor = true; Application.Exit();
             }
             Logger("Number of Devices: " + mDevices.Length);
 
@@ -1321,6 +1160,13 @@ namespace GatelessGateSharp
             numericUpDownDeviceFanControlMinimumFanSpeedArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceFanControlMaximumFanSpeedArray = new NumericUpDown[mDevices.Length];
 
+            checkBoxDeviceOverclockingEnabledArray = new Dictionary<Tuple<int, string>, CheckBox> { };
+            numericUpDownDeviceOverclockingPowerLimitArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+            numericUpDownDeviceOverclockingCoreClockArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+            numericUpDownDeviceOverclockingCoreVoltageArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+            numericUpDownDeviceOverclockingMemoryClockArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+            numericUpDownDeviceOverclockingMemoryVoltageArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
+
             buttonDeviceResetToDefaultArray = new Button[mDevices.Length];
             buttonDeviceResetAllArray = new Button[mDevices.Length];
             buttonDeviceCopyToOthersArray = new Button[mDevices.Length];
@@ -1339,6 +1185,7 @@ namespace GatelessGateSharp
                 uc.ButtonResetToDefaultClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetToDefaultClicked);
                 uc.ButtonResetAllClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetAllClicked);
                 uc.ButtonCopyToOthersClicked += new EventHandler(DeviceSettingsUserControl_ButtonCopyToOthersClicked);
+                uc.CheckedChanged += new EventHandler(DeviceSettingsUserControl_CheckedChanged);
 
                 tabPageDeviceArray[i] = tp;
                 foreach (var tabPage in uc.Controls[3].Controls) {
@@ -1380,6 +1227,29 @@ namespace GatelessGateSharp
                             numericUpDownDeviceLbryIntensityArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "lbry_local_work_size") {
                             numericUpDownDeviceLbryLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "overclocking") {
+                            foreach (var controlOC in ((GroupBox)control).Controls) {
+                                var tagOC = (string)(controlOC.GetType().GetProperty("Tag").GetValue(controlOC));
+                                if (tagOC == null || tagOC == "")
+                                    continue;
+                                var regex = new System.Text.RegularExpressions.Regex(@"(" + sAlgorithmListRegexPattern + @")_overclocking_(enabled|power_limit|core_clock|core_voltage|memory_clock|memory_voltage)");
+                                var match = regex.Match(tagOC);
+                                var algorithm = match.Success ? match.Groups[1].Value : null;
+                                var parameter = match.Success ? match.Groups[2].Value : null;
+                                if (parameter == "enabled") {
+                                    checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(i, algorithm)] = ((CheckBox)controlOC);
+                                } else if (parameter == "power_limit") {
+                                    numericUpDownDeviceOverclockingPowerLimitArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                } else if (parameter == "core_clock") {
+                                    numericUpDownDeviceOverclockingCoreClockArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                } else if (parameter == "core_voltage") {
+                                    numericUpDownDeviceOverclockingCoreVoltageArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                } else if (parameter == "memory_clock") {
+                                    numericUpDownDeviceOverclockingMemoryClockArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                } else if (parameter == "memory_voltage") {
+                                    numericUpDownDeviceOverclockingMemoryVoltageArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
+                                }
+                            }
                         }
                     }
                 }
@@ -1459,14 +1329,19 @@ namespace GatelessGateSharp
             CopyDeviceSettings(deviceIndex);
         }
 
+        void DeviceSettingsUserControl_CheckedChanged(object sender, EventArgs e) {
+            UpdateControls();
+        }
+
         private void ResetDeviceSettings(Device device) {
             tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName();
 
-            numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
-            numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
-            numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
-            numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = (decimal)100;
+            ResetDeviceFanControlSettings(device);
+            ResetDeviceAlgorithmSettings(device);
+            ResetDeviceOverclockingSettings(device);
+        }
 
+        private void ResetDeviceAlgorithmSettings(Device device) {
             // EthashPascal
             numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
             numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)1024;
@@ -1500,7 +1375,7 @@ namespace GatelessGateSharp
             numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 2 : 1);
             numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
             numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
-                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 40 :
+                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 60 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 96 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 96 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 90 :
@@ -1513,6 +1388,52 @@ namespace GatelessGateSharp
                                                                                                           2 * device.GetMaxComputeUnits());
         }
 
+        private void ResetDeviceOverclockingSettings(Device device){
+            foreach (var algorithm in sAlgorithmList) {
+                Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+
+                checkBoxDeviceOverclockingEnabledArray[tuple].Checked = false;
+                numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = 100;
+
+                int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock;
+                int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock;
+                int minCoreClock = ((OpenCLDevice)device).MinCoreClock;
+                int coreClockStep = ((OpenCLDevice)device).CoreClockStep;
+                if (defaultCoreClock > 0 && maxCoreClock > 0 && minCoreClock > 0 && coreClockStep > 0) {
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Maximum = maxCoreClock;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Minimum = minCoreClock;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Increment = coreClockStep;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = defaultCoreClock;
+                }
+                int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock;
+                int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock;
+                int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock;
+                int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep;
+                if (defaultMemoryClock > 0 && maxMemoryClock > 0 && minMemoryClock > 0 && memoryClockStep > 0) {
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Maximum = maxMemoryClock;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Minimum = minMemoryClock;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Increment = memoryClockStep;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = defaultMemoryClock;
+                }
+                int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage;
+                if (defaultCoreVoltage > 0) {
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = defaultCoreVoltage;
+                }
+                int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage;
+                if (defaultMemoryVoltage > 0) {
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = defaultMemoryVoltage;
+                }
+            }
+        }
+
+        private void ResetDeviceFanControlSettings(Device device) {
+            checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked = true;
+            numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
+            numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
+            numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
+            numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = (decimal)100;
+        }
+
         private void CopyDeviceSettings(int sourceDeviceIndex) {
             foreach (var device in mDevices) {
                 if (sourceDeviceIndex == device.DeviceIndex
@@ -1520,6 +1441,7 @@ namespace GatelessGateSharp
                     || device.GetName() != mDevices[sourceDeviceIndex].GetName())
                     continue;
 
+                checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked = checkBoxDeviceFanControlEnabledArray[sourceDeviceIndex].Checked;
                 numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlTargetTemperatureArray[sourceDeviceIndex].Value;
                 numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlMaximumTemperatureArray[sourceDeviceIndex].Value;
                 numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlMinimumFanSpeedArray[sourceDeviceIndex].Value;
@@ -1553,8 +1475,20 @@ namespace GatelessGateSharp
                 numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightLocalWorkSizeArray[sourceDeviceIndex].Value;
                 numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightRawIntensityArray[sourceDeviceIndex].Value;
 
+                foreach (var algorithm in sAlgorithmList) {
+                    Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                    Tuple<int, string> source = new Tuple<int, string>(sourceDeviceIndex, algorithm);
+
+                    checkBoxDeviceOverclockingEnabledArray[tuple].Checked = checkBoxDeviceOverclockingEnabledArray[source].Checked;
+                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = numericUpDownDeviceOverclockingCoreClockArray[source].Value;
+                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = numericUpDownDeviceOverclockingMemoryClockArray[source].Value;
+                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = numericUpDownDeviceOverclockingCoreVoltageArray[source].Value;
+                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = numericUpDownDeviceOverclockingMemoryVoltageArray[source].Value;
+                }
             }
         }
+
+        #endregion
 
         private class CustomWebClient : System.Net.WebClient
         {
@@ -1871,12 +1805,18 @@ namespace GatelessGateSharp
                     int fanSpeed = device.FanSpeed;
                     if (fanSpeed >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
+                    int powerLimit = device.PowerLimit;
+                    if (powerLimit >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["power_limit"].Value = powerLimit.ToString() + "%";
                     int activity = device.Activity;
                     if (activity >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = activity.ToString() + "%";
                     int coreClock = device.CoreClock;
                     if (coreClock >= 0)
-                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() + " MHz (" + device.CoreVoltage.ToString() + "mV)";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() +  " MHz";
+                    int coreVoltage = device.CoreVoltage;
+                    if (coreVoltage >= 0)
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = coreVoltage.ToString() + " mV";
                     int memoryClock = device.MemoryClock;
                     if (activity >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
@@ -1913,7 +1853,7 @@ namespace GatelessGateSharp
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            UpdateDatabase();
+            SaveSettingsToDatabase();
             UnloadPhyMemDriver();
             timerFanControl.Enabled = false;
             if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy) {
@@ -2218,8 +2158,8 @@ namespace GatelessGateSharp
             }
 
             if (stratum != null) {
-                LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
                 mPrimaryStratum = (Stratum)stratum;
+                LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
             }
         }
 
@@ -2897,185 +2837,202 @@ namespace GatelessGateSharp
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            if (CustomPoolEnabled && !mDevFeeMode)
-            {
-                for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++)
-                {
-                    bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
-                                   (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
-                                   (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
-                                                            checkBoxCustomPool3Enable.Checked;
-                    String host = (customPoolIndex == 0) ? textBoxCustomPool0Host.Text :
-                                  (customPoolIndex == 1) ? textBoxCustomPool1Host.Text :
-                                  (customPoolIndex == 2) ? textBoxCustomPool2Host.Text :
-                                                           textBoxCustomPool3Host.Text;
-                    int port = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0Port.Value) :
-                               (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1Port.Value) :
-                               (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2Port.Value) :
-                                                        Convert.ToInt32(numericUpDownCustomPool3Port.Value);
-                    String login = (customPoolIndex == 0) ? textBoxCustomPool0Login.Text :
-                                   (customPoolIndex == 1) ? textBoxCustomPool1Login.Text :
-                                   (customPoolIndex == 2) ? textBoxCustomPool2Login.Text :
-                                                            textBoxCustomPool3Login.Text;
-                    String password = (customPoolIndex == 0) ? textBoxCustomPool0Password.Text :
-                                      (customPoolIndex == 1) ? textBoxCustomPool1Password.Text :
-                                      (customPoolIndex == 2) ? textBoxCustomPool2Password.Text :
-                                                               textBoxCustomPool3Password.Text;
-                    String host2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryHost.Text :
-                                   (customPoolIndex == 1) ? textBoxCustomPool1SecondaryHost.Text :
-                                   (customPoolIndex == 2) ? textBoxCustomPool2SecondaryHost.Text :
-                                                            textBoxCustomPool3SecondaryHost.Text;
-                    int port2 = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0SecondaryPort.Value) :
-                                (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1SecondaryPort.Value) :
-                                (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2SecondaryPort.Value) :
-                                                         Convert.ToInt32(numericUpDownCustomPool3SecondaryPort.Value);
-                    String login2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryLogin.Text :
-                                    (customPoolIndex == 1) ? textBoxCustomPool1SecondaryLogin.Text :
-                                    (customPoolIndex == 2) ? textBoxCustomPool2SecondaryLogin.Text :
-                                                             textBoxCustomPool3SecondaryLogin.Text;
-                    String password2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryPassword.Text :
-                                       (customPoolIndex == 1) ? textBoxCustomPool1SecondaryPassword.Text :
-                                       (customPoolIndex == 2) ? textBoxCustomPool2SecondaryPassword.Text :
-                                                                textBoxCustomPool3SecondaryPassword.Text;
-                    String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
-                                  (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
-                                  (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
-                                                           (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
-                    String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
-                                   (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
-                                   (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
-                                                            (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
+            if (CustomPoolEnabled && !mDevFeeMode) {
+                LaunchMinersForCustomPools();
+            } else if (CustomPoolEnabled && mDevFeeMode) {
+                LaunchMinersForCustomPoolsInDevFeeMode();
+            } else {
+                LaunchMinersForDefaultPools();
+            }
 
-
-
-                    if (!enabled)
-                        continue;
-
-                    try {
-                        Logger("Launching miner(s) for Custom Pool " + customPoolIndex + "...");
-                        LaunchMinersForCustomPool(algo, host, port, login, password, algo2, host2, port2, login2, password2);
-                        break;
-                    } catch (UnrecoverableException ex) {
-                        throw ex;
-                    } catch (Exception ex) {
-                        Logger("Failed to launch miner(s) for Custom Pool " + customPoolIndex + ": " + ex.Message + ex.StackTrace);
+            if (mPrimaryStratum != null) {
+                string algorithm = mPrimaryStratum.Algorithm;
+                if (mSecondaryStratum != null)
+                    algorithm += "_" + mSecondaryStratum.Algorithm;
+                foreach (var device in mDevices) {
+                    if (checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(device.DeviceIndex, algorithm)].Checked) {
+                        device.SaveOverclockingSettings();
+                        UpdateOverclockingSettings(device);
                     }
-
-                    // Clean up the mess.
-                    if (mPrimaryStratum != null)
-                        mPrimaryStratum.Stop();
-                    if (mSecondaryStratum != null)
-                        mSecondaryStratum.Stop();
-                    foreach (Miner miner in mActiveMiners)
-                        miner.Stop();
-                    mPrimaryStratum = null;
-                    mSecondaryStratum = null;
-                    mActiveMiners.Clear();
                 }
             }
-            else if (CustomPoolEnabled && mDevFeeMode)
-            {
-                for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++)
-                {
-                    bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
-                                   (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
-                                   (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
-                                                            checkBoxCustomPool3Enable.Checked;
-                    String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
-                                  (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
-                                  (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
-                                                           (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
-                    String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
-                                   (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
-                                   (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
-                                                            (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
+        }
 
-                    if (!enabled)
-                        continue;
-
-                    foreach (string pool in listBoxPoolPriorities.Items) {
-                        try {
-                            if (algo == "Ethash" && algo2 == "Pascal") {
-                                Logger("Launching Dual Ethash/Pascal for DEVFEE...");
-                                LaunchOpenCLDualEthashPascalMiners(pool);
-                            } else if (algo == "Ethash") {
-                                Logger("Launching Ethash miners for DEVFEE...");
-                                LaunchOpenCLEthashMiners(pool);
-                            } else if (algo == "CryptoNight") {
-                                Logger("Launching CryptoNight miners for DEVFEE...");
-                                LaunchOpenCLCryptoNightMiners(pool);
-                            } else if (algo == "Lbry") {
-                                Logger("Launching Lbry miners for DEVFEE...");
-                                LaunchOpenCLLbryMiners(pool);
-                            } else if (algo == "Pascal") {
-                                Logger("Launching Pascal miners for DEVFEE...");
-                                LaunchOpenCLPascalMiners(pool);
-                            } else if (algo == "NeoScrypt") {
-                                Logger("Launching NeoScrypt miners for DEVFEE...");
-                                LaunchOpenCLNeoScryptMiners(pool);
-                            } else if (algo == "Lyra2REv2") {
-                                Logger("Launching Lyra2REv2 miners for DEVFEE...");
-                                LaunchOpenCLLyra2REv2Miners(pool);
-                            }
-                            if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
-                                return;
-                            } else {
-                                Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
-                            }
-                        } catch (UnrecoverableException ex) {
-                            throw ex;
-                        } catch (Exception ex) {
-                            Logger("Failed to launch miner(s) for DEVFEE: " + ex.Message + ex.StackTrace);
-                        }
-
-                        // Clean up the mess.
-                        if (mPrimaryStratum != null)
-                            mPrimaryStratum.Stop();
-                        if (mSecondaryStratum != null)
-                            mSecondaryStratum.Stop();
-                        foreach (Miner miner in mActiveMiners)
-                            miner.Stop();
-                        mPrimaryStratum = null;
-                        mSecondaryStratum = null;
-                        mActiveMiners.Clear();
+        private void LaunchMinersForDefaultPools() {
+            foreach (string pool in listBoxPoolPriorities.Items) {
+                try {
+                    if (radioButtonEthereumPascal.Checked) {
+                        Logger("Launching Dual Ethash/Pascal for " + pool + "...");
+                        LaunchOpenCLDualEthashPascalMiners(pool);
+                    } else if (radioButtonEthereum.Checked) {
+                        Logger("Launching Ethash miners for " + pool + "...");
+                        LaunchOpenCLEthashMiners(pool);
+                    } else if (radioButtonMonero.Checked) {
+                        Logger("Launching CryptoNight miners for " + pool + "...");
+                        LaunchOpenCLCryptoNightMiners(pool);
+                    } else if (radioButtonLbry.Checked) {
+                        Logger("Launching Lbry miners for " + pool + "...");
+                        LaunchOpenCLLbryMiners(pool);
+                    } else if (radioButtonPascal.Checked) {
+                        Logger("Launching Pascal miners for " + pool + "...");
+                        LaunchOpenCLPascalMiners(pool);
+                    } else if (radioButtonFeathercoin.Checked) {
+                        Logger("Launching NeoScrypt miners for " + pool + "...");
+                        LaunchOpenCLNeoScryptMiners(pool);
+                    } else if (radioButtonMonacoin.Checked) {
+                        Logger("Launching Lyra2REv2 miners for " + pool + "...");
+                        LaunchOpenCLLyra2REv2Miners(pool);
                     }
-               }
+                    if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
+                        return;
+                    } else {
+                        Logger("Failed to launch miner(s) for " + pool);
+                    }
+                } catch (UnrecoverableException ex) {
+                    throw ex;
+                } catch (Exception ex) {
+                    Logger("Failed to launch miners for " + pool + ": " + ex.Message + ex.StackTrace);
+                }
+
+                // Clean up the mess.
+                if (mPrimaryStratum != null)
+                    mPrimaryStratum.Stop();
+                if (mSecondaryStratum != null)
+                    mSecondaryStratum.Stop();
+                foreach (Miner miner in mActiveMiners)
+                    miner.Stop();
+                mPrimaryStratum = null;
+                mSecondaryStratum = null;
+                mActiveMiners.Clear();
             }
-            else
-            {
+        }
+        
+        private void LaunchMinersForCustomPools() {
+            for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
+                bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
+                               (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
+                               (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
+                                                        checkBoxCustomPool3Enable.Checked;
+                String host = (customPoolIndex == 0) ? textBoxCustomPool0Host.Text :
+                              (customPoolIndex == 1) ? textBoxCustomPool1Host.Text :
+                              (customPoolIndex == 2) ? textBoxCustomPool2Host.Text :
+                                                       textBoxCustomPool3Host.Text;
+                int port = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0Port.Value) :
+                           (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1Port.Value) :
+                           (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2Port.Value) :
+                                                    Convert.ToInt32(numericUpDownCustomPool3Port.Value);
+                String login = (customPoolIndex == 0) ? textBoxCustomPool0Login.Text :
+                               (customPoolIndex == 1) ? textBoxCustomPool1Login.Text :
+                               (customPoolIndex == 2) ? textBoxCustomPool2Login.Text :
+                                                        textBoxCustomPool3Login.Text;
+                String password = (customPoolIndex == 0) ? textBoxCustomPool0Password.Text :
+                                  (customPoolIndex == 1) ? textBoxCustomPool1Password.Text :
+                                  (customPoolIndex == 2) ? textBoxCustomPool2Password.Text :
+                                                           textBoxCustomPool3Password.Text;
+                String host2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryHost.Text :
+                               (customPoolIndex == 1) ? textBoxCustomPool1SecondaryHost.Text :
+                               (customPoolIndex == 2) ? textBoxCustomPool2SecondaryHost.Text :
+                                                        textBoxCustomPool3SecondaryHost.Text;
+                int port2 = (customPoolIndex == 0) ? Convert.ToInt32(numericUpDownCustomPool0SecondaryPort.Value) :
+                            (customPoolIndex == 1) ? Convert.ToInt32(numericUpDownCustomPool1SecondaryPort.Value) :
+                            (customPoolIndex == 2) ? Convert.ToInt32(numericUpDownCustomPool2SecondaryPort.Value) :
+                                                     Convert.ToInt32(numericUpDownCustomPool3SecondaryPort.Value);
+                String login2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryLogin.Text :
+                                (customPoolIndex == 1) ? textBoxCustomPool1SecondaryLogin.Text :
+                                (customPoolIndex == 2) ? textBoxCustomPool2SecondaryLogin.Text :
+                                                         textBoxCustomPool3SecondaryLogin.Text;
+                String password2 = (customPoolIndex == 0) ? textBoxCustomPool0SecondaryPassword.Text :
+                                   (customPoolIndex == 1) ? textBoxCustomPool1SecondaryPassword.Text :
+                                   (customPoolIndex == 2) ? textBoxCustomPool2SecondaryPassword.Text :
+                                                            textBoxCustomPool3SecondaryPassword.Text;
+                String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
+                              (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
+                              (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
+                                                       (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
+                String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
+                               (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
+                               (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
+                                                        (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
+
+
+
+                if (!enabled)
+                    continue;
+
+                try {
+                    Logger("Launching miner(s) for Custom Pool " + customPoolIndex + "...");
+                    LaunchMinersForCustomPool(algo, host, port, login, password, algo2, host2, port2, login2, password2);
+                    break;
+                } catch (UnrecoverableException ex) {
+                    throw ex;
+                } catch (Exception ex) {
+                    Logger("Failed to launch miner(s) for Custom Pool " + customPoolIndex + ": " + ex.Message + ex.StackTrace);
+                }
+
+                // Clean up the mess.
+                if (mPrimaryStratum != null)
+                    mPrimaryStratum.Stop();
+                if (mSecondaryStratum != null)
+                    mSecondaryStratum.Stop();
+                foreach (Miner miner in mActiveMiners)
+                    miner.Stop();
+                mPrimaryStratum = null;
+                mSecondaryStratum = null;
+                mActiveMiners.Clear();
+            }
+        }
+
+        private void LaunchMinersForCustomPoolsInDevFeeMode() {
+            for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
+                bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
+                               (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
+                               (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
+                                                        checkBoxCustomPool3Enable.Checked;
+                String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
+                              (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
+                              (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
+                                                       (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
+                String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
+                               (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
+                               (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
+                                                        (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
+
+                if (!enabled)
+                    continue;
+
                 foreach (string pool in listBoxPoolPriorities.Items) {
                     try {
-                        if (radioButtonEthereumPascal.Checked) {
-                            Logger("Launching Dual Ethash/Pascal for " + pool + "...");
+                        if (algo == "Ethash" && algo2 == "Pascal") {
+                            Logger("Launching Dual Ethash/Pascal for DEVFEE...");
                             LaunchOpenCLDualEthashPascalMiners(pool);
-                        } else if (radioButtonEthereum.Checked) {
-                            Logger("Launching Ethash miners for " + pool + "...");
+                        } else if (algo == "Ethash") {
+                            Logger("Launching Ethash miners for DEVFEE...");
                             LaunchOpenCLEthashMiners(pool);
-                        } else if (radioButtonMonero.Checked) {
-                            Logger("Launching CryptoNight miners for " + pool + "...");
+                        } else if (algo == "CryptoNight") {
+                            Logger("Launching CryptoNight miners for DEVFEE...");
                             LaunchOpenCLCryptoNightMiners(pool);
-                        } else if (radioButtonLbry.Checked) {
-                            Logger("Launching Lbry miners for " + pool + "...");
+                        } else if (algo == "Lbry") {
+                            Logger("Launching Lbry miners for DEVFEE...");
                             LaunchOpenCLLbryMiners(pool);
-                        } else if (radioButtonPascal.Checked) {
-                            Logger("Launching Pascal miners for " + pool + "...");
+                        } else if (algo == "Pascal") {
+                            Logger("Launching Pascal miners for DEVFEE...");
                             LaunchOpenCLPascalMiners(pool);
-                        } else if (radioButtonFeathercoin.Checked) {
-                            Logger("Launching NeoScrypt miners for " + pool + "...");
+                        } else if (algo == "NeoScrypt") {
+                            Logger("Launching NeoScrypt miners for DEVFEE...");
                             LaunchOpenCLNeoScryptMiners(pool);
-                        } else if (radioButtonMonacoin.Checked) {
-                            Logger("Launching Lyra2REv2 miners for " + pool + "...");
+                        } else if (algo == "Lyra2REv2") {
+                            Logger("Launching Lyra2REv2 miners for DEVFEE...");
                             LaunchOpenCLLyra2REv2Miners(pool);
                         }
                         if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
                             return;
                         } else {
-                            Logger("Failed to launch miner(s) for " + pool);
+                            Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
                         }
                     } catch (UnrecoverableException ex) {
                         throw ex;
                     } catch (Exception ex) {
-                        Logger("Failed to launch miners for " + pool + ": " + ex.Message + ex.StackTrace);
+                        Logger("Failed to launch miner(s) for DEVFEE: " + ex.Message + ex.StackTrace);
                     }
 
                     // Clean up the mess.
@@ -3091,7 +3048,7 @@ namespace GatelessGateSharp
                 }
             }
         }
-
+        
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void StopMiners() {
@@ -3114,6 +3071,13 @@ namespace GatelessGateSharp
                 foreach (var miner in mActiveMiners)
                     if (!miner.Done)
                         miner.Abort(); // Not good at all. Avoid this at all costs.
+                string algorithm = mPrimaryStratum.Algorithm;
+                if (mSecondaryStratum != null)
+                    algorithm += "_" + mSecondaryStratum.Algorithm;
+                foreach (var device in mDevices) {
+                    if (checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(device.DeviceIndex, algorithm)].Checked)
+                        device.RestoreOverclockingSettings();
+                }
                 if (mPrimaryStratum != null)
                     mPrimaryStratum.Stop();
                 if (mSecondaryStratum != null)
@@ -3133,7 +3097,7 @@ namespace GatelessGateSharp
         }
 
         private void buttonStart_Click(object sender = null, EventArgs e = null) {
-            UpdateDatabase();
+            SaveSettingsToDatabase();
 
             if (!CustomPoolEnabled) {
                 if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
@@ -3173,7 +3137,6 @@ namespace GatelessGateSharp
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             if (appState == ApplicationGlobalState.Idle) {
-                UpdateOverClockingSettings();
                 foreach (var device in mDevices) {
                     device.ClearShares();
                     //labelGPUSharesArray[device.DeviceIndex].Text = "0";
@@ -3261,6 +3224,15 @@ namespace GatelessGateSharp
                     numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
                     numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
                     numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+
+                    foreach (var algorithm in sAlgorithmList) {
+                        var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                        numericUpDownDeviceOverclockingPowerLimitArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).PowerLimit >= 0;
+                        numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).CoreClock >= 0;
+                        numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).MemoryClock >= 0;
+                        numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).CoreVoltage >= 0;
+                        numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).DefaultMemoryVoltage >= 0;
+                    }
                 }
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
@@ -3426,7 +3398,7 @@ namespace GatelessGateSharp
                         foreach (var miner in mActiveMiners) {
                             if (!miner.Alive) {
                                 MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
-                                Environment.Exit(1);
+                                Program.KillMonitor = false; Application.Exit();
                             }
                         }
                     }
@@ -4057,11 +4029,18 @@ namespace GatelessGateSharp
                     try { process.Kill(); } catch (Exception) { }
         }
 
-        void UpdateOverClockingSettings() {
-            foreach (var device in mDevices) {
-                device.CoreClock = 500;
-                device.MemoryClock = 500;
-            }
+        void UpdateOverclockingSettings(OpenCLDevice device) {
+            string algorithm = mPrimaryStratum.Algorithm;
+            if (mSecondaryStratum != null)
+                algorithm += "_" + mSecondaryStratum.Algorithm;
+            Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+            if (!checkBoxDeviceOverclockingEnabledArray[tuple].Checked)
+                return;
+            if (device.PowerLimit >= 0) device.PowerLimit = Decimal.ToInt32(numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value);
+            if (device.CoreClock >= 0) device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
+            if (device.MemoryClock >= 0) device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
+            if (device.CoreVoltage >= 0) device.CoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
+            if (device.MemoryVoltage >= 0) device.MemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
         }
 
         static public int DeviceCount {
@@ -4073,6 +4052,33 @@ namespace GatelessGateSharp
         static public OpenCLDevice[] Devices {
             get {
                 return Instance.mDevices;
+            }
+        }
+
+        private void buttonResetAll_Click(object sender, EventArgs e) {
+            foreach (var device in mDevices) {
+                ResetDeviceSettings(device);
+                device.FanSpeed = -1;
+                device.ResetOverclockingSettings();
+            }
+        }
+
+        private void buttonResetFanControlSettings_Click(object sender, EventArgs e) {
+            foreach (var device in mDevices) {
+                ResetDeviceFanControlSettings(device);
+                device.FanSpeed = -1;
+            }
+        }
+
+        private void buttonResetDeviceAlgorithmSettings_Click(object sender, EventArgs e) {
+            foreach (var device in mDevices)
+                ResetDeviceAlgorithmSettings(device);
+        }
+
+        private void buttonResetDeviceOverclockingSettings_Click(object sender, EventArgs e) {
+            foreach (var device in mDevices) {
+                ResetDeviceOverclockingSettings(device);
+                device.ResetOverclockingSettings();
             }
         }
     }

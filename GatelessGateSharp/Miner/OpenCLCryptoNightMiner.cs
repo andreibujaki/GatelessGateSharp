@@ -85,8 +85,9 @@ namespace GatelessGateSharp
             localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
             mNicehashMode = aNicehashMode;
 
-            if (prevGlobalWorkSize != 0 && prevGlobalWorkSize != globalWorkSizeA[0])
-                Environment.Exit(1);
+            if (prevGlobalWorkSize != 0 && prevGlobalWorkSize != globalWorkSizeA[0]) {
+                Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
+            }
 
             try {
                 if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]);

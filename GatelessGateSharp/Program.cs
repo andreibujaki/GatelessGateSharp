@@ -31,7 +31,7 @@ namespace GatelessGateSharp
         private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
             MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            Environment.Exit(1);
+            Program.KillMonitor = false; Application.Exit();
         }
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
@@ -42,10 +42,11 @@ namespace GatelessGateSharp
                 foreach (var process in Process.GetProcessesByName("GatelessGateSharp"))
                     process.Kill();
             }
-            Environment.Exit(1);
+            Program.KillMonitor = false; Application.Exit();
         }
 
         static Mutex sMutex = new Mutex(true, "{1D2A713A-A29C-418C-BC62-2E98BD325490}");
+        public static bool KillMonitor { get; set; }
 
         /// <summary>
         /// The main entry point for the application.
@@ -73,6 +74,8 @@ namespace GatelessGateSharp
 
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
 
+
+            // Launch monitor
             foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharpMonitor"))
                 try { process.Kill(); } catch (Exception) { } 
             Process monitor = null;
@@ -91,13 +94,14 @@ namespace GatelessGateSharp
                 monitor.Start();
             }
             catch (Exception) { }
+            KillMonitor = true;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
-
-            try { monitor.Kill(); }
-            catch (Exception) { }
+            
+            if (KillMonitor)
+                try { monitor.Kill(); } catch (Exception) { }
                 
             try { sMutex.ReleaseMutex(); } catch (Exception) { }
         }

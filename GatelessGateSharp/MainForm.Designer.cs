@@ -29,16 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
@@ -52,7 +54,9 @@
             this.activity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.temperature = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fan = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.power_limit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.core_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.core_voltage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.memory_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.labelElapsedTime = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -190,6 +194,10 @@
             this.textBoxCustomPool0Login = new System.Windows.Forms.TextBox();
             this.label148 = new System.Windows.Forms.Label();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.buttonResetFanControlSettings = new System.Windows.Forms.Button();
             this.groupBoxHadrwareAcceleration = new System.Windows.Forms.GroupBox();
             this.label144 = new System.Windows.Forms.Label();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
@@ -275,7 +283,7 @@
             this.tabControlMainForm.Location = new System.Drawing.Point(11, 8);
             this.tabControlMainForm.Name = "tabControlMainForm";
             this.tabControlMainForm.SelectedIndex = 0;
-            this.tabControlMainForm.Size = new System.Drawing.Size(791, 421);
+            this.tabControlMainForm.Size = new System.Drawing.Size(826, 421);
             this.tabControlMainForm.TabIndex = 0;
             this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
             // 
@@ -296,7 +304,7 @@
             this.tabPageDashboard.Controls.Add(this.label3);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
-            this.tabPageDashboard.Size = new System.Drawing.Size(783, 395);
+            this.tabPageDashboard.Size = new System.Drawing.Size(818, 395);
             this.tabPageDashboard.TabIndex = 2;
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
@@ -307,8 +315,8 @@
             this.dataGridViewDevices.AllowUserToDeleteRows = false;
             this.dataGridViewDevices.AllowUserToResizeColumns = false;
             this.dataGridViewDevices.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
-            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.LightGray;
+            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -316,14 +324,14 @@
             this.dataGridViewDevices.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDevices.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridViewDevices.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
             this.dataGridViewDevices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDevices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.enabled,
@@ -335,22 +343,24 @@
             this.activity,
             this.temperature,
             this.fan,
+            this.power_limit,
             this.core_clock,
+            this.core_voltage,
             this.memory_clock});
             this.dataGridViewDevices.Location = new System.Drawing.Point(11, 145);
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
-            this.dataGridViewDevices.Size = new System.Drawing.Size(758, 238);
+            this.dataGridViewDevices.Size = new System.Drawing.Size(793, 238);
             this.dataGridViewDevices.TabIndex = 144;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
             this.dataGridViewDevices.SelectionChanged += new System.EventHandler(this.dataGridViewDevices_SelectionChanged);
             // 
             // enabled
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle15;
             this.enabled.FalseValue = "";
             this.enabled.HeaderText = "";
             this.enabled.Name = "enabled";
@@ -387,8 +397,8 @@
             // 
             // speed
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle16;
             this.speed.FillWeight = 110F;
             this.speed.HeaderText = "Speed(s)";
             this.speed.Name = "speed";
@@ -399,8 +409,8 @@
             // 
             // shares
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle17;
             this.shares.HeaderText = "Shares";
             this.shares.Name = "shares";
             this.shares.ReadOnly = true;
@@ -412,8 +422,8 @@
             // 
             this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle18;
             this.activity.HeaderText = "Act.";
             this.activity.Name = "activity";
             this.activity.ReadOnly = true;
@@ -423,8 +433,8 @@
             // 
             // temperature
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle19;
             this.temperature.HeaderText = "Temp.";
             this.temperature.Name = "temperature";
             this.temperature.ReadOnly = true;
@@ -434,8 +444,8 @@
             // 
             // fan
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle20;
             this.fan.HeaderText = "Fan";
             this.fan.Name = "fan";
             this.fan.ReadOnly = true;
@@ -443,21 +453,43 @@
             this.fan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fan.Width = 45;
             // 
+            // power_limit
+            // 
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle21;
+            this.power_limit.HeaderText = "Power";
+            this.power_limit.Name = "power_limit";
+            this.power_limit.ReadOnly = true;
+            this.power_limit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.power_limit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.power_limit.Width = 45;
+            // 
             // core_clock
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle22;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
             this.core_clock.ReadOnly = true;
             this.core_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.core_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.core_clock.Width = 120;
+            this.core_clock.Width = 60;
+            // 
+            // core_voltage
+            // 
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle23;
+            this.core_voltage.HeaderText = "";
+            this.core_voltage.Name = "core_voltage";
+            this.core_voltage.ReadOnly = true;
+            this.core_voltage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.core_voltage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.core_voltage.Width = 50;
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle24;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
             this.memory_clock.ReadOnly = true;
@@ -575,7 +607,7 @@
             this.tabPagePoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPagePoolSettings.Name = "tabPagePoolSettings";
             this.tabPagePoolSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePoolSettings.Size = new System.Drawing.Size(783, 395);
+            this.tabPagePoolSettings.Size = new System.Drawing.Size(818, 395);
             this.tabPagePoolSettings.TabIndex = 0;
             this.tabPagePoolSettings.Text = "Default Pools";
             this.tabPagePoolSettings.UseVisualStyleBackColor = true;
@@ -1026,7 +1058,7 @@
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool0);
             this.tabPageCustomPoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustomPoolSettings.Name = "tabPageCustomPoolSettings";
-            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(783, 395);
+            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(818, 395);
             this.tabPageCustomPoolSettings.TabIndex = 6;
             this.tabPageCustomPoolSettings.Text = "Custom Pools";
             this.tabPageCustomPoolSettings.UseVisualStyleBackColor = true;
@@ -1862,14 +1894,58 @@
             // 
             // tabPageDeviceSettings
             // 
+            this.tabPageDeviceSettings.Controls.Add(this.button4);
+            this.tabPageDeviceSettings.Controls.Add(this.button3);
+            this.tabPageDeviceSettings.Controls.Add(this.button2);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonResetFanControlSettings);
             this.tabPageDeviceSettings.Controls.Add(this.groupBoxHadrwareAcceleration);
             this.tabPageDeviceSettings.Controls.Add(this.tabControlDeviceSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
-            this.tabPageDeviceSettings.Size = new System.Drawing.Size(783, 395);
+            this.tabPageDeviceSettings.Size = new System.Drawing.Size(818, 395);
             this.tabPageDeviceSettings.TabIndex = 3;
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(652, 61);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(163, 23);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Reset Overclocking Settings";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.buttonResetDeviceOverclockingSettings_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(652, 96);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(163, 23);
+            this.button3.TabIndex = 4;
+            this.button3.Text = "Reset All";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.buttonResetAll_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(652, 32);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(163, 23);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "Reset Algorithm Settings";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.buttonResetDeviceAlgorithmSettings_Click);
+            // 
+            // buttonResetFanControlSettings
+            // 
+            this.buttonResetFanControlSettings.Location = new System.Drawing.Point(652, 3);
+            this.buttonResetFanControlSettings.Name = "buttonResetFanControlSettings";
+            this.buttonResetFanControlSettings.Size = new System.Drawing.Size(163, 23);
+            this.buttonResetFanControlSettings.TabIndex = 2;
+            this.buttonResetFanControlSettings.Text = "Reset Fan-Control Settings";
+            this.buttonResetFanControlSettings.UseVisualStyleBackColor = true;
+            this.buttonResetFanControlSettings.Click += new System.EventHandler(this.buttonResetFanControlSettings_Click);
             // 
             // groupBoxHadrwareAcceleration
             // 
@@ -1939,7 +2015,7 @@
             this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
             this.tabPageMiscSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageMiscSettings.Name = "tabPageMiscSettings";
-            this.tabPageMiscSettings.Size = new System.Drawing.Size(783, 395);
+            this.tabPageMiscSettings.Size = new System.Drawing.Size(818, 395);
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
@@ -1954,50 +2030,52 @@
             this.groupBox1.Controls.Add(this.buttonInstallRecommendedAMDDriver);
             this.groupBox1.Controls.Add(this.buttonDisableAuomaticRepair);
             this.groupBox1.Controls.Add(this.buttonDisableDriverInstallation);
-            this.groupBox1.Location = new System.Drawing.Point(203, 4);
+            this.groupBox1.Location = new System.Drawing.Point(202, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(261, 253);
+            this.groupBox1.Size = new System.Drawing.Size(293, 195);
             this.groupBox1.TabIndex = 41;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "System Configurations";
             // 
             // buttonDisableUserAccountControl
             // 
-            this.buttonDisableUserAccountControl.Location = new System.Drawing.Point(6, 222);
+            this.buttonDisableUserAccountControl.Location = new System.Drawing.Point(6, 106);
             this.buttonDisableUserAccountControl.Name = "buttonDisableUserAccountControl";
-            this.buttonDisableUserAccountControl.Size = new System.Drawing.Size(249, 23);
+            this.buttonDisableUserAccountControl.Size = new System.Drawing.Size(216, 23);
             this.buttonDisableUserAccountControl.TabIndex = 43;
-            this.buttonDisableUserAccountControl.Text = "Disable User Account Control";
+            this.buttonDisableUserAccountControl.Text = "4. Disable User Account Control";
+            this.buttonDisableUserAccountControl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonDisableUserAccountControl.UseVisualStyleBackColor = true;
             this.buttonDisableUserAccountControl.Click += new System.EventHandler(this.buttonDisableUserAccountControl_Click);
             // 
             // buttonDisableUserAccountControlSettings
             // 
-            this.buttonDisableUserAccountControlSettings.Location = new System.Drawing.Point(6, 193);
+            this.buttonDisableUserAccountControlSettings.Location = new System.Drawing.Point(228, 106);
             this.buttonDisableUserAccountControlSettings.Name = "buttonDisableUserAccountControlSettings";
-            this.buttonDisableUserAccountControlSettings.Size = new System.Drawing.Size(249, 23);
+            this.buttonDisableUserAccountControlSettings.Size = new System.Drawing.Size(57, 23);
             this.buttonDisableUserAccountControlSettings.TabIndex = 42;
-            this.buttonDisableUserAccountControlSettings.Text = "User Account Control Settings";
+            this.buttonDisableUserAccountControlSettings.Text = "Restore";
             this.buttonDisableUserAccountControlSettings.UseVisualStyleBackColor = true;
             this.buttonDisableUserAccountControlSettings.Click += new System.EventHandler(this.buttonUserAccountControlSettings_Click);
             // 
             // buttonDownloadDisplayDriverUninstaller
             // 
-            this.buttonDownloadDisplayDriverUninstaller.Location = new System.Drawing.Point(6, 77);
+            this.buttonDownloadDisplayDriverUninstaller.Location = new System.Drawing.Point(6, 48);
             this.buttonDownloadDisplayDriverUninstaller.Name = "buttonDownloadDisplayDriverUninstaller";
-            this.buttonDownloadDisplayDriverUninstaller.Size = new System.Drawing.Size(249, 23);
+            this.buttonDownloadDisplayDriverUninstaller.Size = new System.Drawing.Size(216, 23);
             this.buttonDownloadDisplayDriverUninstaller.TabIndex = 41;
-            this.buttonDownloadDisplayDriverUninstaller.Text = "Download Display Driver Uninstaller";
+            this.buttonDownloadDisplayDriverUninstaller.Text = "2. Download Display Driver Uninstaller";
+            this.buttonDownloadDisplayDriverUninstaller.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonDownloadDisplayDriverUninstaller.UseVisualStyleBackColor = true;
             this.buttonDownloadDisplayDriverUninstaller.Click += new System.EventHandler(this.buttonDownloadDisplayDriverUninstaller_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 19);
+            this.button1.Location = new System.Drawing.Point(228, 19);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(249, 23);
+            this.button1.Size = new System.Drawing.Size(57, 23);
             this.button1.TabIndex = 40;
-            this.button1.Text = "Driver Installation Settings";
+            this.button1.Text = "Restore";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.buttonDeviceInstallationSettings_Click);
             // 
@@ -2005,19 +2083,21 @@
             // 
             this.buttonConfigureAutomaticLogin.Location = new System.Drawing.Point(6, 135);
             this.buttonConfigureAutomaticLogin.Name = "buttonConfigureAutomaticLogin";
-            this.buttonConfigureAutomaticLogin.Size = new System.Drawing.Size(249, 23);
+            this.buttonConfigureAutomaticLogin.Size = new System.Drawing.Size(216, 23);
             this.buttonConfigureAutomaticLogin.TabIndex = 36;
-            this.buttonConfigureAutomaticLogin.Text = "Configure Automatic Login";
+            this.buttonConfigureAutomaticLogin.Text = "5. Configure Automatic Login";
+            this.buttonConfigureAutomaticLogin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonConfigureAutomaticLogin.UseVisualStyleBackColor = true;
             this.buttonConfigureAutomaticLogin.Click += new System.EventHandler(this.buttonConfigureAutomaticLogin_Click);
             // 
             // buttonInstallRecommendedAMDDriver
             // 
-            this.buttonInstallRecommendedAMDDriver.Location = new System.Drawing.Point(6, 106);
+            this.buttonInstallRecommendedAMDDriver.Location = new System.Drawing.Point(6, 77);
             this.buttonInstallRecommendedAMDDriver.Name = "buttonInstallRecommendedAMDDriver";
-            this.buttonInstallRecommendedAMDDriver.Size = new System.Drawing.Size(249, 23);
+            this.buttonInstallRecommendedAMDDriver.Size = new System.Drawing.Size(216, 23);
             this.buttonInstallRecommendedAMDDriver.TabIndex = 39;
-            this.buttonInstallRecommendedAMDDriver.Text = "Download Recommended AMD Driver";
+            this.buttonInstallRecommendedAMDDriver.Text = "3. Download Recommended AMD Driver";
+            this.buttonInstallRecommendedAMDDriver.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonInstallRecommendedAMDDriver.UseVisualStyleBackColor = true;
             this.buttonInstallRecommendedAMDDriver.Click += new System.EventHandler(this.buttonInstallRecommendedAMDDriver_Click);
             // 
@@ -2025,19 +2105,21 @@
             // 
             this.buttonDisableAuomaticRepair.Location = new System.Drawing.Point(6, 164);
             this.buttonDisableAuomaticRepair.Name = "buttonDisableAuomaticRepair";
-            this.buttonDisableAuomaticRepair.Size = new System.Drawing.Size(249, 23);
+            this.buttonDisableAuomaticRepair.Size = new System.Drawing.Size(216, 23);
             this.buttonDisableAuomaticRepair.TabIndex = 37;
-            this.buttonDisableAuomaticRepair.Text = "Disable Automatic Repair";
+            this.buttonDisableAuomaticRepair.Text = "6. Disable Automatic Repair";
+            this.buttonDisableAuomaticRepair.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonDisableAuomaticRepair.UseVisualStyleBackColor = true;
             this.buttonDisableAuomaticRepair.Click += new System.EventHandler(this.buttonDisableAuomaticRepair_Click);
             // 
             // buttonDisableDriverInstallation
             // 
-            this.buttonDisableDriverInstallation.Location = new System.Drawing.Point(6, 48);
+            this.buttonDisableDriverInstallation.Location = new System.Drawing.Point(6, 19);
             this.buttonDisableDriverInstallation.Name = "buttonDisableDriverInstallation";
-            this.buttonDisableDriverInstallation.Size = new System.Drawing.Size(249, 23);
+            this.buttonDisableDriverInstallation.Size = new System.Drawing.Size(216, 23);
             this.buttonDisableDriverInstallation.TabIndex = 38;
-            this.buttonDisableDriverInstallation.Text = "Disable Driver Installation";
+            this.buttonDisableDriverInstallation.Text = "1. Disable Driver Installation";
+            this.buttonDisableDriverInstallation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonDisableDriverInstallation.UseVisualStyleBackColor = true;
             this.buttonDisableDriverInstallation.Click += new System.EventHandler(this.buttonDisableDriverInstallation_Click);
             // 
@@ -2094,7 +2176,7 @@
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
             this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(783, 395);
+            this.tabPageLog.Size = new System.Drawing.Size(818, 395);
             this.tabPageLog.TabIndex = 1;
             this.tabPageLog.Text = "Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -2141,7 +2223,7 @@
             this.tabPageAbout.Controls.Add(this.richTextBoxAbout);
             this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
             this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Size = new System.Drawing.Size(783, 395);
+            this.tabPageAbout.Size = new System.Drawing.Size(818, 395);
             this.tabPageAbout.TabIndex = 5;
             this.tabPageAbout.Text = "About";
             this.tabPageAbout.UseVisualStyleBackColor = true;
@@ -2193,7 +2275,7 @@
             // 
             this.buttonBenchmark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonBenchmark.Enabled = false;
-            this.buttonBenchmark.Location = new System.Drawing.Point(646, 436);
+            this.buttonBenchmark.Location = new System.Drawing.Point(681, 436);
             this.buttonBenchmark.Name = "buttonBenchmark";
             this.buttonBenchmark.Size = new System.Drawing.Size(75, 23);
             this.buttonBenchmark.TabIndex = 146;
@@ -2203,7 +2285,8 @@
             // buttonStart
             // 
             this.buttonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonStart.Location = new System.Drawing.Point(727, 436);
+            this.buttonStart.Enabled = false;
+            this.buttonStart.Location = new System.Drawing.Point(762, 436);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(75, 23);
             this.buttonStart.TabIndex = 145;
@@ -2218,7 +2301,7 @@
             this.toolStripStatusLabel1});
             this.statusStripMainForm.Location = new System.Drawing.Point(0, 468);
             this.statusStripMainForm.Name = "statusStripMainForm";
-            this.statusStripMainForm.Size = new System.Drawing.Size(814, 23);
+            this.statusStripMainForm.Size = new System.Drawing.Size(849, 23);
             this.statusStripMainForm.TabIndex = 5;
             // 
             // toolStripMainFormProgressBar
@@ -2246,7 +2329,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(814, 491);
+            this.ClientSize = new System.Drawing.Size(849, 491);
             this.Controls.Add(this.buttonBenchmark);
             this.Controls.Add(this.statusStripMainForm);
             this.Controls.Add(this.buttonStart);
@@ -2255,7 +2338,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(32767, 32767);
-            this.MinimumSize = new System.Drawing.Size(770, 530);
+            this.MinimumSize = new System.Drawing.Size(865, 530);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Gateless Gate Sharp";
@@ -2485,6 +2568,7 @@
         private System.Windows.Forms.Button buttonDownloadDisplayDriverUninstaller;
         private System.Windows.Forms.Button buttonDisableUserAccountControl;
         private System.Windows.Forms.Button buttonDisableUserAccountControlSettings;
+        private System.Windows.Forms.Timer timerOverClocking;
         private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
@@ -2494,8 +2578,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn activity;
         private System.Windows.Forms.DataGridViewTextBoxColumn temperature;
         private System.Windows.Forms.DataGridViewTextBoxColumn fan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
         private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn core_voltage;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
-        private System.Windows.Forms.Timer timerOverClocking;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonResetFanControlSettings;
     }
 }

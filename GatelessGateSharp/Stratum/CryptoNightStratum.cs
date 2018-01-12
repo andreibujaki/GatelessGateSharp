@@ -169,7 +169,7 @@ namespace GatelessGateSharp
         }
 
         public CryptoNightStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "cryptonight")
         {
         }
     }
