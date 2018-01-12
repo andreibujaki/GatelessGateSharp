@@ -523,11 +523,8 @@ namespace GatelessGateSharp
                     return -1;
 
                 // activity
-                ADLPMActivity OSADLPMActivityData;
-                OSADLPMActivityData = new ADLPMActivity();
-                var activityBuffer = IntPtr.Zero;
-                var size = Marshal.SizeOf(OSADLPMActivityData);
-                activityBuffer = Marshal.AllocCoTaskMem((int)size);
+                ADLPMActivity OSADLPMActivityData = new ADLPMActivity();
+                var activityBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLPMActivityData));
                 Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
                 if (ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) == ADL.ADL_SUCCESS) {
                     OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
@@ -535,16 +532,13 @@ namespace GatelessGateSharp
                         return OSADLPMActivityData.iVddc;
                 }
 
-                ADLODNPerformanceStatus OSODNPerformanceStatusData;
-                OSODNPerformanceStatusData = new ADLODNPerformanceStatus();
-                var statusBuffer = IntPtr.Zero;
-                size = Marshal.SizeOf(OSODNPerformanceStatusData);
-                statusBuffer = Marshal.AllocCoTaskMem((int)size);
+                ADLODNPerformanceStatus OSODNPerformanceStatusData = new ADLODNPerformanceStatus();
+                var statusBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSODNPerformanceStatusData));
                 Marshal.StructureToPtr(OSODNPerformanceStatusData, statusBuffer, false);
                 if (ADL.ADL2_OverdriveN_PerformanceStatus_Get(ADL2Context, ADLAdapterIndex, statusBuffer) != ADL.ADL_SUCCESS)
                     return -1;
                 OSODNPerformanceStatusData = (ADLODNPerformanceStatus)Marshal.PtrToStructure(statusBuffer, OSODNPerformanceStatusData.GetType());
-                return OSODNPerformanceStatusData.iVDDC <= 0 ? -1 : OSODNPerformanceStatusData.iVDDC;
+                return OSODNPerformanceStatusData.iVDDC <= 800 ? -1 : OSODNPerformanceStatusData.iVDDC; // The driver may return garbage.
             }
 
             set {
@@ -845,7 +839,6 @@ namespace GatelessGateSharp
             get {
                 // OverDrive 5
                 ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
-                OSADLODPerformanceLevelsData.iReserved = 0;
                 var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
                 Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
                 if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 1, levelsBuffer) == ADL.ADL_SUCCESS) {
@@ -931,7 +924,6 @@ namespace GatelessGateSharp
 
             // OverDrive 5
             ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
-            OSADLODPerformanceLevelsData.iReserved = 0;
             var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
             Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
             if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 0, levelsBuffer) == ADL.ADL_SUCCESS)
@@ -947,6 +939,7 @@ namespace GatelessGateSharp
                 sODNSystemClocksBackup = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
 
             // OverDrive Next (Memory Clocks)
+            OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels(); // zero clear
             OSADLODNPerformanceLevelsData.iMode = (int)(ADLODNControlType.ODNControlType_Current);
             OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
             ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
