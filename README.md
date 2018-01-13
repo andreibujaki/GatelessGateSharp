@@ -24,7 +24,7 @@ The minimum requirements for the miner are as follows:
 * Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.
 * 64-bit Windows operating system.
 
-Please note that this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 17.12.2](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire and choose Compute for GPU Workload in Radeon Settings.**
+Please note that the current focus of the project is on AMD and this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 17.12.2](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire and choose Compute for GPU Workload in Radeon Settings.**
 
 ## About the DEVFEE
 
