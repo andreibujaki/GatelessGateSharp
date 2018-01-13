@@ -914,6 +914,7 @@ namespace GatelessGateSharp
             }
         }
 
+        int mPowerControlBackup;
         ADLODPerformanceLevels sODPerformanceLevelsBackup;
         ADLODNPerformanceLevels sODNSystemClocksBackup;
         ADLODNPerformanceLevels sODNMemoryClocksBackup;
@@ -921,6 +922,9 @@ namespace GatelessGateSharp
         public void SaveOverclockingSettings() {
             if (ADLAdapterIndex < 0)
                 return;
+
+            int defaultPowerControl;
+            ADL.ADL_Overdrive5_PowerControl_Get(ADLAdapterIndex, ref mPowerControlBackup, ref defaultPowerControl);
 
             // OverDrive 5
             ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
@@ -951,6 +955,8 @@ namespace GatelessGateSharp
         public void RestoreOverclockingSettings() {
             if (ADLAdapterIndex < 0)
                 return;
+
+            ADL.ADL_Overdrive5_PowerControl_Set(ADLAdapterIndex, mPowerControlBackup);
 
             // OverDrive 5
             var levelsBuffer = Marshal.AllocCoTaskMem((int)(sODPerformanceLevelsBackup.iSize));

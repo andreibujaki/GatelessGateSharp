@@ -1480,6 +1480,7 @@ namespace GatelessGateSharp
                     Tuple<int, string> source = new Tuple<int, string>(sourceDeviceIndex, algorithm);
 
                     checkBoxDeviceOverclockingEnabledArray[tuple].Checked = checkBoxDeviceOverclockingEnabledArray[source].Checked;
+                    numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = numericUpDownDeviceOverclockingPowerLimitArray[source].Value;
                     numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = numericUpDownDeviceOverclockingCoreClockArray[source].Value;
                     numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = numericUpDownDeviceOverclockingMemoryClockArray[source].Value;
                     numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = numericUpDownDeviceOverclockingCoreVoltageArray[source].Value;
@@ -1806,20 +1807,40 @@ namespace GatelessGateSharp
                     if (fanSpeed >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
                     int powerLimit = device.PowerLimit;
-                    if (powerLimit >= 0)
+                    if (powerLimit >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["power_limit"].Value = powerLimit.ToString() + "%";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["power_limit"].Style.ForeColor =
+                                                                   powerLimit > 100 ? Color.Red :
+                                                                   powerLimit < 100 ? Color.Blue :
+                                                                                  Color.Black;
+                    }
                     int activity = device.Activity;
                     if (activity >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["activity"].Value = activity.ToString() + "%";
                     int coreClock = device.CoreClock;
-                    if (coreClock >= 0)
-                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() +  " MHz";
+                    if (coreClock >= 0) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() + " MHz";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Style.ForeColor =
+                                                                   coreClock > device.DefaultCoreClock ? Color.Red :
+                                                                   coreClock < device.DefaultCoreClock ? Color.Blue :
+                                                                                  Color.Black;
+                    }
                     int coreVoltage = device.CoreVoltage;
-                    if (coreVoltage >= 0)
+                    if (coreVoltage >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = coreVoltage.ToString() + " mV";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Style.ForeColor =
+                                                                   coreVoltage > device.DefaultCoreVoltage ? Color.Red :
+                                                                   coreVoltage < device.DefaultCoreVoltage ? Color.Blue :
+                                                                                  Color.Black;
+                    }
                     int memoryClock = device.MemoryClock;
-                    if (activity >= 0)
+                    if (activity >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Style.ForeColor =
+                                                                   memoryClock > device.DefaultMemoryClock ? Color.Red :
+                                                                   memoryClock < device.DefaultMemoryClock ? Color.Blue :
+                                                                                  Color.Black;
+                    }
 
                     if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation")) {
                         uint temp = 0;
