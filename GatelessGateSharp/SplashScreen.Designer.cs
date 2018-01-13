@@ -43,6 +43,7 @@
             this.Text = "Gateless Gate Sharp";
             this.TopMost = true;
             this.TransparencyKey = System.Drawing.Color.White;
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SplashScreen_MouseDown);
             this.ResumeLayout(false);
 
         }

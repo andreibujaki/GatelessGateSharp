@@ -257,7 +257,7 @@ namespace GatelessGateSharp
                                             int[] activityTotalArray = new int[NumberOfAdapters];
                                             for (var i = 0; i < NumberOfAdapters; ++i)
                                                 activityTotalArray[i] = 0;
-                                            for (var j = 0; j < 10; ++j) {
+                                            for (var j = 0; j < 200; ++j) {
                                                 for (var i = 0; i < NumberOfAdapters; ++i) {
                                                     if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
                                                         ADLPMActivity OSADLPMActivityData;
@@ -278,7 +278,8 @@ namespace GatelessGateSharp
                                                     while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
                                                         ++i;
                                                 }
-                                                System.Threading.Thread.Sleep(100);
+                                                System.Windows.Forms.Application.DoEvents();
+                                                System.Threading.Thread.Sleep(10);
                                             }
                                             int candidate = -1;
                                             int candidateActivity = 0;
@@ -923,7 +924,7 @@ namespace GatelessGateSharp
             if (ADLAdapterIndex < 0)
                 return;
 
-            int defaultPowerControl;
+            int defaultPowerControl = 0;
             ADL.ADL_Overdrive5_PowerControl_Get(ADLAdapterIndex, ref mPowerControlBackup, ref defaultPowerControl);
 
             // OverDrive 5

@@ -69,8 +69,8 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.1.21";
-        public static string appName = shortAppName + " " + appVersion + " beta";
+        public static string appVersion = "1.2.0";
+        public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
@@ -107,6 +107,9 @@ namespace GatelessGateSharp
         private NumericUpDown[] numericUpDownDeviceLbryThreadsArray;
         private NumericUpDown[] numericUpDownDeviceLbryIntensityArray;
         private NumericUpDown[] numericUpDownDeviceLbryLocalWorkSizeArray;
+        private NumericUpDown[] numericUpDownDeviceLyra2REv2ThreadsArray;
+        private NumericUpDown[] numericUpDownDeviceLyra2REv2IntensityArray;
+        private NumericUpDown[] numericUpDownDeviceLyra2REv2LocalWorkSizeArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightThreadsArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightRawIntensityArray;
         private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
@@ -542,6 +545,13 @@ namespace GatelessGateSharp
                                     else if (name == "lbry_local_work_size")
                                         numericUpDownDeviceLbryLocalWorkSizeArray[deviceID].Value =
                                             decimal.Parse(value);
+                                    else if (name == "lyra2rev2_threads")
+                                        numericUpDownDeviceLyra2REv2ThreadsArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "lyra2rev2_intensity")
+                                        numericUpDownDeviceLyra2REv2IntensityArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "lyra2rev2_local_work_size")
+                                        numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceID].Value =
+                                            decimal.Parse(value);
                                     else if (name == "pascal_threads")
                                         numericUpDownDevicePascalThreadsArray[deviceID].Value = decimal.Parse(value);
                                     else if (name == "pascal_intensity")
@@ -946,6 +956,16 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@parameter_name", "lbry_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
+
+                            command.Parameters.AddWithValue("@parameter_name", "lyra2rev2_threads");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLyra2REv2ThreadsArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                            command.Parameters.AddWithValue("@parameter_name", "lyra2rev2_intensity");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLyra2REv2IntensityArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
+                            command.Parameters.AddWithValue("@parameter_name", "lyra2rev2_local_work_size");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLyra2REv2LocalWorkSizeArray[i].Value.ToString());
+                            command.ExecuteNonQuery();
                         
                             command.Parameters.AddWithValue("@parameter_name", "pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalThreadsArray[i].Value.ToString());
@@ -1153,6 +1173,9 @@ namespace GatelessGateSharp
             numericUpDownDeviceLbryThreadsArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceLbryIntensityArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceLbryLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceLyra2REv2ThreadsArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceLyra2REv2IntensityArray = new NumericUpDown[mDevices.Length];
+            numericUpDownDeviceLyra2REv2LocalWorkSizeArray = new NumericUpDown[mDevices.Length];
             
             checkBoxDeviceFanControlEnabledArray = new CheckBox[mDevices.Length];
             numericUpDownDeviceFanControlTargetTemperatureArray = new NumericUpDown[mDevices.Length];
@@ -1227,6 +1250,12 @@ namespace GatelessGateSharp
                             numericUpDownDeviceLbryIntensityArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "lbry_local_work_size") {
                             numericUpDownDeviceLbryLocalWorkSizeArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "lyra2rev2_threads") {
+                            numericUpDownDeviceLyra2REv2ThreadsArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "lyra2rev2_intensity") {
+                            numericUpDownDeviceLyra2REv2IntensityArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "lyra2rev2_local_work_size") {
+                            numericUpDownDeviceLyra2REv2LocalWorkSizeArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "overclocking") {
                             foreach (var controlOC in ((GroupBox)control).Controls) {
                                 var tagOC = (string)(controlOC.GetType().GetProperty("Tag").GetValue(controlOC));
@@ -1359,13 +1388,19 @@ namespace GatelessGateSharp
             numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
 
+            // Lyra2REv2
+            numericUpDownDeviceLyra2REv2ThreadsArray[device.DeviceIndex].Value = (decimal)2;
+            numericUpDownDeviceLyra2REv2IntensityArray[device.DeviceIndex].Value = (decimal)4;
+            numericUpDownDeviceLyra2REv2LocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceLyra2REv2LocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
+
             // Pasacal
             numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = (decimal)2;
             numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = (decimal)32;
             numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
 
-            // Pasacal
+            // NeoScrypt
             numericUpDownDeviceNeoScryptThreadsArray[device.DeviceIndex].Value = (decimal)1;
             numericUpDownDeviceNeoScryptIntensityArray[device.DeviceIndex].Value = (decimal)1;
             numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
@@ -1474,6 +1509,11 @@ namespace GatelessGateSharp
                 numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightThreadsArray[sourceDeviceIndex].Value;
                 numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightLocalWorkSizeArray[sourceDeviceIndex].Value;
                 numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightRawIntensityArray[sourceDeviceIndex].Value;
+
+                // Lyra2REv2
+                numericUpDownDeviceLyra2REv2ThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceLyra2REv2ThreadsArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceLyra2REv2IntensityArray[device.DeviceIndex].Value = numericUpDownDeviceLyra2REv2IntensityArray[sourceDeviceIndex].Value;
+                numericUpDownDeviceLyra2REv2LocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceLyra2REv2LocalWorkSizeArray[sourceDeviceIndex].Value;
 
                 foreach (var algorithm in sAlgorithmList) {
                     Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
@@ -2773,13 +2813,13 @@ namespace GatelessGateSharp
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    for (i = 0; i < 2; ++i) // Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i)
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    for (i = 0; i < 2; ++i) { // Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i) {
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i) {
                         OpenCLLyra2REv2Miner miner = null;
                         foreach (var inactiveMiner in mInactiveMiners) {
                             if (inactiveMiner.GetType() == typeof(OpenCLLyra2REv2Miner) && deviceIndex == inactiveMiner.DeviceIndex) {
@@ -2794,8 +2834,8 @@ namespace GatelessGateSharp
                         }
                         mActiveMiners.Add(miner);
                         miner.Start(stratum,
-                            4, //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
-                            256  //Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -4101,6 +4141,51 @@ namespace GatelessGateSharp
                 ResetDeviceOverclockingSettings(device);
                 device.ResetOverclockingSettings();
             }
+        }
+
+        private void DownloadLatestVersion(string extension = ".msi") {
+            try {
+                string url = "https://github.com/zawawawa/GatelessGateSharp/releases.atom";
+                System.ServiceModel.Syndication.Atom10FeedFormatter formatter = new System.ServiceModel.Syndication.Atom10FeedFormatter();
+                using (System.Xml.XmlReader reader = System.Xml.XmlReader.Create(url)) {
+                    formatter.ReadFrom(reader);
+                }
+                String latestReleaseUrl = "";
+                String latestReleaseName = "";
+                foreach (System.ServiceModel.Syndication.SyndicationItem item in formatter.Feed.Items) {
+                    latestReleaseUrl = @"https://github.com" + item.Links[0].Uri.ToString();
+                    latestReleaseName = item.Title.Text;
+                    break;
+                }
+                if (latestReleaseName == appName) {
+                    if (MessageBox.Show("You are running the latest version of Gateless Gate Sharp.\nWould you still like to download it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
+                        return;
+                } else if (MessageBox.Show("The latest version is " + latestReleaseName + ".\nWould you like to download it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes) {
+                    return;
+                }
+
+                HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
+                document.LoadHtml((new CustomWebClient()).DownloadString(latestReleaseUrl));
+                document.DocumentNode.Descendants("a")
+                    .Where(e => {
+                        string src = e.GetAttributeValue("href", null) ?? "";
+                        return !string.IsNullOrEmpty(src);
+                    })
+                    .ToList()
+                    .ForEach(x => {
+                        var href = x.Attributes["href"].Value;
+                        if ((new System.Text.RegularExpressions.Regex(@"^/zawawawa/GatelessGateSharp/releases/download/.*\" + extension + "$")).IsMatch(href))
+                            System.Diagnostics.Process.Start("https://github.com" + href);
+                    });
+            } catch (Exception) {} // TODO
+        }
+
+        private void button6_Click(object sender, EventArgs e) {
+            DownloadLatestVersion();
+        }
+
+        private void button7_Click(object sender, EventArgs e) {
+            System.Diagnostics.Process.Start("https://download.teamviewer.com/download/TeamViewer_Setup.exe");
         }
     }
 }

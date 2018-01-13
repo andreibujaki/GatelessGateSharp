@@ -2475,7 +2475,7 @@
             this.numericUpDown35.Name = "numericUpDown35";
             this.numericUpDown35.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown35.TabIndex = 132;
-            this.numericUpDown35.Tag = "neoscrypt_local_work_size";
+            this.numericUpDown35.Tag = "lyra2rev2_local_work_size";
             this.numericUpDown35.Value = new decimal(new int[] {
             256,
             0,
@@ -2516,7 +2516,7 @@
             this.numericUpDown36.Name = "numericUpDown36";
             this.numericUpDown36.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown36.TabIndex = 128;
-            this.numericUpDown36.Tag = "neoscrypt_intensity";
+            this.numericUpDown36.Tag = "lyra2rev2_intensity";
             this.numericUpDown36.Value = new decimal(new int[] {
             256,
             0,
@@ -2539,7 +2539,7 @@
             this.numericUpDown37.Name = "numericUpDown37";
             this.numericUpDown37.Size = new System.Drawing.Size(57, 20);
             this.numericUpDown37.TabIndex = 130;
-            this.numericUpDown37.Tag = "neoscrypt_threads";
+            this.numericUpDown37.Tag = "lyra2rev2_threads";
             this.numericUpDown37.Value = new decimal(new int[] {
             1,
             0,
