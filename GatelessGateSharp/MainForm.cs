@@ -179,7 +179,7 @@ namespace GatelessGateSharp
                 return;
 
             try {
-                using (var file = new System.IO.StreamWriter(logFileName, true)) {
+                using (var file = new System.IO.StreamWriter(LogFilePath, true)) {
                     file.Write(loggerBuffer);
                 }
 
@@ -275,8 +275,8 @@ namespace GatelessGateSharp
         }
 
         private void CreateNewDatabase() {
-            SQLiteConnection.CreateFile(databaseFileName);
-            using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;")) {
+            SQLiteConnection.CreateFile(DatabaseFilePath);
+            using (var conn = new SQLiteConnection("Data Source=" + DatabaseFilePath + ";Version=3;")) {
                 conn.Open();
                 var sql = "create table wallet_addresses (coin varchar(1024), address varchar(1024));";
                 using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
@@ -292,12 +292,32 @@ namespace GatelessGateSharp
             }
         }
 
+        static string AppDataPathBase {
+            get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\GatelessGateSharp"; }
+        }
+
+        static string DatabaseFilePath {
+            get { return AppDataPathBase + "\\" + databaseFileName; }
+        }
+
+        static string LogFilePath {
+            get { return AppDataPathBase + "\\" + logFileName; }
+        }
+
+        static string OldDatabaseFilePath {
+            get { return databaseFileName; }
+        }
+
+        static string OldLogFilePath {
+            get { return logFileName; }
+        }
+
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void LoadSettingsFromDatabase() {
             int databaseVersion = 0;
             try {
-                using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;")) {
+                using (var conn = new SQLiteConnection("Data Source=" + (System.IO.File.Exists(OldDatabaseFilePath) ? OldDatabaseFilePath : DatabaseFilePath) + ";Version=3;")) {
                     conn.Open();
                     var sql = "select * from wallet_addresses";
                     using (var command = new SQLiteCommand(sql, conn)) {
@@ -651,11 +671,11 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void SaveSettingsToDatabase() {
             // Delete the old database in case it is corrupt.
-            try { System.IO.File.Delete(databaseFileName); } catch (Exception) {  }
+            try { System.IO.File.Delete(DatabaseFilePath); } catch (Exception) { }
             try { CreateNewDatabase(); } catch (Exception) { }
 
             try {
-                using (var conn = new SQLiteConnection("Data Source=" + databaseFileName + ";Version=3;")) {
+                using (var conn = new SQLiteConnection("Data Source=" + DatabaseFilePath + ";Version=3;")) {
                     conn.Open();
                     var sql = "delete from wallet_addresses";
                     using (var command = new SQLiteCommand(sql, conn)) {
@@ -1027,6 +1047,8 @@ namespace GatelessGateSharp
                         }
                     }
                 }
+                if (System.IO.File.Exists(OldDatabaseFilePath))
+                    System.IO.File.Delete(OldDatabaseFilePath);
             } catch (Exception ex) {
                 Logger("Exception in UpdateDatabase(): " + ex.Message + ex.StackTrace);
             }
@@ -1059,7 +1081,7 @@ namespace GatelessGateSharp
             }
 
             try {
-                if (!System.IO.File.Exists(databaseFileName))
+                if (!System.IO.File.Exists(DatabaseFilePath))
                     CreateNewDatabase();
             } catch (Exception ex) {
                 Logger("Exception in CreateNewDatabase(): " + ex.Message + ex.StackTrace);
@@ -1105,6 +1127,9 @@ namespace GatelessGateSharp
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "ForceQueue", 1); } catch (Exception) { }
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 1); } catch (Exception) { }
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1); } catch (Exception) { }
+
+            if (System.IO.File.Exists(OldLogFilePath))
+                System.IO.File.Delete(OldLogFilePath);
 
             appState = ApplicationGlobalState.Idle;
             UpdateControls();
@@ -2870,9 +2895,25 @@ namespace GatelessGateSharp
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 LaunchOpenCLEthashMinersWithStratum(stratum);
                 mPrimaryStratum = stratum;
-            } else if (algo == "CryptoNight") {
+            } else if (algo == "Ethash (NiceHash)" && algo2 == "Lbry") {
+                var stratum = new NiceHashEthashStratum(host, port, login, password, host);
+                var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
+                LaunchOpenCLDualEthashLbryMinersWithStratum(stratum, stratum2);
+                mPrimaryStratum = stratum;
+                mSecondaryStratum = stratum2;
+            } else if (algo == "Ethash (NiceHash)" && algo2 == "Pascal") {
+                var stratum = new NiceHashEthashStratum(host, port, login, password, host);
+                var stratum2 = new PascalStratum(host2, port2, login2, password2, host2);
+                LaunchOpenCLDualEthashPascalMinersWithStratum(stratum, stratum2);
+                mPrimaryStratum = stratum;
+                mSecondaryStratum = stratum2;
+            } else if (algo == "Ethash (NiceHash)") {
+                var stratum = new NiceHashEthashStratum(host, port, login, password, host);
+                LaunchOpenCLEthashMinersWithStratum(stratum);
+                mPrimaryStratum = stratum;
+            } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)") {
                 var stratum = new CryptoNightStratum(host, port, login, password, host);
-                LaunchOpenCLCryptoNightMinersWithStratum(stratum, false);
+                LaunchOpenCLCryptoNightMinersWithStratum(stratum, (algo == "CryptoNight (NiceHash)"));
                 mPrimaryStratum = stratum;
             } else if (algo == "Lbry") {
                 var stratum = new LbryStratum(host, port, login, password, host);
@@ -3063,13 +3104,13 @@ namespace GatelessGateSharp
 
                 foreach (string pool in listBoxPoolPriorities.Items) {
                     try {
-                        if (algo == "Ethash" && algo2 == "Pascal") {
+                        if ((algo == "Ethash" || algo == "Ethash (NiceHash)") && algo2 == "Pascal") {
                             Logger("Launching Dual Ethash/Pascal for DEVFEE...");
                             LaunchOpenCLDualEthashPascalMiners(pool);
-                        } else if (algo == "Ethash") {
+                        } else if (algo == "Ethash" || algo == "Ethash (NiceHash)") {
                             Logger("Launching Ethash miners for DEVFEE...");
                             LaunchOpenCLEthashMiners(pool);
-                        } else if (algo == "CryptoNight") {
+                        } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)") {
                             Logger("Launching CryptoNight miners for DEVFEE...");
                             LaunchOpenCLCryptoNightMiners(pool);
                         } else if (algo == "Lbry") {
@@ -3870,7 +3911,7 @@ namespace GatelessGateSharp
         }
 
         private void buttonOpenLog_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start(logFileName);
+            System.Diagnostics.Process.Start(LogFilePath);
         }
 
         private void timerAutoStart_Tick(object sender, EventArgs e) {
