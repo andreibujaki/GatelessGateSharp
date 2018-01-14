@@ -29,18 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
@@ -317,8 +317,8 @@
             this.dataGridViewDevices.AllowUserToDeleteRows = false;
             this.dataGridViewDevices.AllowUserToResizeColumns = false;
             this.dataGridViewDevices.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
-            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle25.BackColor = System.Drawing.Color.LightGray;
+            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle25;
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -326,14 +326,14 @@
             this.dataGridViewDevices.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDevices.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridViewDevices.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle26.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle26.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle26;
             this.dataGridViewDevices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDevices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.enabled,
@@ -360,9 +360,9 @@
             // 
             // enabled
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle27.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle27;
             this.enabled.FalseValue = "";
             this.enabled.HeaderText = "";
             this.enabled.Name = "enabled";
@@ -399,8 +399,8 @@
             // 
             // speed
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle28;
             this.speed.FillWeight = 110F;
             this.speed.HeaderText = "Speed(s)";
             this.speed.Name = "speed";
@@ -411,8 +411,8 @@
             // 
             // shares
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle29;
             this.shares.HeaderText = "Shares";
             this.shares.Name = "shares";
             this.shares.ReadOnly = true;
@@ -424,8 +424,8 @@
             // 
             this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle30;
             this.activity.HeaderText = "Act.";
             this.activity.Name = "activity";
             this.activity.ReadOnly = true;
@@ -435,8 +435,8 @@
             // 
             // temperature
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle31;
             this.temperature.HeaderText = "Temp.";
             this.temperature.Name = "temperature";
             this.temperature.ReadOnly = true;
@@ -446,8 +446,8 @@
             // 
             // fan
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle32;
             this.fan.HeaderText = "Fan";
             this.fan.Name = "fan";
             this.fan.ReadOnly = true;
@@ -457,8 +457,8 @@
             // 
             // power_limit
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle33;
             this.power_limit.HeaderText = "Power";
             this.power_limit.Name = "power_limit";
             this.power_limit.ReadOnly = true;
@@ -468,8 +468,8 @@
             // 
             // core_clock
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle34;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
             this.core_clock.ReadOnly = true;
@@ -479,8 +479,8 @@
             // 
             // core_voltage
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle35;
             this.core_voltage.HeaderText = "";
             this.core_voltage.Name = "core_voltage";
             this.core_voltage.ReadOnly = true;
@@ -490,8 +490,8 @@
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle36;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
             this.memory_clock.ReadOnly = true;
@@ -1088,7 +1088,7 @@
             this.groupBoxCustmPool1.Controls.Add(this.label154);
             this.groupBoxCustmPool1.Location = new System.Drawing.Point(3, 81);
             this.groupBoxCustmPool1.Name = "groupBoxCustmPool1";
-            this.groupBoxCustmPool1.Size = new System.Drawing.Size(714, 72);
+            this.groupBoxCustmPool1.Size = new System.Drawing.Size(812, 72);
             this.groupBoxCustmPool1.TabIndex = 45;
             this.groupBoxCustmPool1.TabStop = false;
             this.groupBoxCustmPool1.Text = "Custom Pool 1";
@@ -1099,17 +1099,17 @@
             this.comboBoxCustomPool1SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool1SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
-            "Lbry"});
+            "Pascal"});
             this.comboBoxCustomPool1SecondaryAlgorithm.Location = new System.Drawing.Point(71, 43);
             this.comboBoxCustomPool1SecondaryAlgorithm.Name = "comboBoxCustomPool1SecondaryAlgorithm";
-            this.comboBoxCustomPool1SecondaryAlgorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool1SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool1SecondaryAlgorithm.TabIndex = 54;
             this.comboBoxCustomPool1SecondaryAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool1SecondaryAlgorithm_SelectedIndexChanged);
             // 
             // label165
             // 
             this.label165.AutoSize = true;
-            this.label165.Location = new System.Drawing.Point(345, 47);
+            this.label165.Location = new System.Drawing.Point(375, 46);
             this.label165.Name = "label165";
             this.label165.Size = new System.Drawing.Size(29, 13);
             this.label165.TabIndex = 53;
@@ -1117,7 +1117,7 @@
             // 
             // numericUpDownCustomPool1SecondaryPort
             // 
-            this.numericUpDownCustomPool1SecondaryPort.Location = new System.Drawing.Point(380, 43);
+            this.numericUpDownCustomPool1SecondaryPort.Location = new System.Drawing.Point(410, 42);
             this.numericUpDownCustomPool1SecondaryPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1129,22 +1129,22 @@
             // 
             // textBoxCustomPool1SecondaryHost
             // 
-            this.textBoxCustomPool1SecondaryHost.Location = new System.Drawing.Point(224, 44);
+            this.textBoxCustomPool1SecondaryHost.Location = new System.Drawing.Point(254, 43);
             this.textBoxCustomPool1SecondaryHost.Name = "textBoxCustomPool1SecondaryHost";
             this.textBoxCustomPool1SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool1SecondaryHost.TabIndex = 48;
             // 
             // textBoxCustomPool1SecondaryPassword
             // 
-            this.textBoxCustomPool1SecondaryPassword.Location = new System.Drawing.Point(662, 43);
+            this.textBoxCustomPool1SecondaryPassword.Location = new System.Drawing.Point(692, 42);
             this.textBoxCustomPool1SecondaryPassword.Name = "textBoxCustomPool1SecondaryPassword";
-            this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(43, 20);
+            this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1SecondaryPassword.TabIndex = 52;
             // 
             // label166
             // 
             this.label166.AutoSize = true;
-            this.label166.Location = new System.Drawing.Point(186, 47);
+            this.label166.Location = new System.Drawing.Point(216, 46);
             this.label166.Name = "label166";
             this.label166.Size = new System.Drawing.Size(32, 13);
             this.label166.TabIndex = 47;
@@ -1153,7 +1153,7 @@
             // label167
             // 
             this.label167.AutoSize = true;
-            this.label167.Location = new System.Drawing.Point(600, 46);
+            this.label167.Location = new System.Drawing.Point(630, 45);
             this.label167.Name = "label167";
             this.label167.Size = new System.Drawing.Size(56, 13);
             this.label167.TabIndex = 51;
@@ -1161,7 +1161,7 @@
             // 
             // textBoxCustomPool1SecondaryLogin
             // 
-            this.textBoxCustomPool1SecondaryLogin.Location = new System.Drawing.Point(480, 42);
+            this.textBoxCustomPool1SecondaryLogin.Location = new System.Drawing.Point(510, 41);
             this.textBoxCustomPool1SecondaryLogin.Name = "textBoxCustomPool1SecondaryLogin";
             this.textBoxCustomPool1SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1SecondaryLogin.TabIndex = 50;
@@ -1169,7 +1169,7 @@
             // label168
             // 
             this.label168.AutoSize = true;
-            this.label168.Location = new System.Drawing.Point(438, 47);
+            this.label168.Location = new System.Drawing.Point(468, 46);
             this.label168.Name = "label168";
             this.label168.Size = new System.Drawing.Size(36, 13);
             this.label168.TabIndex = 49;
@@ -1190,7 +1190,7 @@
             "Lyra2REv2"});
             this.comboBoxCustomPool1Algorithm.Location = new System.Drawing.Point(71, 16);
             this.comboBoxCustomPool1Algorithm.Name = "comboBoxCustomPool1Algorithm";
-            this.comboBoxCustomPool1Algorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool1Algorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool1Algorithm.TabIndex = 45;
             this.comboBoxCustomPool1Algorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool1Algorithm_SelectedIndexChanged);
             // 
@@ -1208,7 +1208,7 @@
             // label151
             // 
             this.label151.AutoSize = true;
-            this.label151.Location = new System.Drawing.Point(345, 20);
+            this.label151.Location = new System.Drawing.Point(375, 19);
             this.label151.Name = "label151";
             this.label151.Size = new System.Drawing.Size(29, 13);
             this.label151.TabIndex = 42;
@@ -1216,7 +1216,7 @@
             // 
             // numericUpDownCustomPool1Port
             // 
-            this.numericUpDownCustomPool1Port.Location = new System.Drawing.Point(380, 16);
+            this.numericUpDownCustomPool1Port.Location = new System.Drawing.Point(410, 15);
             this.numericUpDownCustomPool1Port.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1228,22 +1228,22 @@
             // 
             // textBoxCustomPool1Host
             // 
-            this.textBoxCustomPool1Host.Location = new System.Drawing.Point(224, 17);
+            this.textBoxCustomPool1Host.Location = new System.Drawing.Point(254, 16);
             this.textBoxCustomPool1Host.Name = "textBoxCustomPool1Host";
             this.textBoxCustomPool1Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool1Host.TabIndex = 35;
             // 
             // textBoxCustomPool1Password
             // 
-            this.textBoxCustomPool1Password.Location = new System.Drawing.Point(662, 16);
+            this.textBoxCustomPool1Password.Location = new System.Drawing.Point(692, 15);
             this.textBoxCustomPool1Password.Name = "textBoxCustomPool1Password";
-            this.textBoxCustomPool1Password.Size = new System.Drawing.Size(43, 20);
+            this.textBoxCustomPool1Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1Password.TabIndex = 41;
             // 
             // label152
             // 
             this.label152.AutoSize = true;
-            this.label152.Location = new System.Drawing.Point(186, 20);
+            this.label152.Location = new System.Drawing.Point(216, 19);
             this.label152.Name = "label152";
             this.label152.Size = new System.Drawing.Size(32, 13);
             this.label152.TabIndex = 34;
@@ -1252,7 +1252,7 @@
             // label153
             // 
             this.label153.AutoSize = true;
-            this.label153.Location = new System.Drawing.Point(600, 18);
+            this.label153.Location = new System.Drawing.Point(630, 17);
             this.label153.Name = "label153";
             this.label153.Size = new System.Drawing.Size(56, 13);
             this.label153.TabIndex = 40;
@@ -1260,7 +1260,7 @@
             // 
             // textBoxCustomPool1Login
             // 
-            this.textBoxCustomPool1Login.Location = new System.Drawing.Point(480, 15);
+            this.textBoxCustomPool1Login.Location = new System.Drawing.Point(510, 14);
             this.textBoxCustomPool1Login.Name = "textBoxCustomPool1Login";
             this.textBoxCustomPool1Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1Login.TabIndex = 39;
@@ -1268,7 +1268,7 @@
             // label154
             // 
             this.label154.AutoSize = true;
-            this.label154.Location = new System.Drawing.Point(438, 20);
+            this.label154.Location = new System.Drawing.Point(468, 19);
             this.label154.Name = "label154";
             this.label154.Size = new System.Drawing.Size(36, 13);
             this.label154.TabIndex = 38;
@@ -1297,7 +1297,7 @@
             this.groupBoxCustmPool2.Controls.Add(this.label159);
             this.groupBoxCustmPool2.Location = new System.Drawing.Point(3, 159);
             this.groupBoxCustmPool2.Name = "groupBoxCustmPool2";
-            this.groupBoxCustmPool2.Size = new System.Drawing.Size(714, 72);
+            this.groupBoxCustmPool2.Size = new System.Drawing.Size(812, 72);
             this.groupBoxCustmPool2.TabIndex = 45;
             this.groupBoxCustmPool2.TabStop = false;
             this.groupBoxCustmPool2.Text = "Custom Pool 2";
@@ -1308,17 +1308,17 @@
             this.comboBoxCustomPool2SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool2SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
-            "Lbry"});
+            "Pascal"});
             this.comboBoxCustomPool2SecondaryAlgorithm.Location = new System.Drawing.Point(71, 43);
             this.comboBoxCustomPool2SecondaryAlgorithm.Name = "comboBoxCustomPool2SecondaryAlgorithm";
-            this.comboBoxCustomPool2SecondaryAlgorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool2SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool2SecondaryAlgorithm.TabIndex = 54;
             this.comboBoxCustomPool2SecondaryAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool2SecondaryAlgorithm_SelectedIndexChanged);
             // 
             // label169
             // 
             this.label169.AutoSize = true;
-            this.label169.Location = new System.Drawing.Point(345, 46);
+            this.label169.Location = new System.Drawing.Point(375, 47);
             this.label169.Name = "label169";
             this.label169.Size = new System.Drawing.Size(29, 13);
             this.label169.TabIndex = 53;
@@ -1326,7 +1326,7 @@
             // 
             // numericUpDownCustomPool2SecondaryPort
             // 
-            this.numericUpDownCustomPool2SecondaryPort.Location = new System.Drawing.Point(380, 42);
+            this.numericUpDownCustomPool2SecondaryPort.Location = new System.Drawing.Point(410, 43);
             this.numericUpDownCustomPool2SecondaryPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1338,22 +1338,22 @@
             // 
             // textBoxCustomPool2SecondaryHost
             // 
-            this.textBoxCustomPool2SecondaryHost.Location = new System.Drawing.Point(224, 42);
+            this.textBoxCustomPool2SecondaryHost.Location = new System.Drawing.Point(254, 43);
             this.textBoxCustomPool2SecondaryHost.Name = "textBoxCustomPool2SecondaryHost";
             this.textBoxCustomPool2SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool2SecondaryHost.TabIndex = 48;
             // 
             // textBoxCustomPool2SecondaryPassword
             // 
-            this.textBoxCustomPool2SecondaryPassword.Location = new System.Drawing.Point(662, 42);
+            this.textBoxCustomPool2SecondaryPassword.Location = new System.Drawing.Point(692, 43);
             this.textBoxCustomPool2SecondaryPassword.Name = "textBoxCustomPool2SecondaryPassword";
-            this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(43, 20);
+            this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2SecondaryPassword.TabIndex = 52;
             // 
             // label170
             // 
             this.label170.AutoSize = true;
-            this.label170.Location = new System.Drawing.Point(186, 46);
+            this.label170.Location = new System.Drawing.Point(216, 47);
             this.label170.Name = "label170";
             this.label170.Size = new System.Drawing.Size(32, 13);
             this.label170.TabIndex = 47;
@@ -1362,7 +1362,7 @@
             // label171
             // 
             this.label171.AutoSize = true;
-            this.label171.Location = new System.Drawing.Point(600, 46);
+            this.label171.Location = new System.Drawing.Point(630, 47);
             this.label171.Name = "label171";
             this.label171.Size = new System.Drawing.Size(56, 13);
             this.label171.TabIndex = 51;
@@ -1370,7 +1370,7 @@
             // 
             // textBoxCustomPool2SecondaryLogin
             // 
-            this.textBoxCustomPool2SecondaryLogin.Location = new System.Drawing.Point(480, 42);
+            this.textBoxCustomPool2SecondaryLogin.Location = new System.Drawing.Point(510, 43);
             this.textBoxCustomPool2SecondaryLogin.Name = "textBoxCustomPool2SecondaryLogin";
             this.textBoxCustomPool2SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2SecondaryLogin.TabIndex = 50;
@@ -1378,7 +1378,7 @@
             // label172
             // 
             this.label172.AutoSize = true;
-            this.label172.Location = new System.Drawing.Point(438, 46);
+            this.label172.Location = new System.Drawing.Point(468, 47);
             this.label172.Name = "label172";
             this.label172.Size = new System.Drawing.Size(36, 13);
             this.label172.TabIndex = 49;
@@ -1399,7 +1399,7 @@
             "Lyra2REv2"});
             this.comboBoxCustomPool2Algorithm.Location = new System.Drawing.Point(71, 16);
             this.comboBoxCustomPool2Algorithm.Name = "comboBoxCustomPool2Algorithm";
-            this.comboBoxCustomPool2Algorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool2Algorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool2Algorithm.TabIndex = 45;
             this.comboBoxCustomPool2Algorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool2Algorithm_SelectedIndexChanged);
             // 
@@ -1417,7 +1417,7 @@
             // label156
             // 
             this.label156.AutoSize = true;
-            this.label156.Location = new System.Drawing.Point(345, 20);
+            this.label156.Location = new System.Drawing.Point(375, 21);
             this.label156.Name = "label156";
             this.label156.Size = new System.Drawing.Size(29, 13);
             this.label156.TabIndex = 42;
@@ -1425,7 +1425,7 @@
             // 
             // numericUpDownCustomPool2Port
             // 
-            this.numericUpDownCustomPool2Port.Location = new System.Drawing.Point(380, 15);
+            this.numericUpDownCustomPool2Port.Location = new System.Drawing.Point(410, 16);
             this.numericUpDownCustomPool2Port.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1437,22 +1437,22 @@
             // 
             // textBoxCustomPool2Host
             // 
-            this.textBoxCustomPool2Host.Location = new System.Drawing.Point(224, 15);
+            this.textBoxCustomPool2Host.Location = new System.Drawing.Point(254, 16);
             this.textBoxCustomPool2Host.Name = "textBoxCustomPool2Host";
             this.textBoxCustomPool2Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool2Host.TabIndex = 35;
             // 
             // textBoxCustomPool2Password
             // 
-            this.textBoxCustomPool2Password.Location = new System.Drawing.Point(662, 15);
+            this.textBoxCustomPool2Password.Location = new System.Drawing.Point(692, 16);
             this.textBoxCustomPool2Password.Name = "textBoxCustomPool2Password";
-            this.textBoxCustomPool2Password.Size = new System.Drawing.Size(43, 20);
+            this.textBoxCustomPool2Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2Password.TabIndex = 41;
             // 
             // label157
             // 
             this.label157.AutoSize = true;
-            this.label157.Location = new System.Drawing.Point(186, 20);
+            this.label157.Location = new System.Drawing.Point(216, 21);
             this.label157.Name = "label157";
             this.label157.Size = new System.Drawing.Size(32, 13);
             this.label157.TabIndex = 34;
@@ -1461,7 +1461,7 @@
             // label158
             // 
             this.label158.AutoSize = true;
-            this.label158.Location = new System.Drawing.Point(600, 18);
+            this.label158.Location = new System.Drawing.Point(630, 19);
             this.label158.Name = "label158";
             this.label158.Size = new System.Drawing.Size(56, 13);
             this.label158.TabIndex = 40;
@@ -1469,7 +1469,7 @@
             // 
             // textBoxCustomPool2Login
             // 
-            this.textBoxCustomPool2Login.Location = new System.Drawing.Point(480, 15);
+            this.textBoxCustomPool2Login.Location = new System.Drawing.Point(510, 16);
             this.textBoxCustomPool2Login.Name = "textBoxCustomPool2Login";
             this.textBoxCustomPool2Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2Login.TabIndex = 39;
@@ -1477,7 +1477,7 @@
             // label159
             // 
             this.label159.AutoSize = true;
-            this.label159.Location = new System.Drawing.Point(438, 18);
+            this.label159.Location = new System.Drawing.Point(468, 19);
             this.label159.Name = "label159";
             this.label159.Size = new System.Drawing.Size(36, 13);
             this.label159.TabIndex = 38;
@@ -1506,7 +1506,7 @@
             this.groupBoxCustmPool3.Controls.Add(this.label164);
             this.groupBoxCustmPool3.Location = new System.Drawing.Point(3, 237);
             this.groupBoxCustmPool3.Name = "groupBoxCustmPool3";
-            this.groupBoxCustmPool3.Size = new System.Drawing.Size(714, 72);
+            this.groupBoxCustmPool3.Size = new System.Drawing.Size(812, 72);
             this.groupBoxCustmPool3.TabIndex = 45;
             this.groupBoxCustmPool3.TabStop = false;
             this.groupBoxCustmPool3.Text = "Custom Pool 3";
@@ -1517,17 +1517,17 @@
             this.comboBoxCustomPool3SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool3SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
-            "Lbry"});
+            "Pascal"});
             this.comboBoxCustomPool3SecondaryAlgorithm.Location = new System.Drawing.Point(71, 46);
             this.comboBoxCustomPool3SecondaryAlgorithm.Name = "comboBoxCustomPool3SecondaryAlgorithm";
-            this.comboBoxCustomPool3SecondaryAlgorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool3SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool3SecondaryAlgorithm.TabIndex = 54;
             this.comboBoxCustomPool3SecondaryAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool3SecondaryAlgorithm_SelectedIndexChanged);
             // 
             // label173
             // 
             this.label173.AutoSize = true;
-            this.label173.Location = new System.Drawing.Point(345, 49);
+            this.label173.Location = new System.Drawing.Point(375, 48);
             this.label173.Name = "label173";
             this.label173.Size = new System.Drawing.Size(29, 13);
             this.label173.TabIndex = 53;
@@ -1535,7 +1535,7 @@
             // 
             // numericUpDownCustomPool3SecondaryPort
             // 
-            this.numericUpDownCustomPool3SecondaryPort.Location = new System.Drawing.Point(380, 46);
+            this.numericUpDownCustomPool3SecondaryPort.Location = new System.Drawing.Point(410, 45);
             this.numericUpDownCustomPool3SecondaryPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1547,22 +1547,22 @@
             // 
             // textBoxCustomPool3SecondaryHost
             // 
-            this.textBoxCustomPool3SecondaryHost.Location = new System.Drawing.Point(224, 46);
+            this.textBoxCustomPool3SecondaryHost.Location = new System.Drawing.Point(254, 45);
             this.textBoxCustomPool3SecondaryHost.Name = "textBoxCustomPool3SecondaryHost";
             this.textBoxCustomPool3SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool3SecondaryHost.TabIndex = 48;
             // 
             // textBoxCustomPool3SecondaryPassword
             // 
-            this.textBoxCustomPool3SecondaryPassword.Location = new System.Drawing.Point(662, 47);
+            this.textBoxCustomPool3SecondaryPassword.Location = new System.Drawing.Point(692, 46);
             this.textBoxCustomPool3SecondaryPassword.Name = "textBoxCustomPool3SecondaryPassword";
-            this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(43, 20);
+            this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3SecondaryPassword.TabIndex = 52;
             // 
             // label174
             // 
             this.label174.AutoSize = true;
-            this.label174.Location = new System.Drawing.Point(186, 49);
+            this.label174.Location = new System.Drawing.Point(216, 48);
             this.label174.Name = "label174";
             this.label174.Size = new System.Drawing.Size(32, 13);
             this.label174.TabIndex = 47;
@@ -1571,7 +1571,7 @@
             // label175
             // 
             this.label175.AutoSize = true;
-            this.label175.Location = new System.Drawing.Point(600, 50);
+            this.label175.Location = new System.Drawing.Point(630, 49);
             this.label175.Name = "label175";
             this.label175.Size = new System.Drawing.Size(56, 13);
             this.label175.TabIndex = 51;
@@ -1579,7 +1579,7 @@
             // 
             // textBoxCustomPool3SecondaryLogin
             // 
-            this.textBoxCustomPool3SecondaryLogin.Location = new System.Drawing.Point(480, 46);
+            this.textBoxCustomPool3SecondaryLogin.Location = new System.Drawing.Point(510, 45);
             this.textBoxCustomPool3SecondaryLogin.Name = "textBoxCustomPool3SecondaryLogin";
             this.textBoxCustomPool3SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3SecondaryLogin.TabIndex = 50;
@@ -1587,7 +1587,7 @@
             // label176
             // 
             this.label176.AutoSize = true;
-            this.label176.Location = new System.Drawing.Point(438, 49);
+            this.label176.Location = new System.Drawing.Point(468, 48);
             this.label176.Name = "label176";
             this.label176.Size = new System.Drawing.Size(36, 13);
             this.label176.TabIndex = 49;
@@ -1608,7 +1608,7 @@
             "Lyra2REv2"});
             this.comboBoxCustomPool3Algorithm.Location = new System.Drawing.Point(71, 15);
             this.comboBoxCustomPool3Algorithm.Name = "comboBoxCustomPool3Algorithm";
-            this.comboBoxCustomPool3Algorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool3Algorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool3Algorithm.TabIndex = 45;
             this.comboBoxCustomPool3Algorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool3Algorithm_SelectedIndexChanged);
             // 
@@ -1626,7 +1626,7 @@
             // label161
             // 
             this.label161.AutoSize = true;
-            this.label161.Location = new System.Drawing.Point(345, 18);
+            this.label161.Location = new System.Drawing.Point(375, 17);
             this.label161.Name = "label161";
             this.label161.Size = new System.Drawing.Size(29, 13);
             this.label161.TabIndex = 42;
@@ -1634,7 +1634,7 @@
             // 
             // numericUpDownCustomPool3Port
             // 
-            this.numericUpDownCustomPool3Port.Location = new System.Drawing.Point(380, 15);
+            this.numericUpDownCustomPool3Port.Location = new System.Drawing.Point(410, 14);
             this.numericUpDownCustomPool3Port.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1646,22 +1646,22 @@
             // 
             // textBoxCustomPool3Host
             // 
-            this.textBoxCustomPool3Host.Location = new System.Drawing.Point(224, 15);
+            this.textBoxCustomPool3Host.Location = new System.Drawing.Point(254, 14);
             this.textBoxCustomPool3Host.Name = "textBoxCustomPool3Host";
             this.textBoxCustomPool3Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool3Host.TabIndex = 35;
             // 
             // textBoxCustomPool3Password
             // 
-            this.textBoxCustomPool3Password.Location = new System.Drawing.Point(662, 16);
+            this.textBoxCustomPool3Password.Location = new System.Drawing.Point(692, 15);
             this.textBoxCustomPool3Password.Name = "textBoxCustomPool3Password";
-            this.textBoxCustomPool3Password.Size = new System.Drawing.Size(43, 20);
+            this.textBoxCustomPool3Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3Password.TabIndex = 41;
             // 
             // label162
             // 
             this.label162.AutoSize = true;
-            this.label162.Location = new System.Drawing.Point(186, 18);
+            this.label162.Location = new System.Drawing.Point(216, 17);
             this.label162.Name = "label162";
             this.label162.Size = new System.Drawing.Size(32, 13);
             this.label162.TabIndex = 34;
@@ -1670,7 +1670,7 @@
             // label163
             // 
             this.label163.AutoSize = true;
-            this.label163.Location = new System.Drawing.Point(600, 20);
+            this.label163.Location = new System.Drawing.Point(630, 19);
             this.label163.Name = "label163";
             this.label163.Size = new System.Drawing.Size(56, 13);
             this.label163.TabIndex = 40;
@@ -1678,7 +1678,7 @@
             // 
             // textBoxCustomPool3Login
             // 
-            this.textBoxCustomPool3Login.Location = new System.Drawing.Point(480, 15);
+            this.textBoxCustomPool3Login.Location = new System.Drawing.Point(510, 14);
             this.textBoxCustomPool3Login.Name = "textBoxCustomPool3Login";
             this.textBoxCustomPool3Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3Login.TabIndex = 39;
@@ -1686,7 +1686,7 @@
             // label164
             // 
             this.label164.AutoSize = true;
-            this.label164.Location = new System.Drawing.Point(438, 18);
+            this.label164.Location = new System.Drawing.Point(468, 17);
             this.label164.Name = "label164";
             this.label164.Size = new System.Drawing.Size(36, 13);
             this.label164.TabIndex = 38;
@@ -1715,7 +1715,7 @@
             this.groupBoxCustmPool0.Controls.Add(this.label148);
             this.groupBoxCustmPool0.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCustmPool0.Name = "groupBoxCustmPool0";
-            this.groupBoxCustmPool0.Size = new System.Drawing.Size(714, 72);
+            this.groupBoxCustmPool0.Size = new System.Drawing.Size(812, 72);
             this.groupBoxCustmPool0.TabIndex = 1;
             this.groupBoxCustmPool0.TabStop = false;
             this.groupBoxCustmPool0.Text = "Custom Pool 0";
@@ -1723,7 +1723,7 @@
             // label149
             // 
             this.label149.AutoSize = true;
-            this.label149.Location = new System.Drawing.Point(345, 46);
+            this.label149.Location = new System.Drawing.Point(375, 47);
             this.label149.Name = "label149";
             this.label149.Size = new System.Drawing.Size(29, 13);
             this.label149.TabIndex = 54;
@@ -1731,7 +1731,7 @@
             // 
             // numericUpDownCustomPool0SecondaryPort
             // 
-            this.numericUpDownCustomPool0SecondaryPort.Location = new System.Drawing.Point(380, 42);
+            this.numericUpDownCustomPool0SecondaryPort.Location = new System.Drawing.Point(410, 43);
             this.numericUpDownCustomPool0SecondaryPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1743,22 +1743,22 @@
             // 
             // textBoxCustomPool0SecondaryHost
             // 
-            this.textBoxCustomPool0SecondaryHost.Location = new System.Drawing.Point(224, 42);
+            this.textBoxCustomPool0SecondaryHost.Location = new System.Drawing.Point(254, 43);
             this.textBoxCustomPool0SecondaryHost.Name = "textBoxCustomPool0SecondaryHost";
             this.textBoxCustomPool0SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool0SecondaryHost.TabIndex = 49;
             // 
             // textBoxCustomPool0SecondaryPassword
             // 
-            this.textBoxCustomPool0SecondaryPassword.Location = new System.Drawing.Point(662, 42);
+            this.textBoxCustomPool0SecondaryPassword.Location = new System.Drawing.Point(692, 43);
             this.textBoxCustomPool0SecondaryPassword.Name = "textBoxCustomPool0SecondaryPassword";
-            this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(43, 20);
+            this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0SecondaryPassword.TabIndex = 53;
             // 
             // label150
             // 
             this.label150.AutoSize = true;
-            this.label150.Location = new System.Drawing.Point(186, 46);
+            this.label150.Location = new System.Drawing.Point(216, 47);
             this.label150.Name = "label150";
             this.label150.Size = new System.Drawing.Size(32, 13);
             this.label150.TabIndex = 48;
@@ -1767,7 +1767,7 @@
             // label155
             // 
             this.label155.AutoSize = true;
-            this.label155.Location = new System.Drawing.Point(600, 46);
+            this.label155.Location = new System.Drawing.Point(630, 47);
             this.label155.Name = "label155";
             this.label155.Size = new System.Drawing.Size(56, 13);
             this.label155.TabIndex = 52;
@@ -1775,7 +1775,7 @@
             // 
             // textBoxCustomPool0SecondaryLogin
             // 
-            this.textBoxCustomPool0SecondaryLogin.Location = new System.Drawing.Point(480, 41);
+            this.textBoxCustomPool0SecondaryLogin.Location = new System.Drawing.Point(510, 42);
             this.textBoxCustomPool0SecondaryLogin.Name = "textBoxCustomPool0SecondaryLogin";
             this.textBoxCustomPool0SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0SecondaryLogin.TabIndex = 51;
@@ -1783,7 +1783,7 @@
             // label160
             // 
             this.label160.AutoSize = true;
-            this.label160.Location = new System.Drawing.Point(438, 44);
+            this.label160.Location = new System.Drawing.Point(468, 45);
             this.label160.Name = "label160";
             this.label160.Size = new System.Drawing.Size(36, 13);
             this.label160.TabIndex = 50;
@@ -1795,11 +1795,10 @@
             this.comboBoxCustomPool0SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool0SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
-            "Pascal",
-            "Lbry"});
+            "Pascal"});
             this.comboBoxCustomPool0SecondaryAlgorithm.Location = new System.Drawing.Point(71, 43);
             this.comboBoxCustomPool0SecondaryAlgorithm.Name = "comboBoxCustomPool0SecondaryAlgorithm";
-            this.comboBoxCustomPool0SecondaryAlgorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool0SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool0SecondaryAlgorithm.TabIndex = 46;
             this.comboBoxCustomPool0SecondaryAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool0SecondaryAlgorithm_SelectedIndexChanged);
             // 
@@ -1829,14 +1828,14 @@
             "Lyra2REv2"});
             this.comboBoxCustomPool0Algorithm.Location = new System.Drawing.Point(71, 16);
             this.comboBoxCustomPool0Algorithm.Name = "comboBoxCustomPool0Algorithm";
-            this.comboBoxCustomPool0Algorithm.Size = new System.Drawing.Size(103, 21);
+            this.comboBoxCustomPool0Algorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool0Algorithm.TabIndex = 43;
             this.comboBoxCustomPool0Algorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool0Algorithm_SelectedIndexChanged);
             // 
             // label147
             // 
             this.label147.AutoSize = true;
-            this.label147.Location = new System.Drawing.Point(345, 20);
+            this.label147.Location = new System.Drawing.Point(375, 21);
             this.label147.Name = "label147";
             this.label147.Size = new System.Drawing.Size(29, 13);
             this.label147.TabIndex = 42;
@@ -1844,7 +1843,7 @@
             // 
             // numericUpDownCustomPool0Port
             // 
-            this.numericUpDownCustomPool0Port.Location = new System.Drawing.Point(380, 16);
+            this.numericUpDownCustomPool0Port.Location = new System.Drawing.Point(410, 17);
             this.numericUpDownCustomPool0Port.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1856,22 +1855,22 @@
             // 
             // textBoxCustomPool0Host
             // 
-            this.textBoxCustomPool0Host.Location = new System.Drawing.Point(224, 16);
+            this.textBoxCustomPool0Host.Location = new System.Drawing.Point(254, 17);
             this.textBoxCustomPool0Host.Name = "textBoxCustomPool0Host";
             this.textBoxCustomPool0Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool0Host.TabIndex = 35;
             // 
             // textBoxCustomPool0Password
             // 
-            this.textBoxCustomPool0Password.Location = new System.Drawing.Point(662, 16);
+            this.textBoxCustomPool0Password.Location = new System.Drawing.Point(692, 17);
             this.textBoxCustomPool0Password.Name = "textBoxCustomPool0Password";
-            this.textBoxCustomPool0Password.Size = new System.Drawing.Size(43, 20);
+            this.textBoxCustomPool0Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0Password.TabIndex = 41;
             // 
             // label145
             // 
             this.label145.AutoSize = true;
-            this.label145.Location = new System.Drawing.Point(186, 20);
+            this.label145.Location = new System.Drawing.Point(216, 21);
             this.label145.Name = "label145";
             this.label145.Size = new System.Drawing.Size(32, 13);
             this.label145.TabIndex = 34;
@@ -1880,7 +1879,7 @@
             // label146
             // 
             this.label146.AutoSize = true;
-            this.label146.Location = new System.Drawing.Point(600, 20);
+            this.label146.Location = new System.Drawing.Point(630, 21);
             this.label146.Name = "label146";
             this.label146.Size = new System.Drawing.Size(56, 13);
             this.label146.TabIndex = 40;
@@ -1888,7 +1887,7 @@
             // 
             // textBoxCustomPool0Login
             // 
-            this.textBoxCustomPool0Login.Location = new System.Drawing.Point(480, 15);
+            this.textBoxCustomPool0Login.Location = new System.Drawing.Point(510, 16);
             this.textBoxCustomPool0Login.Name = "textBoxCustomPool0Login";
             this.textBoxCustomPool0Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0Login.TabIndex = 39;
@@ -1896,7 +1895,7 @@
             // label148
             // 
             this.label148.AutoSize = true;
-            this.label148.Location = new System.Drawing.Point(438, 18);
+            this.label148.Location = new System.Drawing.Point(468, 19);
             this.label148.Name = "label148";
             this.label148.Size = new System.Drawing.Size(36, 13);
             this.label148.TabIndex = 38;

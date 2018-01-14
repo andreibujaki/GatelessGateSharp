@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.0";
+        public static string appVersion = "1.2.1";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -304,12 +304,20 @@ namespace GatelessGateSharp
             get { return AppDataPathBase + "\\" + logFileName; }
         }
 
+        static string AppStateFilePath {
+            get { return AppDataPathBase + "\\" + mAppStateFileName; }
+        }
+
         static string OldDatabaseFilePath {
             get { return databaseFileName; }
         }
 
         static string OldLogFilePath {
             get { return logFileName; }
+        }
+        
+        static string OldAppStateFilePath {
+            get { return mAppStateFileName; }
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -1128,8 +1136,13 @@ namespace GatelessGateSharp
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 1); } catch (Exception) { }
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1); } catch (Exception) { }
 
-            if (System.IO.File.Exists(OldLogFilePath))
-                System.IO.File.Delete(OldLogFilePath);
+            // Remove garbage left by old versions.
+            try {
+                if (System.IO.File.Exists(OldLogFilePath))
+                    System.IO.File.Delete(OldLogFilePath);
+                if (System.IO.File.Exists(OldAppStateFilePath))
+                    System.IO.File.Delete(OldAppStateFilePath);
+            } catch (Exception) { }
 
             appState = ApplicationGlobalState.Idle;
             UpdateControls();
@@ -1140,7 +1153,7 @@ namespace GatelessGateSharp
             Application.DoEvents();
             var autoStart = checkBoxAutoStart.Checked;
             try {
-                if (System.IO.File.ReadAllLines(mAppStateFileName)[0] == "Mining")
+                if (System.IO.File.ReadAllLines(AppStateFilePath)[0] == "Mining")
                     autoStart = true;
             } catch (Exception) { }
             if (autoStart
@@ -1151,7 +1164,7 @@ namespace GatelessGateSharp
                         "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
                 timerAutoStart.Enabled = true;
             } else {
-                try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 buttonStart.Enabled = true;
             }
         }
@@ -1779,6 +1792,7 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void UpdateStatsWithShortPolling() {
+            try { DeviceManagementLibrariesMutex.WaitOne(5000); } catch (Exception) { }
             try {
                 KillInterferingProcesses();
 
@@ -1833,7 +1847,6 @@ namespace GatelessGateSharp
                     }
                 }
 
-                try { DeviceManagementLibrariesMutex.WaitOne(5000); } catch (Exception) { }
                 foreach (var device in mDevices) {
                     var computeDevice = device.GetComputeDevice();
                     var deviceIndex = device.DeviceIndex;
@@ -1934,8 +1947,10 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             } finally {
-                try { try { DeviceManagementLibrariesMutex.ReleaseMutex(); } catch (Exception) { } } catch (Exception) { }
+                try { DeviceManagementLibrariesMutex.ReleaseMutex(); } catch (Exception) { }
             }
+            dataGridViewDevices.Update();
+            Application.DoEvents();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -3249,7 +3264,7 @@ namespace GatelessGateSharp
                 mActiveMiners.Clear();
 
                 mDevFeeMode = false;
-                try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Mining"); } catch (Exception) { }
+                try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
                 Exception unrecoverableException = null;
                 try {
                     LaunchMiners();
@@ -3259,7 +3274,7 @@ namespace GatelessGateSharp
                 if (unrecoverableException != null || mPrimaryStratum == null || !mActiveMiners.Any()) {
                     StopMiners();
                     MessageBox.Show((unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner."), appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                    try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 } else {
                     appState = ApplicationGlobalState.Mining;
                     tabControlMainForm.SelectedIndex = 0;
@@ -3272,7 +3287,7 @@ namespace GatelessGateSharp
                 timerDevFee.Enabled = false;
                 StopMiners();
                 appState = ApplicationGlobalState.Idle;
-                try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
             }
 
             UpdateStatsWithShortPolling();
@@ -3308,10 +3323,10 @@ namespace GatelessGateSharp
                 textBoxCustomPool2Host.Enabled = textBoxCustomPool2Login.Enabled = textBoxCustomPool2Password.Enabled = comboBoxCustomPool2Algorithm.Enabled = comboBoxCustomPool2SecondaryAlgorithm.Enabled = numericUpDownCustomPool2Port.Enabled = checkBoxCustomPool2Enable.Checked;
                 textBoxCustomPool3Host.Enabled = textBoxCustomPool3Login.Enabled = textBoxCustomPool3Password.Enabled = comboBoxCustomPool3Algorithm.Enabled = comboBoxCustomPool3SecondaryAlgorithm.Enabled = numericUpDownCustomPool3Port.Enabled = checkBoxCustomPool3Enable.Checked;
 
-                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex] != "Ethash") comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] != "Ethash" && (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] != "Ethash (NiceHash)") comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] != "Ethash" && (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] != "Ethash (NiceHash)") comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] != "Ethash" && (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] != "Ethash (NiceHash)") comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex] != "Ethash" && (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex] != "Ethash (NiceHash)") comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
                 textBoxCustomPool0SecondaryHost.Enabled = textBoxCustomPool0SecondaryLogin.Enabled = textBoxCustomPool0SecondaryPassword.Enabled = numericUpDownCustomPool0SecondaryPort.Enabled = checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0;
                 textBoxCustomPool1SecondaryHost.Enabled = textBoxCustomPool1SecondaryLogin.Enabled = textBoxCustomPool1SecondaryPassword.Enabled = numericUpDownCustomPool1SecondaryPort.Enabled = checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0;
@@ -3484,7 +3499,7 @@ namespace GatelessGateSharp
                     if (ex != null) {
                         StopMiners();
                         appState = ApplicationGlobalState.Idle;
-                        try { using (var file = new System.IO.StreamWriter(mAppStateFileName, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                        try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                         UpdateStatsWithShortPolling();
                         //UpdateStatsWithLongPolling();
                         UpdateControls();
@@ -4138,11 +4153,11 @@ namespace GatelessGateSharp
             Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
             if (!checkBoxDeviceOverclockingEnabledArray[tuple].Checked)
                 return;
-            if (device.PowerLimit >= 0) device.PowerLimit = Decimal.ToInt32(numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value);
-            if (device.CoreClock >= 0) device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
-            if (device.MemoryClock >= 0) device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
-            if (device.CoreVoltage >= 0) device.CoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
-            if (device.MemoryVoltage >= 0) device.MemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
+            device.PowerLimit = Decimal.ToInt32(numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value);
+            device.CoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
+            device.MemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
+            device.CoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
+            device.MemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
         }
 
         static public int DeviceCount {

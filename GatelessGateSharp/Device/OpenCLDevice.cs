@@ -539,7 +539,7 @@ namespace GatelessGateSharp
                 if (ADL.ADL2_OverdriveN_PerformanceStatus_Get(ADL2Context, ADLAdapterIndex, statusBuffer) != ADL.ADL_SUCCESS)
                     return -1;
                 OSODNPerformanceStatusData = (ADLODNPerformanceStatus)Marshal.PtrToStructure(statusBuffer, OSODNPerformanceStatusData.GetType());
-                return OSODNPerformanceStatusData.iVDDC <= 800 ? -1 : OSODNPerformanceStatusData.iVDDC; // The driver may return garbage.
+                return (OSODNPerformanceStatusData.iVDDC < 800 || OSODNPerformanceStatusData.iVDDC > 2000) ? -1 : OSODNPerformanceStatusData.iVDDC; // The driver may return garbage.
             }
 
             set {
