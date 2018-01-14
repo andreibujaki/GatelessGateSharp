@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.1";
+        public static string appVersion = "1.2.2";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1066,6 +1066,8 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void MainForm_Load(object sender, EventArgs e) {
             Logger(appName + " started.");
+
+            try { System.IO.Directory.CreateDirectory(AppDataPathBase); } catch (Exception) { }
 
             CheckVirtualMemorySize();
 
