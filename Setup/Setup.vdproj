@@ -653,7 +653,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_1.2.1_alpha_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_1.2.2_alpha_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -712,7 +712,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.2.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.2.2.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_005BA131E503E55D3259C325B392A218"
@@ -1356,7 +1356,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.2.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.2.2.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_558AC528A5344188B265CAF48F34D908"
@@ -2067,7 +2067,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.2.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.2.2.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_ADA849628BC355DC41F4B2D4F6ACE3E5"
@@ -2340,7 +2340,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_DFDCB3E1FD61424AB847293197EEA140"
@@ -2738,15 +2738,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
-        "ProductCode" = "8:{6197F8D8-F0EA-4412-B5D1-C36C07F60E5F}"
-        "PackageCode" = "8:{64E50B7F-E10D-497B-B087-540469AA032D}"
+        "ProductCode" = "8:{E18C5D18-AB01-4C9C-829E-2FBB29D93EB9}"
+        "PackageCode" = "8:{51743D64-3CD6-4492-BBE1-144216AD521F}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.1"
+        "ProductVersion" = "8:1.2.2"
         "Manufacturer" = "8:Zawawa Software LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

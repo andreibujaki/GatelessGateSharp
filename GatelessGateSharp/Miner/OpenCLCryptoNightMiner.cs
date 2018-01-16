@@ -86,6 +86,7 @@ namespace GatelessGateSharp
             mNicehashMode = aNicehashMode;
 
             if (prevGlobalWorkSize != 0 && prevGlobalWorkSize != globalWorkSizeA[0]) {
+                MainForm.Logger("Settings for CryptoNight has been changed and the application needs to be restarted...");
                 Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
             }
 

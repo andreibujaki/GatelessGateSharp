@@ -36,10 +36,6 @@ namespace GatelessGateSharp
 {
     public partial class MainForm : Form
     {
-        [DllImport("phymem_wrapper.dll")]
-        public static extern int LoadPhyMemDriver();
-        [DllImport("phymem_wrapper.dll")]
-        public static extern void UnloadPhyMemDriver();
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, EntryPoint = "GlobalMemoryStatusEx", SetLastError = true)]
         static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
@@ -88,7 +84,7 @@ namespace GatelessGateSharp
             Mining = 1,
             Initializing = 2
         };
-        private ApplicationGlobalState appState = ApplicationGlobalState.Initializing;
+        private ApplicationGlobalState mAppState = ApplicationGlobalState.Initializing;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
         private TabPage[] tabPageDeviceArray;
@@ -134,10 +130,10 @@ namespace GatelessGateSharp
         private OpenCLDevice[] mDevices;
         private bool ADLInitialized = false;
         private bool NVMLInitialized = false;
-        private int[] ADLAdapterIndexArray;
         private System.Threading.Mutex DeviceManagementLibrariesMutex = new System.Threading.Mutex();
         private ManagedCuda.Nvml.nvmlDevice[] nvmlDeviceArray;
         private bool phymemLoaded = false;
+        private CancellationTokenSource mBackgroundTasksCancellationTokenSource;
 
         private bool mDevFeeMode = true;
         private int mDevFeePercentage = 1;
@@ -1102,20 +1098,6 @@ namespace GatelessGateSharp
                 Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
             }
 
-            if (checkBoxEnablePhymem.Checked) {
-                if (LoadPhyMemDriver() != 0) {
-                    Logger("Successfully loaded phymem.");
-                    phymemLoaded = true;
-                } else {
-                    Logger("Failed to load phymem.");
-                    var w = new Form() { Size = new System.Drawing.Size(0, 0) };
-                    Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
-                        TaskScheduler.FromCurrentSynchronizationContext());
-                    w.BringToFront();
-                    MessageBox.Show(w, "Failed to load phymem.", "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                }
-            }
-
             Text = appName; // Set the window title.
 
             // Do everything to turn off TDR.
@@ -1146,9 +1128,10 @@ namespace GatelessGateSharp
                     System.IO.File.Delete(OldAppStateFilePath);
             } catch (Exception) { }
 
-            appState = ApplicationGlobalState.Idle;
+            mAppState = ApplicationGlobalState.Idle;
             UpdateControls();
-            timerFanControl.Enabled = true;
+            mBackgroundTasksCancellationTokenSource = new CancellationTokenSource();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_HardwareManagement), mBackgroundTasksCancellationTokenSource.Token);
 
             // Auto-start mining if necessary.
             splashScreen.Dispose();
@@ -1641,7 +1624,7 @@ namespace GatelessGateSharp
                     var coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
 
-                    if (appState == ApplicationGlobalState.Mining && averageHashrate != 0) {
+                    if (mAppState == ApplicationGlobalState.Mining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
 
                         labelPriceDay.Text = string.Format("{0:N6}", price) + " ETH/Day (" + string.Format("{0:N2}", price * USDETH) + " USD/Day)";
@@ -1664,7 +1647,7 @@ namespace GatelessGateSharp
                     var coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
 
-                    if (appState == ApplicationGlobalState.Mining && averageHashrate != 0) {
+                    if (mAppState == ApplicationGlobalState.Mining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
 
                         labelPriceDay.Text = string.Format("{0:N6}", price) + " ETH/Day (" + string.Format("{0:N2}", price * USDETH) + " USD/Day)";
@@ -1749,7 +1732,7 @@ namespace GatelessGateSharp
                 } catch (Exception) { }
             labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
 
-            if (appState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
+            if (mAppState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
                 double price = 0;
                 jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
                 response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
@@ -1799,24 +1782,24 @@ namespace GatelessGateSharp
                 KillInterferingProcesses();
 
                 // Pool
-                mCurrentPool = (appState == ApplicationGlobalState.Mining && mPrimaryStratum != null) ? (mPrimaryStratum.PoolName + ((mSecondaryStratum != null && mSecondaryStratum.PoolName != mPrimaryStratum.PoolName) ? ", " + mSecondaryStratum.PoolName : "")) :
+                mCurrentPool = (mAppState == ApplicationGlobalState.Mining && mPrimaryStratum != null) ? (mPrimaryStratum.PoolName + ((mSecondaryStratum != null && mSecondaryStratum.PoolName != mPrimaryStratum.PoolName) ? ", " + mSecondaryStratum.PoolName : "")) :
                                checkBoxCustomPool0Enable.Checked ? (textBoxCustomPool0Host.Text + (comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool0SecondaryHost.Text) : "")) :
                                checkBoxCustomPool1Enable.Checked ? (textBoxCustomPool1Host.Text + (comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool1SecondaryHost.Text) : "")) :
                                checkBoxCustomPool2Enable.Checked ? (textBoxCustomPool2Host.Text + (comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool2SecondaryHost.Text) : "")) :
                                checkBoxCustomPool3Enable.Checked ? (textBoxCustomPool3Host.Text + (comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 ? (", " + textBoxCustomPool3SecondaryHost.Text) : "")) :
                                (string)listBoxPoolPriorities.Items[0];
-                if (appState == ApplicationGlobalState.Mining && mDevFeeMode) {
+                if (mAppState == ApplicationGlobalState.Mining && mDevFeeMode) {
                     labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + string.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
-                } else if (appState == ApplicationGlobalState.Mining && !CustomPoolEnabled && mPrimaryStratum != null && mSecondaryStratum != null) {
+                } else if (mAppState == ApplicationGlobalState.Mining && !CustomPoolEnabled && mPrimaryStratum != null && mSecondaryStratum != null) {
                     labelCurrentPool.Text = mCurrentPool + " (" + mPrimaryStratum.ServerAddress + ", " + mSecondaryStratum.ServerAddress + ")";
-                } else if (appState == ApplicationGlobalState.Mining && !CustomPoolEnabled && mPrimaryStratum != null) {
+                } else if (mAppState == ApplicationGlobalState.Mining && !CustomPoolEnabled && mPrimaryStratum != null) {
                     labelCurrentPool.Text = mCurrentPool + " (" + mPrimaryStratum.ServerAddress + ")";
                 } else {
                     labelCurrentPool.Text = mCurrentPool;
                 }
 
                 var elapsedTimeInSeconds = (long)(DateTime.Now - mStartTime).TotalSeconds;
-                if (appState != ApplicationGlobalState.Mining)
+                if (mAppState != ApplicationGlobalState.Mining)
                     labelElapsedTime.Text = "-";
                 else if (elapsedTimeInSeconds >= 24 * 60 * 60)
                     labelElapsedTime.Text = string.Format("{3} Days {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24);
@@ -1860,13 +1843,13 @@ namespace GatelessGateSharp
                         if (miner.DeviceIndex == device.DeviceIndex && miner.SecondAlgorithmName != null && miner.SecondAlgorithmName != "")
                             speedSecondary += miner.SecondSpeed;
                     
-                    dataGridViewDevices.Rows[deviceIndex].Cells["speed"].Value = (appState != ApplicationGlobalState.Mining) ? "-" :
+                    dataGridViewDevices.Rows[deviceIndex].Cells["speed"].Value = (mAppState != ApplicationGlobalState.Mining) ? "-" :
                                                            speedSecondary > 0 ? ConvertHashRateToString(speedPrimary) + ", " + ConvertHashRateToString(speedSecondary) :
                                                                                                          ConvertHashRateToString(speedPrimary);
 
                     if (device.AcceptedShares + device.RejectedShares == 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = Color.Black;
-                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = appState == ApplicationGlobalState.Mining ? "0" : "-";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = mAppState == ApplicationGlobalState.Mining ? "0" : "-";
                     } else {
                         var acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = device.AcceptedShares.ToString() + " (" + string.Format("{0:N1}", acceptanceRate * 100) + "%)";
@@ -1951,20 +1934,19 @@ namespace GatelessGateSharp
             } finally {
                 try { DeviceManagementLibrariesMutex.ReleaseMutex(); } catch (Exception) { }
             }
-            dataGridViewDevices.Update();
-            Application.DoEvents();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            mBackgroundTasksCancellationTokenSource.Cancel();
             SaveSettingsToDatabase();
-            UnloadPhyMemDriver();
-            timerFanControl.Enabled = false;
+            PCIExpress.UnloadPhyMem();
             if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy) {
                 foreach (var device in mDevices)
                     if (device.ADLAdapterIndex >= 0 && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
                         device.FanSpeed = -1;
                 // ADL.ADL_Main_Control_Destroy();
             }
+            mBackgroundTasksCancellationTokenSource.Dispose();
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -3255,7 +3237,10 @@ namespace GatelessGateSharp
 
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
-            if (appState == ApplicationGlobalState.Idle) {
+            if (mAppState == ApplicationGlobalState.Idle) {
+                if (checkBoxEnablePhymem.Checked && !PCIExpress.Available && !PCIExpress.LoadPhyMem())
+                    MessageBox.Show(Utilities.GetAutoClosingForm(), "Failed to load phymem.", appName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+
                 foreach (var device in mDevices) {
                     device.ClearShares();
                     //labelGPUSharesArray[device.DeviceIndex].Text = "0";
@@ -3278,17 +3263,17 @@ namespace GatelessGateSharp
                     MessageBox.Show((unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner."), appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 } else {
-                    appState = ApplicationGlobalState.Mining;
+                    mAppState = ApplicationGlobalState.Mining;
                     tabControlMainForm.SelectedIndex = 0;
                     timerDevFee.Interval = 15 * 60 * 1000;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
                 }
-            } else if (appState == ApplicationGlobalState.Mining) {
+            } else if (mAppState == ApplicationGlobalState.Mining) {
                 timerDevFee.Enabled = false;
                 StopMiners();
-                appState = ApplicationGlobalState.Idle;
+                mAppState = ApplicationGlobalState.Idle;
                 try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
             }
 
@@ -3301,24 +3286,24 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void UpdateControls() {
-            if (appState == ApplicationGlobalState.Initializing)
+            if (mAppState == ApplicationGlobalState.Initializing)
                 return;
 
             try {
-                buttonStart.Text = appState == ApplicationGlobalState.Mining ? "Stop" : "Start";
+                buttonStart.Text = mAppState == ApplicationGlobalState.Mining ? "Stop" : "Start";
                 buttonBenchmark.Enabled = false;
 
-                groupBoxCoinsToMine.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxPoolPriorities.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxPoolParameters.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxWalletAddresses.Enabled = appState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxAutomation.Enabled = appState == ApplicationGlobalState.Idle;
-                groupBoxHadrwareAcceleration.Enabled = appState == ApplicationGlobalState.Idle;
-                dataGridViewDevices.Enabled = appState == ApplicationGlobalState.Idle;
-                groupBoxCustmPool0.Enabled = appState == ApplicationGlobalState.Idle;
-                groupBoxCustmPool1.Enabled = appState == ApplicationGlobalState.Idle;
-                groupBoxCustmPool2.Enabled = appState == ApplicationGlobalState.Idle;
-                groupBoxCustmPool3.Enabled = appState == ApplicationGlobalState.Idle;
+                groupBoxCoinsToMine.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxPoolPriorities.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxPoolParameters.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxWalletAddresses.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxAutomation.Enabled = mAppState == ApplicationGlobalState.Idle;
+                groupBoxHadrwareAcceleration.Enabled = mAppState == ApplicationGlobalState.Idle;
+                dataGridViewDevices.Enabled = mAppState == ApplicationGlobalState.Idle;
+                groupBoxCustmPool0.Enabled = mAppState == ApplicationGlobalState.Idle;
+                groupBoxCustmPool1.Enabled = mAppState == ApplicationGlobalState.Idle;
+                groupBoxCustmPool2.Enabled = mAppState == ApplicationGlobalState.Idle;
+                groupBoxCustmPool3.Enabled = mAppState == ApplicationGlobalState.Idle;
 
                 textBoxCustomPool0Host.Enabled = textBoxCustomPool0Login.Enabled = textBoxCustomPool0Password.Enabled = comboBoxCustomPool0Algorithm.Enabled = comboBoxCustomPool0SecondaryAlgorithm.Enabled = numericUpDownCustomPool0Port.Enabled = checkBoxCustomPool0Enable.Checked;
                 textBoxCustomPool1Host.Enabled = textBoxCustomPool1Login.Enabled = textBoxCustomPool1Password.Enabled = comboBoxCustomPool1Algorithm.Enabled = comboBoxCustomPool1SecondaryAlgorithm.Enabled = numericUpDownCustomPool1Port.Enabled = checkBoxCustomPool1Enable.Checked;
@@ -3338,11 +3323,11 @@ namespace GatelessGateSharp
                 tabControlMainForm.Enabled = buttonStart.Enabled = true;
 
                 foreach (var device in mDevices) {
-                    checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle);
-                    numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (appState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle);
+                    numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
 
                     foreach (var algorithm in sAlgorithmList) {
                         var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
@@ -3362,7 +3347,7 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void timerCurrencyStatUpdates_Tick(object sender, EventArgs e) {
             try {
-                if (appState == ApplicationGlobalState.Mining && (DateTime.Now - mStartTime).Seconds < 180) {
+                if (mAppState == ApplicationGlobalState.Mining && (DateTime.Now - mStartTime).Seconds < 180) {
                     timerCurrencyStatUpdates.Interval = 20 * 1000;
                 } else {
                     timerCurrencyStatUpdates.Interval = 5 * 60 * 1000;
@@ -3424,7 +3409,7 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void timerDevFee_Tick(object sender, EventArgs e) {
             try {
-                if (appState != ApplicationGlobalState.Mining) {
+                if (mAppState != ApplicationGlobalState.Mining) {
                     timerDevFee.Enabled = false;
                 } else if (mDevFeeMode) {
                     labelCurrentPool.Text = "Switching...";
@@ -3482,7 +3467,7 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void timerWatchdog_Tick(object sender, EventArgs e) {
             try {
-                if (appState == ApplicationGlobalState.Mining && mActiveMiners.Any()) {
+                if (mAppState == ApplicationGlobalState.Mining && mActiveMiners.Any()) {
                     Exception ex = null;
                     if (mPrimaryStratum != null && mPrimaryStratum.UnrecoverableException != null) {
                         ex = mPrimaryStratum.UnrecoverableException;
@@ -3500,7 +3485,7 @@ namespace GatelessGateSharp
                     }
                     if (ex != null) {
                         StopMiners();
-                        appState = ApplicationGlobalState.Idle;
+                        mAppState = ApplicationGlobalState.Idle;
                         try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                         UpdateStatsWithShortPolling();
                         //UpdateStatsWithLongPolling();
@@ -3992,22 +3977,20 @@ namespace GatelessGateSharp
             dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value = !(bool)(dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value);
         }
 
-        private void timerFanControl_Tick(object sender, EventArgs e) {
-            foreach (var device in mDevices) {
-                if (!checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
+        private static void UpdateFanSpeeds() {
+            foreach (var device in Instance.mDevices) {
+                if (!Instance.checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
                     continue;
 
-                if (appState != ApplicationGlobalState.Mining) {
-                    device.FanSpeed = -1;
+                if (Instance.mAppState != ApplicationGlobalState.Mining) 
                     continue;
-                }
 
                 int currentTemperature = device.Temperature;
-                int targetTemperature = decimal.ToInt32(numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value);
-                int maxTemperature = decimal.ToInt32(numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value);
+                int targetTemperature = decimal.ToInt32(Instance.numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value);
+                int maxTemperature = decimal.ToInt32(Instance.numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value);
                 int currentFanSpeed = device.FanSpeed;
-                int maxFanSpeed = decimal.ToInt32(numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value);
-                int minFanSpeed = decimal.ToInt32(numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value);
+                int maxFanSpeed = decimal.ToInt32(Instance.numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value);
+                int minFanSpeed = decimal.ToInt32(Instance.numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value);
                 int newFanSpeed = currentFanSpeed;
 
                 if (currentTemperature > targetTemperature + 5)
@@ -4244,6 +4227,43 @@ namespace GatelessGateSharp
 
         private void button7_Click(object sender, EventArgs e) {
             System.Diagnostics.Process.Start("https://download.teamviewer.com/download/TeamViewer_Setup.exe");
+        }
+
+        static private void Task_HardwareManagement(object cancellationToken) {
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+            var stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+
+            MainForm.Logger("Hardware management task started.");
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                if (Instance.mAppState == ApplicationGlobalState.Mining && MainForm.Instance.mPrimaryStratum != null) {
+                    // overclocking
+                    string algorithm = Instance.mPrimaryStratum.Algorithm;
+                    if (Instance.mSecondaryStratum != null)
+                        algorithm += "_" + Instance.mSecondaryStratum.Algorithm;
+                    foreach (var device in Instance.mDevices) {
+                        try {
+                            if (Instance.checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(device.DeviceIndex, algorithm)].Checked)
+                                Instance.UpdateOverclockingSettings(device);
+                        } catch (Exception) { }
+                    }
+
+                    // memory timings
+                    PCIExpress.UpdateMemoryTimings();
+
+                    // fan speeds
+                    if (stopwatch.ElapsedMilliseconds >= 5000) {
+                        UpdateFanSpeeds();
+                        stopwatch.Reset();
+                        stopwatch.Start();
+                    }
+                }
+                if (PCIExpress.Available)
+                    System.Threading.Thread.SpinWait(1000); // TODO
+                else
+                    System.Threading.Thread.Sleep(100);
+            }
+            MainForm.Logger("Hardware management task finished.");
         }
     }
 }

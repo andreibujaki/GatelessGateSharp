@@ -60,7 +60,7 @@ namespace GatelessGateSharp
 
         public override long GetMaxComputeUnits() { return mComputeDevice.MaxComputeUnits; }
         public ComputeDevice GetComputeDevice() { return mComputeDevice; }
-        public long          GetMemorySize() { return mComputeDevice.GlobalMemorySize; }
+        public override long GetMemorySize() { return mComputeDevice.GlobalMemorySize; }
 
         public OpenCLDevice(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex)
@@ -303,7 +303,7 @@ namespace GatelessGateSharp
                                                 System.Threading.Thread.Sleep(100);
                                             }
                                             if (!dummyMiner.Stopped) {
-                                                MainForm.Logger("Failed at matching OpenCL devices with ADL devices. Restarting...");
+                                                MainForm.Logger("Failed to match OpenCL devices with ADL devices. Restarting the application...");
                                                 Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
                                             }
                                         }
