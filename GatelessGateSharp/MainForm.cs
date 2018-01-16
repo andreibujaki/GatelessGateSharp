@@ -29,6 +29,10 @@ using System.Threading.Tasks;
 using ATI.ADL;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using LiveCharts;
+using LiveCharts.Configurations;
+using LiveCharts.Wpf;
+using Winforms.Cartesian.ConstantChanges;
 
 
 
@@ -268,6 +272,11 @@ namespace GatelessGateSharp
             comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
             comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
+            // LiveCharts
+            var mapper = Mappers.Xy<MeasureModel>()
+                .X(model => model.DateTime.Ticks) 
+                .Y(model => model.Value);
+            Charting.For<MeasureModel>(mapper);
         }
 
         private void CreateNewDatabase() {
@@ -1574,8 +1583,9 @@ namespace GatelessGateSharp
                 double secondaryTotalSpeed = 0;
                 foreach (var miner in mActiveMiners)
                     secondaryTotalSpeed += miner.SecondSpeed;
-
+                
                 var client = new CustomWebClient();
+                
                 double USDBTC = 0;
                 {
                     var jsonString = client.DownloadString("https://blockchain.info/ticker");
@@ -1831,6 +1841,76 @@ namespace GatelessGateSharp
                         labelCurrentSpeed.Text += ", " + ConvertHashRateToString(speeds[algorithm]) + " (" + algorithm + ")";
                     }
                 }
+
+                /*
+                if (cartesianChartDashboard.Series.Count != speeds.Count) {
+                    cartesianChartDashboard.Series.Clear();
+                    foreach (var algorithm in speeds.Keys) {
+                        cartesianChartDashboard.Series.Add(
+                            new LiveCharts.Wpf.LineSeries {
+                                Values = new LiveCharts.ChartValues<double> { }
+                            }
+                        );
+                    }
+                } else {
+                    for (int i = 0; i < cartesianChartDashboard.Series.Count; ++i)
+                        cartesianChartDashboard.Series[i].Values.Add(speeds[speeds.Keys.ElementAt(i)]);
+                }
+                 */
+
+                /*
+                var now = System.DateTime.Now;
+                ChartValues.Add(new MeasureModel {
+                    DateTime = now,
+                    Value = R.Next(0, 10)
+                });
+                SetAxisLimits(now);
+                if (ChartValues.Count > 30) ChartValues.RemoveAt(0);
+                */
+
+                var now = System.DateTime.Now;
+                if (cartesianChartDashboard.Series.Count != mDevices.Length) {
+                    cartesianChartDashboard.AxisX.Clear();
+                    cartesianChartDashboard.AxisX.Add(new Axis {
+                        DisableAnimations = true,
+                        LabelFormatter = value => new System.DateTime((long)value).ToString("HH:mm:ss"),
+                        Separator = new Separator {
+                            Stroke = System.Windows.Media.Brushes.Gray,
+                            Step = TimeSpan.FromSeconds(10).Ticks
+                        },
+                        ShowLabels = false
+                    });
+                    cartesianChartDashboard.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
+                    cartesianChartDashboard.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
+
+                    cartesianChartDashboard.AxisY[0].LabelFormatter = val => val + "℃";
+                    //cartesianChartDashboard.AxisY[0].Separator.Stroke = System.Windows.Media.Brushes.DarkGray;
+                    cartesianChartDashboard.AxisY[0].SetRange(0, 100);
+
+                    cartesianChartDashboard.Series.Clear();
+                    for (int i = 0; i < mDevices.Length; ++i) {
+                        cartesianChartDashboard.Series.Add(
+                            new LiveCharts.Wpf.LineSeries {
+                                Title = "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName(),
+                                Values = new ChartValues<MeasureModel>(),
+                                PointGeometry = null,
+                                LineSmoothness = 5, 
+                                Fill = System.Windows.Media.Brushes.Transparent
+                            }
+                        );
+                    }
+                }
+
+                for (int i = 0; i < mDevices.Length; ++i) {
+                    cartesianChartDashboard.Series[i].Values.Add(new MeasureModel {
+                        DateTime = now,
+                        Value = mDevices[i].Temperature
+                    });
+                    if (cartesianChartDashboard.Series[i].Values.Count > 120) 
+                        cartesianChartDashboard.Series[i].Values.RemoveAt(0);
+                }
+                cartesianChartDashboard.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
+                cartesianChartDashboard.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
 
                 foreach (var device in mDevices) {
                     var computeDevice = device.GetComputeDevice();
@@ -4235,6 +4315,7 @@ namespace GatelessGateSharp
             stopwatch.Start();
 
             MainForm.Logger("Hardware management task started.");
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 if (Instance.mAppState == ApplicationGlobalState.Mining && MainForm.Instance.mPrimaryStratum != null) {
                     // overclocking
@@ -4261,7 +4342,7 @@ namespace GatelessGateSharp
                 if (PCIExpress.Available)
                     System.Threading.Thread.SpinWait(1000); // TODO
                 else
-                    System.Threading.Thread.Sleep(100);
+                    System.Threading.Thread.Sleep(0);
             }
             MainForm.Logger("Hardware management task finished.");
         }

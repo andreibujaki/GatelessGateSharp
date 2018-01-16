@@ -78,7 +78,7 @@ namespace GatelessGateSharp {
                 int ARBData = 0;
                 ReadAMDGPURegister(busNumber, (int)AMDPolaris10.GMC81Registers.mmMC_ARB_DRAM_TIMING, ref ARBData);
                 BitVector32 ARB = new BitVector32(ARBData);
-                ARB[AMDPolaris10.MC_ARB_DRAM_TIMING.ACTRD] = 14;
+                ARB[AMDPolaris10.MC_ARB_DRAM_TIMING.ACTRD] = 15;
                 WriteAMDGPURegister(busNumber, (int)AMDPolaris10.GMC81Registers.mmMC_ARB_DRAM_TIMING, ARB.Data, AMDPolaris10.MC_ARB_DRAM_TIMING.ACTRD.Mask);
                 
                 int MISC2Data = 0;
@@ -92,7 +92,8 @@ namespace GatelessGateSharp {
                 ReadAMDGPURegister(busNumber, (int)AMDPolaris10.GMC81Registers.mmMC_SEQ_RAS_TIMING, ref RASData);
                 BitVector32 RAS = new BitVector32(RASData);
                 RAS[AMDPolaris10.MC_SEQ_RAS_TIMING.TRRD] = 5;
-                WriteAMDGPURegister(busNumber, (int)AMDPolaris10.GMC81Registers.mmMC_SEQ_RAS_TIMING, RAS.Data, AMDPolaris10.MC_SEQ_RAS_TIMING.TRRD.Mask);
+                RAS[AMDPolaris10.MC_SEQ_RAS_TIMING.TRC] = 87; // 87
+                WriteAMDGPURegister(busNumber, (int)AMDPolaris10.GMC81Registers.mmMC_SEQ_RAS_TIMING, RAS.Data, AMDPolaris10.MC_SEQ_RAS_TIMING.TRRD.Mask | AMDPolaris10.MC_SEQ_RAS_TIMING.TRC.Mask);
 
                 if (stopwatch.ElapsedMilliseconds >= 5000) {
                     ReadAMDGPURegister(busNumber, (int)AMDPolaris10.GMC81Registers.mmMC_ARB_DRAM_TIMING, ref ARBData);
