@@ -18,8 +18,7 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Drawing;
+using System.Collections.Generic;using System.Drawing;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Linq;
@@ -33,6 +32,7 @@ using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Wpf;
 using Winforms.Cartesian.ConstantChanges;
+using System.Text.RegularExpressions;
 
 
 
@@ -89,6 +89,7 @@ namespace GatelessGateSharp
             Initializing = 2
         };
         private ApplicationGlobalState mAppState = ApplicationGlobalState.Initializing;
+        private bool mAreSettingsDirty = false;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
         private TabPage[] tabPageDeviceArray;
@@ -282,9 +283,9 @@ namespace GatelessGateSharp
             Charting.For<MeasureModel>(mapper);
         }
 
-        private void CreateNewDatabase() {
+        private void CreateNewDatabase(string filePath) {
             SQLiteConnection.CreateFile(DatabaseFilePath);
-            using (var conn = new SQLiteConnection("Data Source=" + DatabaseFilePath + ";Version=3;")) {
+            using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                 conn.Open();
                 var sql = "create table wallet_addresses (coin varchar(1024), address varchar(1024));";
                 using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
@@ -330,10 +331,15 @@ namespace GatelessGateSharp
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        private void LoadSettingsFromDatabase() {
+        private void LoadSettingsFromDatabase(string filePath = null) {
+            Logger("Loading settings...");
+            UpdateLog();
+            Update();
+            MainForm.Instance.Enabled = false;
+
             int databaseVersion = 0;
             try {
-                using (var conn = new SQLiteConnection("Data Source=" + (System.IO.File.Exists(OldDatabaseFilePath) ? OldDatabaseFilePath : DatabaseFilePath) + ";Version=3;")) {
+                using (var conn = new SQLiteConnection("Data Source=" + ((filePath == null) ? (System.IO.File.Exists(OldDatabaseFilePath) ? OldDatabaseFilePath : DatabaseFilePath) : (new Regex("'")).Replace(filePath, "")) + ";Version=3;")) {
                     conn.Open();
                     var sql = "select * from wallet_addresses";
                     using (var command = new SQLiteCommand(sql, conn)) {
@@ -664,34 +670,43 @@ namespace GatelessGateSharp
 
                     conn.Close();
                 }
+                if (databaseVersion == 0) {
+                    // Values of intensity were reinterpreted at v1.1.14.
+                    foreach (var device in mDevices)
+                        ResetDeviceSettings(device);
+                    checkBoxDisableAutoStartPrompt.Checked = true;
+                }
+                if (databaseVersion < 2) {
+                    foreach (var device in mDevices) {
+                        numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
+                        numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
+                        numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
+                    }
+                }
+                Logger("Loaded settings.");
+                mAreSettingsDirty = false;
             } catch (Exception ex) {
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             }
-
-            if (databaseVersion == 0) {
-                // Values of intensity were reinterpreted at v1.1.14.
-                foreach (var device in mDevices)
-                    ResetDeviceSettings(device);
-                checkBoxDisableAutoStartPrompt.Checked = true;
-            } 
-            if (databaseVersion < 2) {
-                foreach (var device in mDevices) {
-                    numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
-                    numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
-                    numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
-                }
-            }
+            
+            MainForm.Instance.Enabled = true;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        private void SaveSettingsToDatabase() {
+        private void SaveSettingsToDatabase(string filePath = null) {
+            Logger("Saving settings...");
+            UpdateLog();
+            Update();
+            MainForm.Instance.Enabled = false;
+
             // Delete the old database in case it is corrupt.
-            try { System.IO.File.Delete(DatabaseFilePath); } catch (Exception) { }
-            try { CreateNewDatabase(); } catch (Exception) { }
+            filePath = ((filePath == null) ? DatabaseFilePath : (new Regex("'")).Replace(filePath, ""));
+            try { System.IO.File.Delete(filePath); } catch (Exception) { }
+            try { CreateNewDatabase(filePath); } catch (Exception) { }
 
             try {
-                using (var conn = new SQLiteConnection("Data Source=" + DatabaseFilePath + ";Version=3;")) {
+                using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                     conn.Open();
                     var sql = "delete from wallet_addresses";
                     using (var command = new SQLiteCommand(sql, conn)) {
@@ -1065,9 +1080,13 @@ namespace GatelessGateSharp
                 }
                 if (System.IO.File.Exists(OldDatabaseFilePath))
                     System.IO.File.Delete(OldDatabaseFilePath);
+                Logger("Saved settings.");
+                if (filePath == DatabaseFilePath)
+                    mAreSettingsDirty = false;
             } catch (Exception ex) {
                 Logger("Exception in UpdateDatabase(): " + ex.Message + ex.StackTrace);
             }
+            MainForm.Instance.Enabled = true;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -1102,7 +1121,7 @@ namespace GatelessGateSharp
 
             try {
                 if (!System.IO.File.Exists(DatabaseFilePath))
-                    CreateNewDatabase();
+                    CreateNewDatabase(DatabaseFilePath);
             } catch (Exception ex) {
                 Logger("Exception in CreateNewDatabase(): " + ex.Message + ex.StackTrace);
             }
@@ -1146,6 +1165,7 @@ namespace GatelessGateSharp
             UpdateControls();
             mBackgroundTasksCancellationTokenSource = new CancellationTokenSource();
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_HardwareManagement), mBackgroundTasksCancellationTokenSource.Token);
+            mAreSettingsDirty = false;
 
             // Auto-start mining if necessary.
             splashScreen.Dispose();
@@ -1245,7 +1265,7 @@ namespace GatelessGateSharp
                 uc.ButtonResetToDefaultClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetToDefaultClicked);
                 uc.ButtonResetAllClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetAllClicked);
                 uc.ButtonCopyToOthersClicked += new EventHandler(DeviceSettingsUserControl_ButtonCopyToOthersClicked);
-                uc.CheckedChanged += new EventHandler(DeviceSettingsUserControl_CheckedChanged);
+                uc.ValueChanged += new EventHandler(DeviceSettingsUserControl_ValueChanged);
 
                 tabPageDeviceArray[i] = tp;
                 foreach (var tabPage in uc.Controls[3].Controls) {
@@ -1395,7 +1415,8 @@ namespace GatelessGateSharp
             CopyDeviceSettings(deviceIndex);
         }
 
-        void DeviceSettingsUserControl_CheckedChanged(object sender, EventArgs e) {
+        void DeviceSettingsUserControl_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
@@ -1954,6 +1975,13 @@ namespace GatelessGateSharp
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            timerCurrencyStatUpdates.Enabled = false;
+            timerDevFee.Enabled = false;
+            timerDeviceStatusUpdates.Enabled = false;
+            timerUpdateLog.Enabled = false;
+            timerWatchdog.Enabled = false;
+            mBackgroundTasksCancellationTokenSource.Cancel();
+
             if (mAppState == ApplicationGlobalState.Mining) {
                 StopMiners();
             }
@@ -1961,7 +1989,6 @@ namespace GatelessGateSharp
                 miner.Dispose();
             mInactiveMiners.Clear();
 
-            mBackgroundTasksCancellationTokenSource.Cancel();
             SaveSettingsToDatabase();
             if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy) {
                 foreach (var device in mDevices)
@@ -2012,278 +2039,103 @@ namespace GatelessGateSharp
         void UpdateCharts() {
             var now = System.DateTime.Now;
 
-            // temperature
             if (cartesianChartTemperature.Series.Count != mDevices.Length) {
-                cartesianChartTemperature.DisableAnimations = true;
-                cartesianChartTemperature.AxisX.Clear();
-                cartesianChartTemperature.AxisX.Add(new Axis {
-                    LabelFormatter = value => new System.DateTime((long)value).ToString("yyyy-MM-dd HH:mm:ss"),
-                    ShowLabels = false,
-                    MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks
-                });
-                //
-                cartesianChartTemperature.AxisY.Clear();
-                cartesianChartTemperature.AxisY.Add(new Axis {
-                    DisableAnimations = false,
-                    LabelFormatter = value => value + "℃",
-                    Separator = new Separator {
-                        Stroke = System.Windows.Media.Brushes.DarkGray,
-                        StrokeThickness = 1,
-                    },
-                    MaxValue = 100,
-                    MinValue = 0
-                });
-                //
-                cartesianChartTemperature.Series.Clear();
-                for (int i = 0; i < mDevices.Length; ++i) {
-                    cartesianChartTemperature.Series.Add(
-                        new LiveCharts.Wpf.LineSeries {
-                            Title = "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName(),
-                            Values = new ChartValues<MeasureModel>(),
-                            PointGeometry = null,
-                            LineSmoothness = 0,
-                            Fill = System.Windows.Media.Brushes.Transparent
-                        }
-                    );
-                }
+                InitializeChart(cartesianChartTemperature, value => value + "℃", 100);
+                InitializeChart(cartesianChartSpeedPrimaryAlgorithm, ConvertHashRateToString, double.NaN);
+                InitializeChart(cartesianChartSpeedSecondaryAlgorithm, ConvertHashRateToString, double.NaN);
+                InitializeChart(cartesianChartFanSpeed, value => value + "%", 100);
             }
-            //
-            for (int i = 0; i < mDevices.Length; ++i) {
-                cartesianChartTemperature.Series[i].Values.Add(new MeasureModel {
-                    DateTime = now,
-                    Value = mDevices[i].Temperature
+            UpdateChart(cartesianChartTemperature, "Temperature", deviceIndex => mDevices[deviceIndex].Temperature);
+            UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
+                "Speed (Primary Algorithm)",
+                (int deviceIndex) => {
+                    double speed = 0;
+                    foreach (var miner in mActiveMiners)
+                        speed += (deviceIndex == miner.DeviceIndex) ? miner.Speed : 0;
+                    return speed;
                 });
-                if (cartesianChartTemperature.Series[i].Values.Count > 60 * 60 * 24 * 7) // Keep data for one week.
-                    cartesianChartTemperature.Series[i].Values.RemoveAt(0);
-                int valueIndex = cartesianChartTemperature.Series[i].Values.Count - 1 - 60;
-                if (valueIndex >= 0 && ((MeasureModel)cartesianChartTemperature.Series[i].Values[valueIndex]).DateTime.Second != 0)
-                    cartesianChartTemperature.Series[i].Values.RemoveAt(valueIndex);
-                valueIndex = cartesianChartTemperature.Series[i].Values.Count - 1 - 60 - 60;
-                if (valueIndex >= 0 && ((MeasureModel)cartesianChartTemperature.Series[i].Values[valueIndex]).DateTime.Minute != 0)
-                    cartesianChartTemperature.Series[i].Values.RemoveAt(valueIndex);
-                valueIndex = cartesianChartTemperature.Series[i].Values.Count - 1 - 60 - 60 - 24;
-                if (valueIndex >= 0 && ((MeasureModel)cartesianChartTemperature.Series[i].Values[valueIndex]).DateTime.Hour != 0)
-                    cartesianChartTemperature.Series[i].Values.RemoveAt(valueIndex);
-            }
-            //
-            cartesianChartTemperature.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == "Temperature");
-            cartesianChartTemperature.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
-            if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Minute") {
-                cartesianChartTemperature.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
-            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Hour") {
-                cartesianChartTemperature.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60).Ticks;
-            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Day") {
-                cartesianChartTemperature.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24).Ticks;
-            } else /* if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Week") */ {
-                cartesianChartTemperature.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 7).Ticks;
-            }
+            UpdateChart(cartesianChartSpeedSecondaryAlgorithm,
+                "Speed (Secondary Algorithm)",
+                (int deviceIndex) => {
+                    double speed = 0;
+                    foreach (var miner in mActiveMiners)
+                        speed += (deviceIndex == miner.DeviceIndex) ? miner.SpeedSecondaryAlgorithm : 0;
+                    return speed;
+                });
+            UpdateChart(cartesianChartFanSpeed, "Fan Speed", deviceIndex => mDevices[deviceIndex].FanSpeed);
+        }
 
-            // speed (primary algorithm)
-            if (cartesianChartSpeedPrimaryAlgorithm.Series.Count != mDevices.Length) {
-                cartesianChartSpeedPrimaryAlgorithm.DisableAnimations = true;
-                cartesianChartSpeedPrimaryAlgorithm.AxisX.Clear();
-                cartesianChartSpeedPrimaryAlgorithm.AxisX.Add(new Axis {
-                    DisableAnimations = false,
-                    LabelFormatter = value => new System.DateTime((long)value).ToString("yyyy-MM-dd HH:mm:ss"),
-                    ShowLabels = false,
-                    MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks
-                });
-                //
-                cartesianChartSpeedPrimaryAlgorithm.AxisY.Clear();
-                cartesianChartSpeedPrimaryAlgorithm.AxisY.Add(new Axis {
-                    DisableAnimations = false,
-                    LabelFormatter = value => ConvertHashRateToString(value),
-                    Separator = new Separator {
-                        Stroke = System.Windows.Media.Brushes.DarkGray,
-                        StrokeThickness = 1,
-                    },
-                    MinValue = 0
-                });
-                //
-                cartesianChartSpeedPrimaryAlgorithm.Series.Clear();
-                for (int i = 0; i < mDevices.Length; ++i) {
-                    cartesianChartSpeedPrimaryAlgorithm.Series.Add(
-                        new LiveCharts.Wpf.LineSeries {
-                            Title = "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName(),
-                            Values = new ChartValues<MeasureModel>(),
-                            PointGeometry = null,
-                            LineSmoothness = 0,
-                            Fill = System.Windows.Media.Brushes.Transparent
-                        }
-                    );
-                    int valueIndex = cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.Count - 1 - 60;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartSpeedPrimaryAlgorithm.Series[i].Values[valueIndex]).DateTime.Second != 0)
-                        cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.RemoveAt(valueIndex);
-                    valueIndex = cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.Count - 1 - 60 - 60;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartSpeedPrimaryAlgorithm.Series[i].Values[valueIndex]).DateTime.Minute != 0)
-                        cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.RemoveAt(valueIndex);
-                    valueIndex = cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.Count - 1 - 60 - 60 - 24;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartSpeedPrimaryAlgorithm.Series[i].Values[valueIndex]).DateTime.Hour != 0)
-                        cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.RemoveAt(valueIndex);
-                }
-            }
+        void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue) {
+            chart.DisableAnimations = true;
+            chart.AxisX.Clear();
+            chart.AxisX.Add(new Axis {
+                LabelFormatter = value => new System.DateTime((long)value).ToString("yyyy-MM-dd HH:mm:ss"),
+                ShowLabels = false,
+                MinValue = System.DateTime.Now.Ticks - TimeSpan.FromSeconds(60).Ticks
+            });
             //
+            chart.AxisY.Clear();
+            chart.AxisY.Add(new Axis {
+                DisableAnimations = false,
+                LabelFormatter = formatter,
+                Separator = new Separator {
+                    Stroke = System.Windows.Media.Brushes.DarkGray,
+                    StrokeThickness = 1,
+                },
+                MaxValue = maxValue,
+                MinValue = 0
+            });
+            //
+            chart.Series.Clear();
             for (int i = 0; i < mDevices.Length; ++i) {
-                double speed = 0;
-                foreach (var miner in mActiveMiners)
-                    speed += (i == miner.DeviceIndex) ? miner.Speed : 0;
-                cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.Add(new MeasureModel {
-                    DateTime = now,
-                    Value = speed
-                });
-                if (cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.Count > 60 * 60 * 24 * 7) // Keep data for one week.
-                    cartesianChartSpeedPrimaryAlgorithm.Series[i].Values.RemoveAt(0);
+                chart.Series.Add(
+                    new LiveCharts.Wpf.LineSeries {
+                        Title = "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName(),
+                        Values = new ChartValues<MeasureModel>(),
+                        PointGeometry = null,
+                        LineSmoothness = 0,
+                        Fill = System.Windows.Media.Brushes.Transparent
+                    }
+                );
             }
-            //
-            cartesianChartSpeedPrimaryAlgorithm.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == "Speed (Primary Algorithm)");
-            cartesianChartSpeedPrimaryAlgorithm.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
-            if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Minute") {
-                cartesianChartSpeedPrimaryAlgorithm.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
-            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Hour") {
-                cartesianChartSpeedPrimaryAlgorithm.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60).Ticks;
-            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Day") {
-                cartesianChartSpeedPrimaryAlgorithm.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24).Ticks;
-            } else /* if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Week") */ {
-                cartesianChartSpeedPrimaryAlgorithm.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 7).Ticks;
-            }
+        }
 
-            // speed (secondary algorithm)
-            if (cartesianChartSpeedSecondaryAlgorithm.Series.Count != mDevices.Length) {
-                cartesianChartSpeedSecondaryAlgorithm.DisableAnimations = true;
-                cartesianChartSpeedSecondaryAlgorithm.AxisX.Clear();
-                cartesianChartSpeedSecondaryAlgorithm.AxisX.Add(new Axis {
-                    DisableAnimations = false,
-                    LabelFormatter = value => new System.DateTime((long)value).ToString("yyyy-MM-dd HH:mm:ss"),
-                    ShowLabels = false,
-                    MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks
-                });
-                //
-                cartesianChartSpeedSecondaryAlgorithm.AxisY.Clear();
-                cartesianChartSpeedSecondaryAlgorithm.AxisY.Add(new Axis {
-                    DisableAnimations = false,
-                    LabelFormatter = value => ConvertHashRateToString(value),
-                    Separator = new Separator {
-                        Stroke = System.Windows.Media.Brushes.DarkGray,
-                        StrokeThickness = 1,
-                    },
-                    MinValue = 0
-                });
-                //
-                cartesianChartSpeedSecondaryAlgorithm.Series.Clear();
-                for (int i = 0; i < mDevices.Length; ++i) {
-                    cartesianChartSpeedSecondaryAlgorithm.Series.Add(
-                        new LiveCharts.Wpf.LineSeries {
-                            Title = "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName(),
-                            Values = new ChartValues<MeasureModel>(),
-                            PointGeometry = null,
-                            LineSmoothness = 0,
-                            Fill = System.Windows.Media.Brushes.Transparent
-                        }
-                    );
-                    int valueIndex = cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.Count - 1 - 60;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartSpeedSecondaryAlgorithm.Series[i].Values[valueIndex]).DateTime.Second != 0)
-                        cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.RemoveAt(valueIndex);
-                    valueIndex = cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.Count - 1 - 60 - 60;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartSpeedSecondaryAlgorithm.Series[i].Values[valueIndex]).DateTime.Minute != 0)
-                        cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.RemoveAt(valueIndex);
-                    valueIndex = cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.Count - 1 - 60 - 60 - 24;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartSpeedSecondaryAlgorithm.Series[i].Values[valueIndex]).DateTime.Hour != 0)
-                        cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.RemoveAt(valueIndex);
-                }
-            }
-            //
-            for (int i = 0; i < mDevices.Length; ++i) {
-                double speed = 0;
-                foreach (var miner in mActiveMiners)
-                    speed += (i == miner.DeviceIndex) ? miner.SpeedSecondaryAlgorithm : 0;
-                cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.Add(new MeasureModel {
-                    DateTime = now,
-                    Value = speed
-                });
-                if (cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.Count > 60 * 60 * 24 * 7) // Keep data for one week.
-                    cartesianChartSpeedSecondaryAlgorithm.Series[i].Values.RemoveAt(0);
-            }
-            //
-            cartesianChartSpeedSecondaryAlgorithm.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == "Speed (Secondary Algorithm)");
-            cartesianChartSpeedSecondaryAlgorithm.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
-            if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Minute") {
-                cartesianChartSpeedSecondaryAlgorithm.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
-            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Hour") {
-                cartesianChartSpeedSecondaryAlgorithm.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60).Ticks;
-            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Day") {
-                cartesianChartSpeedSecondaryAlgorithm.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24).Ticks;
-            } else /* if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Week") */ {
-                cartesianChartSpeedSecondaryAlgorithm.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 7).Ticks;
-            }
+        void UpdateChart(LiveCharts.WinForms.CartesianChart chart, string chartName, System.Func<int, double> deviceIndexToValue) {
+            var now = System.DateTime.Now;
 
-            // fan speed
-            if (cartesianChartFanSpeed.Series.Count != mDevices.Length) {
-                cartesianChartFanSpeed.DisableAnimations = true;
-                cartesianChartFanSpeed.AxisX.Clear();
-                cartesianChartFanSpeed.AxisX.Add(new Axis {
-                    DisableAnimations = false,
-                    LabelFormatter = value => new System.DateTime((long)value).ToString("yyyy-MM-dd HH:mm:ss"),
-                    ShowLabels = false,
-                    MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks
-                });
-                //
-                cartesianChartFanSpeed.AxisY.Clear();
-                cartesianChartFanSpeed.AxisY.Add(new Axis {
-                    DisableAnimations = false,
-                    LabelFormatter = value => value + "%",
-                    Separator = new Separator {
-                        Stroke = System.Windows.Media.Brushes.DarkGray,
-                        StrokeThickness = 1,
-                    },
-                    MinValue = 0
-                });
-                //
-                cartesianChartFanSpeed.Series.Clear();
-                for (int i = 0; i < mDevices.Length; ++i) {
-                    cartesianChartFanSpeed.Series.Add(
-                        new LiveCharts.Wpf.LineSeries {
-                            Title = "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName(),
-                            Values = new ChartValues<MeasureModel>(),
-                            PointGeometry = null,
-                            LineSmoothness = 0,
-                            Fill = System.Windows.Media.Brushes.Transparent
-                        }
-                    );
-                    int valueIndex = cartesianChartFanSpeed.Series[i].Values.Count - 1 - 60;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartFanSpeed.Series[i].Values[valueIndex]).DateTime.Second != 0)
-                        cartesianChartFanSpeed.Series[i].Values.RemoveAt(valueIndex);
-                    valueIndex = cartesianChartFanSpeed.Series[i].Values.Count - 1 - 60 - 60;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartFanSpeed.Series[i].Values[valueIndex]).DateTime.Minute != 0)
-                        cartesianChartFanSpeed.Series[i].Values.RemoveAt(valueIndex);
-                    valueIndex = cartesianChartFanSpeed.Series[i].Values.Count - 1 - 60 - 60 - 24;
-                    if (valueIndex >= 0 && ((MeasureModel)cartesianChartFanSpeed.Series[i].Values[valueIndex]).DateTime.Hour != 0)
-                        cartesianChartFanSpeed.Series[i].Values.RemoveAt(valueIndex);
-                }
-            }
-            //
             for (int i = 0; i < mDevices.Length; ++i) {
-                cartesianChartFanSpeed.Series[i].Values.Add(new MeasureModel {
+                chart.Series[i].Values.Add(new MeasureModel {
                     DateTime = now,
-                    Value = mDevices[i].FanSpeed
+                    Value = deviceIndexToValue(i)
                 });
-                if (cartesianChartFanSpeed.Series[i].Values.Count > 60 * 60 * 24 * 7) // Keep data for one week.
-                    cartesianChartFanSpeed.Series[i].Values.RemoveAt(0);
+                if (chart.Series[i].Values.Count > 60 + (60 / 15) + (60 / 10) + (24 / 4 * 7)) // Keep data for one week.
+                    chart.Series[i].Values.RemoveAt(0);
+                int valueIndex = chart.Series[i].Values.Count - 1 - 60;
+                if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Second % 15 != 0)
+                    chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60 / 15;
+                if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Minute % 10 != 0)
+                    chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60 / 15 - (24 / 4 * 7);
+                if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Hour % 6 != 0)
+                    chart.Series[i].Values.RemoveAt(valueIndex);
             }
             //
-            cartesianChartFanSpeed.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == "Fan Speed");
-            cartesianChartFanSpeed.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
+            chart.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == chartName);
+            chart.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
             if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Minute") {
-                cartesianChartFanSpeed.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
+                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
             } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Hour") {
-                cartesianChartFanSpeed.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60).Ticks;
+                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60).Ticks;
             } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Day") {
-                cartesianChartFanSpeed.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24).Ticks;
+                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24).Ticks;
             } else /* if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Week") */ {
-                cartesianChartFanSpeed.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 7).Ticks;
+                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 7).Ticks;
             }
         }
 
         public bool ValidateMoneroAddress() {
+            textBoxMoneroAddress.Text = textBoxMoneroAddress.Text.Trim();
             var regex = new System.Text.RegularExpressions.Regex(@"^(4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}(\.?(([0-9a-fA-F]{16})|([0-9a-fA-F]{64})))?)|([0-9a-fA-F]{64})?$");
             var match = regex.Match(textBoxMoneroAddress.Text);
             if (match.Success) {
@@ -2295,6 +2147,7 @@ namespace GatelessGateSharp
         }
 
         public bool ValidatePascalAddress() {
+            textBoxPascalAddress.Text = textBoxPascalAddress.Text.Trim();
             var regex = new System.Text.RegularExpressions.Regex(@"^[\-0-9a-zA-Z\.]+$");
             var match = regex.Match(textBoxPascalAddress.Text);
             if (match.Success) {
@@ -2306,6 +2159,7 @@ namespace GatelessGateSharp
         }
 
         public bool ValidateLbryAddress() {
+            textBoxLbryAddress.Text = textBoxLbryAddress.Text.Trim();
             var regex = new System.Text.RegularExpressions.Regex(@"^[0-9a-zA-Z]+?$");
             var match = regex.Match(textBoxLbryAddress.Text);
             if (match.Success) {
@@ -2317,6 +2171,7 @@ namespace GatelessGateSharp
         }
 
         public bool ValidateRigID() {
+            textBoxRigID.Text = textBoxRigID.Text.Trim();
             var regex = new System.Text.RegularExpressions.Regex(@"^[a-zA-Z0-9]+$");
             var match = regex.Match(textBoxRigID.Text);
             if (match.Success) {
@@ -3500,7 +3355,6 @@ namespace GatelessGateSharp
         }
 
         private void buttonStart_Click(object sender = null, EventArgs e = null) {
-            SaveSettingsToDatabase();
 
             if (!CustomPoolEnabled) {
                 if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
@@ -3540,6 +3394,8 @@ namespace GatelessGateSharp
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             if (mAppState == ApplicationGlobalState.Idle) {
+                if (mAreSettingsDirty)
+                    SaveSettingsToDatabase();
                 if (checkBoxEnablePhymem.Checked && !PCIExpress.Available && !PCIExpress.LoadPhyMem())
                     MessageBox.Show(Utilities.GetAutoClosingForm(), "Failed to load phymem.", appName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
@@ -3751,21 +3607,27 @@ namespace GatelessGateSharp
         }
 
         private void radioButtonMonero_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
         }
 
         private void radioButtonEthereum_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
         }
 
         private void radioButtonMostProfitable_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
         }
 
         private void radioButtonZcash_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
         }
 
         private void radioButtonLbry_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
         }
 
         private void radioButtonPascal_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -3844,6 +3706,7 @@ namespace GatelessGateSharp
         }
 
         private void checkBoxLaunchAtStartup_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             try {
                 var process = new System.Diagnostics.Process();
                 var startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -4227,50 +4090,62 @@ namespace GatelessGateSharp
         }
 
         private void checkBoxCustomPool0Enable_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void checkBoxCustomPool1Enable_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void checkBoxCustomPool2Enable_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void checkBoxCustomPool3Enable_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxCustomPool0Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxCustomPool0SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxCustomPool1Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxCustomPool1SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxCustomPool2Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxCustomPool2SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxCustomPool3Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxCustomPool3SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
@@ -4535,39 +4410,40 @@ namespace GatelessGateSharp
         }
 
         static private void Task_HardwareManagement(object cancellationToken) {
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             var stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
             MainForm.Logger("Hardware management task started.");
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
-                if (Instance.mAppState == ApplicationGlobalState.Mining && MainForm.Instance.mPrimaryStratum != null) {
-                    // overclocking
-                    string algorithm = Instance.mPrimaryStratum.Algorithm;
-                    if (Instance.mSecondaryStratum != null)
-                        algorithm += "_" + Instance.mSecondaryStratum.Algorithm;
-                    foreach (var device in Instance.mDevices) {
-                        try {
-                            if (Instance.checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(device.DeviceIndex, algorithm)].Checked)
-                                Instance.UpdateOverclockingSettings(device);
-                        } catch (Exception) { }
-                    }
+                try {
+                    if (Instance.mAppState == ApplicationGlobalState.Mining && MainForm.Instance.mPrimaryStratum != null) {
+                        // overclocking
+                        string algorithm = Instance.mPrimaryStratum.Algorithm;
+                        if (Instance.mSecondaryStratum != null)
+                            algorithm += "_" + Instance.mSecondaryStratum.Algorithm;
+                        foreach (var device in Instance.mDevices) {
+                            try {
+                                if (Instance.checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(device.DeviceIndex, algorithm)].Checked)
+                                    Instance.UpdateOverclockingSettings(device);
+                            } catch (Exception) { }
+                        }
 
-                    // memory timings
-                    PCIExpress.UpdateMemoryTimings();
+                        // memory timings
+                        PCIExpress.UpdateMemoryTimings();
 
-                    // fan speeds
-                    if (stopwatch.ElapsedMilliseconds >= 5000) {
-                        UpdateFanSpeeds();
-                        stopwatch.Reset();
-                        stopwatch.Start();
+                        // fan speeds
+                        if (stopwatch.ElapsedMilliseconds >= 5000) {
+                            UpdateFanSpeeds();
+                            stopwatch.Reset();
+                            stopwatch.Start();
+                        }
                     }
-                }
-                if (PCIExpress.Available && MainForm.Instance.mAppState == ApplicationGlobalState.Mining)
-                    System.Threading.Thread.SpinWait(1000); // TODO
-                else
-                    System.Threading.Thread.Sleep(0);
+                    if (PCIExpress.Available && MainForm.Instance.mAppState == ApplicationGlobalState.Mining)
+                        System.Threading.Thread.SpinWait(1000); // TODO
+                    else
+                        System.Threading.Thread.Sleep(0);
+                } catch (Exception) { }
             }
             MainForm.Logger("Hardware management task finished.");
         }
@@ -4578,6 +4454,263 @@ namespace GatelessGateSharp
 
         private void comboBoxGraphCoverage_SelectedIndexChanged(object sender, EventArgs e) {
             UpdateControls();
+        }
+
+        private void buttonSaveSettings_Click(object sender, EventArgs e) {
+            try {
+                if (MessageBox.Show("Would you like to save settings?", appName, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                    SaveSettingsToDatabase();
+            } catch (Exception) { }
+        }
+
+        private void buttonSaveSettingsAs_Click(object sender, EventArgs e) {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Filter = "Gateless Gate Sharp settings files (*.sqlite)|*.sqlite|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.FileName = "GatelessGateSharp.sqlite";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                SaveSettingsToDatabase(saveFileDialog.FileName);
+        }
+
+        private void buttonLoadSettings_Click(object sender, EventArgs e) {
+            try {
+                if (MessageBox.Show("Would you like to load settings?", appName, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                    LoadSettingsFromDatabase();
+            } catch (Exception) { }
+        }
+
+        private void button11_Click(object sender, EventArgs e) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filter = "Gateless Gate Sharp settings files (*.sqlite)|*.sqlite|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                LoadSettingsFromDatabase(openFileDialog.FileName);
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void radioButton4_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void radioButtonEthereumPascal_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void radioButtonFeathercoin_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void radioButtonMonacoin_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void listBoxPoolPriorities_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxBitcoinAddress_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxPascalAddress_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxEthereumAddress_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxLbryAddress_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxMoneroAddress_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxZcashAddress_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxRigID_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxEmail_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool0Host_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool0SecondaryHost_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownCustomPool0Port_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownCustomPool0SecondaryPort_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool0Login_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool0SecondaryLogin_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool0Password_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool0SecondaryPassword_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool1Host_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool1SecondaryHost_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownCustomPool1Port_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownCustomPool1SecondaryPort_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool1Login_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool1SecondaryLogin_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool1Password_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool1SecondaryPassword_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool2Host_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool2SecondaryHost_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownCustomPool2Port_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownCustomPool2SecondaryPort_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool2Login_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool2SecondaryLogin_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool2Password_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool2SecondaryPassword_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool3Host_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool3SecondaryHost_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownCustomPool3Port_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownCustomPool3SecondaryPort_ValueChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool3Login_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool3SecondaryLogin_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool3Password_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void textBoxCustomPool3SecondaryPassword_TextChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void checkBoxEnablePhymem_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void groupBoxAutomation_Enter(object sender, EventArgs e) {
+        }
+
+        private void checkBoxAutoStart_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void checkBoxDisableAutoStartPrompt_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void checkBoxCreateSettingsBackupWhenSettingsAreSaved_CheckedChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void dataGridViewDevices_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            if (e.ColumnIndex == 0)
+                mAreSettingsDirty = true;
         }
     }
 }

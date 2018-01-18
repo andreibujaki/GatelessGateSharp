@@ -44,6 +44,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
+            this.cartesianChartSpeedSecondaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartFanSpeed = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartSpeedPrimaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
             this.comboBoxGraphCoverage = new System.Windows.Forms.ComboBox();
             this.comboBoxGraphType = new System.Windows.Forms.ComboBox();
@@ -210,6 +212,18 @@
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabControlDeviceSettings = new System.Windows.Forms.TabControl();
             this.tabPageMiscSettings = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button11 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.groupBoxSettingsBackups = new System.Windows.Forms.GroupBox();
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved = new System.Windows.Forms.CheckBox();
+            this.button13 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.buttonCreateSettingsBackup = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.button9 = new System.Windows.Forms.Button();
+            this.buttonSaveSettings = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
@@ -222,6 +236,7 @@
             this.buttonDisableAuomaticRepair = new System.Windows.Forms.Button();
             this.buttonDisableDriverInstallation = new System.Windows.Forms.Button();
             this.groupBoxAutomation = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
             this.checkBoxAutoStart = new System.Windows.Forms.CheckBox();
             this.checkBoxLaunchAtStartup = new System.Windows.Forms.CheckBox();
@@ -242,8 +257,6 @@
             this.statusStripMainForm = new System.Windows.Forms.StatusStrip();
             this.toolStripMainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cartesianChartFanSpeed = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartSpeedSecondaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).BeginInit();
@@ -268,6 +281,8 @@
             this.tabPageDeviceSettings.SuspendLayout();
             this.groupBoxHadrwareAcceleration.SuspendLayout();
             this.tabPageMiscSettings.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBoxSettingsBackups.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBoxAutomation.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -290,7 +305,7 @@
             this.tabControlMainForm.Location = new System.Drawing.Point(11, 8);
             this.tabControlMainForm.Name = "tabControlMainForm";
             this.tabControlMainForm.SelectedIndex = 0;
-            this.tabControlMainForm.Size = new System.Drawing.Size(826, 515);
+            this.tabControlMainForm.Size = new System.Drawing.Size(824, 515);
             this.tabControlMainForm.TabIndex = 0;
             this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
             // 
@@ -318,10 +333,32 @@
             this.tabPageDashboard.Controls.Add(this.label3);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
-            this.tabPageDashboard.Size = new System.Drawing.Size(818, 489);
+            this.tabPageDashboard.Size = new System.Drawing.Size(816, 489);
             this.tabPageDashboard.TabIndex = 2;
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
+            // 
+            // cartesianChartSpeedSecondaryAlgorithm
+            // 
+            this.cartesianChartSpeedSecondaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartSpeedSecondaryAlgorithm.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(408, 35);
+            this.cartesianChartSpeedSecondaryAlgorithm.Name = "cartesianChartSpeedSecondaryAlgorithm";
+            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(396, 203);
+            this.cartesianChartSpeedSecondaryAlgorithm.TabIndex = 153;
+            this.cartesianChartSpeedSecondaryAlgorithm.Text = "cartesianChart1";
+            // 
+            // cartesianChartFanSpeed
+            // 
+            this.cartesianChartFanSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartFanSpeed.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartFanSpeed.Location = new System.Drawing.Point(408, 35);
+            this.cartesianChartFanSpeed.Name = "cartesianChartFanSpeed";
+            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(396, 203);
+            this.cartesianChartFanSpeed.TabIndex = 152;
+            this.cartesianChartFanSpeed.Text = "cartesianChart1";
             // 
             // cartesianChartSpeedPrimaryAlgorithm
             // 
@@ -330,7 +367,7 @@
             this.cartesianChartSpeedPrimaryAlgorithm.BackColor = System.Drawing.Color.Black;
             this.cartesianChartSpeedPrimaryAlgorithm.Location = new System.Drawing.Point(408, 35);
             this.cartesianChartSpeedPrimaryAlgorithm.Name = "cartesianChartSpeedPrimaryAlgorithm";
-            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(398, 203);
+            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(396, 203);
             this.cartesianChartSpeedPrimaryAlgorithm.TabIndex = 151;
             this.cartesianChartSpeedPrimaryAlgorithm.Text = "cartesianChart1";
             // 
@@ -379,7 +416,7 @@
             this.cartesianChartTemperature.BackColor = System.Drawing.Color.Black;
             this.cartesianChartTemperature.Location = new System.Drawing.Point(408, 35);
             this.cartesianChartTemperature.Name = "cartesianChartTemperature";
-            this.cartesianChartTemperature.Size = new System.Drawing.Size(398, 203);
+            this.cartesianChartTemperature.Size = new System.Drawing.Size(396, 203);
             this.cartesianChartTemperature.TabIndex = 145;
             this.cartesianChartTemperature.Text = "cartesianChart1";
             // 
@@ -425,9 +462,10 @@
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
-            this.dataGridViewDevices.Size = new System.Drawing.Size(795, 235);
+            this.dataGridViewDevices.Size = new System.Drawing.Size(793, 235);
             this.dataGridViewDevices.TabIndex = 144;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
+            this.dataGridViewDevices.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellValueChanged);
             this.dataGridViewDevices.SelectionChanged += new System.EventHandler(this.dataGridViewDevices_SelectionChanged);
             // 
             // enabled
@@ -681,7 +719,7 @@
             this.tabPagePoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPagePoolSettings.Name = "tabPagePoolSettings";
             this.tabPagePoolSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePoolSettings.Size = new System.Drawing.Size(818, 489);
+            this.tabPagePoolSettings.Size = new System.Drawing.Size(816, 489);
             this.tabPagePoolSettings.TabIndex = 0;
             this.tabPagePoolSettings.Text = "Default Pools";
             this.tabPagePoolSettings.UseVisualStyleBackColor = true;
@@ -738,6 +776,7 @@
             this.textBoxLbryAddress.Name = "textBoxLbryAddress";
             this.textBoxLbryAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxLbryAddress.TabIndex = 21;
+            this.textBoxLbryAddress.TextChanged += new System.EventHandler(this.textBoxLbryAddress_TextChanged);
             // 
             // textBoxPascalAddress
             // 
@@ -746,6 +785,7 @@
             this.textBoxPascalAddress.Name = "textBoxPascalAddress";
             this.textBoxPascalAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxPascalAddress.TabIndex = 19;
+            this.textBoxPascalAddress.TextChanged += new System.EventHandler(this.textBoxPascalAddress_TextChanged);
             // 
             // label27
             // 
@@ -772,6 +812,7 @@
             this.textBoxBitcoinAddress.Name = "textBoxBitcoinAddress";
             this.textBoxBitcoinAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxBitcoinAddress.TabIndex = 7;
+            this.textBoxBitcoinAddress.TextChanged += new System.EventHandler(this.textBoxBitcoinAddress_TextChanged);
             // 
             // button5
             // 
@@ -808,6 +849,7 @@
             this.textBoxEthereumAddress.Name = "textBoxEthereumAddress";
             this.textBoxEthereumAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxEthereumAddress.TabIndex = 9;
+            this.textBoxEthereumAddress.TextChanged += new System.EventHandler(this.textBoxEthereumAddress_TextChanged);
             // 
             // label15
             // 
@@ -825,6 +867,7 @@
             this.textBoxMoneroAddress.Name = "textBoxMoneroAddress";
             this.textBoxMoneroAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxMoneroAddress.TabIndex = 11;
+            this.textBoxMoneroAddress.TextChanged += new System.EventHandler(this.textBoxMoneroAddress_TextChanged);
             // 
             // buttonMoneroBalance
             // 
@@ -865,6 +908,7 @@
             this.textBoxZcashAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxZcashAddress.TabIndex = 13;
             this.textBoxZcashAddress.Visible = false;
+            this.textBoxZcashAddress.TextChanged += new System.EventHandler(this.textBoxZcashAddress_TextChanged);
             // 
             // buttonViewBalancesAtNiceHash
             // 
@@ -895,6 +939,7 @@
             this.textBoxRigID.Name = "textBoxRigID";
             this.textBoxRigID.Size = new System.Drawing.Size(285, 20);
             this.textBoxRigID.TabIndex = 27;
+            this.textBoxRigID.TextChanged += new System.EventHandler(this.textBoxRigID_TextChanged);
             // 
             // label1
             // 
@@ -920,6 +965,7 @@
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(285, 20);
             this.textBoxEmail.TabIndex = 29;
+            this.textBoxEmail.TextChanged += new System.EventHandler(this.textBoxEmail_TextChanged);
             // 
             // groupBoxPoolPriorities
             // 
@@ -968,6 +1014,7 @@
             this.listBoxPoolPriorities.Name = "listBoxPoolPriorities";
             this.listBoxPoolPriorities.Size = new System.Drawing.Size(97, 134);
             this.listBoxPoolPriorities.TabIndex = 23;
+            this.listBoxPoolPriorities.SelectedIndexChanged += new System.EventHandler(this.listBoxPoolPriorities_SelectedIndexChanged);
             // 
             // groupBoxCoinsToMine
             // 
@@ -999,6 +1046,7 @@
             this.radioButtonMonacoin.TabIndex = 15;
             this.radioButtonMonacoin.Text = "Monacoin";
             this.radioButtonMonacoin.UseVisualStyleBackColor = true;
+            this.radioButtonMonacoin.CheckedChanged += new System.EventHandler(this.radioButtonMonacoin_CheckedChanged);
             // 
             // radioButtonFeathercoin
             // 
@@ -1009,6 +1057,7 @@
             this.radioButtonFeathercoin.TabIndex = 14;
             this.radioButtonFeathercoin.Text = "Feathercoin";
             this.radioButtonFeathercoin.UseVisualStyleBackColor = true;
+            this.radioButtonFeathercoin.CheckedChanged += new System.EventHandler(this.radioButtonFeathercoin_CheckedChanged);
             // 
             // radioButtonPascal
             // 
@@ -1042,6 +1091,7 @@
             this.radioButton4.TabIndex = 11;
             this.radioButton4.Text = "Ethereum/Decred";
             this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
             // 
             // radioButton3
             // 
@@ -1053,6 +1103,7 @@
             this.radioButton3.TabIndex = 10;
             this.radioButton3.Text = "Ethereum/Sia";
             this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
             // radioButtonEthereumPascal
             // 
@@ -1063,6 +1114,7 @@
             this.radioButtonEthereumPascal.TabIndex = 9;
             this.radioButtonEthereumPascal.Text = "Ethereum/Pascal";
             this.radioButtonEthereumPascal.UseVisualStyleBackColor = true;
+            this.radioButtonEthereumPascal.CheckedChanged += new System.EventHandler(this.radioButtonEthereumPascal_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -1074,6 +1126,7 @@
             this.radioButton1.TabIndex = 8;
             this.radioButton1.Text = "Ethereum/Lbry";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // radioButtonZcash
             // 
@@ -1132,7 +1185,7 @@
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool0);
             this.tabPageCustomPoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustomPoolSettings.Name = "tabPageCustomPoolSettings";
-            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(818, 489);
+            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(816, 489);
             this.tabPageCustomPoolSettings.TabIndex = 6;
             this.tabPageCustomPoolSettings.Text = "Custom Pools";
             this.tabPageCustomPoolSettings.UseVisualStyleBackColor = true;
@@ -1198,6 +1251,7 @@
             this.numericUpDownCustomPool1SecondaryPort.Name = "numericUpDownCustomPool1SecondaryPort";
             this.numericUpDownCustomPool1SecondaryPort.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool1SecondaryPort.TabIndex = 46;
+            this.numericUpDownCustomPool1SecondaryPort.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool1SecondaryPort_ValueChanged);
             // 
             // textBoxCustomPool1SecondaryHost
             // 
@@ -1205,6 +1259,7 @@
             this.textBoxCustomPool1SecondaryHost.Name = "textBoxCustomPool1SecondaryHost";
             this.textBoxCustomPool1SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool1SecondaryHost.TabIndex = 48;
+            this.textBoxCustomPool1SecondaryHost.TextChanged += new System.EventHandler(this.textBoxCustomPool1SecondaryHost_TextChanged);
             // 
             // textBoxCustomPool1SecondaryPassword
             // 
@@ -1212,6 +1267,7 @@
             this.textBoxCustomPool1SecondaryPassword.Name = "textBoxCustomPool1SecondaryPassword";
             this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1SecondaryPassword.TabIndex = 52;
+            this.textBoxCustomPool1SecondaryPassword.TextChanged += new System.EventHandler(this.textBoxCustomPool1SecondaryPassword_TextChanged);
             // 
             // label166
             // 
@@ -1237,6 +1293,7 @@
             this.textBoxCustomPool1SecondaryLogin.Name = "textBoxCustomPool1SecondaryLogin";
             this.textBoxCustomPool1SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1SecondaryLogin.TabIndex = 50;
+            this.textBoxCustomPool1SecondaryLogin.TextChanged += new System.EventHandler(this.textBoxCustomPool1SecondaryLogin_TextChanged);
             // 
             // label168
             // 
@@ -1297,6 +1354,7 @@
             this.numericUpDownCustomPool1Port.Name = "numericUpDownCustomPool1Port";
             this.numericUpDownCustomPool1Port.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool1Port.TabIndex = 2;
+            this.numericUpDownCustomPool1Port.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool1Port_ValueChanged);
             // 
             // textBoxCustomPool1Host
             // 
@@ -1304,6 +1362,7 @@
             this.textBoxCustomPool1Host.Name = "textBoxCustomPool1Host";
             this.textBoxCustomPool1Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool1Host.TabIndex = 35;
+            this.textBoxCustomPool1Host.TextChanged += new System.EventHandler(this.textBoxCustomPool1Host_TextChanged);
             // 
             // textBoxCustomPool1Password
             // 
@@ -1311,6 +1370,7 @@
             this.textBoxCustomPool1Password.Name = "textBoxCustomPool1Password";
             this.textBoxCustomPool1Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1Password.TabIndex = 41;
+            this.textBoxCustomPool1Password.TextChanged += new System.EventHandler(this.textBoxCustomPool1Password_TextChanged);
             // 
             // label152
             // 
@@ -1336,6 +1396,7 @@
             this.textBoxCustomPool1Login.Name = "textBoxCustomPool1Login";
             this.textBoxCustomPool1Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1Login.TabIndex = 39;
+            this.textBoxCustomPool1Login.TextChanged += new System.EventHandler(this.textBoxCustomPool1Login_TextChanged);
             // 
             // label154
             // 
@@ -1407,6 +1468,7 @@
             this.numericUpDownCustomPool2SecondaryPort.Name = "numericUpDownCustomPool2SecondaryPort";
             this.numericUpDownCustomPool2SecondaryPort.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool2SecondaryPort.TabIndex = 46;
+            this.numericUpDownCustomPool2SecondaryPort.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool2SecondaryPort_ValueChanged);
             // 
             // textBoxCustomPool2SecondaryHost
             // 
@@ -1414,6 +1476,7 @@
             this.textBoxCustomPool2SecondaryHost.Name = "textBoxCustomPool2SecondaryHost";
             this.textBoxCustomPool2SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool2SecondaryHost.TabIndex = 48;
+            this.textBoxCustomPool2SecondaryHost.TextChanged += new System.EventHandler(this.textBoxCustomPool2SecondaryHost_TextChanged);
             // 
             // textBoxCustomPool2SecondaryPassword
             // 
@@ -1421,6 +1484,7 @@
             this.textBoxCustomPool2SecondaryPassword.Name = "textBoxCustomPool2SecondaryPassword";
             this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2SecondaryPassword.TabIndex = 52;
+            this.textBoxCustomPool2SecondaryPassword.TextChanged += new System.EventHandler(this.textBoxCustomPool2SecondaryPassword_TextChanged);
             // 
             // label170
             // 
@@ -1446,6 +1510,7 @@
             this.textBoxCustomPool2SecondaryLogin.Name = "textBoxCustomPool2SecondaryLogin";
             this.textBoxCustomPool2SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2SecondaryLogin.TabIndex = 50;
+            this.textBoxCustomPool2SecondaryLogin.TextChanged += new System.EventHandler(this.textBoxCustomPool2SecondaryLogin_TextChanged);
             // 
             // label172
             // 
@@ -1506,6 +1571,7 @@
             this.numericUpDownCustomPool2Port.Name = "numericUpDownCustomPool2Port";
             this.numericUpDownCustomPool2Port.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool2Port.TabIndex = 2;
+            this.numericUpDownCustomPool2Port.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool2Port_ValueChanged);
             // 
             // textBoxCustomPool2Host
             // 
@@ -1513,6 +1579,7 @@
             this.textBoxCustomPool2Host.Name = "textBoxCustomPool2Host";
             this.textBoxCustomPool2Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool2Host.TabIndex = 35;
+            this.textBoxCustomPool2Host.TextChanged += new System.EventHandler(this.textBoxCustomPool2Host_TextChanged);
             // 
             // textBoxCustomPool2Password
             // 
@@ -1520,6 +1587,7 @@
             this.textBoxCustomPool2Password.Name = "textBoxCustomPool2Password";
             this.textBoxCustomPool2Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2Password.TabIndex = 41;
+            this.textBoxCustomPool2Password.TextChanged += new System.EventHandler(this.textBoxCustomPool2Password_TextChanged);
             // 
             // label157
             // 
@@ -1545,6 +1613,7 @@
             this.textBoxCustomPool2Login.Name = "textBoxCustomPool2Login";
             this.textBoxCustomPool2Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2Login.TabIndex = 39;
+            this.textBoxCustomPool2Login.TextChanged += new System.EventHandler(this.textBoxCustomPool2Login_TextChanged);
             // 
             // label159
             // 
@@ -1616,6 +1685,7 @@
             this.numericUpDownCustomPool3SecondaryPort.Name = "numericUpDownCustomPool3SecondaryPort";
             this.numericUpDownCustomPool3SecondaryPort.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool3SecondaryPort.TabIndex = 46;
+            this.numericUpDownCustomPool3SecondaryPort.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool3SecondaryPort_ValueChanged);
             // 
             // textBoxCustomPool3SecondaryHost
             // 
@@ -1623,6 +1693,7 @@
             this.textBoxCustomPool3SecondaryHost.Name = "textBoxCustomPool3SecondaryHost";
             this.textBoxCustomPool3SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool3SecondaryHost.TabIndex = 48;
+            this.textBoxCustomPool3SecondaryHost.TextChanged += new System.EventHandler(this.textBoxCustomPool3SecondaryHost_TextChanged);
             // 
             // textBoxCustomPool3SecondaryPassword
             // 
@@ -1630,6 +1701,7 @@
             this.textBoxCustomPool3SecondaryPassword.Name = "textBoxCustomPool3SecondaryPassword";
             this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3SecondaryPassword.TabIndex = 52;
+            this.textBoxCustomPool3SecondaryPassword.TextChanged += new System.EventHandler(this.textBoxCustomPool3SecondaryPassword_TextChanged);
             // 
             // label174
             // 
@@ -1655,6 +1727,7 @@
             this.textBoxCustomPool3SecondaryLogin.Name = "textBoxCustomPool3SecondaryLogin";
             this.textBoxCustomPool3SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3SecondaryLogin.TabIndex = 50;
+            this.textBoxCustomPool3SecondaryLogin.TextChanged += new System.EventHandler(this.textBoxCustomPool3SecondaryLogin_TextChanged);
             // 
             // label176
             // 
@@ -1715,6 +1788,7 @@
             this.numericUpDownCustomPool3Port.Name = "numericUpDownCustomPool3Port";
             this.numericUpDownCustomPool3Port.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool3Port.TabIndex = 2;
+            this.numericUpDownCustomPool3Port.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool3Port_ValueChanged);
             // 
             // textBoxCustomPool3Host
             // 
@@ -1722,6 +1796,7 @@
             this.textBoxCustomPool3Host.Name = "textBoxCustomPool3Host";
             this.textBoxCustomPool3Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool3Host.TabIndex = 35;
+            this.textBoxCustomPool3Host.TextChanged += new System.EventHandler(this.textBoxCustomPool3Host_TextChanged);
             // 
             // textBoxCustomPool3Password
             // 
@@ -1729,6 +1804,7 @@
             this.textBoxCustomPool3Password.Name = "textBoxCustomPool3Password";
             this.textBoxCustomPool3Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3Password.TabIndex = 41;
+            this.textBoxCustomPool3Password.TextChanged += new System.EventHandler(this.textBoxCustomPool3Password_TextChanged);
             // 
             // label162
             // 
@@ -1754,6 +1830,7 @@
             this.textBoxCustomPool3Login.Name = "textBoxCustomPool3Login";
             this.textBoxCustomPool3Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3Login.TabIndex = 39;
+            this.textBoxCustomPool3Login.TextChanged += new System.EventHandler(this.textBoxCustomPool3Login_TextChanged);
             // 
             // label164
             // 
@@ -1812,6 +1889,7 @@
             this.numericUpDownCustomPool0SecondaryPort.Name = "numericUpDownCustomPool0SecondaryPort";
             this.numericUpDownCustomPool0SecondaryPort.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool0SecondaryPort.TabIndex = 47;
+            this.numericUpDownCustomPool0SecondaryPort.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool0SecondaryPort_ValueChanged);
             // 
             // textBoxCustomPool0SecondaryHost
             // 
@@ -1819,6 +1897,7 @@
             this.textBoxCustomPool0SecondaryHost.Name = "textBoxCustomPool0SecondaryHost";
             this.textBoxCustomPool0SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool0SecondaryHost.TabIndex = 49;
+            this.textBoxCustomPool0SecondaryHost.TextChanged += new System.EventHandler(this.textBoxCustomPool0SecondaryHost_TextChanged);
             // 
             // textBoxCustomPool0SecondaryPassword
             // 
@@ -1826,6 +1905,7 @@
             this.textBoxCustomPool0SecondaryPassword.Name = "textBoxCustomPool0SecondaryPassword";
             this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0SecondaryPassword.TabIndex = 53;
+            this.textBoxCustomPool0SecondaryPassword.TextChanged += new System.EventHandler(this.textBoxCustomPool0SecondaryPassword_TextChanged);
             // 
             // label150
             // 
@@ -1851,6 +1931,7 @@
             this.textBoxCustomPool0SecondaryLogin.Name = "textBoxCustomPool0SecondaryLogin";
             this.textBoxCustomPool0SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0SecondaryLogin.TabIndex = 51;
+            this.textBoxCustomPool0SecondaryLogin.TextChanged += new System.EventHandler(this.textBoxCustomPool0SecondaryLogin_TextChanged);
             // 
             // label160
             // 
@@ -1924,6 +2005,7 @@
             this.numericUpDownCustomPool0Port.Name = "numericUpDownCustomPool0Port";
             this.numericUpDownCustomPool0Port.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool0Port.TabIndex = 2;
+            this.numericUpDownCustomPool0Port.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool0Port_ValueChanged);
             // 
             // textBoxCustomPool0Host
             // 
@@ -1931,6 +2013,7 @@
             this.textBoxCustomPool0Host.Name = "textBoxCustomPool0Host";
             this.textBoxCustomPool0Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool0Host.TabIndex = 35;
+            this.textBoxCustomPool0Host.TextChanged += new System.EventHandler(this.textBoxCustomPool0Host_TextChanged);
             // 
             // textBoxCustomPool0Password
             // 
@@ -1938,6 +2021,7 @@
             this.textBoxCustomPool0Password.Name = "textBoxCustomPool0Password";
             this.textBoxCustomPool0Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0Password.TabIndex = 41;
+            this.textBoxCustomPool0Password.TextChanged += new System.EventHandler(this.textBoxCustomPool0Password_TextChanged);
             // 
             // label145
             // 
@@ -1963,6 +2047,7 @@
             this.textBoxCustomPool0Login.Name = "textBoxCustomPool0Login";
             this.textBoxCustomPool0Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0Login.TabIndex = 39;
+            this.textBoxCustomPool0Login.TextChanged += new System.EventHandler(this.textBoxCustomPool0Login_TextChanged);
             // 
             // label148
             // 
@@ -1983,7 +2068,7 @@
             this.tabPageDeviceSettings.Controls.Add(this.tabControlDeviceSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
-            this.tabPageDeviceSettings.Size = new System.Drawing.Size(818, 489);
+            this.tabPageDeviceSettings.Size = new System.Drawing.Size(816, 489);
             this.tabPageDeviceSettings.TabIndex = 3;
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
@@ -2060,6 +2145,7 @@
             this.checkBox3.TabIndex = 30;
             this.checkBox3.Text = "Enable on-the-fly memory timing mods (AMD)";
             this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // checkBox2
             // 
@@ -2071,6 +2157,7 @@
             this.checkBox2.TabIndex = 29;
             this.checkBox2.Text = "Enable GDS (AMD)";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // checkBoxEnablePhymem
             // 
@@ -2081,6 +2168,7 @@
             this.checkBoxEnablePhymem.TabIndex = 28;
             this.checkBoxEnablePhymem.Text = "Enable phymem (Application restart required)";
             this.checkBoxEnablePhymem.UseVisualStyleBackColor = true;
+            this.checkBoxEnablePhymem.CheckedChanged += new System.EventHandler(this.checkBoxEnablePhymem_CheckedChanged);
             // 
             // tabControlDeviceSettings
             // 
@@ -2092,14 +2180,139 @@
             // 
             // tabPageMiscSettings
             // 
+            this.tabPageMiscSettings.Controls.Add(this.groupBox2);
             this.tabPageMiscSettings.Controls.Add(this.groupBox1);
             this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
             this.tabPageMiscSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageMiscSettings.Name = "tabPageMiscSettings";
-            this.tabPageMiscSettings.Size = new System.Drawing.Size(818, 489);
+            this.tabPageMiscSettings.Size = new System.Drawing.Size(816, 489);
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.button11);
+            this.groupBox2.Controls.Add(this.button8);
+            this.groupBox2.Controls.Add(this.groupBoxSettingsBackups);
+            this.groupBox2.Controls.Add(this.button9);
+            this.groupBox2.Controls.Add(this.buttonSaveSettings);
+            this.groupBox2.Location = new System.Drawing.Point(542, 4);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(273, 245);
+            this.groupBox2.TabIndex = 42;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "User Settings";
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(138, 45);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(126, 23);
+            this.button11.TabIndex = 4;
+            this.button11.Text = "Load From...";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(138, 15);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(126, 23);
+            this.button8.TabIndex = 3;
+            this.button8.Text = "Save As...";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.buttonSaveSettingsAs_Click);
+            // 
+            // groupBoxSettingsBackups
+            // 
+            this.groupBoxSettingsBackups.Controls.Add(this.checkBoxCreateSettingsBackupWhenSettingsAreSaved);
+            this.groupBoxSettingsBackups.Controls.Add(this.button13);
+            this.groupBoxSettingsBackups.Controls.Add(this.button12);
+            this.groupBoxSettingsBackups.Controls.Add(this.button10);
+            this.groupBoxSettingsBackups.Controls.Add(this.buttonCreateSettingsBackup);
+            this.groupBoxSettingsBackups.Controls.Add(this.listBox1);
+            this.groupBoxSettingsBackups.Location = new System.Drawing.Point(6, 77);
+            this.groupBoxSettingsBackups.Name = "groupBoxSettingsBackups";
+            this.groupBoxSettingsBackups.Size = new System.Drawing.Size(258, 160);
+            this.groupBoxSettingsBackups.TabIndex = 2;
+            this.groupBoxSettingsBackups.TabStop = false;
+            this.groupBoxSettingsBackups.Text = "Backups";
+            // 
+            // checkBoxCreateSettingsBackupWhenSettingsAreSaved
+            // 
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.AutoSize = true;
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.Location = new System.Drawing.Point(6, 134);
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.Name = "checkBoxCreateSettingsBackupWhenSettingsAreSaved";
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.Size = new System.Drawing.Size(214, 17);
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.TabIndex = 7;
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.Text = "Create backup when settings are saved";
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.UseVisualStyleBackColor = true;
+            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.CheckedChanged += new System.EventHandler(this.checkBoxCreateSettingsBackupWhenSettingsAreSaved_CheckedChanged);
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(185, 105);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(67, 23);
+            this.button13.TabIndex = 6;
+            this.button13.Text = "Delete All";
+            this.button13.UseVisualStyleBackColor = true;
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(185, 76);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(67, 23);
+            this.button12.TabIndex = 5;
+            this.button12.Text = "Delete";
+            this.button12.UseVisualStyleBackColor = true;
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(185, 47);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(67, 23);
+            this.button10.TabIndex = 4;
+            this.button10.Text = "Restore";
+            this.button10.UseVisualStyleBackColor = true;
+            // 
+            // buttonCreateSettingsBackup
+            // 
+            this.buttonCreateSettingsBackup.Location = new System.Drawing.Point(185, 18);
+            this.buttonCreateSettingsBackup.Name = "buttonCreateSettingsBackup";
+            this.buttonCreateSettingsBackup.Size = new System.Drawing.Size(67, 23);
+            this.buttonCreateSettingsBackup.TabIndex = 3;
+            this.buttonCreateSettingsBackup.Text = "Create";
+            this.buttonCreateSettingsBackup.UseVisualStyleBackColor = true;
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(6, 20);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(173, 108);
+            this.listBox1.TabIndex = 0;
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(6, 45);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(126, 23);
+            this.button9.TabIndex = 1;
+            this.button9.Text = "Load";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.buttonLoadSettings_Click);
+            // 
+            // buttonSaveSettings
+            // 
+            this.buttonSaveSettings.Location = new System.Drawing.Point(6, 16);
+            this.buttonSaveSettings.Name = "buttonSaveSettings";
+            this.buttonSaveSettings.Size = new System.Drawing.Size(126, 23);
+            this.buttonSaveSettings.TabIndex = 0;
+            this.buttonSaveSettings.Text = "Save";
+            this.buttonSaveSettings.UseVisualStyleBackColor = true;
+            this.buttonSaveSettings.Click += new System.EventHandler(this.buttonSaveSettings_Click);
             // 
             // groupBox1
             // 
@@ -2113,16 +2326,16 @@
             this.groupBox1.Controls.Add(this.buttonInstallRecommendedAMDDriver);
             this.groupBox1.Controls.Add(this.buttonDisableAuomaticRepair);
             this.groupBox1.Controls.Add(this.buttonDisableDriverInstallation);
-            this.groupBox1.Location = new System.Drawing.Point(202, 3);
+            this.groupBox1.Location = new System.Drawing.Point(242, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(293, 251);
+            this.groupBox1.Size = new System.Drawing.Size(293, 252);
             this.groupBox1.TabIndex = 41;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "System Configurations";
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(6, 221);
+            this.button7.Location = new System.Drawing.Point(6, 223);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(216, 23);
             this.button7.TabIndex = 44;
@@ -2144,7 +2357,7 @@
             // 
             // buttonDisableUserAccountControl
             // 
-            this.buttonDisableUserAccountControl.Location = new System.Drawing.Point(6, 134);
+            this.buttonDisableUserAccountControl.Location = new System.Drawing.Point(6, 136);
             this.buttonDisableUserAccountControl.Name = "buttonDisableUserAccountControl";
             this.buttonDisableUserAccountControl.Size = new System.Drawing.Size(216, 23);
             this.buttonDisableUserAccountControl.TabIndex = 43;
@@ -2155,7 +2368,7 @@
             // 
             // buttonDisableUserAccountControlSettings
             // 
-            this.buttonDisableUserAccountControlSettings.Location = new System.Drawing.Point(228, 134);
+            this.buttonDisableUserAccountControlSettings.Location = new System.Drawing.Point(228, 136);
             this.buttonDisableUserAccountControlSettings.Name = "buttonDisableUserAccountControlSettings";
             this.buttonDisableUserAccountControlSettings.Size = new System.Drawing.Size(57, 23);
             this.buttonDisableUserAccountControlSettings.TabIndex = 42;
@@ -2165,7 +2378,7 @@
             // 
             // buttonDownloadDisplayDriverUninstaller
             // 
-            this.buttonDownloadDisplayDriverUninstaller.Location = new System.Drawing.Point(6, 76);
+            this.buttonDownloadDisplayDriverUninstaller.Location = new System.Drawing.Point(6, 78);
             this.buttonDownloadDisplayDriverUninstaller.Name = "buttonDownloadDisplayDriverUninstaller";
             this.buttonDownloadDisplayDriverUninstaller.Size = new System.Drawing.Size(216, 23);
             this.buttonDownloadDisplayDriverUninstaller.TabIndex = 41;
@@ -2176,7 +2389,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(228, 47);
+            this.button1.Location = new System.Drawing.Point(228, 49);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(57, 23);
             this.button1.TabIndex = 40;
@@ -2186,7 +2399,7 @@
             // 
             // buttonConfigureAutomaticLogin
             // 
-            this.buttonConfigureAutomaticLogin.Location = new System.Drawing.Point(6, 163);
+            this.buttonConfigureAutomaticLogin.Location = new System.Drawing.Point(6, 165);
             this.buttonConfigureAutomaticLogin.Name = "buttonConfigureAutomaticLogin";
             this.buttonConfigureAutomaticLogin.Size = new System.Drawing.Size(216, 23);
             this.buttonConfigureAutomaticLogin.TabIndex = 36;
@@ -2197,7 +2410,7 @@
             // 
             // buttonInstallRecommendedAMDDriver
             // 
-            this.buttonInstallRecommendedAMDDriver.Location = new System.Drawing.Point(6, 105);
+            this.buttonInstallRecommendedAMDDriver.Location = new System.Drawing.Point(6, 107);
             this.buttonInstallRecommendedAMDDriver.Name = "buttonInstallRecommendedAMDDriver";
             this.buttonInstallRecommendedAMDDriver.Size = new System.Drawing.Size(216, 23);
             this.buttonInstallRecommendedAMDDriver.TabIndex = 39;
@@ -2208,7 +2421,7 @@
             // 
             // buttonDisableAuomaticRepair
             // 
-            this.buttonDisableAuomaticRepair.Location = new System.Drawing.Point(6, 192);
+            this.buttonDisableAuomaticRepair.Location = new System.Drawing.Point(6, 194);
             this.buttonDisableAuomaticRepair.Name = "buttonDisableAuomaticRepair";
             this.buttonDisableAuomaticRepair.Size = new System.Drawing.Size(216, 23);
             this.buttonDisableAuomaticRepair.TabIndex = 37;
@@ -2219,7 +2432,7 @@
             // 
             // buttonDisableDriverInstallation
             // 
-            this.buttonDisableDriverInstallation.Location = new System.Drawing.Point(6, 47);
+            this.buttonDisableDriverInstallation.Location = new System.Drawing.Point(6, 49);
             this.buttonDisableDriverInstallation.Name = "buttonDisableDriverInstallation";
             this.buttonDisableDriverInstallation.Size = new System.Drawing.Size(216, 23);
             this.buttonDisableDriverInstallation.TabIndex = 38;
@@ -2230,27 +2443,39 @@
             // 
             // groupBoxAutomation
             // 
+            this.groupBoxAutomation.Controls.Add(this.label2);
             this.groupBoxAutomation.Controls.Add(this.checkBoxDisableAutoStartPrompt);
             this.groupBoxAutomation.Controls.Add(this.checkBoxAutoStart);
             this.groupBoxAutomation.Controls.Add(this.checkBoxLaunchAtStartup);
             this.groupBoxAutomation.Location = new System.Drawing.Point(3, 3);
             this.groupBoxAutomation.Name = "groupBoxAutomation";
-            this.groupBoxAutomation.Size = new System.Drawing.Size(193, 95);
+            this.groupBoxAutomation.Size = new System.Drawing.Size(233, 110);
             this.groupBoxAutomation.TabIndex = 35;
             this.groupBoxAutomation.TabStop = false;
             this.groupBoxAutomation.Text = "Automation";
+            this.groupBoxAutomation.Enter += new System.EventHandler(this.groupBoxAutomation_Enter);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(23, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(210, 13);
+            this.label2.TabIndex = 42;
+            this.label2.Text = "(Hold Shift to temporarily disable auto-start.)";
             // 
             // checkBoxDisableAutoStartPrompt
             // 
             this.checkBoxDisableAutoStartPrompt.AutoSize = true;
             this.checkBoxDisableAutoStartPrompt.Checked = true;
             this.checkBoxDisableAutoStartPrompt.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(8, 65);
+            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(6, 82);
             this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
             this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
             this.checkBoxDisableAutoStartPrompt.TabIndex = 29;
             this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
             this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
+            this.checkBoxDisableAutoStartPrompt.CheckedChanged += new System.EventHandler(this.checkBoxDisableAutoStartPrompt_CheckedChanged);
             // 
             // checkBoxAutoStart
             // 
@@ -2261,11 +2486,12 @@
             this.checkBoxAutoStart.TabIndex = 27;
             this.checkBoxAutoStart.Text = "Auto-start mining";
             this.checkBoxAutoStart.UseVisualStyleBackColor = true;
+            this.checkBoxAutoStart.CheckedChanged += new System.EventHandler(this.checkBoxAutoStart_CheckedChanged);
             // 
             // checkBoxLaunchAtStartup
             // 
             this.checkBoxLaunchAtStartup.AutoSize = true;
-            this.checkBoxLaunchAtStartup.Location = new System.Drawing.Point(8, 42);
+            this.checkBoxLaunchAtStartup.Location = new System.Drawing.Point(6, 59);
             this.checkBoxLaunchAtStartup.Name = "checkBoxLaunchAtStartup";
             this.checkBoxLaunchAtStartup.Size = new System.Drawing.Size(163, 17);
             this.checkBoxLaunchAtStartup.TabIndex = 28;
@@ -2281,7 +2507,7 @@
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
             this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(818, 489);
+            this.tabPageLog.Size = new System.Drawing.Size(816, 489);
             this.tabPageLog.TabIndex = 1;
             this.tabPageLog.Text = "Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -2289,7 +2515,7 @@
             // buttonClearLog
             // 
             this.buttonClearLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClearLog.Location = new System.Drawing.Point(737, 36);
+            this.buttonClearLog.Location = new System.Drawing.Point(733, 36);
             this.buttonClearLog.Name = "buttonClearLog";
             this.buttonClearLog.Size = new System.Drawing.Size(75, 23);
             this.buttonClearLog.TabIndex = 60;
@@ -2300,7 +2526,7 @@
             // buttonOpenLog
             // 
             this.buttonOpenLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOpenLog.Location = new System.Drawing.Point(737, 7);
+            this.buttonOpenLog.Location = new System.Drawing.Point(733, 7);
             this.buttonOpenLog.Name = "buttonOpenLog";
             this.buttonOpenLog.Size = new System.Drawing.Size(75, 23);
             this.buttonOpenLog.TabIndex = 3;
@@ -2319,7 +2545,7 @@
             this.richTextBoxLog.Location = new System.Drawing.Point(6, 7);
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(725, 382);
+            this.richTextBoxLog.Size = new System.Drawing.Size(723, 476);
             this.richTextBoxLog.TabIndex = 59;
             this.richTextBoxLog.Text = "";
             // 
@@ -2328,7 +2554,7 @@
             this.tabPageAbout.Controls.Add(this.richTextBoxAbout);
             this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
             this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Size = new System.Drawing.Size(818, 489);
+            this.tabPageAbout.Size = new System.Drawing.Size(816, 489);
             this.tabPageAbout.TabIndex = 5;
             this.tabPageAbout.Text = "About";
             this.tabPageAbout.UseVisualStyleBackColor = true;
@@ -2341,7 +2567,7 @@
             this.richTextBoxAbout.Location = new System.Drawing.Point(4, 4);
             this.richTextBoxAbout.Name = "richTextBoxAbout";
             this.richTextBoxAbout.ReadOnly = true;
-            this.richTextBoxAbout.Size = new System.Drawing.Size(811, 388);
+            this.richTextBoxAbout.Size = new System.Drawing.Size(809, 388);
             this.richTextBoxAbout.TabIndex = 0;
             this.richTextBoxAbout.Text = resources.GetString("richTextBoxAbout.Text");
             // 
@@ -2380,18 +2606,19 @@
             // 
             this.buttonBenchmark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonBenchmark.Enabled = false;
-            this.buttonBenchmark.Location = new System.Drawing.Point(681, 530);
+            this.buttonBenchmark.Location = new System.Drawing.Point(679, 530);
             this.buttonBenchmark.Name = "buttonBenchmark";
             this.buttonBenchmark.Size = new System.Drawing.Size(75, 23);
             this.buttonBenchmark.TabIndex = 146;
             this.buttonBenchmark.Text = "Benchmark";
             this.buttonBenchmark.UseVisualStyleBackColor = true;
+            this.buttonBenchmark.Visible = false;
             // 
             // buttonStart
             // 
             this.buttonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonStart.Enabled = false;
-            this.buttonStart.Location = new System.Drawing.Point(762, 530);
+            this.buttonStart.Location = new System.Drawing.Point(760, 530);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(75, 23);
             this.buttonStart.TabIndex = 145;
@@ -2406,7 +2633,7 @@
             this.toolStripStatusLabel1});
             this.statusStripMainForm.Location = new System.Drawing.Point(0, 562);
             this.statusStripMainForm.Name = "statusStripMainForm";
-            this.statusStripMainForm.Size = new System.Drawing.Size(849, 23);
+            this.statusStripMainForm.Size = new System.Drawing.Size(847, 23);
             this.statusStripMainForm.TabIndex = 5;
             // 
             // toolStripMainFormProgressBar
@@ -2421,33 +2648,11 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(158, 18);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabelMessage";
             // 
-            // cartesianChartFanSpeed
-            // 
-            this.cartesianChartFanSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartFanSpeed.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartFanSpeed.Location = new System.Drawing.Point(408, 35);
-            this.cartesianChartFanSpeed.Name = "cartesianChartFanSpeed";
-            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(398, 203);
-            this.cartesianChartFanSpeed.TabIndex = 152;
-            this.cartesianChartFanSpeed.Text = "cartesianChart1";
-            // 
-            // cartesianChartSpeedSecondaryAlgorithm
-            // 
-            this.cartesianChartSpeedSecondaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartSpeedSecondaryAlgorithm.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(408, 35);
-            this.cartesianChartSpeedSecondaryAlgorithm.Name = "cartesianChartSpeedSecondaryAlgorithm";
-            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(398, 203);
-            this.cartesianChartSpeedSecondaryAlgorithm.TabIndex = 153;
-            this.cartesianChartSpeedSecondaryAlgorithm.Text = "cartesianChart1";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(849, 585);
+            this.ClientSize = new System.Drawing.Size(847, 585);
             this.Controls.Add(this.buttonBenchmark);
             this.Controls.Add(this.statusStripMainForm);
             this.Controls.Add(this.buttonStart);
@@ -2456,7 +2661,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(32767, 32767);
-            this.MinimumSize = new System.Drawing.Size(865, 530);
+            this.MinimumSize = new System.Drawing.Size(863, 624);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Gateless Gate Sharp";
@@ -2495,6 +2700,9 @@
             this.groupBoxHadrwareAcceleration.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.PerformLayout();
             this.tabPageMiscSettings.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBoxSettingsBackups.ResumeLayout(false);
+            this.groupBoxSettingsBackups.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBoxAutomation.ResumeLayout(false);
             this.groupBoxAutomation.PerformLayout();
@@ -2711,5 +2919,18 @@
         private LiveCharts.WinForms.CartesianChart cartesianChartSpeedPrimaryAlgorithm;
         private LiveCharts.WinForms.CartesianChart cartesianChartSpeedSecondaryAlgorithm;
         private LiveCharts.WinForms.CartesianChart cartesianChartFanSpeed;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.GroupBox groupBoxSettingsBackups;
+        private System.Windows.Forms.CheckBox checkBoxCreateSettingsBackupWhenSettingsAreSaved;
+        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button buttonCreateSettingsBackup;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button buttonSaveSettings;
     }
 }
