@@ -216,12 +216,12 @@
             this.button11 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.groupBoxSettingsBackups = new System.Windows.Forms.GroupBox();
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved = new System.Windows.Forms.CheckBox();
+            this.checkBoxAutomaticallyCreateBackups = new System.Windows.Forms.CheckBox();
             this.button13 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.buttonCreateSettingsBackup = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.listBoxSettingBackups = new System.Windows.Forms.ListBox();
             this.button9 = new System.Windows.Forms.Button();
             this.buttonSaveSettings = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -2197,7 +2197,7 @@
             this.groupBox2.Controls.Add(this.groupBoxSettingsBackups);
             this.groupBox2.Controls.Add(this.button9);
             this.groupBox2.Controls.Add(this.buttonSaveSettings);
-            this.groupBox2.Location = new System.Drawing.Point(542, 4);
+            this.groupBox2.Location = new System.Drawing.Point(533, 10);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(273, 245);
             this.groupBox2.TabIndex = 42;
@@ -2226,12 +2226,12 @@
             // 
             // groupBoxSettingsBackups
             // 
-            this.groupBoxSettingsBackups.Controls.Add(this.checkBoxCreateSettingsBackupWhenSettingsAreSaved);
+            this.groupBoxSettingsBackups.Controls.Add(this.checkBoxAutomaticallyCreateBackups);
             this.groupBoxSettingsBackups.Controls.Add(this.button13);
             this.groupBoxSettingsBackups.Controls.Add(this.button12);
             this.groupBoxSettingsBackups.Controls.Add(this.button10);
             this.groupBoxSettingsBackups.Controls.Add(this.buttonCreateSettingsBackup);
-            this.groupBoxSettingsBackups.Controls.Add(this.listBox1);
+            this.groupBoxSettingsBackups.Controls.Add(this.listBoxSettingBackups);
             this.groupBoxSettingsBackups.Location = new System.Drawing.Point(6, 77);
             this.groupBoxSettingsBackups.Name = "groupBoxSettingsBackups";
             this.groupBoxSettingsBackups.Size = new System.Drawing.Size(258, 160);
@@ -2239,16 +2239,18 @@
             this.groupBoxSettingsBackups.TabStop = false;
             this.groupBoxSettingsBackups.Text = "Backups";
             // 
-            // checkBoxCreateSettingsBackupWhenSettingsAreSaved
+            // checkBoxAutomaticallyCreateBackups
             // 
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.AutoSize = true;
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.Location = new System.Drawing.Point(6, 134);
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.Name = "checkBoxCreateSettingsBackupWhenSettingsAreSaved";
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.Size = new System.Drawing.Size(214, 17);
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.TabIndex = 7;
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.Text = "Create backup when settings are saved";
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.UseVisualStyleBackColor = true;
-            this.checkBoxCreateSettingsBackupWhenSettingsAreSaved.CheckedChanged += new System.EventHandler(this.checkBoxCreateSettingsBackupWhenSettingsAreSaved_CheckedChanged);
+            this.checkBoxAutomaticallyCreateBackups.AutoSize = true;
+            this.checkBoxAutomaticallyCreateBackups.Checked = true;
+            this.checkBoxAutomaticallyCreateBackups.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAutomaticallyCreateBackups.Location = new System.Drawing.Point(6, 134);
+            this.checkBoxAutomaticallyCreateBackups.Name = "checkBoxAutomaticallyCreateBackups";
+            this.checkBoxAutomaticallyCreateBackups.Size = new System.Drawing.Size(235, 17);
+            this.checkBoxAutomaticallyCreateBackups.TabIndex = 7;
+            this.checkBoxAutomaticallyCreateBackups.Text = "Create backup whenever settings are saved";
+            this.checkBoxAutomaticallyCreateBackups.UseVisualStyleBackColor = true;
+            this.checkBoxAutomaticallyCreateBackups.CheckedChanged += new System.EventHandler(this.checkBoxCreateSettingsBackupWhenSettingsAreSaved_CheckedChanged);
             // 
             // button13
             // 
@@ -2258,6 +2260,7 @@
             this.button13.TabIndex = 6;
             this.button13.Text = "Delete All";
             this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
             // button12
             // 
@@ -2267,6 +2270,7 @@
             this.button12.TabIndex = 5;
             this.button12.Text = "Delete";
             this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.buttonDeleteSettingsBackup_Click);
             // 
             // button10
             // 
@@ -2276,6 +2280,7 @@
             this.button10.TabIndex = 4;
             this.button10.Text = "Restore";
             this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.buttonRestoreSettings_Click);
             // 
             // buttonCreateSettingsBackup
             // 
@@ -2285,14 +2290,15 @@
             this.buttonCreateSettingsBackup.TabIndex = 3;
             this.buttonCreateSettingsBackup.Text = "Create";
             this.buttonCreateSettingsBackup.UseVisualStyleBackColor = true;
+            this.buttonCreateSettingsBackup.Click += new System.EventHandler(this.buttonCreateSettingsBackup_Click);
             // 
-            // listBox1
+            // listBoxSettingBackups
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 20);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(173, 108);
-            this.listBox1.TabIndex = 0;
+            this.listBoxSettingBackups.FormattingEnabled = true;
+            this.listBoxSettingBackups.Location = new System.Drawing.Point(6, 20);
+            this.listBoxSettingBackups.Name = "listBoxSettingBackups";
+            this.listBoxSettingBackups.Size = new System.Drawing.Size(173, 108);
+            this.listBoxSettingBackups.TabIndex = 0;
             // 
             // button9
             // 
@@ -2326,7 +2332,7 @@
             this.groupBox1.Controls.Add(this.buttonInstallRecommendedAMDDriver);
             this.groupBox1.Controls.Add(this.buttonDisableAuomaticRepair);
             this.groupBox1.Controls.Add(this.buttonDisableDriverInstallation);
-            this.groupBox1.Location = new System.Drawing.Point(242, 3);
+            this.groupBox1.Location = new System.Drawing.Point(234, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(293, 252);
             this.groupBox1.TabIndex = 41;
@@ -2449,7 +2455,7 @@
             this.groupBoxAutomation.Controls.Add(this.checkBoxLaunchAtStartup);
             this.groupBoxAutomation.Location = new System.Drawing.Point(3, 3);
             this.groupBoxAutomation.Name = "groupBoxAutomation";
-            this.groupBoxAutomation.Size = new System.Drawing.Size(233, 110);
+            this.groupBoxAutomation.Size = new System.Drawing.Size(225, 110);
             this.groupBoxAutomation.TabIndex = 35;
             this.groupBoxAutomation.TabStop = false;
             this.groupBoxAutomation.Text = "Automation";
@@ -2460,9 +2466,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(23, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(210, 13);
+            this.label2.Size = new System.Drawing.Size(157, 13);
             this.label2.TabIndex = 42;
-            this.label2.Text = "(Hold Shift to temporarily disable auto-start.)";
+            this.label2.Text = "(Hold Shift to disable auto-start.)";
             // 
             // checkBoxDisableAutoStartPrompt
             // 
@@ -2924,12 +2930,12 @@
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.GroupBox groupBoxSettingsBackups;
-        private System.Windows.Forms.CheckBox checkBoxCreateSettingsBackupWhenSettingsAreSaved;
+        private System.Windows.Forms.CheckBox checkBoxAutomaticallyCreateBackups;
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button buttonCreateSettingsBackup;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox listBoxSettingBackups;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button buttonSaveSettings;
     }

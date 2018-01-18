@@ -181,8 +181,9 @@ namespace GatelessGateSharp {
                 fixed (byte* pascalInputPtr = mPascalInput)
                 fixed (UInt32* pascalOutputPtr = mPascalOutput)
                 while (!Stopped) {
-                    MarkAsAlive();
                     ComputeBuffer<byte> ethashDAGBuffer = null;
+
+                    MarkAsAlive();
 
                     try {
                         int ethashEpoch = -1;

@@ -284,7 +284,7 @@ namespace GatelessGateSharp
         }
 
         private void CreateNewDatabase(string filePath) {
-            SQLiteConnection.CreateFile(DatabaseFilePath);
+            SQLiteConnection.CreateFile(filePath);
             using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                 conn.Open();
                 var sql = "create table wallet_addresses (coin varchar(1024), address varchar(1024));";
@@ -298,11 +298,17 @@ namespace GatelessGateSharp
 
                 sql = "create table device_parameters (device_id int, device_vendor varchar(1024), device_name varchar(1024), parameter_name varchar(1024), parameter_value varchar(1024));";
                 using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
+
+                conn.Close();
             }
         }
 
         static string AppDataPathBase {
             get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\GatelessGateSharp"; }
+        }
+
+        static string SettingsBackupPathBase {
+            get { return AppDataPathBase + "\\Backups"; }
         }
 
         static string DatabaseFilePath {
@@ -332,14 +338,20 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void LoadSettingsFromDatabase(string filePath = null) {
-            Logger("Loading settings...");
+            if (filePath == null) {
+                filePath = (System.IO.File.Exists(OldDatabaseFilePath) ? OldDatabaseFilePath : DatabaseFilePath);
+            } else {
+                filePath = (new Regex("'")).Replace(filePath, "");
+            }
+            Application.DoEvents();
+            Logger("Loading settings from " + filePath + "...");
             UpdateLog();
-            Update();
+            Application.DoEvents();
             MainForm.Instance.Enabled = false;
 
             int databaseVersion = 0;
             try {
-                using (var conn = new SQLiteConnection("Data Source=" + ((filePath == null) ? (System.IO.File.Exists(OldDatabaseFilePath) ? OldDatabaseFilePath : DatabaseFilePath) : (new Regex("'")).Replace(filePath, "")) + ";Version=3;")) {
+                using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                     conn.Open();
                     var sql = "select * from wallet_addresses";
                     using (var command = new SQLiteCommand(sql, conn)) {
@@ -695,13 +707,15 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void SaveSettingsToDatabase(string filePath = null) {
-            Logger("Saving settings...");
+            bool createBackup = filePath == null;
+            filePath = ((filePath == null) ? DatabaseFilePath : (new Regex("'")).Replace(filePath, ""));
+            Application.DoEvents(); 
+            Logger("Saving settings to " + filePath + "...");
             UpdateLog();
-            Update();
+            Application.DoEvents();
             MainForm.Instance.Enabled = false;
 
             // Delete the old database in case it is corrupt.
-            filePath = ((filePath == null) ? DatabaseFilePath : (new Regex("'")).Replace(filePath, ""));
             try { System.IO.File.Delete(filePath); } catch (Exception) { }
             try { CreateNewDatabase(filePath); } catch (Exception) { }
 
@@ -1077,9 +1091,10 @@ namespace GatelessGateSharp
                             }
                         }
                     }
+                    conn.Close();
                 }
                 if (System.IO.File.Exists(OldDatabaseFilePath))
-                    System.IO.File.Delete(OldDatabaseFilePath);
+                System.IO.File.Delete(OldDatabaseFilePath);
                 Logger("Saved settings.");
                 if (filePath == DatabaseFilePath)
                     mAreSettingsDirty = false;
@@ -1087,6 +1102,23 @@ namespace GatelessGateSharp
                 Logger("Exception in UpdateDatabase(): " + ex.Message + ex.StackTrace);
             }
             MainForm.Instance.Enabled = true;
+            if (createBackup && checkBoxAutomaticallyCreateBackups.Checked)
+                CreateSettingsBackup();
+        }
+
+        void CreateSettingsBackup(string name = null) {
+            if (name == null)
+                name = System.DateTime.Now.ToString("yyyy-MM-dd--hhmm") + ".sqlite";
+            SaveSettingsToDatabase(SettingsBackupPathBase + "\\" + name);
+            UpdateSettingBackupList();
+        }
+
+        void UpdateSettingBackupList() {
+            listBoxSettingBackups.Items.Clear();
+            var regex = new Regex(@"^.*\\(.*)--(..)(..)\.sqlite$");
+            foreach (string file in System.IO.Directory.GetFiles(SettingsBackupPathBase))
+                if (regex.Match(file).Success)
+                    listBoxSettingBackups.Items.Add(regex.Replace(file, "$1 $2:$3"));
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -1097,6 +1129,7 @@ namespace GatelessGateSharp
             Logger(appName + " started.");
 
             try { System.IO.Directory.CreateDirectory(AppDataPathBase); } catch (Exception) { }
+            try { System.IO.Directory.CreateDirectory(SettingsBackupPathBase); } catch (Exception) { }
 
             CheckVirtualMemorySize();
 
@@ -1132,6 +1165,7 @@ namespace GatelessGateSharp
             }
 
             Text = appName; // Set the window title.
+            UpdateSettingBackupList();
 
             // Do everything to turn off TDR.
             foreach (var controlSet in new string[] { "CurrentControlSet", "ControlSet001" })
@@ -1838,7 +1872,7 @@ namespace GatelessGateSharp
                 if (mAppState != ApplicationGlobalState.Mining)
                     labelElapsedTime.Text = "-";
                 else if (elapsedTimeInSeconds >= 24 * 60 * 60)
-                    labelElapsedTime.Text = string.Format("{3} Days {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24);
+                    labelElapsedTime.Text = string.Format("{3} Day{4} {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24, elapsedTimeInSeconds / 60 / 60 / 24 == 1 ? "" : "s");
                 else
                     labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
 
@@ -1989,7 +2023,8 @@ namespace GatelessGateSharp
                 miner.Dispose();
             mInactiveMiners.Clear();
 
-            SaveSettingsToDatabase();
+            if (mAreSettingsDirty)
+                SaveSettingsToDatabase();
             if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy) {
                 foreach (var device in mDevices)
                     if (device.ADLAdapterIndex >= 0 && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
@@ -3315,7 +3350,7 @@ namespace GatelessGateSharp
                 foreach (var miner in mActiveMiners)
                     miner.Stop();
                 var allDone = false;
-                var counter = 500;
+                var counter = 60000;
                 while (!allDone && counter-- > 0) {
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(10);
@@ -3326,9 +3361,9 @@ namespace GatelessGateSharp
                             break;
                         }
                 }
-                foreach (var miner in mActiveMiners)
-                    if (!miner.Done)
-                        miner.Abort(); // Not good at all. Avoid this at all costs.
+                //foreach (var miner in mActiveMiners)
+                //    if (!miner.Done)
+                //        miner.Abort(); // Not good at all. Avoid this at all costs.
                 string algorithm = mPrimaryStratum.Algorithm;
                 if (mSecondaryStratum != null)
                     algorithm += "_" + mSecondaryStratum.Algorithm;
@@ -3345,7 +3380,8 @@ namespace GatelessGateSharp
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             }
             foreach (var miner in mActiveMiners)
-                mInactiveMiners.Add(miner);
+                if (miner.Done)
+                    mInactiveMiners.Add(miner);
             mActiveMiners.Clear();
             mPrimaryStratum = null;
             mSecondaryStratum = null;
@@ -3394,6 +3430,7 @@ namespace GatelessGateSharp
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             if (mAppState == ApplicationGlobalState.Idle) {
+                tabControlMainForm.SelectedIndex = 0;
                 if (mAreSettingsDirty)
                     SaveSettingsToDatabase();
                 if (checkBoxEnablePhymem.Checked && !PCIExpress.Available && !PCIExpress.LoadPhyMem())
@@ -3422,7 +3459,6 @@ namespace GatelessGateSharp
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                 } else {
                     mAppState = ApplicationGlobalState.Mining;
-                    tabControlMainForm.SelectedIndex = 0;
                     timerDevFee.Interval = 15 * 60 * 1000;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
@@ -4239,7 +4275,7 @@ namespace GatelessGateSharp
         }
 
         private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start("http://www.guru3d.com/files-details/display-driver-uninstaller-download.html");
+            System.Diagnostics.Process.Start("http://www.guru3d.com/files-get/display-driver-uninstaller-download,9.html");
         }
 
         private void buttonUserAccountControlSettings_Click(object sender, EventArgs e) {
@@ -4711,6 +4747,57 @@ namespace GatelessGateSharp
         private void dataGridViewDevices_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             if (e.ColumnIndex == 0)
                 mAreSettingsDirty = true;
+        }
+
+        private void buttonCreateSettingsBackup_Click(object sender, EventArgs e) {
+            try {
+                CreateSettingsBackup();
+            } catch (Exception ex) {
+                Logger("Exception: " + ex.Message + ex.StackTrace);
+                MessageBox.Show(this, "Failed to create backup.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonRestoreSettings_Click(object sender, EventArgs e) {
+            try {
+                if (listBoxSettingBackups.SelectedIndex >= 0 && MessageBox.Show(this, "Would you like to restore settings from backup?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+                    Regex re = new Regex(@"^(..........) (..):(..)$");
+                    string path = SettingsBackupPathBase + "\\" + re.Replace((string)listBoxSettingBackups.Items[listBoxSettingBackups.SelectedIndex], "$1--$2$3.sqlite");
+                    LoadSettingsFromDatabase(path);
+                }
+            } catch (Exception ex) {
+                Logger("Exception: " + ex.Message + ex.StackTrace);
+                MessageBox.Show(this, "Failed to restore settings.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonDeleteSettingsBackup_Click(object sender, EventArgs e) {
+            try {
+                if (listBoxSettingBackups.SelectedIndex >= 0 && MessageBox.Show(this, "Would you like to delete backup?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+                    Regex re = new Regex(@"^(..........) (..):(..)$");
+                    string path = SettingsBackupPathBase + "\\" + re.Replace((string)listBoxSettingBackups.Items[listBoxSettingBackups.SelectedIndex], "$1--$2$3.sqlite");
+                    System.IO.File.Delete(path);
+                    UpdateSettingBackupList();
+                }
+            } catch (Exception ex) {
+                Logger("Exception: " + ex.Message + ex.StackTrace);
+                MessageBox.Show(this, "Failed to delete backup.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button13_Click(object sender, EventArgs e) {
+            try {
+                if (listBoxSettingBackups.SelectedIndex >= 0 && MessageBox.Show(this, "Would you like to delete all backups?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+                    var regex = new Regex(@"^.*\\(.*)--(..)(..)\.sqlite$");
+                    foreach (string file in System.IO.Directory.GetFiles(SettingsBackupPathBase))
+                        if (regex.Match(file).Success)
+                            System.IO.File.Delete(file);
+                    UpdateSettingBackupList();
+                }
+            } catch (Exception ex) {
+                Logger("Exception: " + ex.Message + ex.StackTrace);
+                MessageBox.Show(this, "Failed to delete backups.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

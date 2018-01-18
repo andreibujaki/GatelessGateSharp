@@ -311,10 +311,10 @@ namespace GatelessGateSharp
                                                         break;
                                                     System.Threading.Thread.Sleep(100);
                                                 }
-                                                if (!dummyMiner.Stopped) {
-                                                    MainForm.Logger("Failed to match OpenCL devices with ADL devices. Restarting the application...");
-                                                    Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
-                                                }
+                                                if (!dummyMiner.Stopped)
+                                                    MainForm.Logger("Failed to match OpenCL devices with ADL devices. The application may become unstable.");
+                                                GC.Collect();
+                                                GC.WaitForPendingFinalizers();
                                             }
                                         }
                                     }
@@ -549,7 +549,7 @@ namespace GatelessGateSharp
                 if (ADL.ADL2_OverdriveN_PerformanceStatus_Get(ADL2Context, ADLAdapterIndex, statusBuffer) != ADL.ADL_SUCCESS)
                     return -1;
                 OSODNPerformanceStatusData = (ADLODNPerformanceStatus)Marshal.PtrToStructure(statusBuffer, OSODNPerformanceStatusData.GetType());
-                mCoreVoltageAvailable = mCoreVoltageAvailable && !(OSODNPerformanceStatusData.iVDDC <= 0 || OSODNPerformanceStatusData.iVDDC > 2000); // The driver may return garbage.
+                mCoreVoltageAvailable = mCoreVoltageAvailable && !(OSODNPerformanceStatusData.iVDDC <= 800 || OSODNPerformanceStatusData.iVDDC > 2000); // The driver may return garbage.
                 return (!mCoreVoltageAvailable) ? -1 : OSODNPerformanceStatusData.iVDDC;
             }
 
