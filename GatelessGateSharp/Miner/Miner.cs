@@ -23,7 +23,7 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class Miner
+    class Miner : IDisposable
     {
         private OpenCLDevice mDevice;
         private bool mStopped = false;
@@ -39,7 +39,7 @@ namespace GatelessGateSharp
         public bool Stopped { get { return mStopped; } }
         public bool Done { get { return mDone; } }
         public double Speed { get; set; }
-        public double SecondSpeed { get; set; }
+        public double SpeedSecondaryAlgorithm { get; set; }
         public String AlgorithmName { get { return mAlgorithmName; } }
         public String FirstAlgorithmName { get { return mFirstAlgorithmName; } }
         public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
@@ -53,8 +53,17 @@ namespace GatelessGateSharp
             mFirstAlgorithmName = (aFirstAlgorithmName == "") ? aAlgorithmName : aFirstAlgorithmName;
             mSecondAlgorithmName = aSecondAlgorithmName;
             Speed = 0;
-            SecondSpeed = 0;
+            SpeedSecondaryAlgorithm = 0;
         }
+
+        public void Dispose() {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing) { }
 
         ~Miner()
         {
@@ -73,7 +82,7 @@ namespace GatelessGateSharp
             mMinerThread = new System.Threading.Thread(MinerThread);
             mMinerThread.IsBackground = true;
             mMinerThread.Start();
-            mMinerThread.Priority = System.Threading.ThreadPriority.AboveNormal;
+            mMinerThread.Priority = System.Threading.ThreadPriority.Normal;
         }
 
         unsafe protected virtual void MinerThread() { }
@@ -114,7 +123,7 @@ namespace GatelessGateSharp
         {
             mDone = true;
             Speed = 0;
-            SecondSpeed = 0;
+            SpeedSecondaryAlgorithm = 0;
         }
 
         public bool Alive

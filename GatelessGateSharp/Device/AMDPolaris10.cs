@@ -1709,12 +1709,20 @@ namespace GatelessGateSharp {
             public static BitVector32.Section TCL   = BitVector32.CreateSection(31, TW2R);
         }
 
+        public class MC_SEQ_MISC_TIMING {
+            public static BitVector32 Create(int value) { return new BitVector32(value); }
+            public static BitVector32.Section TRP_WRA = BitVector32.CreateSection(63);           // 0, 5  
+            public static BitVector32.Section TRP_RDA = BitVector32.CreateSection(63,  TRP_WRA); // 8, 13 
+            public static BitVector32.Section TRP     = BitVector32.CreateSection(31,  TRP_RDA); // 15, 19
+            public static BitVector32.Section TRFC    = BitVector32.CreateSection(511, TRP);     // 20, 28
+        }
+
         public class MC_SEQ_MISC_TIMING2 {
             public static BitVector32 Create(int value) { return new BitVector32(value); }
             public static BitVector32.Section PA2RDATA = BitVector32.CreateSection(7);            // 0, 2    
             public static BitVector32.Section PA2WDATA = BitVector32.CreateSection(7, PA2RDATA); // 4, 6
-            public static BitVector32.Section FAW = BitVector32.CreateSection(31, PA2WDATA); // 8, 12
-            public static BitVector32.Section TREDC = BitVector32.CreateSection(7, FAW);      // 13, 15  
+            public static BitVector32.Section FAW      = BitVector32.CreateSection(31, PA2WDATA); // 8, 12
+            public static BitVector32.Section TREDC    = BitVector32.CreateSection(7, FAW);      // 13, 15  
             public static BitVector32.Section TWEDC = BitVector32.CreateSection(31, TREDC);    // 16, 20
             public static BitVector32.Section T32AW = BitVector32.CreateSection(15, TWEDC);    // 21, 24 
             public static BitVector32.Section TWDATATR = BitVector32.CreateSection(15, T32AW);    // 28, 31
@@ -1731,7 +1739,6 @@ namespace GatelessGateSharp {
         /*
         MC_SEQ_PMG_TIMING
         MC_SEQ_MISC_TIMING
-        MC_ARB_DRAM_TIMING
         MC_ARB_DRAM_TIMING2
         static struct umr_bitfield mmMC_ARB_DRAM_TIMING[]
          */

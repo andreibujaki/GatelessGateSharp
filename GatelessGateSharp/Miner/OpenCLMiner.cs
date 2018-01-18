@@ -29,7 +29,7 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class OpenCLMiner : Miner
+    class OpenCLMiner : Miner, IDisposable
     {
         public class ProgramArrayIndex
         {
@@ -62,6 +62,15 @@ namespace GatelessGateSharp
         {
             mDevice = aDevice;
             mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.OutOfOrderExecution);
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                if (mQueue != null) {
+                    mQueue.Dispose();
+                    mQueue = null;
+                }
+            }
         }
     }
 }
