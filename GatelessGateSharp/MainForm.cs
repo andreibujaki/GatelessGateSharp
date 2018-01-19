@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.2";
+        public static string appVersion = "1.2.3";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -80,8 +80,7 @@ namespace GatelessGateSharp
 
         private Stratum mPrimaryStratum = null;
         private Stratum mSecondaryStratum = null;
-        private List<Miner> mActiveMiners = new List<Miner>();
-        private List<Miner> mInactiveMiners = new List<Miner>();
+        private List<Miner> mMiners = new List<Miner>();
         private enum ApplicationGlobalState
         {
             Idle = 0,
@@ -263,6 +262,10 @@ namespace GatelessGateSharp
 
             InitializeComponent();
 
+            this.AllowDrop = true;
+            this.DragEnter += new DragEventHandler(MainForm_DragEnter);
+            this.DragDrop += new DragEventHandler(MainForm_DragDrop);
+
             comboBoxCustomPool0Algorithm.SelectedIndex = 0;
             comboBoxCustomPool1Algorithm.SelectedIndex = 0;
             comboBoxCustomPool2Algorithm.SelectedIndex = 0;
@@ -281,6 +284,16 @@ namespace GatelessGateSharp
                 .X(model => model.DateTime.Ticks) 
                 .Y(model => model.Value);
             Charting.For<MeasureModel>(mapper);
+        }
+
+        void MainForm_DragEnter(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        void MainForm_DragDrop(object sender, DragEventArgs e) {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files) 
+                LoadSettingsFromDatabase(file);
         }
 
         private void CreateNewDatabase(string filePath) {
@@ -1139,7 +1152,6 @@ namespace GatelessGateSharp
             splashScreen.Show();
             Application.DoEvents();
 
-
             try {
                 RunNGen();
             } catch (Exception ex) {
@@ -1200,6 +1212,7 @@ namespace GatelessGateSharp
             mBackgroundTasksCancellationTokenSource = new CancellationTokenSource();
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_HardwareManagement), mBackgroundTasksCancellationTokenSource.Token);
             mAreSettingsDirty = false;
+            checkBoxEnablePhymem.Checked = false;
 
             // Auto-start mining if necessary.
             splashScreen.Dispose();
@@ -1510,7 +1523,7 @@ namespace GatelessGateSharp
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 64 :
-                            device.GetVendor() == "AMD"                                         ? 2 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD"                                         ? 3 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
                                                                                                           2 * device.GetMaxComputeUnits());
         }
@@ -1627,10 +1640,10 @@ namespace GatelessGateSharp
                 PCIExpress.PrintMemoryTimings();
 
                 double totalSpeed = 0;
-                foreach (var miner in mActiveMiners)
+                foreach (var miner in mMiners)
                     totalSpeed += miner.Speed;
                 double secondaryTotalSpeed = 0;
-                foreach (var miner in mActiveMiners)
+                foreach (var miner in mMiners)
                     secondaryTotalSpeed += miner.SpeedSecondaryAlgorithm;
                 
                 var client = new CustomWebClient();
@@ -1877,14 +1890,14 @@ namespace GatelessGateSharp
                     labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
 
                 Dictionary<string, double> speeds = new Dictionary<string, double>();
-                foreach (var miner in mActiveMiners) {
+                foreach (var miner in mMiners) {
                     if (!speeds.ContainsKey(miner.FirstAlgorithmName)) {
                         speeds.Add(miner.FirstAlgorithmName, miner.Speed);
                     } else {
                         speeds[miner.FirstAlgorithmName] += miner.Speed;
                     }
                 }
-                foreach (var miner in mActiveMiners) {
+                foreach (var miner in mMiners) {
                     if (miner.SecondAlgorithmName == null || miner.SecondAlgorithmName == "")
                         continue;
                     if (!speeds.ContainsKey(miner.SecondAlgorithmName)) {
@@ -1908,10 +1921,10 @@ namespace GatelessGateSharp
                     var computeDevice = device.GetComputeDevice();
                     var deviceIndex = device.DeviceIndex;
                     double speedPrimary = 0, speedSecondary = 0;
-                    foreach (var miner in mActiveMiners)
+                    foreach (var miner in mMiners)
                         if (miner.DeviceIndex == device.DeviceIndex)
                             speedPrimary += miner.Speed;
-                    foreach (var miner in mActiveMiners)
+                    foreach (var miner in mMiners)
                         if (miner.DeviceIndex == device.DeviceIndex && miner.SecondAlgorithmName != null && miner.SecondAlgorithmName != "")
                             speedSecondary += miner.SpeedSecondaryAlgorithm;
                     
@@ -2016,12 +2029,8 @@ namespace GatelessGateSharp
             timerWatchdog.Enabled = false;
             mBackgroundTasksCancellationTokenSource.Cancel();
 
-            if (mAppState == ApplicationGlobalState.Mining) {
+            if (mAppState == ApplicationGlobalState.Mining)
                 StopMiners();
-            }
-            foreach (var miner in mInactiveMiners)
-                miner.Dispose();
-            mInactiveMiners.Clear();
 
             if (mAreSettingsDirty)
                 SaveSettingsToDatabase();
@@ -2085,7 +2094,7 @@ namespace GatelessGateSharp
                 "Speed (Primary Algorithm)",
                 (int deviceIndex) => {
                     double speed = 0;
-                    foreach (var miner in mActiveMiners)
+                    foreach (var miner in mMiners)
                         speed += (deviceIndex == miner.DeviceIndex) ? miner.Speed : 0;
                     return speed;
                 });
@@ -2093,7 +2102,7 @@ namespace GatelessGateSharp
                 "Speed (Secondary Algorithm)",
                 (int deviceIndex) => {
                     double speed = 0;
-                    foreach (var miner in mActiveMiners)
+                    foreach (var miner in mMiners)
                         speed += (deviceIndex == miner.DeviceIndex) ? miner.SpeedSecondaryAlgorithm : 0;
                     return speed;
                 });
@@ -2749,19 +2758,8 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i) {
-                        OpenCLCryptoNightMiner miner = null;
-                        foreach (var inactiveMiner in mInactiveMiners) {
-                            if (inactiveMiner.GetType() == typeof(OpenCLCryptoNightMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
-                                miner = (OpenCLCryptoNightMiner)inactiveMiner;
-                                break;
-                            }
-                        }
-                        if (miner != null) {
-                            mInactiveMiners.Remove((Miner)miner);
-                        } else {
-                            miner = new OpenCLCryptoNightMiner(mDevices[deviceIndex]);
-                        }
-                        mActiveMiners.Add(miner);
+                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(mDevices[deviceIndex]);
+                        mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightRawIntensityArray[deviceIndex]
                                 .Value)),
@@ -2789,19 +2787,8 @@ namespace GatelessGateSharp
 
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    OpenCLDualEthashLbryMiner dualMiner = null;
-                    foreach (var inactiveMiner in mInactiveMiners) {
-                        if (inactiveMiner.GetType() == typeof(OpenCLDualEthashLbryMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
-                            dualMiner = (OpenCLDualEthashLbryMiner)inactiveMiner;
-                            break;
-                        }
-                    }
-                    if (dualMiner != null) {
-                        mInactiveMiners.Remove((Miner)dualMiner);
-                    } else {
-                        dualMiner = new OpenCLDualEthashLbryMiner(mDevices[deviceIndex]);
-                    }
-                    mActiveMiners.Add(dualMiner);
+                    OpenCLDualEthashLbryMiner dualMiner = new OpenCLDualEthashLbryMiner(mDevices[deviceIndex]);
+                    mMiners.Add(dualMiner);
                     dualMiner.Start(stratum,
                         Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
                             .Value)),
@@ -2834,19 +2821,8 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (int i = 0; i < numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value; ++i) {
-                        OpenCLDualEthashPascalMiner dualMiner = null;
-                        foreach (var inactiveMiner in mInactiveMiners) {
-                            if (inactiveMiner.GetType() == typeof(OpenCLDualEthashPascalMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
-                                dualMiner = (OpenCLDualEthashPascalMiner)inactiveMiner;
-                                break;
-                            }
-                        }
-                        if (dualMiner != null) {
-                            mInactiveMiners.Remove((Miner)dualMiner);
-                        } else {
-                            dualMiner = new OpenCLDualEthashPascalMiner(mDevices[deviceIndex]);
-                        }
-                        mActiveMiners.Add(dualMiner);
+                        OpenCLDualEthashPascalMiner dualMiner = new OpenCLDualEthashPascalMiner(mDevices[deviceIndex]);
+                        mMiners.Add(dualMiner);
                         dualMiner.Start(stratum,
                                 stratum2,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalIntensityArray[deviceIndex]
@@ -2877,19 +2853,8 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i) {
-                        OpenCLEthashMiner miner = null;
-                        foreach (var inactiveMiner in mInactiveMiners) {
-                            if (inactiveMiner.GetType() == typeof(OpenCLEthashMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
-                                miner = (OpenCLEthashMiner)inactiveMiner;
-                                break;
-                            }
-                        }
-                        if (miner != null) {
-                            mInactiveMiners.Remove((Miner)miner);
-                        } else {
-                            miner = new OpenCLEthashMiner(mDevices[deviceIndex]);
-                        }
-                        mActiveMiners.Add(miner);
+                        OpenCLEthashMiner miner = new OpenCLEthashMiner(mDevices[deviceIndex]);
+                        mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
                                 .Value)),
@@ -2918,19 +2883,8 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i) {
-                        OpenCLLbryMiner miner = null;
-                        foreach (var inactiveMiner in mInactiveMiners) {
-                            if (inactiveMiner.GetType() == typeof(OpenCLLbryMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
-                                miner = (OpenCLLbryMiner)inactiveMiner;
-                                break;
-                            }
-                        }
-                        if (miner != null) {
-                            mInactiveMiners.Remove((Miner)miner);
-                        } else {
-                            miner = new OpenCLLbryMiner(mDevices[deviceIndex]);
-                        }
-                        mActiveMiners.Add(miner);
+                        OpenCLLbryMiner miner = new OpenCLLbryMiner(mDevices[deviceIndex]);
+                        mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
@@ -2957,19 +2911,8 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i) {
-                        OpenCLPascalMiner miner = null;
-                        foreach (var inactiveMiner in mInactiveMiners) {
-                            if (inactiveMiner.GetType() == typeof(OpenCLPascalMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
-                                miner = (OpenCLPascalMiner)inactiveMiner;
-                                break;
-                            }
-                        }
-                        if (miner != null) {
-                            mInactiveMiners.Remove((Miner)miner);
-                        } else {
-                            miner = new OpenCLPascalMiner(mDevices[deviceIndex]);
-                        }
-                        mActiveMiners.Add(miner);
+                        OpenCLPascalMiner miner =  new OpenCLPascalMiner(mDevices[deviceIndex]);
+                        mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDevicePascalIntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDevicePascalLocalWorkSizeArray[deviceIndex].Value)));
@@ -2996,19 +2939,8 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i) {
-                        OpenCLNeoScryptMiner miner = null;
-                        foreach (var inactiveMiner in mInactiveMiners) {
-                            if (inactiveMiner.GetType() == typeof(OpenCLNeoScryptMiner) && deviceIndex == inactiveMiner.DeviceIndex) {
-                                miner = (OpenCLNeoScryptMiner)inactiveMiner;
-                                break;
-                            }
-                        }
-                        if (miner != null) {
-                            mInactiveMiners.Remove((Miner)miner);
-                        } else {
-                            miner = new OpenCLNeoScryptMiner(mDevices[deviceIndex]);
-                        }
-                        mActiveMiners.Add(miner);
+                        OpenCLNeoScryptMiner miner = new OpenCLNeoScryptMiner(mDevices[deviceIndex]);
+                        mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptIntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceIndex].Value))
@@ -3036,19 +2968,8 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i) {
-                        OpenCLLyra2REv2Miner miner = null;
-                        foreach (var inactiveMiner in mInactiveMiners) {
-                            if (inactiveMiner.GetType() == typeof(OpenCLLyra2REv2Miner) && deviceIndex == inactiveMiner.DeviceIndex) {
-                                miner = (OpenCLLyra2REv2Miner)inactiveMiner;
-                                break;
-                            }
-                        }
-                        if (miner != null) {
-                            mInactiveMiners.Remove((Miner)miner);
-                        } else {
-                            miner = new OpenCLLyra2REv2Miner(mDevices[deviceIndex]);
-                        }
-                        mActiveMiners.Add(miner);
+                        OpenCLLyra2REv2Miner miner = new OpenCLLyra2REv2Miner(mDevices[deviceIndex]);
+                        mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
@@ -3176,7 +3097,7 @@ namespace GatelessGateSharp
                         Logger("Launching Lyra2REv2 miners for " + pool + "...");
                         LaunchOpenCLLyra2REv2Miners(pool);
                     }
-                    if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
+                    if (mPrimaryStratum != null && mMiners.Count > 0) {
                         return;
                     } else {
                         Logger("Failed to launch miner(s) for " + pool);
@@ -3192,11 +3113,11 @@ namespace GatelessGateSharp
                     mPrimaryStratum.Stop();
                 if (mSecondaryStratum != null)
                     mSecondaryStratum.Stop();
-                foreach (Miner miner in mActiveMiners)
+                foreach (Miner miner in mMiners)
                     miner.Stop();
                 mPrimaryStratum = null;
                 mSecondaryStratum = null;
-                mActiveMiners.Clear();
+                mMiners.Clear();
             }
         }
         
@@ -3267,11 +3188,11 @@ namespace GatelessGateSharp
                     mPrimaryStratum.Stop();
                 if (mSecondaryStratum != null)
                     mSecondaryStratum.Stop();
-                foreach (Miner miner in mActiveMiners)
+                foreach (Miner miner in mMiners)
                     miner.Stop();
                 mPrimaryStratum = null;
                 mSecondaryStratum = null;
-                mActiveMiners.Clear();
+                mMiners.Clear();
             }
         }
 
@@ -3317,7 +3238,7 @@ namespace GatelessGateSharp
                             Logger("Launching Lyra2REv2 miners for DEVFEE...");
                             LaunchOpenCLLyra2REv2Miners(pool);
                         }
-                        if (mPrimaryStratum != null && mActiveMiners.Count > 0) {
+                        if (mPrimaryStratum != null && mMiners.Count > 0) {
                             return;
                         } else {
                             Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
@@ -3333,11 +3254,11 @@ namespace GatelessGateSharp
                         mPrimaryStratum.Stop();
                     if (mSecondaryStratum != null)
                         mSecondaryStratum.Stop();
-                    foreach (Miner miner in mActiveMiners)
+                    foreach (Miner miner in mMiners)
                         miner.Stop();
                     mPrimaryStratum = null;
                     mSecondaryStratum = null;
-                    mActiveMiners.Clear();
+                    mMiners.Clear();
                 }
             }
         }
@@ -3347,7 +3268,7 @@ namespace GatelessGateSharp
         private void StopMiners() {
             try {
                 Logger("Stopping miners...");
-                foreach (var miner in mActiveMiners)
+                foreach (var miner in mMiners)
                     miner.Stop();
                 var allDone = false;
                 var counter = 60000;
@@ -3355,7 +3276,7 @@ namespace GatelessGateSharp
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(10);
                     allDone = true;
-                    foreach (var miner in mActiveMiners)
+                    foreach (var miner in mMiners)
                         if (!miner.Done) {
                             allDone = false;
                             break;
@@ -3379,10 +3300,9 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             }
-            foreach (var miner in mActiveMiners)
-                if (miner.Done)
-                    mInactiveMiners.Add(miner);
-            mActiveMiners.Clear();
+            foreach (var miner in mMiners)
+                miner.Dispose();
+            mMiners.Clear();
             mPrimaryStratum = null;
             mSecondaryStratum = null;
 
@@ -3443,7 +3363,7 @@ namespace GatelessGateSharp
 
                 mPrimaryStratum = null;
                 mSecondaryStratum = null;
-                mActiveMiners.Clear();
+                mMiners.Clear();
 
                 mDevFeeMode = false;
                 try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
@@ -3453,7 +3373,7 @@ namespace GatelessGateSharp
                 } catch (Exception ex) { 
                     unrecoverableException = ex;
                 }
-                if (unrecoverableException != null || mPrimaryStratum == null || !mActiveMiners.Any()) {
+                if (unrecoverableException != null || mPrimaryStratum == null || !mMiners.Any()) {
                     StopMiners();
                     MessageBox.Show((unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner."), appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
@@ -3616,7 +3536,7 @@ namespace GatelessGateSharp
                     timerDevFee.Interval = (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
                     System.Threading.Thread.Sleep(1000);
                     LaunchMiners();
-                    if (mActiveMiners.Count() == 0 || mPrimaryStratum == null) {
+                    if (mMiners.Count() == 0 || mPrimaryStratum == null) {
                         mDevFeeMode = true;
                         timerDevFee.Interval = 1000;
                     }
@@ -3629,7 +3549,7 @@ namespace GatelessGateSharp
                     timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
                     System.Threading.Thread.Sleep(1000);
                     LaunchMiners();
-                    if (mActiveMiners.Count() == 0 || mPrimaryStratum == null) {
+                    if (mMiners.Count() == 0 || mPrimaryStratum == null) {
                         mDevFeeMode = false;
                         timerDevFee.Interval = 1000;
                     }
@@ -3670,7 +3590,7 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void timerWatchdog_Tick(object sender, EventArgs e) {
             try {
-                if (mAppState == ApplicationGlobalState.Mining && mActiveMiners.Any()) {
+                if (mAppState == ApplicationGlobalState.Mining && mMiners.Any()) {
                     Exception ex = null;
                     if (mPrimaryStratum != null && mPrimaryStratum.UnrecoverableException != null) {
                         ex = mPrimaryStratum.UnrecoverableException;
@@ -3680,7 +3600,7 @@ namespace GatelessGateSharp
                         ex = mSecondaryStratum.UnrecoverableException;
                         mSecondaryStratum.UnrecoverableException = null;
                     }
-                    foreach (var miner in mActiveMiners) {
+                    foreach (var miner in mMiners) {
                         if (miner.UnrecoverableException != null) {
                             ex = miner.UnrecoverableException;
                             miner.UnrecoverableException = null;
@@ -3702,7 +3622,7 @@ namespace GatelessGateSharp
                         if (MessageBox.Show(w, ex.Message + "\n\nMining will automatically resume in 20 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes)
                             timerAutoStart.Enabled = true;
                     } else {
-                        foreach (var miner in mActiveMiners) {
+                        foreach (var miner in mMiners) {
                             if (!miner.Alive) {
                                 MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
                                 Program.KillMonitor = false; Application.Exit();
@@ -4271,7 +4191,7 @@ namespace GatelessGateSharp
         }
 
         private void buttonInstallRecommendedAMDDriver_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx");
+            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.1.1-Release-Notes.aspx");
         }
 
         private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e) {

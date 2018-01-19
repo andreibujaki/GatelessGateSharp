@@ -2125,6 +2125,7 @@
             this.groupBoxHadrwareAcceleration.TabIndex = 1;
             this.groupBoxHadrwareAcceleration.TabStop = false;
             this.groupBoxHadrwareAcceleration.Text = "Hardware Acceleration";
+            this.groupBoxHadrwareAcceleration.Visible = false;
             // 
             // label144
             // 
@@ -2197,7 +2198,7 @@
             this.groupBox2.Controls.Add(this.groupBoxSettingsBackups);
             this.groupBox2.Controls.Add(this.button9);
             this.groupBox2.Controls.Add(this.buttonSaveSettings);
-            this.groupBox2.Location = new System.Drawing.Point(533, 10);
+            this.groupBox2.Location = new System.Drawing.Point(500, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(273, 245);
             this.groupBox2.TabIndex = 42;
@@ -2332,7 +2333,7 @@
             this.groupBox1.Controls.Add(this.buttonInstallRecommendedAMDDriver);
             this.groupBox1.Controls.Add(this.buttonDisableAuomaticRepair);
             this.groupBox1.Controls.Add(this.buttonDisableDriverInstallation);
-            this.groupBox1.Location = new System.Drawing.Point(234, 3);
+            this.groupBox1.Location = new System.Drawing.Point(201, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(293, 252);
             this.groupBox1.TabIndex = 41;
@@ -2455,7 +2456,7 @@
             this.groupBoxAutomation.Controls.Add(this.checkBoxLaunchAtStartup);
             this.groupBoxAutomation.Location = new System.Drawing.Point(3, 3);
             this.groupBoxAutomation.Name = "groupBoxAutomation";
-            this.groupBoxAutomation.Size = new System.Drawing.Size(225, 110);
+            this.groupBoxAutomation.Size = new System.Drawing.Size(192, 110);
             this.groupBoxAutomation.TabIndex = 35;
             this.groupBoxAutomation.TabStop = false;
             this.groupBoxAutomation.Text = "Automation";

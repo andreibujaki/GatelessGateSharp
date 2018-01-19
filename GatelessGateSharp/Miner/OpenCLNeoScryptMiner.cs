@@ -31,14 +31,6 @@ namespace GatelessGateSharp
         public static readonly int sNeoScryptInputSize = 80;
         public static readonly int sNeoScryptOutputSize = 256;
 
-        static Mutex mProgramArrayMutex = new Mutex();
-
-        static Dictionary<ProgramArrayIndex, ComputeProgram> mNeoScryptProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
-        static Dictionary<ProgramArrayIndex, ComputeKernel> mNeoScryptSearchKernelArray = new Dictionary<ProgramArrayIndex, ComputeKernel>();
-        ComputeProgram mNeoScryptProgram;
-        ComputeKernel mNeoScryptSearchKernel = null;
-        private ComputeBuffer<byte> mNeoScryptInputBuffer = null;
-        private ComputeBuffer<UInt32> mNeoScryptOutputBuffer = null;
         private NeoScryptStratum mNeoScryptStratum;
         long[] mNeoScryptGlobalWorkSizeArray = new long[] { 0 };
         long[] mNeoScryptLocalWorkSizeArray = new long[] { 0 };
@@ -50,12 +42,6 @@ namespace GatelessGateSharp
 
         public OpenCLNeoScryptMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "NeoScrypt") {
-            try {
-                mNeoScryptInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sNeoScryptInputSize);
-                mNeoScryptOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sNeoScryptOutputSize);
-            } catch (Exception ex) {
-                throw new UnrecoverableException(ex, GatelessGateDevice);
-            }
         }
 
         public void Start(NeoScryptStratum aNeoScryptStratum, int aNeoScryptIntensity, int aNeoScryptLocalWorkSize) {
@@ -66,132 +52,133 @@ namespace GatelessGateSharp
             base.Start();
         }
 
-        public void BuildNeoScryptProgram() {
-            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+        [System.Security.SecurityCritical]
+        override unsafe protected void MinerThread() {
+            ComputeProgram neoScryptProgram = null;
 
-            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
+            try {
+                Random r = new Random();
 
-            if (mNeoScryptProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0]))) {
-                mNeoScryptProgram = mNeoScryptProgramArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])];
-                mNeoScryptSearchKernel = mNeoScryptSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])];
-            } else {
+                MarkAsAlive();
+
+                MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+
+                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
                 String source = System.IO.File.ReadAllText(@"Kernels\neoscrypt.cl");
-                mNeoScryptProgram = new ComputeProgram(Context, source);
+                neoScryptProgram = new ComputeProgram(Context, source);
                 MainForm.Logger(@"Loaded Kernels\neoscrypt.cl for Device #" + DeviceIndex + ".");
                 String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O5 -legacy" : // "-legacy" :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + mNeoScryptLocalWorkSizeArray[0];
+                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                                                    "")
+                                        + " -IKernels -DWORKSIZE=" + mNeoScryptLocalWorkSizeArray[0];
                 try {
-                    mNeoScryptProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
+                    neoScryptProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
                 } catch (Exception) {
-                    MainForm.Logger(mNeoScryptProgram.GetBuildLog(computeDevice));
+                    MainForm.Logger(neoScryptProgram.GetBuildLog(computeDevice));
                     throw;
                 }
                 MainForm.Logger("Built NeoScrypt program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
-                mNeoScryptProgramArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])] = mNeoScryptProgram;
-                mNeoScryptSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mNeoScryptLocalWorkSizeArray[0])] = mNeoScryptSearchKernel = mNeoScryptProgram.CreateKernel("search");
-            }
 
-            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
-        }
+                using (var neoScryptSearchKernel = neoScryptProgram.CreateKernel("search"))
+                using (var neoScryptInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sNeoScryptInputSize))
+                using (var neoScryptOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sNeoScryptOutputSize))
+                fixed (long* neoscryptGlobalWorkOffsetArrayPtr = mNeoScryptGlobalWorkOffsetArray)
+                fixed (long* neoscryptGlobalWorkSizeArrayPtr = mNeoScryptGlobalWorkSizeArray)
+                fixed (long* neoscryptLocalWorkSizeArrayPtr = mNeoScryptLocalWorkSizeArray)
+                fixed (byte* neoscryptInputPtr = mNeoScryptInput)
+                fixed (UInt32* neoscryptOutputPtr = mNeoScryptOutput)
+                using (ComputeBuffer<byte> mNeoScryptGlobalCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, (mNeoScryptGlobalWorkSizeArray[0] * 32768)))
+                while (!Stopped) {
+                    MarkAsAlive();
 
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        override unsafe protected void MinerThread() {
-            Random r = new Random();
+                    try {
+                        neoScryptSearchKernel.SetMemoryArgument(0, neoScryptInputBuffer);
+                        neoScryptSearchKernel.SetMemoryArgument(1, neoScryptOutputBuffer);
+                        neoScryptSearchKernel.SetMemoryArgument(2, mNeoScryptGlobalCacheBuffer);
 
-            MarkAsAlive();
+                        // Wait for the first NeoScryptJob to arrive.
+                        int elapsedTime = 0;
+                        while ((mNeoScryptStratum == null || mNeoScryptStratum.GetJob() == null) && elapsedTime < 60000) {
+                            Thread.Sleep(100);
+                            elapsedTime += 100;
+                        }
+                        if (mNeoScryptStratum == null || mNeoScryptStratum.GetJob() == null)
+                            throw new TimeoutException("Stratum server failed to send a new job.");
 
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+                        System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
+                        NeoScryptStratum.Work neoscryptWork;
 
-            BuildNeoScryptProgram();
-
-            fixed (long* neoscryptGlobalWorkOffsetArrayPtr = mNeoScryptGlobalWorkOffsetArray)
-            fixed (long* neoscryptGlobalWorkSizeArrayPtr = mNeoScryptGlobalWorkSizeArray)
-            fixed (long* neoscryptLocalWorkSizeArrayPtr = mNeoScryptLocalWorkSizeArray)
-            fixed (byte* neoscryptInputPtr = mNeoScryptInput)
-            fixed (UInt32* neoscryptOutputPtr = mNeoScryptOutput)
-            using (ComputeBuffer<byte> mNeoScryptGlobalCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, (mNeoScryptGlobalWorkSizeArray[0] * 32768)))
-            while (!Stopped) {
-                MarkAsAlive();
-
-                try {
-                    mNeoScryptSearchKernel.SetMemoryArgument(0, mNeoScryptInputBuffer);
-                    mNeoScryptSearchKernel.SetMemoryArgument(1, mNeoScryptOutputBuffer);
-                    mNeoScryptSearchKernel.SetMemoryArgument(2, mNeoScryptGlobalCacheBuffer);
-
-                    // Wait for the first NeoScryptJob to arrive.
-                    int elapsedTime = 0;
-                    while ((mNeoScryptStratum == null || mNeoScryptStratum.GetJob() == null) && elapsedTime < 60000) {
-                        Thread.Sleep(100);
-                        elapsedTime += 100;
-                    }
-                    if (mNeoScryptStratum == null || mNeoScryptStratum.GetJob() == null)
-                        throw new TimeoutException("Stratum server failed to send a new job.");
-
-                    System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                    NeoScryptStratum.Work neoscryptWork;
-
-                    while (!Stopped && (neoscryptWork = mNeoScryptStratum.GetWork()) != null) {
-                        MarkAsAlive();
-
-                        var neoscryptJob = neoscryptWork.Job;
-                        Array.Copy(neoscryptWork.Blob, mNeoScryptInput, sNeoScryptInputSize);
-                        UInt32 neoscryptStartNonce = (UInt32)(r.Next(0, int.MaxValue));
-                        Queue.Write<byte>(mNeoScryptInputBuffer, true, 0, sNeoScryptInputSize, (IntPtr)neoscryptInputPtr, null);
-
-                        consoleUpdateStopwatch.Start();
-
-                        while (!Stopped && mNeoScryptStratum.GetJob().Equals(neoscryptJob)) {
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
-
+                        while (!Stopped && (neoscryptWork = mNeoScryptStratum.GetWork()) != null) {
                             MarkAsAlive();
 
-                            UInt32 NeoScryptTarget = (UInt32)((double)0xffff0000U / (mNeoScryptStratum.Difficulty * 65536));
-                            mNeoScryptSearchKernel.SetValueArgument<UInt32>(3, NeoScryptTarget);
-                            mNeoScryptGlobalWorkOffsetArray[0] = neoscryptStartNonce;
+                            var neoscryptJob = neoscryptWork.Job;
+                            Array.Copy(neoscryptWork.Blob, mNeoScryptInput, sNeoScryptInputSize);
+                            UInt32 neoscryptStartNonce = (UInt32)(r.Next(0, int.MaxValue));
+                            Queue.Write<byte>(neoScryptInputBuffer, true, 0, sNeoScryptInputSize, (IntPtr)neoscryptInputPtr, null);
 
-                            // Get a new local extranonce if necessary.
-                            if (0xffffffffu - neoscryptStartNonce < (UInt32)mNeoScryptGlobalWorkSizeArray[0])
-                                break;
+                            consoleUpdateStopwatch.Start();
 
-                            mNeoScryptOutput[255] = 0; // mNeoScryptOutput[255] is used as an atomic counter.
-                            Queue.Write<UInt32>(mNeoScryptOutputBuffer, true, 0, sNeoScryptOutputSize, (IntPtr)neoscryptOutputPtr, null);
-                            Queue.Execute(mNeoScryptSearchKernel, mNeoScryptGlobalWorkOffsetArray, mNeoScryptGlobalWorkSizeArray, mNeoScryptLocalWorkSizeArray, null);
-                            Queue.Read<UInt32>(mNeoScryptOutputBuffer, true, 0, sNeoScryptOutputSize, (IntPtr)neoscryptOutputPtr, null);
-                            if (mNeoScryptStratum.GetJob().Equals(neoscryptJob)) {
-                                for (int i = 0; i < mNeoScryptOutput[255]; ++i)
-                                    mNeoScryptStratum.Submit(GatelessGateDevice, neoscryptWork, mNeoScryptOutput[i]);
-                            }
-                            neoscryptStartNonce += (UInt32)mNeoScryptGlobalWorkSizeArray[0];
+                            while (!Stopped && mNeoScryptStratum.GetJob().Equals(neoscryptJob)) {
+                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                                sw.Start();
 
-                            sw.Stop();
-                            Speed = ((double)mNeoScryptGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
-                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (NeoScrypt)", Speed / 1000));
-                                consoleUpdateStopwatch.Restart();
+                                MarkAsAlive();
+
+                                UInt32 NeoScryptTarget = (UInt32)((double)0xffff0000U / (mNeoScryptStratum.Difficulty * 65536));
+                                neoScryptSearchKernel.SetValueArgument<UInt32>(3, NeoScryptTarget);
+                                mNeoScryptGlobalWorkOffsetArray[0] = neoscryptStartNonce;
+
+                                // Get a new local extranonce if necessary.
+                                if (0xffffffffu - neoscryptStartNonce < (UInt32)mNeoScryptGlobalWorkSizeArray[0])
+                                    break;
+
+                                mNeoScryptOutput[255] = 0; // mNeoScryptOutput[255] is used as an atomic counter.
+                                Queue.Write<UInt32>(neoScryptOutputBuffer, true, 0, sNeoScryptOutputSize, (IntPtr)neoscryptOutputPtr, null);
+                                Queue.Execute(neoScryptSearchKernel, mNeoScryptGlobalWorkOffsetArray, mNeoScryptGlobalWorkSizeArray, mNeoScryptLocalWorkSizeArray, null);
+                                Queue.Read<UInt32>(neoScryptOutputBuffer, true, 0, sNeoScryptOutputSize, (IntPtr)neoscryptOutputPtr, null);
+                                if (mNeoScryptStratum.GetJob().Equals(neoscryptJob)) {
+                                    for (int i = 0; i < mNeoScryptOutput[255]; ++i)
+                                        mNeoScryptStratum.Submit(GatelessGateDevice, neoscryptWork, mNeoScryptOutput[i]);
+                                }
+                                neoscryptStartNonce += (UInt32)mNeoScryptGlobalWorkSizeArray[0];
+
+                                sw.Stop();
+                                Speed = ((double)mNeoScryptGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                                if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
+                                    MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (NeoScrypt)", Speed / 1000));
+                                    consoleUpdateStopwatch.Restart();
+                                }
                             }
                         }
+                    } catch (Exception ex) {
+                        MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
+                        if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                            this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                            Stop();
+                        }
                     }
-                } catch (Exception ex) {
-                    MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
-                        Stop();
+
+                    Speed = 0;
+
+                    if (!Stopped) {
+                        MainForm.Logger("Restarting miner thread...");
+                        System.Threading.Thread.Sleep(5000);
                     }
                 }
+                MarkAsDone();
 
-                Speed = 0;
-
-                if (!Stopped) {
-                    MainForm.Logger("Restarting miner thread...");
-                    System.Threading.Thread.Sleep(5000);
-                }
+                neoScryptProgram.Dispose();
+            } catch (UnrecoverableException) {
+                if (neoScryptProgram != null)
+                    neoScryptProgram.Dispose();
+                throw;
+            } catch (Exception ex) {
+                if (neoScryptProgram != null)
+                    neoScryptProgram.Dispose();
+                throw new UnrecoverableException(ex, GatelessGateDevice);
             }
-            MarkAsDone();
         }
     }
 }
