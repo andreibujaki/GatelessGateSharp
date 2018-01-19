@@ -1121,7 +1121,7 @@ namespace GatelessGateSharp
 
         void CreateSettingsBackup(string name = null) {
             if (name == null)
-                name = System.DateTime.Now.ToString("yyyy-MM-dd--hhmm") + ".sqlite";
+                name = System.DateTime.Now.ToString("yyyy-MM-dd--HHmm") + ".sqlite";
             SaveSettingsToDatabase(SettingsBackupPathBase + "\\" + name);
             UpdateSettingBackupList();
         }
@@ -1476,6 +1476,8 @@ namespace GatelessGateSharp
         }
 
         private void ResetDeviceAlgorithmSettings(Device device) {
+            mAreSettingsDirty = true;
+
             // EthashPascal
             numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
             numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)1024;
@@ -1507,9 +1509,9 @@ namespace GatelessGateSharp
 
             // NeoScrypt
             numericUpDownDeviceNeoScryptThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceNeoScryptIntensityArray[device.DeviceIndex].Value = (decimal)1;
+            numericUpDownDeviceNeoScryptIntensityArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 8 : 4);
             numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
+            numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
 
             // CryptoNight
             numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 2 : 1);
@@ -1523,7 +1525,7 @@ namespace GatelessGateSharp
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 64 :
-                            device.GetVendor() == "AMD"                                         ? 3 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD"                                         ? 2 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
                                                                                                           2 * device.GetMaxComputeUnits());
         }
@@ -1554,6 +1556,7 @@ namespace GatelessGateSharp
         }
 
         private void ResetDeviceFanControlSettings(Device device) {
+            mAreSettingsDirty = true;
             checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked = true;
             numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
             numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
@@ -1562,6 +1565,7 @@ namespace GatelessGateSharp
         }
 
         private void CopyDeviceSettings(int sourceDeviceIndex) {
+            mAreSettingsDirty = true;
             foreach (var device in mDevices) {
                 if (sourceDeviceIndex == device.DeviceIndex
                     || device.GetVendor() != mDevices[sourceDeviceIndex].GetVendor()
@@ -4191,7 +4195,7 @@ namespace GatelessGateSharp
         }
 
         private void buttonInstallRecommendedAMDDriver_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.1.1-Release-Notes.aspx");
+            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx");
         }
 
         private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e) {
@@ -4294,6 +4298,7 @@ namespace GatelessGateSharp
         }
 
         private void buttonResetAll_Click(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
             foreach (var device in mDevices) {
                 ResetDeviceSettings(device);
                 device.FanSpeed = -1;
@@ -4302,6 +4307,7 @@ namespace GatelessGateSharp
         }
 
         private void buttonResetFanControlSettings_Click(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
             foreach (var device in mDevices) {
                 ResetDeviceFanControlSettings(device);
                 device.FanSpeed = -1;
@@ -4309,11 +4315,13 @@ namespace GatelessGateSharp
         }
 
         private void buttonResetDeviceAlgorithmSettings_Click(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
             foreach (var device in mDevices)
                 ResetDeviceAlgorithmSettings(device);
         }
 
         private void buttonResetDeviceOverclockingSettings_Click(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
             foreach (var device in mDevices) {
                 ResetDeviceOverclockingSettings(device);
                 device.ResetOverclockingSettings();
