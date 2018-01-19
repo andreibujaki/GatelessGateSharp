@@ -179,13 +179,9 @@ namespace GatelessGateSharp
             }}}));
             try { mMutex.ReleaseMutex(); } catch (Exception) { }
 
-            try {
-                var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
-                if (response["result"] == null)
-                    throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
-            } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
-            }
+            var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+            if (response["result"] == null)
+                throw (UnrecoverableException = new AuthorizationFailedException());
 
             try { mMutex.WaitOne(5000); } catch (Exception) { }
             WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
@@ -233,9 +229,6 @@ namespace GatelessGateSharp
                 MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
             }
             catch (Exception ex) {
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
-                // MainForm.Logger("Failed to submit share: " + ex.Message + "\nRestarting the application...");
-                // Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
                 MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }

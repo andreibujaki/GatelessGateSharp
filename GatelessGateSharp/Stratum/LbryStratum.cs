@@ -218,7 +218,7 @@ namespace GatelessGateSharp
                 LocalExtranonceSize = (int)(((JArray)(response["result"]))[2]);
                 //MainForm.Logger("mLocalExtranonceSize: " + mLocalExtranonceSize);
             } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+                throw this.UnrecoverableException = new AuthorizationFailedException();
             }
             
             // mining.extranonce.subscribe
@@ -316,9 +316,6 @@ namespace GatelessGateSharp
                 //MainForm.Logger("message: " + message);
             }
             catch (Exception ex) {
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
-                // MainForm.Logger("Failed to submit share: " + ex.Message + "\nRestarting the application...");
-                // Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
                 MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }

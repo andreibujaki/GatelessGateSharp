@@ -131,7 +131,7 @@ namespace GatelessGateSharp
             get {
                 if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5)
                     Speed = 0;
-                return !(mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 60);
+                return !(mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5 * 60);
             }
         }
     }

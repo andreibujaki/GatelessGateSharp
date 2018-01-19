@@ -122,7 +122,7 @@ namespace GatelessGateSharp
                 mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
                 mPoolExtranonce = (string)(((JArray)(response["result"]))[1]);
             } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+                throw this.UnrecoverableException = new AuthorizationFailedException();
             }
 
             // mining.extranonce.subscribe
@@ -181,9 +181,6 @@ namespace GatelessGateSharp
                 MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
             }
             catch (Exception ex) {
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
-                // MainForm.Logger("Failed to submit share: " + ex.Message + "\nRestarting the application...");
-                // Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
                 MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }

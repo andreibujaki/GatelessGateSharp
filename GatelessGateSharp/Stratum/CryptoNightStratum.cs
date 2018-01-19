@@ -117,15 +117,11 @@ namespace GatelessGateSharp
             if ((line = ReadLine()) == null)
                 throw new Exception("Disconnected from stratum server.");
             JContainer result;
-            try {
-                Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
-                result = ((JContainer)response["result"]);
-                var status = (String)(result["status"]);
-                if (status != "OK")
-                    throw new Exception("Authorization failed.");
-            } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
-            }
+            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
+            result = ((JContainer)response["result"]);
+            var status = (String)(result["status"]);
+            if (status != "OK")
+                throw new AuthorizationFailedException();
 
             try  {  mMutex.WaitOne(5000); } catch (Exception) { }
             mUserID = (String)(result["id"]);
@@ -156,9 +152,6 @@ namespace GatelessGateSharp
             }
             catch (Exception ex)
             {
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
-                // MainForm.Logger("Failed to submit share: " + ex.Message + "\nRestarting the application...");
-                // Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
                 MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
