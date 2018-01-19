@@ -180,10 +180,11 @@ namespace GatelessGateSharp
                 WriteLine(message);
                 MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
             }
-            catch (Exception ex)
-            {
-                MainForm.Logger("Failed to submit share: " + ex.Message);
+            catch (Exception ex) {
                 try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                // MainForm.Logger("Failed to submit share: " + ex.Message + "\nRestarting the application...");
+                // Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
+                MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }

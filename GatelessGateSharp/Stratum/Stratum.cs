@@ -231,6 +231,7 @@ namespace GatelessGateSharp {
 
         private void StreamReaderThread() {
             try {
+                Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
                 while (!Stopped) {
                     string line;
                     if ((line = mStreamReader.ReadLine()) == null)

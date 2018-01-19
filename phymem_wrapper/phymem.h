@@ -26,8 +26,8 @@ __declspec(dllexport) BOOL LoadPhyMemDriver();
 __declspec(dllexport) VOID UnloadPhyMemDriver();
 
 //map physical memory to user space
-PVOID MapPhyMem(DWORD64 phyAddr, DWORD memSize);
-VOID  UnmapPhyMem(PVOID pVirAddr, DWORD memSize);
+__declspec(dllexport) PVOID MapPhyMem(DWORD64 phyAddr, DWORD memSize);
+__declspec(dllexport) VOID  UnmapPhyMem(PVOID pVirAddr, DWORD memSize);
 
 //access port
 BYTE  ReadPortByte(WORD portAddr);
@@ -38,9 +38,7 @@ VOID  WritePortWord(WORD portAddr, WORD portValue);
 VOID  WritePortLong(WORD portAddr, DWORD portValue);
 
 //access PCI bus
-BOOL ReadPCI(DWORD busNum, DWORD devNum, DWORD funcNum,
-	DWORD regOff, DWORD bytes, PVOID pValue);
-BOOL WritePCI(DWORD busNum, DWORD devNum, DWORD funcNum,
-	DWORD regOff, DWORD bytes, PVOID pValue);
+__declspec(dllexport) BOOL ReadPCI(DWORD busNum, DWORD devNum, DWORD funcNum, DWORD regOff, DWORD bytes, PVOID pValue);
+__declspec(dllexport) BOOL WritePCI(DWORD busNum, DWORD devNum, DWORD funcNum, DWORD regOff, DWORD bytes, PVOID pValue);
 
 #endif	//__PMDLL_H

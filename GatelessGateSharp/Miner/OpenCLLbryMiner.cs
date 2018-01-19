@@ -28,14 +28,6 @@ namespace GatelessGateSharp
 {
     class OpenCLLbryMiner : OpenCLMiner
     {
-        static Mutex mProgramArrayMutex = new Mutex();
-
-        static Dictionary<ProgramArrayIndex, ComputeProgram> mLbryProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
-        static Dictionary<ProgramArrayIndex, ComputeKernel> mLbrySearchKernelArray = new Dictionary<ProgramArrayIndex, ComputeKernel>();
-        ComputeProgram mLbryProgram;
-        ComputeKernel mLbrySearchKernel = null;            
-        private ComputeBuffer<byte> mLbryInputBuffer = null;
-        private ComputeBuffer<UInt32> mLbryOutputBuffer = null;
         private LbryStratum mLbryStratum;
         long[] mLbryGlobalWorkSizeArray = new long[] { 0 };
         long[] mLbryLocalWorkSizeArray = new long[] { 0 };
@@ -49,13 +41,6 @@ namespace GatelessGateSharp
         public OpenCLLbryMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Lbry")
         {
-            try {
-                mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
-                mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
-            } catch (Exception ex) {
-                throw new UnrecoverableException(ex, GatelessGateDevice);
-            }
-            mIterations = (aGatelessGateDevice.GetVendor() == "NVIDIA") ? 8 : 1;
         }
 
         public void Start(LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
@@ -67,164 +52,156 @@ namespace GatelessGateSharp
             base.Start();
         }
 
-        public void BuildLbryProgram()
-        {
-            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
-
-            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
-
-            if (mLbryProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])))
-            {
-                mLbryProgram = mLbryProgramArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])];
-                mLbrySearchKernel = mLbrySearchKernelArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])];
-            }
-            else
-            {
-                try
-                {
-                    if (mLbryLocalWorkSizeArray[0] != 256)
-                        throw new Exception("No suitable binary file was found.");
-                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_lbry.bin";
-                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
-                    mLbryProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
-                }
-                catch (Exception)
-                {
-                    String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
-                    mLbryProgram = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\lbry.cl for Device #" + DeviceIndex + ".");
-                }
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + mLbryLocalWorkSizeArray[0] + " -DITERATIONS=" + mIterations;
-                try
-                {
-                    mLbryProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                    MainForm.Logger(mLbryProgram.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
-                mLbryProgramArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbryProgram;
-                mLbrySearchKernelArray[new ProgramArrayIndex(DeviceIndex, mLbryLocalWorkSizeArray[0])] = mLbrySearchKernel = mLbryProgram.CreateKernel("search_combined");
-            }
-
-            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
-        }
-
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         override unsafe protected void MinerThread()
         {
-            Random r = new Random();
+            ComputeProgram program = null;
+
+            try {
+                Random r = new Random();
             
-            MarkAsAlive();
-
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
-
-            BuildLbryProgram();
-
-            fixed (long* lbryGlobalWorkOffsetArrayPtr = mLbryGlobalWorkOffsetArray)
-            fixed (long* lbryGlobalWorkSizeArrayPtr = mLbryGlobalWorkSizeArray)
-            fixed (long* lbryLocalWorkSizeArrayPtr = mLbryLocalWorkSizeArray)
-            fixed (byte* lbryInputPtr = mLbryInput)
-            fixed (UInt32* lbryOutputPtr = mLbryOutput)
-            while (!Stopped)
-            {
                 MarkAsAlive();
 
-                try
+                MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+
+                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
+
+                try {
+                    if (mLbryLocalWorkSizeArray[0] != 256)
+                        throw new Exception("No suitable binary file was found.");
+                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_lbry.bin";
+                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
+                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
+                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
+                } catch (Exception) {
+                    String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
+                    program = new ComputeProgram(Context, source);
+                    MainForm.Logger(@"Loaded Kernels\lbry.cl for Device #" + DeviceIndex + ".");
+                }
+                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
+                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                                                    "")
+                                        + " -IKernels -DWORKSIZE=" + mLbryLocalWorkSizeArray[0] + " -DITERATIONS=" + mIterations;
+                try {
+                    program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
+                } catch (Exception) {
+                    MainForm.Logger(program.GetBuildLog(computeDevice));
+                    throw;
+                }
+                MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
+                MainForm.Logger("Build options: " + buildOptions);
+
+                using (var lbrySearchKernel = program.CreateKernel("search_combined"))
+                using (var lbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112))
+                using (var lbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize))
+                fixed (long* lbryGlobalWorkOffsetArrayPtr = mLbryGlobalWorkOffsetArray)
+                fixed (long* lbryGlobalWorkSizeArrayPtr = mLbryGlobalWorkSizeArray)
+                fixed (long* lbryLocalWorkSizeArrayPtr = mLbryLocalWorkSizeArray)
+                fixed (byte* lbryInputPtr = mLbryInput)
+                fixed (UInt32* lbryOutputPtr = mLbryOutput)
+                while (!Stopped)
                 {
-                    mLbrySearchKernel.SetMemoryArgument(0, mLbryInputBuffer);
-                    mLbrySearchKernel.SetMemoryArgument(1, mLbryOutputBuffer);
+                    MarkAsAlive();
 
-                    // Wait for the first lbryJob to arrive.
-                    int elapsedTime = 0;
-                    while ((mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 60000) {
-                        Thread.Sleep(100);
-                        elapsedTime += 100;
-                    }
-                    if (mLbryStratum == null || mLbryStratum.GetJob() == null)
-                        throw new TimeoutException("Stratum server failed to send a new lbryJob.");
-
-                    System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                    LbryStratum.Work lbryWork;
-
-                    while (!Stopped && (lbryWork = mLbryStratum.GetWork()) != null)
+                    try
                     {
-                        MarkAsAlive();
+                        lbrySearchKernel.SetMemoryArgument(0, lbryInputBuffer);
+                        lbrySearchKernel.SetMemoryArgument(1, lbryOutputBuffer);
 
-                        var lbryJob = lbryWork.Job;
-                        Array.Copy(lbryWork.Blob, mLbryInput, 112);
-                        UInt32 lbryStartNonce = (UInt32)(r.Next(0, int.MaxValue));
-                        UInt64 lbryTarget = (UInt64) ((double) 0xffff0000UL / (mLbryStratum.Difficulty / 256));
-                        mLbrySearchKernel.SetValueArgument<UInt64>(3, lbryTarget);
-                        Queue.Write<byte>(mLbryInputBuffer, true, 0, 112, (IntPtr)lbryInputPtr, null);
+                        // Wait for the first lbryJob to arrive.
+                        int elapsedTime = 0;
+                        while ((mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 60000) {
+                            Thread.Sleep(100);
+                            elapsedTime += 100;
+                        }
+                        if (mLbryStratum == null || mLbryStratum.GetJob() == null)
+                            throw new TimeoutException("Stratum server failed to send a new lbryJob.");
 
-                        consoleUpdateStopwatch.Start();
+                        System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
+                        LbryStratum.Work lbryWork;
 
-                        while (!Stopped && mLbryStratum.GetJob().Equals(lbryJob))
+                        while (!Stopped && (lbryWork = mLbryStratum.GetWork()) != null)
                         {
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
-
                             MarkAsAlive();
 
-                            mLbrySearchKernel.SetValueArgument<UInt32>(2, lbryStartNonce);
+                            var lbryJob = lbryWork.Job;
+                            Array.Copy(lbryWork.Blob, mLbryInput, 112);
+                            UInt32 lbryStartNonce = (UInt32)(r.Next(0, int.MaxValue));
+                            UInt64 lbryTarget = (UInt64) ((double) 0xffff0000UL / (mLbryStratum.Difficulty / 256));
+                            lbrySearchKernel.SetValueArgument<UInt64>(3, lbryTarget);
+                            Queue.Write<byte>(lbryInputBuffer, true, 0, 112, (IntPtr)lbryInputPtr, null);
 
-                            // Get a new local extranonce if necessary.
-                            if (0xffffffffu - lbryStartNonce < (UInt32)mLbryGlobalWorkSizeArray[0] * mIterations)
-                                break;
+                            consoleUpdateStopwatch.Start();
 
-                            mLbryOutput[255] = 0; // mLbryOutput[255] is used as an atomic counter.
-                            Queue.Write<UInt32>(mLbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
-                            Queue.Execute(mLbrySearchKernel, mLbryGlobalWorkOffsetArray, mLbryGlobalWorkSizeArray, mLbryLocalWorkSizeArray, null);
-                            Queue.Read<UInt32>(mLbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
-                            if (mLbryStratum.GetJob().Equals(lbryJob))
+                            while (!Stopped && mLbryStratum.GetJob().Equals(lbryJob))
                             {
-                                for (int i = 0; i < mLbryOutput[255]; ++i)
+                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                                sw.Start();
+
+                                MarkAsAlive();
+
+                                lbrySearchKernel.SetValueArgument<UInt32>(2, lbryStartNonce);
+
+                                // Get a new local extranonce if necessary.
+                                if (0xffffffffu - lbryStartNonce < (UInt32)mLbryGlobalWorkSizeArray[0] * mIterations)
+                                    break;
+
+                                mLbryOutput[255] = 0; // mLbryOutput[255] is used as an atomic counter.
+                                Queue.Write<UInt32>(lbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
+                                Queue.Execute(lbrySearchKernel, mLbryGlobalWorkOffsetArray, mLbryGlobalWorkSizeArray, mLbryLocalWorkSizeArray, null);
+                                Queue.Read<UInt32>(lbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
+                                if (mLbryStratum.GetJob().Equals(lbryJob))
                                 {
-                                    String result = "";
-                                    for (int j = 0; j < 8; ++j)
+                                    for (int i = 0; i < mLbryOutput[255]; ++i)
                                     {
-                                        UInt32 word = mLbryOutput[256 + i * 8 + j];
-                                        result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
+                                        String result = "";
+                                        for (int j = 0; j < 8; ++j)
+                                        {
+                                            UInt32 word = mLbryOutput[256 + i * 8 + j];
+                                            result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
+                                        }
+                                        mLbryStratum.Submit(GatelessGateDevice, lbryWork, mLbryOutput[i], result);
                                     }
-                                    mLbryStratum.Submit(GatelessGateDevice, lbryWork, mLbryOutput[i], result);
+                                }
+                                lbryStartNonce += (UInt32)mLbryGlobalWorkSizeArray[0] * (uint)mIterations;
+
+                                sw.Stop();
+                                Speed = ((double)mLbryGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mIterations;
+                                if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                                {
+                                    MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Lbry)", Speed / 1000000));
+                                    consoleUpdateStopwatch.Restart();
                                 }
                             }
-                            lbryStartNonce += (UInt32)mLbryGlobalWorkSizeArray[0] * (uint)mIterations;
-
-                            sw.Stop();
-                            Speed = ((double)mLbryGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mIterations;
-                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
-                            {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Lbry)", Speed / 1000000));
-                                consoleUpdateStopwatch.Restart();
-                            }
+                        }
+                    } catch (Exception ex) {
+                        MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
+                        if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                            this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                            Stop();
                         }
                     }
-                } catch (Exception ex) {
-                    MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
-                        Stop();
+
+                    Speed = 0;
+
+                    if (!Stopped) {
+                        MainForm.Logger("Restarting miner thread...");
+                        System.Threading.Thread.Sleep(5000);
                     }
                 }
+                MarkAsDone();
 
-                Speed = 0;
-
-                if (!Stopped) {
-                    MainForm.Logger("Restarting miner thread...");
-                    System.Threading.Thread.Sleep(5000);
-                }
+                program.Dispose();
+            } catch (UnrecoverableException) {
+                if (program != null)
+                    program.Dispose();
+                throw;
+            } catch (Exception ex) {
+                if (program != null)
+                    program.Dispose();
+                throw new UnrecoverableException(ex, GatelessGateDevice);
             }
-            MarkAsDone();
         }
     }
 }

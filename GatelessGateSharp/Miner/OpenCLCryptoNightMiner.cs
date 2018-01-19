@@ -24,10 +24,8 @@ using Cloo;
 
 
 
-namespace GatelessGateSharp
-{
-    class OpenCLCryptoNightMiner : OpenCLMiner
-    {
+namespace GatelessGateSharp {
+    class OpenCLCryptoNightMiner : OpenCLMiner, IDisposable {
         private static readonly int outputSize = 256 + 255 * 8;
 
         private CryptoNightStratum mStratum;
@@ -44,132 +42,72 @@ namespace GatelessGateSharp
         UInt32[] output = new UInt32[outputSize];
         byte[] input = new byte[76];
 
-        static Mutex mProgramArrayMutex = new Mutex();
-
-        static Dictionary<ProgramArrayIndex, ComputeProgram> mProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
-        static Dictionary<ProgramArrayIndex, ComputeKernel> mSearchKernel0Array = new Dictionary<ProgramArrayIndex, ComputeKernel>();
-        static Dictionary<ProgramArrayIndex, ComputeKernel> mSearchKernel1Array = new Dictionary<ProgramArrayIndex, ComputeKernel>();
-        static Dictionary<ProgramArrayIndex, ComputeKernel> mSearchKernel2Array = new Dictionary<ProgramArrayIndex, ComputeKernel>();
-        static Dictionary<ProgramArrayIndex, ComputeKernel> mSearchKernel3Array = new Dictionary<ProgramArrayIndex, ComputeKernel>();
-        ComputeKernel searchKernel0 = null;
-        ComputeKernel searchKernel1 = null;
-        ComputeKernel searchKernel2 = null;
-        ComputeKernel searchKernel3 = null;
-            
-        private ComputeBuffer<byte> statesBuffer = null;
-        private ComputeBuffer<byte> inputBuffer = null;
-        private ComputeBuffer<UInt32> outputBuffer = null;
-        private ComputeBuffer<Int32> terminateBuffer = null;
-        private ComputeBuffer<byte> scratchpadsBuffer = null;
-            
         public bool NiceHashMode { get { return mNicehashMode; } }
 
         public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "CryptoNight")
-        {
-            try {
-                inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76);
-                outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize);
-                terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1);
-            } catch (Exception ex) {
-                throw new UnrecoverableException(ex, GatelessGateDevice);
-            }
+            : base(aGatelessGateDevice, "CryptoNight") {
         }
 
-        public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false)
-        {
-            var prevGlobalWorkSize = globalWorkSizeA[0];
-
+        public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false) {
             mStratum = aStratum;
             globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity * aLocalWorkSize;
             localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
             mNicehashMode = aNicehashMode;
-
-            if (prevGlobalWorkSize != 0 && prevGlobalWorkSize != globalWorkSizeA[0]) {
-                Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
-            }
-
-            try {
-                if (statesBuffer == null) statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]);
-                if (scratchpadsBuffer == null) scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
-            } catch (Exception ex) {
-                throw new UnrecoverableException(ex, GatelessGateDevice);
-            }
 
             base.Start();
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        override unsafe protected void MinerThread()
-        {
-            Random r = new Random();
-            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
-            
-            MarkAsAlive();
+        override unsafe protected void MinerThread() {
+            ComputeProgram program = null;
+            try {
+                Random r = new Random();
+                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
 
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
-            MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
+                MarkAsAlive();
 
-            ComputeProgram program;
-            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
-            if (mProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])))
-            {
-                program = mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
-                searchKernel0 = mSearchKernel0Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
-                searchKernel1 = mSearchKernel1Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
-                searchKernel2 = mSearchKernel2Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
-                searchKernel3 = mSearchKernel3Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])];
-            } 
-            else
-            {
-                try
-                {
+                MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+                MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
+
+                try {
                     if (localWorkSizeA[0] != 8)
                         throw new Exception("No suitable binary file was found.");
                     string fileName = @"BinaryKernels\" + computeDevice.Name + "_cryptonight.bin";
                     byte[] binary = System.IO.File.ReadAllBytes(fileName);
                     program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
                     MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     String source = System.IO.File.ReadAllText(@"Kernels\cryptonight.cl");
                     program = new ComputeProgram(Context, source);
                     MainForm.Logger(@"Loaded Kernels\cryptonight.cl for Device #" + DeviceIndex + ".");
                 }
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O5" : //"-O1 " :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];
-                try
-                {
+                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O5" : //"-O1 " :
+                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                                                    "")
+                                        + " -IKernels -DWORKSIZE=" + localWorkSizeA[0];
+                try {
                     program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     MainForm.Logger(program.GetBuildLog(computeDevice));
+                    program.Dispose();
                     throw;
                 }
                 MainForm.Logger("Built CryptoNight program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
-                mProgramArray[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = program;
-                mSearchKernel0Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = searchKernel0 = program.CreateKernel("search");
-                mSearchKernel1Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = searchKernel1 = program.CreateKernel("search1");
-                mSearchKernel2Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = searchKernel2 = program.CreateKernel("search2");
-                mSearchKernel3Array[new ProgramArrayIndex(DeviceIndex, localWorkSizeA[0])] = searchKernel3 = program.CreateKernel("search3");
-            }
-            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
 
-            fixed (long* globalWorkOffsetAPtr = globalWorkOffsetA)
-            fixed (long* globalWorkOffsetBPtr = globalWorkOffsetB)
-            fixed (long* globalWorkSizeAPtr = globalWorkSizeA)
-            fixed (long* globalWorkSizeBPtr = globalWorkSizeB)
-            fixed (long* localWorkSizeAPtr = localWorkSizeA)
-            fixed (long* localWorkSizeBPtr = localWorkSizeB)
-            fixed (Int32* terminatePtr = terminate)
-            fixed (byte* inputPtr = input)
-            fixed (UInt32* outputPtr = output) {
+                using (var searchKernel0 = program.CreateKernel("search"))
+                using (var searchKernel1 = program.CreateKernel("search1"))
+                using (var searchKernel2 = program.CreateKernel("search2"))
+                using (var searchKernel3 = program.CreateKernel("search3"))
+                using (var statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]))
+                using (var scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]))
+                using (var inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76))
+                using (var outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize))
+                using (var terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1))
+                fixed (Int32* terminatePtr = terminate)
+                fixed (byte* inputPtr = input)
+                fixed (UInt32* outputPtr = output)
                 while (!Stopped) {
                     MarkAsAlive();
 
@@ -296,9 +234,18 @@ namespace GatelessGateSharp
                         System.Threading.Thread.Sleep(5000);
                     }
                 }
-            }
+                MarkAsDone();
 
-            MarkAsDone();
+                program.Dispose();
+            } catch (UnrecoverableException) {
+                if (program != null)
+                    program.Dispose();
+                throw;
+            } catch (Exception ex) {
+                if (program != null)
+                    program.Dispose();
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
         }
     }
 }

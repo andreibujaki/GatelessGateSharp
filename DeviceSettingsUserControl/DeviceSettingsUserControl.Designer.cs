@@ -345,6 +345,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalMemoryVoltage_ValueChanged);
             // 
             // label22
             // 
@@ -382,6 +383,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashPascalMemoryClock.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalMemoryClock_ValueChanged);
             // 
             // label23
             // 
@@ -414,6 +416,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashPascalPowerLimit.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalPowerLimit_ValueChanged);
             // 
             // label24
             // 
@@ -451,6 +454,7 @@
             0,
             0,
             0});
+            this.numericUpDown24.ValueChanged += new System.EventHandler(this.numericUpDown24_ValueChanged);
             // 
             // label25
             // 
@@ -488,6 +492,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashPascalCoreClock.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalCoreClock_ValueChanged);
             // 
             // label26
             // 
@@ -529,6 +534,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashPascalPascalIterations.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalPascalIterations_ValueChanged);
             // 
             // label194
             // 
@@ -570,6 +576,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashPascalIntensity.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalIntensity_ValueChanged);
             // 
             // numericUpDownDevice0EthashPascalThreads
             // 
@@ -593,6 +600,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashPascalThreads.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalThreads_ValueChanged);
             // 
             // tabPage1
             // 
@@ -671,6 +679,7 @@
             0,
             0,
             0});
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label1
             // 
@@ -708,6 +717,7 @@
             0,
             0,
             0});
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
             // 
             // label2
             // 
@@ -740,6 +750,7 @@
             0,
             0,
             0});
+            this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown3_ValueChanged);
             // 
             // label3
             // 
@@ -777,6 +788,7 @@
             0,
             0,
             0});
+            this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown4_ValueChanged);
             // 
             // label4
             // 
@@ -814,6 +826,7 @@
             0,
             0,
             0});
+            this.numericUpDown5.ValueChanged += new System.EventHandler(this.numericUpDown5_ValueChanged);
             // 
             // label5
             // 
@@ -873,6 +886,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashLocalWorkSize.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashLocalWorkSize_ValueChanged);
             // 
             // numericUpDownDevice0EthashIntensity
             // 
@@ -896,6 +910,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashIntensity.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashIntensity_ValueChanged);
             // 
             // numericUpDownDevice0EthashThreads
             // 
@@ -919,6 +934,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0EthashThreads.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashThreads_ValueChanged);
             // 
             // tabPage2
             // 
@@ -997,6 +1013,7 @@
             0,
             0,
             0});
+            this.numericUpDown6.ValueChanged += new System.EventHandler(this.numericUpDown6_ValueChanged);
             // 
             // label6
             // 
@@ -1034,6 +1051,7 @@
             0,
             0,
             0});
+            this.numericUpDown7.ValueChanged += new System.EventHandler(this.numericUpDown7_ValueChanged);
             // 
             // label8
             // 
@@ -1066,6 +1084,7 @@
             0,
             0,
             0});
+            this.numericUpDown8.ValueChanged += new System.EventHandler(this.numericUpDown8_ValueChanged);
             // 
             // label9
             // 
@@ -1103,6 +1122,7 @@
             0,
             0,
             0});
+            this.numericUpDown9.ValueChanged += new System.EventHandler(this.numericUpDown9_ValueChanged);
             // 
             // label10
             // 
@@ -1140,6 +1160,7 @@
             0,
             0,
             0});
+            this.numericUpDown10.ValueChanged += new System.EventHandler(this.numericUpDown10_ValueChanged);
             // 
             // label11
             // 
@@ -1181,6 +1202,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0CryptoNightThreads.ValueChanged += new System.EventHandler(this.numericUpDownDevice0CryptoNightThreads_ValueChanged);
             // 
             // label135
             // 
@@ -1222,6 +1244,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0CryptoNightRawIntensity.ValueChanged += new System.EventHandler(this.numericUpDownDevice0CryptoNightRawIntensity_ValueChanged);
             // 
             // numericUpDownDevice0CryptoNightLocalWorkSize
             // 
@@ -1245,6 +1268,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0CryptoNightLocalWorkSize.ValueChanged += new System.EventHandler(this.numericUpDownDevice0CryptoNightLocalWorkSize_ValueChanged);
             // 
             // tabPage3
             // 
@@ -1322,6 +1346,7 @@
             0,
             0,
             0});
+            this.numericUpDown11.ValueChanged += new System.EventHandler(this.numericUpDown11_ValueChanged);
             // 
             // label12
             // 
@@ -1359,6 +1384,7 @@
             0,
             0,
             0});
+            this.numericUpDown12.ValueChanged += new System.EventHandler(this.numericUpDown12_ValueChanged);
             // 
             // label13
             // 
@@ -1391,6 +1417,7 @@
             0,
             0,
             0});
+            this.numericUpDown13.ValueChanged += new System.EventHandler(this.numericUpDown13_ValueChanged);
             // 
             // label14
             // 
@@ -1428,6 +1455,7 @@
             0,
             0,
             0});
+            this.numericUpDown14.ValueChanged += new System.EventHandler(this.numericUpDown14_ValueChanged);
             // 
             // label15
             // 
@@ -1465,6 +1493,7 @@
             0,
             0,
             0});
+            this.numericUpDown15.ValueChanged += new System.EventHandler(this.numericUpDown15_ValueChanged);
             // 
             // label16
             // 
@@ -1524,6 +1553,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0LbryLocalWorkSize.ValueChanged += new System.EventHandler(this.numericUpDownDevice0LbryLocalWorkSize_ValueChanged);
             // 
             // numericUpDownDevice0LbryIntensity
             // 
@@ -1547,6 +1577,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0LbryIntensity.ValueChanged += new System.EventHandler(this.numericUpDownDevice0LbryIntensity_ValueChanged);
             // 
             // numericUpDownDevice0LbryThreads
             // 
@@ -1570,6 +1601,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0LbryThreads.ValueChanged += new System.EventHandler(this.numericUpDownDevice0LbryThreads_ValueChanged);
             // 
             // tabPage4
             // 
@@ -1647,6 +1679,7 @@
             0,
             0,
             0});
+            this.numericUpDown16.ValueChanged += new System.EventHandler(this.numericUpDown16_ValueChanged);
             // 
             // label17
             // 
@@ -1684,6 +1717,7 @@
             0,
             0,
             0});
+            this.numericUpDown17.ValueChanged += new System.EventHandler(this.numericUpDown17_ValueChanged);
             // 
             // label18
             // 
@@ -1716,6 +1750,7 @@
             0,
             0,
             0});
+            this.numericUpDown18.ValueChanged += new System.EventHandler(this.numericUpDown18_ValueChanged);
             // 
             // label19
             // 
@@ -1753,6 +1788,7 @@
             0,
             0,
             0});
+            this.numericUpDown19.ValueChanged += new System.EventHandler(this.numericUpDown19_ValueChanged);
             // 
             // label20
             // 
@@ -1790,6 +1826,7 @@
             0,
             0,
             0});
+            this.numericUpDown20.ValueChanged += new System.EventHandler(this.numericUpDown20_ValueChanged);
             // 
             // label21
             // 
@@ -1849,6 +1886,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0PascalLocalWorkSize.ValueChanged += new System.EventHandler(this.numericUpDownDevice0PascalLocalWorkSize_ValueChanged);
             // 
             // numericUpDownDevice0PascalIntensity
             // 
@@ -1872,6 +1910,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0PascalIntensity.ValueChanged += new System.EventHandler(this.numericUpDownDevice0PascalIntensity_ValueChanged);
             // 
             // numericUpDownDevice0PascalThreads
             // 
@@ -1895,6 +1934,7 @@
             0,
             0,
             0});
+            this.numericUpDownDevice0PascalThreads.ValueChanged += new System.EventHandler(this.numericUpDownDevice0PascalThreads_ValueChanged);
             // 
             // tabPage41
             // 
@@ -1972,6 +2012,7 @@
             0,
             0,
             0});
+            this.numericUpDown21.ValueChanged += new System.EventHandler(this.numericUpDown21_ValueChanged);
             // 
             // label30
             // 
@@ -2009,6 +2050,7 @@
             0,
             0,
             0});
+            this.numericUpDown22.ValueChanged += new System.EventHandler(this.numericUpDown22_ValueChanged);
             // 
             // label31
             // 
@@ -2041,6 +2083,7 @@
             0,
             0,
             0});
+            this.numericUpDown23.ValueChanged += new System.EventHandler(this.numericUpDown23_ValueChanged);
             // 
             // label32
             // 
@@ -2078,6 +2121,7 @@
             0,
             0,
             0});
+            this.numericUpDown25.ValueChanged += new System.EventHandler(this.numericUpDown25_ValueChanged);
             // 
             // label33
             // 
@@ -2115,6 +2159,7 @@
             0,
             0,
             0});
+            this.numericUpDown29.ValueChanged += new System.EventHandler(this.numericUpDown29_ValueChanged);
             // 
             // label34
             // 
@@ -2297,6 +2342,7 @@
             0,
             0,
             0});
+            this.numericUpDown30.ValueChanged += new System.EventHandler(this.numericUpDown30_ValueChanged);
             // 
             // label35
             // 
@@ -2334,6 +2380,7 @@
             0,
             0,
             0});
+            this.numericUpDown31.ValueChanged += new System.EventHandler(this.numericUpDown31_ValueChanged);
             // 
             // label36
             // 
@@ -2366,6 +2413,7 @@
             0,
             0,
             0});
+            this.numericUpDown32.ValueChanged += new System.EventHandler(this.numericUpDown32_ValueChanged);
             // 
             // label37
             // 
@@ -2403,6 +2451,7 @@
             0,
             0,
             0});
+            this.numericUpDown33.ValueChanged += new System.EventHandler(this.numericUpDown33_ValueChanged);
             // 
             // label38
             // 
@@ -2440,6 +2489,7 @@
             0,
             0,
             0});
+            this.numericUpDown34.ValueChanged += new System.EventHandler(this.numericUpDown34_ValueChanged);
             // 
             // label39
             // 
@@ -2481,6 +2531,7 @@
             0,
             0,
             0});
+            this.numericUpDown35.ValueChanged += new System.EventHandler(this.numericUpDown35_ValueChanged);
             // 
             // label41
             // 
@@ -2522,6 +2573,7 @@
             0,
             0,
             0});
+            this.numericUpDown36.ValueChanged += new System.EventHandler(this.numericUpDown36_ValueChanged);
             // 
             // numericUpDown37
             // 
@@ -2545,6 +2597,7 @@
             0,
             0,
             0});
+            this.numericUpDown37.ValueChanged += new System.EventHandler(this.numericUpDown37_ValueChanged);
             // 
             // label188
             // 
@@ -2577,6 +2630,7 @@
             0,
             0,
             0});
+            this.numericUpDown52.ValueChanged += new System.EventHandler(this.numericUpDown52_ValueChanged);
             // 
             // fanControlEnabled
             // 
@@ -2627,6 +2681,7 @@
             0,
             0,
             0});
+            this.numericUpDown28.ValueChanged += new System.EventHandler(this.numericUpDown28_ValueChanged);
             // 
             // label29
             // 
@@ -2655,6 +2710,7 @@
             0,
             0,
             0});
+            this.numericUpDown27.ValueChanged += new System.EventHandler(this.numericUpDown27_ValueChanged);
             // 
             // label28
             // 
@@ -2687,6 +2743,7 @@
             0,
             0,
             0});
+            this.numericUpDown26.ValueChanged += new System.EventHandler(this.numericUpDown26_ValueChanged);
             // 
             // label27
             // 

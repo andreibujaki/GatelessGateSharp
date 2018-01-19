@@ -226,10 +226,11 @@ namespace GatelessGateSharp
                 MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
                 //MainForm.Logger("message: " + message);
             }
-            catch (Exception ex)
-            {
-                MainForm.Logger("Failed to submit share: " + ex.Message + ex.StackTrace);
+            catch (Exception ex) {
                 try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                // MainForm.Logger("Failed to submit share: " + ex.Message + "\nRestarting the application...");
+                // Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
+                MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
 

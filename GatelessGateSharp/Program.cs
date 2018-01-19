@@ -30,13 +30,13 @@ namespace GatelessGateSharp
     {
         private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
-            MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace + "\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             Program.KillMonitor = false; Application.Exit();
         }
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Exception: " + ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace, "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Exception: " + ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace + "\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             if (e.ExceptionObject.GetType() == typeof(DllNotFoundException))
             {
                 foreach (var process in Process.GetProcessesByName("GatelessGateSharp"))
@@ -60,6 +60,9 @@ namespace GatelessGateSharp
             try { mutexResult = sMutex.WaitOne(TimeSpan.Zero, true); } catch (Exception) {}
             if (!mutexResult)
                 return;
+
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
 
             Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable("GPU_MAX_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);

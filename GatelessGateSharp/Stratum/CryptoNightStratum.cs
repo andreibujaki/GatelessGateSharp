@@ -156,8 +156,10 @@ namespace GatelessGateSharp
             }
             catch (Exception ex)
             {
-                MainForm.Logger("Failed to submit share: " + ex.Message);
                 try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                // MainForm.Logger("Failed to submit share: " + ex.Message + "\nRestarting the application...");
+                // Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
+                MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
             try  {  mMutex.ReleaseMutex(); } catch (Exception) { }

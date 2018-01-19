@@ -32,16 +32,7 @@ namespace GatelessGateSharp
 {
     class OpenCLEthashMiner : OpenCLMiner
     {
-        private static Mutex mProgramArrayMutex = new Mutex();
-        private static Dictionary<long[], ComputeProgram> mEthashProgramArray = new Dictionary<long[], ComputeProgram>();
-        private static Dictionary<long[], ComputeKernel> mEthashDAGKernelArray = new Dictionary<long[], ComputeKernel>();
-        private static Dictionary<long[], ComputeKernel> mEthashSearchKernelArray = new Dictionary<long[], ComputeKernel>();
         private EthashStratum mEthashStratum;
-        private ComputeProgram mEthashProgram;
-        private ComputeKernel mEthashDAGKernel;
-        private ComputeKernel mEthashSearchKernel;
-        private ComputeBuffer<UInt32> mEthashOutputBuffer;
-        private ComputeBuffer<byte> mEthashHeaderBuffer;
         private long[] mEthashGlobalWorkOffsetArray = new long[1];
         private long[] mEthashGlobalWorkSizeArray = new long[1];
         private long[] mEthashLocalWorkSizeArray = new long[1];
@@ -49,12 +40,6 @@ namespace GatelessGateSharp
         public OpenCLEthashMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "Ethash")
         {
-            try {
-                mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
-                mEthashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32);
-            } catch (Exception ex) {
-                throw new UnrecoverableException(ex, GatelessGateDevice);
-            }
         }
 
         public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize)
@@ -66,223 +51,207 @@ namespace GatelessGateSharp
             base.Start();
         }
 
-        private void BuildEthashProgram()
+        override unsafe protected void MinerThread()
         {
-            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
+            ComputeProgram program = null;
+            try { 
+                Random r = new Random();
+                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
+                UInt32[] ethashOutput = new UInt32[256];
+                byte[] ethashHeaderhash = new byte[32];
 
-            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
-            
-            if (mEthashProgramArray.ContainsKey(new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }))
-            {
-                mEthashProgram = mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }];
-                mEthashDAGKernel = mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }];
-                mEthashSearchKernel = mEthashSearchKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }];
-            }
-            else
-            {
-                try
-                {
-                    if (mEthashLocalWorkSizeArray[0] != 192)
-                        throw new Exception("No suitable binary file was found.");
+                MarkAsAlive();
+
+                MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+
+                try {
                     string fileName = @"BinaryKernels\" + computeDevice.Name + "_ethash.bin";
                     byte[] binary = System.IO.File.ReadAllBytes(fileName);
-                    mEthashProgram = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
+                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
                     MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
-                }
-                catch (Exception)
-                {
-                    //MainForm.Logger("ex.message: " + ex.Message);
+                } catch (Exception) {
                     String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
-                    mEthashProgram = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\ethash.cl for Device #" + DeviceIndex + ".");
+                    program = new ComputeProgram(Context, source);
+                    MainForm.Logger(@"Loaded Kernels\ethashl.cl for Device #" + DeviceIndex + ".");
                 }
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O1 " :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + mEthashLocalWorkSizeArray[0];
-                try
-                {
-                    mEthashProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                    MainForm.Logger(mEthashProgram.GetBuildLog(computeDevice));
+                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1" :
+                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
+                                                                    "")
+                                        + " -IKernels -DWORKSIZE=" + mEthashLocalWorkSizeArray[0];
+                try {
+                    program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
+                } catch (Exception) {
+                    MainForm.Logger(program.GetBuildLog(computeDevice));
                     throw;
                 }
                 MainForm.Logger("Built Ethash program for Device #" + DeviceIndex + ".");
                 MainForm.Logger("Build options: " + buildOptions);
-                mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
-                mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");
-                mEthashSearchKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashSearchKernel = mEthashProgram.CreateKernel("search");
-            }
 
-            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
-        }
-
-        override unsafe protected void MinerThread()
-        {
-            Random r = new Random();
-            UInt32[] ethashOutput = new UInt32[256];
-            byte[] ethashHeaderhash = new byte[32];
-
-            MarkAsAlive();
-
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
-
-            BuildEthashProgram();
-
-            fixed (UInt32* ethashOutputPtr = ethashOutput)
-            fixed (byte* ethashHeaderhashPtr = ethashHeaderhash)
-            while (!Stopped)
-            {
-                MarkAsAlive();
-
-                try
-                {
-                    int ethashEpoch = -1;
-                    long ethashDAGSize = 0;
+                using (var searchKernel = program.CreateKernel("search"))
+                using (var DAGKernel = program.CreateKernel("GenerateDAG"))
+                using (var ethashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256))
+                using (var ethashHeaderBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 32))
+                fixed (UInt32* ethashOutputPtr = ethashOutput)
+                fixed (byte* ethashHeaderhashPtr = ethashHeaderhash)
+                while (!Stopped) {
                     ComputeBuffer<byte> ethashDAGBuffer = null;
 
-                    // Wait for the first job to arrive.
-                    int elapsedTime = 0;
-                    while ((mEthashStratum == null || mEthashStratum.GetJob() == null) && elapsedTime < 60000) {
-                        Thread.Sleep(100);
-                        elapsedTime += 100;
-                    }
-                    if (mEthashStratum == null || mEthashStratum.GetJob() == null)
+                    MarkAsAlive();
+
+                    try
                     {
-                        MainForm.Logger("Ethash stratum server failed to send a new job.");
-                        //throw new TimeoutException("Stratum server failed to send a new job.");
-                        return;
-                    }
-                    
-                    System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                    EthashStratum.Work ethashWork;
- 
-                    while (!Stopped && (ethashWork = mEthashStratum.GetWork()) != null)
-                    {
-                        MarkAsAlive();
+                        int ethashEpoch = -1;
+                        long ethashDAGSize = 0;
 
-                        String ethashPoolExtranonce = mEthashStratum.PoolExtranonce;
-                        byte[] ethashExtranonceByteArray = Utilities.StringToByteArray(ethashPoolExtranonce);
-                        byte ethashLocalExtranonce = (byte)ethashWork.LocalExtranonce;
-                        UInt64 ethashStartNonce = (UInt64)ethashLocalExtranonce << (8 * (7 - ethashExtranonceByteArray.Length));
-                        for (int i = 0; i < ethashExtranonceByteArray.Length; ++i)
-                            ethashStartNonce |= (UInt64)ethashExtranonceByteArray[i] << (8 * (7 - i));
-                        ethashStartNonce += (ulong)r.Next(0, int.MaxValue) & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8));
-                        String ethashJobID = ethashWork.GetJob().ID;
-                        String ethashSeedhash = ethashWork.GetJob().Seedhash;
-                        double ethashDifficulty = mEthashStratum.Difficulty;
-
-                        Buffer.BlockCopy(Utilities.StringToByteArray(ethashWork.GetJob().Headerhash), 0, ethashHeaderhash, 0, 32);
-                        Queue.Write<byte>(mEthashHeaderBuffer, true, 0, 32, (IntPtr)ethashHeaderhashPtr, null);
-
-                        if (ethashEpoch != ethashWork.GetJob().Epoch)
-                        {
-                            if (ethashDAGBuffer != null)
-                            {
-                                ethashDAGBuffer.Dispose();
-                                ethashDAGBuffer = null;
-                            }
-                            ethashEpoch = ethashWork.GetJob().Epoch;
-                            DAGCache cache = new DAGCache(ethashEpoch, ethashWork.GetJob().Seedhash);
-                            ethashDAGSize = Utilities.GetDAGSize(ethashEpoch);
-
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
-                            mEthashGlobalWorkSizeArray[0] = ethashDAGSize / 64;
-                            mEthashGlobalWorkSizeArray[0] /= 8;
-                            if (mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0] > 0)
-                                mEthashGlobalWorkSizeArray[0] += mEthashLocalWorkSizeArray[0] - mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0];
-
-                            ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, cache.GetData().Length);
-                            fixed (byte* p = cache.GetData())
-                                Queue.Write<byte>(DAGCacheBuffer, true, 0, cache.GetData().Length, (IntPtr)p, null);
-                            ethashDAGBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, mEthashGlobalWorkSizeArray[0] * 8 * 64 /* ethashDAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
-
-                            mEthashDAGKernel.SetValueArgument<UInt32>(0, 0);
-                            mEthashDAGKernel.SetMemoryArgument(1, DAGCacheBuffer);
-                            mEthashDAGKernel.SetMemoryArgument(2, ethashDAGBuffer);
-                            mEthashDAGKernel.SetValueArgument<UInt32>(3, (UInt32)cache.GetData().Length / 64);
-                            mEthashDAGKernel.SetValueArgument<UInt32>(4, 0xffffffffu);
-
-                            for (long start = 0; start < ethashDAGSize / 64; start += mEthashGlobalWorkSizeArray[0])
-                            {
-                                mEthashGlobalWorkOffsetArray[0] = start;
-                                Queue.Execute(mEthashDAGKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
-                                Queue.Finish();
-                                if (Stopped || !mEthashStratum.GetJob().ID.Equals(ethashJobID))
-                                    break;
-                            }
-                            DAGCacheBuffer.Dispose();
-                            if (Stopped || !mEthashStratum.GetJob().ID.Equals(ethashJobID))
-                                break;
-                            sw.Stop();
-                            MainForm.Logger("Generated DAG for Epoch #" + ethashEpoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
+                        // Wait for the first job to arrive.
+                        int elapsedTime = 0;
+                        while ((mEthashStratum == null || mEthashStratum.GetJob() == null) && elapsedTime < 60000) {
+                            Thread.Sleep(100);
+                            elapsedTime += 100;
                         }
-
-                        consoleUpdateStopwatch.Start();
-
-                        while (!Stopped && mEthashStratum.GetJob().ID.Equals(ethashJobID) && mEthashStratum.PoolExtranonce.Equals(ethashPoolExtranonce))
+                        if (mEthashStratum == null || mEthashStratum.GetJob() == null)
+                        {
+                            MainForm.Logger("Ethash stratum server failed to send a new job.");
+                            //throw new TimeoutException("Stratum server failed to send a new job.");
+                            return;
+                        }
+                    
+                        System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
+                        EthashStratum.Work ethashWork;
+ 
+                        while (!Stopped && (ethashWork = mEthashStratum.GetWork()) != null)
                         {
                             MarkAsAlive();
 
-                            // Get a new local extranonce if necessary.
-                            if ((ethashStartNonce & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8)) + (ulong)mEthashGlobalWorkSizeArray[0]) >= ((ulong)0x1 << (64 - (ethashExtranonceByteArray.Length * 8 + 8))))
-                                break;
+                            String ethashPoolExtranonce = mEthashStratum.PoolExtranonce;
+                            byte[] ethashExtranonceByteArray = Utilities.StringToByteArray(ethashPoolExtranonce);
+                            byte ethashLocalExtranonce = (byte)ethashWork.LocalExtranonce;
+                            UInt64 ethashStartNonce = (UInt64)ethashLocalExtranonce << (8 * (7 - ethashExtranonceByteArray.Length));
+                            for (int i = 0; i < ethashExtranonceByteArray.Length; ++i)
+                                ethashStartNonce |= (UInt64)ethashExtranonceByteArray[i] << (8 * (7 - i));
+                            ethashStartNonce += (ulong)r.Next(0, int.MaxValue) & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8));
+                            String ethashJobID = ethashWork.GetJob().ID;
+                            String ethashSeedhash = ethashWork.GetJob().Seedhash;
+                            double ethashDifficulty = mEthashStratum.Difficulty;
 
-                            UInt64 target = (UInt64)((double)0xffff0000U / ethashDifficulty);
-                            mEthashSearchKernel.SetMemoryArgument(0, mEthashOutputBuffer); // g_output
-                            mEthashSearchKernel.SetMemoryArgument(1, mEthashHeaderBuffer); // g_header
-                            mEthashSearchKernel.SetMemoryArgument(2, ethashDAGBuffer); // _g_dag
-                            mEthashSearchKernel.SetValueArgument<UInt32>(3, (UInt32)(ethashDAGSize / 128)); // DAG_SIZE
-                            mEthashSearchKernel.SetValueArgument<UInt64>(4, ethashStartNonce); // start_nonce
-                            mEthashSearchKernel.SetValueArgument<UInt64>(5, target); // target
-                            mEthashSearchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
+                            Buffer.BlockCopy(Utilities.StringToByteArray(ethashWork.GetJob().Headerhash), 0, ethashHeaderhash, 0, 32);
+                            Queue.Write<byte>(ethashHeaderBuffer, true, 0, 32, (IntPtr)ethashHeaderhashPtr, null);
 
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
-                            ethashOutput[255] = 0; // ethashOutput[255] is used as an atomic counter.
-                            Queue.Write<UInt32>(mEthashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
-                            mEthashGlobalWorkOffsetArray[0] = 0;
-                            Queue.Execute(mEthashSearchKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
-                            Queue.Read<UInt32>(mEthashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
-                            if (mEthashStratum.GetJob().ID.Equals(ethashJobID))
+                            if (ethashEpoch != ethashWork.GetJob().Epoch)
                             {
-                                for (int i = 0; i < ethashOutput[255]; ++i)
-                                    mEthashStratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
+                                if (ethashDAGBuffer != null)
+                                {
+                                    ethashDAGBuffer.Dispose();
+                                    ethashDAGBuffer = null;
+                                }
+                                ethashEpoch = ethashWork.GetJob().Epoch;
+                                DAGCache cache = new DAGCache(ethashEpoch, ethashWork.GetJob().Seedhash);
+                                ethashDAGSize = Utilities.GetDAGSize(ethashEpoch);
+
+                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                                sw.Start();
+                                mEthashGlobalWorkSizeArray[0] = ethashDAGSize / 64;
+                                mEthashGlobalWorkSizeArray[0] /= 8;
+                                if (mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0] > 0)
+                                    mEthashGlobalWorkSizeArray[0] += mEthashLocalWorkSizeArray[0] - mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0];
+
+                                ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, cache.GetData().Length);
+                                fixed (byte* p = cache.GetData())
+                                    Queue.Write<byte>(DAGCacheBuffer, true, 0, cache.GetData().Length, (IntPtr)p, null);
+                                ethashDAGBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, mEthashGlobalWorkSizeArray[0] * 8 * 64 /* ethashDAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
+
+                                DAGKernel.SetValueArgument<UInt32>(0, 0);
+                                DAGKernel.SetMemoryArgument(1, DAGCacheBuffer);
+                                DAGKernel.SetMemoryArgument(2, ethashDAGBuffer);
+                                DAGKernel.SetValueArgument<UInt32>(3, (UInt32)cache.GetData().Length / 64);
+                                DAGKernel.SetValueArgument<UInt32>(4, 0xffffffffu);
+
+                                for (long start = 0; start < ethashDAGSize / 64; start += mEthashGlobalWorkSizeArray[0])
+                                {
+                                    mEthashGlobalWorkOffsetArray[0] = start;
+                                    Queue.Execute(DAGKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
+                                    Queue.Finish();
+                                    if (Stopped || !mEthashStratum.GetJob().ID.Equals(ethashJobID))
+                                        break;
+                                }
+                                DAGCacheBuffer.Dispose();
+                                if (Stopped || !mEthashStratum.GetJob().ID.Equals(ethashJobID))
+                                    break;
+                                sw.Stop();
+                                MainForm.Logger("Generated DAG for Epoch #" + ethashEpoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
                             }
-                            ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
 
-                            sw.Stop();
-                            Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
-                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                            consoleUpdateStopwatch.Start();
+
+                            while (!Stopped && mEthashStratum.GetJob().ID.Equals(ethashJobID) && mEthashStratum.PoolExtranonce.Equals(ethashPoolExtranonce))
                             {
-                                MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", Speed / (1000000)));
-                                consoleUpdateStopwatch.Restart();
+                                MarkAsAlive();
+
+                                // Get a new local extranonce if necessary.
+                                if ((ethashStartNonce & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8)) + (ulong)mEthashGlobalWorkSizeArray[0]) >= ((ulong)0x1 << (64 - (ethashExtranonceByteArray.Length * 8 + 8))))
+                                    break;
+
+                                UInt64 target = (UInt64)((double)0xffff0000U / ethashDifficulty);
+                                searchKernel.SetMemoryArgument(0, ethashOutputBuffer); // g_output
+                                searchKernel.SetMemoryArgument(1, ethashHeaderBuffer); // g_header
+                                searchKernel.SetMemoryArgument(2, ethashDAGBuffer); // _g_dag
+                                searchKernel.SetValueArgument<UInt32>(3, (UInt32)(ethashDAGSize / 128)); // DAG_SIZE
+                                searchKernel.SetValueArgument<UInt64>(4, ethashStartNonce); // start_nonce
+                                searchKernel.SetValueArgument<UInt64>(5, target); // target
+                                searchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
+
+                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                                sw.Start();
+                                ethashOutput[255] = 0; // ethashOutput[255] is used as an atomic counter.
+                                Queue.Write<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
+                                mEthashGlobalWorkOffsetArray[0] = 0;
+                                Queue.Execute(searchKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
+                                Queue.Read<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
+                                if (mEthashStratum.GetJob().ID.Equals(ethashJobID))
+                                {
+                                    for (int i = 0; i < ethashOutput[255]; ++i)
+                                        mEthashStratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
+                                }
+                                ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
+
+                                sw.Stop();
+                                Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                                if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                                {
+                                    MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", Speed / (1000000)));
+                                    consoleUpdateStopwatch.Restart();
+                                }
                             }
                         }
+                    } catch (Exception ex) {
+                        MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
+                        Speed = 0;
+                        if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                            this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                            Stop();
+                        } else {
+                            MainForm.Logger("Restarting miner thread...");
+                            System.Threading.Thread.Sleep(5000);
+                        }
                     }
-
-                    if (ethashDAGBuffer != null)
-                    {
+                    if (ethashDAGBuffer != null) {
                         ethashDAGBuffer.Dispose();
                         ethashDAGBuffer = null;
                     }
-                } catch (Exception ex) {
-                    MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    Speed = 0;
-                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
-                        Stop();
-                    } else {
-                        MainForm.Logger("Restarting miner thread...");
-                        System.Threading.Thread.Sleep(5000);
-                    }
                 }
-            }
 
-            MarkAsDone();
+                MarkAsDone();
+
+                program.Dispose();
+            } catch (UnrecoverableException) {
+                if (program != null)
+                    program.Dispose();
+                throw;
+            } catch (Exception ex) {
+                if (program != null)
+                    program.Dispose();
+                throw new UnrecoverableException(ex, GatelessGateDevice);
+            }
         }
     }
 }

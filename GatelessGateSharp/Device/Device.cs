@@ -11,14 +11,12 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    public class Device
+    public class Device : IDisposable
     {
         private int mDeviceIndex;
         private int mAcceptedShares;
         private int mRejectedShares;
-        private ComputeContext mContext = null;
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
-        private List<ComputeDevice> mDeviceList;
 
         public virtual String GetVendor() { return ""; }
         public virtual String GetName() { return ""; }
@@ -35,6 +33,16 @@ namespace GatelessGateSharp
             mDeviceIndex = aDeviceIndex;
             mAcceptedShares = 0;
             mRejectedShares = 0;
+        }
+
+        public void Dispose() {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing) {
         }
 
         public int IncrementAcceptedShares()
