@@ -69,7 +69,7 @@ namespace GatelessGateSharp
         
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.3";
+        public static string appVersion = "1.2.4";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1791,7 +1791,7 @@ namespace GatelessGateSharp
                     labelBalance.Text = "-";
                 }
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger("Failed to update pool statistics.");
             }
         }
 
@@ -1867,9 +1867,9 @@ namespace GatelessGateSharp
                 var currentSecondaryPool
                              = (mAppState == ApplicationGlobalState.Mining && mSecondaryStratum != null) ? (mSecondaryStratum.PoolName) :
                                checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool0SecondaryHost.Text :
-                               checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool1SecondaryHost.Text : 
+                               checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool1SecondaryHost.Text :
                                checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool2SecondaryHost.Text :
-                               checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool3SecondaryHost.Text : 
+                               checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool3SecondaryHost.Text :
                                "";
                 if (mAppState == ApplicationGlobalState.Mining && mDevFeeMode) {
                     labelCurrentPool.Text = "DEVFEE(" + mDevFeePercentage + "%; " + string.Format("{0:N0}", mDevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
@@ -1931,7 +1931,7 @@ namespace GatelessGateSharp
                     foreach (var miner in mMiners)
                         if (miner.DeviceIndex == device.DeviceIndex && miner.SecondAlgorithmName != null && miner.SecondAlgorithmName != "")
                             speedSecondary += miner.SpeedSecondaryAlgorithm;
-                    
+
                     dataGridViewDevices.Rows[deviceIndex].Cells["speed"].Value = (mAppState != ApplicationGlobalState.Mining) ? "-" :
                                                            speedSecondary > 0 ? ConvertHashRateToString(speedPrimary) + ", " + ConvertHashRateToString(speedSecondary) :
                                                                                                          ConvertHashRateToString(speedPrimary);
@@ -2035,6 +2035,10 @@ namespace GatelessGateSharp
 
             if (mAppState == ApplicationGlobalState.Mining)
                 StopMiners();
+            if (e.CloseReason == CloseReason.UserClosing) {
+                try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                Program.KillMonitor = true;
+            }
 
             if (mAreSettingsDirty)
                 SaveSettingsToDatabase();
@@ -3540,7 +3544,7 @@ namespace GatelessGateSharp
                     timerDevFee.Interval = (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
                     System.Threading.Thread.Sleep(1000);
                     LaunchMiners();
-                    if (mMiners.Count() == 0 || mPrimaryStratum == null) {
+                    if (mMiners.Count == 0 || mPrimaryStratum == null) {
                         mDevFeeMode = true;
                         timerDevFee.Interval = 1000;
                     }
@@ -3610,7 +3614,9 @@ namespace GatelessGateSharp
                             miner.UnrecoverableException = null;
                         }
                     }
-                    if (ex != null) {
+                    if (ex != null && ex.GetType() == typeof(StratumServerUnavailableException)) {
+                        timerFailOver.Enabled = true; 
+                    } else if (ex != null) {
                         StopMiners();
                         mAppState = ApplicationGlobalState.Idle;
                         try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
@@ -4726,6 +4732,18 @@ namespace GatelessGateSharp
                 Logger("Exception: " + ex.Message + ex.StackTrace);
                 MessageBox.Show(this, "Failed to delete backups.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void timerFailOver_Tick(object sender, EventArgs e) {
+            timerFailOver.Enabled = false;
+            if (mAppState != ApplicationGlobalState.Mining)
+                return;
+            try {
+                StopMiners();
+                LaunchMiners();
+            } catch (Exception) {}
+            if (mMiners.Count == 0 || mPrimaryStratum == null)
+                timerFailOver.Enabled = true;
         }
     }
 }
