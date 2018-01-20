@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace GatelessGateSharp
 {
-    class Utilities
+    static class Utilities
     {
         static long[] sDAGSizes = {
             1073739904, 1082130304, 1090514816, 1098906752, 1107293056, 
@@ -492,12 +492,19 @@ namespace GatelessGateSharp
             _controlfp(_MCW_EM, _EM_INVALID);
         }
 
-        public static Form GetAutoClosingForm()
+        public static Form GetAutoClosingForm(int wait = 10)
         {
             var w = new Form() { Size = new System.Drawing.Size(0, 0) };
-            Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith((t) => w.Close(), TaskScheduler.FromCurrentSynchronizationContext());
+            Task.Delay(TimeSpan.FromSeconds(wait)).ContinueWith((t) => w.Close(), TaskScheduler.FromCurrentSynchronizationContext());
             w.BringToFront();
             return w;
+        }
+
+        public static IEnumerable<T> FindAllChildrenByType<T>(this Control control) {
+            IEnumerable<Control> controls = control.Controls.Cast<Control>();
+            return controls
+                .OfType<T>()
+                .Concat<T>(controls.SelectMany<Control, T>(ctrl => FindAllChildrenByType<T>(ctrl)));
         }
     }
 }

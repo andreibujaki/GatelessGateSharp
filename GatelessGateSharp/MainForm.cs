@@ -18,7 +18,8 @@
 
 
 using System;
-using System.Collections.Generic;using System.Drawing;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Linq;
@@ -36,16 +37,14 @@ using System.Text.RegularExpressions;
 
 
 
-namespace GatelessGateSharp
-{
-    public partial class MainForm : Form
-    {
+namespace GatelessGateSharp {
+    public partial class MainForm : Form {
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, EntryPoint = "GlobalMemoryStatusEx", SetLastError = true)]
         static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
         [DllImport("kernel32.dll")]
         public static extern uint SetThreadExecutionState(uint esFlags);
-         
+
         [StructLayout(LayoutKind.Sequential)]
         internal class MemoryStatusEx {
             public uint dwLength;
@@ -57,16 +56,15 @@ namespace GatelessGateSharp
             public UInt64 ullTotalVirtual;
             public UInt64 ullAvailVirtual;
             public UInt64 ullAvailExtendedVirtual;
-            public MemoryStatusEx()
-            {
+            public MemoryStatusEx() {
                 this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
             }
-        } 
-        
+        }
+
         public const uint ES_CONTINUOUS = 0x80000000;
         public const uint ES_SYSTEM_REQUIRED = 0x00000001;
         public const uint ES_AWAYMODE_REQUIRED = 0x00000040;
-        
+
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
         public static string appVersion = "1.2.4";
@@ -81,8 +79,7 @@ namespace GatelessGateSharp
         private Stratum mPrimaryStratum = null;
         private Stratum mSecondaryStratum = null;
         private List<Miner> mMiners = new List<Miner>();
-        private enum ApplicationGlobalState
-        {
+        private enum ApplicationGlobalState {
             Idle = 0,
             Mining = 1,
             Initializing = 2
@@ -200,7 +197,7 @@ namespace GatelessGateSharp
             var status = new MemoryStatusEx();
 
             GlobalMemoryStatusEx(status);
-            
+
             /*
             MainForm.Logger("dwLength: " + (ulong)status.dwLength);
             MainForm.Logger("dwMemoryLoad: " + (ulong)status.dwMemoryLoad);
@@ -211,13 +208,9 @@ namespace GatelessGateSharp
             MainForm.Logger("ullTotalVirtual: " + (ulong)status.ullTotalVirtual);
             MainForm.Logger("ullAvailVirtual: " + (ulong)status.ullAvailVirtual);
             */
-            
+
             if ((ulong)status.ullTotalPageFile - status.ullTotalPhys < (ulong)24 * 1024 * 1024 * 1024) {
-                var w = new Form() { Size = new System.Drawing.Size(0, 0) };
-                Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
-                    TaskScheduler.FromCurrentSynchronizationContext());
-                w.BringToFront();
-                var result = MessageBox.Show(w, "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                var result = MessageBox.Show(Utilities.GetAutoClosingForm(20), "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
                 if (result == DialogResult.Yes) {
                     try {
                         var process = new System.Diagnostics.Process();
@@ -241,7 +234,7 @@ namespace GatelessGateSharp
                         process.StartInfo = startInfo;
                         process.Start();
                         process.WaitForExit();
-                        
+
                         startInfo.FileName = "shutdown";
                         startInfo.Arguments = "/r";
                         process.StartInfo = startInfo;
@@ -266,6 +259,18 @@ namespace GatelessGateSharp
             this.DragEnter += new DragEventHandler(MainForm_DragEnter);
             this.DragDrop += new DragEventHandler(MainForm_DragDrop);
 
+            foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
+                var tag = (string)(checkBox.GetType().GetProperty("Tag").GetValue(checkBox));
+                if (tag == null)
+                    continue;
+                var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                var match = regex.Match(tag);
+                var type = match.Success ? match.Groups[1].Value : null;
+                var name = match.Success ? match.Groups[2].Value : null;
+                if (type == "parameter")
+                    checkBox.CheckedChanged += new System.EventHandler(this.MarkSettingsAsDirty);
+            }
+            
             comboBoxCustomPool0Algorithm.SelectedIndex = 0;
             comboBoxCustomPool1Algorithm.SelectedIndex = 0;
             comboBoxCustomPool2Algorithm.SelectedIndex = 0;
@@ -276,12 +281,14 @@ namespace GatelessGateSharp
             comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
             comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
+            comboBoxCurrency.SelectedIndex = 0;
+
             comboBoxGraphType.SelectedIndex = 0;
             comboBoxGraphCoverage.SelectedIndex = 0;
 
             // LiveCharts
             var mapper = Mappers.Xy<MeasureModel>()
-                .X(model => model.DateTime.Ticks) 
+                .X(model => model.DateTime.Ticks)
                 .Y(model => model.Value);
             Charting.For<MeasureModel>(mapper);
         }
@@ -292,7 +299,7 @@ namespace GatelessGateSharp
 
         void MainForm_DragDrop(object sender, DragEventArgs e) {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (string file in files) 
+            foreach (string file in files)
                 LoadSettingsFromDatabase(file);
         }
 
@@ -300,16 +307,16 @@ namespace GatelessGateSharp
             SQLiteConnection.CreateFile(filePath);
             using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                 conn.Open();
-                var sql = "create table wallet_addresses (coin varchar(1024), address varchar(1024));";
+                var sql = "create table wallet_addresses (coin varchar(64), address varchar(256));";
                 using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
 
-                sql = "create table pools (name varchar(1024));";
+                sql = "create table pools (name varchar(64));";
                 using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
 
-                sql = "create table properties (name varchar(1024), value varchar(1024));";
+                sql = "create table properties (name varchar(64), value varchar(256));";
                 using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
 
-                sql = "create table device_parameters (device_id int, device_vendor varchar(1024), device_name varchar(1024), parameter_name varchar(1024), parameter_value varchar(1024));";
+                sql = "create table device_parameters (device_id int, device_vendor varchar(64), device_name varchar(64), parameter_name varchar(64), parameter_value varchar(256));";
                 using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
 
                 conn.Close();
@@ -322,6 +329,10 @@ namespace GatelessGateSharp
 
         static string SettingsBackupPathBase {
             get { return AppDataPathBase + "\\Backups"; }
+        }
+
+        public static string SavedOpenCLBinaryKernelPathBase {
+            get { return AppDataPathBase + "\\BinaryKernels"; }
         }
 
         static string DatabaseFilePath {
@@ -343,7 +354,7 @@ namespace GatelessGateSharp
         static string OldLogFilePath {
             get { return logFileName; }
         }
-        
+
         static string OldAppStateFilePath {
             get { return mAppStateFileName; }
         }
@@ -577,7 +588,35 @@ namespace GatelessGateSharp
 
                                     } else if (propertyName == "disable_auto_start_prompt") {
                                         checkBoxDisableAutoStartPrompt.Checked = (string)reader["value"] == "true";
+
+                                    } else if (propertyName == "graph_type") {
+                                        comboBoxGraphType.SelectedItem = (string)reader["value"];
+                                    } else if (propertyName == "graph_coverage") {
+                                        comboBoxGraphCoverage.SelectedItem = (string)reader["value"];
+                                    
+                                    } else if (propertyName == "automatic_backups") {
+                                        checkBoxAutomaticBackups.Checked = (string)reader["value"] == "true";
+
+                                    } else if (propertyName == "currency") {
+                                        if (!comboBoxCurrency.Items.Contains(reader["value"])) {
+                                            comboBoxCurrency.Items.Add((string)reader["value"]);
+                                        } else {
+                                            comboBoxCurrency.SelectedItem = (string)reader["value"];
+                                        }
                                     }
+
+                                    foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
+                                        var tag = (string)(checkBox.GetType().GetProperty("Tag").GetValue(checkBox));
+                                        if (tag == null)
+                                            continue;
+                                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                                        var match = regex.Match(tag);
+                                        var type = match.Success ? match.Groups[1].Value : null;
+                                        var name = match.Success ? match.Groups[2].Value : null;
+                                        if (type == "parameter" && name == propertyName)
+                                            checkBox.Checked = (string)reader["value"] == "true";
+                                    }
+
                                 }
                             }
                         }
@@ -713,7 +752,7 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             }
-            
+
             MainForm.Instance.Enabled = true;
         }
 
@@ -722,7 +761,7 @@ namespace GatelessGateSharp
         private void SaveSettingsToDatabase(string filePath = null) {
             bool createBackup = filePath == null;
             filePath = ((filePath == null) ? DatabaseFilePath : (new Regex("'")).Replace(filePath, ""));
-            Application.DoEvents(); 
+            Application.DoEvents();
             Logger("Saving settings to " + filePath + "...");
             UpdateLog();
             Application.DoEvents();
@@ -735,12 +774,8 @@ namespace GatelessGateSharp
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                     conn.Open();
-                    var sql = "delete from wallet_addresses";
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        command.ExecuteNonQuery();
-                    }
 
-                    sql = "insert into wallet_addresses (coin, address) values (@coin, @address)";
+                    var sql = "insert into wallet_addresses (coin, address) values (@coin, @address)";
                     using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@coin", "bitcoin");
                         command.Parameters.AddWithValue("@address", textBoxBitcoinAddress.Text);
@@ -762,36 +797,10 @@ namespace GatelessGateSharp
                         command.ExecuteNonQuery();
                     }
 
-                    try {
-                        sql = "delete from pools";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.ExecuteNonQuery();
-                        }
-                    } catch (Exception ex) {
-                        Logger("Exception: " + ex.Message + ex.StackTrace);
-                        sql = "create table pools (name varchar(1024));";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.ExecuteNonQuery();
-                        }
-                    }
-
                     sql = "insert into pools (name) values (@name)";
                     using (var command = new SQLiteCommand(sql, conn)) {
                         foreach (string poolName in listBoxPoolPriorities.Items) {
                             command.Parameters.AddWithValue("@name", poolName);
-                            command.ExecuteNonQuery();
-                        }
-                    }
-
-                    try {
-                        sql = "delete from properties";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.ExecuteNonQuery();
-                        }
-                    } catch (Exception ex) {
-                        Logger("Exception: " + ex.Message + ex.StackTrace);
-                        sql = "create table properties (name varchar(1024), value varchar(1024));";
-                        using (var command = new SQLiteCommand(sql, conn)) {
                             command.ExecuteNonQuery();
                         }
                     }
@@ -828,6 +837,30 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@name", "disable_auto_start_prompt");
                         command.Parameters.AddWithValue("@value", checkBoxDisableAutoStartPrompt.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@name", "graph_type");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxGraphType.SelectedItem);
+                        command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@name", "graph_coverage");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxGraphCoverage.SelectedItem);
+                        command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@name", "currency");
+                        command.Parameters.AddWithValue("@value", (string)comboBoxCurrency.SelectedItem);
+                        command.ExecuteNonQuery();
+
+                        foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
+                            var tag = (string)(checkBox.GetType().GetProperty("Tag").GetValue(checkBox));
+                            if (tag == null)
+                                continue;
+                            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                            var match = regex.Match(tag);
+                            var type = match.Success ? match.Groups[1].Value : null;
+                            var name = match.Success ? match.Groups[2].Value : null;
+                            if (type == "parameter") {
+                                command.Parameters.AddWithValue("@name", name);
+                                command.Parameters.AddWithValue("@value", checkBox.Checked ? "true" : "false");
+                                command.ExecuteNonQuery();
+                            }
+                        }
                     }
                     for (var i = 0; i < mDevices.Length; ++i) {
                         using (var command = new SQLiteCommand(sql, conn)) {
@@ -974,19 +1007,6 @@ namespace GatelessGateSharp
                         command.Parameters.AddWithValue("@value", checkBoxEnablePhymem.Checked ? "true" : "false");
                         command.ExecuteNonQuery();
                     }
-                    
-                    try {
-                        sql = "delete from device_parameters";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.ExecuteNonQuery();
-                        }
-                    } catch (Exception ex) {
-                        Logger("Exception: " + ex.Message + ex.StackTrace);
-                        sql = "create table device_parameters (device_id int, device_vendor varchar(1024), device_name varchar(1024), parameter_name varchar(1024), parameter_value varchar(1024));";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.ExecuteNonQuery();
-                        }
-                    }
 
                     sql = "insert into device_parameters (device_id, device_vendor, device_name, parameter_name, parameter_value) values (@device_id, @device_vendor, @device_name, @parameter_name, @parameter_value)";
                     for (var i = 0; i < mDevices.Length; ++i) {
@@ -1004,7 +1024,7 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_pascal_iterations");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalPascalIterationsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                         
+
                             command.Parameters.AddWithValue("@parameter_name", "ethash_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
@@ -1044,7 +1064,7 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@parameter_name", "lyra2rev2_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLyra2REv2LocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        
+
                             command.Parameters.AddWithValue("@parameter_name", "pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
@@ -1054,7 +1074,7 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@parameter_name", "pascal_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        
+
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
@@ -1064,7 +1084,7 @@ namespace GatelessGateSharp
                             command.Parameters.AddWithValue("@parameter_name", "cryptonight_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightLocalWorkSizeArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                        
+
                             command.Parameters.AddWithValue("@parameter_name", "fan_control_enabled");
                             command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceFanControlEnabledArray[i].Checked ? "true" : "false");
                             command.ExecuteNonQuery();
@@ -1107,7 +1127,7 @@ namespace GatelessGateSharp
                     conn.Close();
                 }
                 if (System.IO.File.Exists(OldDatabaseFilePath))
-                System.IO.File.Delete(OldDatabaseFilePath);
+                    System.IO.File.Delete(OldDatabaseFilePath);
                 Logger("Saved settings.");
                 if (filePath == DatabaseFilePath)
                     mAreSettingsDirty = false;
@@ -1115,7 +1135,7 @@ namespace GatelessGateSharp
                 Logger("Exception in UpdateDatabase(): " + ex.Message + ex.StackTrace);
             }
             MainForm.Instance.Enabled = true;
-            if (createBackup && checkBoxAutomaticallyCreateBackups.Checked)
+            if (createBackup && checkBoxAutomaticBackups.Checked)
                 CreateSettingsBackup();
         }
 
@@ -1143,6 +1163,7 @@ namespace GatelessGateSharp
 
             try { System.IO.Directory.CreateDirectory(AppDataPathBase); } catch (Exception) { }
             try { System.IO.Directory.CreateDirectory(SettingsBackupPathBase); } catch (Exception) { }
+            try { System.IO.Directory.CreateDirectory(SavedOpenCLBinaryKernelPathBase); } catch (Exception) { }
 
             CheckVirtualMemorySize();
 
@@ -1153,7 +1174,7 @@ namespace GatelessGateSharp
             Application.DoEvents();
 
             try {
-                RunNGen();
+                //RunNGen();
             } catch (Exception ex) {
                 Logger("Exception in RunNGen(): " + ex.Message + ex.StackTrace);
             }
@@ -1165,18 +1186,12 @@ namespace GatelessGateSharp
             }
 
             try {
-                if (!System.IO.File.Exists(DatabaseFilePath))
-                    CreateNewDatabase(DatabaseFilePath);
-            } catch (Exception ex) {
-                Logger("Exception in CreateNewDatabase(): " + ex.Message + ex.StackTrace);
-            }
-            try {
-                LoadSettingsFromDatabase();
+                if (System.IO.File.Exists(DatabaseFilePath))
+                    LoadSettingsFromDatabase();
             } catch (Exception ex) {
                 Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
             }
 
-            Text = appName; // Set the window title.
             UpdateSettingBackupList();
 
             // Do everything to turn off TDR.
@@ -1186,13 +1201,13 @@ namespace GatelessGateSharp
                 @"HKEY_LOCAL_MACHINE\System\" + controlSet + @"\Control\GraphicsDrivers",
                 @"HKEY_LOCAL_MACHINE\System\" + controlSet + @"\Control\GraphicsDrivers\TdrWatch"
             }) {
-                try { Microsoft.Win32.Registry.SetValue(path, "TdrLevel", 0); } catch (Exception) { }
-                try { Microsoft.Win32.Registry.SetValue(path, "TdrDelay", 60); } catch (Exception) { }
-                try { Microsoft.Win32.Registry.SetValue(path, "TdrDdiDelay", 60); } catch (Exception) { }
-                try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitTime", 60); } catch (Exception) { }
-                try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitCount", 256); } catch (Exception) { }
-                try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); } catch (Exception) { } // Undocumented but found on Windows 10.
-            }
+                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLevel", 0); } catch (Exception) { }
+                    try { Microsoft.Win32.Registry.SetValue(path, "TdrDelay", 60); } catch (Exception) { }
+                    try { Microsoft.Win32.Registry.SetValue(path, "TdrDdiDelay", 60); } catch (Exception) { }
+                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitTime", 60); } catch (Exception) { }
+                    try { Microsoft.Win32.Registry.SetValue(path, "TdrLimitCount", 256); } catch (Exception) { }
+                    try { Microsoft.Win32.Registry.SetValue(path, "TDR_RECOVERY", 0); } catch (Exception) { } // Undocumented but found on Windows 10.
+                }
 
             // Not ideal but absolutely necessary.
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "ForceQueue", 1); } catch (Exception) { }
@@ -1211,6 +1226,10 @@ namespace GatelessGateSharp
             UpdateControls();
             mBackgroundTasksCancellationTokenSource = new CancellationTokenSource();
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_HardwareManagement), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateBitcoinRates), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateAltcoinRates), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdatePoolStats), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateLatestReleaseInfo), mBackgroundTasksCancellationTokenSource.Token);
             mAreSettingsDirty = false;
             checkBoxEnablePhymem.Checked = false;
 
@@ -1280,7 +1299,7 @@ namespace GatelessGateSharp
             numericUpDownDeviceLyra2REv2ThreadsArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceLyra2REv2IntensityArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceLyra2REv2LocalWorkSizeArray = new NumericUpDown[mDevices.Length];
-            
+
             checkBoxDeviceFanControlEnabledArray = new CheckBox[mDevices.Length];
             numericUpDownDeviceFanControlTargetTemperatureArray = new NumericUpDown[mDevices.Length];
             numericUpDownDeviceFanControlMaximumTemperatureArray = new NumericUpDown[mDevices.Length];
@@ -1297,7 +1316,7 @@ namespace GatelessGateSharp
             buttonDeviceResetToDefaultArray = new Button[mDevices.Length];
             buttonDeviceResetAllArray = new Button[mDevices.Length];
             buttonDeviceCopyToOthersArray = new Button[mDevices.Length];
-            
+
             for (var i = 0; i < mDevices.Length; ++i) {
                 DeviceSettingsUserControl.DeviceSettingsUserControl uc = new DeviceSettingsUserControl.DeviceSettingsUserControl();
 
@@ -1441,10 +1460,8 @@ namespace GatelessGateSharp
             foreach (var device in mDevices)
                 ResetDeviceSettings(device);
 
-            UpdateStatsWithShortPolling();
-            timerDeviceStatusUpdates.Enabled = true;
-            UpdateStatsWithLongPolling();
-            timerCurrencyStatUpdates.Enabled = true;
+            UpdateStats();
+            timerStatsUpdates.Enabled = true;
         }
 
         void DeviceSettingsUserControl_ButtonResetToDefaultClicked(object sender, EventArgs e) {
@@ -1525,12 +1542,12 @@ namespace GatelessGateSharp
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 64 :
-                            device.GetVendor() == "AMD"                                         ? 2 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" ? 2 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
                                                                                                           2 * device.GetMaxComputeUnits());
         }
 
-        private void ResetDeviceOverclockingSettings(Device device){
+        private void ResetDeviceOverclockingSettings(Device device) {
             foreach (var algorithm in sAlgorithmList) {
                 Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
 
@@ -1627,8 +1644,7 @@ namespace GatelessGateSharp
 
         #endregion
 
-        private class CustomWebClient : System.Net.WebClient
-        {
+        private class CustomWebClient : System.Net.WebClient {
             protected override System.Net.WebRequest GetWebRequest(Uri uri) {
                 Encoding = System.Text.Encoding.UTF8;
                 var request = base.GetWebRequest(uri);
@@ -1637,182 +1653,240 @@ namespace GatelessGateSharp
             }
         }
 
+        static Dictionary<string, double> sBitcoinRates = new Dictionary<string, double> { };
+        static Dictionary<string, double> sAltcoinRates = new Dictionary<string, double> { };
+        delegate void StringArgReturningVoidDelegate(string text);
+
+        static void Task_UpdateBitcoinRates(object cancellationToken) {
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    using (var client = new CustomWebClient()) {
+                        var jsonString = client.DownloadString("https://blockchain.info/ticker");
+                        var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        foreach (var currency in response.Keys) {
+                            var info = (JContainer)response[currency];
+                            sBitcoinRates[currency] = (double)info["15m"];
+                            if (Instance.comboBoxCurrency.InvokeRequired) {
+                                Instance.Invoke(new StringArgReturningVoidDelegate(aCurrency => {
+                                    if (!MainForm.Instance.comboBoxCurrency.Items.Contains(aCurrency))
+                                        MainForm.Instance.comboBoxCurrency.Items.Add(aCurrency);
+                                }), new object[] { currency });
+                            }
+                        }
+                    }
+                } catch (Exception) {
+                    Logger("Failed to update Bitcoin rates.");
+                }
+                System.Threading.Thread.Sleep(5 * 60 * 1000);
+            }
+        }
+
+        static void Task_UpdateAltcoinRates(object cancellationToken) {
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    using (var client = new CustomWebClient()) {
+                        var jsonString = client.DownloadString("https://api.coinmarketcap.com/v1/ticker/?convert=USD");
+                        var responseArray = JsonConvert.DeserializeObject<JArray>(jsonString);
+                        foreach (JContainer coin in responseArray) {
+                            try {
+                                sAltcoinRates[(string)coin["name"]] = sAltcoinRates[(string)coin["symbol"]] = double.Parse((string)coin["price_btc"], System.Globalization.CultureInfo.InvariantCulture);
+                            } catch (Exception) { }
+                        }
+                    }
+                } catch (Exception) {
+                    Logger("Failed to update altcoin rates.");
+                }
+                System.Threading.Thread.Sleep(5 * 60 * 1000);
+            }
+        }
+
+        static Dictionary<string, object> sNiceHashProviderStats = null;
+        static Dictionary<string, object> sNiceHashGlobalCurrentStats = null;
+        static Dictionary<string, object> sEthermineStats = null;
+        static Dictionary<string, object> sEthpoolStats = null;
+        static Dictionary<string, object> sNanopoolEthereumStats = null;
+        static Dictionary<string, object> sNanopoolMoneroStats = null;
+        static Dictionary<string, object> sDwarfPoolEthereumStats = null;
+        static Dictionary<string, object> sDwarfPoolMoneroStats = null;
+
+        static void Task_UpdatePoolStats(object cancellationToken) {
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    if (Instance.ValidateBitcoinAddress(false)) {
+                        using (var client = new CustomWebClient()) {
+                            var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + Instance.textBoxBitcoinAddress.Text);
+                            sNiceHashProviderStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                            jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
+                            sNiceHashGlobalCurrentStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        }
+                    }
+                } catch (Exception) {
+                    Logger("Failed to update NiceHash stats.");
+                }
+                try {
+                    if (Instance.ValidateEthereumAddress(false)) {
+                        using (var client = new CustomWebClient()) {
+                            var jsonString = client.DownloadString("https://api.ethermine.org/miner/" + Instance.textBoxEthereumAddress.Text + "/currentStats");
+                            sEthermineStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        }
+                    }
+                } catch (Exception) {
+                    Logger("Failed to update ethermine.org stats.");
+                }
+                try {
+                    if (Instance.ValidateEthereumAddress(false)) {
+                        using (var client = new CustomWebClient()) {
+                            var jsonString = client.DownloadString("http://api.ethpool.org/miner/" + Instance.textBoxEthereumAddress.Text + "/currentStats");
+                            sEthpoolStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        }
+                    }
+                } catch (Exception) {
+                    Logger("Failed to update ethpool.org stats.");
+                }
+                try {
+                    using (var client = new CustomWebClient()) {
+                        if (Instance.ValidateEthereumAddress(false)) {
+                            var jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/user/" + Instance.textBoxEthereumAddress.Text);
+                            sNanopoolEthereumStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        }
+                        if (Instance.ValidateMoneroAddress(false)) {
+                            var jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/user/" + Instance.textBoxMoneroAddress.Text);
+                            sNanopoolMoneroStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        }
+                    }
+                } catch (Exception) {
+                    Logger("Failed to update Nanopool stats.");
+                }
+                try {
+                    using (var client = new CustomWebClient()) {
+                        if (Instance.ValidateEthereumAddress(false)) {
+                            var jsonString = client.DownloadString("http://dwarfpool.com/eth/api?wallet=" + Instance.textBoxEthereumAddress.Text);
+                            sDwarfPoolEthereumStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        }
+                        if (Instance.ValidateMoneroAddress(false)) {
+                            var jsonString = client.DownloadString("http://dwarfpool.com/xmr/api?wallet=" + Instance.textBoxMoneroAddress.Text);
+                            sDwarfPoolMoneroStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                        }
+                    }
+                } catch (Exception) {
+                    Logger("Failed to update DwarfPool stats.");
+                }
+                System.Threading.Thread.Sleep(5 * 60 * 1000);
+            }
+        }
+
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        private void UpdateStatsWithLongPolling() {
+        private void UpdatePoolStats() {
             try {
-                PCIExpress.PrintMemoryTimings();
-
                 double totalSpeed = 0;
                 foreach (var miner in mMiners)
                     totalSpeed += miner.Speed;
                 double secondaryTotalSpeed = 0;
                 foreach (var miner in mMiners)
                     secondaryTotalSpeed += miner.SpeedSecondaryAlgorithm;
-                
-                var client = new CustomWebClient();
-                
-                double USDBTC = 0;
-                {
-                    var jsonString = client.DownloadString("https://blockchain.info/ticker");
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var USD = (JContainer)response["USD"];
-                    USDBTC = (double)USD["15m"];
-                }
 
-                var USDETH = 0.0;
-                var USDXMR = 0.0;
-                {
-                    var jsonString = client.DownloadString("https://api.coinmarketcap.com/v1/ticker/?convert=USD");
-                    var responseArray = JsonConvert.DeserializeObject<JArray>(jsonString);
-                    foreach (JContainer currency in responseArray) {
-                        try {
-                            if ((string)currency["id"] == "ethereum")
-                                USDETH = double.Parse((string)currency["price_usd"], System.Globalization.CultureInfo.InvariantCulture);
-                        } catch (Exception) { }
-                        try {
-                            if ((string)currency["id"] == "monero")
-                                USDXMR = double.Parse((string)currency["price_usd"], System.Globalization.CultureInfo.InvariantCulture);
-                        } catch (Exception) { }
-                    }
-                }
+                string currency = (string)comboBoxCurrency.SelectedItem;
+                double BTCRate = sBitcoinRates.Keys.Contains<string>(currency) ? sBitcoinRates[currency] : 0;
+                var ETHRate = sBitcoinRates.Keys.Contains<string>(currency) && sAltcoinRates.Keys.Contains<string>("ETH") ? sBitcoinRates[currency] * sAltcoinRates["ETH"] : 0;
+                var XMRRate = sBitcoinRates.Keys.Contains<string>(currency) && sAltcoinRates.Keys.Contains<string>("XMR") ? sBitcoinRates[currency] * sAltcoinRates["XMR"] : 0;
+
+                labelPriceDay.Text = "-";
+                labelPriceDay.Text = "-";
+                labelPriceWeek.Text = "-";
+                labelPriceMonth.Text = "-";
 
                 if (mCurrentPool == "NiceHash" && radioButtonEthereum.Checked && textBoxBitcoinAddress.Text != "") {
-                    UpdateProfitabilityInfoForNiceHash(USDBTC, 20, totalSpeed, 1000000000.0);
+                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 20, totalSpeed, 1000000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonEthereumPascal.Checked && textBoxBitcoinAddress.Text != "") {
-                    UpdateProfitabilityInfoForNiceHash(USDBTC, 20, totalSpeed, 1000000000.0, 25, secondaryTotalSpeed, 1000000000000.0);
+                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 20, totalSpeed, 1000000000.0, 25, secondaryTotalSpeed, 1000000000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonMonero.Checked && textBoxBitcoinAddress.Text != "") {
-                    UpdateProfitabilityInfoForNiceHash(USDBTC, 22, totalSpeed, 1000000.0);
+                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 22, totalSpeed, 1000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonLbry.Checked && textBoxBitcoinAddress.Text != "") {
-                    UpdateProfitabilityInfoForNiceHash(USDBTC, 23, totalSpeed, 1000000000000.0);
+                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 23, totalSpeed, 1000000000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonPascal.Checked && textBoxBitcoinAddress.Text != "") {
-                    UpdateProfitabilityInfoForNiceHash(USDBTC, 58 - 33, totalSpeed, 1000000000000.0);
+                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 58 - 33, totalSpeed, 1000000000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonFeathercoin.Checked && textBoxBitcoinAddress.Text != "") {
-                    UpdateProfitabilityInfoForNiceHash(USDBTC, 41 - 33, totalSpeed, 1000000000.0);
+                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 41 - 33, totalSpeed, 1000000000.0);
                 } else if (mCurrentPool == "NiceHash" && radioButtonMonacoin.Checked && textBoxBitcoinAddress.Text != "") {
-                    UpdateProfitabilityInfoForNiceHash(USDBTC, 47 - 33, totalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "ethermine.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "") {
-                    var jsonString = client.DownloadString("https://api.ethermine.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 47 - 33, totalSpeed, 1000000000000.0);
+                } else if (mCurrentPool == "ethermine.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "" && sEthermineStats != null) {
+                    var response = sEthermineStats;
                     var data = (JContainer)response["data"];
                     var balance = (double)data["unpaid"] * 1e-18;
                     var averageHashrate = (double)data["averageHashrate"];
                     var coinsPerMin = (double)data["coinsPerMin"];
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
 
                     if (mAppState == ApplicationGlobalState.Mining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
-
-                        labelPriceDay.Text = string.Format("{0:N6}", price) + " ETH/Day (" + string.Format("{0:N2}", price * USDETH) + " USD/Day)";
-                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " ETH/Week (" + string.Format("{0:N2}", price * 7 * USDETH) + " USD/Week)";
-                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " ETH/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDETH) + " USD/Month)";
-                    } else {
-                        labelPriceDay.Text = "-";
-                        labelPriceWeek.Text = "-";
-                        labelPriceMonth.Text = "-";
-                    }
-                } else if (mCurrentPool == "ethpool.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "") {
-                    var jsonString = client.DownloadString("http://api.ethpool.org/miner/" + textBoxEthereumAddress.Text + "/currentStats");
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var data = (JContainer)response["data"];
+                        UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
+                    } 
+                } else if (mCurrentPool == "ethpool.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "" && sEthpoolStats != null) {
+                    var data = (JContainer)sEthpoolStats["data"];
                     double balance = 0;
                     try {
                         balance = (double)data["unpaid"] * 1e-18;
                     } catch (Exception) { }
                     var averageHashrate = (double)data["averageHashrate"];
                     var coinsPerMin = (double)data["coinsPerMin"];
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
 
                     if (mAppState == ApplicationGlobalState.Mining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
-
-                        labelPriceDay.Text = string.Format("{0:N6}", price) + " ETH/Day (" + string.Format("{0:N2}", price * USDETH) + " USD/Day)";
-                        labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " ETH/Week (" + string.Format("{0:N2}", price * 7 * USDETH) + " USD/Week)";
-                        labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " ETH/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDETH) + " USD/Month)";
-                    } else {
-                        labelPriceDay.Text = "-";
-                        labelPriceWeek.Text = "-";
-                        labelPriceMonth.Text = "-";
-                    }
+                        UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
+                    } 
                 } else if (mCurrentPool == "Nanopool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "") {
-                    var jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/user/" + textBoxEthereumAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var data = (JContainer)response["data"];
+                    var data = (JContainer)sNanopoolEthereumStats["data"];
                     double balance = 0;
                     try {
                         balance = (double)data["balance"];
                     } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
-
-                    labelPriceDay.Text = "-";
-                    labelPriceWeek.Text = "-";
-                    labelPriceMonth.Text = "-";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
                 } else if (mCurrentPool == "Nanopool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "") {
-                    var jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/user/" + textBoxMoneroAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                    var data = (JContainer)response["data"];
+                    var data = (JContainer)sNanopoolMoneroStats["data"];
                     double balance = 0;
                     try {
                         balance = (double)data["balance"];
                     } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * USDXMR) + " USD)";
-
-                    labelPriceDay.Text = "-";
-                    labelPriceWeek.Text = "-";
-                    labelPriceMonth.Text = "-";
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * XMRRate) + " " + currency + ")";
                 } else if (mCurrentPool == "DwarfPool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "") {
-                    var jsonString = client.DownloadString("http://dwarfpool.com/eth/api?wallet=" + textBoxEthereumAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                     double balance = 0;
                     try {
-                        balance = double.Parse((string)response["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
+                        balance = double.Parse((string)sDwarfPoolEthereumStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * USDETH) + " USD)";
-
-                    labelPriceDay.Text = "-";
-                    labelPriceWeek.Text = "-";
-                    labelPriceMonth.Text = "-";
-                } else if (mCurrentPool == "DwarfPool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "") {
-                    var jsonString = client.DownloadString("http://dwarfpool.com/xmr/api?wallet=" + textBoxMoneroAddress.Text);
-                    var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
+               } else if (mCurrentPool == "DwarfPool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "") {
                     double balance = 0;
                     try {
-                        balance = double.Parse((string)response["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
+                        balance = double.Parse((string)sDwarfPoolMoneroStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     } catch (Exception) { }
-                    labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * USDXMR) + " USD)";
-
-                    labelPriceDay.Text = "-";
-                    labelPriceWeek.Text = "-";
-                    labelPriceMonth.Text = "-";
-                } else {
-                    labelPriceDay.Text = "-";
-                    labelPriceWeek.Text = "-";
-                    labelPriceMonth.Text = "-";
-                    labelBalance.Text = "-";
-                }
-            } catch (Exception ex) {
+                    labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * XMRRate) + " " + currency + ")";
+               } 
+            } catch (Exception) {
                 Logger("Failed to update pool statistics.");
             }
         }
 
-        private void UpdateProfitabilityInfoForNiceHash(double USDBTC, int algo, double totalSpeed, double speedDivisor, int secondaryAlgo = -1, double secondaryTotalSpeed = 0, double secondarySpeedDivisor = 1) {
+        private void UpdateProfitabilityInfoForNiceHash(string currency, double BTCRate, int algo, double totalSpeed, double speedDivisor, int secondaryAlgo = -1, double secondaryTotalSpeed = 0, double secondarySpeedDivisor = 1) {
+            if (sNiceHashProviderStats == null)
+                return;
+
             double balance = 0;
-            var client = new CustomWebClient();
-            var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + textBoxBitcoinAddress.Text);
-            var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-            var result = (JContainer)response["result"];
+            var result = (JContainer)sNiceHashProviderStats["result"];
             var stats = (JArray)result["stats"];
             foreach (JContainer item in stats)
                 try {
                     balance += double.Parse((string)item["balance"], System.Globalization.CultureInfo.InvariantCulture);
                 } catch (Exception) { }
-            labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * USDBTC) + " USD)";
+            labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * BTCRate) + " " + currency + ")";
 
             if (mAppState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
                 double price = 0;
-                jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                response = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                result = (JContainer)response["result"];
+                result = (JContainer)sNiceHashGlobalCurrentStats["result"];
                 stats = (JArray)result["stats"];
                 foreach (JContainer item in stats)
                     try {
@@ -1821,16 +1895,15 @@ namespace GatelessGateSharp
                         else if ((double)item["algo"] == secondaryAlgo)
                             price += double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * secondaryTotalSpeed / secondarySpeedDivisor;
                     } catch (Exception) { }
-                labelPriceDay.Text = string.Format("{0:N6}", price) + " BTC/Day (" + string.Format("{0:N2}", price * USDBTC) + " USD/Day)";
-                labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " BTC/Week (" + string.Format("{0:N2}", price * 7 * USDBTC) + " USD/Week)";
-                labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " BTC/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * USDBTC) + " USD/Month)";
-            } else {
-                labelPriceDay.Text = "-";
-                labelPriceWeek.Text = "-";
-                labelPriceMonth.Text = "-";
-            }
+           }
         }
 
+        void UpdateLabelsForProfitability(string coin, double price, double rate, string currency) {
+            labelPriceDay.Text = string.Format("{0:N6}", price) + " " + coin + "/Day (" + string.Format("{0:N2}", price * rate) + " " + currency + "/Day)";
+            labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " " + coin + "/Week (" + string.Format("{0:N2}", price * 7 * rate) + " " + currency + "/Week)";
+            labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " " + coin + "/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * rate) + " " + currency + "/Month)";
+        }
+ 
         private string ConvertHashRateToString(double totalSpeed) {
             if (totalSpeed < 1000)
                 return string.Format("{0:N1} h/s", totalSpeed);
@@ -1850,12 +1923,18 @@ namespace GatelessGateSharp
                 return string.Format("{0:N0} Mh/s", totalSpeed / 1000000);
         }
 
+        private void UpdateStats() {
+            UpdateLocalStats();
+            UpdatePoolStats();
+        }
+ 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        private void UpdateStatsWithShortPolling() {
+        private void UpdateLocalStats() {
             try { DeviceManagementLibrariesMutex.WaitOne(5000); } catch (Exception) { }
             try {
                 KillInterferingProcesses();
+                Text = appName + " (" + (mLatestReleaseDiff == 0 ? "latest release" : mLatestReleaseDiff + " release(s) behind") + ")"; // Set the window title.
 
                 // Pool
                 mCurrentPool = (mAppState == ApplicationGlobalState.Mining && mPrimaryStratum != null) ? (mPrimaryStratum.PoolName) :
@@ -2026,9 +2105,8 @@ namespace GatelessGateSharp
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            timerCurrencyStatUpdates.Enabled = false;
             timerDevFee.Enabled = false;
-            timerDeviceStatusUpdates.Enabled = false;
+            timerStatsUpdates.Enabled = false;
             timerUpdateLog.Enabled = false;
             timerWatchdog.Enabled = false;
             mBackgroundTasksCancellationTokenSource.Cancel();
@@ -2060,30 +2138,32 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         private void timerDeviceStatusUpdates_Tick(object sender, EventArgs e) {
             try {
-                UpdateStatsWithShortPolling();
+                UpdateStats();
             } catch (Exception ex) {
                 Logger("Exception: " + ex.Message + ex.StackTrace);
             }
         }
 
-        public bool ValidateBitcoinAddress() {
+        public bool ValidateBitcoinAddress(bool showMessageBox = true) {
             var regex = new System.Text.RegularExpressions.Regex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$");
             var match = regex.Match(textBoxBitcoinAddress.Text);
             if (match.Success) {
                 return true;
             } else {
-                MessageBox.Show("Please enter a valid Bitcoin address.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (showMessageBox)
+                    MessageBox.Show("Please enter a valid Bitcoin address.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
 
-        public bool ValidateEthereumAddress() {
+        public bool ValidateEthereumAddress(bool showMessageBox = true) {
             var regex = new System.Text.RegularExpressions.Regex("^0x[a-fA-Z0-9]{40}$");
             var match = regex.Match(textBoxEthereumAddress.Text);
             if (match.Success) {
                 return true;
             } else {
-                MessageBox.Show("Please enter a valid Ethereum address starting with \"0x\".", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (showMessageBox)
+                    MessageBox.Show("Please enter a valid Ethereum address starting with \"0x\".", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -2186,14 +2266,15 @@ namespace GatelessGateSharp
             }
         }
 
-        public bool ValidateMoneroAddress() {
+        public bool ValidateMoneroAddress(bool showMessageBox = true) {
             textBoxMoneroAddress.Text = textBoxMoneroAddress.Text.Trim();
             var regex = new System.Text.RegularExpressions.Regex(@"^(4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}(\.?(([0-9a-fA-F]{16})|([0-9a-fA-F]{64})))?)|([0-9a-fA-F]{64})?$");
             var match = regex.Match(textBoxMoneroAddress.Text);
             if (match.Success) {
                 return true;
             } else {
-                MessageBox.Show("Please enter a valid Monero address.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (showMessageBox)
+                    MessageBox.Show("Please enter a valid Monero address.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -2234,8 +2315,7 @@ namespace GatelessGateSharp
             }
         }
 
-        private struct StratumServerInfo : IComparable<StratumServerInfo>
-        {
+        private struct StratumServerInfo : IComparable<StratumServerInfo> {
             public string name;
             public long delay;
             public long time;
@@ -2919,7 +2999,7 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i) {
-                        OpenCLPascalMiner miner =  new OpenCLPascalMiner(mDevices[deviceIndex]);
+                        OpenCLPascalMiner miner = new OpenCLPascalMiner(mDevices[deviceIndex]);
                         mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDevicePascalIntensityArray[deviceIndex].Value)),
@@ -3128,7 +3208,7 @@ namespace GatelessGateSharp
                 mMiners.Clear();
             }
         }
-        
+
         private void LaunchMinersForCustomPools() {
             for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
                 bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
@@ -3270,7 +3350,7 @@ namespace GatelessGateSharp
                 }
             }
         }
-        
+
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         private void StopMiners() {
@@ -3334,8 +3414,8 @@ namespace GatelessGateSharp
                 if (textBoxRigID.Text != "" && !ValidateRigID())
                     if (textBoxRigID.Text != "" && !ValidateRigID())
                         if (textBoxRigID.Text != "" && !ValidateRigID())
-                    return;
-                if (textBoxBitcoinAddress.Text == "" 
+                            return;
+                if (textBoxBitcoinAddress.Text == ""
                     && textBoxEthereumAddress.Text == ""
                     && textBoxMoneroAddress.Text == ""
                     && textBoxPascalAddress.Text == ""
@@ -3378,7 +3458,7 @@ namespace GatelessGateSharp
                 Exception unrecoverableException = null;
                 try {
                     LaunchMiners();
-                } catch (Exception ex) { 
+                } catch (Exception ex) {
                     unrecoverableException = ex;
                 }
                 if (unrecoverableException != null || mPrimaryStratum == null || !mMiners.Any()) {
@@ -3399,10 +3479,8 @@ namespace GatelessGateSharp
                 try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
             }
 
-            UpdateStatsWithShortPolling();
-            //UpdateStatsWithLongPolling();
+            UpdateStats();
             UpdateControls();
-            timerCurrencyStatUpdates.Interval = 100;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -3461,24 +3539,13 @@ namespace GatelessGateSharp
                     }
                 }
 
+                buttonRestoreSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
+                buttonDeleteSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
+                buttonDeleteAllSettingsBackups.Enabled = listBoxSettingBackups.Items.Count > 0;
+
                 UpdateCharts();
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
-            }
-        }
-
-        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
-        [System.Security.SecurityCritical]
-        private void timerCurrencyStatUpdates_Tick(object sender, EventArgs e) {
-            try {
-                if (mAppState == ApplicationGlobalState.Mining && (DateTime.Now - mStartTime).Seconds < 180) {
-                    timerCurrencyStatUpdates.Interval = 20 * 1000;
-                } else {
-                    timerCurrencyStatUpdates.Interval = 5 * 60 * 1000;
-                }
-                UpdateStatsWithLongPolling();
-            } catch (Exception ex) {
-                Logger("Exception in timerCurrencyStatUpdates_Tick(): " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -3488,7 +3555,7 @@ namespace GatelessGateSharp
                 listBoxPoolPriorities.Items.Insert(selectedIndex - 1, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex + 1);
                 listBoxPoolPriorities.SelectedIndex = selectedIndex - 1;
-                UpdateStatsWithLongPolling();
+                UpdateStats();
             }
         }
 
@@ -3498,7 +3565,7 @@ namespace GatelessGateSharp
                 listBoxPoolPriorities.Items.Insert(selectedIndex + 2, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex);
                 listBoxPoolPriorities.SelectedIndex = selectedIndex + 1;
-                UpdateStatsWithLongPolling();
+                UpdateStats();
             }
         }
 
@@ -3563,7 +3630,6 @@ namespace GatelessGateSharp
                     }
                 }
 
-                UpdateStatsWithLongPolling();
                 tabControlMainForm.Enabled = buttonStart.Enabled = true;
             } catch (Exception ex) {
                 Logger("Exception in timerDevFee_Tick(): " + ex.Message + ex.StackTrace);
@@ -3615,22 +3681,17 @@ namespace GatelessGateSharp
                         }
                     }
                     if (ex != null && ex.GetType() == typeof(StratumServerUnavailableException)) {
-                        timerFailOver.Enabled = true; 
+                        timerFailOver.Enabled = true;
                     } else if (ex != null) {
-                        StopMiners();
-                        mAppState = ApplicationGlobalState.Idle;
-                        try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
-                        UpdateStatsWithShortPolling();
-                        //UpdateStatsWithLongPolling();
-                        UpdateControls();
-                        timerCurrencyStatUpdates.Interval = 100;
-
-                        var w = new Form() { Size = new System.Drawing.Size(0, 0) };
-                        Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith((t) => w.Close(),
-                            TaskScheduler.FromCurrentSynchronizationContext());
-                        w.BringToFront();
-                        if (MessageBox.Show(w, ex.Message + "\n\nMining will automatically resume in 20 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes)
-                            timerAutoStart.Enabled = true;
+                        if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes) {
+                            StopMiners();
+                            mAppState = ApplicationGlobalState.Idle;
+                            try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                            UpdateStats();
+                            UpdateControls();
+                        } else {
+                            timerFailOver.Enabled = true;
+                        }
                     } else {
                         foreach (var miner in mMiners) {
                             if (!miner.Alive) {
@@ -3672,7 +3733,7 @@ namespace GatelessGateSharp
         }
 
         private void checkBoxLaunchAtStartup_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             try {
                 var process = new System.Diagnostics.Process();
                 var startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -3690,355 +3751,355 @@ namespace GatelessGateSharp
         }
 
         private void checkBoxGPU0Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStatsWithShortPolling();
+            UpdateStats();
         }
 
         private void checkBoxGPU1Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStatsWithShortPolling();
+            UpdateStats();
         }
 
         private void checkBoxGPU2Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStatsWithShortPolling();
+            UpdateStats();
         }
 
         private void checkBoxGPU3Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStatsWithShortPolling();
+            UpdateStats();
         }
 
         private void checkBoxGPU4Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStatsWithShortPolling();
+            UpdateStats();
         }
 
         private void checkBoxGPU5Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStatsWithShortPolling();
+            UpdateStats();
         }
 
         private void checkBoxGPU6Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStatsWithShortPolling();
+            UpdateStats();
         }
 
         private void checkBoxGPU7Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStatsWithShortPolling();
+            UpdateStats();
         }
 
         private void labelGPU0ID_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0Vendor_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0Name_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0Speed_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0Shares_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0Activity_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0Temp_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0Fan_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0CoreClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU0MemoryClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1ID_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1Vendor_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1Name_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1Speed_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1Shares_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1Activity_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1Temp_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1Fan_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1CoreClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU1MemoryClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2ID_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2Vendor_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2Name_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2Speed_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2Shares_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2Activity_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2Temp_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2Fan_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2CoreClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU2MemoryClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3Vendor_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3ID_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3Name_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3Speed_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3Shares_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3Activity_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3Temp_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3Fan_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3CoreClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU3MemoryClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4ID_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4Vendor_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4Name_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4Speed_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4Shares_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4Activity_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4Temp_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4Fan_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4CoreClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU4MemoryClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5ID_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5Vendor_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5Name_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5Speed_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5Shares_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5Activity_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5Temp_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5Fan_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5CoreClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU5MemoryClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6ID_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6Vendor_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6Name_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6Speed_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6Shares_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6Activity_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6Temp_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6Fan_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6CoreClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU6MemoryClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7ID_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7Vendor_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7Name_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7Speed_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7Shares_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7Activity_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7Temp_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7Fan_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7CoreClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void labelGPU7MemoryClock_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void buttonClearLog_Click(object sender, EventArgs e) {
@@ -4056,62 +4117,62 @@ namespace GatelessGateSharp
         }
 
         private void checkBoxCustomPool0Enable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void checkBoxCustomPool1Enable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void checkBoxCustomPool2Enable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void checkBoxCustomPool3Enable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void comboBoxCustomPool0Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void comboBoxCustomPool0SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void comboBoxCustomPool1Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void comboBoxCustomPool1SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void comboBoxCustomPool2Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void comboBoxCustomPool2SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void comboBoxCustomPool3Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
         private void comboBoxCustomPool3SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
@@ -4128,7 +4189,7 @@ namespace GatelessGateSharp
                 if (!Instance.checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked)
                     continue;
 
-                if (Instance.mAppState != ApplicationGlobalState.Mining) 
+                if (Instance.mAppState != ApplicationGlobalState.Mining)
                     continue;
 
                 int currentTemperature = device.Temperature;
@@ -4270,8 +4331,7 @@ namespace GatelessGateSharp
             process.WaitForExit();
         }
 
-        static void KillInterferingProcesses()
-        {
+        static void KillInterferingProcesses() {
             foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" })
                 foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
                     try { process.Kill(); } catch (Exception) { }
@@ -4334,41 +4394,66 @@ namespace GatelessGateSharp
             }
         }
 
-        private void DownloadLatestVersion(string extension = ".msi") {
+        string mLatestReleaseUrl;
+        string mLatestReleaseName;
+        int mLatestReleaseDiff = 0;
+
+        private void Task_UpdateLatestReleaseInfo(object cancellationToken) {
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    string url = "https://github.com/zawawawa/GatelessGateSharp/releases.atom";
+                    System.ServiceModel.Syndication.Atom10FeedFormatter formatter = new System.ServiceModel.Syndication.Atom10FeedFormatter();
+                    using (System.Xml.XmlReader reader = System.Xml.XmlReader.Create(url)) {
+                        formatter.ReadFrom(reader);
+                    }
+                    String latestReleaseUrl = "";
+                    String latestReleaseName = "";
+                    int latestReleaseDiff = 0;
+                    foreach (System.ServiceModel.Syndication.SyndicationItem item in formatter.Feed.Items) {
+                        if (latestReleaseName == "") {
+                            latestReleaseUrl = @"https://github.com" + item.Links[0].Uri.ToString();
+                            latestReleaseName = item.Title.Text;
+                        }
+                        if (item.Title.Text == appName)
+                            break;
+                        ++latestReleaseDiff;
+                    }
+
+                    HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
+                    document.LoadHtml((new CustomWebClient()).DownloadString(latestReleaseUrl));
+                    document.DocumentNode.Descendants("a")
+                        .Where(e => {
+                            string src = e.GetAttributeValue("href", null) ?? "";
+                            return !string.IsNullOrEmpty(src);
+                        })
+                        .ToList()
+                        .ForEach(x => {
+                            var href = x.Attributes["href"].Value;
+                            if ((new System.Text.RegularExpressions.Regex(@"^/zawawawa/GatelessGateSharp/releases/download/.*\.msi$")).IsMatch(href)) {
+                                mLatestReleaseName = latestReleaseName;
+                                mLatestReleaseUrl = "https://github.com" + href;
+                                mLatestReleaseDiff = latestReleaseDiff;
+                            }
+                        });
+                } catch (Exception) { } // TODO
+                System.Threading.Thread.Sleep(60 * 1000 * 10);
+            }
+        }
+
+        private void DownloadLatestVersion() {
             try {
-                string url = "https://github.com/zawawawa/GatelessGateSharp/releases.atom";
-                System.ServiceModel.Syndication.Atom10FeedFormatter formatter = new System.ServiceModel.Syndication.Atom10FeedFormatter();
-                using (System.Xml.XmlReader reader = System.Xml.XmlReader.Create(url)) {
-                    formatter.ReadFrom(reader);
-                }
-                String latestReleaseUrl = "";
-                String latestReleaseName = "";
-                foreach (System.ServiceModel.Syndication.SyndicationItem item in formatter.Feed.Items) {
-                    latestReleaseUrl = @"https://github.com" + item.Links[0].Uri.ToString();
-                    latestReleaseName = item.Title.Text;
-                    break;
-                }
-                if (latestReleaseName == appName) {
+                if (mLatestReleaseName == null) {
+                    MessageBox.Show("There is no information available on the latest release.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                } else if (mLatestReleaseName == appName) {
                     if (MessageBox.Show("You are running the latest version of Gateless Gate Sharp.\nWould you still like to download it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
                         return;
-                } else if (MessageBox.Show("The latest version is " + latestReleaseName + ".\nWould you like to download it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes) {
+                } else if (MessageBox.Show("The latest version is " + mLatestReleaseName + ".\nWould you like to download it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes) {
                     return;
-                }
-
-                HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
-                document.LoadHtml((new CustomWebClient()).DownloadString(latestReleaseUrl));
-                document.DocumentNode.Descendants("a")
-                    .Where(e => {
-                        string src = e.GetAttributeValue("href", null) ?? "";
-                        return !string.IsNullOrEmpty(src);
-                    })
-                    .ToList()
-                    .ForEach(x => {
-                        var href = x.Attributes["href"].Value;
-                        if ((new System.Text.RegularExpressions.Regex(@"^/zawawawa/GatelessGateSharp/releases/download/.*\" + extension + "$")).IsMatch(href))
-                            System.Diagnostics.Process.Start("https://github.com" + href);
-                    });
-            } catch (Exception) {} // TODO
+                } 
+                System.Diagnostics.Process.Start(mLatestReleaseUrl);
+            } catch (Exception) { } // TODO
         }
 
         private void button6_Click(object sender, EventArgs e) {
@@ -4412,17 +4497,19 @@ namespace GatelessGateSharp
                     if (PCIExpress.Available && MainForm.Instance.mAppState == ApplicationGlobalState.Mining)
                         System.Threading.Thread.SpinWait(1000); // TODO
                     else
-                        System.Threading.Thread.Sleep(0);
+                        System.Threading.Thread.Sleep(1);
                 } catch (Exception) { }
             }
             MainForm.Logger("Hardware management task finished.");
         }
 
         private void comboBoxGraphType_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true; 
             UpdateControls();
         }
 
         private void comboBoxGraphCoverage_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
             UpdateControls();
         }
 
@@ -4721,7 +4808,7 @@ namespace GatelessGateSharp
 
         private void button13_Click(object sender, EventArgs e) {
             try {
-                if (listBoxSettingBackups.SelectedIndex >= 0 && MessageBox.Show(this, "Would you like to delete all backups?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+                if (listBoxSettingBackups.Items.Count > 0 && MessageBox.Show(this, "Would you like to delete all backups?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
                     var regex = new Regex(@"^.*\\(.*)--(..)(..)\.sqlite$");
                     foreach (string file in System.IO.Directory.GetFiles(SettingsBackupPathBase))
                         if (regex.Match(file).Success)
@@ -4741,9 +4828,33 @@ namespace GatelessGateSharp
             try {
                 StopMiners();
                 LaunchMiners();
-            } catch (Exception) {}
+            } catch (Exception) { }
             if (mMiners.Count == 0 || mPrimaryStratum == null)
                 timerFailOver.Enabled = true;
+        }
+
+        private void comboBoxCurrency_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void MarkSettingsAsDirty(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+        }
+
+        private void buttonOpenOpenCLBinaryFolder_Click(object sender, EventArgs e) {
+            System.Diagnostics.Process.Start(SavedOpenCLBinaryKernelPathBase);
+        }
+
+        private void listBoxSettingBackups_SelectedIndexChanged(object sender, EventArgs e) {
+            UpdateControls();
+        }
+
+        public static bool UseDefaultOpenCLBinariesChecked {
+            get { return Instance.checkBoxUseDefaultOpenCLBinaries.Checked; }
+        }
+
+        public static bool ReuseCompiledBinariesChecked {
+            get { return Instance.checkBoxReuseCompiledBinaries.Checked; }
         }
     }
 }

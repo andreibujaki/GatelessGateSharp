@@ -64,28 +64,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                try {
-                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_ethash.bin";
-                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
-                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
-                } catch (Exception) {
-                    String source = System.IO.File.ReadAllText(@"Kernels\ethash.cl");
-                    program = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\ethashl.cl for Device #" + DeviceIndex + ".");
-                }
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1" :
-                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                    "")
-                                        + " -IKernels -DWORKSIZE=" + mEthashLocalWorkSizeArray[0];
-                try {
-                    program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                } catch (Exception) {
-                    MainForm.Logger(program.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Ethash program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
+                program = BuildProgram("ethash", mEthashLocalWorkSizeArray[0], "-O1", "", "");
 
                 using (var searchKernel = program.CreateKernel("search"))
                 using (var DAGKernel = program.CreateKernel("GenerateDAG"))

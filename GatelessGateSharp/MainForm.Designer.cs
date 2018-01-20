@@ -44,6 +44,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.comboBoxCurrency = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.labelBalance = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.labelPriceDay = new System.Windows.Forms.Label();
+            this.labelPriceWeek = new System.Windows.Forms.Label();
+            this.labelPriceMonth = new System.Windows.Forms.Label();
             this.cartesianChartSpeedSecondaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartFanSpeed = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartSpeedPrimaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
@@ -67,14 +76,8 @@
             this.memory_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.labelElapsedTime = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.labelPriceMonth = new System.Windows.Forms.Label();
             this.labelCurrentPool = new System.Windows.Forms.Label();
             this.label70 = new System.Windows.Forms.Label();
-            this.labelPriceWeek = new System.Windows.Forms.Label();
-            this.labelPriceDay = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.labelBalance = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.labelCurrentSpeed = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPagePoolSettings = new System.Windows.Forms.TabPage();
@@ -212,14 +215,18 @@
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabControlDeviceSettings = new System.Windows.Forms.TabControl();
             this.tabPageMiscSettings = new System.Windows.Forms.TabPage();
+            this.groupBoxOpenCLBinaries = new System.Windows.Forms.GroupBox();
+            this.buttonOpenOpenCLBinaryFolder = new System.Windows.Forms.Button();
+            this.checkBoxReuseCompiledBinaries = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseDefaultOpenCLBinaries = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button11 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.groupBoxSettingsBackups = new System.Windows.Forms.GroupBox();
-            this.checkBoxAutomaticallyCreateBackups = new System.Windows.Forms.CheckBox();
-            this.button13 = new System.Windows.Forms.Button();
-            this.button12 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
+            this.checkBoxAutomaticBackups = new System.Windows.Forms.CheckBox();
+            this.buttonDeleteAllSettingsBackups = new System.Windows.Forms.Button();
+            this.buttonDeleteSettingsBackup = new System.Windows.Forms.Button();
+            this.buttonRestoreSettingsBackup = new System.Windows.Forms.Button();
             this.buttonCreateSettingsBackup = new System.Windows.Forms.Button();
             this.listBoxSettingBackups = new System.Windows.Forms.ListBox();
             this.button9 = new System.Windows.Forms.Button();
@@ -246,8 +253,7 @@
             this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.tabPageAbout = new System.Windows.Forms.TabPage();
             this.richTextBoxAbout = new System.Windows.Forms.RichTextBox();
-            this.timerDeviceStatusUpdates = new System.Windows.Forms.Timer(this.components);
-            this.timerCurrencyStatUpdates = new System.Windows.Forms.Timer(this.components);
+            this.timerStatsUpdates = new System.Windows.Forms.Timer(this.components);
             this.timerDevFee = new System.Windows.Forms.Timer(this.components);
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
             this.timerUpdateLog = new System.Windows.Forms.Timer(this.components);
@@ -260,6 +266,7 @@
             this.timerFailOver = new System.Windows.Forms.Timer(this.components);
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).BeginInit();
             this.tabPagePoolSettings.SuspendLayout();
             this.groupBoxWalletAddresses.SuspendLayout();
@@ -282,6 +289,7 @@
             this.tabPageDeviceSettings.SuspendLayout();
             this.groupBoxHadrwareAcceleration.SuspendLayout();
             this.tabPageMiscSettings.SuspendLayout();
+            this.groupBoxOpenCLBinaries.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBoxSettingsBackups.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -312,6 +320,7 @@
             // 
             // tabPageDashboard
             // 
+            this.tabPageDashboard.Controls.Add(this.groupBox4);
             this.tabPageDashboard.Controls.Add(this.cartesianChartSpeedSecondaryAlgorithm);
             this.tabPageDashboard.Controls.Add(this.cartesianChartFanSpeed);
             this.tabPageDashboard.Controls.Add(this.cartesianChartSpeedPrimaryAlgorithm);
@@ -322,14 +331,8 @@
             this.tabPageDashboard.Controls.Add(this.dataGridViewDevices);
             this.tabPageDashboard.Controls.Add(this.labelElapsedTime);
             this.tabPageDashboard.Controls.Add(this.label4);
-            this.tabPageDashboard.Controls.Add(this.labelPriceMonth);
             this.tabPageDashboard.Controls.Add(this.labelCurrentPool);
             this.tabPageDashboard.Controls.Add(this.label70);
-            this.tabPageDashboard.Controls.Add(this.labelPriceWeek);
-            this.tabPageDashboard.Controls.Add(this.labelPriceDay);
-            this.tabPageDashboard.Controls.Add(this.label10);
-            this.tabPageDashboard.Controls.Add(this.labelBalance);
-            this.tabPageDashboard.Controls.Add(this.label5);
             this.tabPageDashboard.Controls.Add(this.labelCurrentSpeed);
             this.tabPageDashboard.Controls.Add(this.label3);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
@@ -338,6 +341,95 @@
             this.tabPageDashboard.TabIndex = 2;
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.comboBoxCurrency);
+            this.groupBox4.Controls.Add(this.label12);
+            this.groupBox4.Controls.Add(this.label5);
+            this.groupBox4.Controls.Add(this.labelBalance);
+            this.groupBox4.Controls.Add(this.label10);
+            this.groupBox4.Controls.Add(this.labelPriceDay);
+            this.groupBox4.Controls.Add(this.labelPriceWeek);
+            this.groupBox4.Controls.Add(this.labelPriceMonth);
+            this.groupBox4.Location = new System.Drawing.Point(11, 89);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(391, 134);
+            this.groupBox4.TabIndex = 154;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Profitability";
+            // 
+            // comboBoxCurrency
+            // 
+            this.comboBoxCurrency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCurrency.FormattingEnabled = true;
+            this.comboBoxCurrency.Items.AddRange(new object[] {
+            "USD",
+            "JPY"});
+            this.comboBoxCurrency.Location = new System.Drawing.Point(64, 19);
+            this.comboBoxCurrency.Name = "comboBoxCurrency";
+            this.comboBoxCurrency.Size = new System.Drawing.Size(57, 21);
+            this.comboBoxCurrency.TabIndex = 143;
+            this.comboBoxCurrency.SelectedIndexChanged += new System.EventHandler(this.comboBoxCurrency_SelectedIndexChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 22);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(52, 13);
+            this.label12.TabIndex = 142;
+            this.label12.Text = "Currency:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 49);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(88, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Estimated Profits:";
+            // 
+            // labelBalance
+            // 
+            this.labelBalance.Location = new System.Drawing.Point(94, 103);
+            this.labelBalance.Name = "labelBalance";
+            this.labelBalance.Size = new System.Drawing.Size(158, 13);
+            this.labelBalance.TabIndex = 10;
+            this.labelBalance.Text = "-";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 103);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(49, 13);
+            this.label10.TabIndex = 14;
+            this.label10.Text = "Balance:";
+            // 
+            // labelPriceDay
+            // 
+            this.labelPriceDay.Location = new System.Drawing.Point(94, 49);
+            this.labelPriceDay.Name = "labelPriceDay";
+            this.labelPriceDay.Size = new System.Drawing.Size(232, 17);
+            this.labelPriceDay.TabIndex = 16;
+            this.labelPriceDay.Text = "-";
+            // 
+            // labelPriceWeek
+            // 
+            this.labelPriceWeek.Location = new System.Drawing.Point(94, 66);
+            this.labelPriceWeek.Name = "labelPriceWeek";
+            this.labelPriceWeek.Size = new System.Drawing.Size(232, 17);
+            this.labelPriceWeek.TabIndex = 17;
+            this.labelPriceWeek.Text = "-";
+            // 
+            // labelPriceMonth
+            // 
+            this.labelPriceMonth.Location = new System.Drawing.Point(94, 83);
+            this.labelPriceMonth.Name = "labelPriceMonth";
+            this.labelPriceMonth.Size = new System.Drawing.Size(232, 17);
+            this.labelPriceMonth.TabIndex = 141;
+            this.labelPriceMonth.Text = "-";
             // 
             // cartesianChartSpeedSecondaryAlgorithm
             // 
@@ -627,14 +719,6 @@
             this.label4.TabIndex = 142;
             this.label4.Text = "Elapsed Time:";
             // 
-            // labelPriceMonth
-            // 
-            this.labelPriceMonth.Location = new System.Drawing.Point(96, 120);
-            this.labelPriceMonth.Name = "labelPriceMonth";
-            this.labelPriceMonth.Size = new System.Drawing.Size(232, 17);
-            this.labelPriceMonth.TabIndex = 141;
-            this.labelPriceMonth.Text = "-";
-            // 
             // labelCurrentPool
             // 
             this.labelCurrentPool.Location = new System.Drawing.Point(96, 25);
@@ -651,48 +735,6 @@
             this.label70.Size = new System.Drawing.Size(79, 13);
             this.label70.TabIndex = 22;
             this.label70.Text = "Current Pool(s):";
-            // 
-            // labelPriceWeek
-            // 
-            this.labelPriceWeek.Location = new System.Drawing.Point(96, 103);
-            this.labelPriceWeek.Name = "labelPriceWeek";
-            this.labelPriceWeek.Size = new System.Drawing.Size(232, 17);
-            this.labelPriceWeek.TabIndex = 17;
-            this.labelPriceWeek.Text = "-";
-            // 
-            // labelPriceDay
-            // 
-            this.labelPriceDay.Location = new System.Drawing.Point(96, 86);
-            this.labelPriceDay.Name = "labelPriceDay";
-            this.labelPriceDay.Size = new System.Drawing.Size(232, 17);
-            this.labelPriceDay.TabIndex = 16;
-            this.labelPriceDay.Text = "-";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(8, 140);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(49, 13);
-            this.label10.TabIndex = 14;
-            this.label10.Text = "Balance:";
-            // 
-            // labelBalance
-            // 
-            this.labelBalance.Location = new System.Drawing.Point(96, 140);
-            this.labelBalance.Name = "labelBalance";
-            this.labelBalance.Size = new System.Drawing.Size(158, 13);
-            this.labelBalance.TabIndex = 10;
-            this.labelBalance.Text = "-";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 86);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(88, 13);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Estimated Profits:";
             // 
             // labelCurrentSpeed
             // 
@@ -2182,6 +2224,7 @@
             // 
             // tabPageMiscSettings
             // 
+            this.tabPageMiscSettings.Controls.Add(this.groupBoxOpenCLBinaries);
             this.tabPageMiscSettings.Controls.Add(this.groupBox2);
             this.tabPageMiscSettings.Controls.Add(this.groupBox1);
             this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
@@ -2191,6 +2234,52 @@
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxOpenCLBinaries
+            // 
+            this.groupBoxOpenCLBinaries.Controls.Add(this.buttonOpenOpenCLBinaryFolder);
+            this.groupBoxOpenCLBinaries.Controls.Add(this.checkBoxReuseCompiledBinaries);
+            this.groupBoxOpenCLBinaries.Controls.Add(this.checkBoxUseDefaultOpenCLBinaries);
+            this.groupBoxOpenCLBinaries.Location = new System.Drawing.Point(3, 119);
+            this.groupBoxOpenCLBinaries.Name = "groupBoxOpenCLBinaries";
+            this.groupBoxOpenCLBinaries.Size = new System.Drawing.Size(192, 94);
+            this.groupBoxOpenCLBinaries.TabIndex = 43;
+            this.groupBoxOpenCLBinaries.TabStop = false;
+            this.groupBoxOpenCLBinaries.Text = "OpenCL Binaries";
+            // 
+            // buttonOpenOpenCLBinaryFolder
+            // 
+            this.buttonOpenOpenCLBinaryFolder.Location = new System.Drawing.Point(6, 65);
+            this.buttonOpenOpenCLBinaryFolder.Name = "buttonOpenOpenCLBinaryFolder";
+            this.buttonOpenOpenCLBinaryFolder.Size = new System.Drawing.Size(180, 23);
+            this.buttonOpenOpenCLBinaryFolder.TabIndex = 44;
+            this.buttonOpenOpenCLBinaryFolder.Text = "Open Containing Folder";
+            this.buttonOpenOpenCLBinaryFolder.UseVisualStyleBackColor = true;
+            this.buttonOpenOpenCLBinaryFolder.Click += new System.EventHandler(this.buttonOpenOpenCLBinaryFolder_Click);
+            // 
+            // checkBoxReuseCompiledBinaries
+            // 
+            this.checkBoxReuseCompiledBinaries.AutoSize = true;
+            this.checkBoxReuseCompiledBinaries.Location = new System.Drawing.Point(6, 42);
+            this.checkBoxReuseCompiledBinaries.Name = "checkBoxReuseCompiledBinaries";
+            this.checkBoxReuseCompiledBinaries.Size = new System.Drawing.Size(141, 17);
+            this.checkBoxReuseCompiledBinaries.TabIndex = 1;
+            this.checkBoxReuseCompiledBinaries.Tag = "parameter:reuse_compiled_binaries";
+            this.checkBoxReuseCompiledBinaries.Text = "Reuse compiled binaries";
+            this.checkBoxReuseCompiledBinaries.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxUseDefaultOpenCLBinaries
+            // 
+            this.checkBoxUseDefaultOpenCLBinaries.AutoSize = true;
+            this.checkBoxUseDefaultOpenCLBinaries.Checked = true;
+            this.checkBoxUseDefaultOpenCLBinaries.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseDefaultOpenCLBinaries.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxUseDefaultOpenCLBinaries.Name = "checkBoxUseDefaultOpenCLBinaries";
+            this.checkBoxUseDefaultOpenCLBinaries.Size = new System.Drawing.Size(119, 17);
+            this.checkBoxUseDefaultOpenCLBinaries.TabIndex = 0;
+            this.checkBoxUseDefaultOpenCLBinaries.Tag = "parameter:use_default_binaries";
+            this.checkBoxUseDefaultOpenCLBinaries.Text = "Use default binaries";
+            this.checkBoxUseDefaultOpenCLBinaries.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -2228,10 +2317,10 @@
             // 
             // groupBoxSettingsBackups
             // 
-            this.groupBoxSettingsBackups.Controls.Add(this.checkBoxAutomaticallyCreateBackups);
-            this.groupBoxSettingsBackups.Controls.Add(this.button13);
-            this.groupBoxSettingsBackups.Controls.Add(this.button12);
-            this.groupBoxSettingsBackups.Controls.Add(this.button10);
+            this.groupBoxSettingsBackups.Controls.Add(this.checkBoxAutomaticBackups);
+            this.groupBoxSettingsBackups.Controls.Add(this.buttonDeleteAllSettingsBackups);
+            this.groupBoxSettingsBackups.Controls.Add(this.buttonDeleteSettingsBackup);
+            this.groupBoxSettingsBackups.Controls.Add(this.buttonRestoreSettingsBackup);
             this.groupBoxSettingsBackups.Controls.Add(this.buttonCreateSettingsBackup);
             this.groupBoxSettingsBackups.Controls.Add(this.listBoxSettingBackups);
             this.groupBoxSettingsBackups.Location = new System.Drawing.Point(6, 77);
@@ -2241,48 +2330,48 @@
             this.groupBoxSettingsBackups.TabStop = false;
             this.groupBoxSettingsBackups.Text = "Backups";
             // 
-            // checkBoxAutomaticallyCreateBackups
+            // checkBoxAutomaticBackups
             // 
-            this.checkBoxAutomaticallyCreateBackups.AutoSize = true;
-            this.checkBoxAutomaticallyCreateBackups.Checked = true;
-            this.checkBoxAutomaticallyCreateBackups.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutomaticallyCreateBackups.Location = new System.Drawing.Point(6, 134);
-            this.checkBoxAutomaticallyCreateBackups.Name = "checkBoxAutomaticallyCreateBackups";
-            this.checkBoxAutomaticallyCreateBackups.Size = new System.Drawing.Size(235, 17);
-            this.checkBoxAutomaticallyCreateBackups.TabIndex = 7;
-            this.checkBoxAutomaticallyCreateBackups.Text = "Create backup whenever settings are saved";
-            this.checkBoxAutomaticallyCreateBackups.UseVisualStyleBackColor = true;
-            this.checkBoxAutomaticallyCreateBackups.CheckedChanged += new System.EventHandler(this.checkBoxCreateSettingsBackupWhenSettingsAreSaved_CheckedChanged);
+            this.checkBoxAutomaticBackups.AutoSize = true;
+            this.checkBoxAutomaticBackups.Checked = true;
+            this.checkBoxAutomaticBackups.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAutomaticBackups.Location = new System.Drawing.Point(6, 134);
+            this.checkBoxAutomaticBackups.Name = "checkBoxAutomaticBackups";
+            this.checkBoxAutomaticBackups.Size = new System.Drawing.Size(235, 17);
+            this.checkBoxAutomaticBackups.TabIndex = 7;
+            this.checkBoxAutomaticBackups.Text = "Create backup whenever settings are saved";
+            this.checkBoxAutomaticBackups.UseVisualStyleBackColor = true;
+            this.checkBoxAutomaticBackups.CheckedChanged += new System.EventHandler(this.checkBoxCreateSettingsBackupWhenSettingsAreSaved_CheckedChanged);
             // 
-            // button13
+            // buttonDeleteAllSettingsBackups
             // 
-            this.button13.Location = new System.Drawing.Point(185, 105);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(67, 23);
-            this.button13.TabIndex = 6;
-            this.button13.Text = "Delete All";
-            this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.button13_Click);
+            this.buttonDeleteAllSettingsBackups.Location = new System.Drawing.Point(185, 105);
+            this.buttonDeleteAllSettingsBackups.Name = "buttonDeleteAllSettingsBackups";
+            this.buttonDeleteAllSettingsBackups.Size = new System.Drawing.Size(67, 23);
+            this.buttonDeleteAllSettingsBackups.TabIndex = 6;
+            this.buttonDeleteAllSettingsBackups.Text = "Delete All";
+            this.buttonDeleteAllSettingsBackups.UseVisualStyleBackColor = true;
+            this.buttonDeleteAllSettingsBackups.Click += new System.EventHandler(this.button13_Click);
             // 
-            // button12
+            // buttonDeleteSettingsBackup
             // 
-            this.button12.Location = new System.Drawing.Point(185, 76);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(67, 23);
-            this.button12.TabIndex = 5;
-            this.button12.Text = "Delete";
-            this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.buttonDeleteSettingsBackup_Click);
+            this.buttonDeleteSettingsBackup.Location = new System.Drawing.Point(185, 76);
+            this.buttonDeleteSettingsBackup.Name = "buttonDeleteSettingsBackup";
+            this.buttonDeleteSettingsBackup.Size = new System.Drawing.Size(67, 23);
+            this.buttonDeleteSettingsBackup.TabIndex = 5;
+            this.buttonDeleteSettingsBackup.Text = "Delete";
+            this.buttonDeleteSettingsBackup.UseVisualStyleBackColor = true;
+            this.buttonDeleteSettingsBackup.Click += new System.EventHandler(this.buttonDeleteSettingsBackup_Click);
             // 
-            // button10
+            // buttonRestoreSettingsBackup
             // 
-            this.button10.Location = new System.Drawing.Point(185, 47);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(67, 23);
-            this.button10.TabIndex = 4;
-            this.button10.Text = "Restore";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.buttonRestoreSettings_Click);
+            this.buttonRestoreSettingsBackup.Location = new System.Drawing.Point(185, 47);
+            this.buttonRestoreSettingsBackup.Name = "buttonRestoreSettingsBackup";
+            this.buttonRestoreSettingsBackup.Size = new System.Drawing.Size(67, 23);
+            this.buttonRestoreSettingsBackup.TabIndex = 4;
+            this.buttonRestoreSettingsBackup.Text = "Restore";
+            this.buttonRestoreSettingsBackup.UseVisualStyleBackColor = true;
+            this.buttonRestoreSettingsBackup.Click += new System.EventHandler(this.buttonRestoreSettings_Click);
             // 
             // buttonCreateSettingsBackup
             // 
@@ -2301,6 +2390,7 @@
             this.listBoxSettingBackups.Name = "listBoxSettingBackups";
             this.listBoxSettingBackups.Size = new System.Drawing.Size(173, 108);
             this.listBoxSettingBackups.TabIndex = 0;
+            this.listBoxSettingBackups.SelectedIndexChanged += new System.EventHandler(this.listBoxSettingBackups_SelectedIndexChanged);
             // 
             // button9
             // 
@@ -2579,15 +2669,10 @@
             this.richTextBoxAbout.TabIndex = 0;
             this.richTextBoxAbout.Text = resources.GetString("richTextBoxAbout.Text");
             // 
-            // timerDeviceStatusUpdates
+            // timerStatsUpdates
             // 
-            this.timerDeviceStatusUpdates.Interval = 1000;
-            this.timerDeviceStatusUpdates.Tick += new System.EventHandler(this.timerDeviceStatusUpdates_Tick);
-            // 
-            // timerCurrencyStatUpdates
-            // 
-            this.timerCurrencyStatUpdates.Interval = 300000;
-            this.timerCurrencyStatUpdates.Tick += new System.EventHandler(this.timerCurrencyStatUpdates_Tick);
+            this.timerStatsUpdates.Interval = 1000;
+            this.timerStatsUpdates.Tick += new System.EventHandler(this.timerDeviceStatusUpdates_Tick);
             // 
             // timerDevFee
             // 
@@ -2683,6 +2768,8 @@
             this.tabControlMainForm.ResumeLayout(false);
             this.tabPageDashboard.ResumeLayout(false);
             this.tabPageDashboard.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).EndInit();
             this.tabPagePoolSettings.ResumeLayout(false);
             this.groupBoxWalletAddresses.ResumeLayout(false);
@@ -2713,6 +2800,8 @@
             this.groupBoxHadrwareAcceleration.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.PerformLayout();
             this.tabPageMiscSettings.ResumeLayout(false);
+            this.groupBoxOpenCLBinaries.ResumeLayout(false);
+            this.groupBoxOpenCLBinaries.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBoxSettingsBackups.ResumeLayout(false);
             this.groupBoxSettingsBackups.PerformLayout();
@@ -2758,9 +2847,8 @@
         private System.Windows.Forms.RadioButton radioButtonMostProfitable;
         private System.Windows.Forms.Label labelCurrentPool;
         private System.Windows.Forms.Label label70;
-        private System.Windows.Forms.Timer timerDeviceStatusUpdates;
+        private System.Windows.Forms.Timer timerStatsUpdates;
         private System.Windows.Forms.RichTextBox richTextBoxLog;
-        private System.Windows.Forms.Timer timerCurrencyStatUpdates;
         private System.Windows.Forms.Label labelPriceMonth;
         private System.Windows.Forms.GroupBox groupBoxPoolPriorities;
         private System.Windows.Forms.Button buttonPoolPrioritiesDown;
@@ -2937,14 +3025,21 @@
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.GroupBox groupBoxSettingsBackups;
-        private System.Windows.Forms.CheckBox checkBoxAutomaticallyCreateBackups;
-        private System.Windows.Forms.Button button13;
-        private System.Windows.Forms.Button button12;
-        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.CheckBox checkBoxAutomaticBackups;
+        private System.Windows.Forms.Button buttonDeleteAllSettingsBackups;
+        private System.Windows.Forms.Button buttonDeleteSettingsBackup;
+        private System.Windows.Forms.Button buttonRestoreSettingsBackup;
         private System.Windows.Forms.Button buttonCreateSettingsBackup;
         private System.Windows.Forms.ListBox listBoxSettingBackups;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button buttonSaveSettings;
         private System.Windows.Forms.Timer timerFailOver;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.ComboBox comboBoxCurrency;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.GroupBox groupBoxOpenCLBinaries;
+        private System.Windows.Forms.Button buttonOpenOpenCLBinaryFolder;
+        private System.Windows.Forms.CheckBox checkBoxReuseCompiledBinaries;
+        private System.Windows.Forms.CheckBox checkBoxUseDefaultOpenCLBinaries;
     }
 }

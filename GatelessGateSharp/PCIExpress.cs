@@ -167,6 +167,8 @@ namespace GatelessGateSharp {
         }
 
         public static void UnloadPhyMem() {
+            if (!sAvailable)
+                return;
             UnloadPhyMemDriver();
             sAvailable = false;
         }

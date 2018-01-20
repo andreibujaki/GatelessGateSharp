@@ -64,22 +64,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
-                String source = System.IO.File.ReadAllText(@"Kernels\neoscrypt.cl");
-                neoScryptProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\neoscrypt.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O5 -legacy" : // "-legacy" :
-                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                    "")
-                                        + " -IKernels -DWORKSIZE=" + mNeoScryptLocalWorkSizeArray[0];
-                try {
-                    neoScryptProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                } catch (Exception) {
-                    MainForm.Logger(neoScryptProgram.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built NeoScrypt program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
+                neoScryptProgram = BuildProgram("neoscrypt", mNeoScryptLocalWorkSizeArray[0], "-O5 -legacy", "", "");
 
                 using (var neoScryptSearchKernel = neoScryptProgram.CreateKernel("search"))
                 using (var neoScryptInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sNeoScryptInputSize))

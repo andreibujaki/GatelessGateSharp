@@ -65,32 +65,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
-
-                try {
-                    if (mLbryLocalWorkSizeArray[0] != 256)
-                        throw new Exception("No suitable binary file was found.");
-                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_lbry.bin";
-                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
-                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
-                } catch (Exception) {
-                    String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
-                    program = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\lbry.cl for Device #" + DeviceIndex + ".");
-                }
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
-                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                    "")
-                                        + " -IKernels -DWORKSIZE=" + mLbryLocalWorkSizeArray[0] + " -DITERATIONS=" + mIterations;
-                try {
-                    program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                } catch (Exception) {
-                    MainForm.Logger(program.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
+                program = BuildProgram("lbry", mLbryLocalWorkSizeArray[0], "-O1", "", "");
 
                 using (var lbrySearchKernel = program.CreateKernel("search_combined"))
                 using (var lbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112))

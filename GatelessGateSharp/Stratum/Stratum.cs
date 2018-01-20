@@ -199,6 +199,8 @@ namespace GatelessGateSharp {
             
             do {
                 try {
+                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                    sw.Start();
 
                     try { mMutex.WaitOne(5000); } catch (Exception) { }
 
@@ -206,14 +208,14 @@ namespace GatelessGateSharp {
                     mStream = mClient.GetStream();
                     mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
                     mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
-                    mStreamReader.BaseStream.ReadTimeout = 120 * 1000;
-                    mStreamWriter.BaseStream.WriteTimeout = 60 * 1000;
+                    mStreamReader.BaseStream.ReadTimeout = 3 * 60 * 1000;
+                    mStreamWriter.BaseStream.WriteTimeout = 10 * 1000;
+                    mReconnectionRequested = false;
 
                     try { mMutex.ReleaseMutex(); } catch (Exception) { }
 
                     Authorize();
 
-                    mReconnectionRequested = false;
                     while (!Stopped  && !mReconnectionRequested) {
                         string line;
                         try {
@@ -228,6 +230,8 @@ namespace GatelessGateSharp {
                             break;
                         if (line != "")
                             ProcessLine(line);
+                        if (sw.ElapsedMilliseconds >= 60 * 60 * 1000)
+                            mReconnectionRequested = true;
                     }
                 } catch (UnrecoverableException ex) {
                     this.UnrecoverableException = ex;

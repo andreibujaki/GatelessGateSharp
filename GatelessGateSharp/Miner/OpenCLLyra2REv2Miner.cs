@@ -1149,24 +1149,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
-
-                String source = System.IO.File.ReadAllText(@"Kernels\lyra2rev2.cl");
-                lyra2REv2Program = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\lyra2rev2.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O5" : // "-legacy" :
-                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                    "")
-                                        + " -IKernels -DWORKSIZE=" + mLyra2REv2LocalWorkSizeArray[0]
-                                        + " -DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0]; // TODO
-                try {
-                    lyra2REv2Program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                } catch (Exception) {
-                    MainForm.Logger(lyra2REv2Program.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Lyra2REv2 program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
+                lyra2REv2Program = BuildProgram("lyra2rev2", mLyra2REv2LocalWorkSizeArray[0], "-O5", "", "");
 
                 using (var mLyra2REv2SearchKernel = lyra2REv2Program.CreateKernel("search"))
                 using (var mLyra2REv2Search1Kernel = lyra2REv2Program.CreateKernel("search1"))
@@ -1175,7 +1158,7 @@ namespace GatelessGateSharp
                 using (var mLyra2REv2Search4Kernel = lyra2REv2Program.CreateKernel("search4"))
                 using (var mLyra2REv2Search5Kernel = lyra2REv2Program.CreateKernel("search5"))
                 using (var mLyra2REv2Search6Kernel = lyra2REv2Program.CreateKernel("search6"))
-    using (var mLyra2REv2InputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sLyra2REv2InputSize))
+                using (var mLyra2REv2InputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sLyra2REv2InputSize))
                 using (var mLyra2REv2OutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sLyra2REv2OutputSize))
                 fixed (long* lyra2rev2GlobalWorkOffsetArrayPtr = mLyra2REv2GlobalWorkOffsetArray)
                 fixed (long* lyra2rev2GlobalWorkSizeArrayPtr = mLyra2REv2GlobalWorkSizeArray)

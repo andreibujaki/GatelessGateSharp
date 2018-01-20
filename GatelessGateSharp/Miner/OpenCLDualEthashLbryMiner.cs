@@ -97,24 +97,7 @@ namespace GatelessGateSharp
             }
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\ethash_lbry.cl");
-                mEthashProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\ethash_lbry.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O1 " :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + mEthashLocalWorkSizeArray[0];
-                try
-                {
-                    mEthashProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                    MainForm.Logger(mEthashProgram.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Ethash program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
+                mEthashProgram = BuildProgram("ethash_lbry", mEthashLocalWorkSizeArray[0], "-O1", "", "");
                 mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
                 mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");
                 mEthashSearchKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashSearchKernel = mEthashProgram.CreateKernel("search");

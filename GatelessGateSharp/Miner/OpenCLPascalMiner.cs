@@ -140,28 +140,13 @@ namespace GatelessGateSharp
             ComputeProgram pascalProgram = null;
 
             try {
-                var computeDevice = OpenCLDevice.GetComputeDevice();
                 Random r = new Random();
             
                 MarkAsAlive();
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                String source = System.IO.File.ReadAllText(@"Kernels\pascal.cl");
-                pascalProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\pascal.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + mPascalLocalWorkSizeArray[0];
-                try {
-                    pascalProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                } catch (Exception) {
-                    MainForm.Logger(pascalProgram.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Pascal program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
+                pascalProgram = BuildProgram("pascal", mPascalLocalWorkSizeArray[0], "-O1", "", "");
 
                 using (var pascalSearchKernel = pascalProgram.CreateKernel("search"))
                 using (var pascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize))
