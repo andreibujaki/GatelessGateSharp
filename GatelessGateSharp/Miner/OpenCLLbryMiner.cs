@@ -65,8 +65,13 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                program = BuildProgram("lbry", mLbryLocalWorkSizeArray[0], "-O1", "", "");
-
+                program = BuildProgram(
+                    "lbry",
+                    mLbryLocalWorkSizeArray[0], 
+                    "-O1 -DITERATIONS=" + mIterations,
+                    "-DITERATIONS=" + mIterations,
+                    "-DITERATIONS=" + mIterations);
+                
                 using (var lbrySearchKernel = program.CreateKernel("search_combined"))
                 using (var lbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112))
                 using (var lbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize))

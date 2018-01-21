@@ -1149,7 +1149,10 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                lyra2REv2Program = BuildProgram("lyra2rev2", mLyra2REv2LocalWorkSizeArray[0], "-O5", "", "");
+                lyra2REv2Program = BuildProgram("lyra2rev2", mLyra2REv2LocalWorkSizeArray[0],
+                    "-O5 -DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0],
+                    "-DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0],
+                    "-DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0]);
 
                 using (var mLyra2REv2SearchKernel = lyra2REv2Program.CreateKernel("search"))
                 using (var mLyra2REv2Search1Kernel = lyra2REv2Program.CreateKernel("search1"))

@@ -1268,6 +1268,41 @@ namespace GatelessGateSharp {
             }
             Logger("Number of Devices: " + mDevices.Length);
 
+            ADLInitialized = OpenCLDevice.InitializeADL(mDevices);
+
+            try {
+                if (ManagedCuda.Nvml.NvmlNativeMethods.nvmlInit() == 0) {
+                    Logger("Successfully initialized NVIDIA Management Library.");
+                    uint nvmlDeviceCount = 0;
+                    ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetCount(ref nvmlDeviceCount);
+                    Logger("NVML Device Count: " + nvmlDeviceCount);
+
+                    nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[mDevices.Length];
+                    for (uint i = 0; i < nvmlDeviceCount; ++i) {
+                        var nvmlDevice = new ManagedCuda.Nvml.nvmlDevice();
+                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetHandleByIndex(i, ref nvmlDevice);
+                        var info = new ManagedCuda.Nvml.nvmlPciInfo();
+                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetPciInfo(nvmlDevice, ref info);
+
+                        uint j;
+                        for (j = 0; j < mDevices.Length; ++j)
+                            if (mDevices[j].GetComputeDevice().Vendor == "NVIDIA Corporation" && mDevices[j].GetComputeDevice().PciBusIdNV == info.bus) {
+                                nvmlDeviceArray[j] = nvmlDevice;
+                                break;
+                            }
+                        if (j >= mDevices.Length)
+                            throw new Exception();
+                    }
+
+                    NVMLInitialized = true;
+                }
+            } catch (Exception) {
+            }
+            if (!NVMLInitialized) {
+                Logger("Failed to initialize NVIDIA Management Library.");
+            } else {
+            }
+
             foreach (var device in mDevices) {
                 dataGridViewDevices.Rows.Add(new object[] {
                     true,
@@ -1420,41 +1455,6 @@ namespace GatelessGateSharp {
                         numericUpDownDeviceFanControlMaximumFanSpeedArray[i] = (NumericUpDown)control;
                     }
                 }
-            }
-
-            ADLInitialized = OpenCLDevice.InitializeADL(mDevices);
-
-            try {
-                if (ManagedCuda.Nvml.NvmlNativeMethods.nvmlInit() == 0) {
-                    Logger("Successfully initialized NVIDIA Management Library.");
-                    uint nvmlDeviceCount = 0;
-                    ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetCount(ref nvmlDeviceCount);
-                    Logger("NVML Device Count: " + nvmlDeviceCount);
-
-                    nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[mDevices.Length];
-                    for (uint i = 0; i < nvmlDeviceCount; ++i) {
-                        var nvmlDevice = new ManagedCuda.Nvml.nvmlDevice();
-                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetHandleByIndex(i, ref nvmlDevice);
-                        var info = new ManagedCuda.Nvml.nvmlPciInfo();
-                        ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetPciInfo(nvmlDevice, ref info);
-
-                        uint j;
-                        for (j = 0; j < mDevices.Length; ++j)
-                            if (mDevices[j].GetComputeDevice().Vendor == "NVIDIA Corporation" && mDevices[j].GetComputeDevice().PciBusIdNV == info.bus) {
-                                nvmlDeviceArray[j] = nvmlDevice;
-                                break;
-                            }
-                        if (j >= mDevices.Length)
-                            throw new Exception();
-                    }
-
-                    NVMLInitialized = true;
-                }
-            } catch (Exception) {
-            }
-            if (!NVMLInitialized) {
-                Logger("Failed to initialize NVIDIA Management Library.");
-            } else {
             }
 
             foreach (var device in mDevices)
@@ -1648,7 +1648,7 @@ namespace GatelessGateSharp {
             protected override System.Net.WebRequest GetWebRequest(Uri uri) {
                 Encoding = System.Text.Encoding.UTF8;
                 var request = base.GetWebRequest(uri);
-                request.Timeout = 10 * 1000;
+                request.Timeout = 60 * 1000;
                 return request;
             }
         }
@@ -1895,7 +1895,8 @@ namespace GatelessGateSharp {
                         else if ((double)item["algo"] == secondaryAlgo)
                             price += double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * secondaryTotalSpeed / secondarySpeedDivisor;
                     } catch (Exception) { }
-           }
+                UpdateLabelsForProfitability("BTC", price, BTCRate, currency);
+            }
         }
 
         void UpdateLabelsForProfitability(string coin, double price, double rate, string currency) {
@@ -2037,9 +2038,14 @@ namespace GatelessGateSharp {
                     int fanSpeed = device.FanSpeed;
                     if (fanSpeed >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
+                    int power = device.Power;
+                    if (power >= 0) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["power"].Value = power.ToString() + "W";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["power"].Style.ForeColor = Color.Black;
+                    }
                     int powerLimit = device.PowerLimit;
                     if (powerLimit >= 0) {
-                        dataGridViewDevices.Rows[deviceIndex].Cells["power_limit"].Value = powerLimit.ToString() + "%";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["power_limit"].Value = "(" + powerLimit.ToString() + "%)";
                         dataGridViewDevices.Rows[deviceIndex].Cells["power_limit"].Style.ForeColor =
                                                                    powerLimit > 100 ? Color.Red :
                                                                    powerLimit < 100 ? Color.Blue :
@@ -2169,40 +2175,44 @@ namespace GatelessGateSharp {
         }
 
         void UpdateCharts() {
-            var now = System.DateTime.Now;
+            try {
+                var now = System.DateTime.Now;
 
-            if (cartesianChartTemperature.Series.Count != mDevices.Length) {
-                InitializeChart(cartesianChartTemperature, value => value + "℃", 100);
-                InitializeChart(cartesianChartSpeedPrimaryAlgorithm, ConvertHashRateToString, double.NaN);
-                InitializeChart(cartesianChartSpeedSecondaryAlgorithm, ConvertHashRateToString, double.NaN);
-                InitializeChart(cartesianChartFanSpeed, value => value + "%", 100);
+                if (cartesianChartTemperature.Series.Count != mDevices.Length) {
+                    InitializeChart(cartesianChartTemperature, value => value + "℃", 100);
+                    InitializeChart(cartesianChartSpeedPrimaryAlgorithm, ConvertHashRateToString, double.NaN);
+                    InitializeChart(cartesianChartSpeedSecondaryAlgorithm, ConvertHashRateToString, double.NaN);
+                    InitializeChart(cartesianChartFanSpeed, value => value + "%", 100);
 
-            }
-            for (int i = 0; i < mDevices.Length; ++i) {
-                var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke)).Color;
-                dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
-                    color.R + (255 - color.R) / 2, 
-                    color.G + (255 - color.G) / 2, 
-                    color.B + (255 - color.B) / 2);
-            }
-            UpdateChart(cartesianChartTemperature, "Temperature", deviceIndex => mDevices[deviceIndex].Temperature);
-            UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
-                "Speed (Primary Algorithm)",
-                (int deviceIndex) => {
-                    double speed = 0;
-                    foreach (var miner in mMiners)
-                        speed += (deviceIndex == miner.DeviceIndex) ? miner.Speed : 0;
-                    return speed;
-                });
-            UpdateChart(cartesianChartSpeedSecondaryAlgorithm,
-                "Speed (Secondary Algorithm)",
-                (int deviceIndex) => {
-                    double speed = 0;
-                    foreach (var miner in mMiners)
-                        speed += (deviceIndex == miner.DeviceIndex) ? miner.SpeedSecondaryAlgorithm : 0;
-                    return speed;
-                });
-            UpdateChart(cartesianChartFanSpeed, "Fan Speed", deviceIndex => mDevices[deviceIndex].FanSpeed);
+                }
+                UpdateChart(cartesianChartTemperature, "Temperature", deviceIndex => mDevices[deviceIndex].Temperature);
+                UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
+                    "Speed (Primary Algorithm)",
+                    (int deviceIndex) => {
+                        double speed = 0;
+                        foreach (var miner in mMiners)
+                            speed += (deviceIndex == miner.DeviceIndex) ? miner.Speed : 0;
+                        return speed;
+                    });
+                UpdateChart(cartesianChartSpeedSecondaryAlgorithm,
+                    "Speed (Secondary Algorithm)",
+                    (int deviceIndex) => {
+                        double speed = 0;
+                        foreach (var miner in mMiners)
+                            speed += (deviceIndex == miner.DeviceIndex) ? miner.SpeedSecondaryAlgorithm : 0;
+                        return speed;
+                    });
+                UpdateChart(cartesianChartFanSpeed, "Fan Speed", deviceIndex => mDevices[deviceIndex].FanSpeed);
+                for (int i = 0; i < mDevices.Length; ++i) {
+                    try { 
+                    var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke)).Color;
+                    dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
+                        color.R + (255 - color.R) / 2,
+                        color.G + (255 - color.G) / 2,
+                        color.B + (255 - color.B) / 2);
+                    } catch (Exception ex) { }
+                }
+            } catch (Exception ex) { Logger("Exception in UpdateCharts(): " + ex.ToString()); }
         }
 
         void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue) {
