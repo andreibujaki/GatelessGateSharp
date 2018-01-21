@@ -2180,7 +2180,10 @@ namespace GatelessGateSharp {
             }
             for (int i = 0; i < mDevices.Length; ++i) {
                 var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke)).Color;
-                dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(color.R, color.G, color.B);
+                dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
+                    color.R + (255 - color.R) / 2, 
+                    color.G + (255 - color.G) / 2, 
+                    color.B + (255 - color.B) / 2);
             }
             UpdateChart(cartesianChartTemperature, "Temperature", deviceIndex => mDevices[deviceIndex].Temperature);
             UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
