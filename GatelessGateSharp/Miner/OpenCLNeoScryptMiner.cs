@@ -55,7 +55,7 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         override unsafe protected void MinerThread() {
-            ComputeProgram neoScryptProgram = null;
+            ComputeProgram program = null;
 
             try {
                 Random r = new Random();
@@ -64,9 +64,9 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                neoScryptProgram = BuildProgram("neoscrypt", mNeoScryptLocalWorkSizeArray[0], "-O5 -legacy", "", "");
+                program = BuildProgram("neoscrypt", mNeoScryptLocalWorkSizeArray[0], "-O5 -legacy", "", "");
 
-                using (var neoScryptSearchKernel = neoScryptProgram.CreateKernel("search"))
+                using (var neoScryptSearchKernel = program.CreateKernel("search"))
                 using (var neoScryptInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sNeoScryptInputSize))
                 using (var neoScryptOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sNeoScryptOutputSize))
                 fixed (long* neoscryptGlobalWorkOffsetArrayPtr = mNeoScryptGlobalWorkOffsetArray)
@@ -154,15 +154,15 @@ namespace GatelessGateSharp
                 }
                 MarkAsDone();
 
-                neoScryptProgram.Dispose();
-            } catch (UnrecoverableException) {
-                if (neoScryptProgram != null)
-                    neoScryptProgram.Dispose();
-                throw;
+                program.Dispose();
+            } catch (UnrecoverableException ex) {
+                if (program != null)
+                    program.Dispose();
+                this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                if (neoScryptProgram != null)
-                    neoScryptProgram.Dispose();
-                throw new UnrecoverableException(ex, GatelessGateDevice);
+                if (program != null)
+                    program.Dispose();
+                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
             }
         }
     }

@@ -260,7 +260,7 @@
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
             this.timerUpdateLog = new System.Windows.Forms.Timer(this.components);
             this.timerAutoStart = new System.Windows.Forms.Timer(this.components);
-            this.buttonBenchmark = new System.Windows.Forms.Button();
+            this.buttonRestart = new System.Windows.Forms.Button();
             this.buttonStart = new System.Windows.Forms.Button();
             this.statusStripMainForm = new System.Windows.Forms.StatusStrip();
             this.toolStripMainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -2695,7 +2695,6 @@
             // 
             // timerWatchdog
             // 
-            this.timerWatchdog.Enabled = true;
             this.timerWatchdog.Interval = 2000;
             this.timerWatchdog.Tick += new System.EventHandler(this.timerWatchdog_Tick);
             // 
@@ -2709,17 +2708,18 @@
             // 
             this.timerAutoStart.Tick += new System.EventHandler(this.timerAutoStart_Tick);
             // 
-            // buttonBenchmark
+            // buttonRestart
             // 
-            this.buttonBenchmark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBenchmark.Enabled = false;
-            this.buttonBenchmark.Location = new System.Drawing.Point(724, 530);
-            this.buttonBenchmark.Name = "buttonBenchmark";
-            this.buttonBenchmark.Size = new System.Drawing.Size(75, 23);
-            this.buttonBenchmark.TabIndex = 146;
-            this.buttonBenchmark.Text = "Benchmark";
-            this.buttonBenchmark.UseVisualStyleBackColor = true;
-            this.buttonBenchmark.Visible = false;
+            this.buttonRestart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRestart.Enabled = false;
+            this.buttonRestart.Location = new System.Drawing.Point(724, 530);
+            this.buttonRestart.Name = "buttonRestart";
+            this.buttonRestart.Size = new System.Drawing.Size(75, 23);
+            this.buttonRestart.TabIndex = 146;
+            this.buttonRestart.Text = "Benchmark";
+            this.buttonRestart.UseVisualStyleBackColor = true;
+            this.buttonRestart.Visible = false;
+            this.buttonRestart.Click += new System.EventHandler(this.buttonRestart_Click);
             // 
             // buttonStart
             // 
@@ -2765,7 +2765,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(892, 585);
-            this.Controls.Add(this.buttonBenchmark);
+            this.Controls.Add(this.buttonRestart);
             this.Controls.Add(this.statusStripMainForm);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.tabControlMainForm);
@@ -2994,7 +2994,7 @@
         private System.Windows.Forms.RadioButton radioButtonFeathercoin;
         private System.Windows.Forms.RadioButton radioButtonMonacoin;
         private System.Windows.Forms.DataGridView dataGridViewDevices;
-        private System.Windows.Forms.Button buttonBenchmark;
+        private System.Windows.Forms.Button buttonRestart;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.StatusStrip statusStripMainForm;
         private System.Windows.Forms.ToolStripProgressBar toolStripMainFormProgressBar;

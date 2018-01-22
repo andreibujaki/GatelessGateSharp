@@ -291,7 +291,7 @@ namespace GatelessGateSharp
                                                         while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
                                                             ++i;
                                                     }
-                                                    System.Windows.Forms.Application.DoEvents();
+                                                    //System.Windows.Forms.Application.DoEvents();
                                                     System.Threading.Thread.Sleep(10);
                                                 }
                                                 int candidate = -1;

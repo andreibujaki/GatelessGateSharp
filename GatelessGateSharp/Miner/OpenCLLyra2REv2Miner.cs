@@ -1140,7 +1140,7 @@ namespace GatelessGateSharp
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         override unsafe protected void MinerThread() {
-            ComputeProgram lyra2REv2Program = null;
+            ComputeProgram program = null;
 
             try { 
                 Random r = new Random();
@@ -1149,18 +1149,18 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                lyra2REv2Program = BuildProgram("lyra2rev2", mLyra2REv2LocalWorkSizeArray[0],
+                program = BuildProgram("lyra2rev2", mLyra2REv2LocalWorkSizeArray[0],
                     "-O5 -DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0],
                     "-DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0],
                     "-DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0]);
 
-                using (var mLyra2REv2SearchKernel = lyra2REv2Program.CreateKernel("search"))
-                using (var mLyra2REv2Search1Kernel = lyra2REv2Program.CreateKernel("search1"))
-                using (var mLyra2REv2Search2Kernel = lyra2REv2Program.CreateKernel("search2"))
-                using (var mLyra2REv2Search3Kernel = lyra2REv2Program.CreateKernel("search3"))
-                using (var mLyra2REv2Search4Kernel = lyra2REv2Program.CreateKernel("search4"))
-                using (var mLyra2REv2Search5Kernel = lyra2REv2Program.CreateKernel("search5"))
-                using (var mLyra2REv2Search6Kernel = lyra2REv2Program.CreateKernel("search6"))
+                using (var mLyra2REv2SearchKernel = program.CreateKernel("search"))
+                using (var mLyra2REv2Search1Kernel = program.CreateKernel("search1"))
+                using (var mLyra2REv2Search2Kernel = program.CreateKernel("search2"))
+                using (var mLyra2REv2Search3Kernel = program.CreateKernel("search3"))
+                using (var mLyra2REv2Search4Kernel = program.CreateKernel("search4"))
+                using (var mLyra2REv2Search5Kernel = program.CreateKernel("search5"))
+                using (var mLyra2REv2Search6Kernel = program.CreateKernel("search6"))
                 using (var mLyra2REv2InputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sLyra2REv2InputSize))
                 using (var mLyra2REv2OutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sLyra2REv2OutputSize))
                 fixed (long* lyra2rev2GlobalWorkOffsetArrayPtr = mLyra2REv2GlobalWorkOffsetArray)
@@ -1268,16 +1268,17 @@ namespace GatelessGateSharp
                         System.Threading.Thread.Sleep(5000);
                     }
                 }
-
                 MarkAsDone();
-            } catch (UnrecoverableException) {
-                if (lyra2REv2Program != null)
-                    lyra2REv2Program.Dispose();
-                throw;
+
+                program.Dispose();
+            } catch (UnrecoverableException ex) {
+                if (program != null)
+                    program.Dispose();
+                this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                if (lyra2REv2Program != null)
-                    lyra2REv2Program.Dispose();
-                throw new UnrecoverableException(ex, GatelessGateDevice);
+                if (program != null)
+                    program.Dispose();
+                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
             }
         }
     }

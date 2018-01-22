@@ -173,14 +173,14 @@ namespace GatelessGateSharp
                 MarkAsDone();
 
                 program.Dispose();
-            } catch (UnrecoverableException) {
+            } catch (UnrecoverableException ex) {
                 if (program != null)
                     program.Dispose();
-                throw;
+                this.UnrecoverableException = ex;
             } catch (Exception ex) {
                 if (program != null)
                     program.Dispose();
-                throw new UnrecoverableException(ex, GatelessGateDevice);
+                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
             }
         }
     }

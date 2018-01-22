@@ -198,58 +198,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
-    <None Include="BinaryKernels\Baffin_cryptonight.bin" />
-    <None Include="BinaryKernels\Baffin_ethash.bin" />
-    <None Include="BinaryKernels\Baffin_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Bonaire_cryptonight.bin" />
-    <None Include="BinaryKernels\Bonaire_ethash.bin" />
-    <None Include="BinaryKernels\Bonaire_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Capeverde_ethash.bin" />
-    <None Include="BinaryKernels\Capeverde_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Carrizo_cryptonight.bin" />
-    <None Include="BinaryKernels\Carrizo_ethash.bin" />
-    <None Include="BinaryKernels\Carrizo_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Ellesmere_cryptonight.bin" />
-    <None Include="BinaryKernels\Ellesmere_ethash.bin" />
-    <None Include="BinaryKernels\Ellesmere_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Fiji_cryptonight.bin" />
-    <None Include="BinaryKernels\Fiji_ethash.bin" />
-    <None Include="BinaryKernels\Fiji_ethash_pascal.bin" />
-    <None Include="BinaryKernels\gfx900_cryptonight.bin" />
-    <None Include="BinaryKernels\gfx900_ethash.bin" />
-    <None Include="BinaryKernels\gfx900_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Hainan_ethash.bin" />
-    <None Include="BinaryKernels\Hainan_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Hawaii_cryptonight.bin" />
-    <None Include="BinaryKernels\Hawaii_ethash.bin" />
-    <None Include="BinaryKernels\Hawaii_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Iceland_cryptonight.bin" />
-    <None Include="BinaryKernels\Iceland_ethash.bin" />
-    <None Include="BinaryKernels\Iceland_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Kalindi_cryptonight.bin" />
-    <None Include="BinaryKernels\Kalindi_ethash.bin" />
-    <None Include="BinaryKernels\Kalindi_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Mullins_cryptonight.bin" />
-    <None Include="BinaryKernels\Mullins_ethash.bin" />
-    <None Include="BinaryKernels\Mullins_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Oland_ethash.bin" />
-    <None Include="BinaryKernels\Oland_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Pitcairn_ethash.bin" />
-    <None Include="BinaryKernels\Pitcairn_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Spectre_cryptonight.bin" />
-    <None Include="BinaryKernels\Spectre_ethash.bin" />
-    <None Include="BinaryKernels\Spectre_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Spooky_cryptonight.bin" />
-    <None Include="BinaryKernels\Spooky_ethash.bin" />
-    <None Include="BinaryKernels\Spooky_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Stoney_cryptonight.bin" />
-    <None Include="BinaryKernels\Stoney_ethash.bin" />
-    <None Include="BinaryKernels\Stoney_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Tahiti_ethash.bin" />
-    <None Include="BinaryKernels\Tahiti_ethash_pascal.bin" />
-    <None Include="BinaryKernels\Tonga_cryptonight.bin" />
-    <None Include="BinaryKernels\Tonga_ethash.bin" />
-    <None Include="BinaryKernels\Tonga_ethash_pascal.bin" />
     <None Include="Kernels\blake256.cl" />
     <None Include="Kernels\bmw256.cl" />
     <None Include="Kernels\cryptonight.cl" />
@@ -326,6 +274,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gateless Gate Sharp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BinaryKernels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

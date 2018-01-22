@@ -137,7 +137,7 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         override unsafe protected void MinerThread()
         {
-            ComputeProgram pascalProgram = null;
+            ComputeProgram program = null;
 
             try {
                 Random r = new Random();
@@ -146,9 +146,9 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                pascalProgram = BuildProgram("pascal", mPascalLocalWorkSizeArray[0], "-O1", "", "");
+                program = BuildProgram("pascal", mPascalLocalWorkSizeArray[0], "-O1", "", "");
 
-                using (var pascalSearchKernel = pascalProgram.CreateKernel("search"))
+                using (var pascalSearchKernel = program.CreateKernel("search"))
                 using (var pascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize))
                 using (var pascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sPascalOutputSize))
                 using (var pascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize))
@@ -245,15 +245,15 @@ namespace GatelessGateSharp
                 }
                 MarkAsDone();
 
-                pascalProgram.Dispose();
-            } catch (UnrecoverableException) {
-                if (pascalProgram != null)
-                    pascalProgram.Dispose();
-                throw;
+                program.Dispose();
+            } catch (UnrecoverableException ex) {
+                if (program != null)
+                    program.Dispose();
+                this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                if (pascalProgram != null)
-                    pascalProgram.Dispose();
-                throw new UnrecoverableException(ex, GatelessGateDevice);
+                if (program != null)
+                    program.Dispose();
+                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
             }
         }
     }
