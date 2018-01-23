@@ -39,35 +39,42 @@ using System.Text.RegularExpressions;
 
 namespace GatelessGateSharp {
     public partial class MainForm : Form {
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, EntryPoint = "GlobalMemoryStatusEx", SetLastError = true)]
-        static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
-        [DllImport("kernel32.dll")]
-        public static extern uint SetThreadExecutionState(uint esFlags);
 
-        [StructLayout(LayoutKind.Sequential)]
-        internal class MemoryStatusEx {
-            public uint dwLength;
-            public uint dwMemoryLoad;
-            public UInt64 ullTotalPhys;
-            public UInt64 ullAvailPhys;
-            public UInt64 ullTotalPageFile;
-            public UInt64 ullAvailPageFile;
-            public UInt64 ullTotalVirtual;
-            public UInt64 ullAvailVirtual;
-            public UInt64 ullAvailExtendedVirtual;
-            public MemoryStatusEx() {
-                this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
+        #region NativeMethods
+
+        class NativeMethods {
+            [return: MarshalAs(UnmanagedType.Bool)]
+            [DllImport("kernel32.dll", CharSet = CharSet.Auto, EntryPoint = "GlobalMemoryStatusEx", SetLastError = true)]
+            public  static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
+            [DllImport("kernel32.dll")]
+            public static extern uint SetThreadExecutionState(uint esFlags);
+
+            [StructLayout(LayoutKind.Sequential)]
+            internal class MemoryStatusEx {
+                public uint dwLength;
+                public uint dwMemoryLoad;
+                public UInt64 ullTotalPhys;
+                public UInt64 ullAvailPhys;
+                public UInt64 ullTotalPageFile;
+                public UInt64 ullAvailPageFile;
+                public UInt64 ullTotalVirtual;
+                public UInt64 ullAvailVirtual;
+                public UInt64 ullAvailExtendedVirtual;
+                public MemoryStatusEx() {
+                    this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
+                }
             }
+
+            public const uint ES_CONTINUOUS = 0x80000000;
+            public const uint ES_SYSTEM_REQUIRED = 0x00000001;
+            public const uint ES_AWAYMODE_REQUIRED = 0x00000040;
         }
 
-        public const uint ES_CONTINUOUS = 0x80000000;
-        public const uint ES_SYSTEM_REQUIRED = 0x00000001;
-        public const uint ES_AWAYMODE_REQUIRED = 0x00000040;
+        #endregion
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.6";
+        public static string appVersion = "1.2.7";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -82,10 +89,11 @@ namespace GatelessGateSharp {
         private enum ApplicationGlobalState {
             Idle = 0,
             Mining = 1,
-            Initializing = 2
+            Switching = 2
         };
-        private ApplicationGlobalState mAppState = ApplicationGlobalState.Initializing;
+        private ApplicationGlobalState mAppState = ApplicationGlobalState.Switching;
         private bool mAreSettingsDirty = false;
+        private bool mDisableAutomaticSaving = false;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
         private TabPage[] tabPageDeviceArray;
@@ -213,9 +221,9 @@ namespace GatelessGateSharp {
         }
 
         private static bool CheckVirtualMemorySize() {
-            var status = new MemoryStatusEx();
+            var status = new NativeMethods.MemoryStatusEx();
 
-            GlobalMemoryStatusEx(status);
+            NativeMethods.GlobalMemoryStatusEx(status);
 
             /*
             MainForm.Logger("dwLength: " + (ulong)status.dwLength);
@@ -384,10 +392,10 @@ namespace GatelessGateSharp {
             } else {
                 filePath = (new Regex("'")).Replace(filePath, "");
             }
-            //Application.DoEvents();
+            Application.DoEvents();
             Logger("Loading settings from " + filePath + "...");
             UpdateLog();
-            //Application.DoEvents();
+            Application.DoEvents();
             MainForm.Instance.Enabled = false;
 
             int databaseVersion = 0;
@@ -774,10 +782,10 @@ namespace GatelessGateSharp {
         private void SaveSettingsToDatabase(string filePath = null) {
             bool createBackup = filePath == null;
             filePath = ((filePath == null) ? DatabaseFilePath : (new Regex("'")).Replace(filePath, ""));
-            //Application.DoEvents();
+            Application.DoEvents();
             Logger("Saving settings to " + filePath + "...");
             UpdateLog();
-            //Application.DoEvents();
+            Application.DoEvents();
             MainForm.Instance.Enabled = false;
 
             // Delete the old database in case it is corrupt.
@@ -1178,11 +1186,11 @@ namespace GatelessGateSharp {
 
             CheckVirtualMemorySize();
 
-            SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
+            NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED | NativeMethods.ES_AWAYMODE_REQUIRED);
 
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
-            //Application.DoEvents();
+            Application.DoEvents();
 
             try {
                 //RunNGen();
@@ -1246,7 +1254,7 @@ namespace GatelessGateSharp {
 
             // Auto-start mining if necessary.
             splashScreen.Dispose();
-            //Application.DoEvents();
+            Application.DoEvents();
             var autoStart = checkBoxAutoStart.Checked;
             try {
                 if (System.IO.File.ReadAllLines(AppStateFilePath)[0] == "Mining")
@@ -1669,6 +1677,7 @@ namespace GatelessGateSharp {
         static Dictionary<string, double> sBitcoinRates = new Dictionary<string, double> { };
         static Dictionary<string, double> sAltcoinRates = new Dictionary<string, double> { };
         delegate void StringArgReturningVoidDelegate(string text);
+        delegate bool NoArgReturningBoolDelegate();
 
         static void Task_UpdateBitcoinRates(object cancellationToken) {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
@@ -1936,6 +1945,8 @@ namespace GatelessGateSharp {
         }
 
         private void UpdateStats() {
+            if (mAppState == ApplicationGlobalState.Switching)
+                return;
             UpdateLocalStats();
             UpdatePoolStats();
         }
@@ -2869,7 +2880,7 @@ namespace GatelessGateSharp {
                                 .Value)), niceHashMode);
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
-                            //Application.DoEvents();
+                            Application.DoEvents();
                             System.Threading.Thread.Sleep(10);
                         }
                     }
@@ -2902,7 +2913,7 @@ namespace GatelessGateSharp {
                     toolStripMainFormProgressBar.Value = ++minerCount;
 
                     for (int j = 0; j < mLaunchInterval; j += 10) {
-                        //Application.DoEvents();
+                        Application.DoEvents();
                         System.Threading.Thread.Sleep(10);
                     }
 
@@ -2934,7 +2945,7 @@ namespace GatelessGateSharp {
                         toolStripMainFormProgressBar.Value = ++minerCount;
 
                         for (int j = 0; j < mLaunchInterval; j += 10) {
-                            //Application.DoEvents();
+                            Application.DoEvents();
                             System.Threading.Thread.Sleep(10);
                         }
                     }
@@ -2964,7 +2975,7 @@ namespace GatelessGateSharp {
                                 .Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
-                            //Application.DoEvents();
+                            Application.DoEvents();
                             System.Threading.Thread.Sleep(10);
                         }
                     }
@@ -2992,7 +3003,7 @@ namespace GatelessGateSharp {
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
-                            //Application.DoEvents();
+                            Application.DoEvents();
                             System.Threading.Thread.Sleep(10);
                         }
                     }
@@ -3020,7 +3031,7 @@ namespace GatelessGateSharp {
                             Convert.ToInt32(Math.Round(numericUpDownDevicePascalLocalWorkSizeArray[deviceIndex].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
-                            //Application.DoEvents();
+                            Application.DoEvents();
                             System.Threading.Thread.Sleep(10);
                         }
                     }
@@ -3049,7 +3060,7 @@ namespace GatelessGateSharp {
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
-                            //Application.DoEvents();
+                            Application.DoEvents();
                             System.Threading.Thread.Sleep(10);
                         }
                     }
@@ -3078,7 +3089,7 @@ namespace GatelessGateSharp {
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
-                            //Application.DoEvents();
+                            Application.DoEvents();
                             System.Threading.Thread.Sleep(10);
                         }
                     }
@@ -3388,7 +3399,7 @@ namespace GatelessGateSharp {
                 var allDone = false;
                 var counter = 60000;
                 while (!allDone && counter-- > 0) {
-                    //Application.DoEvents();
+                    Application.DoEvents();
                     System.Threading.Thread.Sleep(10);
                     allDone = true;
                     foreach (var miner in mMiners)
@@ -3430,43 +3441,13 @@ namespace GatelessGateSharp {
         }
 
         private void buttonStart_Click(object sender = null, EventArgs e = null) {
-
-            if (!CustomPoolEnabled) {
-                if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
-                    return;
-                if (textBoxEthereumAddress.Text != "" && !ValidateEthereumAddress())
-                    return;
-                if (textBoxMoneroAddress.Text != "" && !ValidateMoneroAddress())
-                    return;
-                if (textBoxPascalAddress.Text != "" && !ValidatePascalAddress())
-                    return;
-                if (textBoxLbryAddress.Text != "" && !ValidateLbryAddress())
-                    return;
-                if (textBoxRigID.Text != "" && !ValidateRigID())
-                    return; 
-                if (textBoxBitcoinAddress.Text == ""
-                    && textBoxEthereumAddress.Text == ""
-                    && textBoxMoneroAddress.Text == ""
-                    && textBoxPascalAddress.Text == ""
-                    && textBoxLbryAddress.Text == "") {
-                    MessageBox.Show("Please enter at least one valid wallet address.", appName, MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    tabControlMainForm.TabIndex = 1;
-                    return;
-                }
-            }
-            var enabled = false;
-            foreach (var device in mDevices)
-                enabled = enabled || (bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value);
-            if (!enabled) {
-                MessageBox.Show("Please enable at least one device.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                tabControlMainForm.TabIndex = 0;
+            if (mAppState == ApplicationGlobalState.Idle && !CheckSettingsBeforeMining())
                 return;
-            }
 
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             if (mAppState == ApplicationGlobalState.Idle) {
+                mAppState = ApplicationGlobalState.Switching;
                 tabControlMainForm.SelectedIndex = 0;
                 if (mAreSettingsDirty)
                     SaveSettingsToDatabase();
@@ -3481,7 +3462,6 @@ namespace GatelessGateSharp {
                 mMiners.Clear();
                 mDevFeeMode = false;
                 try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
-                mAppState = ApplicationGlobalState.Mining;
                 Exception unrecoverableException = null;
                 try {
                     LaunchMiners();
@@ -3513,7 +3493,9 @@ namespace GatelessGateSharp {
                     mDevFeeModeStartTime = DateTime.Now;
                     timerWatchdog.Enabled = true;
                 }
+                mAppState = ApplicationGlobalState.Mining;
             } else if (mAppState == ApplicationGlobalState.Mining) {
+                mAppState = ApplicationGlobalState.Switching;
                 timerWatchdog.Enabled = false;
                 timerDevFee.Enabled = false;
                 StopMiners();
@@ -3525,8 +3507,46 @@ namespace GatelessGateSharp {
             UpdateControls();
         }
 
+        private bool CheckSettingsBeforeMining()
+        {
+            if (!CustomPoolEnabled) {
+                if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
+                    return false;
+                if (textBoxEthereumAddress.Text != "" && !ValidateEthereumAddress())
+                    return false;
+                if (textBoxMoneroAddress.Text != "" && !ValidateMoneroAddress())
+                    return false;
+                if (textBoxPascalAddress.Text != "" && !ValidatePascalAddress())
+                    return false;
+                if (textBoxLbryAddress.Text != "" && !ValidateLbryAddress())
+                    return false;
+                if (textBoxRigID.Text != "" && !ValidateRigID())
+                    return false; 
+                if (textBoxBitcoinAddress.Text == ""
+                    && textBoxEthereumAddress.Text == ""
+                    && textBoxMoneroAddress.Text == ""
+                    && textBoxPascalAddress.Text == ""
+                    && textBoxLbryAddress.Text == "") {
+                    MessageBox.Show("Please enter at least one valid wallet address.", appName, MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    tabControlMainForm.TabIndex = 1;
+                    return false;
+                }
+            }
+            var enabled = false;
+            foreach (var device in mDevices)
+                enabled = enabled || (bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value);
+            if (!enabled) {
+                MessageBox.Show("Please enable at least one device.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tabControlMainForm.TabIndex = 0;
+                return false;
+            }
+
+            return true;
+        }
+
         private void UpdateControls() {
-            if (mAppState == ApplicationGlobalState.Initializing)
+            if (mAppState == ApplicationGlobalState.Switching)
                 return;
 
             try {
@@ -3534,7 +3554,7 @@ namespace GatelessGateSharp {
                 buttonReleaseMemory.Enabled = mAppState == ApplicationGlobalState.Idle;
                 buttonRelaunch.Enabled = true;
 
-                groupBoxCoinsToMine.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxCoinsToMine.Enabled = /*mAppState == ApplicationGlobalState.Idle &&*/ !CustomPoolEnabled;
                 groupBoxPoolPriorities.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
                 groupBoxPoolParameters.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
                 groupBoxWalletAddresses.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
@@ -3641,57 +3661,59 @@ namespace GatelessGateSharp {
         }
 
         private void timerDevFee_Tick(object sender, EventArgs e) {
-            if (mAppState != ApplicationGlobalState.Mining) {
+            if (mAppState == ApplicationGlobalState.Idle) {
                 timerDevFee.Enabled = false;
                 return;
+            } else if (mAppState == ApplicationGlobalState.Switching) {
+                timerDevFee.Interval = 1000;
+                return;
             }
-            try {
-                if (mDevFeeMode) {
-                    labelCurrentPool.Text = "Switching...";
-                    labelCurrentSecondaryPool.Text = "";
-                    tabControlMainForm.Enabled = buttonStart.Enabled = false;
-                    StopMiners();
-                    mDevFeeMode = false;
-                    timerDevFee.Interval = (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
-                    timerFailOver.Enabled = true;
-                } else {
-                    labelCurrentPool.Text = "Switching...";
-                    tabControlMainForm.Enabled = buttonStart.Enabled = false;
-                    StopMiners();
-                    mDevFeeMode = true;
-                    mDevFeeModeStartTime = DateTime.Now;
-                    timerDevFee.Interval = mDevFeeDurationInSeconds * 1000;
-                    timerFailOver.Enabled = true;
-                }
 
-                tabControlMainForm.Enabled = buttonStart.Enabled = true;
+            mAppState = ApplicationGlobalState.Switching;
+            try {
+                labelCurrentPool.Text = "Switching...";
+                labelCurrentSecondaryPool.Text = "";
+                tabControlMainForm.Enabled = buttonStart.Enabled = false;
+                StopMiners();
+                mDevFeeMode = !(mDevFeeMode);
+                timerDevFee.Interval = (mDevFeeMode) ? mDevFeeDurationInSeconds * 1000 : (int)((double)mDevFeeDurationInSeconds * ((double)(100 - mDevFeePercentage) / mDevFeePercentage) * 1000);
+                if (mDevFeeMode)
+                    mDevFeeModeStartTime = DateTime.Now; 
+                timerFailOver.Enabled = true;
             } catch (Exception ex) {
                 Logger("Exception in timerDevFee_Tick(): " + ex.Message + ex.StackTrace);
             }
+            //mAppState = ApplicationGlobalState.Mining;
         }
 
         private void radioButtonMonero_CheckedChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
+            timerFailOver.Enabled = true;
         }
 
         private void radioButtonEthereum_CheckedChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
+            timerFailOver.Enabled = true;
         }
 
         private void radioButtonMostProfitable_CheckedChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
+            timerFailOver.Enabled = true;
         }
 
         private void radioButtonZcash_CheckedChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
+            timerFailOver.Enabled = true;
         }
 
         private void radioButtonLbry_CheckedChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
+            timerFailOver.Enabled = true;
         }
 
         private void radioButtonPascal_CheckedChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
+            timerFailOver.Enabled = true;
         }
 
         private Exception GetUnrecoverableException() {
@@ -3714,28 +3736,35 @@ namespace GatelessGateSharp {
         }
 
         private void timerWatchdog_Tick(object sender, EventArgs e) {
+            if (mAppState != ApplicationGlobalState.Mining)
+                return;
+
             try {
-                if (mAppState == ApplicationGlobalState.Mining && mMiners.Count > 0) {
-                    Exception ex = GetUnrecoverableException();
-                    if (ex != null && ex.GetType() == typeof(StratumServerUnavailableException)) {
-                        StopMiners();
-                        timerFailOver.Enabled = true;
-                    } else if (ex != null) {
-                        StopMiners();
-                        if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes) {
-                            mAppState = ApplicationGlobalState.Idle;
-                            try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
-                            UpdateStats();
-                            UpdateControls();
-                        } else {
-                            timerFailOver.Enabled = true;
-                        }
+                Exception ex = GetUnrecoverableException();
+                if (ex != null && ex.GetType() == typeof(StratumServerUnavailableException)) {
+                    mAppState = ApplicationGlobalState.Switching;
+                    tabControlMainForm.Enabled = buttonStart.Enabled = false;
+                    StopMiners();
+                    timerFailOver.Enabled = true;
+                    //mAppState = ApplicationGlobalState.Mining;
+                } else if (ex != null) {
+                    mAppState = ApplicationGlobalState.Switching;
+                    tabControlMainForm.Enabled = buttonStart.Enabled = false;
+                    StopMiners();
+                    if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes) {
+                        mAppState = ApplicationGlobalState.Idle;
+                        try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                        UpdateStats();
+                        UpdateControls();
                     } else {
-                        foreach (var miner in mMiners) {
-                            if (!miner.Alive) {
-                                MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
-                                Program.KillMonitor = false; Application.Exit();
-                            }
+                        timerFailOver.Enabled = true;
+                        ///mAppState = ApplicationGlobalState.Mining;
+                    }
+                } else {
+                    foreach (var miner in mMiners) {
+                        if (!miner.Alive) {
+                            MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
+                            Program.KillMonitor = false; Application.Exit();
                         }
                     }
                 }
@@ -4149,7 +4178,9 @@ namespace GatelessGateSharp {
 
         private void timerAutoStart_Tick(object sender, EventArgs e) {
             timerAutoStart.Enabled = false;
-            buttonStart_Click();
+            if (mAppState == ApplicationGlobalState.Idle) {
+                buttonStart_Click();
+            }
         }
 
         private void checkBoxCustomPool0Enable_CheckedChanged(object sender, EventArgs e) {
@@ -4758,6 +4789,7 @@ namespace GatelessGateSharp {
 
         private void numericUpDownCustomPool3SecondaryPort_ValueChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
+
         }
 
         private void textBoxCustomPool3Login_TextChanged(object sender, EventArgs e) {
@@ -4861,14 +4893,17 @@ namespace GatelessGateSharp {
 
         private void timerFailOver_Tick(object sender, EventArgs e) {
             timerFailOver.Enabled = false;
-            if (mAppState != ApplicationGlobalState.Mining)
+            if (mAppState == ApplicationGlobalState.Idle)
                 return;
+
+            mAppState = ApplicationGlobalState.Switching;
+            tabControlMainForm.Enabled = buttonStart.Enabled = false;
             try {
                 StopMiners();
                 LaunchMiners();
             } catch (Exception) { }
-            if (mMiners.Count == 0 || mPrimaryStratum == null)
-                timerFailOver.Enabled = true;
+            mAppState = ApplicationGlobalState.Mining;
+            tabControlMainForm.Enabled = buttonStart.Enabled = true;
         }
 
         private void comboBoxCurrency_SelectedIndexChanged(object sender, EventArgs e) {
@@ -4888,11 +4923,27 @@ namespace GatelessGateSharp {
         }
 
         public static bool UseDefaultOpenCLBinariesChecked {
-            get { return Instance.checkBoxUseDefaultOpenCLBinaries.Checked; }
+            get {
+                if (Instance.checkBoxUseDefaultOpenCLBinaries.InvokeRequired) {
+                    return (bool)Instance.Invoke(new NoArgReturningBoolDelegate(() => {
+                        return Instance.checkBoxUseDefaultOpenCLBinaries.Checked;
+                    }));
+                } else {
+                    return Instance.checkBoxUseDefaultOpenCLBinaries.Checked;
+                }
+            }
         }
 
         public static bool ReuseCompiledBinariesChecked {
-            get { return Instance.checkBoxReuseCompiledBinaries.Checked; }
+            get {
+                if (Instance.checkBoxReuseCompiledBinaries.InvokeRequired) {
+                    return (bool)Instance.Invoke(new NoArgReturningBoolDelegate(() => {
+                        return Instance.checkBoxReuseCompiledBinaries.Checked;
+                    }));
+                } else {
+                    return Instance.checkBoxReuseCompiledBinaries.Checked; 
+                }
+            }
         }
 
         private void buttonRestart_Click(object sender, EventArgs e) {
