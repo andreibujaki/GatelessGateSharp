@@ -120,17 +120,16 @@ namespace GatelessGateSharp
                         MainForm.Logger("Restarting dummy miner thread...");
                     }
                 }
-                MarkAsDone();
-
-                program.Dispose();
             } catch (UnrecoverableException ex) {
-                if (program != null)
-                    program.Dispose();
                 this.UnrecoverableException = ex;
             } catch (Exception ex) {
+                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+            } finally {
+                MarkAsDone();
+                MemoryUsage = 0;
                 if (program != null)
                     program.Dispose();
-                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                program = null;
             }
         }
     }

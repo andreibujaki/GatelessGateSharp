@@ -147,6 +147,12 @@ namespace GatelessGateSharp {
 
                 program = BuildProgram("ethash_pascal", mEthashLocalWorkSizeArray[0], "-O1", "", "");
 
+                MemoryUsage = 256;
+                MemoryUsage += 32;
+                MemoryUsage += sPascalInputSize;
+                MemoryUsage += sPascalOutputSize;
+                MemoryUsage += sPascalMidstateSize;
+
                 using (var searchKernel = program.CreateKernel("search"))
                 using (var DAGKernel = program.CreateKernel("GenerateDAG"))
                 using (var ethashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256))
@@ -179,12 +185,9 @@ namespace GatelessGateSharp {
                             Thread.Sleep(100);
                             elapsedTime += 100;
                         }
-                        if (mEthashStratum == null || mEthashStratum.GetJob() == null || mPascalStratum == null || mPascalStratum.GetJob() == null) {
-                            MainForm.Logger("Ethash stratum server failed to send a new job.");
-                            //throw new TimeoutException("Stratum server failed to send a new job.");
-                            return;
-                        }
-
+                        if (mEthashStratum == null || mEthashStratum.GetJob() == null || mPascalStratum == null || mPascalStratum.GetJob() == null)
+                            throw new TimeoutException("Stratum server failed to send a new job.");
+                        
                         System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                         EthashStratum.Work ethashWork;
                         PascalStratum.Work pascalWork;
@@ -216,6 +219,7 @@ namespace GatelessGateSharp {
 
                             if (ethashEpoch != ethashWork.GetJob().Epoch) {
                                 if (ethashDAGBuffer != null) {
+                                    MemoryUsage -= ethashDAGBuffer.Size;
                                     ethashDAGBuffer.Dispose();
                                     ethashDAGBuffer = null;
                                 }
@@ -231,9 +235,11 @@ namespace GatelessGateSharp {
                                     mEthashGlobalWorkSizeArray[0] += mEthashLocalWorkSizeArray[0] - mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0];
 
                                 ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, cache.GetData().Length);
+                                MemoryUsage += DAGCacheBuffer.Size; 
                                 fixed (byte* p = cache.GetData())
                                     Queue.Write<byte>(DAGCacheBuffer, true, 0, cache.GetData().Length, (IntPtr)p, null);
                                 ethashDAGBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, mEthashGlobalWorkSizeArray[0] * 8 * 64 /* ethashDAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
+                                MemoryUsage += ethashDAGBuffer.Size;
 
                                 DAGKernel.SetValueArgument<UInt32>(0, 0);
                                 DAGKernel.SetMemoryArgument(1, DAGCacheBuffer);
@@ -249,6 +255,7 @@ namespace GatelessGateSharp {
                                         break;
                                 }
                                 DAGCacheBuffer.Dispose();
+                                MemoryUsage -= DAGCacheBuffer.Size;
                                 if (Stopped || !mEthashStratum.GetJob().ID.Equals(ethashJobID))
                                     break;
                                 sw.Stop();
@@ -320,24 +327,24 @@ namespace GatelessGateSharp {
                             MainForm.Logger("Restarting miner thread...");
                             System.Threading.Thread.Sleep(5000);
                         }
-                    }
-
-                    if (ethashDAGBuffer != null) {
-                        ethashDAGBuffer.Dispose();
-                        ethashDAGBuffer = null;
+                    } finally {
+                        if (ethashDAGBuffer != null) {
+                            MemoryUsage -= ethashDAGBuffer.Size;
+                            ethashDAGBuffer.Dispose();
+                            ethashDAGBuffer = null;
+                        }
                     }
                 }
-                MarkAsDone();
-
-                program.Dispose();
             } catch (UnrecoverableException ex) {
-                if (program != null)
-                    program.Dispose();
                 this.UnrecoverableException = ex;
             } catch (Exception ex) {
+                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+            } finally {
+                MarkAsDone();
+                MemoryUsage = 0;
                 if (program != null)
                     program.Dispose();
-                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                program = null;
             }
         }
     }

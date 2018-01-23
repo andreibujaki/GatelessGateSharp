@@ -206,8 +206,8 @@ namespace GatelessGateSharp {
 
                     mClient = new TcpClient(ServerAddress, ServerPort);
                     mStream = mClient.GetStream();
-                    mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
-                    mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
+                    mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false, 65536);
+                    mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII, 65536);
                     mStreamReader.BaseStream.ReadTimeout = 3 * 60 * 1000;
                     mStreamWriter.BaseStream.WriteTimeout = 10 * 1000;
                     mReconnectionRequested = false;

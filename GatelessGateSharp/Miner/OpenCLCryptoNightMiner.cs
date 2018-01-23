@@ -61,23 +61,27 @@ namespace GatelessGateSharp {
         [System.Security.SecurityCritical]
         override unsafe protected void MinerThread() {
             ComputeProgram program = null;
+            ComputeBuffer<byte> statesBuffer = null;
+            ComputeBuffer<byte> scratchpadsBuffer = null;
             try {
                 Random r = new Random();
-                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
+                var openCLName = OpenCLDevice.GetComputeDevice().Name;
+                var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
 
                 MarkAsAlive();
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
                 MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
-                program = BuildProgram("cryptonight", localWorkSizeA[0], "-O5", "", "");
+                program = BuildProgram("cryptonight", localWorkSizeA[0], "-O5" + (GCN1 ? " -legacy" : ""), "", "");
+
+                statesBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]);
+                scratchpadsBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
 
                 using (var searchKernel0 = program.CreateKernel("search"))
                 using (var searchKernel1 = program.CreateKernel("search1"))
                 using (var searchKernel2 = program.CreateKernel("search2"))
                 using (var searchKernel3 = program.CreateKernel("search3"))
-                using (var statesBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]))
-                using (var scratchpadsBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]))
                 using (var inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76))
                 using (var outputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, outputSize))
                 using (var terminateBuffer = new ComputeBuffer<Int32>(Context, ComputeMemoryFlags.ReadWrite, 1))
@@ -86,6 +90,10 @@ namespace GatelessGateSharp {
                 fixed (UInt32* outputPtr = output)
                 while (!Stopped) {
                     MarkAsAlive();
+                    MemoryUsage =
+                        200 * globalWorkSizeA[0]
+                        + ((long)1 << 21) * globalWorkSizeA[0]
+                        + 76 + outputSize + 1;
 
                     try {
                         searchKernel0.SetMemoryArgument(0, inputBuffer);
@@ -196,6 +204,8 @@ namespace GatelessGateSharp {
                             }
                         }
                     } catch (Exception ex) {
+                        if (statesBuffer != null) { OpenCLDevice.ReleaseComputeByteBuffer(statesBuffer); statesBuffer = null; }
+                        if (scratchpadsBuffer != null) { OpenCLDevice.ReleaseComputeByteBuffer(scratchpadsBuffer); scratchpadsBuffer = null; }
                         MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
                         if (UnrecoverableException.IsUnrecoverableException(ex)) {
                             this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
@@ -210,17 +220,16 @@ namespace GatelessGateSharp {
                         System.Threading.Thread.Sleep(5000);
                     }
                 }
-                MarkAsDone();
-
-                program.Dispose();
             } catch (UnrecoverableException ex) {
-                if (program != null)
-                    program.Dispose();
                 this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                if (program != null)
-                    program.Dispose();
                 this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+            } finally {
+                MarkAsDone();
+                MemoryUsage = 0;
+                if (program != null) { program.Dispose(); program = null; }
+                if (statesBuffer != null) { OpenCLDevice.ReleaseComputeByteBuffer(statesBuffer); statesBuffer = null; }
+                if (scratchpadsBuffer != null) { OpenCLDevice.ReleaseComputeByteBuffer(scratchpadsBuffer); scratchpadsBuffer = null; }
             }
         }
     }

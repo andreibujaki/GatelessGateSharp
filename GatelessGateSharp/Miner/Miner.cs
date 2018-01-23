@@ -45,6 +45,7 @@ namespace GatelessGateSharp
         public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
         public UnrecoverableException UnrecoverableException { get; set; }
+        public long MemoryUsage { get; set; }
 
         protected Miner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
         {
@@ -54,6 +55,7 @@ namespace GatelessGateSharp
             mSecondAlgorithmName = aSecondAlgorithmName;
             Speed = 0;
             SpeedSecondaryAlgorithm = 0;
+            MemoryUsage = 0;
         }
 
         public void Dispose() {

@@ -67,7 +67,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.5";
+        public static string appVersion = "1.2.6";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1542,7 +1542,7 @@ namespace GatelessGateSharp {
             // CryptoNight
             var openCLName = ((OpenCLDevice)device).GetComputeDevice().Name;
             var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
-            numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" && !GCN1 && openCLName != "Fiji" ? 2 : 1);
+            numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" && /*!GCN1 &&*/ openCLName != "Fiji" ? 2 : 1);
             numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
             numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 60 :
@@ -1552,8 +1552,8 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 128 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 128 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 128 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 64 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 64 :
                             device.GetVendor() == "AMD" && GCN1 ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" ? 2 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
@@ -2080,12 +2080,29 @@ namespace GatelessGateSharp {
                                                                                   Color.Black;
                     }
                     int memoryClock = device.MemoryClock;
-                    if (activity >= 0) {
+                    if (memoryClock >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Style.ForeColor =
                                                                    memoryClock > device.DefaultMemoryClock ? Color.Red :
                                                                    memoryClock < device.DefaultMemoryClock ? Color.Blue :
                                                                                   Color.Black;
+                    }
+                    long memoryUsed = 0;
+                    foreach (var miner in mMiners)
+                        if (device.DeviceIndex == miner.DeviceIndex)
+                        memoryUsed += miner.MemoryUsage;
+                    if (memoryUsed > 0) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Value = String.Format("{0:0.0}", memoryUsed / 1000000000.0) + "GB";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Style.ForeColor = Color.Black;
+                    } else {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Value = "";
+                    }
+                    long memoryReserved = device.MemoryUsage;
+                    if (memoryReserved > 0) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_reserved"].Value = String.Format("{0:0.0}", memoryReserved / 1000000000.0) + "GB";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_reserved"].Style.ForeColor = Color.Black;
+                    } else {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_reserved"].Value = "";
                     }
 
                     if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation")) {
@@ -2182,13 +2199,13 @@ namespace GatelessGateSharp {
                     });
                 UpdateChart(cartesianChartFanSpeed, deviceIndex => mDevices[deviceIndex].FanSpeed);
                 for (int i = 0; i < mDevices.Length; ++i) {
-                    try { 
-                    var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke)).Color;
-                    dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
-                        color.R + (255 - color.R) / 2,
-                        color.G + (255 - color.G) / 2,
-                        color.B + (255 - color.B) / 2);
-                    } catch (Exception ex) { }
+                    if (((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke != null) {
+                        var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke)).Color;
+                        dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
+                            color.R + (255 - color.R) / 2,
+                            color.G + (255 - color.G) / 2,
+                            color.B + (255 - color.B) / 2);
+                    }
                 }
             } catch (Exception ex) { Logger("Exception in UpdateCharts(): " + ex.ToString()); }
         }
@@ -3147,6 +3164,8 @@ namespace GatelessGateSharp {
                 if (mSecondaryStratum != null)
                     algorithm += "_" + mSecondaryStratum.Algorithm;
                 foreach (var device in mDevices) {
+                    if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
+                        continue;
                     var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
                     if (checkBoxDeviceOverclockingEnabledArray[tuple].Checked) {
                         device.SaveOverclockingSettings();
@@ -3488,7 +3507,7 @@ namespace GatelessGateSharp {
                             timerAutoStart.Enabled = true;
                     } 
                 } else {
-                    timerDevFee.Interval = 1 * 60 * 1000;
+                    timerDevFee.Interval = 15 * 60 * 1000;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
@@ -3512,7 +3531,8 @@ namespace GatelessGateSharp {
 
             try {
                 buttonStart.Text = mAppState == ApplicationGlobalState.Mining ? "Stop" : "Start";
-                buttonRestart.Enabled = false;
+                buttonReleaseMemory.Enabled = mAppState == ApplicationGlobalState.Idle;
+                buttonRelaunch.Enabled = true;
 
                 groupBoxCoinsToMine.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
                 groupBoxPoolPriorities.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
@@ -4876,7 +4896,13 @@ namespace GatelessGateSharp {
         }
 
         private void buttonRestart_Click(object sender, EventArgs e) {
+            try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
+            Program.KillMonitor = false; Application.Exit();
+        }
 
+        private void buttonReleaseMemory_Click(object sender, EventArgs e) {
+            foreach (var device in mDevices)
+                device.ReleaseAllComputeBuffers();
         }
     }
 }

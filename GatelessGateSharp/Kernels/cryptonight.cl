@@ -487,7 +487,7 @@ __kernel void search2(__global uint4 *Scratchpad, __global ulong *states)
         AES3[i] = rotate(tmp, 24U);
     }
 
-#if 0 // defined(__Tahiti__) || defined(__Pitcairn__)
+#if defined(__Tahiti__) || defined(__Pitcairn__)
 
     for (int i = 0; i < 4; ++i) ((ulong *)ExpandedKey2)[i] = states[i + 4];
     text = vload4(get_local_id(1) + 4, (__global uint *)states);

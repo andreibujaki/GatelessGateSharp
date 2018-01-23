@@ -56,7 +56,8 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         override unsafe protected void MinerThread() {
             ComputeProgram program = null;
-
+            ComputeBuffer<byte> neoScryptGlobalCacheBuffer = null;
+            
             try {
                 Random r = new Random();
 
@@ -66,6 +67,9 @@ namespace GatelessGateSharp
 
                 program = BuildProgram("neoscrypt", mNeoScryptLocalWorkSizeArray[0], "-O5 -legacy", "", "");
 
+                neoScryptGlobalCacheBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, (mNeoScryptGlobalWorkSizeArray[0] * 32768));
+                MemoryUsage = sNeoScryptInputSize + sNeoScryptOutputSize + neoScryptGlobalCacheBuffer.Size;
+
                 using (var neoScryptSearchKernel = program.CreateKernel("search"))
                 using (var neoScryptInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sNeoScryptInputSize))
                 using (var neoScryptOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sNeoScryptOutputSize))
@@ -74,14 +78,13 @@ namespace GatelessGateSharp
                 fixed (long* neoscryptLocalWorkSizeArrayPtr = mNeoScryptLocalWorkSizeArray)
                 fixed (byte* neoscryptInputPtr = mNeoScryptInput)
                 fixed (UInt32* neoscryptOutputPtr = mNeoScryptOutput)
-                using (ComputeBuffer<byte> mNeoScryptGlobalCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, (mNeoScryptGlobalWorkSizeArray[0] * 32768)))
                 while (!Stopped) {
                     MarkAsAlive();
 
                     try {
                         neoScryptSearchKernel.SetMemoryArgument(0, neoScryptInputBuffer);
                         neoScryptSearchKernel.SetMemoryArgument(1, neoScryptOutputBuffer);
-                        neoScryptSearchKernel.SetMemoryArgument(2, mNeoScryptGlobalCacheBuffer);
+                        neoScryptSearchKernel.SetMemoryArgument(2, neoScryptGlobalCacheBuffer);
 
                         // Wait for the first NeoScryptJob to arrive.
                         int elapsedTime = 0;
@@ -152,17 +155,15 @@ namespace GatelessGateSharp
                         System.Threading.Thread.Sleep(5000);
                     }
                 }
-                MarkAsDone();
-
-                program.Dispose();
             } catch (UnrecoverableException ex) {
-                if (program != null)
-                    program.Dispose();
                 this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                if (program != null)
-                    program.Dispose();
                 this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+            } finally {
+                MarkAsDone();
+                MemoryUsage = 0;
+                if (program != null) { program.Dispose(); program = null; }
+                if (neoScryptGlobalCacheBuffer != null) { OpenCLDevice.ReleaseComputeByteBuffer(neoScryptGlobalCacheBuffer); neoScryptGlobalCacheBuffer = null; }
             }
         }
     }

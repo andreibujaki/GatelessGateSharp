@@ -126,9 +126,14 @@ namespace ATI.ADL
     internal delegate int ADL_Overdrive5_ODPerformanceLevels_Get(int iAdapterIndex, int iDefault, IntPtr lpODPerformanceLevels);
     internal delegate int ADL_Overdrive5_ODPerformanceLevels_Set(int iAdapterIndex, IntPtr lpODPerformanceLevels);
     internal delegate int 	ADL_Overdrive5_PowerControl_Get (int iAdapterIndex, ref int lpCurrentValue, ref int lpDefaultValue);
-    internal delegate int 	ADL_Overdrive5_PowerControl_Set (int iAdapterIndex, int iValue);
+    internal delegate int ADL_Overdrive5_PowerControl_Set(int iAdapterIndex, int iValue);
+    internal delegate int ADL2_Overdrive_Caps(IntPtr context, int iAdapterIndex, ref int iSupported, ref int iEnabled, ref int iVersion);
 
-    internal delegate int ADL2_Overdrive6_CurrentPower_Get	(IntPtr	context, int iAdapterIndex, int iPowerType, ref int lpCurrentValue);
+    internal delegate int ADL_Overdrive6_CurrentPower_Get(int iAdapterIndex, int iPowerType, ref int lpCurrentValue);
+    internal delegate int ADL_Overdrive6_VoltageControl_Get(int iAdapterIndex, ref int lpCurrentValue, ref int lpDefaultValue);
+    internal delegate int ADL_Overdrive6_VoltageControl_Set(int iAdapterIndex, int iValue);
+
+    internal delegate int ADL2_Overdrive6_CurrentPower_Get(IntPtr context, int iAdapterIndex, int iPowerType, ref int lpCurrentValue);
     internal delegate int ADL2_Overdrive6_VoltageControl_Get(IntPtr context, int iAdapterIndex, ref int lpCurrentValue, ref int lpDefaultValue);
     internal delegate int ADL2_Overdrive6_VoltageControl_Set(IntPtr context, int iAdapterIndex, int iValue);
 
@@ -513,6 +518,18 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Overdrive5_PowerControl_Set(int iAdapterIndex, int iValue);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_Overdrive_Caps(IntPtr context, int iAdapterIndex, ref int iSupported, ref int iEnabled, ref int iVersion);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Overdrive6_CurrentPower_Get(int AdapterIndex, int iPowerType, ref int lpCurrentValue);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Overdrive6_VoltageControl_Get(int iAdapterIndex, ref int lpCurrentValue, ref int lpDefaultValue);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Overdrive6_VoltageControl_Set(int iAdapterIndex, int iValue);
 
 
             [DllImport(Atiadlxx_FileName)]
@@ -1025,6 +1042,81 @@ namespace ATI.ADL
         private static bool ADL_Overdrive5_FanSpeedToDefault_Set_Check = false;
         #endregion ADL_Overdrive5_FanSpeedToDefault_Set
 
+        #region ADL2_Overdrive_Caps
+        /// <summary> ADL2_Overdrive_Caps Delegates</summary>
+        internal static ADL2_Overdrive_Caps ADL2_Overdrive_Caps {
+            get {
+                if (!ADL2_Overdrive_Caps_Check && null == ADL2_Overdrive_Caps_) {
+                    ADL2_Overdrive_Caps_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_Overdrive_Caps")) {
+                        ADL2_Overdrive_Caps_ = ADLImport.ADL2_Overdrive_Caps;
+                    }
+                }
+                return ADL2_Overdrive_Caps_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_Overdrive_Caps ADL2_Overdrive_Caps_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_Overdrive_Caps_Check = false;
+        #endregion ADL2_Overdrive_Caps
+
+        #region ADL_Overdrive6_CurrentPower_Get
+        /// <summary> ADL_Overdrive6_CurrentPower_Get Delegates</summary>
+        internal static ADL_Overdrive6_CurrentPower_Get ADL_Overdrive6_CurrentPower_Get {
+            get {
+                if (!ADL_Overdrive6_CurrentPower_Get_Check && null == ADL_Overdrive6_CurrentPower_Get_) {
+                    ADL_Overdrive6_CurrentPower_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive6_CurrentPower_Get")) {
+                        ADL_Overdrive6_CurrentPower_Get_ = ADLImport.ADL_Overdrive6_CurrentPower_Get;
+                    }
+                }
+                return ADL_Overdrive6_CurrentPower_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Overdrive6_CurrentPower_Get ADL_Overdrive6_CurrentPower_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Overdrive6_CurrentPower_Get_Check = false;
+        #endregion ADL_Overdrive6_CurrentPower_Get
+
+        #region ADL_Overdrive6_VoltageControl_Get
+        /// <summary> ADL_Overdrive6_VoltageControl_Get Delegates</summary>
+        internal static ADL_Overdrive6_VoltageControl_Get ADL_Overdrive6_VoltageControl_Get {
+            get {
+                if (!ADL_Overdrive6_VoltageControl_Get_Check && null == ADL_Overdrive6_VoltageControl_Get_) {
+                    ADL_Overdrive6_VoltageControl_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive6_VoltageControl_Get")) {
+                        ADL_Overdrive6_VoltageControl_Get_ = ADLImport.ADL_Overdrive6_VoltageControl_Get;
+                    }
+                }
+                return ADL_Overdrive6_VoltageControl_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Overdrive6_VoltageControl_Get ADL_Overdrive6_VoltageControl_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Overdrive6_VoltageControl_Get_Check = false;
+        #endregion ADL_Overdrive6_VoltageControl_Get
+
+        #region ADL_Overdrive6_VoltageControl_Set
+        /// <summary> ADL_Overdrive6_VoltageControl_Set Delegates</summary>
+        internal static ADL_Overdrive6_VoltageControl_Set ADL_Overdrive6_VoltageControl_Set {
+            get {
+                if (!ADL_Overdrive6_VoltageControl_Set_Check && null == ADL_Overdrive6_VoltageControl_Set_) {
+                    ADL_Overdrive6_VoltageControl_Set_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Overdrive6_VoltageControl_Set")) {
+                        ADL_Overdrive6_VoltageControl_Set_ = ADLImport.ADL_Overdrive6_VoltageControl_Set;
+                    }
+                }
+                return ADL_Overdrive6_VoltageControl_Set_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Overdrive6_VoltageControl_Set ADL_Overdrive6_VoltageControl_Set_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Overdrive6_VoltageControl_Set_Check = false;
+        #endregion ADL_Overdrive6_VoltageControl_Set
         #region ADL2_Overdrive6_CurrentPower_Get
         /// <summary> ADL2_Overdrive6_CurrentPower_Get Delegates</summary>
         internal static ADL2_Overdrive6_CurrentPower_Get ADL2_Overdrive6_CurrentPower_Get {

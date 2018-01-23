@@ -170,17 +170,14 @@ namespace GatelessGateSharp
                         System.Threading.Thread.Sleep(5000);
                     }
                 }
-                MarkAsDone();
-
-                program.Dispose();
             } catch (UnrecoverableException ex) {
-                if (program != null)
-                    program.Dispose();
                 this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                if (program != null)
-                    program.Dispose();
                 this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+            } finally {
+                MarkAsDone();
+                MemoryUsage = 0;
+                if (program != null) { program.Dispose(); program = null; }
             }
         }
     }
