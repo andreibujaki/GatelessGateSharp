@@ -240,7 +240,9 @@ namespace GatelessGateSharp {
                     this.UnrecoverableException = ex;
                 } catch (Exception ex) {
                     MainForm.Logger("Exception in Stratum.StreamReaderThread(): " + ex.ToString());
-                    if (++errorCount < 4) {
+                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                        this.UnrecoverableException = new UnrecoverableException(ex.Message);
+                    } else if (++errorCount < 4) {
                         MainForm.Logger("Reconnecting to the server...");
                         System.Threading.Thread.Sleep(5000);
                     } else {

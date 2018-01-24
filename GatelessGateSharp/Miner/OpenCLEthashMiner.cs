@@ -91,7 +91,7 @@ namespace GatelessGateSharp
 
                         // Wait for the first job to arrive.
                         int elapsedTime = 0;
-                        while ((Stratum == null || Stratum.GetJob() == null) && elapsedTime < 60000) {
+                        while ((Stratum == null || Stratum.GetJob() == null) && elapsedTime < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped) {
                             Thread.Sleep(100);
                             elapsedTime += 100;
                         }
@@ -221,7 +221,7 @@ namespace GatelessGateSharp
                             Stop();
                         } else {
                             MainForm.Logger("Restarting miner thread...");
-                            System.Threading.Thread.Sleep(5000);
+                            System.Threading.Thread.Sleep(Parameters.WaitTimeForRestartingMinerThreadInMilliseconds);
                         }
                     } finally {
                         if (ethashDAGBuffer != null) {

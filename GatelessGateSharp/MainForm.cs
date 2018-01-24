@@ -74,7 +74,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.7";
+        public static string appVersion = "1.2.8";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -2275,6 +2275,20 @@ namespace GatelessGateSharp {
             }
         }
 
+        public bool ValidateCustomPoolSettings(bool showMessageBox = true) {
+            var regex = new System.Text.RegularExpressions.Regex(@"^stratum\+tcp\:\/\/");
+            textBoxCustomPool0Host.Text = regex.Replace(textBoxCustomPool0Host.Text.Trim(), "");
+            textBoxCustomPool1Host.Text = regex.Replace(textBoxCustomPool1Host.Text.Trim(), "");
+            textBoxCustomPool2Host.Text = regex.Replace(textBoxCustomPool2Host.Text.Trim(), "");
+            textBoxCustomPool3Host.Text = regex.Replace(textBoxCustomPool3Host.Text.Trim(), "");
+            textBoxCustomPool0SecondaryHost.Text = regex.Replace(textBoxCustomPool0SecondaryHost.Text.Trim(), "");
+            textBoxCustomPool1SecondaryHost.Text = regex.Replace(textBoxCustomPool1SecondaryHost.Text.Trim(), "");
+            textBoxCustomPool2SecondaryHost.Text = regex.Replace(textBoxCustomPool2SecondaryHost.Text.Trim(), "");
+            textBoxCustomPool3SecondaryHost.Text = regex.Replace(textBoxCustomPool3SecondaryHost.Text.Trim(), "");
+
+            return true;
+        }
+
         public bool ValidateBitcoinAddress(bool showMessageBox = true) {
             var regex = new System.Text.RegularExpressions.Regex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$");
             var match = regex.Match(mUserBitcoinAddress);
@@ -3474,7 +3488,7 @@ namespace GatelessGateSharp {
                     timerDevFee.Enabled = false;
                     mAppState = ApplicationGlobalState.Idle;
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
-
+                    
                     if (MessageBox.Show(
                         Utilities.GetAutoClosingForm(20),
                         (unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner.") + "\nWould you like to stop mining now?",
@@ -3487,8 +3501,8 @@ namespace GatelessGateSharp {
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
                     timerWatchdog.Enabled = true;
+                    mAppState = ApplicationGlobalState.Mining;
                 }
-                mAppState = ApplicationGlobalState.Mining;
             } else if (mAppState == ApplicationGlobalState.Mining) {
                 mAppState = ApplicationGlobalState.Switching;
                 timerWatchdog.Enabled = false;
@@ -3504,6 +3518,8 @@ namespace GatelessGateSharp {
 
         private bool CheckSettingsBeforeMining()
         {
+            if (CustomPoolEnabled && !ValidateCustomPoolSettings())
+                return false;
             if (!CustomPoolEnabled) {
                 if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
                     return false;

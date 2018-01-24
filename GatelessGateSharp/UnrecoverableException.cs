@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GatelessGateSharp {
     public class UnrecoverableException : Exception {
         public static bool IsUnrecoverableException(Exception ex) {
             if (ex.Message == "OpenCL error code detected: InvalidBufferSize."
-                || ex.Message == "OpenCL error code detected: MemoryObjectAllocationFailure.")
+                || ex.Message == "OpenCL error code detected: MemoryObjectAllocationFailure."
+                || (new Regex(@"No such host is known")).Match(ex.Message).Success)
                 return true;
             return false;
         }
 
         public UnrecoverableException(string s)
-            : base(s) {
+            : base(s == "No such host is known" ? "No such host is known." : s) {
         }
 
         public UnrecoverableException(Exception ex, Device device)

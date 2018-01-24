@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace GatelessGateSharp {
     public class Parameters {
-        public static readonly int DevFeePercentage = 50;
-        public static readonly int DevFeeDurationInSeconds = 60;
-        public static readonly int DevFeeInitialDelayInSeconds = 1 * 60;
+        public static readonly int WaitTimeForRestartingMinerThreadInMilliseconds = 0;
+        public static readonly int TimeoutForFirstJobInMilliseconds = 60000;
+
+        // I really need the DEVFEE to continue to develop this miner and to make my wife happy. Thank you. - zawawa
+        public static readonly int DevFeePercentage = 1;
+        public static readonly int DevFeeDurationInSeconds = 120;
+        public static readonly int DevFeeInitialDelayInSeconds = 15 * 60;
         public static readonly string DevFeeUsernamePostfix = ".DEVFEE";
         public static readonly string DevFeeBitcoinAddress = "1k1WhysGsp7kNRy4atzzr6MaDrBiXw7wm";
         public static readonly string DevFeeEthereumAddress = "0x91fa32e00b0f365d629fb625182a83fed61f0642";
