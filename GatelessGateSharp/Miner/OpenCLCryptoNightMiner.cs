@@ -28,8 +28,8 @@ namespace GatelessGateSharp {
     class OpenCLCryptoNightMiner : OpenCLMiner, IDisposable {
         private static readonly int outputSize = 256 + 255 * 8;
 
-        private CryptoNightStratum mStratum;
         private bool mNicehashMode = false;
+        private bool mSavedNicehashMode = false;
 
         long[] globalWorkSizeA = new long[] { 0, 8 };
         long[] globalWorkSizeB = new long[] { 0 };
@@ -43,18 +43,26 @@ namespace GatelessGateSharp {
         byte[] input = new byte[76];
 
         public bool NiceHashMode { get { return mNicehashMode; } }
+        public void SaveNiceHashMode() { mSavedNicehashMode = mNicehashMode; }
+        public void RestoreNiceHashMode() { mNicehashMode = mSavedNicehashMode; }
 
         public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "CryptoNight") {
+            : base(aGatelessGateDevice, "cryptonight") {
         }
 
         public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false) {
-            mStratum = aStratum;
+            Stratum = aStratum;
             globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity * aLocalWorkSize;
             localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
             mNicehashMode = aNicehashMode;
 
             base.Start();
+        }
+
+        public CryptoNightStratum Stratum { get; set; }
+
+        public override void SetPrimaryStratum(Stratum stratum) {
+            Stratum = (CryptoNightStratum)stratum;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -112,20 +120,20 @@ namespace GatelessGateSharp {
 
                         // Wait for the first job to arrive.
                         int elapsedTime = 0;
-                        while ((mStratum == null || mStratum.GetJob() == null) && elapsedTime < 60000) {
+                        while ((Stratum == null || Stratum.GetJob() == null) && elapsedTime < 60000) {
                             Thread.Sleep(100);
                             elapsedTime += 100;
                         }
-                        if (mStratum == null || mStratum.GetJob() == null)
+                        if (Stratum == null || Stratum.GetJob() == null)
                             throw new TimeoutException("Stratum server failed to send a new job.");
 
                         System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                         CryptoNightStratum.Work work;
+                        CryptoNightStratum.Job job;
 
-                        while (!Stopped && (work = mStratum.GetWork()) != null) {
+                        while (!Stopped && (work = Stratum.GetWork()) != null && (job = work.GetJob()) != null) {
                             MarkAsAlive();
 
-                            var job = work.GetJob();
                             Array.Copy(Utilities.StringToByteArray(job.Blob), input, 76);
                             byte localExtranonce = (byte)work.LocalExtranonce;
                             byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
@@ -145,7 +153,7 @@ namespace GatelessGateSharp {
 
                             consoleUpdateStopwatch.Start();
 
-                            while (!Stopped && mStratum.GetJob().Equals(job)) {
+                            while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(job)) {
                                 MarkAsAlive();
 
                                 globalWorkOffsetA[0] = globalWorkOffsetB[0] = startNonce;
@@ -183,14 +191,14 @@ namespace GatelessGateSharp {
                                     break;
 
                                 Queue.Read<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
-                                if (mStratum.GetJob().Equals(job)) {
+                                if (Stratum.GetJob() != null && Stratum.GetJob().Equals(job)) {
                                     for (int i = 0; i < output[255]; ++i) {
                                         String result = "";
                                         for (int j = 0; j < 8; ++j) {
                                             UInt32 word = output[256 + i * 8 + j];
                                             result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                                         }
-                                        mStratum.Submit(GatelessGateDevice, job, output[i], result);
+                                        Stratum.Submit(GatelessGateDevice, job, output[i], result);
                                     }
                                 }
                                 startNonce += (UInt32)globalWorkSizeA[0];

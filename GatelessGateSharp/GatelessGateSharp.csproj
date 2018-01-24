@@ -143,6 +143,7 @@
     <Compile Include="Device\Device.cs" />
     <Compile Include="Device\AMDPolaris10.cs" />
     <Compile Include="LiveCharts\ConstantChanges.cs" />
+    <Compile Include="Parameters.cs" />
     <Compile Include="PCIExpress.cs" />
     <Compile Include="SplashScreen.cs">
       <SubType>Form</SubType>

@@ -32,23 +32,28 @@ namespace GatelessGateSharp
 {
     class OpenCLEthashMiner : OpenCLMiner
     {
-        private EthashStratum mEthashStratum;
         private long[] mEthashGlobalWorkOffsetArray = new long[1];
         private long[] mEthashGlobalWorkSizeArray = new long[1];
         private long[] mEthashLocalWorkSizeArray = new long[1];
         
         public OpenCLEthashMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Ethash")
+            : base(aGatelessGateDevice, "ethash")
         {
         }
 
         public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize)
         {
-            mEthashStratum = aEthashStratum;
+            Stratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = aEthashLocalWorkSize;
             mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * OpenCLDevice.GetComputeDevice().MaxComputeUnits;
 
             base.Start();
+        }
+
+        public EthashStratum Stratum { get; set; }
+
+        public override void SetPrimaryStratum(Stratum stratum) {
+            Stratum = (EthashStratum)stratum;
         }
 
         override unsafe protected void MinerThread()
@@ -86,11 +91,11 @@ namespace GatelessGateSharp
 
                         // Wait for the first job to arrive.
                         int elapsedTime = 0;
-                        while ((mEthashStratum == null || mEthashStratum.GetJob() == null) && elapsedTime < 60000) {
+                        while ((Stratum == null || Stratum.GetJob() == null) && elapsedTime < 60000) {
                             Thread.Sleep(100);
                             elapsedTime += 100;
                         }
-                        if (mEthashStratum == null || mEthashStratum.GetJob() == null)
+                        if (Stratum == null || Stratum.GetJob() == null)
                         {
                             MainForm.Logger("Ethash stratum server failed to send a new job.");
                             //throw new TimeoutException("Stratum server failed to send a new job.");
@@ -99,21 +104,22 @@ namespace GatelessGateSharp
                     
                         System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                         EthashStratum.Work ethashWork;
- 
-                        while (!Stopped && (ethashWork = mEthashStratum.GetWork()) != null)
+                        EthashStratum.Job ethashJob;
+
+                        while (!Stopped && (ethashWork = Stratum.GetWork()) != null && (ethashJob = ethashWork.GetJob()) != null)
                         {
                             MarkAsAlive();
 
-                            String ethashPoolExtranonce = mEthashStratum.PoolExtranonce;
+                            String ethashPoolExtranonce = Stratum.PoolExtranonce;
                             byte[] ethashExtranonceByteArray = Utilities.StringToByteArray(ethashPoolExtranonce);
                             byte ethashLocalExtranonce = (byte)ethashWork.LocalExtranonce;
                             UInt64 ethashStartNonce = (UInt64)ethashLocalExtranonce << (8 * (7 - ethashExtranonceByteArray.Length));
                             for (int i = 0; i < ethashExtranonceByteArray.Length; ++i)
                                 ethashStartNonce |= (UInt64)ethashExtranonceByteArray[i] << (8 * (7 - i));
                             ethashStartNonce += (ulong)r.Next(0, int.MaxValue) & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8));
-                            String ethashJobID = ethashWork.GetJob().ID;
-                            String ethashSeedhash = ethashWork.GetJob().Seedhash;
-                            double ethashDifficulty = mEthashStratum.Difficulty;
+                            String ethashJobID = ethashJob.ID;
+                            String ethashSeedhash = ethashJob.Seedhash;
+                            double ethashDifficulty = Stratum.Difficulty;
 
                             Buffer.BlockCopy(Utilities.StringToByteArray(ethashWork.GetJob().Headerhash), 0, ethashHeaderhash, 0, 32);
                             Queue.Write<byte>(ethashHeaderBuffer, true, 0, 32, (IntPtr)ethashHeaderhashPtr, null);
@@ -154,12 +160,12 @@ namespace GatelessGateSharp
                                     mEthashGlobalWorkOffsetArray[0] = start;
                                     Queue.Execute(DAGKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
                                     Queue.Finish();
-                                    if (Stopped || !mEthashStratum.GetJob().ID.Equals(ethashJobID))
+                                    if (Stopped || !Stratum.GetJob().ID.Equals(ethashJobID))
                                         break;
                                 }
                                 MemoryUsage -= DAGCacheBuffer.Size;
                                 DAGCacheBuffer.Dispose();
-                                if (Stopped || !mEthashStratum.GetJob().ID.Equals(ethashJobID))
+                                if (Stopped || !Stratum.GetJob().ID.Equals(ethashJobID))
                                     break;
                                 sw.Stop();
                                 MainForm.Logger("Generated DAG for Epoch #" + ethashEpoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
@@ -167,7 +173,7 @@ namespace GatelessGateSharp
 
                             consoleUpdateStopwatch.Start();
 
-                            while (!Stopped && mEthashStratum.GetJob().ID.Equals(ethashJobID) && mEthashStratum.PoolExtranonce.Equals(ethashPoolExtranonce))
+                            while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().ID.Equals(ethashJobID) && Stratum.PoolExtranonce.Equals(ethashPoolExtranonce))
                             {
                                 MarkAsAlive();
 
@@ -191,10 +197,10 @@ namespace GatelessGateSharp
                                 mEthashGlobalWorkOffsetArray[0] = 0;
                                 Queue.Execute(searchKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
                                 Queue.Read<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
-                                if (mEthashStratum.GetJob().ID.Equals(ethashJobID))
+                                if (Stratum.GetJob() != null && Stratum.GetJob().ID.Equals(ethashJobID))
                                 {
                                     for (int i = 0; i < ethashOutput[255]; ++i)
-                                        mEthashStratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
+                                        Stratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
                                 }
                                 ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
 

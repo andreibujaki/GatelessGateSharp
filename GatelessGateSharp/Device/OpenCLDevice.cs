@@ -405,7 +405,6 @@ namespace GatelessGateSharp
                                     && available != 0
                                     //&& enabled != 0
                                     ) {
-                                    Console.WriteLine("{0} {1} {2}", ADLVersion, available, enabled);
                                     mDevices[i].ADLVersion = ADLVersion;
                                 }
                             }

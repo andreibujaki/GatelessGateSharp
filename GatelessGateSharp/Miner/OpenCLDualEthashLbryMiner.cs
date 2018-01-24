@@ -59,7 +59,7 @@ namespace GatelessGateSharp
 
 
         public OpenCLDualEthashLbryMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Ethash/Lbry", "Ethash", "Lbry")
+            : base(aGatelessGateDevice, "ethash_lbry", "ethash", "lbry")
         {
             try {
                 mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
@@ -141,7 +141,7 @@ namespace GatelessGateSharp
                         MainForm.Logger("Stratum server failed to send a new job.");
                         return;
                     }
-                    
+
                     System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                     EthashStratum.Work ethashWork;
                     LbryStratum.Work lbryWork;

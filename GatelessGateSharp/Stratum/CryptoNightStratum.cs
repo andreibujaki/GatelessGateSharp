@@ -74,7 +74,7 @@ namespace GatelessGateSharp
                     try  {  mMutex.WaitOne(5000); } catch (Exception) { }
                     mJob = new Job(this, (string)parameters["job_id"], (string)parameters["blob"], (string)parameters["target"]);
                     try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
-                    MainForm.Logger("Received new job: " + parameters["job_id"]);
+                    if (!SilentMode) MainForm.Logger("Received new job: " + parameters["job_id"]);
                 }
                 else
                 {
@@ -86,11 +86,11 @@ namespace GatelessGateSharp
                 var ID = response["id"];
                 var error = response["error"];
 
-                if (error == null && !MainForm.DevFeeMode) {
+                if (error == null) {
                     MainForm.Logger("Share accepted.");
                     ReportShareAcceptance();
                 }
-                else if (error != null && !MainForm.DevFeeMode)
+                else if (error != null)
                 {
                     MainForm.Logger("Share rejected: " + (String)(((JContainer)response["error"])["message"]));
                     ReportShareRejection();
@@ -148,7 +148,7 @@ namespace GatelessGateSharp
                         { "result", result }}},
                     { "id", 4 }});
                 WriteLine(message);
-                MainForm.Logger("Device #" + device.DeviceIndex + " submitted a share.");
+                MainForm.Logger("Device #" + device.DeviceIndex + " submitted a share to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
             }
             catch (Exception ex)
             {

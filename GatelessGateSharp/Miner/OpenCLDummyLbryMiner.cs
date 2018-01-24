@@ -40,7 +40,7 @@ namespace GatelessGateSharp
 
 
         public OpenCLDummyLbryMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Lbry")
+            : base(aGatelessGateDevice, "lbry")
         {
             mIterations = (aGatelessGateDevice.GetVendor() == "NVIDIA") ? 8 : 1;
         }

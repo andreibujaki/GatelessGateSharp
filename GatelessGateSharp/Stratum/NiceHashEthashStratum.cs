@@ -61,7 +61,7 @@ namespace GatelessGateSharp
                     try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mJob = (EthashStratum.Job)(new Job(this, (string)parameters[0], (string)parameters[1], (string)parameters[2]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                    MainForm.Logger("Received new job: " + parameters[0]);
+                    if (!SilentMode) MainForm.Logger("Received new job: " + parameters[0]);
                     //MainForm.Logger("Seedhash: " + parameters[1]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
@@ -85,12 +85,12 @@ namespace GatelessGateSharp
                 var ID = response["id"];
                 bool result = (bool)response["result"];
 
-                if (result && !MainForm.DevFeeMode)
+                if (result)
                 {
                     MainForm.Logger("Share #" + ID + " accepted.");
                     ReportShareAcceptance();
                 }
-                else if (!result && !MainForm.DevFeeMode)
+                else if (!result)
                 {
                     MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
                     ReportShareRejection();
@@ -170,7 +170,7 @@ namespace GatelessGateSharp
                          (PoolExtranonce.Length == 4) ? (String.Format("{5:x2}{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff))) :
                                                         (String.Format("{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff))));
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
-                    { "id", mJsonRPCMessageID++ },
+                    { "id", mJsonRPCMessageID },
                     { "method", "mining.submit" },
                     { "params", new List<string> {
                         Username,
@@ -178,7 +178,8 @@ namespace GatelessGateSharp
                         stringNonce
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted Share #" + mJsonRPCMessageID + " to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
+                ++mJsonRPCMessageID;
             }
             catch (Exception ex) {
                 MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");

@@ -52,7 +52,8 @@ namespace GatelessGateSharp {
 
             public UInt64 LocalExtranonce {
                 get {
-                    return (mJob.Stratum.LocalExtranonceSize == 1) ? (mLocalExtranonce & 0xffUL) :
+                    return mJob == null ? 0 : // dummy
+                           (mJob.Stratum.LocalExtranonceSize == 1) ? (mLocalExtranonce & 0xffUL) :
                            (mJob.Stratum.LocalExtranonceSize == 2) ? (mLocalExtranonce & 0xffffUL) :
                            (mJob.Stratum.LocalExtranonceSize == 3) ? (mLocalExtranonce & 0xffffffUL) :
                            (mJob.Stratum.LocalExtranonceSize == 4) ? (mLocalExtranonce & 0xffffffffUL) :
@@ -78,7 +79,7 @@ namespace GatelessGateSharp {
 
             protected Work(Job aJob) {
                 mJob = aJob;
-                mLocalExtranonce = aJob.GetNewLocalExtranonce();
+                mLocalExtranonce = (mJob == null) ? 0 : aJob.GetNewLocalExtranonce();
             }
         }
 
@@ -121,9 +122,10 @@ namespace GatelessGateSharp {
         public String Password { get { return mPassword; } }
         public String PoolExtranonce { get { return mPoolExtranonce; } }
         public String PoolName { get { return mPoolName; } }
-        public String Algorithm { get { return mAlgorithm; } }
+        public String AlgorithmName { get { return mAlgorithm; } }
         public double Difficulty { get { return mDifficulty; } }
         public UnrecoverableException UnrecoverableException { get; set; }
+        public bool SilentMode { get; set; }
 
         protected void RegisterDeviceWithShare(OpenCLDevice aDevice) {
             try { mMutex.WaitOne(5000); } catch (Exception) { }
@@ -166,6 +168,7 @@ namespace GatelessGateSharp {
             mPassword = aPassword;
             mPoolName = aPoolName;
             mAlgorithm = aAlgorithm;
+            SilentMode = false;
 
             mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
             mStreamReaderThread.IsBackground = true;

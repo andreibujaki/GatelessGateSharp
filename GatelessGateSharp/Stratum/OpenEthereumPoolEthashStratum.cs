@@ -73,22 +73,22 @@ namespace GatelessGateSharp
                 && response["result"].GetType() == typeof(bool)
                 && mShareIDs.Contains(response["id"].ToString()))
             {
-                if ((bool)response["result"] && !MainForm.DevFeeMode)
+                if ((bool)response["result"])
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " accepted.");
                     ReportShareAcceptance();
                 }
-                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String) && !MainForm.DevFeeMode)
+                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String))
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + (String)response["error"]);
                     ReportShareRejection();
                 }
-                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray) && !MainForm.DevFeeMode)
+                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray))
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + ((JArray)response["error"])["message"]);
                     ReportShareRejection();
                 }
-                else if (!(bool)response["result"] && !MainForm.DevFeeMode)
+                else if (!(bool)response["result"])
                 {
                     MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
                     ReportShareRejection();
@@ -118,7 +118,7 @@ namespace GatelessGateSharp
                     regex = new System.Text.RegularExpressions.Regex(@"^0x(.*)................................................$"); // I don't know about this one...
                     mDifficulty = (double)0xffff0000U / (double)Convert.ToUInt64(regex.Replace((string)result[2], "$1"), 16);
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                    MainForm.Logger("Received new job: " + (string)result[0]);
+                    if (!SilentMode) MainForm.Logger("Received new job: " + (string)result[0]);
                 }
             }
             else
@@ -217,7 +217,7 @@ namespace GatelessGateSharp
                                       ((output >> 56) & 0xff));
                 mShareIDs.Add(mJsonRPCMessageID.ToString());
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
-                    { "id", mJsonRPCMessageID++ },
+                    { "id", mJsonRPCMessageID },
                     { "jsonrpc", "2.0" },
                     { "method", "eth_submitWork" },
                     { "params", new List<string> {
@@ -226,7 +226,8 @@ namespace GatelessGateSharp
                         "0x" + job.GetMixHash(output) // mix digest
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted Share #" + mJsonRPCMessageID + " to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
+                ++mJsonRPCMessageID;
             }
             catch (Exception ex) {
                 MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");

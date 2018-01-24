@@ -41,8 +41,8 @@ namespace GatelessGateSharp
         public double Speed { get; set; }
         public double SpeedSecondaryAlgorithm { get; set; }
         public String AlgorithmName { get { return mAlgorithmName; } }
-        public String FirstAlgorithmName { get { return mFirstAlgorithmName; } }
-        public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
+        public String PrimaryAlgorithmName { get { return mFirstAlgorithmName; } }
+        public String SecondaryAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
         public UnrecoverableException UnrecoverableException { get; set; }
         public long MemoryUsage { get; set; }
@@ -135,6 +135,13 @@ namespace GatelessGateSharp
                     Speed = 0;
                 return !(mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5 * 60);
             }
+        }
+
+        public virtual void SetPrimaryStratum(Stratum stratum) {
+            throw new System.InvalidOperationException();
+        }
+        public virtual void SetSecondaryStratum(Stratum stratum) {
+            throw new System.InvalidOperationException();
         }
     }
 }

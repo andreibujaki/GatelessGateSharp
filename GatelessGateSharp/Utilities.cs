@@ -506,5 +506,17 @@ namespace GatelessGateSharp
                 .OfType<T>()
                 .Concat<T>(controls.SelectMany<Control, T>(ctrl => FindAllChildrenByType<T>(ctrl)));
         }
+
+        public static bool IsDevFeeAddress(string s) {
+            return (new List<string> {
+                Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix,
+                Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix,
+                Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix,
+                Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix,
+                Parameters.DevFeeLbryAddress + Parameters.DevFeeUsernamePostfix,
+                Parameters.DevFeeZcashAddress + Parameters.DevFeeUsernamePostfix,
+                Parameters.DevFeeFeathercoinAddress + Parameters.DevFeeUsernamePostfix,
+            }).Contains(s);
+        }
     }
 }
