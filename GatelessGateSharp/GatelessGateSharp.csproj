@@ -5,10 +5,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5C6B25E1-991B-4A2A-B9D3-8F5E672384FD}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GatelessGateSharp</RootNamespace>
-    <AssemblyName>GatelessGateSharp</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
@@ -32,6 +30,8 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AssemblyName>GatelessGateSharp</AssemblyName>
+    <OutputType>WinExe</OutputType>
     <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -44,11 +44,27 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AssemblyName>GatelessGateSharp</AssemblyName>
+    <OutputType>WinExe</OutputType>
     <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseCL|AnyCPU' ">
+    <AssemblyName>GatelessGateSharpCL</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ReleaseCL\</OutputPath>
+    <DefineConstants>TRACE;COMMAND_LINE_VERSION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -293,6 +309,7 @@ copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSha
 "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:16777216
 xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
 xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
+copy $(SolutionDir)GatelessGateSharp\bin\ReleaseCL\GatelessGateSharpCL.exe $(SolutionDir)GatelessGateSharp\bin\Release\GatelessGateSharpCL.exe 
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -258,7 +258,7 @@ namespace GatelessGateSharp {
                         process.StartInfo = startInfo;
                         process.Start();
 
-                        Program.KillMonitor = true; Application.Exit();
+                        Program.Exit(true);
                     } catch (Exception ex) {
                         MainForm.Logger("Failed to increase the total size of page files: " + ex.Message + ex.StackTrace);
                     }
@@ -310,6 +310,16 @@ namespace GatelessGateSharp {
                 .Y(model => model.Value);
             Charting.For<MeasureModel>(mapper);
         }
+
+#if COMMAND_LINE_VERSION
+        protected override void OnLoad(EventArgs e) {
+            Visible = false;
+            ShowInTaskbar = false;
+            Opacity = 0;
+
+            base.OnLoad(e);
+        }
+#endif
 
         void MainForm_DragEnter(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
@@ -1175,13 +1185,15 @@ namespace GatelessGateSharp {
             try { System.IO.Directory.CreateDirectory(SettingsBackupPathBase); } catch (Exception) { }
             try { System.IO.Directory.CreateDirectory(SavedOpenCLBinaryKernelPathBase); } catch (Exception) { }
 
-            CheckVirtualMemorySize();
-
             NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED | NativeMethods.ES_AWAYMODE_REQUIRED);
+
+#if !COMMAND_LINE_VERSION
+            CheckVirtualMemorySize();
 
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
             Application.DoEvents();
+#endif          
 
             try {
                 //RunNGen();
@@ -1244,9 +1256,13 @@ namespace GatelessGateSharp {
             checkBoxEnablePhymem.Checked = false;
 
             // Auto-start mining if necessary.
+#if COMMAND_LINE_VERSION
+            var autoStart = true;
+#else
+            var autoStart = checkBoxAutoStart.Checked;
             splashScreen.Dispose();
             Application.DoEvents();
-            var autoStart = checkBoxAutoStart.Checked;
+#endif
             try {
                 if (System.IO.File.ReadAllLines(AppStateFilePath)[0] == "Mining")
                     autoStart = true;
@@ -2175,15 +2191,17 @@ namespace GatelessGateSharp {
 
         void UpdateCharts() {
             try {
-                var now = System.DateTime.Now;
+                bool initialized = cartesianChartTemperature.Series.Count == mDevices.Length;
 
-                if (cartesianChartTemperature.Series.Count != mDevices.Length) {
+                if (!initialized) {
                     InitializeChart(cartesianChartTemperature, value => value + "℃", 100);
                     InitializeChart(cartesianChartSpeedPrimaryAlgorithm, ConvertHashRateToString, double.NaN);
                     InitializeChart(cartesianChartSpeedSecondaryAlgorithm, ConvertHashRateToString, double.NaN);
                     InitializeChart(cartesianChartFanSpeed, value => value + "%", 100);
-
+                    InitializeChart(cartesianChartDeviceActivity, value => value + "%", 100);
+                    InitializeChart(cartesianChartPower, value => (Double.IsNaN(value) ? "" : value + "W"), double.NaN);
                 }
+                
                 UpdateChart(cartesianChartTemperature, deviceIndex => mDevices[deviceIndex].Temperature);
                 UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
                     (int deviceIndex) => {
@@ -2200,16 +2218,21 @@ namespace GatelessGateSharp {
                         return speed;
                     });
                 UpdateChart(cartesianChartFanSpeed, deviceIndex => mDevices[deviceIndex].FanSpeed);
-                for (int i = 0; i < mDevices.Length; ++i) {
-                    if (((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke != null) {
-                        var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke)).Color;
-                        dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
-                            color.R + (255 - color.R) / 2,
-                            color.G + (255 - color.G) / 2,
-                            color.B + (255 - color.B) / 2);
+                UpdateChart(cartesianChartDeviceActivity, deviceIndex => mDevices[deviceIndex].Activity);
+                UpdateChart(cartesianChartPower, deviceIndex => (mDevices[deviceIndex].Power < 0 ? double.NaN : mDevices[deviceIndex].Power));
+
+                if (!initialized) {
+                    for (int i = 0; i < mDevices.Length; ++i) {
+                        if (((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke != null) {
+                            var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke)).Color;
+                            dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
+                                color.R + (255 - color.R) / 2,
+                                color.G + (255 - color.G) / 2,
+                                color.B + (255 - color.B) / 2);
+                        }
                     }
                 }
-            } catch (Exception ex) { Logger("Exception in UpdateCharts(): " + ex.ToString()); }
+            } catch (Exception ex) { ExceptionLogger(ex); }
         }
 
         void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue) {
@@ -2255,11 +2278,11 @@ namespace GatelessGateSharp {
                     DateTime = now,
                     Value = deviceIndexToValue(i)
                 });
-                int valueIndex = chart.Series[i].Values.Count - 1; 
-                valueIndex -= 60;           if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Second % 15 != 0) chart.Series[i].Values.RemoveAt(valueIndex);
-                valueIndex -= 60 / 15 * 59; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Minute % 10 != 0) chart.Series[i].Values.RemoveAt(valueIndex);
-                valueIndex -= 60 / 10 * 23; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Hour   %  6 != 0) chart.Series[i].Values.RemoveAt(valueIndex);
-                while (chart.Series[i].Values.Count > 60 + (60 / 15) * 59 + (60 / 10) * 23 + (6 / 10) * 6) // Keep data at least for one week.
+                int valueIndex = chart.Series[i].Values.Count - 1;
+                valueIndex = chart.Series[i].Values.Count - 1 - 60;           if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Second != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60;      if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Minute != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60 - 24; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Hour   != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                while (chart.Series[i].Values.Count > 60 + 60 + 24 + 365) // Keep data for one year.
                     chart.Series[i].Values.RemoveAt(0);
             }
             //
@@ -2270,8 +2293,10 @@ namespace GatelessGateSharp {
                 chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60).Ticks;
             } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Day") {
                 chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24).Ticks;
-            } else /* if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Week") */ {
-                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 7).Ticks;
+            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Month") {
+                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 31).Ticks;
+            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Year") {
+                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 365).Ticks;
             }
         }
 
@@ -3917,7 +3942,7 @@ namespace GatelessGateSharp {
                     foreach (var miner in mMiners) {
                         if (!miner.Alive) {
                             MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
-                            Program.KillMonitor = false; Application.Exit();
+                            Program.Exit(false);
                         }
                     }
                 }
@@ -5101,7 +5126,7 @@ namespace GatelessGateSharp {
 
         private void buttonRestart_Click(object sender, EventArgs e) {
             try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
-            Program.KillMonitor = false; Application.Exit();
+            Program.Exit(false);
         }
 
         private void buttonReleaseMemory_Click(object sender, EventArgs e) {

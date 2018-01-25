@@ -29,24 +29,34 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.cartesianChartDeviceActivity = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartFanSpeed = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartTemperature = new LiveCharts.WinForms.CartesianChart();
+            this.comboBoxGraphType = new System.Windows.Forms.ComboBox();
+            this.comboBoxGraphCoverage = new System.Windows.Forms.ComboBox();
+            this.cartesianChartSpeedSecondaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartSpeedPrimaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
+            this.comboBoxSecondGraphType = new System.Windows.Forms.ComboBox();
+            this.comboBoxSecondGraphCoverage = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.comboBoxCurrency = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -56,13 +66,7 @@
             this.labelPriceDay = new System.Windows.Forms.Label();
             this.labelPriceWeek = new System.Windows.Forms.Label();
             this.labelPriceMonth = new System.Windows.Forms.Label();
-            this.cartesianChartSpeedSecondaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartFanSpeed = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartSpeedPrimaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
-            this.comboBoxGraphCoverage = new System.Windows.Forms.ComboBox();
-            this.comboBoxGraphType = new System.Windows.Forms.ComboBox();
             this.labelCurrentSecondaryPool = new System.Windows.Forms.Label();
-            this.cartesianChartTemperature = new LiveCharts.WinForms.CartesianChart();
             this.dataGridViewDevices = new System.Windows.Forms.DataGridView();
             this.enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -271,8 +275,13 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerFailOver = new System.Windows.Forms.Timer(this.components);
             this.buttonReleaseMemory = new System.Windows.Forms.Button();
+            this.cartesianChartPower = new LiveCharts.WinForms.CartesianChart();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).BeginInit();
             this.tabPagePoolSettings.SuspendLayout();
@@ -327,14 +336,9 @@
             // 
             // tabPageDashboard
             // 
+            this.tabPageDashboard.Controls.Add(this.splitContainer1);
             this.tabPageDashboard.Controls.Add(this.groupBox4);
-            this.tabPageDashboard.Controls.Add(this.cartesianChartSpeedSecondaryAlgorithm);
-            this.tabPageDashboard.Controls.Add(this.cartesianChartFanSpeed);
-            this.tabPageDashboard.Controls.Add(this.cartesianChartSpeedPrimaryAlgorithm);
-            this.tabPageDashboard.Controls.Add(this.comboBoxGraphCoverage);
-            this.tabPageDashboard.Controls.Add(this.comboBoxGraphType);
             this.tabPageDashboard.Controls.Add(this.labelCurrentSecondaryPool);
-            this.tabPageDashboard.Controls.Add(this.cartesianChartTemperature);
             this.tabPageDashboard.Controls.Add(this.dataGridViewDevices);
             this.tabPageDashboard.Controls.Add(this.labelElapsedTime);
             this.tabPageDashboard.Controls.Add(this.label4);
@@ -349,6 +353,149 @@
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(369, 8);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartPower);
+            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartDeviceActivity);
+            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartFanSpeed);
+            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartTemperature);
+            this.splitContainer1.Panel1.Controls.Add(this.comboBoxGraphType);
+            this.splitContainer1.Panel1.Controls.Add(this.comboBoxGraphCoverage);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartSpeedSecondaryAlgorithm);
+            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartSpeedPrimaryAlgorithm);
+            this.splitContainer1.Panel2.Controls.Add(this.comboBoxSecondGraphType);
+            this.splitContainer1.Panel2.Controls.Add(this.comboBoxSecondGraphCoverage);
+            this.splitContainer1.Size = new System.Drawing.Size(600, 230);
+            this.splitContainer1.SplitterDistance = 298;
+            this.splitContainer1.TabIndex = 144;
+            // 
+            // cartesianChartDeviceActivity
+            // 
+            this.cartesianChartDeviceActivity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartDeviceActivity.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartDeviceActivity.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartDeviceActivity.Name = "cartesianChartDeviceActivity";
+            this.cartesianChartDeviceActivity.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartDeviceActivity.TabIndex = 153;
+            // 
+            // cartesianChartFanSpeed
+            // 
+            this.cartesianChartFanSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartFanSpeed.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartFanSpeed.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartFanSpeed.Name = "cartesianChartFanSpeed";
+            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartFanSpeed.TabIndex = 152;
+            this.cartesianChartFanSpeed.Text = "cartesianChart1";
+            // 
+            // cartesianChartTemperature
+            // 
+            this.cartesianChartTemperature.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartTemperature.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartTemperature.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartTemperature.Name = "cartesianChartTemperature";
+            this.cartesianChartTemperature.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartTemperature.TabIndex = 145;
+            this.cartesianChartTemperature.Text = "cartesianChart1";
+            // 
+            // comboBoxGraphType
+            // 
+            this.comboBoxGraphType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxGraphType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGraphType.FormattingEnabled = true;
+            this.comboBoxGraphType.Items.AddRange(new object[] {
+            "Temperature",
+            "Fan Speed",
+            "Activity"});
+            this.comboBoxGraphType.Location = new System.Drawing.Point(3, 3);
+            this.comboBoxGraphType.Name = "comboBoxGraphType";
+            this.comboBoxGraphType.Size = new System.Drawing.Size(207, 21);
+            this.comboBoxGraphType.TabIndex = 149;
+            this.comboBoxGraphType.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphType_SelectedIndexChanged);
+            // 
+            // comboBoxGraphCoverage
+            // 
+            this.comboBoxGraphCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxGraphCoverage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGraphCoverage.FormattingEnabled = true;
+            this.comboBoxGraphCoverage.Items.AddRange(new object[] {
+            "1 Minute",
+            "1 Hour",
+            "1 Day",
+            "1 Month",
+            "1 Year"});
+            this.comboBoxGraphCoverage.Location = new System.Drawing.Point(217, 3);
+            this.comboBoxGraphCoverage.Name = "comboBoxGraphCoverage";
+            this.comboBoxGraphCoverage.Size = new System.Drawing.Size(78, 21);
+            this.comboBoxGraphCoverage.TabIndex = 150;
+            this.comboBoxGraphCoverage.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphCoverage_SelectedIndexChanged);
+            // 
+            // cartesianChartSpeedSecondaryAlgorithm
+            // 
+            this.cartesianChartSpeedSecondaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartSpeedSecondaryAlgorithm.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartSpeedSecondaryAlgorithm.Name = "cartesianChartSpeedSecondaryAlgorithm";
+            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartSpeedSecondaryAlgorithm.TabIndex = 153;
+            this.cartesianChartSpeedSecondaryAlgorithm.Text = "cartesianChart1";
+            // 
+            // cartesianChartSpeedPrimaryAlgorithm
+            // 
+            this.cartesianChartSpeedPrimaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartSpeedPrimaryAlgorithm.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartSpeedPrimaryAlgorithm.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartSpeedPrimaryAlgorithm.Name = "cartesianChartSpeedPrimaryAlgorithm";
+            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartSpeedPrimaryAlgorithm.TabIndex = 151;
+            this.cartesianChartSpeedPrimaryAlgorithm.Text = "cartesianChart1";
+            // 
+            // comboBoxSecondGraphType
+            // 
+            this.comboBoxSecondGraphType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxSecondGraphType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSecondGraphType.FormattingEnabled = true;
+            this.comboBoxSecondGraphType.Items.AddRange(new object[] {
+            "Speed (Primary Algorithm)",
+            "Speed (Secondary Algorithm)"});
+            this.comboBoxSecondGraphType.Location = new System.Drawing.Point(3, 3);
+            this.comboBoxSecondGraphType.Name = "comboBoxSecondGraphType";
+            this.comboBoxSecondGraphType.Size = new System.Drawing.Size(208, 21);
+            this.comboBoxSecondGraphType.TabIndex = 151;
+            // 
+            // comboBoxSecondGraphCoverage
+            // 
+            this.comboBoxSecondGraphCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxSecondGraphCoverage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSecondGraphCoverage.FormattingEnabled = true;
+            this.comboBoxSecondGraphCoverage.Items.AddRange(new object[] {
+            "1 Minute",
+            "1 Hour",
+            "1 Day",
+            "1 Month",
+            "1 Year"});
+            this.comboBoxSecondGraphCoverage.Location = new System.Drawing.Point(217, 3);
+            this.comboBoxSecondGraphCoverage.Name = "comboBoxSecondGraphCoverage";
+            this.comboBoxSecondGraphCoverage.Size = new System.Drawing.Size(78, 21);
+            this.comboBoxSecondGraphCoverage.TabIndex = 152;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.comboBoxCurrency);
@@ -361,7 +508,7 @@
             this.groupBox4.Controls.Add(this.labelPriceMonth);
             this.groupBox4.Location = new System.Drawing.Point(11, 104);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(391, 134);
+            this.groupBox4.Size = new System.Drawing.Size(345, 134);
             this.groupBox4.TabIndex = 154;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Profitability";
@@ -438,69 +585,6 @@
             this.labelPriceMonth.TabIndex = 141;
             this.labelPriceMonth.Text = "-";
             // 
-            // cartesianChartSpeedSecondaryAlgorithm
-            // 
-            this.cartesianChartSpeedSecondaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartSpeedSecondaryAlgorithm.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(408, 35);
-            this.cartesianChartSpeedSecondaryAlgorithm.Name = "cartesianChartSpeedSecondaryAlgorithm";
-            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(561, 203);
-            this.cartesianChartSpeedSecondaryAlgorithm.TabIndex = 153;
-            this.cartesianChartSpeedSecondaryAlgorithm.Text = "cartesianChart1";
-            // 
-            // cartesianChartFanSpeed
-            // 
-            this.cartesianChartFanSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartFanSpeed.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartFanSpeed.Location = new System.Drawing.Point(408, 35);
-            this.cartesianChartFanSpeed.Name = "cartesianChartFanSpeed";
-            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(561, 203);
-            this.cartesianChartFanSpeed.TabIndex = 152;
-            this.cartesianChartFanSpeed.Text = "cartesianChart1";
-            // 
-            // cartesianChartSpeedPrimaryAlgorithm
-            // 
-            this.cartesianChartSpeedPrimaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartSpeedPrimaryAlgorithm.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartSpeedPrimaryAlgorithm.Location = new System.Drawing.Point(408, 35);
-            this.cartesianChartSpeedPrimaryAlgorithm.Name = "cartesianChartSpeedPrimaryAlgorithm";
-            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(561, 203);
-            this.cartesianChartSpeedPrimaryAlgorithm.TabIndex = 151;
-            this.cartesianChartSpeedPrimaryAlgorithm.Text = "cartesianChart1";
-            // 
-            // comboBoxGraphCoverage
-            // 
-            this.comboBoxGraphCoverage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxGraphCoverage.FormattingEnabled = true;
-            this.comboBoxGraphCoverage.Items.AddRange(new object[] {
-            "1 Minute",
-            "1 Hour",
-            "1 Day",
-            "1 Week"});
-            this.comboBoxGraphCoverage.Location = new System.Drawing.Point(625, 8);
-            this.comboBoxGraphCoverage.Name = "comboBoxGraphCoverage";
-            this.comboBoxGraphCoverage.Size = new System.Drawing.Size(94, 21);
-            this.comboBoxGraphCoverage.TabIndex = 150;
-            this.comboBoxGraphCoverage.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphCoverage_SelectedIndexChanged);
-            // 
-            // comboBoxGraphType
-            // 
-            this.comboBoxGraphType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxGraphType.FormattingEnabled = true;
-            this.comboBoxGraphType.Items.AddRange(new object[] {
-            "Temperature",
-            "Speed (Primary Algorithm)",
-            "Speed (Secondary Algorithm)",
-            "Fan Speed"});
-            this.comboBoxGraphType.Location = new System.Drawing.Point(408, 8);
-            this.comboBoxGraphType.Name = "comboBoxGraphType";
-            this.comboBoxGraphType.Size = new System.Drawing.Size(211, 21);
-            this.comboBoxGraphType.TabIndex = 149;
-            this.comboBoxGraphType.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphType_SelectedIndexChanged);
-            // 
             // labelCurrentSecondaryPool
             // 
             this.labelCurrentSecondaryPool.Location = new System.Drawing.Point(96, 43);
@@ -509,25 +593,14 @@
             this.labelCurrentSecondaryPool.TabIndex = 148;
             this.labelCurrentSecondaryPool.Text = "-";
             // 
-            // cartesianChartTemperature
-            // 
-            this.cartesianChartTemperature.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartTemperature.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartTemperature.Location = new System.Drawing.Point(408, 35);
-            this.cartesianChartTemperature.Name = "cartesianChartTemperature";
-            this.cartesianChartTemperature.Size = new System.Drawing.Size(561, 203);
-            this.cartesianChartTemperature.TabIndex = 145;
-            this.cartesianChartTemperature.Text = "cartesianChart1";
-            // 
             // dataGridViewDevices
             // 
             this.dataGridViewDevices.AllowUserToAddRows = false;
             this.dataGridViewDevices.AllowUserToDeleteRows = false;
             this.dataGridViewDevices.AllowUserToResizeColumns = false;
             this.dataGridViewDevices.AllowUserToResizeRows = false;
-            dataGridViewCellStyle16.BackColor = System.Drawing.Color.LightGray;
-            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
+            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -535,14 +608,14 @@
             this.dataGridViewDevices.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDevices.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridViewDevices.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewDevices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDevices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.enabled,
@@ -573,9 +646,9 @@
             // 
             // enabled
             // 
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle3;
             this.enabled.FalseValue = "";
             this.enabled.HeaderText = "";
             this.enabled.Name = "enabled";
@@ -612,8 +685,8 @@
             // 
             // speed
             // 
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle4;
             this.speed.FillWeight = 110F;
             this.speed.HeaderText = "Speed(s)";
             this.speed.Name = "speed";
@@ -624,8 +697,8 @@
             // 
             // shares
             // 
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle5;
             this.shares.HeaderText = "Shares";
             this.shares.Name = "shares";
             this.shares.ReadOnly = true;
@@ -637,8 +710,8 @@
             // 
             this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle6;
             this.activity.HeaderText = "Act.";
             this.activity.Name = "activity";
             this.activity.ReadOnly = true;
@@ -648,8 +721,8 @@
             // 
             // temperature
             // 
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle7;
             this.temperature.HeaderText = "Temp.";
             this.temperature.Name = "temperature";
             this.temperature.ReadOnly = true;
@@ -659,8 +732,8 @@
             // 
             // fan
             // 
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle8;
             this.fan.HeaderText = "Fan";
             this.fan.Name = "fan";
             this.fan.ReadOnly = true;
@@ -670,8 +743,8 @@
             // 
             // power
             // 
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power.DefaultCellStyle = dataGridViewCellStyle9;
             this.power.HeaderText = "Power";
             this.power.Name = "power";
             this.power.ReadOnly = true;
@@ -681,8 +754,8 @@
             // 
             // power_limit
             // 
-            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle10;
             this.power_limit.HeaderText = "";
             this.power_limit.Name = "power_limit";
             this.power_limit.ReadOnly = true;
@@ -692,8 +765,8 @@
             // 
             // core_clock
             // 
-            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle26;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle11;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
             this.core_clock.ReadOnly = true;
@@ -703,8 +776,8 @@
             // 
             // core_voltage
             // 
-            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle27;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle12;
             this.core_voltage.HeaderText = "";
             this.core_voltage.Name = "core_voltage";
             this.core_voltage.ReadOnly = true;
@@ -714,8 +787,8 @@
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle28;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle13;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
             this.memory_clock.ReadOnly = true;
@@ -725,8 +798,8 @@
             // 
             // memory_used
             // 
-            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_used.DefaultCellStyle = dataGridViewCellStyle29;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_used.DefaultCellStyle = dataGridViewCellStyle14;
             this.memory_used.HeaderText = "(Used)";
             this.memory_used.Name = "memory_used";
             this.memory_used.ReadOnly = true;
@@ -734,8 +807,8 @@
             // 
             // memory_reserved
             // 
-            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle30;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle15;
             this.memory_reserved.HeaderText = "(Rsvd.)";
             this.memory_reserved.Name = "memory_reserved";
             this.memory_reserved.ReadOnly = true;
@@ -2795,6 +2868,16 @@
             this.buttonReleaseMemory.UseVisualStyleBackColor = true;
             this.buttonReleaseMemory.Click += new System.EventHandler(this.buttonReleaseMemory_Click);
             // 
+            // cartesianChartPower
+            // 
+            this.cartesianChartPower.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartPower.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartPower.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartPower.Name = "cartesianChartPower";
+            this.cartesianChartPower.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartPower.TabIndex = 154;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2818,6 +2901,10 @@
             this.tabControlMainForm.ResumeLayout(false);
             this.tabPageDashboard.ResumeLayout(false);
             this.tabPageDashboard.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).EndInit();
@@ -3095,5 +3182,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ComboBox comboBoxSecondGraphType;
+        private System.Windows.Forms.ComboBox comboBoxSecondGraphCoverage;
+        private LiveCharts.WinForms.CartesianChart cartesianChartDeviceActivity;
+        private LiveCharts.WinForms.CartesianChart cartesianChartPower;
     }
 }
