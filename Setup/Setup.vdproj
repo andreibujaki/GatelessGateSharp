@@ -706,12 +706,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3F257B72128849FFBA6BAEFBFEC78450"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -775,6 +769,12 @@
         "OwnerKey" = "8:_005BA131E503E55D3259C325B392A218"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_3F257B72128849FFBA6BAEFBFEC78450"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -815,7 +815,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Gateless_Gate_Sharp_1.2.9_alpha_Setup.msi"
+        "OutputFilename" = "8:Gateless_Gate_Sharp_1.2.10_alpha_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -906,7 +906,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.2.9.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.2.10.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_005BA131E503E55D3259C325B392A218"
@@ -1390,7 +1390,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.2.9.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.2.10.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3F257B72128849FFBA6BAEFBFEC78450"
@@ -1623,7 +1623,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpCL, Version=1.2.9.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpCL, Version=1.2.10.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_57A6C17ADC734FD2BACA5B7C1923253E"
@@ -2014,7 +2014,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.2.9.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.2.10.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_94470E592BF34FCEBF3FC318A54CC736"
@@ -2225,7 +2225,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.2.9.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.2.10.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_ADA849628BC355DC41F4B2D4F6ACE3E5"
@@ -3176,15 +3176,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
-        "ProductCode" = "8:{3CE62F3E-0E1B-423D-AC70-B64A63A5357A}"
-        "PackageCode" = "8:{3C50F502-3B6B-4087-A3F9-D761AF97DDC6}"
+        "ProductCode" = "8:{0D7272BA-171F-4601-8149-1F99DAB078B3}"
+        "PackageCode" = "8:{4D07DD12-7E72-464F-8282-27824D4911DA}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.9"
+        "ProductVersion" = "8:1.2.10"
         "Manufacturer" = "8:Zawawa Software LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

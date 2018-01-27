@@ -11,7 +11,7 @@ namespace GatelessGateSharp {
 
         // I really need the DEVFEE to continue to develop this miner and to make my wife happy. Thank you. - zawawa
         public static readonly int DevFeePercentage = 1;
-        public static readonly int DevFeeDurationInSeconds = 120;
+        public static readonly int DevFeeDurationInSeconds = 60;
         public static readonly int DevFeeInitialDelayInSeconds = 15 * 60;
         public static readonly string DevFeeUsernamePostfix = ".DEVFEE";
         public static readonly string DevFeeBitcoinAddress = "1k1WhysGsp7kNRy4atzzr6MaDrBiXw7wm";

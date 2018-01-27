@@ -74,7 +74,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.9";
+        public static string appVersion = "1.2.10";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -396,6 +396,117 @@ namespace GatelessGateSharp {
 
         static string OldAppStateFilePath {
             get { return mAppStateFileName; }
+        }
+
+        class CommandLineParameter {
+            string mParameterName;
+            string mParameterValue;
+
+            public string Name { get { return mParameterName; } }
+            public string Value { get { return mParameterValue; } }
+
+            public CommandLineParameter(string parameterName, string parameterValue = "true") {
+                mParameterName = parameterName;
+                mParameterValue = parameterValue;
+            }
+
+            public CommandLineParameter(string s) {
+                Regex re = new Regex(@"^--([a-zA-Z0-9_-]+)=(.*)$");
+                Match match;
+                if ((match = re.Match(s)).Success) {
+                    mParameterName = match.Groups[1].Value;
+                    mParameterValue = match.Groups[2].Value;
+                    mParameterName = (new Regex(@"-")).Replace(mParameterName, "_");
+                } else {
+                    re = new Regex(@"^--([a-zA-Z0-9_-]+)$");
+                    if ((match = re.Match(s)).Success) {
+                        mParameterName = match.Groups[1].Value;
+                        mParameterValue = "true";
+                        mParameterName = (new Regex(@"-")).Replace(mParameterName, "_");
+                    } else {
+                        throw new System.ArgumentException("\"" + s + "\" is not a valid command-line option.");
+                    }
+                }
+
+                Console.WriteLine("Parameter Name: " + Name);
+                Console.WriteLine("Parameter Value: " + Value);
+            }
+        }
+
+        private void ParseCommandLineArguments(string[] arguments) {
+            var list = new List<CommandLineParameter> { };
+            foreach (var argument in arguments) {
+                try {
+                    list.Add(new CommandLineParameter(argument));
+                } catch (Exception ex) {
+                    Logger("Invalid argument: " + argument);
+                }
+            }
+
+            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+
+            foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
+                var tag = (string)(comboBox.GetType().GetProperty("Tag").GetValue(comboBox));
+                if (tag == null)
+                    continue;
+                var match = regex.Match(tag);
+                var type = match.Success ? match.Groups[1].Value : null;
+                var name = match.Success ? match.Groups[2].Value : null;
+                if (type == "parameter") {
+                    foreach (var param in list) {
+                        if (param.Name == name) {
+                            if (name == "currency" && !comboBox.Items.Contains(param.Value))
+                                comboBox.Items.Add(param.Value);
+                            try { comboBox.SelectedItem = param.Value; } catch (Exception) { }
+                        }
+                    }
+                }
+            }
+
+            foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
+                var tag = (string)(textBox.GetType().GetProperty("Tag").GetValue(textBox));
+                if (tag == null)
+                    continue;
+                var match = regex.Match(tag);
+                var type = match.Success ? match.Groups[1].Value : null;
+                var name = match.Success ? match.Groups[2].Value : null;
+                if (type == "parameter") {
+                    foreach (var param in list) {
+                        if (param.Name == name)
+                            textBox.Text = param.Value;
+                    }
+                }
+            }
+
+            foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
+                var tag = (string)(checkBox.GetType().GetProperty("Tag").GetValue(checkBox));
+                if (tag == null)
+                    continue;
+                var match = regex.Match(tag);
+                var type = match.Success ? match.Groups[1].Value : null;
+                var name = match.Success ? match.Groups[2].Value : null;
+                if (type == "parameter") {
+                    foreach (var param in list) {
+                        if (param.Name == name)
+                            checkBox.Checked = param.Value == "true";
+                    }
+                }
+            }
+
+            foreach (var numericUpDown in Utilities.FindAllChildrenByType<NumericUpDown>(this)) {
+                var tag = (string)(numericUpDown.GetType().GetProperty("Tag").GetValue(numericUpDown));
+                if (tag == null)
+                    continue;
+                var match = regex.Match(tag);
+                var type = match.Success ? match.Groups[1].Value : null;
+                var name = match.Success ? match.Groups[2].Value : null;
+                if (type == "parameter") {
+                    foreach (var param in list) {
+                        if (param.Name == name)
+                            numericUpDown.Value = decimal.Parse(param.Value);
+                    }
+                }
+            }
         }
 
         private void LoadSettingsFromDatabase(string filePath = null) {
@@ -953,7 +1064,7 @@ namespace GatelessGateSharp {
             try {
                 RunNGen();
             } catch (Exception ex) {
-                Logger("Exception in RunNGen(): " + ex.Message + ex.StackTrace);
+                Logger("Exception in RuznNGen(): " + ex.Message + ex.StackTrace);
             }
 
             try {
@@ -968,6 +1079,8 @@ namespace GatelessGateSharp {
             } catch (Exception ex) {
                 Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
             }
+
+            ParseCommandLineArguments(Environment.GetCommandLineArgs());
 
             UpdateSettingBackupList();
 
@@ -4597,7 +4710,22 @@ namespace GatelessGateSharp {
                         mCPUUsage = (int)counter.NextValue();
                         System.Threading.Thread.Sleep(1000);
                     }
-                } catch (Exception ex) { ExceptionLogger(ex); }
+                } catch (Exception) {
+                    // https://support.microsoft.com/en-us/help/300956/how-to-manually-rebuild-performance-counter-library-values
+                    try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Perflib", "Last Counter", 1846); } catch (Exception) { }
+                    try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Perflib", "Last Help", 1847); } catch (Exception) { }
+                    try {
+                        using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"System\CurrentControlSet\Services\Processor", true)) {
+                            if (key != null) {
+                                try { key.DeleteValue("First Counter"); } catch (Exception) { }
+                                try { key.DeleteValue("First Help"); } catch (Exception) { }
+                                try { key.DeleteValue("Last Counter"); } catch (Exception) { }
+                                try { key.DeleteValue("Last Help"); } catch (Exception) { }
+                            }
+                        }
+                    } catch (Exception) { }
+                }
+                System.Threading.Thread.Sleep(1000);
             }
         }
 
