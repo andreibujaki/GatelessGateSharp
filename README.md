@@ -5,9 +5,9 @@
 Gateless Gate Sharp is the first open-source OpenCL dual ETH/XMR/PASC/LBC/FTC miner for Windows operating systems. It focuses on performance, stability, and ease of use.
 Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), this miner aims at stability with a much simpler design and the managed .NET Framework.
 
-* [Gateless_Gate_Sharp_1.2.8_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.2.8-alpha/Gateless_Gate_Sharp_1.2.8_alpha_Setup.msi) (Windows x64 Installer; highly recommended)
-* [Gateless_Gate_Sharp_1.2.8_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.2.8-alpha/Gateless_Gate_Sharp_1.2.8_alpha.7z)
-* [Gateless_Gate_Sharp_1.2.8_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.2.8-alpha/Gateless_Gate_Sharp_1.2.8_alpha.zip)
+* [Gateless_Gate_Sharp_1.2.9_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.2.9-alpha/Gateless_Gate_Sharp_1.2.9_alpha_Setup.msi) (Windows x64 Installer; highly recommended)
+* [Gateless_Gate_Sharp_1.2.9_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.2.9-alpha/Gateless_Gate_Sharp_1.2.9_alpha.7z)
+* [Gateless_Gate_Sharp_1.2.9_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.2.9-alpha/Gateless_Gate_Sharp_1.2.9_alpha.zip)
 
 * [Gateless_Gate_Sharp_1.1.21_beta_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.21-beta/Gateless_Gate_Sharp_1.1.21_beta_Setup.msi) (Windows x64 Installer; highly recommended)
 * [Gateless_Gate_Sharp_1.1.21_beta.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.1.21-beta/Gateless_Gate_Sharp_1.1.21_beta.7z)
