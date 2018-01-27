@@ -1874,6 +1874,7 @@ namespace GatelessGateSharp {
                     if (coreClock >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() + " MHz";
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Style.ForeColor =
+                                                                   device.DefaultCoreClock < 0 ? Color.Black :
                                                                    coreClock > device.DefaultCoreClock ? Color.Red :
                                                                    coreClock < device.DefaultCoreClock ? Color.Blue :
                                                                                   Color.Black;
@@ -1882,6 +1883,7 @@ namespace GatelessGateSharp {
                     if (coreVoltage >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = coreVoltage.ToString() + " mV";
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Style.ForeColor =
+                                                                   device.DefaultCoreVoltage < 0 ? Color.Black :
                                                                    coreVoltage > device.DefaultCoreVoltage ? Color.Red :
                                                                    coreVoltage < device.DefaultCoreVoltage ? Color.Blue :
                                                                                   Color.Black;
@@ -1890,6 +1892,7 @@ namespace GatelessGateSharp {
                     if (memoryClock >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Style.ForeColor =
+                                                                    device.DefaultMemoryClock < 0? Color.Black :
                                                                    memoryClock > device.DefaultMemoryClock ? Color.Red :
                                                                    memoryClock < device.DefaultMemoryClock ? Color.Blue :
                                                                                   Color.Black;
