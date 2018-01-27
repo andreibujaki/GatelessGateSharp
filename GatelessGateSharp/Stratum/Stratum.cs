@@ -102,7 +102,6 @@ namespace GatelessGateSharp {
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
-        Thread mReconnectThread;
         private List<OpenCLDevice> mDevicesWithShare = new List<OpenCLDevice>();
         private int mLocalExtranonceSize = 1;
         private bool mReconnectionRequested = false;
@@ -143,6 +142,7 @@ namespace GatelessGateSharp {
                 device.IncrementAcceptedShares();
             }
             try { mMutex.ReleaseMutex(); } catch (Exception) { }
+            MainForm.Instance.ReportAcceptedShare();
         }
 
         protected void ReportShareRejection() {
@@ -155,6 +155,7 @@ namespace GatelessGateSharp {
                 device.IncrementRejectedShares();
             }
             try { mMutex.ReleaseMutex(); } catch (Exception) { }
+            MainForm.Instance.ReportRejectedShare();
         }
 
         public void Stop() {
@@ -255,6 +256,11 @@ namespace GatelessGateSharp {
                     mClient = null;
                 } catch (Exception) { }
             } while (!Stopped && UnrecoverableException == null);
+        }
+
+        ~Stratum() {
+            if (mStreamReaderThread != null)
+                mStreamReaderThread.Abort();
         }
     }
 }

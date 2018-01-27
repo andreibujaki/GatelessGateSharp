@@ -29,25 +29,27 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.cartesianChartCPUUsage = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartPower = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartDeviceActivity = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartFanSpeed = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartTemperature = new LiveCharts.WinForms.CartesianChart();
@@ -275,7 +277,10 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerFailOver = new System.Windows.Forms.Timer(this.components);
             this.buttonReleaseMemory = new System.Windows.Forms.Button();
-            this.cartesianChartPower = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Minute = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Hour = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Day = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Month = new LiveCharts.WinForms.CartesianChart();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -357,11 +362,12 @@
             // 
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(369, 8);
+            this.splitContainer1.Location = new System.Drawing.Point(320, 8);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartCPUUsage);
             this.splitContainer1.Panel1.Controls.Add(this.cartesianChartPower);
             this.splitContainer1.Panel1.Controls.Add(this.cartesianChartDeviceActivity);
             this.splitContainer1.Panel1.Controls.Add(this.cartesianChartFanSpeed);
@@ -371,13 +377,39 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartShare1Month);
+            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartShare1Day);
+            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartShare1Hour);
+            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartShare1Minute);
             this.splitContainer1.Panel2.Controls.Add(this.cartesianChartSpeedSecondaryAlgorithm);
             this.splitContainer1.Panel2.Controls.Add(this.cartesianChartSpeedPrimaryAlgorithm);
             this.splitContainer1.Panel2.Controls.Add(this.comboBoxSecondGraphType);
             this.splitContainer1.Panel2.Controls.Add(this.comboBoxSecondGraphCoverage);
-            this.splitContainer1.Size = new System.Drawing.Size(600, 230);
-            this.splitContainer1.SplitterDistance = 298;
+            this.splitContainer1.Size = new System.Drawing.Size(649, 230);
+            this.splitContainer1.SplitterDistance = 321;
             this.splitContainer1.TabIndex = 144;
+            // 
+            // cartesianChartCPUUsage
+            // 
+            this.cartesianChartCPUUsage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartCPUUsage.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartCPUUsage.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartCPUUsage.Name = "cartesianChartCPUUsage";
+            this.cartesianChartCPUUsage.Size = new System.Drawing.Size(315, 197);
+            this.cartesianChartCPUUsage.TabIndex = 154;
+            this.cartesianChartCPUUsage.Text = "cartesianChart1";
+            // 
+            // cartesianChartPower
+            // 
+            this.cartesianChartPower.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartPower.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartPower.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartPower.Name = "cartesianChartPower";
+            this.cartesianChartPower.Size = new System.Drawing.Size(315, 197);
+            this.cartesianChartPower.TabIndex = 154;
+            this.cartesianChartPower.Visible = false;
             // 
             // cartesianChartDeviceActivity
             // 
@@ -386,7 +418,7 @@
             this.cartesianChartDeviceActivity.BackColor = System.Drawing.Color.Black;
             this.cartesianChartDeviceActivity.Location = new System.Drawing.Point(3, 30);
             this.cartesianChartDeviceActivity.Name = "cartesianChartDeviceActivity";
-            this.cartesianChartDeviceActivity.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartDeviceActivity.Size = new System.Drawing.Size(315, 197);
             this.cartesianChartDeviceActivity.TabIndex = 153;
             // 
             // cartesianChartFanSpeed
@@ -396,7 +428,7 @@
             this.cartesianChartFanSpeed.BackColor = System.Drawing.Color.Black;
             this.cartesianChartFanSpeed.Location = new System.Drawing.Point(3, 30);
             this.cartesianChartFanSpeed.Name = "cartesianChartFanSpeed";
-            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(315, 197);
             this.cartesianChartFanSpeed.TabIndex = 152;
             this.cartesianChartFanSpeed.Text = "cartesianChart1";
             // 
@@ -407,7 +439,7 @@
             this.cartesianChartTemperature.BackColor = System.Drawing.Color.Black;
             this.cartesianChartTemperature.Location = new System.Drawing.Point(3, 30);
             this.cartesianChartTemperature.Name = "cartesianChartTemperature";
-            this.cartesianChartTemperature.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartTemperature.Size = new System.Drawing.Size(315, 197);
             this.cartesianChartTemperature.TabIndex = 145;
             this.cartesianChartTemperature.Text = "cartesianChart1";
             // 
@@ -420,11 +452,13 @@
             this.comboBoxGraphType.Items.AddRange(new object[] {
             "Temperature",
             "Fan Speed",
-            "Activity"});
+            "Activity",
+            "CPU Usage"});
             this.comboBoxGraphType.Location = new System.Drawing.Point(3, 3);
             this.comboBoxGraphType.Name = "comboBoxGraphType";
-            this.comboBoxGraphType.Size = new System.Drawing.Size(207, 21);
+            this.comboBoxGraphType.Size = new System.Drawing.Size(230, 21);
             this.comboBoxGraphType.TabIndex = 149;
+            this.comboBoxGraphType.Tag = "parameter:graph_type";
             this.comboBoxGraphType.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphType_SelectedIndexChanged);
             // 
             // comboBoxGraphCoverage
@@ -438,10 +472,11 @@
             "1 Day",
             "1 Month",
             "1 Year"});
-            this.comboBoxGraphCoverage.Location = new System.Drawing.Point(217, 3);
+            this.comboBoxGraphCoverage.Location = new System.Drawing.Point(240, 3);
             this.comboBoxGraphCoverage.Name = "comboBoxGraphCoverage";
             this.comboBoxGraphCoverage.Size = new System.Drawing.Size(78, 21);
             this.comboBoxGraphCoverage.TabIndex = 150;
+            this.comboBoxGraphCoverage.Tag = "parameter:graph_coverage";
             this.comboBoxGraphCoverage.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphCoverage_SelectedIndexChanged);
             // 
             // cartesianChartSpeedSecondaryAlgorithm
@@ -451,7 +486,7 @@
             this.cartesianChartSpeedSecondaryAlgorithm.BackColor = System.Drawing.Color.Black;
             this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(3, 30);
             this.cartesianChartSpeedSecondaryAlgorithm.Name = "cartesianChartSpeedSecondaryAlgorithm";
-            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(318, 197);
             this.cartesianChartSpeedSecondaryAlgorithm.TabIndex = 153;
             this.cartesianChartSpeedSecondaryAlgorithm.Text = "cartesianChart1";
             // 
@@ -462,7 +497,7 @@
             this.cartesianChartSpeedPrimaryAlgorithm.BackColor = System.Drawing.Color.Black;
             this.cartesianChartSpeedPrimaryAlgorithm.Location = new System.Drawing.Point(3, 30);
             this.cartesianChartSpeedPrimaryAlgorithm.Name = "cartesianChartSpeedPrimaryAlgorithm";
-            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(292, 197);
+            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(318, 197);
             this.cartesianChartSpeedPrimaryAlgorithm.TabIndex = 151;
             this.cartesianChartSpeedPrimaryAlgorithm.Text = "cartesianChart1";
             // 
@@ -474,11 +509,14 @@
             this.comboBoxSecondGraphType.FormattingEnabled = true;
             this.comboBoxSecondGraphType.Items.AddRange(new object[] {
             "Speed (Primary Algorithm)",
-            "Speed (Secondary Algorithm)"});
+            "Speed (Secondary Algorithm)",
+            "Share"});
             this.comboBoxSecondGraphType.Location = new System.Drawing.Point(3, 3);
             this.comboBoxSecondGraphType.Name = "comboBoxSecondGraphType";
-            this.comboBoxSecondGraphType.Size = new System.Drawing.Size(208, 21);
+            this.comboBoxSecondGraphType.Size = new System.Drawing.Size(234, 21);
             this.comboBoxSecondGraphType.TabIndex = 151;
+            this.comboBoxSecondGraphType.Tag = "parameter:second_graph_type";
+            this.comboBoxSecondGraphType.SelectedIndexChanged += new System.EventHandler(this.comboBoxSecondGraphType_SelectedIndexChanged);
             // 
             // comboBoxSecondGraphCoverage
             // 
@@ -491,10 +529,12 @@
             "1 Day",
             "1 Month",
             "1 Year"});
-            this.comboBoxSecondGraphCoverage.Location = new System.Drawing.Point(217, 3);
+            this.comboBoxSecondGraphCoverage.Location = new System.Drawing.Point(243, 3);
             this.comboBoxSecondGraphCoverage.Name = "comboBoxSecondGraphCoverage";
             this.comboBoxSecondGraphCoverage.Size = new System.Drawing.Size(78, 21);
             this.comboBoxSecondGraphCoverage.TabIndex = 152;
+            this.comboBoxSecondGraphCoverage.Tag = "parameter:second_graph_coverage";
+            this.comboBoxSecondGraphCoverage.SelectedIndexChanged += new System.EventHandler(this.comboBoxSecondGraphCoverage_SelectedIndexChanged);
             // 
             // groupBox4
             // 
@@ -508,7 +548,7 @@
             this.groupBox4.Controls.Add(this.labelPriceMonth);
             this.groupBox4.Location = new System.Drawing.Point(11, 104);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(345, 134);
+            this.groupBox4.Size = new System.Drawing.Size(303, 134);
             this.groupBox4.TabIndex = 154;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Profitability";
@@ -524,6 +564,7 @@
             this.comboBoxCurrency.Name = "comboBoxCurrency";
             this.comboBoxCurrency.Size = new System.Drawing.Size(57, 21);
             this.comboBoxCurrency.TabIndex = 143;
+            this.comboBoxCurrency.Tag = "parameter:currency";
             this.comboBoxCurrency.SelectedIndexChanged += new System.EventHandler(this.comboBoxCurrency_SelectedIndexChanged);
             // 
             // label12
@@ -599,8 +640,8 @@
             this.dataGridViewDevices.AllowUserToDeleteRows = false;
             this.dataGridViewDevices.AllowUserToResizeColumns = false;
             this.dataGridViewDevices.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
-            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle16.BackColor = System.Drawing.Color.LightGray;
+            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -608,14 +649,14 @@
             this.dataGridViewDevices.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDevices.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridViewDevices.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
             this.dataGridViewDevices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDevices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.enabled,
@@ -646,9 +687,9 @@
             // 
             // enabled
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle18.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle18;
             this.enabled.FalseValue = "";
             this.enabled.HeaderText = "";
             this.enabled.Name = "enabled";
@@ -685,8 +726,8 @@
             // 
             // speed
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle19;
             this.speed.FillWeight = 110F;
             this.speed.HeaderText = "Speed(s)";
             this.speed.Name = "speed";
@@ -697,8 +738,8 @@
             // 
             // shares
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle20;
             this.shares.HeaderText = "Shares";
             this.shares.Name = "shares";
             this.shares.ReadOnly = true;
@@ -710,8 +751,8 @@
             // 
             this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle21;
             this.activity.HeaderText = "Act.";
             this.activity.Name = "activity";
             this.activity.ReadOnly = true;
@@ -721,8 +762,8 @@
             // 
             // temperature
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle22;
             this.temperature.HeaderText = "Temp.";
             this.temperature.Name = "temperature";
             this.temperature.ReadOnly = true;
@@ -732,8 +773,8 @@
             // 
             // fan
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle23;
             this.fan.HeaderText = "Fan";
             this.fan.Name = "fan";
             this.fan.ReadOnly = true;
@@ -743,8 +784,8 @@
             // 
             // power
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power.DefaultCellStyle = dataGridViewCellStyle24;
             this.power.HeaderText = "Power";
             this.power.Name = "power";
             this.power.ReadOnly = true;
@@ -754,8 +795,8 @@
             // 
             // power_limit
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle25;
             this.power_limit.HeaderText = "";
             this.power_limit.Name = "power_limit";
             this.power_limit.ReadOnly = true;
@@ -765,8 +806,8 @@
             // 
             // core_clock
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle26;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
             this.core_clock.ReadOnly = true;
@@ -776,8 +817,8 @@
             // 
             // core_voltage
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle27;
             this.core_voltage.HeaderText = "";
             this.core_voltage.Name = "core_voltage";
             this.core_voltage.ReadOnly = true;
@@ -787,8 +828,8 @@
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle28;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
             this.memory_clock.ReadOnly = true;
@@ -798,8 +839,8 @@
             // 
             // memory_used
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_used.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_used.DefaultCellStyle = dataGridViewCellStyle29;
             this.memory_used.HeaderText = "(Used)";
             this.memory_used.Name = "memory_used";
             this.memory_used.ReadOnly = true;
@@ -807,8 +848,8 @@
             // 
             // memory_reserved
             // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle30;
             this.memory_reserved.HeaderText = "(Rsvd.)";
             this.memory_reserved.Name = "memory_reserved";
             this.memory_reserved.ReadOnly = true;
@@ -932,6 +973,7 @@
             this.textBoxLbryAddress.Name = "textBoxLbryAddress";
             this.textBoxLbryAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxLbryAddress.TabIndex = 21;
+            this.textBoxLbryAddress.Tag = "parameter:lbry_address";
             this.textBoxLbryAddress.TextChanged += new System.EventHandler(this.textBoxLbryAddress_TextChanged);
             // 
             // textBoxPascalAddress
@@ -941,6 +983,7 @@
             this.textBoxPascalAddress.Name = "textBoxPascalAddress";
             this.textBoxPascalAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxPascalAddress.TabIndex = 19;
+            this.textBoxPascalAddress.Tag = "parameter:pascal_address";
             this.textBoxPascalAddress.TextChanged += new System.EventHandler(this.textBoxPascalAddress_TextChanged);
             // 
             // label27
@@ -968,6 +1011,7 @@
             this.textBoxBitcoinAddress.Name = "textBoxBitcoinAddress";
             this.textBoxBitcoinAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxBitcoinAddress.TabIndex = 7;
+            this.textBoxBitcoinAddress.Tag = "parameter:bitcoin_address";
             this.textBoxBitcoinAddress.TextChanged += new System.EventHandler(this.textBoxBitcoinAddress_TextChanged);
             // 
             // button5
@@ -1005,6 +1049,7 @@
             this.textBoxEthereumAddress.Name = "textBoxEthereumAddress";
             this.textBoxEthereumAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxEthereumAddress.TabIndex = 9;
+            this.textBoxEthereumAddress.Tag = "parameter:ethereum_address";
             this.textBoxEthereumAddress.TextChanged += new System.EventHandler(this.textBoxEthereumAddress_TextChanged);
             // 
             // label15
@@ -1023,6 +1068,7 @@
             this.textBoxMoneroAddress.Name = "textBoxMoneroAddress";
             this.textBoxMoneroAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxMoneroAddress.TabIndex = 11;
+            this.textBoxMoneroAddress.Tag = "parameter:monero_address";
             this.textBoxMoneroAddress.TextChanged += new System.EventHandler(this.textBoxMoneroAddress_TextChanged);
             // 
             // buttonMoneroBalance
@@ -1063,6 +1109,7 @@
             this.textBoxZcashAddress.Name = "textBoxZcashAddress";
             this.textBoxZcashAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxZcashAddress.TabIndex = 13;
+            this.textBoxZcashAddress.Tag = "parameter:zcash_address";
             this.textBoxZcashAddress.Visible = false;
             this.textBoxZcashAddress.TextChanged += new System.EventHandler(this.textBoxZcashAddress_TextChanged);
             // 
@@ -1095,6 +1142,7 @@
             this.textBoxRigID.Name = "textBoxRigID";
             this.textBoxRigID.Size = new System.Drawing.Size(285, 20);
             this.textBoxRigID.TabIndex = 27;
+            this.textBoxRigID.Tag = "parameter:pool_rig_id";
             this.textBoxRigID.TextChanged += new System.EventHandler(this.textBoxRigID_TextChanged);
             // 
             // label1
@@ -1121,6 +1169,7 @@
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(285, 20);
             this.textBoxEmail.TabIndex = 29;
+            this.textBoxEmail.Tag = "parameter:pool_email";
             this.textBoxEmail.TextChanged += new System.EventHandler(this.textBoxEmail_TextChanged);
             // 
             // groupBoxPoolPriorities
@@ -1385,6 +1434,7 @@
             this.comboBoxCustomPool1SecondaryAlgorithm.Name = "comboBoxCustomPool1SecondaryAlgorithm";
             this.comboBoxCustomPool1SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool1SecondaryAlgorithm.TabIndex = 54;
+            this.comboBoxCustomPool1SecondaryAlgorithm.Tag = "parameter:custom_pool1_secondary_algorithm";
             this.comboBoxCustomPool1SecondaryAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool1SecondaryAlgorithm_SelectedIndexChanged);
             // 
             // label165
@@ -1407,6 +1457,7 @@
             this.numericUpDownCustomPool1SecondaryPort.Name = "numericUpDownCustomPool1SecondaryPort";
             this.numericUpDownCustomPool1SecondaryPort.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool1SecondaryPort.TabIndex = 46;
+            this.numericUpDownCustomPool1SecondaryPort.Tag = "parameter:custom_pool1_secondary_port";
             this.numericUpDownCustomPool1SecondaryPort.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool1SecondaryPort_ValueChanged);
             // 
             // textBoxCustomPool1SecondaryHost
@@ -1415,6 +1466,7 @@
             this.textBoxCustomPool1SecondaryHost.Name = "textBoxCustomPool1SecondaryHost";
             this.textBoxCustomPool1SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool1SecondaryHost.TabIndex = 48;
+            this.textBoxCustomPool1SecondaryHost.Tag = "parameter:custom_pool1_secondary_host";
             this.textBoxCustomPool1SecondaryHost.TextChanged += new System.EventHandler(this.textBoxCustomPool1SecondaryHost_TextChanged);
             // 
             // textBoxCustomPool1SecondaryPassword
@@ -1423,6 +1475,7 @@
             this.textBoxCustomPool1SecondaryPassword.Name = "textBoxCustomPool1SecondaryPassword";
             this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1SecondaryPassword.TabIndex = 52;
+            this.textBoxCustomPool1SecondaryPassword.Tag = "parameter:custom_pool1_secondary_password";
             this.textBoxCustomPool1SecondaryPassword.TextChanged += new System.EventHandler(this.textBoxCustomPool1SecondaryPassword_TextChanged);
             // 
             // label166
@@ -1449,6 +1502,7 @@
             this.textBoxCustomPool1SecondaryLogin.Name = "textBoxCustomPool1SecondaryLogin";
             this.textBoxCustomPool1SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1SecondaryLogin.TabIndex = 50;
+            this.textBoxCustomPool1SecondaryLogin.Tag = "parameter:custom_pool1_secondary_login";
             this.textBoxCustomPool1SecondaryLogin.TextChanged += new System.EventHandler(this.textBoxCustomPool1SecondaryLogin_TextChanged);
             // 
             // label168
@@ -1477,6 +1531,7 @@
             this.comboBoxCustomPool1Algorithm.Name = "comboBoxCustomPool1Algorithm";
             this.comboBoxCustomPool1Algorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool1Algorithm.TabIndex = 45;
+            this.comboBoxCustomPool1Algorithm.Tag = "parameter:custom_pool1_algorithm";
             this.comboBoxCustomPool1Algorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool1Algorithm_SelectedIndexChanged);
             // 
             // checkBoxCustomPool1Enable
@@ -1486,6 +1541,7 @@
             this.checkBoxCustomPool1Enable.Name = "checkBoxCustomPool1Enable";
             this.checkBoxCustomPool1Enable.Size = new System.Drawing.Size(59, 17);
             this.checkBoxCustomPool1Enable.TabIndex = 0;
+            this.checkBoxCustomPool1Enable.Tag = "parameter:custom_pool1_enabled";
             this.checkBoxCustomPool1Enable.Text = "Enable";
             this.checkBoxCustomPool1Enable.UseVisualStyleBackColor = true;
             this.checkBoxCustomPool1Enable.CheckedChanged += new System.EventHandler(this.checkBoxCustomPool1Enable_CheckedChanged);
@@ -1510,6 +1566,7 @@
             this.numericUpDownCustomPool1Port.Name = "numericUpDownCustomPool1Port";
             this.numericUpDownCustomPool1Port.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool1Port.TabIndex = 2;
+            this.numericUpDownCustomPool1Port.Tag = "parameter:custom_pool1_port";
             this.numericUpDownCustomPool1Port.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool1Port_ValueChanged);
             // 
             // textBoxCustomPool1Host
@@ -1518,6 +1575,7 @@
             this.textBoxCustomPool1Host.Name = "textBoxCustomPool1Host";
             this.textBoxCustomPool1Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool1Host.TabIndex = 35;
+            this.textBoxCustomPool1Host.Tag = "parameter:custom_pool1_host";
             this.textBoxCustomPool1Host.TextChanged += new System.EventHandler(this.textBoxCustomPool1Host_TextChanged);
             // 
             // textBoxCustomPool1Password
@@ -1526,6 +1584,7 @@
             this.textBoxCustomPool1Password.Name = "textBoxCustomPool1Password";
             this.textBoxCustomPool1Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1Password.TabIndex = 41;
+            this.textBoxCustomPool1Password.Tag = "parameter:custom_pool1_password";
             this.textBoxCustomPool1Password.TextChanged += new System.EventHandler(this.textBoxCustomPool1Password_TextChanged);
             // 
             // label152
@@ -1552,6 +1611,7 @@
             this.textBoxCustomPool1Login.Name = "textBoxCustomPool1Login";
             this.textBoxCustomPool1Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1Login.TabIndex = 39;
+            this.textBoxCustomPool1Login.Tag = "parameter:custom_pool1_login";
             this.textBoxCustomPool1Login.TextChanged += new System.EventHandler(this.textBoxCustomPool1Login_TextChanged);
             // 
             // label154
@@ -1602,6 +1662,7 @@
             this.comboBoxCustomPool2SecondaryAlgorithm.Name = "comboBoxCustomPool2SecondaryAlgorithm";
             this.comboBoxCustomPool2SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool2SecondaryAlgorithm.TabIndex = 54;
+            this.comboBoxCustomPool2SecondaryAlgorithm.Tag = "parameter:custom_pool2_secondary_algorithm";
             this.comboBoxCustomPool2SecondaryAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool2SecondaryAlgorithm_SelectedIndexChanged);
             // 
             // label169
@@ -1624,6 +1685,7 @@
             this.numericUpDownCustomPool2SecondaryPort.Name = "numericUpDownCustomPool2SecondaryPort";
             this.numericUpDownCustomPool2SecondaryPort.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool2SecondaryPort.TabIndex = 46;
+            this.numericUpDownCustomPool2SecondaryPort.Tag = "parameter:custom_pool2_secondary_port";
             this.numericUpDownCustomPool2SecondaryPort.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool2SecondaryPort_ValueChanged);
             // 
             // textBoxCustomPool2SecondaryHost
@@ -1632,6 +1694,7 @@
             this.textBoxCustomPool2SecondaryHost.Name = "textBoxCustomPool2SecondaryHost";
             this.textBoxCustomPool2SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool2SecondaryHost.TabIndex = 48;
+            this.textBoxCustomPool2SecondaryHost.Tag = "parameter:custom_pool2_secondary_host";
             this.textBoxCustomPool2SecondaryHost.TextChanged += new System.EventHandler(this.textBoxCustomPool2SecondaryHost_TextChanged);
             // 
             // textBoxCustomPool2SecondaryPassword
@@ -1640,6 +1703,7 @@
             this.textBoxCustomPool2SecondaryPassword.Name = "textBoxCustomPool2SecondaryPassword";
             this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2SecondaryPassword.TabIndex = 52;
+            this.textBoxCustomPool2SecondaryPassword.Tag = "parameter:custom_pool2_secondary_password";
             this.textBoxCustomPool2SecondaryPassword.TextChanged += new System.EventHandler(this.textBoxCustomPool2SecondaryPassword_TextChanged);
             // 
             // label170
@@ -1666,6 +1730,7 @@
             this.textBoxCustomPool2SecondaryLogin.Name = "textBoxCustomPool2SecondaryLogin";
             this.textBoxCustomPool2SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2SecondaryLogin.TabIndex = 50;
+            this.textBoxCustomPool2SecondaryLogin.Tag = "parameter:custom_pool2_secondary_login";
             this.textBoxCustomPool2SecondaryLogin.TextChanged += new System.EventHandler(this.textBoxCustomPool2SecondaryLogin_TextChanged);
             // 
             // label172
@@ -1694,6 +1759,7 @@
             this.comboBoxCustomPool2Algorithm.Name = "comboBoxCustomPool2Algorithm";
             this.comboBoxCustomPool2Algorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool2Algorithm.TabIndex = 45;
+            this.comboBoxCustomPool2Algorithm.Tag = "parameter:custom_pool2_algorithm";
             this.comboBoxCustomPool2Algorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool2Algorithm_SelectedIndexChanged);
             // 
             // checkBoxCustomPool2Enable
@@ -1703,6 +1769,7 @@
             this.checkBoxCustomPool2Enable.Name = "checkBoxCustomPool2Enable";
             this.checkBoxCustomPool2Enable.Size = new System.Drawing.Size(59, 17);
             this.checkBoxCustomPool2Enable.TabIndex = 0;
+            this.checkBoxCustomPool2Enable.Tag = "parameter:custom_pool2_enabled";
             this.checkBoxCustomPool2Enable.Text = "Enable";
             this.checkBoxCustomPool2Enable.UseVisualStyleBackColor = true;
             this.checkBoxCustomPool2Enable.CheckedChanged += new System.EventHandler(this.checkBoxCustomPool2Enable_CheckedChanged);
@@ -1727,6 +1794,7 @@
             this.numericUpDownCustomPool2Port.Name = "numericUpDownCustomPool2Port";
             this.numericUpDownCustomPool2Port.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool2Port.TabIndex = 2;
+            this.numericUpDownCustomPool2Port.Tag = "parameter:custom_pool2_port";
             this.numericUpDownCustomPool2Port.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool2Port_ValueChanged);
             // 
             // textBoxCustomPool2Host
@@ -1735,6 +1803,7 @@
             this.textBoxCustomPool2Host.Name = "textBoxCustomPool2Host";
             this.textBoxCustomPool2Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool2Host.TabIndex = 35;
+            this.textBoxCustomPool2Host.Tag = "parameter:custom_pool2_host";
             this.textBoxCustomPool2Host.TextChanged += new System.EventHandler(this.textBoxCustomPool2Host_TextChanged);
             // 
             // textBoxCustomPool2Password
@@ -1743,6 +1812,7 @@
             this.textBoxCustomPool2Password.Name = "textBoxCustomPool2Password";
             this.textBoxCustomPool2Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2Password.TabIndex = 41;
+            this.textBoxCustomPool2Password.Tag = "parameter:custom_pool2_password";
             this.textBoxCustomPool2Password.TextChanged += new System.EventHandler(this.textBoxCustomPool2Password_TextChanged);
             // 
             // label157
@@ -1769,6 +1839,7 @@
             this.textBoxCustomPool2Login.Name = "textBoxCustomPool2Login";
             this.textBoxCustomPool2Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2Login.TabIndex = 39;
+            this.textBoxCustomPool2Login.Tag = "parameter:custom_pool2_login";
             this.textBoxCustomPool2Login.TextChanged += new System.EventHandler(this.textBoxCustomPool2Login_TextChanged);
             // 
             // label159
@@ -1819,6 +1890,7 @@
             this.comboBoxCustomPool3SecondaryAlgorithm.Name = "comboBoxCustomPool3SecondaryAlgorithm";
             this.comboBoxCustomPool3SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool3SecondaryAlgorithm.TabIndex = 54;
+            this.comboBoxCustomPool3SecondaryAlgorithm.Tag = "parameter:custom_pool3_secondary_algorithm";
             this.comboBoxCustomPool3SecondaryAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool3SecondaryAlgorithm_SelectedIndexChanged);
             // 
             // label173
@@ -1841,6 +1913,7 @@
             this.numericUpDownCustomPool3SecondaryPort.Name = "numericUpDownCustomPool3SecondaryPort";
             this.numericUpDownCustomPool3SecondaryPort.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool3SecondaryPort.TabIndex = 46;
+            this.numericUpDownCustomPool3SecondaryPort.Tag = "parameter:custom_pool3_secondary_port";
             this.numericUpDownCustomPool3SecondaryPort.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool3SecondaryPort_ValueChanged);
             // 
             // textBoxCustomPool3SecondaryHost
@@ -1849,6 +1922,7 @@
             this.textBoxCustomPool3SecondaryHost.Name = "textBoxCustomPool3SecondaryHost";
             this.textBoxCustomPool3SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool3SecondaryHost.TabIndex = 48;
+            this.textBoxCustomPool3SecondaryHost.Tag = "parameter:custom_pool3_secondary_host";
             this.textBoxCustomPool3SecondaryHost.TextChanged += new System.EventHandler(this.textBoxCustomPool3SecondaryHost_TextChanged);
             // 
             // textBoxCustomPool3SecondaryPassword
@@ -1857,6 +1931,7 @@
             this.textBoxCustomPool3SecondaryPassword.Name = "textBoxCustomPool3SecondaryPassword";
             this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3SecondaryPassword.TabIndex = 52;
+            this.textBoxCustomPool3SecondaryPassword.Tag = "parameter:custom_pool3_secondary_password";
             this.textBoxCustomPool3SecondaryPassword.TextChanged += new System.EventHandler(this.textBoxCustomPool3SecondaryPassword_TextChanged);
             // 
             // label174
@@ -1883,6 +1958,7 @@
             this.textBoxCustomPool3SecondaryLogin.Name = "textBoxCustomPool3SecondaryLogin";
             this.textBoxCustomPool3SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3SecondaryLogin.TabIndex = 50;
+            this.textBoxCustomPool3SecondaryLogin.Tag = "parameter:custom_pool3_secondary_login";
             this.textBoxCustomPool3SecondaryLogin.TextChanged += new System.EventHandler(this.textBoxCustomPool3SecondaryLogin_TextChanged);
             // 
             // label176
@@ -1911,6 +1987,7 @@
             this.comboBoxCustomPool3Algorithm.Name = "comboBoxCustomPool3Algorithm";
             this.comboBoxCustomPool3Algorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool3Algorithm.TabIndex = 45;
+            this.comboBoxCustomPool3Algorithm.Tag = "parameter:custom_pool3_algorithm";
             this.comboBoxCustomPool3Algorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool3Algorithm_SelectedIndexChanged);
             // 
             // checkBoxCustomPool3Enable
@@ -1920,6 +1997,7 @@
             this.checkBoxCustomPool3Enable.Name = "checkBoxCustomPool3Enable";
             this.checkBoxCustomPool3Enable.Size = new System.Drawing.Size(59, 17);
             this.checkBoxCustomPool3Enable.TabIndex = 0;
+            this.checkBoxCustomPool3Enable.Tag = "parameter:custom_pool3_enabled";
             this.checkBoxCustomPool3Enable.Text = "Enable";
             this.checkBoxCustomPool3Enable.UseVisualStyleBackColor = true;
             this.checkBoxCustomPool3Enable.CheckedChanged += new System.EventHandler(this.checkBoxCustomPool3Enable_CheckedChanged);
@@ -1944,6 +2022,7 @@
             this.numericUpDownCustomPool3Port.Name = "numericUpDownCustomPool3Port";
             this.numericUpDownCustomPool3Port.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool3Port.TabIndex = 2;
+            this.numericUpDownCustomPool3Port.Tag = "parameter:custom_pool3_port";
             this.numericUpDownCustomPool3Port.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool3Port_ValueChanged);
             // 
             // textBoxCustomPool3Host
@@ -1952,6 +2031,7 @@
             this.textBoxCustomPool3Host.Name = "textBoxCustomPool3Host";
             this.textBoxCustomPool3Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool3Host.TabIndex = 35;
+            this.textBoxCustomPool3Host.Tag = "parameter:custom_pool3_host";
             this.textBoxCustomPool3Host.TextChanged += new System.EventHandler(this.textBoxCustomPool3Host_TextChanged);
             // 
             // textBoxCustomPool3Password
@@ -1960,6 +2040,7 @@
             this.textBoxCustomPool3Password.Name = "textBoxCustomPool3Password";
             this.textBoxCustomPool3Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3Password.TabIndex = 41;
+            this.textBoxCustomPool3Password.Tag = "parameter:custom_pool3_password";
             this.textBoxCustomPool3Password.TextChanged += new System.EventHandler(this.textBoxCustomPool3Password_TextChanged);
             // 
             // label162
@@ -1986,6 +2067,7 @@
             this.textBoxCustomPool3Login.Name = "textBoxCustomPool3Login";
             this.textBoxCustomPool3Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3Login.TabIndex = 39;
+            this.textBoxCustomPool3Login.Tag = "parameter:custom_pool3_login";
             this.textBoxCustomPool3Login.TextChanged += new System.EventHandler(this.textBoxCustomPool3Login_TextChanged);
             // 
             // label164
@@ -2045,6 +2127,7 @@
             this.numericUpDownCustomPool0SecondaryPort.Name = "numericUpDownCustomPool0SecondaryPort";
             this.numericUpDownCustomPool0SecondaryPort.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool0SecondaryPort.TabIndex = 47;
+            this.numericUpDownCustomPool0SecondaryPort.Tag = "parameter:custom_pool0_secondary_port";
             this.numericUpDownCustomPool0SecondaryPort.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool0SecondaryPort_ValueChanged);
             // 
             // textBoxCustomPool0SecondaryHost
@@ -2053,6 +2136,7 @@
             this.textBoxCustomPool0SecondaryHost.Name = "textBoxCustomPool0SecondaryHost";
             this.textBoxCustomPool0SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool0SecondaryHost.TabIndex = 49;
+            this.textBoxCustomPool0SecondaryHost.Tag = "parameter:custom_pool0_secondary_host";
             this.textBoxCustomPool0SecondaryHost.TextChanged += new System.EventHandler(this.textBoxCustomPool0SecondaryHost_TextChanged);
             // 
             // textBoxCustomPool0SecondaryPassword
@@ -2061,6 +2145,7 @@
             this.textBoxCustomPool0SecondaryPassword.Name = "textBoxCustomPool0SecondaryPassword";
             this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0SecondaryPassword.TabIndex = 53;
+            this.textBoxCustomPool0SecondaryPassword.Tag = "parameter:custom_pool0_secondary_password";
             this.textBoxCustomPool0SecondaryPassword.TextChanged += new System.EventHandler(this.textBoxCustomPool0SecondaryPassword_TextChanged);
             // 
             // label150
@@ -2087,6 +2172,7 @@
             this.textBoxCustomPool0SecondaryLogin.Name = "textBoxCustomPool0SecondaryLogin";
             this.textBoxCustomPool0SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0SecondaryLogin.TabIndex = 51;
+            this.textBoxCustomPool0SecondaryLogin.Tag = "parameter:custom_pool0_secondary_login";
             this.textBoxCustomPool0SecondaryLogin.TextChanged += new System.EventHandler(this.textBoxCustomPool0SecondaryLogin_TextChanged);
             // 
             // label160
@@ -2109,6 +2195,7 @@
             this.comboBoxCustomPool0SecondaryAlgorithm.Name = "comboBoxCustomPool0SecondaryAlgorithm";
             this.comboBoxCustomPool0SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool0SecondaryAlgorithm.TabIndex = 46;
+            this.comboBoxCustomPool0SecondaryAlgorithm.Tag = "parameter:custom_pool0_secondary_algorithm";
             this.comboBoxCustomPool0SecondaryAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool0SecondaryAlgorithm_SelectedIndexChanged);
             // 
             // checkBoxCustomPool0Enable
@@ -2118,6 +2205,7 @@
             this.checkBoxCustomPool0Enable.Name = "checkBoxCustomPool0Enable";
             this.checkBoxCustomPool0Enable.Size = new System.Drawing.Size(59, 17);
             this.checkBoxCustomPool0Enable.TabIndex = 0;
+            this.checkBoxCustomPool0Enable.Tag = "parameter:custom_pool0_enabled";
             this.checkBoxCustomPool0Enable.Text = "Enable";
             this.checkBoxCustomPool0Enable.UseVisualStyleBackColor = true;
             this.checkBoxCustomPool0Enable.CheckedChanged += new System.EventHandler(this.checkBoxCustomPool0Enable_CheckedChanged);
@@ -2139,6 +2227,7 @@
             this.comboBoxCustomPool0Algorithm.Name = "comboBoxCustomPool0Algorithm";
             this.comboBoxCustomPool0Algorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool0Algorithm.TabIndex = 43;
+            this.comboBoxCustomPool0Algorithm.Tag = "parameter:custom_pool0_algorithm";
             this.comboBoxCustomPool0Algorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPool0Algorithm_SelectedIndexChanged);
             // 
             // label147
@@ -2161,6 +2250,7 @@
             this.numericUpDownCustomPool0Port.Name = "numericUpDownCustomPool0Port";
             this.numericUpDownCustomPool0Port.Size = new System.Drawing.Size(52, 20);
             this.numericUpDownCustomPool0Port.TabIndex = 2;
+            this.numericUpDownCustomPool0Port.Tag = "parameter:custom_pool0_port";
             this.numericUpDownCustomPool0Port.ValueChanged += new System.EventHandler(this.numericUpDownCustomPool0Port_ValueChanged);
             // 
             // textBoxCustomPool0Host
@@ -2169,6 +2259,7 @@
             this.textBoxCustomPool0Host.Name = "textBoxCustomPool0Host";
             this.textBoxCustomPool0Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool0Host.TabIndex = 35;
+            this.textBoxCustomPool0Host.Tag = "parameter:custom_pool0_host";
             this.textBoxCustomPool0Host.TextChanged += new System.EventHandler(this.textBoxCustomPool0Host_TextChanged);
             // 
             // textBoxCustomPool0Password
@@ -2177,6 +2268,7 @@
             this.textBoxCustomPool0Password.Name = "textBoxCustomPool0Password";
             this.textBoxCustomPool0Password.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0Password.TabIndex = 41;
+            this.textBoxCustomPool0Password.Tag = "parameter:custom_pool0_password";
             this.textBoxCustomPool0Password.TextChanged += new System.EventHandler(this.textBoxCustomPool0Password_TextChanged);
             // 
             // label145
@@ -2203,6 +2295,7 @@
             this.textBoxCustomPool0Login.Name = "textBoxCustomPool0Login";
             this.textBoxCustomPool0Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0Login.TabIndex = 39;
+            this.textBoxCustomPool0Login.Tag = "parameter:custom_pool0_login";
             this.textBoxCustomPool0Login.TextChanged += new System.EventHandler(this.textBoxCustomPool0Login_TextChanged);
             // 
             // label148
@@ -2323,6 +2416,7 @@
             this.checkBoxEnablePhymem.Name = "checkBoxEnablePhymem";
             this.checkBoxEnablePhymem.Size = new System.Drawing.Size(235, 17);
             this.checkBoxEnablePhymem.TabIndex = 28;
+            this.checkBoxEnablePhymem.Tag = "parameter:enable_phymem";
             this.checkBoxEnablePhymem.Text = "Enable phymem (Application restart required)";
             this.checkBoxEnablePhymem.UseVisualStyleBackColor = true;
             this.checkBoxEnablePhymem.CheckedChanged += new System.EventHandler(this.checkBoxEnablePhymem_CheckedChanged);
@@ -2452,6 +2546,7 @@
             this.checkBoxAutomaticBackups.Name = "checkBoxAutomaticBackups";
             this.checkBoxAutomaticBackups.Size = new System.Drawing.Size(235, 17);
             this.checkBoxAutomaticBackups.TabIndex = 7;
+            this.checkBoxAutomaticBackups.Tag = "parameter:automatic_backups";
             this.checkBoxAutomaticBackups.Text = "Create backup whenever settings are saved";
             this.checkBoxAutomaticBackups.UseVisualStyleBackColor = true;
             this.checkBoxAutomaticBackups.CheckedChanged += new System.EventHandler(this.checkBoxCreateSettingsBackupWhenSettingsAreSaved_CheckedChanged);
@@ -2684,6 +2779,7 @@
             this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
             this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
             this.checkBoxDisableAutoStartPrompt.TabIndex = 29;
+            this.checkBoxDisableAutoStartPrompt.Tag = "parameter:disable_auto_start_prompt";
             this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
             this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
             this.checkBoxDisableAutoStartPrompt.CheckedChanged += new System.EventHandler(this.checkBoxDisableAutoStartPrompt_CheckedChanged);
@@ -2695,6 +2791,7 @@
             this.checkBoxAutoStart.Name = "checkBoxAutoStart";
             this.checkBoxAutoStart.Size = new System.Drawing.Size(104, 17);
             this.checkBoxAutoStart.TabIndex = 27;
+            this.checkBoxAutoStart.Tag = "parameter:auto_start";
             this.checkBoxAutoStart.Text = "Auto-start mining";
             this.checkBoxAutoStart.UseVisualStyleBackColor = true;
             this.checkBoxAutoStart.CheckedChanged += new System.EventHandler(this.checkBoxAutoStart_CheckedChanged);
@@ -2706,6 +2803,7 @@
             this.checkBoxLaunchAtStartup.Name = "checkBoxLaunchAtStartup";
             this.checkBoxLaunchAtStartup.Size = new System.Drawing.Size(163, 17);
             this.checkBoxLaunchAtStartup.TabIndex = 28;
+            this.checkBoxLaunchAtStartup.Tag = "parameter:launch_at_startup";
             this.checkBoxLaunchAtStartup.Text = "Launch application at startup";
             this.checkBoxLaunchAtStartup.UseVisualStyleBackColor = true;
             this.checkBoxLaunchAtStartup.CheckedChanged += new System.EventHandler(this.checkBoxLaunchAtStartup_CheckedChanged);
@@ -2868,15 +2966,49 @@
             this.buttonReleaseMemory.UseVisualStyleBackColor = true;
             this.buttonReleaseMemory.Click += new System.EventHandler(this.buttonReleaseMemory_Click);
             // 
-            // cartesianChartPower
+            // cartesianChartShare1Minute
             // 
-            this.cartesianChartPower.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cartesianChartShare1Minute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartPower.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartPower.Location = new System.Drawing.Point(3, 30);
-            this.cartesianChartPower.Name = "cartesianChartPower";
-            this.cartesianChartPower.Size = new System.Drawing.Size(292, 197);
-            this.cartesianChartPower.TabIndex = 154;
+            this.cartesianChartShare1Minute.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Minute.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartShare1Minute.Name = "cartesianChartShare1Minute";
+            this.cartesianChartShare1Minute.Size = new System.Drawing.Size(318, 197);
+            this.cartesianChartShare1Minute.TabIndex = 154;
+            this.cartesianChartShare1Minute.Text = "cartesianChart1";
+            // 
+            // cartesianChartShare1Hour
+            // 
+            this.cartesianChartShare1Hour.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Hour.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Hour.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartShare1Hour.Name = "cartesianChartShare1Hour";
+            this.cartesianChartShare1Hour.Size = new System.Drawing.Size(318, 197);
+            this.cartesianChartShare1Hour.TabIndex = 155;
+            this.cartesianChartShare1Hour.Text = "cartesianChart2";
+            // 
+            // cartesianChartShare1Day
+            // 
+            this.cartesianChartShare1Day.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Day.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Day.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartShare1Day.Name = "cartesianChartShare1Day";
+            this.cartesianChartShare1Day.Size = new System.Drawing.Size(318, 197);
+            this.cartesianChartShare1Day.TabIndex = 156;
+            this.cartesianChartShare1Day.Text = "cartesianChart3";
+            // 
+            // cartesianChartShare1Month
+            // 
+            this.cartesianChartShare1Month.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Month.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Month.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartShare1Month.Name = "cartesianChartShare1Month";
+            this.cartesianChartShare1Month.Size = new System.Drawing.Size(318, 197);
+            this.cartesianChartShare1Month.TabIndex = 157;
+            this.cartesianChartShare1Month.Text = "cartesianChart4";
             // 
             // MainForm
             // 
@@ -2892,7 +3024,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(32767, 32767);
-            this.MinimumSize = new System.Drawing.Size(908, 624);
+            this.MinimumSize = new System.Drawing.Size(1028, 624);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Gateless Gate Sharp";
@@ -3187,5 +3319,10 @@
         private System.Windows.Forms.ComboBox comboBoxSecondGraphCoverage;
         private LiveCharts.WinForms.CartesianChart cartesianChartDeviceActivity;
         private LiveCharts.WinForms.CartesianChart cartesianChartPower;
+        private LiveCharts.WinForms.CartesianChart cartesianChartCPUUsage;
+        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Month;
+        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Day;
+        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Hour;
+        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Minute;
     }
 }
