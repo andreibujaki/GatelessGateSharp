@@ -21,6 +21,7 @@ using System;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 
 
@@ -28,10 +29,17 @@ namespace GatelessGateSharp
 {
     static class Program
     {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool AttachConsole(int dwProcessId);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern int FreeConsole();
+
+        private const int ATTACH_PARENT_PROCESS = -1;
+
         private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
             MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace + "\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            Program.KillMonitor = false; Application.Exit();
+            Program.Exit(false);
         }
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
@@ -42,11 +50,13 @@ namespace GatelessGateSharp
                 foreach (var process in Process.GetProcessesByName("GatelessGateSharp"))
                     process.Kill();
             }
-            Program.KillMonitor = false; Application.Exit();
+            Program.Exit(false);
         }
 
         static Mutex sMutex = new Mutex(true, "{1D2A713A-A29C-418C-BC62-2E98BD325490}");
         public static bool KillMonitor { get; set; }
+        public static void Exit() { Application.Exit(); }
+        public static void Exit(bool killMonitor) { KillMonitor = killMonitor; Application.Exit(); }
 
         /// <summary>
         /// The main entry point for the application.
@@ -54,12 +64,14 @@ namespace GatelessGateSharp
         [STAThread]
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
-        static void Main()
+        static int Main(string[] args)
         {
+           var attachedToConsole = AttachConsole(ATTACH_PARENT_PROCESS);
+
             bool mutexResult = false;
             try { mutexResult = sMutex.WaitOne(TimeSpan.Zero, true); } catch (Exception) {}
             if (!mutexResult)
-                return;
+                return 1;
 
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
             System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
@@ -77,7 +89,7 @@ namespace GatelessGateSharp
 
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
 
-
+#if !COMMAND_LINE_VERSION
             // Launch monitor
             foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharpMonitor"))
                 try { process.Kill(); } catch (Exception) { } 
@@ -97,16 +109,24 @@ namespace GatelessGateSharp
                 monitor.Start();
             }
             catch (Exception) { }
+#endif
+            
             KillMonitor = true;
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
             
+#if !COMMAND_LINE_VERSION
             if (KillMonitor)
                 try { monitor.Kill(); } catch (Exception) { }
-                
+#endif
+
             try { sMutex.ReleaseMutex(); } catch (Exception) { }
+
+            if (attachedToConsole)
+                FreeConsole();
+
+            return 0;
         }
     }
 }

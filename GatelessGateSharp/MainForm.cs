@@ -74,7 +74,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.8";
+        public static string appVersion = "1.2.9";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -143,6 +143,8 @@ namespace GatelessGateSharp {
         private ManagedCuda.Nvml.nvmlDevice[] nvmlDeviceArray;
         private bool phymemLoaded = false;
         private CancellationTokenSource mBackgroundTasksCancellationTokenSource;
+        private bool mDeviceColorCodesInitialized = false;
+        private bool mChartsInitialized = false;
 
         string mUserMoneroAddress = "";
         string mUserPascalAddress = "";
@@ -181,6 +183,7 @@ namespace GatelessGateSharp {
             Logger("    Member:      " + memberName);
             Logger("    Source File: " + sourceFilePath);
             Logger("    Line Number: " + sourceLineNumber);
+            Logger("    StackTrace:  " + ex.StackTrace);
         }
 
 
@@ -258,7 +261,7 @@ namespace GatelessGateSharp {
                         process.StartInfo = startInfo;
                         process.Start();
 
-                        Program.KillMonitor = true; Application.Exit();
+                        Program.Exit(true);
                     } catch (Exception ex) {
                         MainForm.Logger("Failed to increase the total size of page files: " + ex.Message + ex.StackTrace);
                     }
@@ -303,6 +306,8 @@ namespace GatelessGateSharp {
 
             comboBoxGraphType.SelectedIndex = 0;
             comboBoxGraphCoverage.SelectedIndex = 0;
+            comboBoxSecondGraphType.SelectedIndex = 0;
+            comboBoxSecondGraphCoverage.SelectedIndex = 0;
 
             // LiveCharts
             var mapper = Mappers.Xy<MeasureModel>()
@@ -310,6 +315,22 @@ namespace GatelessGateSharp {
                 .Y(model => model.Value);
             Charting.For<MeasureModel>(mapper);
         }
+
+#if COMMAND_LINE_VERSION
+        protected override void OnLoad(EventArgs e) {
+            Visible = false;
+            ShowInTaskbar = false;
+            Opacity = 0;
+
+            base.OnLoad(e);
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            this.Visible = false;
+        }
+#endif
 
         void MainForm_DragEnter(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
@@ -393,28 +414,30 @@ namespace GatelessGateSharp {
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                     conn.Open();
-                    var sql = "select * from wallet_addresses";
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        using (var reader = command.ExecuteReader()) {
-
-                            while (reader.Read())
-                                if ((string)reader["coin"] == "bitcoin")
-                                    textBoxBitcoinAddress.Text = (string)reader["address"];
-                                else if ((string)reader["coin"] == "ethereum")
-                                    textBoxEthereumAddress.Text = (string)reader["address"];
-                                else if ((string)reader["coin"] == "monero")
-                                    textBoxMoneroAddress.Text = (string)reader["address"];
-                                else if ((string)reader["coin"] == "zcash")
-                                    textBoxZcashAddress.Text = (string)reader["address"];
-                                else if ((string)reader["coin"] == "pascal")
-                                    textBoxPascalAddress.Text = (string)reader["address"];
-                                else if ((string)reader["coin"] == "lbry")
-                                    textBoxLbryAddress.Text = (string)reader["address"];
+                    try { 
+                        var sql = "select * from wallet_addresses";
+                        using (var command = new SQLiteCommand(sql, conn)) {
+                            using (var reader = command.ExecuteReader()) {
+                                while (reader.Read()) {
+                                    if ((string)reader["coin"] == "bitcoin")
+                                        textBoxBitcoinAddress.Text = (string)reader["address"];
+                                    else if ((string)reader["coin"] == "ethereum")
+                                        textBoxEthereumAddress.Text = (string)reader["address"];
+                                    else if ((string)reader["coin"] == "monero")
+                                        textBoxMoneroAddress.Text = (string)reader["address"];
+                                    else if ((string)reader["coin"] == "zcash")
+                                        textBoxZcashAddress.Text = (string)reader["address"];
+                                    else if ((string)reader["coin"] == "pascal")
+                                        textBoxPascalAddress.Text = (string)reader["address"];
+                                    else if ((string)reader["coin"] == "lbry")
+                                        textBoxLbryAddress.Text = (string)reader["address"];
+                                }
+                            }
                         }
-                    }
+                    } catch (Exception ex) { ExceptionLogger(ex); }
 
                     try {
-                        sql = "select * from pools";
+                        var sql = "select * from pools";
                         using (var command = new SQLiteCommand(sql, conn)) {
                             using (var reader = command.ExecuteReader()) {
                                 var oldItems = new List<string>();
@@ -428,12 +451,10 @@ namespace GatelessGateSharp {
                                         listBoxPoolPriorities.Items.Add(poolName);
                             }
                         }
-                    } catch (Exception ex) {
-                        Logger("Exception: " + ex.Message + ex.StackTrace);
-                    }
+                    } catch (Exception ex) { ExceptionLogger(ex); }
 
                     try {
-                        sql = "select * from properties";
+                        var sql = "select * from properties";
                         using (var command = new SQLiteCommand(sql, conn)) {
                             using (var reader = command.ExecuteReader()) {
                                 while (reader.Read()) {
@@ -461,162 +482,36 @@ namespace GatelessGateSharp {
                                         } else {
                                             radioButtonEthereum.Checked = true;
                                         }
-                                    } else if (propertyName == "pool_rig_id") {
-                                        textBoxRigID.Text = (string)reader["value"];
-                                    } else if (propertyName == "pool_email") {
-                                        textBoxEmail.Text = (string)reader["value"];
-                                    } else if (propertyName == "auto_start") {
-                                        checkBoxAutoStart.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "launch_at_startup") {
-                                        checkBoxLaunchAtStartup.Checked = (string)reader["value"] == "true";
                                     } else if ((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Success) {
                                         int index = int.Parse((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Groups[1].Captures[0].Value);
                                         dataGridViewDevices.Rows[index].Cells["enabled"].Value = (string)reader["value"] == "true";
-                                    } else if (propertyName == "enable_phymem") {
-                                        checkBoxEnablePhymem.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "custom_pool0_enabled") {
-                                        checkBoxCustomPool0Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "custom_pool1_enabled") {
-                                        checkBoxCustomPool1Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "custom_pool2_enabled") {
-                                        checkBoxCustomPool2Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "custom_pool3_enabled") {
-                                        checkBoxCustomPool3Enable.Checked = (string)reader["value"] == "true";
-                                    } else if (propertyName == "custom_pool0_host") {
-                                        textBoxCustomPool0Host.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool0_login") {
-                                        textBoxCustomPool0Login.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool0_password") {
-                                        textBoxCustomPool0Password.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool1_host") {
-                                        textBoxCustomPool1Host.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool1_login") {
-                                        textBoxCustomPool1Login.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool1_password") {
-                                        textBoxCustomPool1Password.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool2_host") {
-                                        textBoxCustomPool2Host.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool2_login") {
-                                        textBoxCustomPool2Login.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool2_password") {
-                                        textBoxCustomPool2Password.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool3_host") {
-                                        textBoxCustomPool3Host.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool3_login") {
-                                        textBoxCustomPool3Login.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool3_password") {
-                                        textBoxCustomPool3Password.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool0_port") {
-                                        numericUpDownCustomPool0Port.Value = decimal.Parse((string)reader["value"]);
-                                    } else if (propertyName == "custom_pool1_port") {
-                                        numericUpDownCustomPool1Port.Value = decimal.Parse((string)reader["value"]);
-                                    } else if (propertyName == "custom_pool2_port") {
-                                        numericUpDownCustomPool2Port.Value = decimal.Parse((string)reader["value"]);
-                                    } else if (propertyName == "custom_pool3_port") {
-                                        numericUpDownCustomPool3Port.Value = decimal.Parse((string)reader["value"]);
-                                    } else if (propertyName == "custom_pool0_algorithm") {
-                                        for (int i = 0; i < comboBoxCustomPool0Algorithm.Items.Count; ++i) {
-                                            var item = comboBoxCustomPool0Algorithm.Items[i];
-                                            if ((string)item == (string)reader["value"])
-                                                comboBoxCustomPool0Algorithm.SelectedIndex = i;
+                                    }
+
+                                    foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
+                                        var tag = (string)(comboBox.GetType().GetProperty("Tag").GetValue(comboBox));
+                                        if (tag == null)
+                                            continue;
+                                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                                        var match = regex.Match(tag);
+                                        var type = match.Success ? match.Groups[1].Value : null;
+                                        var name = match.Success ? match.Groups[2].Value : null;
+                                        if (type == "parameter" && name == propertyName) {
+                                            if (name == "currency" && !comboBox.Items.Contains((string)reader["value"]))
+                                                comboBox.Items.Add((string)reader["value"]);
+                                            try { comboBox.SelectedItem = (string)reader["value"]; } catch (Exception) { }
                                         }
+                                    }
 
-                                    } else if (propertyName == "custom_pool1_algorithm") {
-                                        for (int i = 0; i < comboBoxCustomPool1Algorithm.Items.Count; ++i) {
-                                            var item = comboBoxCustomPool1Algorithm.Items[i];
-                                            if ((string)item == (string)reader["value"])
-                                                comboBoxCustomPool1Algorithm.SelectedIndex = i;
-                                        }
-
-                                    } else if (propertyName == "custom_pool2_algorithm") {
-                                        for (int i = 0; i < comboBoxCustomPool2Algorithm.Items.Count; ++i) {
-                                            var item = comboBoxCustomPool2Algorithm.Items[i];
-                                            if ((string)item == (string)reader["value"])
-                                                comboBoxCustomPool2Algorithm.SelectedIndex = i;
-                                        }
-
-                                    } else if (propertyName == "custom_pool3_algorithm") {
-                                        for (int i = 0; i < comboBoxCustomPool3Algorithm.Items.Count; ++i) {
-                                            var item = comboBoxCustomPool3Algorithm.Items[i];
-                                            if ((string)item == (string)reader["value"])
-                                                comboBoxCustomPool3Algorithm.SelectedIndex = i;
-                                        }
-
-                                    } else if (propertyName == "custom_pool0_secondary_host") {
-                                        textBoxCustomPool0SecondaryHost.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool0_secondary_login") {
-                                        textBoxCustomPool0SecondaryLogin.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool0_secondary_password") {
-                                        textBoxCustomPool0SecondaryPassword.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool1_secondary_host") {
-                                        textBoxCustomPool1SecondaryHost.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool1_secondary_login") {
-                                        textBoxCustomPool1SecondaryLogin.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool1_secondary_password") {
-                                        textBoxCustomPool1SecondaryPassword.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool2_secondary_host") {
-                                        textBoxCustomPool2SecondaryHost.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool2_secondary_login") {
-                                        textBoxCustomPool2SecondaryLogin.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool2_secondary_password") {
-                                        textBoxCustomPool2SecondaryPassword.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool3_secondary_host") {
-                                        textBoxCustomPool3SecondaryHost.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool3_secondary_login") {
-                                        textBoxCustomPool3SecondaryLogin.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool3_secondary_password") {
-                                        textBoxCustomPool3SecondaryPassword.Text = (string)reader["value"];
-                                    } else if (propertyName == "custom_pool0_secondary_port") {
-                                        numericUpDownCustomPool0SecondaryPort.Value = decimal.Parse((string)reader["value"]);
-                                    } else if (propertyName == "custom_pool1_secondary_port") {
-                                        numericUpDownCustomPool1SecondaryPort.Value = decimal.Parse((string)reader["value"]);
-                                    } else if (propertyName == "custom_pool2_secondary_port") {
-                                        numericUpDownCustomPool2SecondaryPort.Value = decimal.Parse((string)reader["value"]);
-                                    } else if (propertyName == "custom_pool3_secondary_port") {
-                                        numericUpDownCustomPool3SecondaryPort.Value = decimal.Parse((string)reader["value"]);
-                                    } else if (propertyName == "custom_pool0_secondary_algorithm") {
-                                        for (int i = 0; i < comboBoxCustomPool0SecondaryAlgorithm.Items.Count; ++i) {
-                                            var item = comboBoxCustomPool0SecondaryAlgorithm.Items[i];
-                                            if ((string)item == (string)reader["value"])
-                                                comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = i;
-                                        }
-
-                                    } else if (propertyName == "custom_pool1_secondary_algorithm") {
-                                        for (int i = 0; i < comboBoxCustomPool1SecondaryAlgorithm.Items.Count; ++i) {
-                                            var item = comboBoxCustomPool1SecondaryAlgorithm.Items[i];
-                                            if ((string)item == (string)reader["value"])
-                                                comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = i;
-                                        }
-
-                                    } else if (propertyName == "custom_pool2_secondary_algorithm") {
-                                        for (int i = 0; i < comboBoxCustomPool2SecondaryAlgorithm.Items.Count; ++i) {
-                                            var item = comboBoxCustomPool2SecondaryAlgorithm.Items[i];
-                                            if ((string)item == (string)reader["value"])
-                                                comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = i;
-                                        }
-
-                                    } else if (propertyName == "custom_pool3_secondary_algorithm") {
-                                        for (int i = 0; i < comboBoxCustomPool3SecondaryAlgorithm.Items.Count; ++i) {
-                                            var item = comboBoxCustomPool3SecondaryAlgorithm.Items[i];
-                                            if ((string)item == (string)reader["value"])
-                                                comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = i;
-                                        }
-
-                                    } else if (propertyName == "disable_auto_start_prompt") {
-                                        checkBoxDisableAutoStartPrompt.Checked = (string)reader["value"] == "true";
-
-                                    } else if (propertyName == "graph_type") {
-                                        comboBoxGraphType.SelectedItem = (string)reader["value"];
-                                    } else if (propertyName == "graph_coverage") {
-                                        comboBoxGraphCoverage.SelectedItem = (string)reader["value"];
-                                    
-                                    } else if (propertyName == "automatic_backups") {
-                                        checkBoxAutomaticBackups.Checked = (string)reader["value"] == "true";
-
-                                    } else if (propertyName == "currency") {
-                                        if (!comboBoxCurrency.Items.Contains(reader["value"]))
-                                            comboBoxCurrency.Items.Add((string)reader["value"]);
-                                        comboBoxCurrency.SelectedItem = (string)reader["value"];
+                                    foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
+                                        var tag = (string)(textBox.GetType().GetProperty("Tag").GetValue(textBox));
+                                        if (tag == null)
+                                            continue;
+                                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                                        var match = regex.Match(tag);
+                                        var type = match.Success ? match.Groups[1].Value : null;
+                                        var name = match.Success ? match.Groups[2].Value : null;
+                                        if (type == "parameter" && name == propertyName)
+                                            textBox.Text = (string)reader["value"];
                                     }
 
                                     foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
@@ -631,6 +526,17 @@ namespace GatelessGateSharp {
                                             checkBox.Checked = (string)reader["value"] == "true";
                                     }
 
+                                    foreach (var numericUpDown in Utilities.FindAllChildrenByType<NumericUpDown>(this)) {
+                                        var tag = (string)(numericUpDown.GetType().GetProperty("Tag").GetValue(numericUpDown));
+                                        if (tag == null)
+                                            continue;
+                                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                                        var match = regex.Match(tag);
+                                        var type = match.Success ? match.Groups[1].Value : null;
+                                        var name = match.Success ? match.Groups[2].Value : null;
+                                        if (type == "parameter" && name == propertyName)
+                                            numericUpDown.Value = decimal.Parse((string)reader["value"]);
+                                    }
                                 }
                             }
                         }
@@ -639,7 +545,7 @@ namespace GatelessGateSharp {
                     }
 
                     try {
-                        sql = "select * from device_parameters";
+                        var sql = "select * from device_parameters";
                         using (var command = new SQLiteCommand(sql, conn)) {
                             using (var reader = command.ExecuteReader()) {
                                 while (reader.Read()) {
@@ -760,7 +666,7 @@ namespace GatelessGateSharp {
                         numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
                         numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
                     }
-                }
+                }   
                 Logger("Loaded settings.");
                 mAreSettingsDirty = false;
             } catch (Exception ex) {
@@ -786,30 +692,8 @@ namespace GatelessGateSharp {
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                     conn.Open();
-
-                    var sql = "insert into wallet_addresses (coin, address) values (@coin, @address)";
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        command.Parameters.AddWithValue("@coin", "bitcoin");
-                        command.Parameters.AddWithValue("@address", textBoxBitcoinAddress.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@coin", "ethereum");
-                        command.Parameters.AddWithValue("@address", textBoxEthereumAddress.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@coin", "monero");
-                        command.Parameters.AddWithValue("@address", textBoxMoneroAddress.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@coin", "zcash");
-                        command.Parameters.AddWithValue("@address", textBoxZcashAddress.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@coin", "pascal");
-                        command.Parameters.AddWithValue("@address", textBoxPascalAddress.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@coin", "lbry");
-                        command.Parameters.AddWithValue("@address", textBoxLbryAddress.Text);
-                        command.ExecuteNonQuery();
-                    }
-
-                    sql = "insert into pools (name) values (@name)";
+                    
+                    var sql = "insert into pools (name) values (@name)";
                     using (var command = new SQLiteCommand(sql, conn)) {
                         foreach (string poolName in listBoxPoolPriorities.Items) {
                             command.Parameters.AddWithValue("@name", poolName);
@@ -820,7 +704,7 @@ namespace GatelessGateSharp {
                     sql = "insert into properties (name, value) values (@name, @value)";
                     using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "database_version");
-                        command.Parameters.AddWithValue("@value", "2"); // starting at v1.1.15
+                        command.Parameters.AddWithValue("@value", "3"); // started with v1.2.8
                         command.ExecuteNonQuery();
                         command.Parameters.AddWithValue("@name", "coin_to_mine");
                         command.Parameters.AddWithValue("@value",
@@ -834,30 +718,41 @@ namespace GatelessGateSharp {
                                                         radioButtonMonacoin.Checked ? "monacoin" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "pool_rig_id");
-                        command.Parameters.AddWithValue("@value", textBoxRigID.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "pool_email");
-                        command.Parameters.AddWithValue("@value", textBoxEmail.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "auto_start");
-                        command.Parameters.AddWithValue("@value", checkBoxAutoStart.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "launch_at_startup");
-                        command.Parameters.AddWithValue("@value", checkBoxLaunchAtStartup.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "disable_auto_start_prompt");
-                        command.Parameters.AddWithValue("@value", checkBoxDisableAutoStartPrompt.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "graph_type");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxGraphType.SelectedItem);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "graph_coverage");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxGraphCoverage.SelectedItem);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "currency");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCurrency.SelectedItem);
-                        command.ExecuteNonQuery();
+                        for (var i = 0; i < mDevices.Length; ++i) {
+                            command.Parameters.AddWithValue("@name", "enable_gpu" + i);
+                            command.Parameters.AddWithValue("@value", (bool)(dataGridViewDevices.Rows[i].Cells["enabled"].Value) ? "true" : "false");
+                            command.ExecuteNonQuery();
+                        }
+
+                        foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
+                            var tag = (string)(comboBox.GetType().GetProperty("Tag").GetValue(comboBox));
+                            if (tag == null)
+                                continue;
+                            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                            var match = regex.Match(tag);
+                            var type = match.Success ? match.Groups[1].Value : null;
+                            var name = match.Success ? match.Groups[2].Value : null;
+                            if (type == "parameter") {
+                                command.Parameters.AddWithValue("@name", name);
+                                command.Parameters.AddWithValue("@value", (string)comboBox.SelectedItem);
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
+                            var tag = (string)(textBox.GetType().GetProperty("Tag").GetValue(textBox));
+                            if (tag == null)
+                                continue;
+                            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                            var match = regex.Match(tag);
+                            var type = match.Success ? match.Groups[1].Value : null;
+                            var name = match.Success ? match.Groups[2].Value : null;
+                            if (type == "parameter") {
+                                command.Parameters.AddWithValue("@name", name);
+                                command.Parameters.AddWithValue("@value", textBox.Text);
+                                command.ExecuteNonQuery();
+                            }
+                        }
 
                         foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
                             var tag = (string)(checkBox.GetType().GetProperty("Tag").GetValue(checkBox));
@@ -873,151 +768,21 @@ namespace GatelessGateSharp {
                                 command.ExecuteNonQuery();
                             }
                         }
-                    }
-                    for (var i = 0; i < mDevices.Length; ++i) {
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@name", "enable_gpu" + i);
-                            command.Parameters.AddWithValue("@value", (bool)(dataGridViewDevices.Rows[i].Cells["enabled"].Value) ? "true" : "false");
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        command.Parameters.AddWithValue("@name", "custom_pool0_host");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool0Host.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_login");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool0Login.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_password");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool0Password.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_host");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool1Host.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_login");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool1Login.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_password");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool1Password.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_host");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool2Host.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_login");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool2Login.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_password");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool2Password.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_host");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool3Host.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_login");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool3Login.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_password");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool3Password.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_enabled");
-                        command.Parameters.AddWithValue("@value", checkBoxCustomPool0Enable.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_enabled");
-                        command.Parameters.AddWithValue("@value", checkBoxCustomPool1Enable.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_enabled");
-                        command.Parameters.AddWithValue("@value", checkBoxCustomPool2Enable.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_enabled");
-                        command.Parameters.AddWithValue("@value", checkBoxCustomPool3Enable.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_port");
-                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool0Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_port");
-                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool1Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_port");
-                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool2Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_port");
-                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool3Port.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_algorithm");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex]);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_algorithm");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex]);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_algorithm");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex]);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_algorithm");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex]);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_host");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryHost.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_login");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryLogin.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_password");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool0SecondaryPassword.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_host");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryHost.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_login");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryLogin.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_password");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool1SecondaryPassword.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_host");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryHost.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_login");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryLogin.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_password");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool2SecondaryPassword.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_host");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryHost.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_login");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryLogin.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_password");
-                        command.Parameters.AddWithValue("@value", textBoxCustomPool3SecondaryPassword.Text);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_port");
-                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool0SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_port");
-                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool1SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_port");
-                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool2SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_port");
-                        command.Parameters.AddWithValue("@value", numericUpDownCustomPool3SecondaryPort.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool0_secondary_algorithm");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex]);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool1_secondary_algorithm");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex]);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool2_secondary_algorithm");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex]);
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "custom_pool3_secondary_algorithm");
-                        command.Parameters.AddWithValue("@value", (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex]);
-                        command.ExecuteNonQuery();
 
-                        command.Parameters.AddWithValue("@name", "enable_phymem");
-                        command.Parameters.AddWithValue("@value", checkBoxEnablePhymem.Checked ? "true" : "false");
-                        command.ExecuteNonQuery();
+                        foreach (var numericUpDown in Utilities.FindAllChildrenByType<NumericUpDown>(this)) {
+                            var tag = (string)(numericUpDown.GetType().GetProperty("Tag").GetValue(numericUpDown));
+                            if (tag == null)
+                                continue;
+                            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                            var match = regex.Match(tag);
+                            var type = match.Success ? match.Groups[1].Value : null;
+                            var name = match.Success ? match.Groups[2].Value : null;
+                            if (type == "parameter") {
+                                command.Parameters.AddWithValue("@name", name);
+                                command.Parameters.AddWithValue("@value", numericUpDown.Value.ToString());
+                                command.ExecuteNonQuery();
+                            }
+                        }
                     }
 
                     sql = "insert into device_parameters (device_id, device_vendor, device_name, parameter_name, parameter_value) values (@device_id, @device_vendor, @device_name, @parameter_name, @parameter_value)";
@@ -1175,16 +940,18 @@ namespace GatelessGateSharp {
             try { System.IO.Directory.CreateDirectory(SettingsBackupPathBase); } catch (Exception) { }
             try { System.IO.Directory.CreateDirectory(SavedOpenCLBinaryKernelPathBase); } catch (Exception) { }
 
-            CheckVirtualMemorySize();
-
             NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED | NativeMethods.ES_AWAYMODE_REQUIRED);
+
+#if !COMMAND_LINE_VERSION
+            CheckVirtualMemorySize();
 
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
             Application.DoEvents();
+#endif          
 
             try {
-                //RunNGen();
+                RunNGen();
             } catch (Exception ex) {
                 Logger("Exception in RunNGen(): " + ex.Message + ex.StackTrace);
             }
@@ -1232,6 +999,11 @@ namespace GatelessGateSharp {
                     System.IO.File.Delete(OldAppStateFilePath);
             } catch (Exception) { }
 
+            InitializeShareChart(cartesianChartShare1Minute, 60);
+            InitializeShareChart(cartesianChartShare1Hour, 60);
+            InitializeShareChart(cartesianChartShare1Day, 24);
+            InitializeShareChart(cartesianChartShare1Month, 31);
+            
             mAppState = ApplicationGlobalState.Idle;
             UpdateControls();
             mBackgroundTasksCancellationTokenSource = new CancellationTokenSource();
@@ -1240,13 +1012,20 @@ namespace GatelessGateSharp {
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateAltcoinRates), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdatePoolStats), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateLatestReleaseInfo), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateCPUUsage), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_CollectGarbage), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateShareCharts), mBackgroundTasksCancellationTokenSource.Token);
             mAreSettingsDirty = false;
             checkBoxEnablePhymem.Checked = false;
 
             // Auto-start mining if necessary.
+#if COMMAND_LINE_VERSION
+            var autoStart = true;
+#else
+            var autoStart = checkBoxAutoStart.Checked;
             splashScreen.Dispose();
             Application.DoEvents();
-            var autoStart = checkBoxAutoStart.Checked;
+#endif
             try {
                 if (System.IO.File.ReadAllLines(AppStateFilePath)[0] == "Mining")
                     autoStart = true;
@@ -1720,7 +1499,9 @@ namespace GatelessGateSharp {
         static Dictionary<string, object> sEthermineStats = null;
         static Dictionary<string, object> sEthpoolStats = null;
         static Dictionary<string, object> sNanopoolEthereumStats = null;
+        static Dictionary<string, object> sNanopoolEthereumEarningStats = null;
         static Dictionary<string, object> sNanopoolMoneroStats = null;
+        static Dictionary<string, object> sNanopoolMoneroEarningStats = null;
         static Dictionary<string, object> sDwarfPoolEthereumStats = null;
         static Dictionary<string, object> sDwarfPoolMoneroStats = null;
 
@@ -1764,10 +1545,14 @@ namespace GatelessGateSharp {
                         if (Instance.ValidateEthereumAddress(false)) {
                             var jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/user/" + Instance.mUserEthereumAddress);
                             sNanopoolEthereumStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                            jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/approximated_earnings/1");
+                            sNanopoolEthereumEarningStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                         }
                         if (Instance.ValidateMoneroAddress(false)) {
                             var jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/user/" + Instance.mUserMoneroAddress);
                             sNanopoolMoneroStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                            jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/approximated_earnings/1000");
+                            sNanopoolMoneroEarningStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                         }
                     }
                 } catch (Exception) {
@@ -1857,6 +1642,11 @@ namespace GatelessGateSharp {
                         balance = (double)data["balance"];
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
+                    if (mAppState == ApplicationGlobalState.Mining && sNanopoolEthereumEarningStats != null) {
+                        var earningData = (JContainer)sNanopoolEthereumEarningStats["data"];
+                        double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
+                        UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
+                    }
                 } else if (mCurrentPool == "Nanopool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "") {
                     var data = (JContainer)sNanopoolMoneroStats["data"];
                     double balance = 0;
@@ -1864,19 +1654,34 @@ namespace GatelessGateSharp {
                         balance = (double)data["balance"];
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * XMRRate) + " " + currency + ")";
+                    if (mAppState == ApplicationGlobalState.Mining && sNanopoolMoneroEarningStats != null) {
+                        var earningData = (JContainer)sNanopoolMoneroEarningStats["data"];
+                        double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
+                        UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
+                    }
                 } else if (mCurrentPool == "DwarfPool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "") {
                     double balance = 0;
                     try {
                         balance = double.Parse((string)sDwarfPoolEthereumStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
-               } else if (mCurrentPool == "DwarfPool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "") {
+                    if (mAppState == ApplicationGlobalState.Mining && sNanopoolEthereumEarningStats != null) { // TODO
+                        var earningData = (JContainer)sNanopoolEthereumEarningStats["data"];
+                        double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
+                        UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
+                    }
+                } else if (mCurrentPool == "DwarfPool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "") {
                     double balance = 0;
                     try {
                         balance = double.Parse((string)sDwarfPoolMoneroStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * XMRRate) + " " + currency + ")";
-               } 
+                    if (mAppState == ApplicationGlobalState.Mining && sNanopoolMoneroEarningStats != null) { // TODO
+                        var earningData = (JContainer)sNanopoolMoneroEarningStats["data"];
+                        double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
+                        UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
+                    }
+                } 
             } catch (Exception) {
                 Logger("Failed to update pool statistics.");
             }
@@ -2069,6 +1874,7 @@ namespace GatelessGateSharp {
                     if (coreClock >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Value = coreClock.ToString() + " MHz";
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_clock"].Style.ForeColor =
+                                                                   device.DefaultCoreClock < 0 ? Color.Black :
                                                                    coreClock > device.DefaultCoreClock ? Color.Red :
                                                                    coreClock < device.DefaultCoreClock ? Color.Blue :
                                                                                   Color.Black;
@@ -2077,6 +1883,7 @@ namespace GatelessGateSharp {
                     if (coreVoltage >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = coreVoltage.ToString() + " mV";
                         dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Style.ForeColor =
+                                                                   device.DefaultCoreVoltage < 0 ? Color.Black :
                                                                    coreVoltage > device.DefaultCoreVoltage ? Color.Red :
                                                                    coreVoltage < device.DefaultCoreVoltage ? Color.Blue :
                                                                                   Color.Black;
@@ -2085,6 +1892,7 @@ namespace GatelessGateSharp {
                     if (memoryClock >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Style.ForeColor =
+                                                                    device.DefaultMemoryClock < 0? Color.Black :
                                                                    memoryClock > device.DefaultMemoryClock ? Color.Red :
                                                                    memoryClock < device.DefaultMemoryClock ? Color.Blue :
                                                                                   Color.Black;
@@ -2139,30 +1947,32 @@ namespace GatelessGateSharp {
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            timerDevFee.Enabled = false;
-            timerStatsUpdates.Enabled = false;
-            timerUpdateLog.Enabled = false;
-            timerWatchdog.Enabled = false;
-            mBackgroundTasksCancellationTokenSource.Cancel();
+            try {
+                timerDevFee.Enabled = false;
+                timerStatsUpdates.Enabled = false;
+                timerUpdateLog.Enabled = false;
+                timerWatchdog.Enabled = false;
+                mBackgroundTasksCancellationTokenSource.Cancel();
 
-            if (mAppState == ApplicationGlobalState.Mining)
-                StopMiners();
-            if (e.CloseReason == CloseReason.UserClosing) {
-                try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
-                Program.KillMonitor = true;
-            }
+                if (mAppState == ApplicationGlobalState.Mining)
+                    StopMiners();
+                if (e.CloseReason == CloseReason.UserClosing) {
+                    try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                    Program.KillMonitor = true;
+                }
 
-            if (mAreSettingsDirty)
-                SaveSettingsToDatabase();
-            //if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy)
-            //    ADL.ADL_Main_Control_Destroy();
-            
-            foreach (var device in mDevices)
-                device.Dispose();
-            mDevices = null;
-            PCIExpress.UnloadPhyMem();
+                if (mAreSettingsDirty)
+                    SaveSettingsToDatabase();
+                //if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy)
+                //    ADL.ADL_Main_Control_Destroy();
 
-            mBackgroundTasksCancellationTokenSource.Dispose();
+                foreach (var device in mDevices)
+                    device.Dispose();
+                mDevices = null;
+                PCIExpress.UnloadPhyMem();
+
+                mBackgroundTasksCancellationTokenSource.Dispose();
+            } catch (Exception ex) { ExceptionLogger(ex); }
         }
 
         private void timerDeviceStatusUpdates_Tick(object sender, EventArgs e) {
@@ -2175,44 +1985,46 @@ namespace GatelessGateSharp {
 
         void UpdateCharts() {
             try {
-                var now = System.DateTime.Now;
-
-                if (cartesianChartTemperature.Series.Count != mDevices.Length) {
-                    InitializeChart(cartesianChartTemperature, value => value + "℃", 100);
-                    InitializeChart(cartesianChartSpeedPrimaryAlgorithm, ConvertHashRateToString, double.NaN);
-                    InitializeChart(cartesianChartSpeedSecondaryAlgorithm, ConvertHashRateToString, double.NaN);
-                    InitializeChart(cartesianChartFanSpeed, value => value + "%", 100);
-
+                if (!mChartsInitialized) {
+                    InitializeChart(cartesianChartTemperature, value => value + "℃", 100, ChartType.Device);
+                    InitializeChart(cartesianChartSpeedPrimaryAlgorithm, ConvertHashRateToString, double.NaN, ChartType.Device);
+                    InitializeChart(cartesianChartSpeedSecondaryAlgorithm, ConvertHashRateToString, double.NaN, ChartType.Device);
+                    InitializeChart(cartesianChartFanSpeed, value => value + "%", 100, ChartType.Device);
+                    InitializeChart(cartesianChartDeviceActivity, value => value + "%", 100, ChartType.Device);
+                    InitializeChart(cartesianChartPower, value => (value < 0 ? "" : value + "W"), double.NaN, ChartType.Device);
+                    InitializeChart(cartesianChartCPUUsage, value => value + "%", 100, ChartType.Total);
+                    mChartsInitialized = true;
                 }
-                UpdateChart(cartesianChartTemperature, deviceIndex => mDevices[deviceIndex].Temperature);
+
+                UpdateChart(cartesianChartTemperature, deviceIndex => mDevices[deviceIndex].Temperature, ChartType.Device);
+                UpdateChart(cartesianChartFanSpeed, deviceIndex => mDevices[deviceIndex].FanSpeed, ChartType.Device);
+                UpdateChart(cartesianChartDeviceActivity, deviceIndex => mDevices[deviceIndex].Activity, ChartType.Device);
+                UpdateChart(cartesianChartPower, deviceIndex => (mDevices[deviceIndex].Power < 0 ? 0 : mDevices[deviceIndex].Power), ChartType.Device);
+                UpdateChart(cartesianChartCPUUsage, dummy => ( mCPUUsage ), ChartType.Total);
+
                 UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
                     (int deviceIndex) => {
                         double speed = 0;
                         foreach (var miner in mMiners)
                             speed += (deviceIndex == miner.DeviceIndex) ? miner.Speed : 0;
                         return speed;
-                    });
+                    }, ChartType.Device, 1);
                 UpdateChart(cartesianChartSpeedSecondaryAlgorithm,
                     (int deviceIndex) => {
                         double speed = 0;
                         foreach (var miner in mMiners)
                             speed += (deviceIndex == miner.DeviceIndex) ? miner.SpeedSecondaryAlgorithm : 0;
                         return speed;
-                    });
-                UpdateChart(cartesianChartFanSpeed, deviceIndex => mDevices[deviceIndex].FanSpeed);
-                for (int i = 0; i < mDevices.Length; ++i) {
-                    if (((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke != null) {
-                        var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)cartesianChartTemperature.Series[i]).Stroke)).Color;
-                        dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
-                            color.R + (255 - color.R) / 2,
-                            color.G + (255 - color.G) / 2,
-                            color.B + (255 - color.B) / 2);
-                    }
-                }
-            } catch (Exception ex) { Logger("Exception in UpdateCharts(): " + ex.ToString()); }
+                    }, ChartType.Device, 1);
+            } catch (Exception ex) { ExceptionLogger(ex); }
         }
 
-        void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue) {
+        void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue, ChartType type) {
+            int numSerieses = (type == ChartType.Device) ? mDevices.Length :
+                              (type == ChartType.Total) ? 1 :
+                              (type == ChartType.Algorithm) ? sAlgorithmList.Length :
+                                                              mDevices.Length;
+
             chart.DisableAnimations = true;
             chart.AxisX.Clear();
             chart.AxisX.Add(new Axis {
@@ -2234,10 +2046,13 @@ namespace GatelessGateSharp {
             });
             //
             chart.Series.Clear();
-            for (int i = 0; i < mDevices.Length; ++i) {
+            for (int i = 0; i < numSerieses; ++i) {
                 chart.Series.Add(
                     new LiveCharts.Wpf.LineSeries {
-                        Title = "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName(),
+                        Title = (type == ChartType.Device) ? "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName() :
+                                (type == ChartType.Total) ? "Total" :
+                                (type == ChartType.Algorithm) ? sAlgorithmList[i] :
+                                                                "",
                         Values = new ChartValues<MeasureModel>(),
                         PointGeometry = null,
                         LineSmoothness = 0,
@@ -2247,31 +2062,180 @@ namespace GatelessGateSharp {
             }
         }
 
-        void UpdateChart(LiveCharts.WinForms.CartesianChart chart, System.Func<int, double> deviceIndexToValue) {
-            var now = System.DateTime.Now;
+        void InitializeShareChart(LiveCharts.WinForms.CartesianChart chart, int size) {
+            chart.DisableAnimations = true;
+            chart.AxisX.Clear();
+            chart.AxisX.Add(new Axis {
+                ShowLabels = false,
+                Labels = new List<string> { }
+            });
+            for (int j = 0; j < size; ++j)
+                chart.AxisX[0].Labels.Add("");
+            //
+            chart.AxisY.Clear();
+            chart.AxisY.Add(new Axis {
+                DisableAnimations = false,
+                Separator = new Separator {
+                    Stroke = System.Windows.Media.Brushes.DarkGray,
+                    StrokeThickness = 1,
+                },
+                MinValue = 0
+            });
+            //
+            chart.Series.Clear();
+            for (int i = 0; i < 2; ++i) {
+                var values = new ChartValues<int> {};
+                for (int j = 0; j < size; ++j)
+                    values.Add(0);
+                chart.Series.Add(
+                    new LiveCharts.Wpf.StackedColumnSeries {
+                        Title = (i == 0) ? "Accepted" : "Rejected",
+                        Values = values,
+                        PointGeometry = null,
+                        Fill = (i == 0) ? System.Windows.Media.Brushes.Green : System.Windows.Media.Brushes.Red
+                    }
+                );
+            }
+        }
 
-            for (int i = 0; i < mDevices.Length; ++i) {
+        delegate void NoArgReturningVoidDelegate();
+
+        void Task_UpdateShareCharts(object cancellationToken) {
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            int counter = 0;
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    if (cartesianChartShare1Minute.InvokeRequired) {
+                        cartesianChartShare1Minute.Invoke(new NoArgReturningVoidDelegate(() => {
+                            AddNewValueToShareChart(cartesianChartShare1Minute);
+                        }));
+                    } else {
+                        AddNewValueToShareChart(cartesianChartShare1Minute);
+                    }
+                    if (counter % 60 == 0) {
+                        if (cartesianChartShare1Hour.InvokeRequired) {
+                            cartesianChartShare1Hour.Invoke(new NoArgReturningVoidDelegate(() => {
+                                AddNewValueToShareChart(cartesianChartShare1Hour);
+                            }));
+                        } else {
+                            AddNewValueToShareChart(cartesianChartShare1Hour);
+                        }
+                    }
+                    if (counter % (60 * 60) == 0) {
+                        if (cartesianChartShare1Day.InvokeRequired) {
+                            cartesianChartShare1Day.Invoke(new NoArgReturningVoidDelegate(() => {
+                                AddNewValueToShareChart(cartesianChartShare1Day);
+                            }));
+                        } else {
+                            AddNewValueToShareChart(cartesianChartShare1Day);
+                        }
+                    }
+                    if (counter % (60 * 60 * 24) == 0) {
+                        if (cartesianChartShare1Month.InvokeRequired) {
+                            cartesianChartShare1Month.Invoke(new NoArgReturningVoidDelegate(() => {
+                                AddNewValueToShareChart(cartesianChartShare1Month);
+                            }));
+                        } else {
+                            AddNewValueToShareChart(cartesianChartShare1Month);
+                        }
+                    }
+                } catch (Exception ex) { ExceptionLogger(ex); }
+                ++counter;
+                System.Threading.Thread.Sleep(1000);
+            }
+        }
+
+        delegate void IntArgReturningVoidDelegate(int i);
+        
+        public void ReportAcceptedShare()
+        {
+            AddShareToShareChart(cartesianChartShare1Minute, 0);
+            AddShareToShareChart(cartesianChartShare1Hour, 0);
+            AddShareToShareChart(cartesianChartShare1Day, 0);
+            AddShareToShareChart(cartesianChartShare1Month, 0);
+        }
+
+        public void ReportRejectedShare()
+        {
+            AddShareToShareChart(cartesianChartShare1Minute, 1);
+            AddShareToShareChart(cartesianChartShare1Hour, 1);
+            AddShareToShareChart(cartesianChartShare1Day, 1);
+            AddShareToShareChart(cartesianChartShare1Month, 1);
+        }
+
+        void AddShareToShareChart(LiveCharts.WinForms.CartesianChart chart, int index) {
+            if (chart.InvokeRequired) {
+                chart.Invoke(new IntArgReturningVoidDelegate((i) => {
+                    var count = ((LiveCharts.Wpf.StackedColumnSeries)(chart.Series[i])).Values.Count;
+                    var value = (int)(((LiveCharts.Wpf.StackedColumnSeries)(chart.Series[i])).Values[count - 1]);
+                    ((LiveCharts.Wpf.StackedColumnSeries)(chart.Series[i])).Values[count - 1] = value + 1;
+                }), new object[] { index });
+            } else {
+                var count = ((LiveCharts.Wpf.StackedColumnSeries)(chart.Series[index])).Values.Count;
+                var value = (int)(((LiveCharts.Wpf.StackedColumnSeries)(chart.Series[index])).Values[count - 1]);
+                ((LiveCharts.Wpf.StackedColumnSeries)(chart.Series[index])).Values[count - 1] = value + 1;
+            }
+        }
+
+        void AddNewValueToShareChart(LiveCharts.WinForms.CartesianChart chart) {
+            chart.Series[0].Values.RemoveAt(0);
+            chart.Series[1].Values.RemoveAt(0);
+            chart.AxisX[0].Labels.RemoveAt(0);
+
+            chart.Series[0].Values.Add(0);
+            chart.Series[1].Values.Add(0);
+            chart.AxisX[0].Labels.Add(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        }
+
+        enum ChartType { Device, Total, Algorithm }
+
+        void UpdateChart(LiveCharts.WinForms.CartesianChart chart, System.Func<int, double> deviceIndexToValue, ChartType type, int chartIndex = 0) {
+            var now = System.DateTime.Now;
+            var numSerieses = (type == ChartType.Device   ) ? mDevices.Length :
+                              (type == ChartType.Total    ) ? 1 :
+                              (type == ChartType.Algorithm) ? sAlgorithmList.Length :
+                                                              mDevices.Length;
+
+            for (int i = 0; i < numSerieses; ++i) {
                 chart.Series[i].Values.Add(new MeasureModel {
                     DateTime = now,
                     Value = deviceIndexToValue(i)
                 });
-                int valueIndex = chart.Series[i].Values.Count - 1; 
-                valueIndex -= 60;           if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Second % 15 != 0) chart.Series[i].Values.RemoveAt(valueIndex);
-                valueIndex -= 60 / 15 * 59; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Minute % 10 != 0) chart.Series[i].Values.RemoveAt(valueIndex);
-                valueIndex -= 60 / 10 * 23; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Hour   %  6 != 0) chart.Series[i].Values.RemoveAt(valueIndex);
-                while (chart.Series[i].Values.Count > 60 + (60 / 15) * 59 + (60 / 10) * 23 + (6 / 10) * 6) // Keep data at least for one week.
+                int valueIndex = chart.Series[i].Values.Count - 1;
+                valueIndex = chart.Series[i].Values.Count - 1 - 60;           if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Second != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60;      if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Minute != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60 - 24; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Hour   != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                while (chart.Series[i].Values.Count > 60 + 60 + 24 + 365) // Keep data for one year.
                     chart.Series[i].Values.RemoveAt(0);
             }
             //
+            string coverage = (chartIndex == 0) ? (string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] : (string)comboBoxSecondGraphCoverage.Items[comboBoxSecondGraphCoverage.SelectedIndex];
             chart.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
-            if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Minute") {
+            if (coverage == "1 Minute") {
                 chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
-            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Hour") {
+            } else if (coverage == "1 Hour") {
                 chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60).Ticks;
-            } else if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Day") {
+            } else if (coverage == "1 Day") {
                 chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24).Ticks;
-            } else /* if ((string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] == "1 Week") */ {
-                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 7).Ticks;
+            } else if (coverage == "1 Month") {
+                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 31).Ticks;
+            } else if (coverage == "1 Year") {
+                chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60 * 60 * 24 * 365).Ticks;
+            }
+            //
+            if (!mDeviceColorCodesInitialized && type == ChartType.Device) {
+                for (int i = 0; i < mDevices.Length; ++i) {
+                    try {
+                        if (((LiveCharts.Wpf.LineSeries)chart.Series[i]).Stroke != null) {
+                            var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)chart.Series[i]).Stroke)).Color;
+                            dataGridViewDevices.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(
+                                color.R + (255 - color.R) / 2,
+                                color.G + (255 - color.G) / 2,
+                                color.B + (255 - color.B) / 2);
+                            mDeviceColorCodesInitialized = true;
+                        }
+                    } catch (Exception) { }
+                }
             }
         }
 
@@ -3615,10 +3579,18 @@ namespace GatelessGateSharp {
                 buttonDeleteSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
                 buttonDeleteAllSettingsBackups.Enabled = listBoxSettingBackups.Items.Count > 0;
 
-                cartesianChartTemperature.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == "Temperature");
-                cartesianChartSpeedPrimaryAlgorithm.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == "Speed (Primary Algorithm)");
-                cartesianChartSpeedSecondaryAlgorithm.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == "Speed (Secondary Algorithm)");
-                cartesianChartFanSpeed.Visible = ((string)comboBoxGraphType.Items[comboBoxGraphType.SelectedIndex] == "Fan Speed");
+                cartesianChartTemperature.Visible = ((string)comboBoxGraphType.SelectedItem == "Temperature");
+                cartesianChartFanSpeed.Visible = ((string)comboBoxGraphType.SelectedItem == "Fan Speed");
+                cartesianChartPower.Visible = ((string)comboBoxGraphType.SelectedItem == "Power");
+                cartesianChartDeviceActivity.Visible = ((string)comboBoxGraphType.SelectedItem == "Activity");
+                cartesianChartCPUUsage.Visible = ((string)comboBoxGraphType.SelectedItem == "CPU Usage");
+
+                cartesianChartSpeedPrimaryAlgorithm.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Speed (Primary Algorithm)");
+                cartesianChartSpeedSecondaryAlgorithm.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Speed (Secondary Algorithm)");
+                cartesianChartShare1Minute.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Minute");
+                cartesianChartShare1Hour.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Hour");
+                cartesianChartShare1Day.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Day");
+                cartesianChartShare1Month.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Month");
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
             }
@@ -3917,7 +3889,7 @@ namespace GatelessGateSharp {
                     foreach (var miner in mMiners) {
                         if (!miner.Alive) {
                             MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
-                            Program.KillMonitor = false; Application.Exit();
+                            Program.Exit(false);
                         }
                     }
                 }
@@ -4610,6 +4582,37 @@ namespace GatelessGateSharp {
             }
         }
 
+        int mCPUUsage = 0;
+
+        private void Task_UpdateCPUUsage(object cancellationToken) {
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                    System.Diagnostics.PerformanceCounter counter = new System.Diagnostics.PerformanceCounter("Processor", "% Processor Time", "_Total");
+                    System.Threading.Thread.Sleep(1000);
+
+                    while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                        mCPUUsage = (int)counter.NextValue();
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                } catch (Exception ex) { ExceptionLogger(ex); }
+            }
+        }
+
+        private void Task_CollectGarbage(object cancellationToken) {
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    Logger("Running garbage collection...");
+                    Logger("Memory used before collection: " + GC.GetTotalMemory(false) / 1024 / 1024 + "MB");
+                    System.Runtime.GCSettings.LargeObjectHeapCompactionMode = System.Runtime.GCLargeObjectHeapCompactionMode.CompactOnce;
+                    GC.Collect();
+                    Logger("Memory used before collection: " + GC.GetTotalMemory(true) / 1024 / 1024 + "MB");
+                } catch (Exception ex) { ExceptionLogger(ex); }
+                System.Threading.Thread.Sleep(5 * 60 * 1000);
+            }
+        }
+
         string mLatestReleaseUrl;
         string mLatestReleaseName;
         int mLatestReleaseDiff = 0;
@@ -4710,9 +4713,9 @@ namespace GatelessGateSharp {
                             stopwatch.Start();
                         }
                     }
-                    if (PCIExpress.Available && MainForm.Instance.mAppState == ApplicationGlobalState.Mining)
-                        System.Threading.Thread.SpinWait(1000); // TODO
-                    else
+                    //if (PCIExpress.Available && MainForm.Instance.mAppState == ApplicationGlobalState.Mining)
+                    //    System.Threading.Thread.SpinWait(1000); // TODO
+                    //else
                         System.Threading.Thread.Sleep(1);
                 } catch (Exception) { }
             }
@@ -5101,12 +5104,22 @@ namespace GatelessGateSharp {
 
         private void buttonRestart_Click(object sender, EventArgs e) {
             try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
-            Program.KillMonitor = false; Application.Exit();
+            Program.Exit(false);
         }
 
         private void buttonReleaseMemory_Click(object sender, EventArgs e) {
             foreach (var device in mDevices)
                 device.ReleaseAllComputeBuffers();
+        }
+
+        private void comboBoxSecondGraphType_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+            UpdateControls();
+        }
+
+        private void comboBoxSecondGraphCoverage_SelectedIndexChanged(object sender, EventArgs e) {
+            mAreSettingsDirty = true;
+            UpdateControls();
         }
     }
 }

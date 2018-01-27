@@ -562,7 +562,6 @@ namespace GatelessGateSharp
 
             set {
                 bool reset = value < 0;
-                int ret;
 
                 if (ADLAdapterIndex < 0)
                     return;
@@ -663,7 +662,6 @@ namespace GatelessGateSharp
 
             set {
                 bool reset = value < 0;
-                int ret;
 
                 if (ADLAdapterIndex < 0)
                     return;
@@ -739,7 +737,6 @@ namespace GatelessGateSharp
 
             set {
                 bool reset = value < 0;
-                int ret;
 
                 if (ADLAdapterIndex < 0)
                     return;
