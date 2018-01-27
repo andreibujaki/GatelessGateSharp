@@ -3482,42 +3482,44 @@ namespace GatelessGateSharp {
 
         private bool CheckSettingsBeforeMining()
         {
-            if (CustomPoolEnabled && !ValidateCustomPoolSettings())
-                return false;
-            if (!CustomPoolEnabled) {
-                if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
+            try {
+                if (CustomPoolEnabled && !ValidateCustomPoolSettings())
                     return false;
-                if (textBoxEthereumAddress.Text != "" && !ValidateEthereumAddress())
-                    return false;
-                if (textBoxMoneroAddress.Text != "" && !ValidateMoneroAddress())
-                    return false;
-                if (textBoxPascalAddress.Text != "" && !ValidatePascalAddress())
-                    return false;
-                if (textBoxLbryAddress.Text != "" && !ValidateLbryAddress())
-                    return false;
-                if (textBoxRigID.Text != "" && !ValidateRigID())
-                    return false; 
-                if (textBoxBitcoinAddress.Text == ""
-                    && textBoxEthereumAddress.Text == ""
-                    && textBoxMoneroAddress.Text == ""
-                    && textBoxPascalAddress.Text == ""
-                    && textBoxLbryAddress.Text == "") {
-                    MessageBox.Show("Please enter at least one valid wallet address.", appName, MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    tabControlMainForm.TabIndex = 1;
+                if (!CustomPoolEnabled) {
+                    if (textBoxBitcoinAddress.Text != "" && !ValidateBitcoinAddress())
+                        return false;
+                    if (textBoxEthereumAddress.Text != "" && !ValidateEthereumAddress())
+                        return false;
+                    if (textBoxMoneroAddress.Text != "" && !ValidateMoneroAddress())
+                        return false;
+                    if (textBoxPascalAddress.Text != "" && !ValidatePascalAddress())
+                        return false;
+                    if (textBoxLbryAddress.Text != "" && !ValidateLbryAddress())
+                        return false;
+                    if (textBoxRigID.Text != "" && !ValidateRigID())
+                        return false;
+                    if (textBoxBitcoinAddress.Text == ""
+                        && textBoxEthereumAddress.Text == ""
+                        && textBoxMoneroAddress.Text == ""
+                        && textBoxPascalAddress.Text == ""
+                        && textBoxLbryAddress.Text == "") {
+                        MessageBox.Show("Please enter at least one valid wallet address.", appName, MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        tabControlMainForm.TabIndex = 1;
+                        return false;
+                    }
+                }
+                var enabled = false;
+                foreach (var device in mDevices)
+                    enabled = enabled || (bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value);
+                if (!enabled) {
+                    MessageBox.Show("Please enable at least one device.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tabControlMainForm.TabIndex = 0;
                     return false;
                 }
-            }
-            var enabled = false;
-            foreach (var device in mDevices)
-                enabled = enabled || (bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value);
-            if (!enabled) {
-                MessageBox.Show("Please enable at least one device.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                tabControlMainForm.TabIndex = 0;
-                return false;
-            }
 
-            return true;
+                return true;
+            } catch (Exception ex) { ExceptionLogger(ex); return false;  }
         }
 
         private void UpdateControls() {

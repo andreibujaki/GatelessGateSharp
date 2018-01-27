@@ -16,7 +16,13 @@
         "Entry"
         {
         "MsmKey" = "8:_005BA131E503E55D3259C325B392A218"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_005BA131E503E55D3259C325B392A218"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -28,7 +34,13 @@
         "Entry"
         {
         "MsmKey" = "8:_00AA238AA09A4A5FD7750A2A49F90FB1"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_00AA238AA09A4A5FD7750A2A49F90FB1"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -100,7 +112,13 @@
         "Entry"
         {
         "MsmKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2A178B97B26AE0AD8808019FC59D99C0"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -130,7 +148,13 @@
         "Entry"
         {
         "MsmKey" = "8:_381FCF22B4217A09400FE06D5EDFDEFC"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_381FCF22B4217A09400FE06D5EDFDEFC"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -153,6 +177,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3F257B72128849FFBA6BAEFBFEC78450"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4130C1162AE044AE9A893D54929F8A3B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -166,13 +196,25 @@
         "Entry"
         {
         "MsmKey" = "8:_419AA3B6AC7F5D90CD6D83C38A63F4B3"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_419AA3B6AC7F5D90CD6D83C38A63F4B3"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_41D73E71863A5CF344DE0BC191304925"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_41D73E71863A5CF344DE0BC191304925"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -201,13 +243,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "MsmKey" = "8:_55C2667EF70641308F03ED199821B14C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_55C2667EF70641308F03ED199821B14C"
+        "MsmKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -321,6 +363,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_949261D795644D93BFE8E46806A1236C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -376,7 +424,13 @@
         "Entry"
         {
         "MsmKey" = "8:_ADA849628BC355DC41F4B2D4F6ACE3E5"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ADA849628BC355DC41F4B2D4F6ACE3E5"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -406,7 +460,13 @@
         "Entry"
         {
         "MsmKey" = "8:_B86CF387C2C12D251394FBBCB17C4241"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B86CF387C2C12D251394FBBCB17C4241"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -490,7 +550,13 @@
         "Entry"
         {
         "MsmKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D5E0043C4E894C579440EACD8A99AF6D"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -532,7 +598,13 @@
         "Entry"
         {
         "MsmKey" = "8:_DA26F0A023D7F9002E8409A3798624AE"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DA26F0A023D7F9002E8409A3798624AE"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -544,12 +616,6 @@
         "Entry"
         {
         "MsmKey" = "8:_DD5483791A2D47DAB2A4CD2F483E02B7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DFDCB3E1FD61424AB847293197EEA140"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -634,13 +700,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DFDCB3E1FD61424AB847293197EEA140"
+        "OwnerKey" = "8:_57A6C17ADC734FD2BACA5B7C1923253E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_558AC528A5344188B265CAF48F34D908"
+        "OwnerKey" = "8:_3F257B72128849FFBA6BAEFBFEC78450"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -792,6 +864,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
             }
         }
     }
@@ -1306,6 +1386,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3F257B72128849FFBA6BAEFBFEC78450"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.2.9.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_3F257B72128849FFBA6BAEFBFEC78450"
+                    {
+                    "Name" = "8:GatelessGateSharpMonitor.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharpMonitor.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4130C1162AE044AE9A893D54929F8A3B"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\jh.cl"
@@ -1488,23 +1599,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_558AC528A5344188B265CAF48F34D908"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55C2667EF70641308F03ED199821B14C"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.2.9.0, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_558AC528A5344188B265CAF48F34D908"
-                    {
-                    "Name" = "8:GatelessGateSharp.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharp.exe"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ethash_lbry.cl"
+            "TargetName" = "8:ethash_lbry.cl"
             "Tag" = "8:"
-            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1519,12 +1619,23 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55C2667EF70641308F03ED199821B14C"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_57A6C17ADC734FD2BACA5B7C1923253E"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ethash_lbry.cl"
-            "TargetName" = "8:ethash_lbry.cl"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpCL, Version=1.2.9.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_57A6C17ADC734FD2BACA5B7C1923253E"
+                    {
+                    "Name" = "8:GatelessGateSharpCL.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharpCL.exe"
+            "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1885,6 +1996,37 @@
             "TargetName" = "8:Oland_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_94470E592BF34FCEBF3FC318A54CC736"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.2.9.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_94470E592BF34FCEBF3FC318A54CC736"
+                    {
+                    "Name" = "8:GatelessGateSharp.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharp.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2663,37 +2805,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DFDCB3E1FD61424AB847293197EEA140"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.2.9.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_DFDCB3E1FD61424AB847293197EEA140"
-                    {
-                    "Name" = "8:GatelessGateSharpMonitor.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharpMonitor.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E3AE1DDCC6F34C90A4465D4E68038325"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_cryptonight_8.bin"
@@ -3066,7 +3177,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
         "ProductCode" = "8:{3CE62F3E-0E1B-423D-AC70-B64A63A5357A}"
-        "PackageCode" = "8:{1DCEFC47-2923-481E-8750-C74062E9E464}"
+        "PackageCode" = "8:{3C50F502-3B6B-4087-A3F9-D761AF97DDC6}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -3186,7 +3297,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1E40E7F9B6E84E57A751723D9B11EA53"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_35E9960D3AE44B56B47FABB1D75EC53D"
             {
             "Name" = "8:Gateless Gate Sharp"
             "Arguments" = "8:"
@@ -3194,13 +3305,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_558AC528A5344188B265CAF48F34D908"
+            "Target" = "8:_94470E592BF34FCEBF3FC318A54CC736"
             "Folder" = "8:_660873410D3F434FA886514EC3A2C4FC"
             "WorkingFolder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Icon" = "8:_F6A2FA18F955449E83C7F83DB16E2C23"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_90C61B6D0B3D43BDB255DDE7369AEAA9"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AF43947C63A147DC84E2D4333AD35D08"
             {
             "Name" = "8:Gateless Gate Sharp"
             "Arguments" = "8:"
@@ -3208,7 +3319,7 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_558AC528A5344188B265CAF48F34D908"
+            "Target" = "8:_94470E592BF34FCEBF3FC318A54CC736"
             "Folder" = "8:_B203AFE30AB346679C07ED227950460D"
             "WorkingFolder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
             "Icon" = "8:_F6A2FA18F955449E83C7F83DB16E2C23"
