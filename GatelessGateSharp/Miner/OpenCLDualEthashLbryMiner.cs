@@ -59,7 +59,7 @@ namespace GatelessGateSharp
 
 
         public OpenCLDualEthashLbryMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Ethash/Lbry", "Ethash", "Lbry")
+            : base(aGatelessGateDevice, "ethash_lbry", "ethash", "lbry")
         {
             try {
                 mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
@@ -97,24 +97,7 @@ namespace GatelessGateSharp
             }
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\ethash_lbry.cl");
-                mEthashProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\ethash_lbry.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O1 " :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + mEthashLocalWorkSizeArray[0];
-                try
-                {
-                    mEthashProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                    MainForm.Logger(mEthashProgram.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Ethash program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
+                mEthashProgram = BuildProgram("ethash_lbry", mEthashLocalWorkSizeArray[0], "-O1", "", "");
                 mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
                 mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");
                 mEthashSearchKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashSearchKernel = mEthashProgram.CreateKernel("search");
@@ -149,7 +132,7 @@ namespace GatelessGateSharp
 
                     // Wait for the first job to arrive.
                     int elapsedTime = 0;
-                    while ((mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 60000) {
+                    while ((mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped) {
                         Thread.Sleep(100);
                         elapsedTime += 100;
                     }
@@ -158,7 +141,7 @@ namespace GatelessGateSharp
                         MainForm.Logger("Stratum server failed to send a new job.");
                         return;
                     }
-                    
+
                     System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                     EthashStratum.Work ethashWork;
                     LbryStratum.Work lbryWork;

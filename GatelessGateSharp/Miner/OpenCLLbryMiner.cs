@@ -28,7 +28,6 @@ namespace GatelessGateSharp
 {
     class OpenCLLbryMiner : OpenCLMiner
     {
-        private LbryStratum mLbryStratum;
         long[] mLbryGlobalWorkSizeArray = new long[] { 0 };
         long[] mLbryLocalWorkSizeArray = new long[] { 0 };
         long[] mLbryGlobalWorkOffsetArray = new long[] { 0 };
@@ -38,18 +37,25 @@ namespace GatelessGateSharp
         private int mIterations = 1;
 
 
+
         public OpenCLLbryMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Lbry")
+            : base(aGatelessGateDevice, "lbry")
         {
         }
 
         public void Start(LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
         {
-            mLbryStratum = aLbryStratum;
+            Stratum = aLbryStratum;
             mLbryGlobalWorkSizeArray[0] = aLbryIntensity * OpenCLDevice.GetMaxComputeUnits() * aLbryLocalWorkSize;
             mLbryLocalWorkSizeArray[0] = aLbryLocalWorkSize;
 
             base.Start();
+        }
+
+        public LbryStratum Stratum { get; set; }
+
+        public override void SetPrimaryStratum(Stratum stratum) {
+            Stratum = (LbryStratum)stratum;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
@@ -65,33 +71,13 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
-
-                try {
-                    if (mLbryLocalWorkSizeArray[0] != 256)
-                        throw new Exception("No suitable binary file was found.");
-                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_lbry.bin";
-                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
-                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
-                } catch (Exception) {
-                    String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
-                    program = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded Kernels\lbry.cl for Device #" + DeviceIndex + ".");
-                }
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
-                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                    "")
-                                        + " -IKernels -DWORKSIZE=" + mLbryLocalWorkSizeArray[0] + " -DITERATIONS=" + mIterations;
-                try {
-                    program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                } catch (Exception) {
-                    MainForm.Logger(program.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Lbry program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
-
+                program = BuildProgram(
+                    "lbry",
+                    mLbryLocalWorkSizeArray[0], 
+                    "-O1 -DITERATIONS=" + mIterations,
+                    "-DITERATIONS=" + mIterations,
+                    "-DITERATIONS=" + mIterations);
+                
                 using (var lbrySearchKernel = program.CreateKernel("search_combined"))
                 using (var lbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112))
                 using (var lbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize))
@@ -111,30 +97,30 @@ namespace GatelessGateSharp
 
                         // Wait for the first lbryJob to arrive.
                         int elapsedTime = 0;
-                        while ((mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 60000) {
+                        while ((Stratum == null || Stratum.GetJob() == null) && elapsedTime < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped) {
                             Thread.Sleep(100);
                             elapsedTime += 100;
                         }
-                        if (mLbryStratum == null || mLbryStratum.GetJob() == null)
+                        if (Stratum == null || Stratum.GetJob() == null)
                             throw new TimeoutException("Stratum server failed to send a new lbryJob.");
 
                         System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                         LbryStratum.Work lbryWork;
+                        LbryStratum.Job lbryJob;
 
-                        while (!Stopped && (lbryWork = mLbryStratum.GetWork()) != null)
+                        while (!Stopped && (lbryWork = Stratum.GetWork()) != null && (lbryJob = lbryWork.Job) != null)
                         {
                             MarkAsAlive();
 
-                            var lbryJob = lbryWork.Job;
                             Array.Copy(lbryWork.Blob, mLbryInput, 112);
                             UInt32 lbryStartNonce = (UInt32)(r.Next(0, int.MaxValue));
-                            UInt64 lbryTarget = (UInt64) ((double) 0xffff0000UL / (mLbryStratum.Difficulty / 256));
+                            UInt64 lbryTarget = (UInt64) ((double) 0xffff0000UL / (Stratum.Difficulty / 256));
                             lbrySearchKernel.SetValueArgument<UInt64>(3, lbryTarget);
                             Queue.Write<byte>(lbryInputBuffer, true, 0, 112, (IntPtr)lbryInputPtr, null);
 
                             consoleUpdateStopwatch.Start();
 
-                            while (!Stopped && mLbryStratum.GetJob().Equals(lbryJob))
+                            while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(lbryJob))
                             {
                                 System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                                 sw.Start();
@@ -151,7 +137,7 @@ namespace GatelessGateSharp
                                 Queue.Write<UInt32>(lbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
                                 Queue.Execute(lbrySearchKernel, mLbryGlobalWorkOffsetArray, mLbryGlobalWorkSizeArray, mLbryLocalWorkSizeArray, null);
                                 Queue.Read<UInt32>(lbryOutputBuffer, true, 0, lbryOutputSize, (IntPtr)lbryOutputPtr, null);
-                                if (mLbryStratum.GetJob().Equals(lbryJob))
+                                if (Stratum.GetJob() != null && Stratum.GetJob().Equals(lbryJob))
                                 {
                                     for (int i = 0; i < mLbryOutput[255]; ++i)
                                     {
@@ -161,7 +147,7 @@ namespace GatelessGateSharp
                                             UInt32 word = mLbryOutput[256 + i * 8 + j];
                                             result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                                         }
-                                        mLbryStratum.Submit(GatelessGateDevice, lbryWork, mLbryOutput[i], result);
+                                        Stratum.Submit(GatelessGateDevice, lbryWork, mLbryOutput[i], result);
                                     }
                                 }
                                 lbryStartNonce += (UInt32)mLbryGlobalWorkSizeArray[0] * (uint)mIterations;
@@ -187,20 +173,17 @@ namespace GatelessGateSharp
 
                     if (!Stopped) {
                         MainForm.Logger("Restarting miner thread...");
-                        System.Threading.Thread.Sleep(5000);
+                        System.Threading.Thread.Sleep(Parameters.WaitTimeForRestartingMinerThreadInMilliseconds);
                     }
                 }
-                MarkAsDone();
-
-                program.Dispose();
-            } catch (UnrecoverableException) {
-                if (program != null)
-                    program.Dispose();
-                throw;
+            } catch (UnrecoverableException ex) {
+                this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                if (program != null)
-                    program.Dispose();
-                throw new UnrecoverableException(ex, GatelessGateDevice);
+                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+            } finally {
+                MarkAsDone();
+                MemoryUsage = 0;
+                if (program != null) { program.Dispose(); program = null; }
             }
         }
     }

@@ -28,11 +28,26 @@ namespace GatelessGateSharp
         public int AcceptedShares { get { return mAcceptedShares; } }
         public int RejectedShares { get { return mRejectedShares; } }
 
+        public bool OverclockingEnabled { get; set; }
+        public int TargetPowerLimit { get; set; }
+        public int TargetCoreClock { get; set; }
+        public int TargetMemoryClock { get; set; }
+        public int TargetCoreVoltage { get; set; }
+        public int TargetMemoryVoltage { get; set; }
+
+        public bool FanControlEnabled { get; set; }
+        public int TargetMaxFanSpeed { get; set; }
+        public int TargetMinFanSpeed { get; set; }
+        public int TargetTemperature { get; set; }
+        public int TargetMaxTemperature { get; set; }
+
         public Device(int aDeviceIndex)
         {
             mDeviceIndex = aDeviceIndex;
             mAcceptedShares = 0;
             mRejectedShares = 0;
+            OverclockingEnabled = false;
+            FanControlEnabled = false;
         }
 
         public void Dispose() {

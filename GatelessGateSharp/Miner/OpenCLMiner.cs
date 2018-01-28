@@ -64,6 +64,46 @@ namespace GatelessGateSharp
             mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.OutOfOrderExecution);
         }
 
+        protected ComputeProgram BuildProgram(string programName, long localWorkSize, string optionsAMD, string optionsNVIDIA, string optionsOthers) {
+            ComputeProgram program;
+            string defultBinaryFilePath = @"BinaryKernels\" + ComputeDevice.Name + "_" + programName + "_" + localWorkSize + ".bin";
+            string savedBinaryFilePath = (MainForm.SavedOpenCLBinaryKernelPathBase + @"\") + ComputeDevice.Name + "_" + programName + "_" + localWorkSize + ".bin";
+            string sourceFilePath = @"Kernels\" + programName + ".cl";
+            String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? optionsAMD : OpenCLDevice.GetVendor() == "NVIDIA" ? optionsNVIDIA : optionsOthers) + " -IKernels -DWORKSIZE=" + localWorkSize;
+            try {
+                if (!MainForm.UseDefaultOpenCLBinariesChecked)
+                    throw new Exception();
+                byte[] binary = System.IO.File.ReadAllBytes(defultBinaryFilePath);
+                program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { ComputeDevice });
+                MainForm.Logger("Loaded " + defultBinaryFilePath + " for Device #" + DeviceIndex + ".");
+            } catch (Exception) {
+                try {
+                    if (!MainForm.ReuseCompiledBinariesChecked)
+                        throw new Exception();
+                    byte[] binary = System.IO.File.ReadAllBytes(savedBinaryFilePath);
+                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { ComputeDevice });
+                    MainForm.Logger("Loaded " + savedBinaryFilePath + " for Device #" + DeviceIndex + ".");
+                } catch (Exception) {
+                    String source = System.IO.File.ReadAllText(sourceFilePath);
+                    program = new ComputeProgram(Context, source);
+                    MainForm.Logger(@"Loaded " + sourceFilePath + " for Device #" + DeviceIndex + ".");
+                }
+            }
+            try {
+                program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
+                if (MainForm.ReuseCompiledBinariesChecked)
+                    System.IO.File.WriteAllBytes(savedBinaryFilePath, program.Binaries[0]);
+            } catch (Exception) {
+                MainForm.Logger(program.GetBuildLog(ComputeDevice));
+                program.Dispose();
+                throw;
+            }
+            MainForm.Logger("Built " + programName + " program for Device #" + DeviceIndex + ".");
+            MainForm.Logger("Build options: " + buildOptions);
+
+            return program;
+        }
+
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 if (mQueue != null) {

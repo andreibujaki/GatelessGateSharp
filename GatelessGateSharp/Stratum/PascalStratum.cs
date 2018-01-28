@@ -118,7 +118,7 @@ namespace GatelessGateSharp
                     try  { mMutex.WaitOne(5000); } catch (Exception) { }
                     mJob = (new Job(this, (string)parameters[0], (string)parameters[2], (string)parameters[3], (string)parameters[7]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                    MainForm.Logger("Received new job: " + parameters[0]);
+                    if (!SilentMode) MainForm.Logger("Received new job: " + parameters[0]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {
@@ -145,11 +145,11 @@ namespace GatelessGateSharp
                 {
                     throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
                 }
-                else if ((ID != "1" && ID != "2" && ID != "3") && result && !MainForm.DevFeeMode)
+                else if ((ID != "1" && ID != "2" && ID != "3") && result)
                 {
                     MainForm.Logger("Share #" + ID + " accepted.");
                     ReportShareAcceptance();
-                } else if ((ID != "1" && ID != "2" && ID != "3") && !result && !MainForm.DevFeeMode)
+                } else if ((ID != "1" && ID != "2" && ID != "3") && !result)
                 {
                     MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
                     ReportShareRejection();
@@ -180,7 +180,7 @@ namespace GatelessGateSharp
                 LocalExtranonceSize = (int)(((JArray)(response["result"]))[2]);
                 //MainForm.Logger("mLocalExtranonceSize: " + mLocalExtranonceSize);
             } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+                throw this.UnrecoverableException = new AuthorizationFailedException();
             }
             
             // mining.extranonce.subscribe
@@ -213,7 +213,7 @@ namespace GatelessGateSharp
             {
                 String stringNonce = (String.Format("{3:x2}{2:x2}{1:x2}{0:x2}", ((aNonce >> 0) & 0xff), ((aNonce >> 8) & 0xff), ((aNonce >> 16) & 0xff), ((aNonce >> 24) & 0xff)));
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
-                    { "id", mJsonRPCMessageID++ },
+                    { "id", mJsonRPCMessageID },
                     { "method", "mining.submit" },
                     { "params", new List<string> {
                         Username,
@@ -223,13 +223,10 @@ namespace GatelessGateSharp
                         stringNonce
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
-                //MainForm.Logger("message: " + message);
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted Share #" + mJsonRPCMessageID + " to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
+                ++mJsonRPCMessageID;
             }
             catch (Exception ex) {
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
-                // MainForm.Logger("Failed to submit share: " + ex.Message + "\nRestarting the application...");
-                // Program.KillMonitor = false; System.Windows.Forms.Application.Exit();
                 MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }

@@ -40,7 +40,7 @@ namespace GatelessGateSharp
 
 
         public OpenCLDummyLbryMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Lbry")
+            : base(aGatelessGateDevice, "lbry")
         {
             mIterations = (aGatelessGateDevice.GetVendor() == "NVIDIA") ? 8 : 1;
         }
@@ -65,33 +65,13 @@ namespace GatelessGateSharp
                 MarkAsAlive();
 
                 //MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
-                try {
-                    if (mLbryLocalWorkSizeArray[0] != 256)
-                        throw new Exception("No suitable binary file was found.");
-                    string fileName = @"BinaryKernels\" + computeDevice.Name + "_lbry.bin";
-                    byte[] binary = System.IO.File.ReadAllBytes(fileName);
-                    program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { computeDevice });
-                    //MainForm.Logger("Loaded " + fileName + " for Device #" + DeviceIndex + ".");
-                }
-                catch (Exception)
-                {
-                    String source = System.IO.File.ReadAllText(@"Kernels\lbry.cl");
-                    program = new ComputeProgram(Context, source);
-                    //MainForm.Logger(@"Loaded Kernels\lbry.cl for Device #" + DeviceIndex + ".");
-                }
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
-                                        OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                    "")
-                                        + " -IKernels -DWORKSIZE=" + mLbryLocalWorkSizeArray[0] + " -DITERATIONS=" + mIterations;
-                try
-                {
-                    program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                    MainForm.Logger(program.GetBuildLog(computeDevice));
-                    throw;
-                }
+
+                program = BuildProgram(
+                    "lbry",
+                    mLbryLocalWorkSizeArray[0],
+                    "-O1 -DITERATIONS=" + mIterations,
+                    "-DITERATIONS=" + mIterations,
+                    "-DITERATIONS=" + mIterations);
 
                 using (var mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112))
                 using (var mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize))
@@ -145,17 +125,16 @@ namespace GatelessGateSharp
                         MainForm.Logger("Restarting dummy miner thread...");
                     }
                 }
-                MarkAsDone();
-
-                program.Dispose();
-            } catch (UnrecoverableException) {
-                if (program != null)
-                    program.Dispose();
-                throw;
+            } catch (UnrecoverableException ex) {
+                this.UnrecoverableException = ex;
             } catch (Exception ex) {
+                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+            } finally {
+                MarkAsDone();
+                MemoryUsage = 0;
                 if (program != null)
                     program.Dispose();
-                throw new UnrecoverableException(ex, GatelessGateDevice);
+                program = null;
             }
         }
     }

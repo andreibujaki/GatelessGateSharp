@@ -41,10 +41,11 @@ namespace GatelessGateSharp
         public double Speed { get; set; }
         public double SpeedSecondaryAlgorithm { get; set; }
         public String AlgorithmName { get { return mAlgorithmName; } }
-        public String FirstAlgorithmName { get { return mFirstAlgorithmName; } }
-        public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
+        public String PrimaryAlgorithmName { get { return mFirstAlgorithmName; } }
+        public String SecondaryAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
         public UnrecoverableException UnrecoverableException { get; set; }
+        public long MemoryUsage { get; set; }
 
         protected Miner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
         {
@@ -54,6 +55,7 @@ namespace GatelessGateSharp
             mSecondAlgorithmName = aSecondAlgorithmName;
             Speed = 0;
             SpeedSecondaryAlgorithm = 0;
+            MemoryUsage = 0;
         }
 
         public void Dispose() {
@@ -131,8 +133,15 @@ namespace GatelessGateSharp
             get {
                 if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5)
                     Speed = 0;
-                return !(mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 60);
+                return !(mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5 * 60);
             }
+        }
+
+        public virtual void SetPrimaryStratum(Stratum stratum) {
+            throw new System.InvalidOperationException();
+        }
+        public virtual void SetSecondaryStratum(Stratum stratum) {
+            throw new System.InvalidOperationException();
         }
     }
 }
