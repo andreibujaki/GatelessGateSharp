@@ -34,6 +34,9 @@ using LiveCharts.Configurations;
 using LiveCharts.Wpf;
 using Winforms.Cartesian.ConstantChanges;
 using System.Text.RegularExpressions;
+using System.Net;
+using System.Net.Sockets;
+using NetTools;
 
 
 
@@ -83,15 +86,6 @@ namespace GatelessGateSharp {
         public static readonly string[] sAlgorithmList = new string[] { "ethash_pascal", "ethash", "pascal", "neoscrypt", "cryptonight", "lyra2rev2", "lbry" };
         public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|pascal|cryptonight|neoscrypt|lyra2rev2|lbry";
 
-        private Stratum mPrimaryStratum = null;
-        private Stratum mSecondaryStratum = null;
-        private List<Miner> mMiners = new List<Miner>();
-        private enum ApplicationGlobalState {
-            Idle = 0,
-            Mining = 1,
-            Switching = 2
-        };
-        private ApplicationGlobalState mAppState = ApplicationGlobalState.Switching;
         private bool mAreSettingsDirty = false;
         private bool mDisableAutomaticSaving = false;
 
@@ -136,7 +130,6 @@ namespace GatelessGateSharp {
         private Button[] buttonDeviceResetAllArray;
         private Button[] buttonDeviceCopyToOthersArray;
 
-        private OpenCLDevice[] mDevices;
         private bool ADLInitialized = false;
         private bool NVMLInitialized = false;
         private System.Threading.Mutex DeviceManagementLibrariesMutex = new System.Threading.Mutex();
@@ -595,7 +588,8 @@ namespace GatelessGateSharp {
                                         }
                                     } else if ((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Success) {
                                         int index = int.Parse((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Groups[1].Captures[0].Value);
-                                        dataGridViewDevices.Rows[index].Cells["enabled"].Value = (string)reader["value"] == "true";
+                                        if (index < Controller.OpenCLDevices.Length)
+                                            dataGridViewDevices.Rows[index].Cells["enabled"].Value = (string)reader["value"] == "true";
                                     }
 
                                     foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
@@ -665,8 +659,8 @@ namespace GatelessGateSharp {
                                     var deviceName = (string)reader["device_name"];
                                     var name = (string)reader["parameter_name"];
                                     var value = (string)reader["parameter_value"];
-                                    if (deviceID >= mDevices.Length || deviceVendor != mDevices[deviceID].GetVendor() ||
-                                        deviceName != mDevices[deviceID].GetName())
+                                    if (deviceID >= Controller.OpenCLDevices.Length || deviceVendor != Controller.OpenCLDevices[deviceID].GetVendor() ||
+                                        deviceName != Controller.OpenCLDevices[deviceID].GetName())
                                         continue;
                                     if (name == "ethash_pascal_threads")
                                         numericUpDownDeviceEthashPascalThreadsArray[deviceID].Value = decimal.Parse(value);
@@ -715,7 +709,7 @@ namespace GatelessGateSharp {
                                             decimal.Parse(value);
                                     else if (name == "cryptonight_intensity")
                                         numericUpDownDeviceCryptoNightRawIntensityArray[deviceID].Value =
-                                            decimal.Parse(value) * mDevices[deviceID].GetMaxComputeUnits();
+                                            decimal.Parse(value) * Controller.OpenCLDevices[deviceID].GetMaxComputeUnits();
                                     else if (name == "cryptonight_raw_intensity")
                                         numericUpDownDeviceCryptoNightRawIntensityArray[deviceID].Value =
                                             decimal.Parse(value);
@@ -767,12 +761,12 @@ namespace GatelessGateSharp {
                 }
                 if (databaseVersion == 0) {
                     // Values of intensity were reinterpreted at v1.1.14.
-                    foreach (var device in mDevices)
+                    foreach (var device in Controller.OpenCLDevices)
                         ResetDeviceSettings(device);
                     checkBoxDisableAutoStartPrompt.Checked = true;
                 }
                 if (databaseVersion < 2) {
-                    foreach (var device in mDevices) {
+                    foreach (var device in Controller.OpenCLDevices) {
                         numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
                         numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
                         numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
@@ -829,7 +823,7 @@ namespace GatelessGateSharp {
                                                         radioButtonMonacoin.Checked ? "monacoin" :
                                                                                         "most_profitable");
                         command.ExecuteNonQuery();
-                        for (var i = 0; i < mDevices.Length; ++i) {
+                        for (var i = 0; i < Controller.OpenCLDevices.Length; ++i) {
                             command.Parameters.AddWithValue("@name", "enable_gpu" + i);
                             command.Parameters.AddWithValue("@value", (bool)(dataGridViewDevices.Rows[i].Cells["enabled"].Value) ? "true" : "false");
                             command.ExecuteNonQuery();
@@ -897,11 +891,11 @@ namespace GatelessGateSharp {
                     }
 
                     sql = "insert into device_parameters (device_id, device_vendor, device_name, parameter_name, parameter_value) values (@device_id, @device_vendor, @device_name, @parameter_name, @parameter_value)";
-                    for (var i = 0; i < mDevices.Length; ++i) {
+                    for (var i = 0; i < Controller.OpenCLDevices.Length; ++i) {
                         using (var command = new SQLiteCommand(sql, conn)) {
                             command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", mDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", mDevices[i].GetName());
+                            command.Parameters.AddWithValue("@device_vendor", Controller.OpenCLDevices[i].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", Controller.OpenCLDevices[i].GetName());
 
                             command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalThreadsArray[i].Value.ToString());
@@ -1062,7 +1056,7 @@ namespace GatelessGateSharp {
 #endif          
 
             try {
-                RunNGen();
+                //RunNGen();
             } catch (Exception ex) {
                 Logger("Exception in RuznNGen(): " + ex.Message + ex.StackTrace);
             }
@@ -1117,10 +1111,10 @@ namespace GatelessGateSharp {
             InitializeShareChart(cartesianChartShare1Day, 24);
             InitializeShareChart(cartesianChartShare1Month, 31);
             
-            mAppState = ApplicationGlobalState.Idle;
+            Controller.AppState = Controller.ApplicationGlobalState.Idle;
             UpdateControls();
             mBackgroundTasksCancellationTokenSource = new CancellationTokenSource();
-            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_HardwareManagement), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Controller.Task_HardwareManagement), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateBitcoinRates), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateAltcoinRates), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdatePoolStats), mBackgroundTasksCancellationTokenSource.Token);
@@ -1128,6 +1122,7 @@ namespace GatelessGateSharp {
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateCPUUsage), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_CollectGarbage), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateShareCharts), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_APIListener), mBackgroundTasksCancellationTokenSource.Token);
             mAreSettingsDirty = false;
             checkBoxEnablePhymem.Checked = false;
 
@@ -1160,15 +1155,15 @@ namespace GatelessGateSharp {
 
         private void InitializeDevices() {
             try {
-                mDevices = OpenCLDevice.GetAllOpenCLDevices();
+                Controller.OpenCLDevices = OpenCLDevice.GetAllOpenCLDevices();
             } catch (Exception ex) {
                 Logger("Exception in OpenCLDevice.GetAllOpenCLDevices(): " + ex.Message + ex.StackTrace);
                 MessageBox.Show("Failed to initialize OpenCL devices. Please install appropriate device driver(s) for your graphics cards.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                mDevices = new OpenCLDevice[] { };
+                Controller.OpenCLDevices = new OpenCLDevice[] { };
             }
-            Logger("Number of Devices: " + mDevices.Length);
+            Logger("Number of Devices: " + Controller.OpenCLDevices.Length);
 
-            ADLInitialized = OpenCLDevice.InitializeADL(mDevices);
+            ADLInitialized = OpenCLDevice.InitializeADL(Controller.OpenCLDevices);
 
             try {
                 if (ManagedCuda.Nvml.NvmlNativeMethods.nvmlInit() == 0) {
@@ -1177,7 +1172,7 @@ namespace GatelessGateSharp {
                     ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetCount(ref nvmlDeviceCount);
                     Logger("NVML Device Count: " + nvmlDeviceCount);
 
-                    nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[mDevices.Length];
+                    nvmlDeviceArray = new ManagedCuda.Nvml.nvmlDevice[Controller.OpenCLDevices.Length];
                     for (uint i = 0; i < nvmlDeviceCount; ++i) {
                         var nvmlDevice = new ManagedCuda.Nvml.nvmlDevice();
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetHandleByIndex(i, ref nvmlDevice);
@@ -1185,12 +1180,12 @@ namespace GatelessGateSharp {
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetPciInfo(nvmlDevice, ref info);
 
                         uint j;
-                        for (j = 0; j < mDevices.Length; ++j)
-                            if (mDevices[j].GetComputeDevice().Vendor == "NVIDIA Corporation" && mDevices[j].GetComputeDevice().PciBusIdNV == info.bus) {
+                        for (j = 0; j < Controller.OpenCLDevices.Length; ++j)
+                            if (Controller.OpenCLDevices[j].GetComputeDevice().Vendor == "NVIDIA Corporation" && Controller.OpenCLDevices[j].GetComputeDevice().PciBusIdNV == info.bus) {
                                 nvmlDeviceArray[j] = nvmlDevice;
                                 break;
                             }
-                        if (j >= mDevices.Length)
+                        if (j >= Controller.OpenCLDevices.Length)
                             throw new Exception();
                     }
 
@@ -1203,7 +1198,7 @@ namespace GatelessGateSharp {
             } else {
             }
 
-            foreach (var device in mDevices) {
+            foreach (var device in Controller.OpenCLDevices) {
                 dataGridViewDevices.Rows.Add(new object[] {
                     true,
                     device.DeviceIndex,
@@ -1212,34 +1207,34 @@ namespace GatelessGateSharp {
                 });
             }
 
-            tabPageDeviceArray = new TabPage[mDevices.Length];
-            numericUpDownDeviceEthashPascalThreadsArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceEthashPascalIntensityArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceEthashPascalPascalIterationsArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceNeoScryptThreadsArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceNeoScryptIntensityArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceNeoScryptLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDevicePascalThreadsArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDevicePascalIntensityArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDevicePascalLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceLbryThreadsArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceLbryIntensityArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceLbryLocalWorkSizeArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceLyra2REv2ThreadsArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceLyra2REv2IntensityArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceLyra2REv2LocalWorkSizeArray = new NumericUpDown[mDevices.Length];
+            tabPageDeviceArray = new TabPage[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceEthashPascalThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceEthashPascalIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceEthashPascalPascalIterationsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceNeoScryptThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceNeoScryptIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceNeoScryptLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDevicePascalThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDevicePascalIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDevicePascalLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceLbryThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceLbryIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceLbryLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceLyra2REv2ThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceLyra2REv2IntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceLyra2REv2LocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
 
-            checkBoxDeviceFanControlEnabledArray = new CheckBox[mDevices.Length];
-            numericUpDownDeviceFanControlTargetTemperatureArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceFanControlMaximumTemperatureArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceFanControlMinimumFanSpeedArray = new NumericUpDown[mDevices.Length];
-            numericUpDownDeviceFanControlMaximumFanSpeedArray = new NumericUpDown[mDevices.Length];
+            checkBoxDeviceFanControlEnabledArray = new CheckBox[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceFanControlTargetTemperatureArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceFanControlMaximumTemperatureArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceFanControlMinimumFanSpeedArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceFanControlMaximumFanSpeedArray = new NumericUpDown[Controller.OpenCLDevices.Length];
 
             checkBoxDeviceOverclockingEnabledArray = new Dictionary<Tuple<int, string>, CheckBox> { };
             numericUpDownDeviceOverclockingPowerLimitArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
@@ -1248,11 +1243,11 @@ namespace GatelessGateSharp {
             numericUpDownDeviceOverclockingMemoryClockArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
             numericUpDownDeviceOverclockingMemoryVoltageArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
 
-            buttonDeviceResetToDefaultArray = new Button[mDevices.Length];
-            buttonDeviceResetAllArray = new Button[mDevices.Length];
-            buttonDeviceCopyToOthersArray = new Button[mDevices.Length];
+            buttonDeviceResetToDefaultArray = new Button[Controller.OpenCLDevices.Length];
+            buttonDeviceResetAllArray = new Button[Controller.OpenCLDevices.Length];
+            buttonDeviceCopyToOthersArray = new Button[Controller.OpenCLDevices.Length];
 
-            for (var i = 0; i < mDevices.Length; ++i) {
+            for (var i = 0; i < Controller.OpenCLDevices.Length; ++i) {
                 DeviceSettingsUserControl.DeviceSettingsUserControl uc = new DeviceSettingsUserControl.DeviceSettingsUserControl();
 
                 uc.GetType().GetProperty("Tag").SetValue(uc, i);
@@ -1357,7 +1352,7 @@ namespace GatelessGateSharp {
                 }
             }
 
-            foreach (var device in mDevices)
+            foreach (var device in Controller.OpenCLDevices)
                 ResetDeviceSettings(device);
 
             UpdateStats();
@@ -1366,11 +1361,11 @@ namespace GatelessGateSharp {
 
         void DeviceSettingsUserControl_ButtonResetToDefaultClicked(object sender, EventArgs e) {
             int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
-            ResetDeviceSettings(mDevices[deviceIndex]);
+            ResetDeviceSettings(Controller.OpenCLDevices[deviceIndex]);
         }
 
         void DeviceSettingsUserControl_ButtonResetAllClicked(object sender, EventArgs e) {
-            foreach (var device in mDevices)
+            foreach (var device in Controller.OpenCLDevices)
                 ResetDeviceSettings(device);
         }
 
@@ -1487,10 +1482,10 @@ namespace GatelessGateSharp {
 
         private void CopyDeviceSettings(int sourceDeviceIndex) {
             mAreSettingsDirty = true;
-            foreach (var device in mDevices) {
+            foreach (var device in Controller.OpenCLDevices) {
                 if (sourceDeviceIndex == device.DeviceIndex
-                    || device.GetVendor() != mDevices[sourceDeviceIndex].GetVendor()
-                    || device.GetName() != mDevices[sourceDeviceIndex].GetName())
+                    || device.GetVendor() != Controller.OpenCLDevices[sourceDeviceIndex].GetVendor()
+                    || device.GetName() != Controller.OpenCLDevices[sourceDeviceIndex].GetName())
                     continue;
 
                 checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked = checkBoxDeviceFanControlEnabledArray[sourceDeviceIndex].Checked;
@@ -1561,6 +1556,7 @@ namespace GatelessGateSharp {
         static Dictionary<string, double> sAltcoinRates = new Dictionary<string, double> { };
         delegate void StringArgReturningVoidDelegate(string text);
         delegate bool NoArgReturningBoolDelegate();
+        delegate int NoArgReturningIntDelegate();
 
         static void Task_UpdateBitcoinRates(object cancellationToken) {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
@@ -1730,7 +1726,7 @@ namespace GatelessGateSharp {
                     var coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
 
-                    if (mAppState == ApplicationGlobalState.Mining && averageHashrate != 0) {
+                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
                         UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
                     } 
@@ -1744,7 +1740,7 @@ namespace GatelessGateSharp {
                     var coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
 
-                    if (mAppState == ApplicationGlobalState.Mining && averageHashrate != 0) {
+                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
                         UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
                     } 
@@ -1755,7 +1751,7 @@ namespace GatelessGateSharp {
                         balance = (double)data["balance"];
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
-                    if (mAppState == ApplicationGlobalState.Mining && sNanopoolEthereumEarningStats != null) {
+                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && sNanopoolEthereumEarningStats != null) {
                         var earningData = (JContainer)sNanopoolEthereumEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
                         UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
@@ -1767,7 +1763,7 @@ namespace GatelessGateSharp {
                         balance = (double)data["balance"];
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * XMRRate) + " " + currency + ")";
-                    if (mAppState == ApplicationGlobalState.Mining && sNanopoolMoneroEarningStats != null) {
+                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && sNanopoolMoneroEarningStats != null) {
                         var earningData = (JContainer)sNanopoolMoneroEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
                         UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
@@ -1778,7 +1774,7 @@ namespace GatelessGateSharp {
                         balance = double.Parse((string)sDwarfPoolEthereumStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
-                    if (mAppState == ApplicationGlobalState.Mining && sNanopoolEthereumEarningStats != null) { // TODO
+                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && sNanopoolEthereumEarningStats != null) { // TODO
                         var earningData = (JContainer)sNanopoolEthereumEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
                         UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
@@ -1789,7 +1785,7 @@ namespace GatelessGateSharp {
                         balance = double.Parse((string)sDwarfPoolMoneroStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * XMRRate) + " " + currency + ")";
-                    if (mAppState == ApplicationGlobalState.Mining && sNanopoolMoneroEarningStats != null) { // TODO
+                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && sNanopoolMoneroEarningStats != null) { // TODO
                         var earningData = (JContainer)sNanopoolMoneroEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
                         UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
@@ -1813,7 +1809,7 @@ namespace GatelessGateSharp {
                 } catch (Exception) { }
             labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * BTCRate) + " " + currency + ")";
 
-            if (mAppState == ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
+            if (Controller.AppState == Controller.ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
                 double price = 0;
                 result = (JContainer)sNiceHashGlobalCurrentStats["result"];
                 stats = (JArray)result["stats"];
@@ -1854,7 +1850,7 @@ namespace GatelessGateSharp {
         }
 
         private void UpdateStats() {
-            if (mAppState == ApplicationGlobalState.Switching)
+            if (Controller.AppState == Controller.ApplicationGlobalState.Switching)
                 return;
             UpdateLocalStats();
             UpdatePoolStats();
@@ -1867,27 +1863,27 @@ namespace GatelessGateSharp {
                 Text = appName + " (" + (mLatestReleaseDiff == 0 ? "latest release" : mLatestReleaseDiff + " release(s) behind") + ")"; // Set the window title.
 
                 // Pool
-                mCurrentPool = (mAppState == ApplicationGlobalState.Mining && mPrimaryStratum != null) ? (mPrimaryStratum.PoolName) :
+                mCurrentPool = (Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.PrimaryStratum != null) ? (Controller.PrimaryStratum.PoolName) :
                                checkBoxCustomPool0Enable.Checked ? textBoxCustomPool0Host.Text :
                                checkBoxCustomPool1Enable.Checked ? textBoxCustomPool1Host.Text :
                                checkBoxCustomPool2Enable.Checked ? textBoxCustomPool2Host.Text :
                                checkBoxCustomPool3Enable.Checked ? textBoxCustomPool3Host.Text :
                                (string)listBoxPoolPriorities.Items[0];
                 var currentSecondaryPool
-                             = (mAppState == ApplicationGlobalState.Mining && mSecondaryStratum != null) ? (mSecondaryStratum.PoolName) :
+                             = (Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.SecondaryStratum != null) ? (Controller.SecondaryStratum.PoolName) :
                                checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool0SecondaryHost.Text :
                                checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool1SecondaryHost.Text :
                                checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool2SecondaryHost.Text :
                                checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool3SecondaryHost.Text :
                                "";
-                if (mAppState == ApplicationGlobalState.Mining && mDevFeeMode) {
+                if (Controller.AppState == Controller.ApplicationGlobalState.Mining && mDevFeeMode) {
                     labelCurrentPool.Text = "DEVFEE(" + Parameters.DevFeePercentage + "%; " + string.Format("{0:N0}", Parameters.DevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
                     labelCurrentSecondaryPool.Text = "";
-                } else if (mAppState == ApplicationGlobalState.Mining && !CustomPoolEnabled && mPrimaryStratum != null && mSecondaryStratum != null) {
-                    labelCurrentPool.Text = mCurrentPool + " (" + mPrimaryStratum.ServerAddress + ")";
-                    labelCurrentSecondaryPool.Text = currentSecondaryPool + " (" + mSecondaryStratum.ServerAddress + ")";
-                } else if (mAppState == ApplicationGlobalState.Mining && !CustomPoolEnabled && mPrimaryStratum != null) {
-                    labelCurrentPool.Text = mCurrentPool + " (" + mPrimaryStratum.ServerAddress + ")";
+                } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining && !CustomPoolEnabled && Controller.PrimaryStratum != null && Controller.SecondaryStratum != null) {
+                    labelCurrentPool.Text = mCurrentPool + " (" + Controller.PrimaryStratum.ServerAddress + ")";
+                    labelCurrentSecondaryPool.Text = currentSecondaryPool + " (" + Controller.SecondaryStratum.ServerAddress + ")";
+                } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining && !CustomPoolEnabled && Controller.PrimaryStratum != null) {
+                    labelCurrentPool.Text = mCurrentPool + " (" + Controller.PrimaryStratum.ServerAddress + ")";
                     labelCurrentSecondaryPool.Text = "";
                 } else {
                     labelCurrentPool.Text = mCurrentPool;
@@ -1895,7 +1891,7 @@ namespace GatelessGateSharp {
                 }
 
                 var elapsedTimeInSeconds = (long)(DateTime.Now - mStartTime).TotalSeconds;
-                if (mAppState != ApplicationGlobalState.Mining)
+                if (Controller.AppState != Controller.ApplicationGlobalState.Mining)
                     labelElapsedTime.Text = "-";
                 else if (elapsedTimeInSeconds >= 24 * 60 * 60)
                     labelElapsedTime.Text = string.Format("{3} Day{4} {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24, elapsedTimeInSeconds / 60 / 60 / 24 == 1 ? "" : "s");
@@ -1930,7 +1926,7 @@ namespace GatelessGateSharp {
 
                 UpdateCharts();
 
-                foreach (var device in mDevices) {
+                foreach (var device in Controller.OpenCLDevices) {
                     var computeDevice = device.GetComputeDevice();
                     var deviceIndex = device.DeviceIndex;
                     double speedPrimary = 0, speedSecondary = 0;
@@ -1941,13 +1937,13 @@ namespace GatelessGateSharp {
                         if (miner.DeviceIndex == device.DeviceIndex && miner.SecondaryAlgorithmName != null && miner.SecondaryAlgorithmName != "")
                             speedSecondary += miner.SpeedSecondaryAlgorithm;
 
-                    dataGridViewDevices.Rows[deviceIndex].Cells["speed"].Value = (mAppState != ApplicationGlobalState.Mining) ? "-" :
+                    dataGridViewDevices.Rows[deviceIndex].Cells["speed"].Value = (Controller.AppState != Controller.ApplicationGlobalState.Mining) ? "-" :
                                                            speedSecondary > 0 ? ConvertHashRateToString(speedPrimary) + ", " + ConvertHashRateToString(speedSecondary) :
                                                                                                          ConvertHashRateToString(speedPrimary);
 
                     if (device.AcceptedShares + device.RejectedShares == 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = Color.Black;
-                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = mAppState == ApplicationGlobalState.Mining ? "0" : "-";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = Controller.AppState == Controller.ApplicationGlobalState.Mining ? "0" : "-";
                     } else {
                         var acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = device.AcceptedShares.ToString() + " (" + string.Format("{0:N1}", acceptanceRate * 100) + "%)";
@@ -2059,6 +2055,149 @@ namespace GatelessGateSharp {
             }
         }
 
+        private bool IsAPIEnabled() {
+            if (checkBoxAPIEnabled.InvokeRequired) {
+                return (bool)checkBoxAPIEnabled.Invoke(new NoArgReturningBoolDelegate(() => {
+                    return checkBoxAPIEnabled.Checked;
+                }));
+            } else {
+                return checkBoxAPIEnabled.Checked;
+            }
+        }
+
+        private int GetAPIPort() {
+            if (numericUpDownAPIPort.InvokeRequired) {
+                return (int)numericUpDownAPIPort.Invoke(new NoArgReturningIntDelegate(() => {
+                    return decimal.ToInt32(numericUpDownAPIPort.Value);
+                }));
+            } else {
+                return decimal.ToInt32(numericUpDownAPIPort.Value);
+            }
+        }
+
+        private IPAddressRange GetAdminIPAddressRange() {
+            try {
+                string text = null;
+                if (textBoxAdminIPRange.InvokeRequired) {
+                    text = (string)textBoxAdminIPRange.Invoke(new NoArgReturningStringDelegate(() => {
+                        return textBoxAdminIPRange.Text;
+                    }));
+                } else {
+                    text = textBoxAdminIPRange.Text;
+                }
+                return IPAddressRange.Parse(text);
+            } catch (Exception ex) {
+                ExceptionLogger(ex);
+                return null;
+            }
+        }
+
+        private IPAddressRange GetAllowedIPAddressRange() {
+            try {
+                string text = null;
+                if (textBoxAllowedIPRange.InvokeRequired) {
+                    text = (string)textBoxAllowedIPRange.Invoke(new NoArgReturningStringDelegate(() => {
+                        return textBoxAllowedIPRange.Text;
+                    }));
+                } else {
+                    text = textBoxAllowedIPRange.Text;
+                }
+                return IPAddressRange.Parse(text);
+            } catch (Exception ex) {
+                ExceptionLogger(ex);
+                return null;
+            }
+        }
+
+        private IPAddressRange GetDeniedIPAddressRange() {
+            try {
+                string text = null;
+                if (textBoxDeniedIPRange.InvokeRequired) {
+                    text = (string)textBoxDeniedIPRange.Invoke(new NoArgReturningStringDelegate(() => {
+                        return textBoxDeniedIPRange.Text;
+                    }));
+                } else {
+                    text = textBoxDeniedIPRange.Text;
+                }
+                return IPAddressRange.Parse(text);
+            } catch (Exception ex) {
+                ExceptionLogger(ex);
+                return null;
+            }
+        }
+
+        async void Task_APIListener(object cancellationToken) {
+            TcpListener server = null;
+
+            Logger("API Listener started.");
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                if (IsAPIEnabled()) {
+                    try {
+                        int port = GetAPIPort();
+                        server = new TcpListener(IPAddress.Any, port);
+                        server.Start();
+
+                        Logger("API Listener started listening to port " + port + ".");
+                        while (!((CancellationToken)cancellationToken).IsCancellationRequested && IsAPIEnabled()) {
+                            var task = server.AcceptTcpClientAsync();
+                            while (!task.IsCompleted && !((CancellationToken)cancellationToken).IsCancellationRequested && IsAPIEnabled())
+                                Thread.Sleep(1);
+                            if (((CancellationToken)cancellationToken).IsCancellationRequested || !IsAPIEnabled())
+                                break;
+                            var client = await task;
+                            var admin = GetAdminIPAddressRange();
+                            var allowed = GetAllowedIPAddressRange();
+                            var denied = GetDeniedIPAddressRange();
+                            var address = ((System.Net.IPEndPoint)client.Client.RemoteEndPoint).Address;
+                            var accessAllowed =
+                                (allowed != null)
+                                && allowed.Contains(address)
+                                && (denied == null || !denied.Contains(address));
+                            var adminAccessAllowed =
+                                (admin != null)
+                                && admin.Contains(address)
+                                && accessAllowed;
+                            if (accessAllowed) {
+                                Logger(address + " has been granted access to the API.");
+                            } else {
+                                Logger(address + " has been denied access to the API.");
+                                client.Close();
+                                continue;
+                            }
+                            var childSocketThread = new Thread(() => {
+                                try {
+                                    Logger(address + " connected.");
+                                    Byte[] bytes = new Byte[1024];
+                                    String data = null;
+                                    NetworkStream stream = client.GetStream();
+                                    int i;
+                                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0) {
+                                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                                        Logger("Received: " + data);
+                                        data = data.ToUpper();
+                                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+                                        stream.Write(msg, 0, msg.Length);
+                                        Logger("Sent: " + data);
+                                    }
+                                } catch (Exception ex) {
+                                    ExceptionLogger(ex);
+                                } finally {
+                                    client.Close();
+                                }
+                            });
+                            childSocketThread.Start();
+                        }
+                    } catch (Exception ex) {
+                        ExceptionLogger(ex);
+                    } finally {
+                        server.Stop();
+                    }
+                }
+                System.Threading.Thread.Sleep(1000);
+            }
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             try {
                 timerDevFee.Enabled = false;
@@ -2067,7 +2206,7 @@ namespace GatelessGateSharp {
                 timerWatchdog.Enabled = false;
                 mBackgroundTasksCancellationTokenSource.Cancel();
 
-                if (mAppState == ApplicationGlobalState.Mining)
+                if (Controller.AppState == Controller.ApplicationGlobalState.Mining)
                     StopMiners();
                 if (e.CloseReason == CloseReason.UserClosing) {
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
@@ -2079,9 +2218,9 @@ namespace GatelessGateSharp {
                 //if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy)
                 //    ADL.ADL_Main_Control_Destroy();
 
-                foreach (var device in mDevices)
+                foreach (var device in Controller.OpenCLDevices)
                     device.Dispose();
-                mDevices = null;
+                Controller.OpenCLDevices = null;
                 PCIExpress.UnloadPhyMem();
 
                 mBackgroundTasksCancellationTokenSource.Dispose();
@@ -2109,10 +2248,10 @@ namespace GatelessGateSharp {
                     mChartsInitialized = true;
                 }
 
-                UpdateChart(cartesianChartTemperature, deviceIndex => mDevices[deviceIndex].Temperature, ChartType.Device);
-                UpdateChart(cartesianChartFanSpeed, deviceIndex => mDevices[deviceIndex].FanSpeed, ChartType.Device);
-                UpdateChart(cartesianChartDeviceActivity, deviceIndex => mDevices[deviceIndex].Activity, ChartType.Device);
-                UpdateChart(cartesianChartPower, deviceIndex => (mDevices[deviceIndex].Power < 0 ? 0 : mDevices[deviceIndex].Power), ChartType.Device);
+                UpdateChart(cartesianChartTemperature, deviceIndex => Controller.OpenCLDevices[deviceIndex].Temperature, ChartType.Device);
+                UpdateChart(cartesianChartFanSpeed, deviceIndex => Controller.OpenCLDevices[deviceIndex].FanSpeed, ChartType.Device);
+                UpdateChart(cartesianChartDeviceActivity, deviceIndex => Controller.OpenCLDevices[deviceIndex].Activity, ChartType.Device);
+                UpdateChart(cartesianChartPower, deviceIndex => (Controller.OpenCLDevices[deviceIndex].Power < 0 ? 0 : Controller.OpenCLDevices[deviceIndex].Power), ChartType.Device);
                 UpdateChart(cartesianChartCPUUsage, dummy => ( mCPUUsage ), ChartType.Total);
 
                 UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
@@ -2133,10 +2272,10 @@ namespace GatelessGateSharp {
         }
 
         void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue, ChartType type) {
-            int numSerieses = (type == ChartType.Device) ? mDevices.Length :
+            int numSerieses = (type == ChartType.Device) ? Controller.OpenCLDevices.Length :
                               (type == ChartType.Total) ? 1 :
                               (type == ChartType.Algorithm) ? sAlgorithmList.Length :
-                                                              mDevices.Length;
+                                                              Controller.OpenCLDevices.Length;
 
             chart.DisableAnimations = true;
             chart.AxisX.Clear();
@@ -2162,7 +2301,7 @@ namespace GatelessGateSharp {
             for (int i = 0; i < numSerieses; ++i) {
                 chart.Series.Add(
                     new LiveCharts.Wpf.LineSeries {
-                        Title = (type == ChartType.Device) ? "Device #" + i + ": " + mDevices[i].GetVendor() + " " + mDevices[i].GetName() :
+                        Title = (type == ChartType.Device) ? "Device #" + i + ": " + Controller.OpenCLDevices[i].GetVendor() + " " + Controller.OpenCLDevices[i].GetName() :
                                 (type == ChartType.Total) ? "Total" :
                                 (type == ChartType.Algorithm) ? sAlgorithmList[i] :
                                                                 "",
@@ -2212,6 +2351,7 @@ namespace GatelessGateSharp {
         }
 
         delegate void NoArgReturningVoidDelegate();
+        delegate string NoArgReturningStringDelegate();
 
         void Task_UpdateShareCharts(object cancellationToken) {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
@@ -2304,10 +2444,10 @@ namespace GatelessGateSharp {
 
         void UpdateChart(LiveCharts.WinForms.CartesianChart chart, System.Func<int, double> deviceIndexToValue, ChartType type, int chartIndex = 0) {
             var now = System.DateTime.Now;
-            var numSerieses = (type == ChartType.Device   ) ? mDevices.Length :
+            var numSerieses = (type == ChartType.Device   ) ? Controller.OpenCLDevices.Length :
                               (type == ChartType.Total    ) ? 1 :
                               (type == ChartType.Algorithm) ? sAlgorithmList.Length :
-                                                              mDevices.Length;
+                                                              Controller.OpenCLDevices.Length;
 
             for (int i = 0; i < numSerieses; ++i) {
                 chart.Series[i].Values.Add(new MeasureModel {
@@ -2337,7 +2477,7 @@ namespace GatelessGateSharp {
             }
             //
             if (!mDeviceColorCodesInitialized && type == ChartType.Device) {
-                for (int i = 0; i < mDevices.Length; ++i) {
+                for (int i = 0; i < Controller.OpenCLDevices.Length; ++i) {
                     try {
                         if (((LiveCharts.Wpf.LineSeries)chart.Series[i]).Stroke != null) {
                             var color = ((System.Windows.Media.SolidColorBrush)(((LiveCharts.Wpf.LineSeries)chart.Series[i]).Stroke)).Color;
@@ -2651,7 +2791,7 @@ namespace GatelessGateSharp {
             }
 
             if (stratum != null) {
-                mPrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (Stratum)stratum;
                 LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
             }
         }
@@ -2679,7 +2819,7 @@ namespace GatelessGateSharp {
 
             if (stratum != null) {
                 LaunchOpenCLLbryMinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (Stratum)stratum;
             }
         }
 
@@ -2706,7 +2846,7 @@ namespace GatelessGateSharp {
 
             if (stratum != null) {
                 LaunchOpenCLNeoScryptMinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (Stratum)stratum;
             }
         }
 
@@ -2733,7 +2873,7 @@ namespace GatelessGateSharp {
 
             if (stratum != null) {
                 LaunchOpenCLLyra2REv2MinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (Stratum)stratum;
             }
         }
 
@@ -2792,8 +2932,8 @@ namespace GatelessGateSharp {
 
             if (ethashStratum != null && pascalStratum != null) {
                 LaunchOpenCLDualEthashPascalMinersWithStratum(ethashStratum, pascalStratum);
-                mPrimaryStratum = (Stratum)ethashStratum;
-                mSecondaryStratum = (Stratum)pascalStratum;
+                Controller.PrimaryStratum = (Stratum)ethashStratum;
+                Controller.SecondaryStratum = (Stratum)pascalStratum;
             }
         }
 
@@ -2830,7 +2970,7 @@ namespace GatelessGateSharp {
 
             if (stratum != null) {
                 LaunchOpenCLPascalMinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (Stratum)stratum;
             }
         }
 
@@ -2936,7 +3076,7 @@ namespace GatelessGateSharp {
 
             if (stratum != null) {
                 LaunchOpenCLEthashMinersWithStratum(stratum);
-                mPrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (Stratum)stratum;
             }
         }
 
@@ -2944,16 +3084,16 @@ namespace GatelessGateSharp {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i) {
-                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(mDevices[deviceIndex]);
+                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex]);
                         mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightRawIntensityArray[deviceIndex]
@@ -2974,15 +3114,15 @@ namespace GatelessGateSharp {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     minerCount += 1;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    OpenCLDualEthashLbryMiner dualMiner = new OpenCLDualEthashLbryMiner(mDevices[deviceIndex]);
+                    OpenCLDualEthashLbryMiner dualMiner = new OpenCLDualEthashLbryMiner(Controller.OpenCLDevices[deviceIndex]);
                     mMiners.Add(dualMiner);
                     dualMiner.Start(stratum,
                         Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
@@ -3007,16 +3147,16 @@ namespace GatelessGateSharp {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     minerCount += Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value));
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (int i = 0; i < numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value; ++i) {
-                        OpenCLDualEthashPascalMiner dualMiner = new OpenCLDualEthashPascalMiner(mDevices[deviceIndex]);
+                        OpenCLDualEthashPascalMiner dualMiner = new OpenCLDualEthashPascalMiner(Controller.OpenCLDevices[deviceIndex]);
                         mMiners.Add(dualMiner);
                         dualMiner.Start(stratum,
                                 stratum2,
@@ -3039,16 +3179,16 @@ namespace GatelessGateSharp {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i) {
-                        OpenCLEthashMiner miner = new OpenCLEthashMiner(mDevices[deviceIndex]);
+                        OpenCLEthashMiner miner = new OpenCLEthashMiner(Controller.OpenCLDevices[deviceIndex]);
                         mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
@@ -3069,16 +3209,16 @@ namespace GatelessGateSharp {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i) {
-                        OpenCLLbryMiner miner = new OpenCLLbryMiner(mDevices[deviceIndex]);
+                        OpenCLLbryMiner miner = new OpenCLLbryMiner(Controller.OpenCLDevices[deviceIndex]);
                         mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
@@ -3097,16 +3237,16 @@ namespace GatelessGateSharp {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i) {
-                        OpenCLPascalMiner miner = new OpenCLPascalMiner(mDevices[deviceIndex]);
+                        OpenCLPascalMiner miner = new OpenCLPascalMiner(Controller.OpenCLDevices[deviceIndex]);
                         mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDevicePascalIntensityArray[deviceIndex].Value)),
@@ -3125,16 +3265,16 @@ namespace GatelessGateSharp {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i) {
-                        OpenCLNeoScryptMiner miner = new OpenCLNeoScryptMiner(mDevices[deviceIndex]);
+                        OpenCLNeoScryptMiner miner = new OpenCLNeoScryptMiner(Controller.OpenCLDevices[deviceIndex]);
                         mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptIntensityArray[deviceIndex].Value)),
@@ -3154,16 +3294,16 @@ namespace GatelessGateSharp {
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex)
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < mDevices.Length; ++deviceIndex) {
+            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i) {
-                        OpenCLLyra2REv2Miner miner = new OpenCLLyra2REv2Miner(mDevices[deviceIndex]);
+                        OpenCLLyra2REv2Miner miner = new OpenCLLyra2REv2Miner(Controller.OpenCLDevices[deviceIndex]);
                         mMiners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
@@ -3190,53 +3330,53 @@ namespace GatelessGateSharp {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashLbryMinersWithStratum(stratum, stratum2);
-                mPrimaryStratum = stratum;
-                mSecondaryStratum = stratum2;
+                Controller.PrimaryStratum = stratum;
+                Controller.SecondaryStratum = stratum2;
             } else if (algo == "Ethash" && algo2 == "Pascal") {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new PascalStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashPascalMinersWithStratum(stratum, stratum2);
-                mPrimaryStratum = stratum;
-                mSecondaryStratum = stratum2;
+                Controller.PrimaryStratum = stratum;
+                Controller.SecondaryStratum = stratum2;
             } else if (algo == "Ethash") {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 LaunchOpenCLEthashMinersWithStratum(stratum);
-                mPrimaryStratum = stratum;
+                Controller.PrimaryStratum = stratum;
             } else if (algo == "Ethash (NiceHash)" && algo2 == "Lbry") {
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashLbryMinersWithStratum(stratum, stratum2);
-                mPrimaryStratum = stratum;
-                mSecondaryStratum = stratum2;
+                Controller.PrimaryStratum = stratum;
+                Controller.SecondaryStratum = stratum2;
             } else if (algo == "Ethash (NiceHash)" && algo2 == "Pascal") {
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 var stratum2 = new PascalStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashPascalMinersWithStratum(stratum, stratum2);
-                mPrimaryStratum = stratum;
-                mSecondaryStratum = stratum2;
+                Controller.PrimaryStratum = stratum;
+                Controller.SecondaryStratum = stratum2;
             } else if (algo == "Ethash (NiceHash)") {
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 LaunchOpenCLEthashMinersWithStratum(stratum);
-                mPrimaryStratum = stratum;
+                Controller.PrimaryStratum = stratum;
             } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)") {
                 var stratum = new CryptoNightStratum(host, port, login, password, host);
                 LaunchOpenCLCryptoNightMinersWithStratum(stratum, (algo == "CryptoNight (NiceHash)"));
-                mPrimaryStratum = stratum;
+                Controller.PrimaryStratum = stratum;
             } else if (algo == "Lbry") {
                 var stratum = new LbryStratum(host, port, login, password, host);
                 LaunchOpenCLLbryMinersWithStratum(stratum);
             } else if (algo == "Pascal") {
                 var stratum = new PascalStratum(host, port, login, password, host);
                 LaunchOpenCLPascalMinersWithStratum(stratum);
-                mPrimaryStratum = stratum;
+                Controller.PrimaryStratum = stratum;
             } else if (algo == "NeoScrypt") {
                 var stratum = new NeoScryptStratum(host, port, login, password, host);
                 LaunchOpenCLNeoScryptMinersWithStratum(stratum);
-                mPrimaryStratum = stratum;
+                Controller.PrimaryStratum = stratum;
             } else if (algo == "Lyra2REv2") {
                 var stratum = new Lyra2REv2Stratum(host, port, login, password, host);
                 LaunchOpenCLLyra2REv2MinersWithStratum(stratum);
-                mPrimaryStratum = stratum;
+                Controller.PrimaryStratum = stratum;
             }
         }
 
@@ -3252,11 +3392,11 @@ namespace GatelessGateSharp {
                 LaunchMinersForDefaultPools();
             }
 
-            if (mPrimaryStratum != null) {
-                string algorithm = mPrimaryStratum.AlgorithmName;
-                if (mSecondaryStratum != null)
-                    algorithm += "_" + mSecondaryStratum.AlgorithmName;
-                foreach (var device in mDevices) {
+            if (Controller.PrimaryStratum != null) {
+                string algorithm = Controller.PrimaryStratum.AlgorithmName;
+                if (Controller.SecondaryStratum != null)
+                    algorithm += "_" + Controller.SecondaryStratum.AlgorithmName;
+                foreach (var device in Controller.OpenCLDevices) {
                     if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
                         continue;
                     var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
@@ -3268,7 +3408,7 @@ namespace GatelessGateSharp {
                         device.TargetCoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
                         device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
                         device.OverclockingEnabled = true;
-                        UpdateOverclockingSettings(device);
+                        device.UpdateOverclockingSettings();
                     }
                     if (checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked) {
                         device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value);
@@ -3276,7 +3416,7 @@ namespace GatelessGateSharp {
                         device.TargetMinFanSpeed = Decimal.ToInt32(numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value);
                         device.TargetMaxFanSpeed = Decimal.ToInt32(numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value);
                         device.FanControlEnabled = true;
-                        UpdateFanSpeeds();
+                        Controller.UpdateFanSpeeds();
                     }
                 }
             }
@@ -3307,7 +3447,7 @@ namespace GatelessGateSharp {
                         Logger("Launching Lyra2REv2 miners for " + pool + "...");
                         LaunchOpenCLLyra2REv2Miners(pool);
                     }
-                    if (mPrimaryStratum != null && mMiners.Count > 0) {
+                    if (Controller.PrimaryStratum != null && mMiners.Count > 0) {
                         return;
                     } else {
                         Logger("Failed to launch miner(s) for " + pool);
@@ -3319,14 +3459,14 @@ namespace GatelessGateSharp {
                 }
 
                 // Clean up the mess.
-                if (mPrimaryStratum != null)
-                    mPrimaryStratum.Stop();
-                if (mSecondaryStratum != null)
-                    mSecondaryStratum.Stop();
+                if (Controller.PrimaryStratum != null)
+                    Controller.PrimaryStratum.Stop();
+                if (Controller.SecondaryStratum != null)
+                    Controller.SecondaryStratum.Stop();
                 foreach (Miner miner in mMiners)
                     miner.Stop();
-                mPrimaryStratum = null;
-                mSecondaryStratum = null;
+                Controller.PrimaryStratum = null;
+                Controller.SecondaryStratum = null;
                 mMiners.Clear();
             }
         }
@@ -3394,14 +3534,14 @@ namespace GatelessGateSharp {
                 }
 
                 // Clean up the mess.
-                if (mPrimaryStratum != null)
-                    mPrimaryStratum.Stop();
-                if (mSecondaryStratum != null)
-                    mSecondaryStratum.Stop();
+                if (Controller.PrimaryStratum != null)
+                    Controller.PrimaryStratum.Stop();
+                if (Controller.SecondaryStratum != null)
+                    Controller.SecondaryStratum.Stop();
                 foreach (Miner miner in mMiners)
                     miner.Stop();
-                mPrimaryStratum = null;
-                mSecondaryStratum = null;
+                Controller.PrimaryStratum = null;
+                Controller.SecondaryStratum = null;
                 mMiners.Clear();
             }
         }
@@ -3448,7 +3588,7 @@ namespace GatelessGateSharp {
                             Logger("Launching Lyra2REv2 miners for DEVFEE...");
                             LaunchOpenCLLyra2REv2Miners(pool);
                         }
-                        if (mPrimaryStratum != null && mMiners.Count > 0) {
+                        if (Controller.PrimaryStratum != null && mMiners.Count > 0) {
                             return;
                         } else {
                             Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
@@ -3460,14 +3600,14 @@ namespace GatelessGateSharp {
                     }
 
                     // Clean up the mess.
-                    if (mPrimaryStratum != null)
-                        mPrimaryStratum.Stop();
-                    if (mSecondaryStratum != null)
-                        mSecondaryStratum.Stop();
+                    if (Controller.PrimaryStratum != null)
+                        Controller.PrimaryStratum.Stop();
+                    if (Controller.SecondaryStratum != null)
+                        Controller.SecondaryStratum.Stop();
                     foreach (Miner miner in mMiners)
                         miner.Stop();
-                    mPrimaryStratum = null;
-                    mSecondaryStratum = null;
+                    Controller.PrimaryStratum = null;
+                    Controller.SecondaryStratum = null;
                     mMiners.Clear();
                 }
             }
@@ -3490,7 +3630,7 @@ namespace GatelessGateSharp {
                             break;
                         }
                 }
-                foreach (var device in mDevices) {
+                foreach (var device in Controller.OpenCLDevices) {
                     if (device.OverclockingEnabled) {
                         device.OverclockingEnabled = false;
                         device.RestoreOverclockingSettings();
@@ -3500,10 +3640,10 @@ namespace GatelessGateSharp {
                         device.FanSpeed = -1;
                     }
                 }
-                if (mPrimaryStratum != null)
-                    mPrimaryStratum.Stop();
-                if (mSecondaryStratum != null)
-                    mSecondaryStratum.Stop();
+                if (Controller.PrimaryStratum != null)
+                    Controller.PrimaryStratum.Stop();
+                if (Controller.SecondaryStratum != null)
+                    Controller.SecondaryStratum.Stop();
                 if (mPrimaryStratumBackup != null)
                     mPrimaryStratumBackup.Stop();
                 if (mSecondaryStratumBackup != null)
@@ -3518,8 +3658,8 @@ namespace GatelessGateSharp {
                 miner.Dispose();
             }
             mMiners.Clear();
-            mPrimaryStratum = null;
-            mSecondaryStratum = null;
+            Controller.PrimaryStratum = null;
+            Controller.SecondaryStratum = null;
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -3527,24 +3667,24 @@ namespace GatelessGateSharp {
         }
 
         private void buttonStart_Click(object sender = null, EventArgs e = null) {
-            if (mAppState == ApplicationGlobalState.Idle && !CheckSettingsBeforeMining())
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle && !CheckSettingsBeforeMining())
                 return;
 
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
-            if (mAppState == ApplicationGlobalState.Idle) {
-                mAppState = ApplicationGlobalState.Switching;
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
+                Controller.AppState = Controller.ApplicationGlobalState.Switching;
                 tabControlMainForm.SelectedIndex = 0;
                 if (mAreSettingsDirty)
                     SaveSettingsToDatabase();
                 if (checkBoxEnablePhymem.Checked && !PCIExpress.Available && !PCIExpress.LoadPhyMem())
                     MessageBox.Show(Utilities.GetAutoClosingForm(10), "Failed to load phymem.", appName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
-                foreach (var device in mDevices)
+                foreach (var device in Controller.OpenCLDevices)
                     device.ClearShares();
 
-                mPrimaryStratum = null;
-                mSecondaryStratum = null;
+                Controller.PrimaryStratum = null;
+                Controller.SecondaryStratum = null;
                 mMiners.Clear();
                 mDevFeeMode = false;
                 try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
@@ -3560,10 +3700,10 @@ namespace GatelessGateSharp {
                     unrecoverableException = GetUnrecoverableException();
                 }
 
-                if (unrecoverableException != null || mPrimaryStratum == null || !mMiners.Any()) {
+                if (unrecoverableException != null || Controller.PrimaryStratum == null || !mMiners.Any()) {
                     StopMiners();
                     timerDevFee.Enabled = false;
-                    mAppState = ApplicationGlobalState.Idle;
+                    Controller.AppState = Controller.ApplicationGlobalState.Idle;
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                     
                     if (MessageBox.Show(
@@ -3578,14 +3718,14 @@ namespace GatelessGateSharp {
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
                     timerWatchdog.Enabled = true;
-                    mAppState = ApplicationGlobalState.Mining;
+                    Controller.AppState = Controller.ApplicationGlobalState.Mining;
                 }
-            } else if (mAppState == ApplicationGlobalState.Mining) {
-                mAppState = ApplicationGlobalState.Switching;
+            } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining) {
+                Controller.AppState = Controller.ApplicationGlobalState.Switching;
                 timerWatchdog.Enabled = false;
                 timerDevFee.Enabled = false;
                 StopMiners();
-                mAppState = ApplicationGlobalState.Idle;
+                Controller.AppState = Controller.ApplicationGlobalState.Idle;
                 try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
             }
 
@@ -3623,7 +3763,7 @@ namespace GatelessGateSharp {
                     }
                 }
                 var enabled = false;
-                foreach (var device in mDevices)
+                foreach (var device in Controller.OpenCLDevices)
                     enabled = enabled || (bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value);
                 if (!enabled) {
                     MessageBox.Show("Please enable at least one device.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -3636,25 +3776,25 @@ namespace GatelessGateSharp {
         }
 
         private void UpdateControls() {
-            if (mAppState == ApplicationGlobalState.Switching)
+            if (Controller.AppState == Controller.ApplicationGlobalState.Switching)
                 return;
 
             try {
-                buttonStart.Text = mAppState == ApplicationGlobalState.Mining ? "Stop" : "Start";
-                buttonReleaseMemory.Enabled = mAppState == ApplicationGlobalState.Idle;
+                buttonStart.Text = Controller.AppState == Controller.ApplicationGlobalState.Mining ? "Stop" : "Start";
+                buttonReleaseMemory.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
                 buttonRelaunch.Enabled = true;
 
-                groupBoxCoinsToMine.Enabled = /*mAppState == ApplicationGlobalState.Idle &&*/ !CustomPoolEnabled;
-                groupBoxPoolPriorities.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxPoolParameters.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxWalletAddresses.Enabled = mAppState == ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxAutomation.Enabled = mAppState == ApplicationGlobalState.Idle;
-                groupBoxHadrwareAcceleration.Enabled = mAppState == ApplicationGlobalState.Idle;
-                dataGridViewDevices.Enabled = mAppState == ApplicationGlobalState.Idle;
-                groupBoxCustmPool0.Enabled = mAppState == ApplicationGlobalState.Idle;
-                groupBoxCustmPool1.Enabled = mAppState == ApplicationGlobalState.Idle;
-                groupBoxCustmPool2.Enabled = mAppState == ApplicationGlobalState.Idle;
-                groupBoxCustmPool3.Enabled = mAppState == ApplicationGlobalState.Idle;
+                groupBoxCoinsToMine.Enabled = /*Controller.AppState == Controller.ApplicationGlobalState.Idle &&*/ !CustomPoolEnabled;
+                groupBoxPoolPriorities.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxPoolParameters.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxWalletAddresses.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle && !CustomPoolEnabled;
+                groupBoxAutomation.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                groupBoxHadrwareAcceleration.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                dataGridViewDevices.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                groupBoxCustmPool0.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                groupBoxCustmPool1.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                groupBoxCustmPool2.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                groupBoxCustmPool3.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
 
                 textBoxCustomPool0Host.Enabled = textBoxCustomPool0Login.Enabled = textBoxCustomPool0Password.Enabled = comboBoxCustomPool0Algorithm.Enabled = comboBoxCustomPool0SecondaryAlgorithm.Enabled = numericUpDownCustomPool0Port.Enabled = checkBoxCustomPool0Enable.Checked;
                 textBoxCustomPool1Host.Enabled = textBoxCustomPool1Login.Enabled = textBoxCustomPool1Password.Enabled = comboBoxCustomPool1Algorithm.Enabled = comboBoxCustomPool1SecondaryAlgorithm.Enabled = numericUpDownCustomPool1Port.Enabled = checkBoxCustomPool1Enable.Checked;
@@ -3673,12 +3813,12 @@ namespace GatelessGateSharp {
 
                 tabControlMainForm.Enabled = buttonStart.Enabled = true;
 
-                foreach (var device in mDevices) {
-                    checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle);
-                    numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (mAppState == ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                foreach (var device in Controller.OpenCLDevices) {
+                    checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
+                    numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                    numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
 
                     foreach (var algorithm in sAlgorithmList) {
                         var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
@@ -3857,10 +3997,10 @@ namespace GatelessGateSharp {
                     if (miner.GetType() == typeof(OpenCLCryptoNightMiner))
                         ((OpenCLCryptoNightMiner)miner).SaveNiceHashMode();
                 }
-                mPrimaryStratumBackup = mPrimaryStratum;
-                mPrimaryStratum = newPrimaryStratum;
-                mSecondaryStratumBackup = mSecondaryStratum;
-                mSecondaryStratum = newSecondaryStratum;
+                mPrimaryStratumBackup = Controller.PrimaryStratum;
+                Controller.PrimaryStratum = newPrimaryStratum;
+                mSecondaryStratumBackup = Controller.SecondaryStratum;
+                Controller.SecondaryStratum = newSecondaryStratum;
                 mPrimaryStratumBackup.SilentMode = true;
                 if (mSecondaryStratumBackup != null)
                     mSecondaryStratumBackup.SilentMode = true;
@@ -3873,41 +4013,41 @@ namespace GatelessGateSharp {
         private void SwitchFromStratumForDEVFEE() {
             Logger("Switching back from the DEVFEE mode...");
 
-            Stratum oldPrimaryStratum = mPrimaryStratum;
-            mPrimaryStratum = mPrimaryStratumBackup;
+            Stratum oldPrimaryStratum = Controller.PrimaryStratum;
+            Controller.PrimaryStratum = mPrimaryStratumBackup;
             mPrimaryStratumBackup = null;
             oldPrimaryStratum.Stop();
 
-            Stratum oldSecondaryStratum = mSecondaryStratum;
-            mSecondaryStratum = mSecondaryStratumBackup;
+            Stratum oldSecondaryStratum = Controller.SecondaryStratum;
+            Controller.SecondaryStratum = mSecondaryStratumBackup;
             mSecondaryStratumBackup = null;
             if (oldSecondaryStratum != null)
                 oldSecondaryStratum.Stop();
 
-            mPrimaryStratum.SilentMode = true;
-            if (mSecondaryStratum != null)
-                mSecondaryStratum.SilentMode = true;
+            Controller.PrimaryStratum.SilentMode = true;
+            if (Controller.SecondaryStratum != null)
+                Controller.SecondaryStratum.SilentMode = true;
 
             foreach (var miner in mMiners) {
-                if (miner.PrimaryAlgorithmName == mPrimaryStratum.AlgorithmName)
-                    miner.SetPrimaryStratum(mPrimaryStratum);
-                if (mSecondaryStratum != null && miner.SecondaryAlgorithmName == mSecondaryStratum.AlgorithmName)
-                    miner.SetSecondaryStratum(mSecondaryStratum);
+                if (miner.PrimaryAlgorithmName == Controller.PrimaryStratum.AlgorithmName)
+                    miner.SetPrimaryStratum(Controller.PrimaryStratum);
+                if (Controller.SecondaryStratum != null && miner.SecondaryAlgorithmName == Controller.SecondaryStratum.AlgorithmName)
+                    miner.SetSecondaryStratum(Controller.SecondaryStratum);
                 if (miner.GetType() == typeof(OpenCLCryptoNightMiner))
                     ((OpenCLCryptoNightMiner)miner).RestoreNiceHashMode();
             }
         }
 
         private void timerDevFee_Tick(object sender, EventArgs e) {
-            if (mAppState == ApplicationGlobalState.Idle) {
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
                 timerDevFee.Enabled = false;
                 return;
-            } else if (mAppState == ApplicationGlobalState.Switching) {
+            } else if (Controller.AppState == Controller.ApplicationGlobalState.Switching) {
                 timerDevFee.Interval = 1000;
                 return;
             }
 
-            mAppState = ApplicationGlobalState.Switching;
+            Controller.AppState = Controller.ApplicationGlobalState.Switching;
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
             mDevFeeMode = !(mDevFeeMode);
@@ -3920,7 +4060,7 @@ namespace GatelessGateSharp {
             if (mDevFeeMode)
                 mDevFeeModeStartTime = DateTime.Now; 
 
-            mAppState = ApplicationGlobalState.Mining;
+            Controller.AppState = Controller.ApplicationGlobalState.Mining;
             tabControlMainForm.Enabled = buttonStart.Enabled = true;
         }
 
@@ -3958,13 +4098,13 @@ namespace GatelessGateSharp {
 
         private Exception GetUnrecoverableException() {
             Exception ex = null;
-            if (mPrimaryStratum != null && mPrimaryStratum.UnrecoverableException != null) {
-                ex = mPrimaryStratum.UnrecoverableException;
-                mPrimaryStratum.UnrecoverableException = null;
+            if (Controller.PrimaryStratum != null && Controller.PrimaryStratum.UnrecoverableException != null) {
+                ex = Controller.PrimaryStratum.UnrecoverableException;
+                Controller.PrimaryStratum.UnrecoverableException = null;
             }
-            if (mSecondaryStratum != null && mSecondaryStratum.UnrecoverableException != null) {
-                ex = mSecondaryStratum.UnrecoverableException;
-                mSecondaryStratum.UnrecoverableException = null;
+            if (Controller.SecondaryStratum != null && Controller.SecondaryStratum.UnrecoverableException != null) {
+                ex = Controller.SecondaryStratum.UnrecoverableException;
+                Controller.SecondaryStratum.UnrecoverableException = null;
             }
             foreach (var miner in mMiners) {
                 if (miner.UnrecoverableException != null) {
@@ -3976,29 +4116,29 @@ namespace GatelessGateSharp {
         }
 
         private void timerWatchdog_Tick(object sender, EventArgs e) {
-            if (mAppState != ApplicationGlobalState.Mining)
+            if (Controller.AppState != Controller.ApplicationGlobalState.Mining)
                 return;
 
             try {
                 Exception ex = GetUnrecoverableException();
                 if (ex != null && ex.GetType() == typeof(StratumServerUnavailableException)) {
-                    mAppState = ApplicationGlobalState.Switching;
+                    Controller.AppState = Controller.ApplicationGlobalState.Switching;
                     tabControlMainForm.Enabled = buttonStart.Enabled = false;
                     StopMiners();
                     timerFailOver.Enabled = true;
-                    //mAppState = ApplicationGlobalState.Mining;
+                    //Controller.AppState = Controller.ApplicationGlobalState.Mining;
                 } else if (ex != null) {
-                    mAppState = ApplicationGlobalState.Switching;
+                    Controller.AppState = Controller.ApplicationGlobalState.Switching;
                     tabControlMainForm.Enabled = buttonStart.Enabled = false;
                     StopMiners();
                     if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes) {
-                        mAppState = ApplicationGlobalState.Idle;
+                        Controller.AppState = Controller.ApplicationGlobalState.Idle;
                         try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                         UpdateStats();
                         UpdateControls();
                     } else {
                         timerFailOver.Enabled = true;
-                        ///mAppState = ApplicationGlobalState.Mining;
+                        ///Controller.AppState = Controller.ApplicationGlobalState.Mining;
                     }
                 } else {
                     foreach (var miner in mMiners) {
@@ -4418,7 +4558,7 @@ namespace GatelessGateSharp {
 
         private void timerAutoStart_Tick(object sender, EventArgs e) {
             timerAutoStart.Enabled = false;
-            if (mAppState == ApplicationGlobalState.Idle) {
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
                 buttonStart_Click();
             }
         }
@@ -4489,38 +4629,6 @@ namespace GatelessGateSharp {
 
         private void dataGridViewDevices_CellContentClick(object sender, DataGridViewCellEventArgs e) {
             dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value = !(bool)(dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value);
-        }
-
-        private static void UpdateFanSpeeds() {
-            foreach (var device in Instance.mDevices) {
-                if (!device.FanControlEnabled)
-                    continue;
-
-                if (Instance.mAppState != ApplicationGlobalState.Mining)
-                    continue;
-
-                int currentTemperature = device.Temperature;
-                int targetTemperature = device.TargetTemperature;
-                int maxTemperature = device.TargetMaxTemperature;
-                int currentFanSpeed = device.FanSpeed;
-                int maxFanSpeed = device.TargetMaxFanSpeed;
-                int minFanSpeed = device.TargetMinFanSpeed;
-                int newFanSpeed = currentFanSpeed;
-
-                if (currentTemperature > targetTemperature + 5)
-                    newFanSpeed += 5;
-                else if (currentTemperature > targetTemperature)
-                    ++newFanSpeed;
-                else if (currentTemperature < targetTemperature - 5)
-                    newFanSpeed -= 5;
-                else if (currentTemperature < targetTemperature)
-                    --newFanSpeed;
-                if (currentTemperature > maxTemperature)
-                    newFanSpeed = maxFanSpeed;
-                if (newFanSpeed < minFanSpeed)
-                    newFanSpeed = minFanSpeed;
-                device.FanSpeed = newFanSpeed;
-            }
         }
 
         private void buttonConfigureAutomaticLogin_Click(object sender, EventArgs e) {
@@ -4644,31 +4752,9 @@ namespace GatelessGateSharp {
                     try { process.Kill(); } catch (Exception) { }
         }
 
-        void UpdateOverclockingSettings(OpenCLDevice device) {
-            if (!device.OverclockingEnabled)
-                return;
-            device.PowerLimit = device.TargetPowerLimit;
-            device.CoreClock = device.TargetCoreClock;
-            device.MemoryClock = device.TargetMemoryClock;
-            device.CoreVoltage = device.TargetCoreVoltage;
-            device.MemoryVoltage = device.TargetMemoryVoltage;
-        }
-
-        static public int DeviceCount {
-            get {
-                return Instance.mDevices.Length;
-            }
-        }
-
-        static public OpenCLDevice[] Devices {
-            get {
-                return Instance.mDevices;
-            }
-        }
-
         private void buttonResetAll_Click(object sender, EventArgs e) {
             mAreSettingsDirty = true;
-            foreach (var device in mDevices) {
+            foreach (var device in Controller.OpenCLDevices) {
                 ResetDeviceSettings(device);
                 device.FanSpeed = -1;
                 device.ResetOverclockingSettings();
@@ -4677,7 +4763,7 @@ namespace GatelessGateSharp {
 
         private void buttonResetFanControlSettings_Click(object sender, EventArgs e) {
             mAreSettingsDirty = true;
-            foreach (var device in mDevices) {
+            foreach (var device in Controller.OpenCLDevices) {
                 ResetDeviceFanControlSettings(device);
                 device.FanSpeed = -1;
             }
@@ -4685,13 +4771,13 @@ namespace GatelessGateSharp {
 
         private void buttonResetDeviceAlgorithmSettings_Click(object sender, EventArgs e) {
             mAreSettingsDirty = true;
-            foreach (var device in mDevices)
+            foreach (var device in Controller.OpenCLDevices)
                 ResetDeviceAlgorithmSettings(device);
         }
 
         private void buttonResetDeviceOverclockingSettings_Click(object sender, EventArgs e) {
             mAreSettingsDirty = true;
-            foreach (var device in mDevices) {
+            foreach (var device in Controller.OpenCLDevices) {
                 ResetDeviceOverclockingSettings(device);
                 device.ResetOverclockingSettings();
             }
@@ -4811,45 +4897,6 @@ namespace GatelessGateSharp {
 
         private void button7_Click(object sender, EventArgs e) {
             System.Diagnostics.Process.Start("https://download.teamviewer.com/download/TeamViewer_Setup.exe");
-        }
-
-        static private void Task_HardwareManagement(object cancellationToken) {
-            var stopwatch = new System.Diagnostics.Stopwatch();
-            stopwatch.Start();
-
-            MainForm.Logger("Hardware management task started.");
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
-            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
-                try {
-                    if (Instance.mAppState == ApplicationGlobalState.Mining && MainForm.Instance.mPrimaryStratum != null) {
-                        // overclocking
-                        string algorithm = Instance.mPrimaryStratum.AlgorithmName;
-                        if (Instance.mSecondaryStratum != null)
-                            algorithm += "_" + Instance.mSecondaryStratum.AlgorithmName;
-                        foreach (var device in Instance.mDevices) {
-                            try {
-                                if (device.OverclockingEnabled)
-                                    Instance.UpdateOverclockingSettings(device);
-                            } catch (Exception) { }
-                        }
-
-                        // memory timings
-                        PCIExpress.UpdateMemoryTimings();
-
-                        // fan speeds
-                        if (stopwatch.ElapsedMilliseconds >= 5000) {
-                            UpdateFanSpeeds();
-                            stopwatch.Reset();
-                            stopwatch.Start();
-                        }
-                    }
-                    //if (PCIExpress.Available && MainForm.Instance.mAppState == ApplicationGlobalState.Mining)
-                    //    System.Threading.Thread.SpinWait(1000); // TODO
-                    //else
-                        System.Threading.Thread.Sleep(1);
-                } catch (Exception) { }
-            }
-            MainForm.Logger("Hardware management task finished.");
         }
 
         private void comboBoxGraphType_SelectedIndexChanged(object sender, EventArgs e) {
@@ -5179,16 +5226,16 @@ namespace GatelessGateSharp {
 
         private void timerFailOver_Tick(object sender, EventArgs e) {
             timerFailOver.Enabled = false;
-            if (mAppState == ApplicationGlobalState.Idle)
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle)
                 return;
 
-            mAppState = ApplicationGlobalState.Switching;
+            Controller.AppState = Controller.ApplicationGlobalState.Switching;
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
             try {
                 StopMiners();
                 LaunchMiners();
             } catch (Exception) { }
-            mAppState = ApplicationGlobalState.Mining;
+            Controller.AppState = Controller.ApplicationGlobalState.Mining;
             tabControlMainForm.Enabled = buttonStart.Enabled = true;
         }
 
@@ -5238,7 +5285,7 @@ namespace GatelessGateSharp {
         }
 
         private void buttonReleaseMemory_Click(object sender, EventArgs e) {
-            foreach (var device in mDevices)
+            foreach (var device in Controller.OpenCLDevices)
                 device.ReleaseAllComputeBuffers();
         }
 
@@ -5250,6 +5297,14 @@ namespace GatelessGateSharp {
         private void comboBoxSecondGraphCoverage_SelectedIndexChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
             UpdateControls();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start("https://github.com/sgminer-dev/sgminer/blob/master/doc/API.md");
+        }
+
+        private void textBoxAllowedIPRange_TextChanged(object sender, EventArgs e) {
+
         }
     }
 }

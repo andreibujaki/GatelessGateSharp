@@ -1136,5 +1136,15 @@ namespace GatelessGateSharp
             Marshal.StructureToPtr(sODNMemoryClocksBackup, ODNLevelsBuffer, false);
             ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
         }
+
+        public void UpdateOverclockingSettings() {
+            if (!OverclockingEnabled)
+                return;
+            PowerLimit = TargetPowerLimit;
+            CoreClock = TargetCoreClock;
+            MemoryClock = TargetMemoryClock;
+            CoreVoltage = TargetCoreVoltage;
+            MemoryVoltage = TargetMemoryVoltage;
+        }
     }
 }

@@ -103,6 +103,10 @@
       <HintPath>..\packages\HtmlAgilityPack.1.6.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="IPAddressRange, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\IPAddressRange.2.1.1\lib\net45\IPAddressRange.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -154,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADL.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="Device\AMDDevice.cs" />
     <Compile Include="Device\OpenCLDevice.cs" />
     <Compile Include="Device\Device.cs" />
