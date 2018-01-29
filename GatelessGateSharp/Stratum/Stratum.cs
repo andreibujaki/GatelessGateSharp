@@ -103,8 +103,10 @@ namespace GatelessGateSharp {
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
         private List<OpenCLDevice> mDevicesWithShare = new List<OpenCLDevice>();
+        private List<int> mShareIDs = new List<int>();
         private int mLocalExtranonceSize = 1;
         private bool mReconnectionRequested = false;
+        private int mShareCounter = 0;
 
         public int LocalExtranonceSize {
             get {
@@ -126,36 +128,70 @@ namespace GatelessGateSharp {
         public UnrecoverableException UnrecoverableException { get; set; }
         public bool SilentMode { get; set; }
 
-        protected void RegisterDeviceWithShare(OpenCLDevice aDevice) {
+        protected void ReportSubmittedShare(OpenCLDevice aDevice) {
+            int shareID = -1;
+
             try { mMutex.WaitOne(5000); } catch (Exception) { }
             mDevicesWithShare.Add(aDevice);
+            shareID = mShareCounter;
+            mShareIDs.Add(mShareCounter++);
             try { mMutex.ReleaseMutex(); } catch (Exception) { }
+
+            if (shareID >= 0 && !MainForm.DevFeeMode) {
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted Share #" + shareID + " to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
+            } else {
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
+            }
         }
 
-        protected void ReportShareAcceptance() {
-            if (MainForm.DevFeeMode)
-                return;
+        protected void ReportAcceptedShare() {
+            int shareID = -1;
+            OpenCLDevice device = null;
+            
             try { mMutex.WaitOne(5000); } catch (Exception) { }
             if (mDevicesWithShare.Count > 0) {
-                OpenCLDevice device = mDevicesWithShare[0];
+                device = mDevicesWithShare[0];
                 mDevicesWithShare.RemoveAt(0);
+                shareID = mShareIDs[0];
+                mShareIDs.RemoveAt(0);
+            }
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
+
+            if (!MainForm.DevFeeMode) {
                 device.IncrementAcceptedShares();
+                MainForm.Instance.ReportAcceptedShare();
             }
-            try { mMutex.ReleaseMutex(); } catch (Exception) { }
-            MainForm.Instance.ReportAcceptedShare();
+
+            if (shareID >= 0 && !MainForm.DevFeeMode) {
+                MainForm.Logger("Share #" + shareID + " accepted.");
+            } else {
+                MainForm.Logger("Share accepted.");
+            }
         }
 
-        protected void ReportShareRejection() {
-            if (MainForm.DevFeeMode)
-                return;
+        protected void ReportRejectedShare(string reason = null) {
+            int shareID = -1;
+            OpenCLDevice device = null;
+
             try { mMutex.WaitOne(5000); } catch (Exception) { }
             if (mDevicesWithShare.Count > 0) {
-                OpenCLDevice device = mDevicesWithShare[0];
+                device = mDevicesWithShare[0];
                 mDevicesWithShare.RemoveAt(0);
-                device.IncrementRejectedShares();
+                shareID = mShareIDs[0];
+                mShareIDs.RemoveAt(0);
             }
             try { mMutex.ReleaseMutex(); } catch (Exception) { }
-            MainForm.Instance.ReportRejectedShare();
+
+            if (!MainForm.DevFeeMode) {
+                device.IncrementRejectedShares();
+                MainForm.Instance.ReportRejectedShare();
+            }
+
+            if (shareID >= 0 && !MainForm.DevFeeMode) {
+                MainForm.Logger("Share #" + shareID + " rejected.");
+            } else {
+                MainForm.Logger("Share rejected.");
+            }
         }
 
         public void Stop() {

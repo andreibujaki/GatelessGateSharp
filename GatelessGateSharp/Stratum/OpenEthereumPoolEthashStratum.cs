@@ -65,8 +65,7 @@ namespace GatelessGateSharp
                     && response["result"] == null
                     && mShareIDs.Contains(response["id"].ToString()))
             {
-                MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
-                ReportShareRejection();
+                ReportRejectedShare();
             }
             else if (response.ContainsKey("result")
                 && response["result"] != null
@@ -75,23 +74,19 @@ namespace GatelessGateSharp
             {
                 if ((bool)response["result"])
                 {
-                    MainForm.Logger("Share #" + response["id"].ToString() + " accepted.");
-                    ReportShareAcceptance();
+                    ReportAcceptedShare();
                 }
                 else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String))
                 {
-                    MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + (String)response["error"]);
-                    ReportShareRejection();
+                    ReportRejectedShare((String)response["error"]);
                 }
                 else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray))
                 {
-                    MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + ((JArray)response["error"])["message"]);
-                    ReportShareRejection();
+                    ReportRejectedShare((string)(((JArray)response["error"])["message"]));
                 }
                 else if (!(bool)response["result"])
                 {
-                    MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
-                    ReportShareRejection();
+                    ReportRejectedShare();
                 }
                 else 
                 {
@@ -202,7 +197,7 @@ namespace GatelessGateSharp
                 return;
 
             try  { mMutex.WaitOne(5000); } catch (Exception) { }
-            RegisterDeviceWithShare(aDevice);
+            ReportSubmittedShare(aDevice);
             try
             {
                 String stringNonce
@@ -226,7 +221,6 @@ namespace GatelessGateSharp
                         "0x" + job.GetMixHash(output) // mix digest
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted Share #" + mJsonRPCMessageID + " to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
                 ++mJsonRPCMessageID;
             }
             catch (Exception ex) {

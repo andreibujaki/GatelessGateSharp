@@ -13,7 +13,6 @@ namespace GatelessGateSharp {
         public static readonly int DevFeePercentage = 1;
         public static readonly int DevFeeDurationInSeconds = 60;
         public static readonly int DevFeeInitialDelayInSeconds = 15 * 60;
-        public static readonly int DevFeeSwitchingPreparationTimeInMilliseconds = 5000;
         public static readonly string DevFeeUsernamePostfix = ".DEVFEE";
         public static readonly string DevFeeBitcoinAddress = "1k1WhysGsp7kNRy4atzzr6MaDrBiXw7wm";
         public static readonly string DevFeeEthereumAddress = "0x91fa32e00b0f365d629fb625182a83fed61f0642";

@@ -94,7 +94,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.11";
+        public static string appVersion = "1.2.12";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1443,10 +1443,10 @@ namespace GatelessGateSharp {
             numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
             numericUpDownDeviceNeoScryptRawIntensityArray[device.DeviceIndex].Value
-                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 4 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 4 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 4 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 4 * device.GetMaxComputeUnits() :
+                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 8 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 8 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 8 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 8 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 4 * device.GetMaxComputeUnits() :
@@ -1977,7 +1977,7 @@ namespace GatelessGateSharp {
                     } else {
                         var acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = device.AcceptedShares.ToString() + " (" + string.Format("{0:N1}", acceptanceRate * 100) + "%)";
-                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = acceptanceRate >= 0.99 ? Color.Green : acceptanceRate >= 0.95 ? Color.Goldenrod : Color.Red; // TODO
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = acceptanceRate >= 0.99 ? Color.Green : acceptanceRate >= 0.95 ? Color.Black : Color.Red; // TODO
                     }
 
                     // hardware monitoring
@@ -2767,6 +2767,8 @@ namespace GatelessGateSharp {
         #endregion
 
         public void LaunchOpenCLCryptoNightMiners(string pool) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             CryptoNightStratum stratum = null;
             var niceHashMode = false;
 
@@ -2827,6 +2829,8 @@ namespace GatelessGateSharp {
         }
 
         public void LaunchOpenCLLbryMiners(string pool) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             LbryStratum stratum = null;
 
             if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -2854,6 +2858,8 @@ namespace GatelessGateSharp {
         }
 
         public void LaunchOpenCLNeoScryptMiners(string pool) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             NeoScryptStratum stratum = null;
 
             if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -2881,6 +2887,8 @@ namespace GatelessGateSharp {
         }
 
         public void LaunchOpenCLLyra2REv2Miners(string pool) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             Lyra2REv2Stratum stratum = null;
 
             if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -2908,6 +2916,8 @@ namespace GatelessGateSharp {
         }
 
         public void LaunchOpenCLDualEthashPascalMiners(string pool) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             EthashStratum ethashStratum = null;
             PascalStratum pascalStratum = null;
 
@@ -2968,6 +2978,8 @@ namespace GatelessGateSharp {
         }
 
         public void LaunchOpenCLPascalMiners(string pool) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             PascalStratum stratum = null;
 
             if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -3005,6 +3017,8 @@ namespace GatelessGateSharp {
         }
 
         public void LaunchOpenCLEthashMiners(string pool) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             EthashStratum stratum = null;
 
             if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -3111,6 +3125,8 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
@@ -3141,6 +3157,8 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLDualEthashLbryMinersWithStratum(EthashStratum stratum, LbryStratum stratum2) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, minerCount = 0;
@@ -3174,6 +3192,8 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLDualEthashPascalMinersWithStratum(EthashStratum stratum, PascalStratum stratum2) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, minerCount = 0;
@@ -3206,6 +3226,8 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLEthashMinersWithStratum(EthashStratum stratum) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
@@ -3236,6 +3258,8 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLLbryMinersWithStratum(LbryStratum stratum) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
@@ -3264,6 +3288,8 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLPascalMinersWithStratum(PascalStratum stratum) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
@@ -3292,6 +3318,8 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLNeoScryptMinersWithStratum(NeoScryptStratum stratum) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
@@ -3321,6 +3349,8 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLLyra2REv2MinersWithStratum(Lyra2REv2Stratum stratum) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
@@ -3356,6 +3386,8 @@ namespace GatelessGateSharp {
         }
 
         private void LaunchMinersForCustomPool(string algo, string host, int port, string login, string password, string algo2, string host2, int port2, string login2, string password2) {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             if (algo == "Ethash" && algo2 == "Lbry") {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
@@ -3411,13 +3443,13 @@ namespace GatelessGateSharp {
         }
 
         private void LaunchMiners() {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            if (CustomPoolEnabled && !mDevFeeMode) {
+            if (CustomPoolEnabled) {
                 LaunchMinersForCustomPools();
-            } else if (CustomPoolEnabled && mDevFeeMode) {
-                LaunchMinersForCustomPoolsInDevFeeMode();
             } else {
                 LaunchMinersForDefaultPools();
             }
@@ -3453,6 +3485,8 @@ namespace GatelessGateSharp {
         }
 
         private void LaunchMinersForDefaultPools() {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             foreach (string pool in listBoxPoolPriorities.Items) {
                 try {
                     if (radioButtonEthereumPascal.Checked) {
@@ -3502,6 +3536,8 @@ namespace GatelessGateSharp {
         }
 
         private void LaunchMinersForCustomPools() {
+            if (mDevFeeMode)
+                throw new InvalidOperationException();
             for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
                 bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
                                (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
@@ -3576,80 +3612,15 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void LaunchMinersForCustomPoolsInDevFeeMode() {
-            for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
-                bool enabled = (customPoolIndex == 0) ? checkBoxCustomPool0Enable.Checked :
-                               (customPoolIndex == 1) ? checkBoxCustomPool1Enable.Checked :
-                               (customPoolIndex == 2) ? checkBoxCustomPool2Enable.Checked :
-                                                        checkBoxCustomPool3Enable.Checked;
-                String algo = (customPoolIndex == 0) ? (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] :
-                              (customPoolIndex == 1) ? (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] :
-                              (customPoolIndex == 2) ? (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] :
-                                                       (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex];
-                String algo2 = (customPoolIndex == 0) ? (string)comboBoxCustomPool0SecondaryAlgorithm.Items[comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex] :
-                               (customPoolIndex == 1) ? (string)comboBoxCustomPool1SecondaryAlgorithm.Items[comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex] :
-                               (customPoolIndex == 2) ? (string)comboBoxCustomPool2SecondaryAlgorithm.Items[comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex] :
-                                                        (string)comboBoxCustomPool3SecondaryAlgorithm.Items[comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex];
-
-                if (!enabled)
-                    continue;
-
-                foreach (string pool in listBoxPoolPriorities.Items) {
-                    try {
-                        if ((algo == "Ethash" || algo == "Ethash (NiceHash)") && algo2 == "Pascal") {
-                            Logger("Launching Dual Ethash/Pascal for DEVFEE...");
-                            LaunchOpenCLDualEthashPascalMiners(pool);
-                        } else if (algo == "Ethash" || algo == "Ethash (NiceHash)") {
-                            Logger("Launching Ethash miners for DEVFEE...");
-                            LaunchOpenCLEthashMiners(pool);
-                        } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)") {
-                            Logger("Launching CryptoNight miners for DEVFEE...");
-                            LaunchOpenCLCryptoNightMiners(pool);
-                        } else if (algo == "Lbry") {
-                            Logger("Launching Lbry miners for DEVFEE...");
-                            LaunchOpenCLLbryMiners(pool);
-                        } else if (algo == "Pascal") {
-                            Logger("Launching Pascal miners for DEVFEE...");
-                            LaunchOpenCLPascalMiners(pool);
-                        } else if (algo == "NeoScrypt") {
-                            Logger("Launching NeoScrypt miners for DEVFEE...");
-                            LaunchOpenCLNeoScryptMiners(pool);
-                        } else if (algo == "Lyra2REv2") {
-                            Logger("Launching Lyra2REv2 miners for DEVFEE...");
-                            LaunchOpenCLLyra2REv2Miners(pool);
-                        }
-                        if (Controller.PrimaryStratum != null && Controller.Miners.Count > 0) {
-                            return;
-                        } else {
-                            Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
-                        }
-                    } catch (UnrecoverableException ex) {
-                        throw ex;
-                    } catch (Exception ex) {
-                        Logger("Failed to launch miner(s) for DEVFEE: " + ex.Message + ex.StackTrace);
-                    }
-
-                    // Clean up the mess.
-                    if (Controller.PrimaryStratum != null)
-                        Controller.PrimaryStratum.Stop();
-                    if (Controller.SecondaryStratum != null)
-                        Controller.SecondaryStratum.Stop();
-                    foreach (Miner miner in Controller.Miners)
-                        miner.Stop();
-                    Controller.PrimaryStratum = null;
-                    Controller.SecondaryStratum = null;
-                    Controller.Miners.Clear();
-                }
-            }
-        }
-
         private void StopMiners() {
             try {
                 Logger("Stopping miners...");
+                if (mDevFeeMode)
+                    SetDevFeeMode(false);
                 foreach (var miner in Controller.Miners)
                     miner.Stop();
                 var allDone = false;
-                var counter = 3 * 60 * 1000;
+                var counter = 10 * 1000;
                 while (!allDone && (counter -= 10) > 0) {
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(10);
@@ -3690,6 +3661,8 @@ namespace GatelessGateSharp {
             Controller.Miners.Clear();
             Controller.PrimaryStratum = null;
             Controller.SecondaryStratum = null;
+            Controller.PrimaryStratumBackup = null;
+            Controller.SecondaryStratumBackup = null;
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -3743,7 +3716,7 @@ namespace GatelessGateSharp {
                             timerAutoStart.Enabled = true;
                     } 
                 } else {
-                    timerDevFee.Interval = Parameters.DevFeeInitialDelayInSeconds * 1000 - Parameters.DevFeeSwitchingPreparationTimeInMilliseconds;
+                    timerDevFee.Interval = Parameters.DevFeeInitialDelayInSeconds * 1000;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
@@ -4086,11 +4059,9 @@ namespace GatelessGateSharp {
                 throw new System.InvalidOperationException(algo);
             }
 
-            if (newPrimaryStratum != null) {
-
-                Utilities.SleepWithDoEvents(Parameters.DevFeeSwitchingPreparationTimeInMilliseconds);
-
+            if (newPrimaryStratum != null && (Controller.SecondaryStratum == null || newSecondaryStratum != null)) {
                 Logger("Switching to the DEVFEE mode...");
+                mDevFeeMode = true;
 
                 foreach (var miner in Controller.Miners) {
                     miner.SetPrimaryStratum(newPrimaryStratum);
@@ -4107,22 +4078,22 @@ namespace GatelessGateSharp {
                 if (Controller.SecondaryStratumBackup != null)
                     Controller.SecondaryStratumBackup.SilentMode = true;
                 return true;
+            } else {
+                Logger("Failed to switch to the DEVFEE mode...");
+                if (newPrimaryStratum != null) newPrimaryStratum.Stop();
+                if (newSecondaryStratum != null) newSecondaryStratum.Stop();
+                return false;
             }
-
-            return false;
         }
 
         private void SwitchFromStratumForDEVFEE() {
             Controller.PrimaryStratumBackup.SilentMode = false;
-            Controller.PrimaryStratumBackup.Reconnect();
             if (Controller.SecondaryStratumBackup != null) {
                 Controller.SecondaryStratumBackup.SilentMode = false;
-                Controller.SecondaryStratumBackup.Reconnect();
             }
 
-            Utilities.SleepWithDoEvents(Parameters.DevFeeSwitchingPreparationTimeInMilliseconds);
-
             Logger("Switching back from the DEVFEE mode...");
+            mDevFeeMode = false;
 
             Stratum oldPrimaryStratum = Controller.PrimaryStratum;
             Controller.PrimaryStratum = Controller.PrimaryStratumBackup;
@@ -4155,20 +4126,27 @@ namespace GatelessGateSharp {
             }
 
             Controller.AppState = Controller.ApplicationGlobalState.Switching;
+            timerDevFee.Stop();
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
 
-            mDevFeeMode = !(mDevFeeMode);
-            if (mDevFeeMode) {
+            if (!mDevFeeMode) {
                 SwitchToStratumForDEVFEE();
             } else {
                 SwitchFromStratumForDEVFEE();
             }
-            timerDevFee.Interval = ((mDevFeeMode) ? Parameters.DevFeeDurationInSeconds * 1000 : (int)((double)Parameters.DevFeeDurationInSeconds * ((double)(100 - Parameters.DevFeePercentage) / Parameters.DevFeePercentage) * 1000));
-            if (mDevFeeMode)
-                mDevFeeModeStartTime = DateTime.Now; 
+            SetDevFeeMode(mDevFeeMode);
 
             Controller.AppState = Controller.ApplicationGlobalState.Mining;
             tabControlMainForm.Enabled = buttonStart.Enabled = true;
+        }
+
+        void SetDevFeeMode(bool mode) {
+            mDevFeeMode = mode;
+            timerDevFee.Stop();
+            timerDevFee.Interval = ((mDevFeeMode) ? Parameters.DevFeeDurationInSeconds * 1000 : (int)((double)Parameters.DevFeeDurationInSeconds * ((double)(100 - Parameters.DevFeePercentage) / Parameters.DevFeePercentage) * 1000));
+            timerDevFee.Start();
+            if (mDevFeeMode)
+                mDevFeeModeStartTime = DateTime.Now;
         }
 
         #endregion

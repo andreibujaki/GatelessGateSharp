@@ -186,14 +186,10 @@ namespace GatelessGateSharp
                 {
                     throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
                 }
-                else if ((ID != "1" && ID != "2" && ID != "3") && result)
-                {
-                    MainForm.Logger("Share #" + ID + " accepted.");
-                    ReportShareAcceptance();
-                } else if ((ID != "1" && ID != "2" && ID != "3") && !result)
-                {
-                    MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
-                    ReportShareRejection();
+                else if ((ID != "1" && ID != "2" && ID != "3") && result) {
+                    ReportAcceptedShare();
+                } else if ((ID != "1" && ID != "2" && ID != "3") && !result) {
+                    ReportRejectedShare((String)(((JArray)response["error"])[1]));
                 }
             }
             else
@@ -249,7 +245,7 @@ namespace GatelessGateSharp
             
             try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
-            RegisterDeviceWithShare(aDevice);
+            ReportSubmittedShare(aDevice);
             try
             {
                 String stringNonce = (String.Format("{3:x2}{2:x2}{1:x2}{0:x2}", ((aNonce >> 0) & 0xff), ((aNonce >> 8) & 0xff), ((aNonce >> 16) & 0xff), ((aNonce >> 24) & 0xff)));
@@ -264,7 +260,6 @@ namespace GatelessGateSharp
                         stringNonce
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted Share #" + mJsonRPCMessageID + " to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
                 ++mJsonRPCMessageID;
             }
             catch (Exception ex) {

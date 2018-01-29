@@ -89,13 +89,9 @@ namespace GatelessGateSharp
                 var error = response["error"];
 
                 if (error == null) {
-                    MainForm.Logger("Share accepted.");
-                    ReportShareAcceptance();
-                }
-                else if (error != null)
-                {
-                    MainForm.Logger("Share rejected: " + (String)(((JContainer)response["error"])["message"]));
-                    ReportShareRejection();
+                    ReportAcceptedShare();
+                } else if (error != null) {
+                    ReportRejectedShare((String)(((JContainer)response["error"])["message"]));
                 }
             }
             else
@@ -137,7 +133,7 @@ namespace GatelessGateSharp
                 return;
 
             try  {  mMutex.WaitOne(5000); } catch (Exception) { }
-            RegisterDeviceWithShare(device);
+            ReportSubmittedShare(device);
             try
             {
                 String stringNonce = String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff));

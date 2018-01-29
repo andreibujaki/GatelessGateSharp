@@ -92,7 +92,7 @@ namespace GatelessGateSharp
 #if !COMMAND_LINE_VERSION
             // Launch monitor
             foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharpMonitor"))
-                try { process.Kill(); } catch (Exception) { } 
+                try { process.Kill(); } catch (Exception) { }
             Process monitor = null;
             try
             {
