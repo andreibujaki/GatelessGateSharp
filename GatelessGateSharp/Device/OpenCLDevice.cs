@@ -116,7 +116,7 @@ namespace GatelessGateSharp
                         break;
                     }
                 }
-            } catch (Exception ex) { MainForm.ExceptionLogger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
+            } catch (Exception ex) { MainForm.Logger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
 
             return (buffer != null) ? buffer : new ComputeBuffer<byte>(Context, flags, size);
         }
@@ -127,7 +127,7 @@ namespace GatelessGateSharp
 
                 computeByteBufferList.Add(buffer);
 
-            } catch (Exception ex) { MainForm.ExceptionLogger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
+            } catch (Exception ex) { MainForm.Logger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
         }
 
         public long MemoryUsage {
@@ -139,7 +139,7 @@ namespace GatelessGateSharp
                     for (int i = 0; i < computeByteBufferList.Count; ++i)
                         size += computeByteBufferList[i].Count;
                     
-                } catch (Exception ex) { MainForm.ExceptionLogger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
+                } catch (Exception ex) { MainForm.Logger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
 
                 return size;
             }
@@ -151,7 +151,7 @@ namespace GatelessGateSharp
                 for (int i = 0; i < computeByteBufferList.Count; ++i)
                     computeByteBufferList[i].Dispose();
                 computeByteBufferList.Clear();
-            } catch (Exception ex) { MainForm.ExceptionLogger(ex); } finally { mMutex.ReleaseMutex(); }
+            } catch (Exception ex) { MainForm.Logger(ex); } finally { mMutex.ReleaseMutex(); }
         }
 
         public List<ComputeDevice> DeviceList { get { return mDeviceList; } }
@@ -1135,6 +1135,16 @@ namespace GatelessGateSharp
             ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(sODNMemoryClocksBackup.iSize));
             Marshal.StructureToPtr(sODNMemoryClocksBackup, ODNLevelsBuffer, false);
             ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+        }
+
+        public void UpdateOverclockingSettings() {
+            if (!OverclockingEnabled)
+                return;
+            PowerLimit = TargetPowerLimit;
+            CoreClock = TargetCoreClock;
+            MemoryClock = TargetMemoryClock;
+            CoreVoltage = TargetCoreVoltage;
+            MemoryVoltage = TargetMemoryVoltage;
         }
     }
 }

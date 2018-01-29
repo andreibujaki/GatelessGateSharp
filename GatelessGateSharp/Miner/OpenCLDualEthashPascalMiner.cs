@@ -262,12 +262,12 @@ namespace GatelessGateSharp {
                                     mEthashGlobalWorkOffsetArray[0] = start;
                                     Queue.Execute(DAGKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
                                     Queue.Finish();
-                                    if (Stopped || !PrimaryStratum.GetJob().ID.Equals(ethashJobID))
+                                    if (Stopped || PrimaryStratum.GetJob() == null || !PrimaryStratum.GetJob().ID.Equals(ethashJobID))
                                         break;
                                 }
                                 DAGCacheBuffer.Dispose();
                                 MemoryUsage -= DAGCacheBuffer.Size;
-                                if (Stopped || !PrimaryStratum.GetJob().ID.Equals(ethashJobID))
+                                if (Stopped || PrimaryStratum.GetJob() == null || !PrimaryStratum.GetJob().ID.Equals(ethashJobID))
                                     break;
                                 sw.Stop();
                                 MainForm.Logger("Generated DAG for Epoch #" + ethashEpoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");

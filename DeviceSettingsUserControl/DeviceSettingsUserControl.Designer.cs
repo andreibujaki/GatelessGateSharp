@@ -2216,9 +2216,9 @@
             this.label482.AutoSize = true;
             this.label482.Location = new System.Drawing.Point(6, 34);
             this.label482.Name = "label482";
-            this.label482.Size = new System.Drawing.Size(49, 13);
+            this.label482.Size = new System.Drawing.Size(74, 13);
             this.label482.TabIndex = 118;
-            this.label482.Text = "Intensity:";
+            this.label482.Text = "Raw Intensity:";
             // 
             // numericUpDownDevice0NeoScryptIntensity
             // 
@@ -2236,7 +2236,7 @@
             this.numericUpDownDevice0NeoScryptIntensity.Name = "numericUpDownDevice0NeoScryptIntensity";
             this.numericUpDownDevice0NeoScryptIntensity.Size = new System.Drawing.Size(57, 20);
             this.numericUpDownDevice0NeoScryptIntensity.TabIndex = 119;
-            this.numericUpDownDevice0NeoScryptIntensity.Tag = "neoscrypt_intensity";
+            this.numericUpDownDevice0NeoScryptIntensity.Tag = "neoscrypt_raw_intensity";
             this.numericUpDownDevice0NeoScryptIntensity.Value = new decimal(new int[] {
             256,
             0,

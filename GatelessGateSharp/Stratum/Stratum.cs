@@ -191,7 +191,7 @@ namespace GatelessGateSharp {
         protected virtual void Authorize() { }
         protected virtual void ProcessLine(String line) { }
 
-        protected void Reconnect() {
+        public void Reconnect() {
             mReconnectionRequested = true;
         }
 

@@ -60,6 +60,13 @@ namespace GatelessGateSharp
                 mHeaderhash = aHeaderhash;
             }
 
+            public bool Equals(Job aJob) {
+                return aJob != null
+                    && mID == aJob.mID
+                    && mSeedhash == aJob.mSeedhash
+                    && mHeaderhash == aJob.mHeaderhash;
+            }
+
             public int Epoch
             {
                 get
@@ -215,11 +222,6 @@ namespace GatelessGateSharp
                 sw.Stop();
                 MainForm.Logger("Generated mix hash (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
                 return Utilities.ByteArrayToString(cmix);
-            }
-
-            public bool Equals(Job aJob)
-            {
-                return (mID.Equals(aJob.mID));
             }
         }
 

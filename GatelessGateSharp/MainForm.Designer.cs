@@ -29,21 +29,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle42 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
@@ -55,6 +55,10 @@
             this.cartesianChartTemperature = new LiveCharts.WinForms.CartesianChart();
             this.comboBoxGraphType = new System.Windows.Forms.ComboBox();
             this.comboBoxGraphCoverage = new System.Windows.Forms.ComboBox();
+            this.cartesianChartShare1Month = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Day = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Hour = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Minute = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartSpeedSecondaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartSpeedPrimaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
             this.comboBoxSecondGraphType = new System.Windows.Forms.ComboBox();
@@ -226,6 +230,25 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabControlDeviceSettings = new System.Windows.Forms.TabControl();
+            this.tabPageAPI = new System.Windows.Forms.TabPage();
+            this.checkBoxAPIMulticast = new System.Windows.Forms.CheckBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBoxAdminIPRange = new System.Windows.Forms.TextBox();
+            this.textBoxDeniedIPRange = new System.Windows.Forms.TextBox();
+            this.textBoxAllowedIPRange = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDownAPIPort = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.checkBoxAPIEnabled = new System.Windows.Forms.CheckBox();
             this.tabPageMiscSettings = new System.Windows.Forms.TabPage();
             this.groupBoxOpenCLBinaries = new System.Windows.Forms.GroupBox();
             this.buttonOpenOpenCLBinaryFolder = new System.Windows.Forms.Button();
@@ -277,10 +300,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerFailOver = new System.Windows.Forms.Timer(this.components);
             this.buttonReleaseMemory = new System.Windows.Forms.Button();
-            this.cartesianChartShare1Minute = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartShare1Hour = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartShare1Day = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartShare1Month = new LiveCharts.WinForms.CartesianChart();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -309,6 +329,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool0Port)).BeginInit();
             this.tabPageDeviceSettings.SuspendLayout();
             this.groupBoxHadrwareAcceleration.SuspendLayout();
+            this.tabPageAPI.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).BeginInit();
             this.tabPageMiscSettings.SuspendLayout();
             this.groupBoxOpenCLBinaries.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -329,6 +352,7 @@
             this.tabControlMainForm.Controls.Add(this.tabPagePoolSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageCustomPoolSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageDeviceSettings);
+            this.tabControlMainForm.Controls.Add(this.tabPageAPI);
             this.tabControlMainForm.Controls.Add(this.tabPageMiscSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageLog);
             this.tabControlMainForm.Controls.Add(this.tabPageAbout);
@@ -477,6 +501,50 @@
             this.comboBoxGraphCoverage.TabIndex = 150;
             this.comboBoxGraphCoverage.Tag = "parameter:graph_coverage";
             this.comboBoxGraphCoverage.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphCoverage_SelectedIndexChanged);
+            // 
+            // cartesianChartShare1Month
+            // 
+            this.cartesianChartShare1Month.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Month.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Month.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartShare1Month.Name = "cartesianChartShare1Month";
+            this.cartesianChartShare1Month.Size = new System.Drawing.Size(318, 197);
+            this.cartesianChartShare1Month.TabIndex = 157;
+            this.cartesianChartShare1Month.Text = "cartesianChart4";
+            // 
+            // cartesianChartShare1Day
+            // 
+            this.cartesianChartShare1Day.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Day.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Day.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartShare1Day.Name = "cartesianChartShare1Day";
+            this.cartesianChartShare1Day.Size = new System.Drawing.Size(318, 197);
+            this.cartesianChartShare1Day.TabIndex = 156;
+            this.cartesianChartShare1Day.Text = "cartesianChart3";
+            // 
+            // cartesianChartShare1Hour
+            // 
+            this.cartesianChartShare1Hour.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Hour.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Hour.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartShare1Hour.Name = "cartesianChartShare1Hour";
+            this.cartesianChartShare1Hour.Size = new System.Drawing.Size(318, 197);
+            this.cartesianChartShare1Hour.TabIndex = 155;
+            this.cartesianChartShare1Hour.Text = "cartesianChart2";
+            // 
+            // cartesianChartShare1Minute
+            // 
+            this.cartesianChartShare1Minute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Minute.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Minute.Location = new System.Drawing.Point(3, 30);
+            this.cartesianChartShare1Minute.Name = "cartesianChartShare1Minute";
+            this.cartesianChartShare1Minute.Size = new System.Drawing.Size(318, 197);
+            this.cartesianChartShare1Minute.TabIndex = 154;
+            this.cartesianChartShare1Minute.Text = "cartesianChart1";
             // 
             // cartesianChartSpeedSecondaryAlgorithm
             // 
@@ -638,8 +706,8 @@
             this.dataGridViewDevices.AllowUserToDeleteRows = false;
             this.dataGridViewDevices.AllowUserToResizeColumns = false;
             this.dataGridViewDevices.AllowUserToResizeRows = false;
-            dataGridViewCellStyle31.BackColor = System.Drawing.Color.LightGray;
-            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle31;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
+            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -647,14 +715,14 @@
             this.dataGridViewDevices.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDevices.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridViewDevices.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle32.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle32;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewDevices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDevices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.enabled,
@@ -685,9 +753,9 @@
             // 
             // enabled
             // 
-            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle33.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle33;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle3;
             this.enabled.FalseValue = "";
             this.enabled.HeaderText = "";
             this.enabled.Name = "enabled";
@@ -724,8 +792,8 @@
             // 
             // speed
             // 
-            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle34;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle4;
             this.speed.FillWeight = 110F;
             this.speed.HeaderText = "Speed(s)";
             this.speed.Name = "speed";
@@ -736,8 +804,8 @@
             // 
             // shares
             // 
-            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle35;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle5;
             this.shares.HeaderText = "Shares";
             this.shares.Name = "shares";
             this.shares.ReadOnly = true;
@@ -749,8 +817,8 @@
             // 
             this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle36;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle6;
             this.activity.HeaderText = "Act.";
             this.activity.Name = "activity";
             this.activity.ReadOnly = true;
@@ -760,8 +828,8 @@
             // 
             // temperature
             // 
-            dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle37;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle7;
             this.temperature.HeaderText = "Temp.";
             this.temperature.Name = "temperature";
             this.temperature.ReadOnly = true;
@@ -771,8 +839,8 @@
             // 
             // fan
             // 
-            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle38;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle8;
             this.fan.HeaderText = "Fan";
             this.fan.Name = "fan";
             this.fan.ReadOnly = true;
@@ -782,8 +850,8 @@
             // 
             // power
             // 
-            dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power.DefaultCellStyle = dataGridViewCellStyle39;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power.DefaultCellStyle = dataGridViewCellStyle9;
             this.power.HeaderText = "Power";
             this.power.Name = "power";
             this.power.ReadOnly = true;
@@ -793,8 +861,8 @@
             // 
             // power_limit
             // 
-            dataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle40;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle10;
             this.power_limit.HeaderText = "";
             this.power_limit.Name = "power_limit";
             this.power_limit.ReadOnly = true;
@@ -804,8 +872,8 @@
             // 
             // core_clock
             // 
-            dataGridViewCellStyle41.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle41;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle11;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
             this.core_clock.ReadOnly = true;
@@ -815,8 +883,8 @@
             // 
             // core_voltage
             // 
-            dataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle42;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle12;
             this.core_voltage.HeaderText = "";
             this.core_voltage.Name = "core_voltage";
             this.core_voltage.ReadOnly = true;
@@ -826,8 +894,8 @@
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle43;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle13;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
             this.memory_clock.ReadOnly = true;
@@ -837,8 +905,8 @@
             // 
             // memory_used
             // 
-            dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_used.DefaultCellStyle = dataGridViewCellStyle44;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_used.DefaultCellStyle = dataGridViewCellStyle14;
             this.memory_used.HeaderText = "(Used)";
             this.memory_used.Name = "memory_used";
             this.memory_used.ReadOnly = true;
@@ -846,8 +914,8 @@
             // 
             // memory_reserved
             // 
-            dataGridViewCellStyle45.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle45;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle15;
             this.memory_reserved.HeaderText = "(Rsvd.)";
             this.memory_reserved.Name = "memory_reserved";
             this.memory_reserved.ReadOnly = true;
@@ -2427,6 +2495,218 @@
             this.tabControlDeviceSettings.Size = new System.Drawing.Size(643, 285);
             this.tabControlDeviceSettings.TabIndex = 0;
             // 
+            // tabPageAPI
+            // 
+            this.tabPageAPI.Controls.Add(this.checkBoxAPIMulticast);
+            this.tabPageAPI.Controls.Add(this.groupBox3);
+            this.tabPageAPI.Controls.Add(this.numericUpDownAPIPort);
+            this.tabPageAPI.Controls.Add(this.label6);
+            this.tabPageAPI.Controls.Add(this.linkLabel1);
+            this.tabPageAPI.Controls.Add(this.checkBoxAPIEnabled);
+            this.tabPageAPI.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAPI.Name = "tabPageAPI";
+            this.tabPageAPI.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAPI.Size = new System.Drawing.Size(981, 489);
+            this.tabPageAPI.TabIndex = 7;
+            this.tabPageAPI.Text = "API";
+            this.tabPageAPI.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAPIMulticast
+            // 
+            this.checkBoxAPIMulticast.AutoSize = true;
+            this.checkBoxAPIMulticast.Checked = true;
+            this.checkBoxAPIMulticast.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAPIMulticast.Enabled = false;
+            this.checkBoxAPIMulticast.Location = new System.Drawing.Point(108, 34);
+            this.checkBoxAPIMulticast.Name = "checkBoxAPIMulticast";
+            this.checkBoxAPIMulticast.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxAPIMulticast.TabIndex = 10;
+            this.checkBoxAPIMulticast.Tag = "parameter:api_multicast";
+            this.checkBoxAPIMulticast.Text = "Multicast";
+            this.checkBoxAPIMulticast.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label19);
+            this.groupBox3.Controls.Add(this.label18);
+            this.groupBox3.Controls.Add(this.label17);
+            this.groupBox3.Controls.Add(this.label11);
+            this.groupBox3.Controls.Add(this.label22);
+            this.groupBox3.Controls.Add(this.label20);
+            this.groupBox3.Controls.Add(this.label9);
+            this.groupBox3.Controls.Add(this.label21);
+            this.groupBox3.Controls.Add(this.textBoxAdminIPRange);
+            this.groupBox3.Controls.Add(this.textBoxDeniedIPRange);
+            this.groupBox3.Controls.Add(this.textBoxAllowedIPRange);
+            this.groupBox3.Controls.Add(this.label8);
+            this.groupBox3.Enabled = false;
+            this.groupBox3.Location = new System.Drawing.Point(11, 57);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(310, 168);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "IP/IP Range";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(62, 104);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(81, 13);
+            this.label19.TabIndex = 14;
+            this.label19.Text = "192.168.0.0/24";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(62, 123);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(138, 13);
+            this.label18.TabIndex = 13;
+            this.label18.Text = "192.168.0.0/255.255.255.0";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(62, 142);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(136, 13);
+            this.label17.TabIndex = 12;
+            this.label17.Text = "192.168.0.0-192.168.0.255";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 104);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(55, 13);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "Examples:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(6, 22);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(39, 13);
+            this.label22.TabIndex = 10;
+            this.label22.Text = "Admin:";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(6, 22);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(39, 13);
+            this.label20.TabIndex = 10;
+            this.label20.Text = "Admin:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(8, 22);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(39, 13);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "Admin:";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(6, 48);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(35, 13);
+            this.label21.TabIndex = 5;
+            this.label21.Text = "Allow:";
+            // 
+            // textBoxAdminIPRange
+            // 
+            this.textBoxAdminIPRange.Location = new System.Drawing.Point(51, 19);
+            this.textBoxAdminIPRange.Name = "textBoxAdminIPRange";
+            this.textBoxAdminIPRange.Size = new System.Drawing.Size(249, 20);
+            this.textBoxAdminIPRange.TabIndex = 9;
+            this.textBoxAdminIPRange.Tag = "parameter:allowed_ip_range";
+            // 
+            // textBoxDeniedIPRange
+            // 
+            this.textBoxDeniedIPRange.Location = new System.Drawing.Point(51, 71);
+            this.textBoxDeniedIPRange.Name = "textBoxDeniedIPRange";
+            this.textBoxDeniedIPRange.Size = new System.Drawing.Size(249, 20);
+            this.textBoxDeniedIPRange.TabIndex = 8;
+            this.textBoxDeniedIPRange.Tag = "parameter:denied_ip_range";
+            // 
+            // textBoxAllowedIPRange
+            // 
+            this.textBoxAllowedIPRange.Location = new System.Drawing.Point(51, 45);
+            this.textBoxAllowedIPRange.Name = "textBoxAllowedIPRange";
+            this.textBoxAllowedIPRange.Size = new System.Drawing.Size(249, 20);
+            this.textBoxAllowedIPRange.TabIndex = 4;
+            this.textBoxAllowedIPRange.Tag = "parameter:allowed_ip_range";
+            this.textBoxAllowedIPRange.Text = "0.0.0.0/0.0.0.0";
+            this.textBoxAllowedIPRange.TextChanged += new System.EventHandler(this.textBoxAllowedIPRange_TextChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 74);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(35, 13);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Deny:";
+            // 
+            // numericUpDownAPIPort
+            // 
+            this.numericUpDownAPIPort.Enabled = false;
+            this.numericUpDownAPIPort.Location = new System.Drawing.Point(43, 31);
+            this.numericUpDownAPIPort.Maximum = new decimal(new int[] {
+            65536,
+            0,
+            0,
+            0});
+            this.numericUpDownAPIPort.Name = "numericUpDownAPIPort";
+            this.numericUpDownAPIPort.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDownAPIPort.TabIndex = 3;
+            this.numericUpDownAPIPort.Tag = "parameter:api_port";
+            this.numericUpDownAPIPort.Value = new decimal(new int[] {
+            4028,
+            0,
+            0,
+            0});
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Enabled = false;
+            this.label6.Location = new System.Drawing.Point(8, 33);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(29, 13);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Port:";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Enabled = false;
+            this.linkLabel1.Location = new System.Drawing.Point(210, 8);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(99, 13);
+            this.linkLabel1.TabIndex = 1;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "API Documentation";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // checkBoxAPIEnabled
+            // 
+            this.checkBoxAPIEnabled.AutoSize = true;
+            this.checkBoxAPIEnabled.Enabled = false;
+            this.checkBoxAPIEnabled.Location = new System.Drawing.Point(7, 7);
+            this.checkBoxAPIEnabled.Name = "checkBoxAPIEnabled";
+            this.checkBoxAPIEnabled.Size = new System.Drawing.Size(197, 17);
+            this.checkBoxAPIEnabled.TabIndex = 0;
+            this.checkBoxAPIEnabled.Tag = "parameter:api_enabled";
+            this.checkBoxAPIEnabled.Text = "Enable sgminer-compatible RPC API";
+            this.checkBoxAPIEnabled.UseVisualStyleBackColor = true;
+            // 
             // tabPageMiscSettings
             // 
             this.tabPageMiscSettings.Controls.Add(this.groupBoxOpenCLBinaries);
@@ -2646,7 +2926,7 @@
             this.button7.Text = "8. Download TeamViewer";
             this.button7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button7.Click += new System.EventHandler(this.buttonInstallTeamViewer_Click);
             // 
             // button6
             // 
@@ -2654,7 +2934,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(216, 23);
             this.button6.TabIndex = 42;
-            this.button6.Text = "1. Download Latest Version";
+            this.button6.Text = "1. Install Latest Version";
             this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
@@ -2964,50 +3244,6 @@
             this.buttonReleaseMemory.UseVisualStyleBackColor = true;
             this.buttonReleaseMemory.Click += new System.EventHandler(this.buttonReleaseMemory_Click);
             // 
-            // cartesianChartShare1Minute
-            // 
-            this.cartesianChartShare1Minute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartShare1Minute.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartShare1Minute.Location = new System.Drawing.Point(3, 30);
-            this.cartesianChartShare1Minute.Name = "cartesianChartShare1Minute";
-            this.cartesianChartShare1Minute.Size = new System.Drawing.Size(318, 197);
-            this.cartesianChartShare1Minute.TabIndex = 154;
-            this.cartesianChartShare1Minute.Text = "cartesianChart1";
-            // 
-            // cartesianChartShare1Hour
-            // 
-            this.cartesianChartShare1Hour.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartShare1Hour.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartShare1Hour.Location = new System.Drawing.Point(3, 30);
-            this.cartesianChartShare1Hour.Name = "cartesianChartShare1Hour";
-            this.cartesianChartShare1Hour.Size = new System.Drawing.Size(318, 197);
-            this.cartesianChartShare1Hour.TabIndex = 155;
-            this.cartesianChartShare1Hour.Text = "cartesianChart2";
-            // 
-            // cartesianChartShare1Day
-            // 
-            this.cartesianChartShare1Day.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartShare1Day.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartShare1Day.Location = new System.Drawing.Point(3, 30);
-            this.cartesianChartShare1Day.Name = "cartesianChartShare1Day";
-            this.cartesianChartShare1Day.Size = new System.Drawing.Size(318, 197);
-            this.cartesianChartShare1Day.TabIndex = 156;
-            this.cartesianChartShare1Day.Text = "cartesianChart3";
-            // 
-            // cartesianChartShare1Month
-            // 
-            this.cartesianChartShare1Month.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartShare1Month.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartShare1Month.Location = new System.Drawing.Point(3, 30);
-            this.cartesianChartShare1Month.Name = "cartesianChartShare1Month";
-            this.cartesianChartShare1Month.Size = new System.Drawing.Size(318, 197);
-            this.cartesianChartShare1Month.TabIndex = 157;
-            this.cartesianChartShare1Month.Text = "cartesianChart4";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3066,6 +3302,11 @@
             this.tabPageDeviceSettings.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.PerformLayout();
+            this.tabPageAPI.ResumeLayout(false);
+            this.tabPageAPI.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).EndInit();
             this.tabPageMiscSettings.ResumeLayout(false);
             this.groupBoxOpenCLBinaries.ResumeLayout(false);
             this.groupBoxOpenCLBinaries.PerformLayout();
@@ -3322,5 +3563,25 @@
         private LiveCharts.WinForms.CartesianChart cartesianChartShare1Day;
         private LiveCharts.WinForms.CartesianChart cartesianChartShare1Hour;
         private LiveCharts.WinForms.CartesianChart cartesianChartShare1Minute;
+        private System.Windows.Forms.TabPage tabPageAPI;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox checkBoxAPIEnabled;
+        private System.Windows.Forms.NumericUpDown numericUpDownAPIPort;
+        private System.Windows.Forms.Label label6;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.TextBox textBoxDeniedIPRange;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox textBoxAllowedIPRange;
+        private System.Windows.Forms.CheckBox checkBoxAPIMulticast;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox textBoxAdminIPRange;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
     }
 }
