@@ -311,6 +311,7 @@ copy $(SolutionDir)SQLite\System.Data.SQLite.dll.config $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
+copy $(SolutionDir)GatelessGateSharpLauncher\bin\$(Configuration)\GatelessGateSharpLauncher.exe $(TargetDir)
 "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:16777216
 xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
 xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels

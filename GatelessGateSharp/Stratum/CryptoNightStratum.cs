@@ -47,9 +47,11 @@ namespace GatelessGateSharp
                 mTarget = aTarget;
             }
 
-            public bool Equals(Job right)
-            {
-                return mID == right.mID && mBlob == right.mBlob && mTarget == right.mTarget;
+            public bool Equals(Job aJob) {
+                return aJob != null
+                    && mID == aJob.mID
+                    && mBlob == aJob.mBlob
+                    && mTarget == aJob.mTarget;
             }
         }
 

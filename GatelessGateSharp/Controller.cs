@@ -21,16 +21,20 @@ namespace GatelessGateSharp {
         public static ApplicationGlobalState AppState { get; set; }
         public static OpenCLDevice[] OpenCLDevices { get; set; }
         public static Stratum PrimaryStratum { get; set; }
+        public static Stratum PrimaryStratumBackup { get; set; }
         public static Stratum SecondaryStratum { get; set; }
-        public static List<Miner> Miners { get; set; };
+        public static Stratum SecondaryStratumBackup { get; set; }
+        public static List<Miner> Miners { get; set; }
         
 
 
         private Controller() {
             AppState = ApplicationGlobalState.Switching;
             PrimaryStratum = null;
+            PrimaryStratumBackup = null;
             SecondaryStratum = null;
-            mMiners { get; set; } = new List<Miner>()
+            SecondaryStratumBackup = null;
+            Miners = new List<Miner>() { };
         }
 
         public static void Task_HardwareManagement(object cancellationToken) {

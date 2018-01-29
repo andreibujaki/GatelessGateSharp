@@ -509,6 +509,13 @@ namespace GatelessGateSharp
 
         public static bool IsDevFeeAddress(string s) {
             return (new List<string> {
+                Parameters.DevFeeBitcoinAddress,
+                Parameters.DevFeeEthereumAddress,
+                Parameters.DevFeeMoneroAddress,
+                Parameters.DevFeePascalAddress,
+                Parameters.DevFeeLbryAddress,
+                Parameters.DevFeeZcashAddress,
+                Parameters.DevFeeFeathercoinAddress,
                 Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix,
                 Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix,
                 Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix,
@@ -517,6 +524,15 @@ namespace GatelessGateSharp
                 Parameters.DevFeeZcashAddress + Parameters.DevFeeUsernamePostfix,
                 Parameters.DevFeeFeathercoinAddress + Parameters.DevFeeUsernamePostfix,
             }).Contains(s);
+        }
+
+        public static void SleepWithDoEvents(int timeout) {
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            while (sw.ElapsedMilliseconds < timeout) {
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(1);
+            }
         }
     }
 }

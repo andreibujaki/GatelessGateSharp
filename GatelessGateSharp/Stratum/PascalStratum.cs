@@ -80,7 +80,10 @@ namespace GatelessGateSharp
 
             public bool Equals(Job aJob)
             {
-                return mID == aJob.mID;
+                return mID == aJob.mID 
+                    && mCoinbase1 == aJob.Coinbase1 
+                    && mCoinbase2 == aJob.mCoinbase2 
+                    && mNTime == aJob.mNTime;
             }
         }
 
@@ -113,12 +116,13 @@ namespace GatelessGateSharp
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                 }
-                else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
+                else if (method.Equals("mining.notify"))
                 {
-                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
+                    bool jobChanged = (mJob == null || mJob.ID != (string)parameters[0]);
+                    try { mMutex.WaitOne(5000); } catch (Exception) { }
                     mJob = (new Job(this, (string)parameters[0], (string)parameters[2], (string)parameters[3], (string)parameters[7]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                    if (!SilentMode) MainForm.Logger("Received new job: " + parameters[0]);
+                    if (!SilentMode && jobChanged) MainForm.Logger("Received new job: " + parameters[0]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {

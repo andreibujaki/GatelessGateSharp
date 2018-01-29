@@ -68,6 +68,23 @@ namespace GatelessGateSharp {
                 }
             }
 
+            [DllImport("Shell32.dll")]
+            public static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags, IntPtr hToken, out IntPtr ppszPath);
+
+            [Flags]
+            public enum KnownFolderFlags : uint {
+                SimpleIDList = 0x00000100,
+                NotParentRelative = 0x00000200,
+                DefaultPath = 0x00000400,
+                Init = 0x00000800,
+                NoAlias = 0x00001000,
+                DontUnexpand = 0x00002000,
+                DontVerify = 0x00004000,
+                Create = 0x00008000,
+                NoAppcontainerRedirection = 0x00010000,
+                AliasOnly = 0x80000000
+            }
+
             public const uint ES_CONTINUOUS = 0x80000000;
             public const uint ES_SYSTEM_REQUIRED = 0x00000001;
             public const uint ES_AWAYMODE_REQUIRED = 0x00000040;
@@ -77,7 +94,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.10";
+        public static string appVersion = "1.2.11";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -98,7 +115,7 @@ namespace GatelessGateSharp {
         private NumericUpDown[] numericUpDownDeviceEthashIntensityArray;
         private NumericUpDown[] numericUpDownDeviceEthashLocalWorkSizeArray;
         private NumericUpDown[] numericUpDownDeviceNeoScryptThreadsArray;
-        private NumericUpDown[] numericUpDownDeviceNeoScryptIntensityArray;
+        private NumericUpDown[] numericUpDownDeviceNeoScryptRawIntensityArray;
         private NumericUpDown[] numericUpDownDeviceNeoScryptLocalWorkSizeArray;
         private NumericUpDown[] numericUpDownDevicePascalThreadsArray;
         private NumericUpDown[] numericUpDownDevicePascalIntensityArray;
@@ -166,7 +183,7 @@ namespace GatelessGateSharp {
             try { Instance.loggerMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        public static void ExceptionLogger(
+        public static void Logger(
             Exception ex,
             [System.Runtime.CompilerServices.CallerMemberName] string memberName = "",
             [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
@@ -538,7 +555,7 @@ namespace GatelessGateSharp {
                                 }
                             }
                         }
-                    } catch (Exception ex) { ExceptionLogger(ex); }
+                    } catch (Exception ex) { Logger(ex); }
 
                     try {
                         var sql = "select * from pools";
@@ -555,7 +572,7 @@ namespace GatelessGateSharp {
                                         listBoxPoolPriorities.Items.Add(poolName);
                             }
                         }
-                    } catch (Exception ex) { ExceptionLogger(ex); }
+                    } catch (Exception ex) { Logger(ex); }
 
                     try {
                         var sql = "select * from properties";
@@ -646,7 +663,7 @@ namespace GatelessGateSharp {
                             }
                         }
                     } catch (Exception ex) {
-                        Logger("Exception: " + ex.Message + ex.StackTrace);
+                        Logger(ex);
                     }
 
                     try {
@@ -699,8 +716,8 @@ namespace GatelessGateSharp {
                                             decimal.Parse(value);
                                     else if (name == "neoscrypt_threads")
                                         numericUpDownDeviceNeoScryptThreadsArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "neoscrypt_intensity")
-                                        numericUpDownDeviceNeoScryptIntensityArray[deviceID].Value = decimal.Parse(value);
+                                    else if (name == "neoscrypt_raw_intensity")
+                                        numericUpDownDeviceNeoScryptRawIntensityArray[deviceID].Value = decimal.Parse(value);
                                     else if (name == "neoscrypt_local_work_size")
                                         numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceID].Value =
                                             decimal.Parse(value);
@@ -754,7 +771,7 @@ namespace GatelessGateSharp {
                             }
                         }
                     } catch (Exception ex) {
-                        Logger("Exception: " + ex.Message + ex.StackTrace);
+                        Logger(ex);
                     }
 
                     conn.Close();
@@ -775,7 +792,7 @@ namespace GatelessGateSharp {
                 Logger("Loaded settings.");
                 mAreSettingsDirty = false;
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger(ex);
             }
 
             MainForm.Instance.Enabled = true;
@@ -920,8 +937,8 @@ namespace GatelessGateSharp {
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_threads");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptThreadsArray[i].Value.ToString());
                             command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "neoscrypt_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptIntensityArray[i].Value.ToString());
+                            command.Parameters.AddWithValue("@parameter_name", "neoscrypt_raw_intensity");
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptRawIntensityArray[i].Value.ToString());
                             command.ExecuteNonQuery();
                             command.Parameters.AddWithValue("@parameter_name", "neoscrypt_local_work_size");
                             command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptLocalWorkSizeArray[i].Value.ToString());
@@ -1215,7 +1232,7 @@ namespace GatelessGateSharp {
             numericUpDownDeviceEthashIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
             numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
             numericUpDownDeviceNeoScryptThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceNeoScryptIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
+            numericUpDownDeviceNeoScryptRawIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
             numericUpDownDeviceNeoScryptLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
             numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
             numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
@@ -1281,8 +1298,8 @@ namespace GatelessGateSharp {
                             numericUpDownDeviceEthashLocalWorkSizeArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "neoscrypt_threads") {
                             numericUpDownDeviceNeoScryptThreadsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "neoscrypt_intensity") {
-                            numericUpDownDeviceNeoScryptIntensityArray[i] = (NumericUpDown)control;
+                        } else if (tag != null && (string)tag == "neoscrypt_raw_intensity") {
+                            numericUpDownDeviceNeoScryptRawIntensityArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "neoscrypt_local_work_size") {
                             numericUpDownDeviceNeoScryptLocalWorkSizeArray[i] = (NumericUpDown)control;
                         } else if (tag != null && (string)tag == "cryptonight_threads") {
@@ -1389,6 +1406,8 @@ namespace GatelessGateSharp {
 
         private void ResetDeviceAlgorithmSettings(Device device) {
             mAreSettingsDirty = true;
+            var openCLName = ((OpenCLDevice)device).GetComputeDevice().Name;
+            var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
 
             // EthashPascal
             numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
@@ -1421,20 +1440,31 @@ namespace GatelessGateSharp {
 
             // NeoScrypt
             numericUpDownDeviceNeoScryptThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceNeoScryptIntensityArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 8 : 4);
             numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
+            numericUpDownDeviceNeoScryptRawIntensityArray[device.DeviceIndex].Value
+                = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && GCN1 ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 8 * device.GetMaxComputeUnits() :
+                                                                                                          8 * device.GetMaxComputeUnits());
 
             // CryptoNight
-            var openCLName = ((OpenCLDevice)device).GetComputeDevice().Name;
-            var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
             numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" && /*!GCN1 &&*/ openCLName != "Fiji" ? 2 : 1);
             numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
             numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 60 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 96 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 96 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 90 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 128 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 128 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 128 :
@@ -1688,10 +1718,10 @@ namespace GatelessGateSharp {
         private void UpdatePoolStats() {
             try {
                 double totalSpeed = 0;
-                foreach (var miner in mMiners)
+                foreach (var miner in Controller.Miners)
                     totalSpeed += miner.Speed;
                 double secondaryTotalSpeed = 0;
-                foreach (var miner in mMiners)
+                foreach (var miner in Controller.Miners)
                     secondaryTotalSpeed += miner.SpeedSecondaryAlgorithm;
 
                 string currency = (string)comboBoxCurrency.SelectedItem;
@@ -1899,14 +1929,14 @@ namespace GatelessGateSharp {
                     labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
 
                 Dictionary<string, double> speeds = new Dictionary<string, double>();
-                foreach (var miner in mMiners) {
+                foreach (var miner in Controller.Miners) {
                     if (!speeds.ContainsKey(miner.PrimaryAlgorithmName)) {
                         speeds.Add(miner.PrimaryAlgorithmName, miner.Speed);
                     } else {
                         speeds[miner.PrimaryAlgorithmName] += miner.Speed;
                     }
                 }
-                foreach (var miner in mMiners) {
+                foreach (var miner in Controller.Miners) {
                     if (miner.SecondaryAlgorithmName == null || miner.SecondaryAlgorithmName == "")
                         continue;
                     if (!speeds.ContainsKey(miner.SecondaryAlgorithmName)) {
@@ -1930,10 +1960,10 @@ namespace GatelessGateSharp {
                     var computeDevice = device.GetComputeDevice();
                     var deviceIndex = device.DeviceIndex;
                     double speedPrimary = 0, speedSecondary = 0;
-                    foreach (var miner in mMiners)
+                    foreach (var miner in Controller.Miners)
                         if (miner.DeviceIndex == device.DeviceIndex)
                             speedPrimary += miner.Speed;
-                    foreach (var miner in mMiners)
+                    foreach (var miner in Controller.Miners)
                         if (miner.DeviceIndex == device.DeviceIndex && miner.SecondaryAlgorithmName != null && miner.SecondaryAlgorithmName != "")
                             speedSecondary += miner.SpeedSecondaryAlgorithm;
 
@@ -2007,7 +2037,7 @@ namespace GatelessGateSharp {
                                                                                   Color.Black;
                     }
                     long memoryUsed = 0;
-                    foreach (var miner in mMiners)
+                    foreach (var miner in Controller.Miners)
                         if (device.DeviceIndex == miner.DeviceIndex)
                         memoryUsed += miner.MemoryUsage;
                     if (memoryUsed > 0) {
@@ -2049,7 +2079,7 @@ namespace GatelessGateSharp {
                     }
                 }
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger(ex);
             } finally {
                 try { DeviceManagementLibrariesMutex.ReleaseMutex(); } catch (Exception) { }
             }
@@ -2087,7 +2117,7 @@ namespace GatelessGateSharp {
                 }
                 return IPAddressRange.Parse(text);
             } catch (Exception ex) {
-                ExceptionLogger(ex);
+                Logger(ex);
                 return null;
             }
         }
@@ -2104,7 +2134,7 @@ namespace GatelessGateSharp {
                 }
                 return IPAddressRange.Parse(text);
             } catch (Exception ex) {
-                ExceptionLogger(ex);
+                Logger(ex);
                 return null;
             }
         }
@@ -2121,7 +2151,7 @@ namespace GatelessGateSharp {
                 }
                 return IPAddressRange.Parse(text);
             } catch (Exception ex) {
-                ExceptionLogger(ex);
+                Logger(ex);
                 return null;
             }
         }
@@ -2181,7 +2211,7 @@ namespace GatelessGateSharp {
                                         Logger("Sent: " + data);
                                     }
                                 } catch (Exception ex) {
-                                    ExceptionLogger(ex);
+                                    Logger(ex);
                                 } finally {
                                     client.Close();
                                 }
@@ -2189,7 +2219,7 @@ namespace GatelessGateSharp {
                             childSocketThread.Start();
                         }
                     } catch (Exception ex) {
-                        ExceptionLogger(ex);
+                        Logger(ex);
                     } finally {
                         server.Stop();
                     }
@@ -2224,14 +2254,14 @@ namespace GatelessGateSharp {
                 PCIExpress.UnloadPhyMem();
 
                 mBackgroundTasksCancellationTokenSource.Dispose();
-            } catch (Exception ex) { ExceptionLogger(ex); }
+            } catch (Exception ex) { Logger(ex); }
         }
 
         private void timerDeviceStatusUpdates_Tick(object sender, EventArgs e) {
             try {
                 UpdateStats();
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger(ex);
             }
         }
 
@@ -2257,18 +2287,18 @@ namespace GatelessGateSharp {
                 UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
                     (int deviceIndex) => {
                         double speed = 0;
-                        foreach (var miner in mMiners)
+                        foreach (var miner in Controller.Miners)
                             speed += (deviceIndex == miner.DeviceIndex) ? miner.Speed : 0;
                         return speed;
                     }, ChartType.Device, 1);
                 UpdateChart(cartesianChartSpeedSecondaryAlgorithm,
                     (int deviceIndex) => {
                         double speed = 0;
-                        foreach (var miner in mMiners)
+                        foreach (var miner in Controller.Miners)
                             speed += (deviceIndex == miner.DeviceIndex) ? miner.SpeedSecondaryAlgorithm : 0;
                         return speed;
                     }, ChartType.Device, 1);
-            } catch (Exception ex) { ExceptionLogger(ex); }
+            } catch (Exception ex) { Logger(ex); }
         }
 
         void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue, ChartType type) {
@@ -2392,7 +2422,7 @@ namespace GatelessGateSharp {
                             AddNewValueToShareChart(cartesianChartShare1Month);
                         }
                     }
-                } catch (Exception ex) { ExceptionLogger(ex); }
+                } catch (Exception ex) { Logger(ex); }
                 ++counter;
                 System.Threading.Thread.Sleep(1000);
             }
@@ -2750,7 +2780,7 @@ namespace GatelessGateSharp {
                         try {
                             stratum = new CryptoNightStratum(host.name, 3355, username, "x", pool);
                             break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
+                        } catch (Exception ex) { Logger(ex); }
                 niceHashMode = true;
             } else if (pool == "DwarfPool" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix : textBoxMoneroAddress.Text;
@@ -2765,7 +2795,7 @@ namespace GatelessGateSharp {
                             stratum = new CryptoNightStratum(host.name, 8005, username, password, pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "Nanopool" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeMoneroAddress : textBoxMoneroAddress.Text;
@@ -2781,7 +2811,7 @@ namespace GatelessGateSharp {
                             stratum = new CryptoNightStratum(host.name, 14444, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "mineXMR.com" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix : textBoxMoneroAddress.Text;
@@ -2810,7 +2840,7 @@ namespace GatelessGateSharp {
                             stratum = new LbryStratum(host.name, 3356, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
@@ -2837,7 +2867,7 @@ namespace GatelessGateSharp {
                             stratum = new NeoScryptStratum(host.name, 3341, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
@@ -2864,7 +2894,7 @@ namespace GatelessGateSharp {
                             stratum = new Lyra2REv2Stratum(host.name, 3347, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
@@ -2892,7 +2922,7 @@ namespace GatelessGateSharp {
                             ethashStratum = new NiceHashEthashStratum(ethashHost.name, 3353, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
                 var pascalHosts = GetNiceHashPascalServers();
                 foreach (var pascalHost in pascalHosts)
@@ -2901,7 +2931,7 @@ namespace GatelessGateSharp {
                             pascalStratum = new PascalStratum(pascalHost.name, 3358, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "Nanopool" && (mDevFeeMode || (textBoxEthereumAddress.Text.Length > 0 && textBoxPascalAddress.Text.Length > 0))) {
                 var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
@@ -2914,7 +2944,7 @@ namespace GatelessGateSharp {
                             ethashStratum = new OpenEthereumPoolEthashStratum(ethashHost.name, 9999, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
                 username = mDevFeeMode ? Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix : textBoxPascalAddress.Text;
                 if (!mDevFeeMode && textBoxRigID.Text != "")
@@ -2926,7 +2956,7 @@ namespace GatelessGateSharp {
                             pascalStratum = new PascalStratum(pascalHost.name, 15555, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             }
 
@@ -2951,7 +2981,7 @@ namespace GatelessGateSharp {
                             stratum = new PascalStratum(host.name, 3358, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "Nanopool" && (mDevFeeMode || textBoxPascalAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix : textBoxPascalAddress.Text;
@@ -2964,7 +2994,7 @@ namespace GatelessGateSharp {
                             stratum = new PascalStratum(host.name, 15555, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             }
 
@@ -2988,7 +3018,7 @@ namespace GatelessGateSharp {
                             stratum = new NiceHashEthashStratum(host.name, 3353, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "DwarfPool" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
@@ -3016,7 +3046,7 @@ namespace GatelessGateSharp {
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 8008, username, textBoxEmail.Text != "" ? textBoxEmail.Text : "x", pool, true);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "ethermine.org" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
@@ -3035,7 +3065,7 @@ namespace GatelessGateSharp {
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 4444, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "ethpool.org" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
@@ -3054,7 +3084,7 @@ namespace GatelessGateSharp {
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 3333, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             } else if (pool == "Nanopool" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
@@ -3070,7 +3100,7 @@ namespace GatelessGateSharp {
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 9999, username, "x", pool);
                             break;
                         } catch (Exception ex) {
-                            Logger("Exception: " + ex.Message + ex.StackTrace);
+                            Logger(ex);
                         }
             }
 
@@ -3094,7 +3124,7 @@ namespace GatelessGateSharp {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i) {
                         OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex]);
-                        mMiners.Add(miner);
+                        Controller.Miners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightRawIntensityArray[deviceIndex]
                                 .Value)),
@@ -3123,7 +3153,7 @@ namespace GatelessGateSharp {
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     OpenCLDualEthashLbryMiner dualMiner = new OpenCLDualEthashLbryMiner(Controller.OpenCLDevices[deviceIndex]);
-                    mMiners.Add(dualMiner);
+                    Controller.Miners.Add(dualMiner);
                     dualMiner.Start(stratum,
                         Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
                             .Value)),
@@ -3157,7 +3187,7 @@ namespace GatelessGateSharp {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (int i = 0; i < numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value; ++i) {
                         OpenCLDualEthashPascalMiner dualMiner = new OpenCLDualEthashPascalMiner(Controller.OpenCLDevices[deviceIndex]);
-                        mMiners.Add(dualMiner);
+                        Controller.Miners.Add(dualMiner);
                         dualMiner.Start(stratum,
                                 stratum2,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalIntensityArray[deviceIndex]
@@ -3189,7 +3219,7 @@ namespace GatelessGateSharp {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i) {
                         OpenCLEthashMiner miner = new OpenCLEthashMiner(Controller.OpenCLDevices[deviceIndex]);
-                        mMiners.Add(miner);
+                        Controller.Miners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
                                 .Value)),
@@ -3219,7 +3249,7 @@ namespace GatelessGateSharp {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i) {
                         OpenCLLbryMiner miner = new OpenCLLbryMiner(Controller.OpenCLDevices[deviceIndex]);
-                        mMiners.Add(miner);
+                        Controller.Miners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
@@ -3247,7 +3277,7 @@ namespace GatelessGateSharp {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i) {
                         OpenCLPascalMiner miner = new OpenCLPascalMiner(Controller.OpenCLDevices[deviceIndex]);
-                        mMiners.Add(miner);
+                        Controller.Miners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDevicePascalIntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDevicePascalLocalWorkSizeArray[deviceIndex].Value)));
@@ -3275,9 +3305,9 @@ namespace GatelessGateSharp {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i) {
                         OpenCLNeoScryptMiner miner = new OpenCLNeoScryptMiner(Controller.OpenCLDevices[deviceIndex]);
-                        mMiners.Add(miner);
+                        Controller.Miners.Add(miner);
                         miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptIntensityArray[deviceIndex].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptRawIntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceIndex].Value))
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
@@ -3304,7 +3334,7 @@ namespace GatelessGateSharp {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i) {
                         OpenCLLyra2REv2Miner miner = new OpenCLLyra2REv2Miner(Controller.OpenCLDevices[deviceIndex]);
-                        mMiners.Add(miner);
+                        Controller.Miners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
@@ -3447,7 +3477,7 @@ namespace GatelessGateSharp {
                         Logger("Launching Lyra2REv2 miners for " + pool + "...");
                         LaunchOpenCLLyra2REv2Miners(pool);
                     }
-                    if (Controller.PrimaryStratum != null && mMiners.Count > 0) {
+                    if (Controller.PrimaryStratum != null && Controller.Miners.Count > 0) {
                         return;
                     } else {
                         Logger("Failed to launch miner(s) for " + pool);
@@ -3463,11 +3493,11 @@ namespace GatelessGateSharp {
                     Controller.PrimaryStratum.Stop();
                 if (Controller.SecondaryStratum != null)
                     Controller.SecondaryStratum.Stop();
-                foreach (Miner miner in mMiners)
+                foreach (Miner miner in Controller.Miners)
                     miner.Stop();
                 Controller.PrimaryStratum = null;
                 Controller.SecondaryStratum = null;
-                mMiners.Clear();
+                Controller.Miners.Clear();
             }
         }
 
@@ -3538,11 +3568,11 @@ namespace GatelessGateSharp {
                     Controller.PrimaryStratum.Stop();
                 if (Controller.SecondaryStratum != null)
                     Controller.SecondaryStratum.Stop();
-                foreach (Miner miner in mMiners)
+                foreach (Miner miner in Controller.Miners)
                     miner.Stop();
                 Controller.PrimaryStratum = null;
                 Controller.SecondaryStratum = null;
-                mMiners.Clear();
+                Controller.Miners.Clear();
             }
         }
 
@@ -3588,7 +3618,7 @@ namespace GatelessGateSharp {
                             Logger("Launching Lyra2REv2 miners for DEVFEE...");
                             LaunchOpenCLLyra2REv2Miners(pool);
                         }
-                        if (Controller.PrimaryStratum != null && mMiners.Count > 0) {
+                        if (Controller.PrimaryStratum != null && Controller.Miners.Count > 0) {
                             return;
                         } else {
                             Logger("Failed to launch miner(s) for " + pool + " for DEVFEE...");
@@ -3604,11 +3634,11 @@ namespace GatelessGateSharp {
                         Controller.PrimaryStratum.Stop();
                     if (Controller.SecondaryStratum != null)
                         Controller.SecondaryStratum.Stop();
-                    foreach (Miner miner in mMiners)
+                    foreach (Miner miner in Controller.Miners)
                         miner.Stop();
                     Controller.PrimaryStratum = null;
                     Controller.SecondaryStratum = null;
-                    mMiners.Clear();
+                    Controller.Miners.Clear();
                 }
             }
         }
@@ -3616,7 +3646,7 @@ namespace GatelessGateSharp {
         private void StopMiners() {
             try {
                 Logger("Stopping miners...");
-                foreach (var miner in mMiners)
+                foreach (var miner in Controller.Miners)
                     miner.Stop();
                 var allDone = false;
                 var counter = 3 * 60 * 1000;
@@ -3624,7 +3654,7 @@ namespace GatelessGateSharp {
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(10);
                     allDone = true;
-                    foreach (var miner in mMiners)
+                    foreach (var miner in Controller.Miners)
                         if (!miner.Done) {
                             allDone = false;
                             break;
@@ -3644,20 +3674,20 @@ namespace GatelessGateSharp {
                     Controller.PrimaryStratum.Stop();
                 if (Controller.SecondaryStratum != null)
                     Controller.SecondaryStratum.Stop();
-                if (mPrimaryStratumBackup != null)
-                    mPrimaryStratumBackup.Stop();
-                if (mSecondaryStratumBackup != null)
-                    mSecondaryStratumBackup.Stop();
+                if (Controller.PrimaryStratumBackup != null)
+                    Controller.PrimaryStratumBackup.Stop();
+                if (Controller.SecondaryStratumBackup != null)
+                    Controller.SecondaryStratumBackup.Stop();
                 toolStripMainFormProgressBar.Value = 0;
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger(ex);
             }
-            foreach (var miner in mMiners) {
+            foreach (var miner in Controller.Miners) {
                 if (!miner.Done)
                     miner.Abort();
                 miner.Dispose();
             }
-            mMiners.Clear();
+            Controller.Miners.Clear();
             Controller.PrimaryStratum = null;
             Controller.SecondaryStratum = null;
 
@@ -3685,7 +3715,7 @@ namespace GatelessGateSharp {
 
                 Controller.PrimaryStratum = null;
                 Controller.SecondaryStratum = null;
-                mMiners.Clear();
+                Controller.Miners.Clear();
                 mDevFeeMode = false;
                 try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
                 Exception unrecoverableException = null;
@@ -3700,7 +3730,7 @@ namespace GatelessGateSharp {
                     unrecoverableException = GetUnrecoverableException();
                 }
 
-                if (unrecoverableException != null || Controller.PrimaryStratum == null || !mMiners.Any()) {
+                if (unrecoverableException != null || Controller.PrimaryStratum == null || !Controller.Miners.Any()) {
                     StopMiners();
                     timerDevFee.Enabled = false;
                     Controller.AppState = Controller.ApplicationGlobalState.Idle;
@@ -3713,7 +3743,7 @@ namespace GatelessGateSharp {
                             timerAutoStart.Enabled = true;
                     } 
                 } else {
-                    timerDevFee.Interval = Parameters.DevFeeInitialDelayInSeconds * 1000;
+                    timerDevFee.Interval = Parameters.DevFeeInitialDelayInSeconds * 1000 - Parameters.DevFeeSwitchingPreparationTimeInMilliseconds;
                     timerDevFee.Enabled = true;
                     mStartTime = DateTime.Now;
                     mDevFeeModeStartTime = DateTime.Now;
@@ -3772,7 +3802,7 @@ namespace GatelessGateSharp {
                 }
 
                 return true;
-            } catch (Exception ex) { ExceptionLogger(ex); return false;  }
+            } catch (Exception ex) { Logger(ex); return false;  }
         }
 
         private void UpdateControls() {
@@ -3900,110 +3930,182 @@ namespace GatelessGateSharp {
 
         #region DEVFEE
 
-        private Stratum mPrimaryStratumBackup = null;
-        private Stratum mSecondaryStratumBackup = null;
-
         private bool SwitchToStratumForDEVFEE() {
-            Logger("Switching to the DEVFEE mode...");
-
-            string algo = mMiners[0].AlgorithmName;
+            string algo = Controller.Miners[0].AlgorithmName;
             Stratum newPrimaryStratum = null;
             Stratum newSecondaryStratum = null;
 
             if (algo == "neoscrypt") {
-                var username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
-                var hosts = GetNiceHashNeoScryptServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            newPrimaryStratum = new NeoScryptStratum(host.name, 3341, username, "x", host.name);
-                            break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
-            } else if (algo == "cryptonight") {
-                var username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
-                var hosts = GetNiceHashCryptoNightServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            newPrimaryStratum = new CryptoNightStratum(host.name, 3355, username, "x", host.name);
-                            break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
-            } else if (algo == "ethash") {
-                var username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
-                var hosts = GetNiceHashEthashServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            newPrimaryStratum = new NiceHashEthashStratum(host.name, 3353, username, "x", host.name);
-                            break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
-            } else if (algo == "ethash_pascal") {
-                var username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
-                var hosts = GetNiceHashEthashServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            newPrimaryStratum = new NiceHashEthashStratum(host.name, 3353, username, "x", host.name);
-                            break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
+                var username = Parameters.DevFeeBitcoinAddress;
+                try {
+                    newPrimaryStratum = new NeoScryptStratum("neoscrypt.mine.zpool.ca", 4233, username, "c=BTC", "neoscrypt.mine.zpool.ca");
+                } catch (Exception ex) { Logger(ex); }
 
-                hosts = GetNiceHashPascalServers();
+                if (newPrimaryStratum == null) {
+                    username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
+                    var hosts = GetNiceHashNeoScryptServers();
+                    foreach (var host in hosts)
+                        if (host.time >= 0)
+                            try {
+                                newPrimaryStratum = new NeoScryptStratum(host.name, 3341, username, "x", host.name);
+                                break;
+                            } catch (Exception ex) { Logger(ex); }
+                }
+            } else if (algo == "cryptonight") {
+                var username = Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix;
+                var hosts = GetNanopoolCryptoNightServers();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            newSecondaryStratum = new PascalStratum(host.name, 3358, username, "x", host.name);
+                            newPrimaryStratum = new CryptoNightStratum(host.name, 14444, username, "x", host.name);
                             break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
+                        } catch (Exception ex) { Logger(ex); }
+
+                if (newPrimaryStratum == null) {
+                    username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
+                    hosts = GetNiceHashCryptoNightServers();
+                    foreach (var host in hosts)
+                        if (host.time >= 0)
+                            try {
+                                newPrimaryStratum = new CryptoNightStratum(host.name, 3355, username, "x", host.name);
+                                break;
+                            } catch (Exception ex) { Logger(ex); }
+                }
+            } else if (algo == "ethash") {
+                var username = Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix;
+                var hosts = GetNanopoolEthashServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            newPrimaryStratum = new OpenEthereumPoolEthashStratum(host.name, 9999, username, "x", host.name);
+                            break;
+                        } catch (Exception ex) { Logger(ex); }
+
+                if (newPrimaryStratum == null) {
+                    username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
+                    hosts = GetNiceHashEthashServers();
+                    foreach (var host in hosts)
+                        if (host.time >= 0)
+                            try {
+                                newPrimaryStratum = new NiceHashEthashStratum(host.name, 3353, username, "x", host.name);
+                                break;
+                            } catch (Exception ex) { Logger(ex); }
+                }
+            } else if (algo == "ethash_pascal") {
+                var username = Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix;
+                var hosts = GetNanopoolEthashServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            newPrimaryStratum = new OpenEthereumPoolEthashStratum(host.name, 9999, username, "x", host.name);
+                            break;
+                        } catch (Exception ex) { Logger(ex); }
+
+                if (newPrimaryStratum == null) {
+                    username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
+                    hosts = GetNiceHashEthashServers();
+                    foreach (var host in hosts)
+                        if (host.time >= 0)
+                            try {
+                                newPrimaryStratum = new NiceHashEthashStratum(host.name, 3353, username, "x", host.name);
+                                break;
+                            } catch (Exception ex) { Logger(ex); }
+                }
+
+                username = Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix;
+                hosts = GetNanopoolPascalServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            newSecondaryStratum = new PascalStratum(host.name, 15555, username, "x", host.name);
+                            break;
+                        } catch (Exception ex) { Logger(ex); }
+                
+                if (newSecondaryStratum == null) {
+                    username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
+                    hosts = GetNiceHashPascalServers();
+                    foreach (var host in hosts)
+                        if (host.time >= 0)
+                            try {
+                                newSecondaryStratum = new PascalStratum(host.name, 3358, username, "x", host.name);
+                                break;
+                            } catch (Exception ex) { Logger(ex); }
+                }
             } else if (algo == "lyra2rev2") {
-                var username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
-                var hosts = GetNiceHashLyra2REv2Servers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            newPrimaryStratum = new Lyra2REv2Stratum(host.name, 3347, username, "x", host.name);
-                            break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
+                var username = Parameters.DevFeeBitcoinAddress;
+                try {
+                    newPrimaryStratum = new Lyra2REv2Stratum("lyra2v2.mine.zpool.ca", 4533, username, "c=BTC", "lyra2v2.mine.zpool.ca");
+                } catch (Exception ex) { Logger(ex); }
+
+                if (newPrimaryStratum == null) {
+                    username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
+                    var hosts = GetNiceHashLyra2REv2Servers();
+                    foreach (var host in hosts)
+                        if (host.time >= 0)
+                            try {
+                                newPrimaryStratum = new Lyra2REv2Stratum(host.name, 3347, username, "x", host.name);
+                                break;
+                            } catch (Exception ex) { Logger(ex); }
+                }
             } else if (algo == "lbry") {
-                var username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
-                var hosts = GetNiceHashLbryServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            newPrimaryStratum = new LbryStratum(host.name, 3356, username, "x", host.name);
-                            break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
+                var username = Parameters.DevFeeBitcoinAddress;
+                try {
+                    newPrimaryStratum = new LbryStratum("lbry.mine.zpool.ca", 3334, username, "c=BTC", "lbry.mine.zpool.ca");
+                } catch (Exception ex) { Logger(ex); }
+
+                if (newPrimaryStratum == null) {
+                    username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
+                    var hosts = GetNiceHashLbryServers();
+                    foreach (var host in hosts)
+                        if (host.time >= 0)
+                            try {
+                                newPrimaryStratum = new LbryStratum(host.name, 3356, username, "x", host.name);
+                                break;
+                            } catch (Exception ex) { Logger(ex); }
+                }
             } else if (algo == "pascal") {
-                var username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
-                var hosts = GetNiceHashPascalServers();
+                var username = Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix;
+                var hosts = GetNanopoolPascalServers();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            newPrimaryStratum = new PascalStratum(host.name, 3358, username, "x", host.name);
+                            newPrimaryStratum = new PascalStratum(host.name, 15555, username, "x", host.name);
                             break;
-                        } catch (Exception ex) { Logger("Exception: " + ex.Message + ex.StackTrace); }
+                        } catch (Exception ex) { Logger(ex); }
+
+                if (newPrimaryStratum == null) {
+                    hosts = GetNiceHashPascalServers();
+                    foreach (var host in hosts)
+                        if (host.time >= 0)
+                            try {
+                                newPrimaryStratum = new PascalStratum(host.name, 3358, username, "x", host.name);
+                                break;
+                            } catch (Exception ex) { Logger(ex); }
+                }
             } else {
                 throw new System.InvalidOperationException(algo);
             }
 
             if (newPrimaryStratum != null) {
-                foreach (var miner in mMiners) {
-                    if (miner.PrimaryAlgorithmName == newPrimaryStratum.AlgorithmName) {
-                        miner.SetPrimaryStratum(newPrimaryStratum);
-                    } else if (newSecondaryStratum != null && miner.SecondaryAlgorithmName == newSecondaryStratum.AlgorithmName) {
+
+                Utilities.SleepWithDoEvents(Parameters.DevFeeSwitchingPreparationTimeInMilliseconds);
+
+                Logger("Switching to the DEVFEE mode...");
+
+                foreach (var miner in Controller.Miners) {
+                    miner.SetPrimaryStratum(newPrimaryStratum);
+                    if (newSecondaryStratum != null)
                         miner.SetSecondaryStratum(newSecondaryStratum);
-                    } else {
-                        throw new System.InvalidOperationException(miner.PrimaryAlgorithmName);
-                    }
                     if (miner.GetType() == typeof(OpenCLCryptoNightMiner))
                         ((OpenCLCryptoNightMiner)miner).SaveNiceHashMode();
                 }
-                mPrimaryStratumBackup = Controller.PrimaryStratum;
+                Controller.PrimaryStratumBackup = Controller.PrimaryStratum;
                 Controller.PrimaryStratum = newPrimaryStratum;
-                mSecondaryStratumBackup = Controller.SecondaryStratum;
+                Controller.SecondaryStratumBackup = Controller.SecondaryStratum;
                 Controller.SecondaryStratum = newSecondaryStratum;
-                mPrimaryStratumBackup.SilentMode = true;
-                if (mSecondaryStratumBackup != null)
-                    mSecondaryStratumBackup.SilentMode = true;
+                Controller.PrimaryStratumBackup.SilentMode = true;
+                if (Controller.SecondaryStratumBackup != null)
+                    Controller.SecondaryStratumBackup.SilentMode = true;
                 return true;
             }
 
@@ -4011,24 +4113,29 @@ namespace GatelessGateSharp {
         }
 
         private void SwitchFromStratumForDEVFEE() {
+            Controller.PrimaryStratumBackup.SilentMode = false;
+            Controller.PrimaryStratumBackup.Reconnect();
+            if (Controller.SecondaryStratumBackup != null) {
+                Controller.SecondaryStratumBackup.SilentMode = false;
+                Controller.SecondaryStratumBackup.Reconnect();
+            }
+
+            Utilities.SleepWithDoEvents(Parameters.DevFeeSwitchingPreparationTimeInMilliseconds);
+
             Logger("Switching back from the DEVFEE mode...");
 
             Stratum oldPrimaryStratum = Controller.PrimaryStratum;
-            Controller.PrimaryStratum = mPrimaryStratumBackup;
-            mPrimaryStratumBackup = null;
+            Controller.PrimaryStratum = Controller.PrimaryStratumBackup;
+            Controller.PrimaryStratumBackup = null;
             oldPrimaryStratum.Stop();
 
             Stratum oldSecondaryStratum = Controller.SecondaryStratum;
-            Controller.SecondaryStratum = mSecondaryStratumBackup;
-            mSecondaryStratumBackup = null;
+            Controller.SecondaryStratum = Controller.SecondaryStratumBackup;
+            Controller.SecondaryStratumBackup = null;
             if (oldSecondaryStratum != null)
                 oldSecondaryStratum.Stop();
 
-            Controller.PrimaryStratum.SilentMode = true;
-            if (Controller.SecondaryStratum != null)
-                Controller.SecondaryStratum.SilentMode = true;
-
-            foreach (var miner in mMiners) {
+            foreach (var miner in Controller.Miners) {
                 if (miner.PrimaryAlgorithmName == Controller.PrimaryStratum.AlgorithmName)
                     miner.SetPrimaryStratum(Controller.PrimaryStratum);
                 if (Controller.SecondaryStratum != null && miner.SecondaryAlgorithmName == Controller.SecondaryStratum.AlgorithmName)
@@ -4056,7 +4163,7 @@ namespace GatelessGateSharp {
             } else {
                 SwitchFromStratumForDEVFEE();
             }
-            timerDevFee.Interval = (mDevFeeMode) ? Parameters.DevFeeDurationInSeconds * 1000 : (int)((double)Parameters.DevFeeDurationInSeconds * ((double)(100 - Parameters.DevFeePercentage) / Parameters.DevFeePercentage) * 1000);
+            timerDevFee.Interval = ((mDevFeeMode) ? Parameters.DevFeeDurationInSeconds * 1000 : (int)((double)Parameters.DevFeeDurationInSeconds * ((double)(100 - Parameters.DevFeePercentage) / Parameters.DevFeePercentage) * 1000));
             if (mDevFeeMode)
                 mDevFeeModeStartTime = DateTime.Now; 
 
@@ -4106,7 +4213,7 @@ namespace GatelessGateSharp {
                 ex = Controller.SecondaryStratum.UnrecoverableException;
                 Controller.SecondaryStratum.UnrecoverableException = null;
             }
-            foreach (var miner in mMiners) {
+            foreach (var miner in Controller.Miners) {
                 if (miner.UnrecoverableException != null) {
                     ex = miner.UnrecoverableException;
                     miner.UnrecoverableException = null;
@@ -4141,7 +4248,7 @@ namespace GatelessGateSharp {
                         ///Controller.AppState = Controller.ApplicationGlobalState.Mining;
                     }
                 } else {
-                    foreach (var miner in mMiners) {
+                    foreach (var miner in Controller.Miners) {
                         if (!miner.Alive) {
                             MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
                             Program.Exit(false);
@@ -4824,7 +4931,7 @@ namespace GatelessGateSharp {
                     System.Runtime.GCSettings.LargeObjectHeapCompactionMode = System.Runtime.GCLargeObjectHeapCompactionMode.CompactOnce;
                     GC.Collect();
                     Logger("Memory used before collection: " + GC.GetTotalMemory(true) / 1024 / 1024 + "MB");
-                } catch (Exception ex) { ExceptionLogger(ex); }
+                } catch (Exception ex) { Logger(ex); }
                 System.Threading.Thread.Sleep(5 * 60 * 1000);
             }
         }
@@ -4832,6 +4939,8 @@ namespace GatelessGateSharp {
         string mLatestReleaseUrl;
         string mLatestReleaseName;
         int mLatestReleaseDiff = 0;
+        string mLatestReleaseFileName;
+        string mLatestReleaseInstallerPath;
 
         private void Task_UpdateLatestReleaseInfo(object cancellationToken) {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
@@ -4865,10 +4974,13 @@ namespace GatelessGateSharp {
                         .ToList()
                         .ForEach(x => {
                             var href = x.Attributes["href"].Value;
-                            if ((new System.Text.RegularExpressions.Regex(@"^/zawawawa/GatelessGateSharp/releases/download/.*\.msi$")).IsMatch(href)) {
+                            var regex = new System.Text.RegularExpressions.Regex(@"^/zawawawa/GatelessGateSharp/releases/download/[^/]+/([^/]+\.msi)$");
+                            var match = regex.Match(href);
+                            if (match.Success) {
                                 mLatestReleaseName = latestReleaseName;
                                 mLatestReleaseUrl = "https://github.com" + href;
                                 mLatestReleaseDiff = latestReleaseDiff;
+                                mLatestReleaseFileName = match.Groups[1].Value;
                             }
                         });
                 } catch (Exception) { } // TODO
@@ -4876,26 +4988,48 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void DownloadLatestVersion() {
+        private void InstallLatestVersion() {
             try {
                 if (mLatestReleaseName == null) {
                     MessageBox.Show("There is no information available on the latest release.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 } else if (mLatestReleaseName == appName) {
-                    if (MessageBox.Show("You are already running the latest version of Gateless Gate Sharp.\nWould you still like to download it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
+                    if (MessageBox.Show("You are already running the latest version of Gateless Gate Sharp.\nWould you still like to install it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
                         return;
-                } else if (MessageBox.Show("The latest version is " + mLatestReleaseName + ".\nWould you like to download it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes) {
+                } else if (MessageBox.Show("The latest version is " + mLatestReleaseName + ".\nWould you like to install it?", appName, MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes) {
                     return;
-                } 
-                System.Diagnostics.Process.Start(mLatestReleaseUrl);
+                }
+                toolStripMainFormProgressBar.Minimum = 0;
+                toolStripMainFormProgressBar.Maximum = 100;
+                toolStripMainFormProgressBar.Value = 0;
+                IntPtr outPath;
+                int result = NativeMethods.SHGetKnownFolderPath(new Guid("{374DE290-123F-4565-9164-39C4925E467B}"), (uint)NativeMethods.KnownFolderFlags.DontVerify, new IntPtr(0), out outPath);
+                if (result == 0) {
+                    mLatestReleaseInstallerPath = Marshal.PtrToStringUni(outPath) + "\\" + mLatestReleaseFileName;
+                    using (WebClient wc = new WebClient()) {
+                        wc.DownloadProgressChanged += LatestReleaseDownloader_DownloadProgressChanged;
+                        wc.DownloadFileCompleted += LatestReleaseDownloader_DownloadFileCompleted;
+                        wc.DownloadFileAsync(new System.Uri(mLatestReleaseUrl), mLatestReleaseInstallerPath);
+                    }
+                    Logger("Downloading the latest version of Gateless Gate Sharp...");
+                }
             } catch (Exception) { } // TODO
         }
 
-        private void button6_Click(object sender, EventArgs e) {
-            DownloadLatestVersion();
+        void LatestReleaseDownloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
+            toolStripMainFormProgressBar.Value = e.ProgressPercentage;
         }
 
-        private void button7_Click(object sender, EventArgs e) {
+        void LatestReleaseDownloader_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e) {
+            System.Diagnostics.Process.Start(mLatestReleaseInstallerPath, "/passive");
+            Program.Exit(true);
+        }
+
+        private void button6_Click(object sender, EventArgs e) {
+            InstallLatestVersion();
+        }
+
+        private void buttonInstallTeamViewer_Click(object sender, EventArgs e) {
             System.Diagnostics.Process.Start("https://download.teamviewer.com/download/TeamViewer_Setup.exe");
         }
 
@@ -5177,7 +5311,7 @@ namespace GatelessGateSharp {
             try {
                 CreateSettingsBackup();
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger(ex);
                 MessageBox.Show(this, "Failed to create backup.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -5190,7 +5324,7 @@ namespace GatelessGateSharp {
                     LoadSettingsFromDatabase(path);
                 }
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger(ex);
                 MessageBox.Show(this, "Failed to restore settings.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -5204,7 +5338,7 @@ namespace GatelessGateSharp {
                     UpdateSettingBackupList();
                 }
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger(ex);
                 MessageBox.Show(this, "Failed to delete backup.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -5219,7 +5353,7 @@ namespace GatelessGateSharp {
                     UpdateSettingBackupList();
                 }
             } catch (Exception ex) {
-                Logger("Exception: " + ex.Message + ex.StackTrace);
+                Logger(ex);
                 MessageBox.Show(this, "Failed to delete backups.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
