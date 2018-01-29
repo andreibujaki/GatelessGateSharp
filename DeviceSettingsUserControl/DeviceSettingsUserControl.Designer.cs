@@ -262,6 +262,7 @@
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage41);
             this.tabControl1.Controls.Add(this.tabPage6);
+            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(7, 85);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -298,6 +299,7 @@
             this.groupBox5.Controls.Add(this.label25);
             this.groupBox5.Controls.Add(this.numericUpDownDevice0EthashPascalCoreClock);
             this.groupBox5.Controls.Add(this.label26);
+            this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox5.Location = new System.Drawing.Point(158, 7);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(314, 123);
@@ -309,6 +311,7 @@
             // checkBox7
             // 
             this.checkBox7.AutoSize = true;
+            this.checkBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox7.Location = new System.Drawing.Point(6, 19);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(59, 17);
@@ -320,6 +323,7 @@
             // 
             // numericUpDownDevice0EthashPascalMemoryVoltage
             // 
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashPascalMemoryVoltage.Increment = new decimal(new int[] {
             10,
             0,
@@ -350,6 +354,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label22.Location = new System.Drawing.Point(159, 96);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(81, 13);
@@ -358,6 +363,7 @@
             // 
             // numericUpDownDevice0EthashPascalMemoryClock
             // 
+            this.numericUpDownDevice0EthashPascalMemoryClock.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashPascalMemoryClock.Increment = new decimal(new int[] {
             10,
             0,
@@ -388,6 +394,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label23.Location = new System.Drawing.Point(6, 96);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(88, 13);
@@ -396,6 +403,7 @@
             // 
             // numericUpDownDevice0EthashPascalPowerLimit
             // 
+            this.numericUpDownDevice0EthashPascalPowerLimit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashPascalPowerLimit.Location = new System.Drawing.Point(96, 42);
             this.numericUpDownDevice0EthashPascalPowerLimit.Maximum = new decimal(new int[] {
             120,
@@ -421,6 +429,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label24.Location = new System.Drawing.Point(6, 44);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(81, 13);
@@ -429,6 +438,7 @@
             // 
             // numericUpDown24
             // 
+            this.numericUpDown24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown24.Increment = new decimal(new int[] {
             10,
             0,
@@ -459,6 +469,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label25.Location = new System.Drawing.Point(159, 72);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(77, 13);
@@ -467,6 +478,7 @@
             // 
             // numericUpDownDevice0EthashPascalCoreClock
             // 
+            this.numericUpDownDevice0EthashPascalCoreClock.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashPascalCoreClock.Increment = new decimal(new int[] {
             10,
             0,
@@ -497,6 +509,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label26.Location = new System.Drawing.Point(6, 70);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(84, 13);
@@ -506,6 +519,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(6, 62);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(88, 13);
@@ -514,6 +528,7 @@
             // 
             // numericUpDownDevice0EthashPascalPascalIterations
             // 
+            this.numericUpDownDevice0EthashPascalPascalIterations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashPascalPascalIterations.Location = new System.Drawing.Point(95, 60);
             this.numericUpDownDevice0EthashPascalPascalIterations.Maximum = new decimal(new int[] {
             16,
@@ -539,6 +554,7 @@
             // label194
             // 
             this.label194.AutoSize = true;
+            this.label194.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label194.Location = new System.Drawing.Point(6, 8);
             this.label194.Name = "label194";
             this.label194.Size = new System.Drawing.Size(49, 13);
@@ -548,6 +564,7 @@
             // label196
             // 
             this.label196.AutoSize = true;
+            this.label196.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label196.Location = new System.Drawing.Point(6, 34);
             this.label196.Name = "label196";
             this.label196.Size = new System.Drawing.Size(49, 13);
@@ -556,6 +573,7 @@
             // 
             // numericUpDownDevice0EthashPascalIntensity
             // 
+            this.numericUpDownDevice0EthashPascalIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashPascalIntensity.Location = new System.Drawing.Point(95, 33);
             this.numericUpDownDevice0EthashPascalIntensity.Maximum = new decimal(new int[] {
             8192,
@@ -580,6 +598,7 @@
             // 
             // numericUpDownDevice0EthashPascalThreads
             // 
+            this.numericUpDownDevice0EthashPascalThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashPascalThreads.Location = new System.Drawing.Point(95, 7);
             this.numericUpDownDevice0EthashPascalThreads.Maximum = new decimal(new int[] {
             4,
@@ -632,6 +651,7 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.numericUpDown5);
             this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(158, 7);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(314, 123);
@@ -643,6 +663,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
+            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox2.Location = new System.Drawing.Point(6, 19);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(59, 17);
@@ -654,6 +675,7 @@
             // 
             // numericUpDown1
             // 
+            this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown1.Increment = new decimal(new int[] {
             10,
             0,
@@ -684,6 +706,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(159, 96);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 13);
@@ -692,6 +715,7 @@
             // 
             // numericUpDown2
             // 
+            this.numericUpDown2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown2.Increment = new decimal(new int[] {
             10,
             0,
@@ -722,6 +746,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(6, 96);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(88, 13);
@@ -730,6 +755,7 @@
             // 
             // numericUpDown3
             // 
+            this.numericUpDown3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown3.Location = new System.Drawing.Point(96, 42);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             120,
@@ -755,6 +781,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(6, 44);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(81, 13);
@@ -763,6 +790,7 @@
             // 
             // numericUpDown4
             // 
+            this.numericUpDown4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown4.Increment = new decimal(new int[] {
             10,
             0,
@@ -793,6 +821,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(159, 72);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 13);
@@ -801,6 +830,7 @@
             // 
             // numericUpDown5
             // 
+            this.numericUpDown5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown5.Increment = new decimal(new int[] {
             10,
             0,
@@ -831,6 +861,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(6, 70);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(84, 13);
@@ -840,6 +871,7 @@
             // label141
             // 
             this.label141.AutoSize = true;
+            this.label141.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label141.Location = new System.Drawing.Point(6, 8);
             this.label141.Name = "label141";
             this.label141.Size = new System.Drawing.Size(49, 13);
@@ -849,6 +881,7 @@
             // label142
             // 
             this.label142.AutoSize = true;
+            this.label142.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label142.Location = new System.Drawing.Point(6, 60);
             this.label142.Name = "label142";
             this.label142.Size = new System.Drawing.Size(88, 13);
@@ -858,6 +891,7 @@
             // label143
             // 
             this.label143.AutoSize = true;
+            this.label143.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label143.Location = new System.Drawing.Point(6, 34);
             this.label143.Name = "label143";
             this.label143.Size = new System.Drawing.Size(49, 13);
@@ -866,6 +900,7 @@
             // 
             // numericUpDownDevice0EthashLocalWorkSize
             // 
+            this.numericUpDownDevice0EthashLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashLocalWorkSize.Location = new System.Drawing.Point(95, 59);
             this.numericUpDownDevice0EthashLocalWorkSize.Maximum = new decimal(new int[] {
             256,
@@ -890,6 +925,7 @@
             // 
             // numericUpDownDevice0EthashIntensity
             // 
+            this.numericUpDownDevice0EthashIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashIntensity.Location = new System.Drawing.Point(95, 33);
             this.numericUpDownDevice0EthashIntensity.Maximum = new decimal(new int[] {
             8192,
@@ -914,6 +950,7 @@
             // 
             // numericUpDownDevice0EthashThreads
             // 
+            this.numericUpDownDevice0EthashThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0EthashThreads.Location = new System.Drawing.Point(95, 7);
             this.numericUpDownDevice0EthashThreads.Maximum = new decimal(new int[] {
             4,
@@ -966,6 +1003,7 @@
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.numericUpDown10);
             this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(158, 7);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(314, 123);
@@ -977,6 +1015,7 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
+            this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox3.Location = new System.Drawing.Point(6, 19);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(59, 17);
@@ -988,6 +1027,7 @@
             // 
             // numericUpDown6
             // 
+            this.numericUpDown6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown6.Increment = new decimal(new int[] {
             10,
             0,
@@ -1018,6 +1058,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(159, 96);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(81, 13);
@@ -1026,6 +1067,7 @@
             // 
             // numericUpDown7
             // 
+            this.numericUpDown7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown7.Increment = new decimal(new int[] {
             10,
             0,
@@ -1056,6 +1098,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.Location = new System.Drawing.Point(6, 96);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(88, 13);
@@ -1064,6 +1107,7 @@
             // 
             // numericUpDown8
             // 
+            this.numericUpDown8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown8.Location = new System.Drawing.Point(96, 42);
             this.numericUpDown8.Maximum = new decimal(new int[] {
             120,
@@ -1089,6 +1133,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(6, 44);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(81, 13);
@@ -1097,6 +1142,7 @@
             // 
             // numericUpDown9
             // 
+            this.numericUpDown9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown9.Increment = new decimal(new int[] {
             10,
             0,
@@ -1127,6 +1173,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.Location = new System.Drawing.Point(159, 72);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(77, 13);
@@ -1135,6 +1182,7 @@
             // 
             // numericUpDown10
             // 
+            this.numericUpDown10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown10.Increment = new decimal(new int[] {
             10,
             0,
@@ -1165,6 +1213,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(6, 70);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(84, 13);
@@ -1174,6 +1223,7 @@
             // label134
             // 
             this.label134.AutoSize = true;
+            this.label134.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label134.Location = new System.Drawing.Point(6, 60);
             this.label134.Name = "label134";
             this.label134.Size = new System.Drawing.Size(88, 13);
@@ -1182,6 +1232,7 @@
             // 
             // numericUpDownDevice0CryptoNightThreads
             // 
+            this.numericUpDownDevice0CryptoNightThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0CryptoNightThreads.Location = new System.Drawing.Point(95, 7);
             this.numericUpDownDevice0CryptoNightThreads.Maximum = new decimal(new int[] {
             4,
@@ -1207,6 +1258,7 @@
             // label135
             // 
             this.label135.AutoSize = true;
+            this.label135.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label135.Location = new System.Drawing.Point(6, 34);
             this.label135.Name = "label135";
             this.label135.Size = new System.Drawing.Size(74, 13);
@@ -1216,6 +1268,7 @@
             // label133
             // 
             this.label133.AutoSize = true;
+            this.label133.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label133.Location = new System.Drawing.Point(6, 8);
             this.label133.Name = "label133";
             this.label133.Size = new System.Drawing.Size(49, 13);
@@ -1224,6 +1277,7 @@
             // 
             // numericUpDownDevice0CryptoNightRawIntensity
             // 
+            this.numericUpDownDevice0CryptoNightRawIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0CryptoNightRawIntensity.Location = new System.Drawing.Point(95, 33);
             this.numericUpDownDevice0CryptoNightRawIntensity.Maximum = new decimal(new int[] {
             4096,
@@ -1248,6 +1302,7 @@
             // 
             // numericUpDownDevice0CryptoNightLocalWorkSize
             // 
+            this.numericUpDownDevice0CryptoNightLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Location = new System.Drawing.Point(95, 59);
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Maximum = new decimal(new int[] {
             64,
@@ -1299,6 +1354,7 @@
             this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.numericUpDown15);
             this.groupBox3.Controls.Add(this.label16);
+            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBox3.Location = new System.Drawing.Point(158, 7);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(314, 123);
@@ -1516,6 +1572,7 @@
             // label186
             // 
             this.label186.AutoSize = true;
+            this.label186.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label186.Location = new System.Drawing.Point(6, 60);
             this.label186.Name = "label186";
             this.label186.Size = new System.Drawing.Size(88, 13);
@@ -1533,6 +1590,7 @@
             // 
             // numericUpDownDevice0LbryLocalWorkSize
             // 
+            this.numericUpDownDevice0LbryLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.numericUpDownDevice0LbryLocalWorkSize.Location = new System.Drawing.Point(95, 59);
             this.numericUpDownDevice0LbryLocalWorkSize.Maximum = new decimal(new int[] {
             256,
@@ -1557,6 +1615,7 @@
             // 
             // numericUpDownDevice0LbryIntensity
             // 
+            this.numericUpDownDevice0LbryIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.numericUpDownDevice0LbryIntensity.Location = new System.Drawing.Point(95, 33);
             this.numericUpDownDevice0LbryIntensity.Maximum = new decimal(new int[] {
             8192,
@@ -1581,6 +1640,7 @@
             // 
             // numericUpDownDevice0LbryThreads
             // 
+            this.numericUpDownDevice0LbryThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.numericUpDownDevice0LbryThreads.Location = new System.Drawing.Point(95, 7);
             this.numericUpDownDevice0LbryThreads.Maximum = new decimal(new int[] {
             4,
@@ -1632,6 +1692,7 @@
             this.groupBox4.Controls.Add(this.label20);
             this.groupBox4.Controls.Add(this.numericUpDown20);
             this.groupBox4.Controls.Add(this.label21);
+            this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.Location = new System.Drawing.Point(158, 7);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(314, 123);
@@ -1643,6 +1704,7 @@
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
+            this.checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox5.Location = new System.Drawing.Point(6, 19);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(59, 17);
@@ -1654,6 +1716,7 @@
             // 
             // numericUpDown16
             // 
+            this.numericUpDown16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown16.Increment = new decimal(new int[] {
             10,
             0,
@@ -1684,6 +1747,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.Location = new System.Drawing.Point(159, 96);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(81, 13);
@@ -1692,6 +1756,7 @@
             // 
             // numericUpDown17
             // 
+            this.numericUpDown17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown17.Increment = new decimal(new int[] {
             10,
             0,
@@ -1722,6 +1787,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.Location = new System.Drawing.Point(6, 96);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(88, 13);
@@ -1730,6 +1796,7 @@
             // 
             // numericUpDown18
             // 
+            this.numericUpDown18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown18.Location = new System.Drawing.Point(96, 42);
             this.numericUpDown18.Maximum = new decimal(new int[] {
             120,
@@ -1755,6 +1822,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label19.Location = new System.Drawing.Point(6, 44);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(81, 13);
@@ -1763,6 +1831,7 @@
             // 
             // numericUpDown19
             // 
+            this.numericUpDown19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown19.Increment = new decimal(new int[] {
             10,
             0,
@@ -1793,6 +1862,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.Location = new System.Drawing.Point(159, 72);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(77, 13);
@@ -1801,6 +1871,7 @@
             // 
             // numericUpDown20
             // 
+            this.numericUpDown20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown20.Increment = new decimal(new int[] {
             10,
             0,
@@ -1831,6 +1902,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.Location = new System.Drawing.Point(6, 70);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(84, 13);
@@ -1840,6 +1912,7 @@
             // label202
             // 
             this.label202.AutoSize = true;
+            this.label202.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label202.Location = new System.Drawing.Point(6, 8);
             this.label202.Name = "label202";
             this.label202.Size = new System.Drawing.Size(49, 13);
@@ -1849,6 +1922,7 @@
             // label203
             // 
             this.label203.AutoSize = true;
+            this.label203.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label203.Location = new System.Drawing.Point(6, 60);
             this.label203.Name = "label203";
             this.label203.Size = new System.Drawing.Size(88, 13);
@@ -1858,6 +1932,7 @@
             // label204
             // 
             this.label204.AutoSize = true;
+            this.label204.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label204.Location = new System.Drawing.Point(6, 34);
             this.label204.Name = "label204";
             this.label204.Size = new System.Drawing.Size(49, 13);
@@ -1866,6 +1941,7 @@
             // 
             // numericUpDownDevice0PascalLocalWorkSize
             // 
+            this.numericUpDownDevice0PascalLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0PascalLocalWorkSize.Location = new System.Drawing.Point(95, 59);
             this.numericUpDownDevice0PascalLocalWorkSize.Maximum = new decimal(new int[] {
             256,
@@ -1890,6 +1966,7 @@
             // 
             // numericUpDownDevice0PascalIntensity
             // 
+            this.numericUpDownDevice0PascalIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0PascalIntensity.Location = new System.Drawing.Point(95, 33);
             this.numericUpDownDevice0PascalIntensity.Maximum = new decimal(new int[] {
             8192,
@@ -1914,6 +1991,7 @@
             // 
             // numericUpDownDevice0PascalThreads
             // 
+            this.numericUpDownDevice0PascalThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0PascalThreads.Location = new System.Drawing.Point(95, 7);
             this.numericUpDownDevice0PascalThreads.Maximum = new decimal(new int[] {
             4,
@@ -1965,6 +2043,7 @@
             this.groupBox6.Controls.Add(this.label33);
             this.groupBox6.Controls.Add(this.numericUpDown29);
             this.groupBox6.Controls.Add(this.label34);
+            this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox6.Location = new System.Drawing.Point(158, 7);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(314, 123);
@@ -1976,6 +2055,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.checkBox1.Location = new System.Drawing.Point(6, 19);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(59, 17);
@@ -1987,6 +2067,7 @@
             // 
             // numericUpDown21
             // 
+            this.numericUpDown21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.numericUpDown21.Increment = new decimal(new int[] {
             10,
             0,
@@ -2017,6 +2098,7 @@
             // label30
             // 
             this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label30.Location = new System.Drawing.Point(159, 96);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(81, 13);
@@ -2025,6 +2107,7 @@
             // 
             // numericUpDown22
             // 
+            this.numericUpDown22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.numericUpDown22.Increment = new decimal(new int[] {
             10,
             0,
@@ -2055,6 +2138,7 @@
             // label31
             // 
             this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label31.Location = new System.Drawing.Point(6, 96);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(88, 13);
@@ -2063,6 +2147,7 @@
             // 
             // numericUpDown23
             // 
+            this.numericUpDown23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.numericUpDown23.Location = new System.Drawing.Point(96, 42);
             this.numericUpDown23.Maximum = new decimal(new int[] {
             120,
@@ -2088,6 +2173,7 @@
             // label32
             // 
             this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label32.Location = new System.Drawing.Point(6, 44);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(81, 13);
@@ -2096,6 +2182,7 @@
             // 
             // numericUpDown25
             // 
+            this.numericUpDown25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.numericUpDown25.Increment = new decimal(new int[] {
             10,
             0,
@@ -2126,6 +2213,7 @@
             // label33
             // 
             this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label33.Location = new System.Drawing.Point(159, 72);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(77, 13);
@@ -2134,6 +2222,7 @@
             // 
             // numericUpDown29
             // 
+            this.numericUpDown29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.numericUpDown29.Increment = new decimal(new int[] {
             10,
             0,
@@ -2164,6 +2253,7 @@
             // label34
             // 
             this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label34.Location = new System.Drawing.Point(6, 70);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(84, 13);
@@ -2173,6 +2263,7 @@
             // label474
             // 
             this.label474.AutoSize = true;
+            this.label474.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label474.Location = new System.Drawing.Point(6, 61);
             this.label474.Name = "label474";
             this.label474.Size = new System.Drawing.Size(88, 13);
@@ -2181,6 +2272,7 @@
             // 
             // numericUpDownDevice0NeoScryptLocalWorkSize
             // 
+            this.numericUpDownDevice0NeoScryptLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Location = new System.Drawing.Point(95, 59);
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Maximum = new decimal(new int[] {
             512,
@@ -2205,6 +2297,7 @@
             // label481
             // 
             this.label481.AutoSize = true;
+            this.label481.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label481.Location = new System.Drawing.Point(6, 8);
             this.label481.Name = "label481";
             this.label481.Size = new System.Drawing.Size(49, 13);
@@ -2214,6 +2307,7 @@
             // label482
             // 
             this.label482.AutoSize = true;
+            this.label482.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label482.Location = new System.Drawing.Point(6, 34);
             this.label482.Name = "label482";
             this.label482.Size = new System.Drawing.Size(74, 13);
@@ -2222,6 +2316,7 @@
             // 
             // numericUpDownDevice0NeoScryptIntensity
             // 
+            this.numericUpDownDevice0NeoScryptIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0NeoScryptIntensity.Location = new System.Drawing.Point(95, 33);
             this.numericUpDownDevice0NeoScryptIntensity.Maximum = new decimal(new int[] {
             8192,
@@ -2245,6 +2340,7 @@
             // 
             // numericUpDownDevice0NeoScryptThreads
             // 
+            this.numericUpDownDevice0NeoScryptThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownDevice0NeoScryptThreads.Location = new System.Drawing.Point(95, 7);
             this.numericUpDownDevice0NeoScryptThreads.Maximum = new decimal(new int[] {
             4,
@@ -2295,6 +2391,7 @@
             this.groupBox7.Controls.Add(this.label38);
             this.groupBox7.Controls.Add(this.numericUpDown34);
             this.groupBox7.Controls.Add(this.label39);
+            this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox7.Location = new System.Drawing.Point(158, 7);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(314, 123);
@@ -2306,6 +2403,7 @@
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
+            this.checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox6.Location = new System.Drawing.Point(6, 19);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(59, 17);
@@ -2317,6 +2415,7 @@
             // 
             // numericUpDown30
             // 
+            this.numericUpDown30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown30.Increment = new decimal(new int[] {
             10,
             0,
@@ -2347,6 +2446,7 @@
             // label35
             // 
             this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label35.Location = new System.Drawing.Point(159, 96);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(81, 13);
@@ -2355,6 +2455,7 @@
             // 
             // numericUpDown31
             // 
+            this.numericUpDown31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown31.Increment = new decimal(new int[] {
             10,
             0,
@@ -2385,6 +2486,7 @@
             // label36
             // 
             this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label36.Location = new System.Drawing.Point(6, 96);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(88, 13);
@@ -2393,6 +2495,7 @@
             // 
             // numericUpDown32
             // 
+            this.numericUpDown32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown32.Location = new System.Drawing.Point(96, 42);
             this.numericUpDown32.Maximum = new decimal(new int[] {
             120,
@@ -2418,6 +2521,7 @@
             // label37
             // 
             this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label37.Location = new System.Drawing.Point(6, 44);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(81, 13);
@@ -2426,6 +2530,7 @@
             // 
             // numericUpDown33
             // 
+            this.numericUpDown33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown33.Increment = new decimal(new int[] {
             10,
             0,
@@ -2456,6 +2561,7 @@
             // label38
             // 
             this.label38.AutoSize = true;
+            this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label38.Location = new System.Drawing.Point(159, 72);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(77, 13);
@@ -2464,6 +2570,7 @@
             // 
             // numericUpDown34
             // 
+            this.numericUpDown34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown34.Increment = new decimal(new int[] {
             10,
             0,
@@ -2494,6 +2601,7 @@
             // label39
             // 
             this.label39.AutoSize = true;
+            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label39.Location = new System.Drawing.Point(6, 70);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(84, 13);
@@ -2503,6 +2611,7 @@
             // label40
             // 
             this.label40.AutoSize = true;
+            this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label40.Location = new System.Drawing.Point(6, 61);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(88, 13);
@@ -2511,6 +2620,7 @@
             // 
             // numericUpDown35
             // 
+            this.numericUpDown35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown35.Location = new System.Drawing.Point(95, 59);
             this.numericUpDown35.Maximum = new decimal(new int[] {
             512,
@@ -2536,6 +2646,7 @@
             // label41
             // 
             this.label41.AutoSize = true;
+            this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label41.Location = new System.Drawing.Point(6, 8);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(49, 13);
@@ -2545,6 +2656,7 @@
             // label42
             // 
             this.label42.AutoSize = true;
+            this.label42.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label42.Location = new System.Drawing.Point(6, 34);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(49, 13);
@@ -2553,6 +2665,7 @@
             // 
             // numericUpDown36
             // 
+            this.numericUpDown36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown36.Location = new System.Drawing.Point(95, 33);
             this.numericUpDown36.Maximum = new decimal(new int[] {
             8192,
@@ -2577,6 +2690,7 @@
             // 
             // numericUpDown37
             // 
+            this.numericUpDown37.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown37.Location = new System.Drawing.Point(95, 7);
             this.numericUpDown37.Maximum = new decimal(new int[] {
             4,
@@ -2602,6 +2716,7 @@
             // label188
             // 
             this.label188.AutoSize = true;
+            this.label188.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label188.Location = new System.Drawing.Point(71, 21);
             this.label188.Name = "label188";
             this.label188.Size = new System.Drawing.Size(124, 13);
@@ -2610,6 +2725,7 @@
             // 
             // numericUpDown52
             // 
+            this.numericUpDown52.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown52.Location = new System.Drawing.Point(200, 19);
             this.numericUpDown52.Maximum = new decimal(new int[] {
             90,
@@ -2637,6 +2753,7 @@
             this.fanControlEnabled.AutoSize = true;
             this.fanControlEnabled.Checked = true;
             this.fanControlEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.fanControlEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.fanControlEnabled.Location = new System.Drawing.Point(6, 32);
             this.fanControlEnabled.Name = "fanControlEnabled";
             this.fanControlEnabled.Size = new System.Drawing.Size(59, 17);
@@ -2657,6 +2774,7 @@
             this.groupBox13.Controls.Add(this.fanControlEnabled);
             this.groupBox13.Controls.Add(this.numericUpDown52);
             this.groupBox13.Controls.Add(this.label188);
+            this.groupBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox13.Location = new System.Drawing.Point(7, 4);
             this.groupBox13.Name = "groupBox13";
             this.groupBox13.Size = new System.Drawing.Size(484, 75);
@@ -2666,6 +2784,7 @@
             // 
             // numericUpDown28
             // 
+            this.numericUpDown28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown28.Location = new System.Drawing.Point(389, 45);
             this.numericUpDown28.Minimum = new decimal(new int[] {
             20,
@@ -2686,6 +2805,7 @@
             // label29
             // 
             this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label29.Location = new System.Drawing.Point(276, 47);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(105, 13);
@@ -2695,6 +2815,7 @@
             // 
             // numericUpDown27
             // 
+            this.numericUpDown27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown27.Location = new System.Drawing.Point(389, 19);
             this.numericUpDown27.Minimum = new decimal(new int[] {
             20,
@@ -2715,6 +2836,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label28.Location = new System.Drawing.Point(276, 21);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(102, 13);
@@ -2723,6 +2845,7 @@
             // 
             // numericUpDown26
             // 
+            this.numericUpDown26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDown26.Location = new System.Drawing.Point(200, 45);
             this.numericUpDown26.Maximum = new decimal(new int[] {
             90,
@@ -2748,6 +2871,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label27.Location = new System.Drawing.Point(71, 47);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(116, 13);
@@ -2757,6 +2881,7 @@
             // 
             // buttonResetToDefault
             // 
+            this.buttonResetToDefault.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResetToDefault.Location = new System.Drawing.Point(497, 38);
             this.buttonResetToDefault.Name = "buttonResetToDefault";
             this.buttonResetToDefault.Size = new System.Drawing.Size(130, 23);
@@ -2767,6 +2892,7 @@
             // 
             // buttonCopyToOthers
             // 
+            this.buttonCopyToOthers.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCopyToOthers.Location = new System.Drawing.Point(497, 9);
             this.buttonCopyToOthers.Name = "buttonCopyToOthers";
             this.buttonCopyToOthers.Size = new System.Drawing.Size(130, 23);
@@ -2777,6 +2903,7 @@
             // 
             // buttonResetAll
             // 
+            this.buttonResetAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResetAll.Location = new System.Drawing.Point(497, 67);
             this.buttonResetAll.Name = "buttonResetAll";
             this.buttonResetAll.Size = new System.Drawing.Size(130, 23);

@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -43,8 +45,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -74,22 +74,6 @@
             this.labelPriceMonth = new System.Windows.Forms.Label();
             this.labelCurrentSecondaryPool = new System.Windows.Forms.Label();
             this.dataGridViewDevices = new System.Windows.Forms.DataGridView();
-            this.enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vendor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.shares = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.activity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.temperature = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fan = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.power = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.power_limit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.core_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.core_voltage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.memory_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.memory_used = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.memory_reserved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.labelElapsedTime = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.labelCurrentPool = new System.Windows.Forms.Label();
@@ -301,6 +285,22 @@
             this.timerFailOver = new System.Windows.Forms.Timer(this.components);
             this.buttonReleaseMemory = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vendor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.shares = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.activity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.temperature = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fan = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.power = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.power_limit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.core_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.core_voltage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memory_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memory_used = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memory_reserved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -472,6 +472,7 @@
             this.comboBoxGraphType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxGraphType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGraphType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.comboBoxGraphType.FormattingEnabled = true;
             this.comboBoxGraphType.Items.AddRange(new object[] {
             "Temperature",
@@ -489,6 +490,7 @@
             // 
             this.comboBoxGraphCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxGraphCoverage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGraphCoverage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.comboBoxGraphCoverage.FormattingEnabled = true;
             this.comboBoxGraphCoverage.Items.AddRange(new object[] {
             "1 Minute",
@@ -573,6 +575,7 @@
             this.comboBoxSecondGraphType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxSecondGraphType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSecondGraphType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.comboBoxSecondGraphType.FormattingEnabled = true;
             this.comboBoxSecondGraphType.Items.AddRange(new object[] {
             "Speed (Primary Algorithm)",
@@ -589,6 +592,7 @@
             // 
             this.comboBoxSecondGraphCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxSecondGraphCoverage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSecondGraphCoverage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.comboBoxSecondGraphCoverage.FormattingEnabled = true;
             this.comboBoxSecondGraphCoverage.Items.AddRange(new object[] {
             "1 Minute",
@@ -636,6 +640,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label12.Location = new System.Drawing.Point(6, 22);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(52, 13);
@@ -645,6 +650,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label5.Location = new System.Drawing.Point(6, 49);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(88, 13);
@@ -653,6 +659,7 @@
             // 
             // labelBalance
             // 
+            this.labelBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.labelBalance.Location = new System.Drawing.Point(94, 103);
             this.labelBalance.Name = "labelBalance";
             this.labelBalance.Size = new System.Drawing.Size(158, 13);
@@ -662,6 +669,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label10.Location = new System.Drawing.Point(6, 103);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(49, 13);
@@ -670,6 +678,7 @@
             // 
             // labelPriceDay
             // 
+            this.labelPriceDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.labelPriceDay.Location = new System.Drawing.Point(94, 49);
             this.labelPriceDay.Name = "labelPriceDay";
             this.labelPriceDay.Size = new System.Drawing.Size(232, 17);
@@ -678,6 +687,7 @@
             // 
             // labelPriceWeek
             // 
+            this.labelPriceWeek.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.labelPriceWeek.Location = new System.Drawing.Point(94, 66);
             this.labelPriceWeek.Name = "labelPriceWeek";
             this.labelPriceWeek.Size = new System.Drawing.Size(232, 17);
@@ -686,6 +696,7 @@
             // 
             // labelPriceMonth
             // 
+            this.labelPriceMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.labelPriceMonth.Location = new System.Drawing.Point(94, 83);
             this.labelPriceMonth.Name = "labelPriceMonth";
             this.labelPriceMonth.Size = new System.Drawing.Size(232, 17);
@@ -694,6 +705,7 @@
             // 
             // labelCurrentSecondaryPool
             // 
+            this.labelCurrentSecondaryPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.labelCurrentSecondaryPool.Location = new System.Drawing.Point(96, 43);
             this.labelCurrentSecondaryPool.Name = "labelCurrentSecondaryPool";
             this.labelCurrentSecondaryPool.Size = new System.Drawing.Size(306, 18);
@@ -715,14 +727,6 @@
             this.dataGridViewDevices.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDevices.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dataGridViewDevices.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewDevices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewDevices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDevices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.enabled,
@@ -745,185 +749,17 @@
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewDevices.RowsDefaultCellStyle = dataGridViewCellStyle15;
             this.dataGridViewDevices.Size = new System.Drawing.Size(958, 235);
             this.dataGridViewDevices.TabIndex = 144;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
             this.dataGridViewDevices.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellValueChanged);
             this.dataGridViewDevices.SelectionChanged += new System.EventHandler(this.dataGridViewDevices_SelectionChanged);
             // 
-            // enabled
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle3;
-            this.enabled.FalseValue = "";
-            this.enabled.HeaderText = "";
-            this.enabled.Name = "enabled";
-            this.enabled.ReadOnly = true;
-            this.enabled.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.enabled.TrueValue = "";
-            this.enabled.Width = 20;
-            // 
-            // id
-            // 
-            this.id.HeaderText = "#";
-            this.id.Name = "id";
-            this.id.ReadOnly = true;
-            this.id.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.id.Width = 24;
-            // 
-            // vendor
-            // 
-            this.vendor.HeaderText = "Vendor";
-            this.vendor.Name = "vendor";
-            this.vendor.ReadOnly = true;
-            this.vendor.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.vendor.Width = 52;
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.name.Width = 116;
-            // 
-            // speed
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle4;
-            this.speed.FillWeight = 110F;
-            this.speed.HeaderText = "Speed(s)";
-            this.speed.Name = "speed";
-            this.speed.ReadOnly = true;
-            this.speed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.speed.Width = 144;
-            // 
-            // shares
-            // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle5;
-            this.shares.HeaderText = "Shares";
-            this.shares.Name = "shares";
-            this.shares.ReadOnly = true;
-            this.shares.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.shares.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.shares.Width = 85;
-            // 
-            // activity
-            // 
-            this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle6;
-            this.activity.HeaderText = "Act.";
-            this.activity.Name = "activity";
-            this.activity.ReadOnly = true;
-            this.activity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.activity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.activity.Width = 45;
-            // 
-            // temperature
-            // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle7;
-            this.temperature.HeaderText = "Temp.";
-            this.temperature.Name = "temperature";
-            this.temperature.ReadOnly = true;
-            this.temperature.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.temperature.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.temperature.Width = 45;
-            // 
-            // fan
-            // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle8;
-            this.fan.HeaderText = "Fan";
-            this.fan.Name = "fan";
-            this.fan.ReadOnly = true;
-            this.fan.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.fan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.fan.Width = 45;
-            // 
-            // power
-            // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power.DefaultCellStyle = dataGridViewCellStyle9;
-            this.power.HeaderText = "Power";
-            this.power.Name = "power";
-            this.power.ReadOnly = true;
-            this.power.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.power.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.power.Width = 45;
-            // 
-            // power_limit
-            // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle10;
-            this.power_limit.HeaderText = "";
-            this.power_limit.Name = "power_limit";
-            this.power_limit.ReadOnly = true;
-            this.power_limit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.power_limit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.power_limit.Width = 45;
-            // 
-            // core_clock
-            // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle11;
-            this.core_clock.HeaderText = "Core";
-            this.core_clock.Name = "core_clock";
-            this.core_clock.ReadOnly = true;
-            this.core_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.core_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.core_clock.Width = 60;
-            // 
-            // core_voltage
-            // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle12;
-            this.core_voltage.HeaderText = "";
-            this.core_voltage.Name = "core_voltage";
-            this.core_voltage.ReadOnly = true;
-            this.core_voltage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.core_voltage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.core_voltage.Width = 50;
-            // 
-            // memory_clock
-            // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle13;
-            this.memory_clock.HeaderText = "Memory";
-            this.memory_clock.Name = "memory_clock";
-            this.memory_clock.ReadOnly = true;
-            this.memory_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.memory_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.memory_clock.Width = 60;
-            // 
-            // memory_used
-            // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_used.DefaultCellStyle = dataGridViewCellStyle14;
-            this.memory_used.HeaderText = "(Used)";
-            this.memory_used.Name = "memory_used";
-            this.memory_used.ReadOnly = true;
-            this.memory_used.Width = 60;
-            // 
-            // memory_reserved
-            // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle15;
-            this.memory_reserved.HeaderText = "(Rsvd.)";
-            this.memory_reserved.Name = "memory_reserved";
-            this.memory_reserved.ReadOnly = true;
-            this.memory_reserved.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.memory_reserved.Width = 60;
-            // 
             // labelElapsedTime
             // 
+            this.labelElapsedTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.labelElapsedTime.Location = new System.Drawing.Point(96, 8);
             this.labelElapsedTime.Name = "labelElapsedTime";
             this.labelElapsedTime.Size = new System.Drawing.Size(306, 17);
@@ -933,6 +769,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label4.Location = new System.Drawing.Point(8, 8);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(74, 13);
@@ -941,6 +778,7 @@
             // 
             // labelCurrentPool
             // 
+            this.labelCurrentPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.labelCurrentPool.Location = new System.Drawing.Point(96, 25);
             this.labelCurrentPool.Name = "labelCurrentPool";
             this.labelCurrentPool.Size = new System.Drawing.Size(306, 18);
@@ -950,6 +788,7 @@
             // label70
             // 
             this.label70.AutoSize = true;
+            this.label70.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label70.Location = new System.Drawing.Point(8, 25);
             this.label70.Name = "label70";
             this.label70.Size = new System.Drawing.Size(79, 13);
@@ -958,6 +797,7 @@
             // 
             // labelCurrentSpeed
             // 
+            this.labelCurrentSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.labelCurrentSpeed.Location = new System.Drawing.Point(96, 63);
             this.labelCurrentSpeed.Name = "labelCurrentSpeed";
             this.labelCurrentSpeed.Size = new System.Drawing.Size(306, 13);
@@ -967,6 +807,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label3.Location = new System.Drawing.Point(8, 63);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 13);
@@ -1007,6 +848,7 @@
             this.groupBoxWalletAddresses.Controls.Add(this.buttonEthereumBalance);
             this.groupBoxWalletAddresses.Controls.Add(this.textBoxZcashAddress);
             this.groupBoxWalletAddresses.Controls.Add(this.buttonViewBalancesAtNiceHash);
+            this.groupBoxWalletAddresses.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxWalletAddresses.Location = new System.Drawing.Point(6, 176);
             this.groupBoxWalletAddresses.Name = "groupBoxWalletAddresses";
             this.groupBoxWalletAddresses.Size = new System.Drawing.Size(708, 128);
@@ -1017,6 +859,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label28.Location = new System.Drawing.Point(357, 50);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(56, 13);
@@ -1025,6 +868,7 @@
             // 
             // buttonLbryBalance
             // 
+            this.buttonLbryBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.buttonLbryBalance.Location = new System.Drawing.Point(633, 48);
             this.buttonLbryBalance.Name = "buttonLbryBalance";
             this.buttonLbryBalance.Size = new System.Drawing.Size(62, 20);
@@ -1034,6 +878,7 @@
             // 
             // textBoxLbryAddress
             // 
+            this.textBoxLbryAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.textBoxLbryAddress.Location = new System.Drawing.Point(448, 47);
             this.textBoxLbryAddress.MaxLength = 512;
             this.textBoxLbryAddress.Name = "textBoxLbryAddress";
@@ -1044,6 +889,7 @@
             // 
             // textBoxPascalAddress
             // 
+            this.textBoxPascalAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.textBoxPascalAddress.Location = new System.Drawing.Point(448, 20);
             this.textBoxPascalAddress.MaxLength = 512;
             this.textBoxPascalAddress.Name = "textBoxPascalAddress";
@@ -1055,6 +901,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label27.Location = new System.Drawing.Point(357, 22);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(79, 13);
@@ -1063,6 +910,7 @@
             // 
             // buttonViewPascalBalance
             // 
+            this.buttonViewPascalBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.buttonViewPascalBalance.Location = new System.Drawing.Point(633, 20);
             this.buttonViewPascalBalance.Name = "buttonViewPascalBalance";
             this.buttonViewPascalBalance.Size = new System.Drawing.Size(62, 20);
@@ -1072,6 +920,7 @@
             // 
             // textBoxBitcoinAddress
             // 
+            this.textBoxBitcoinAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.textBoxBitcoinAddress.Location = new System.Drawing.Point(100, 20);
             this.textBoxBitcoinAddress.MaxLength = 512;
             this.textBoxBitcoinAddress.Name = "textBoxBitcoinAddress";
@@ -1082,6 +931,7 @@
             // 
             // button5
             // 
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.button5.Location = new System.Drawing.Point(285, 100);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(62, 20);
@@ -1093,6 +943,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label13.Location = new System.Drawing.Point(9, 22);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(72, 13);
@@ -1102,6 +953,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label14.Location = new System.Drawing.Point(9, 48);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(86, 13);
@@ -1110,6 +962,7 @@
             // 
             // textBoxEthereumAddress
             // 
+            this.textBoxEthereumAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.textBoxEthereumAddress.Location = new System.Drawing.Point(100, 46);
             this.textBoxEthereumAddress.MaxLength = 512;
             this.textBoxEthereumAddress.Name = "textBoxEthereumAddress";
@@ -1121,6 +974,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label15.Location = new System.Drawing.Point(9, 74);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(79, 13);
@@ -1129,6 +983,7 @@
             // 
             // textBoxMoneroAddress
             // 
+            this.textBoxMoneroAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.textBoxMoneroAddress.Location = new System.Drawing.Point(100, 72);
             this.textBoxMoneroAddress.MaxLength = 512;
             this.textBoxMoneroAddress.Name = "textBoxMoneroAddress";
@@ -1139,6 +994,7 @@
             // 
             // buttonMoneroBalance
             // 
+            this.buttonMoneroBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.buttonMoneroBalance.Location = new System.Drawing.Point(285, 73);
             this.buttonMoneroBalance.Name = "buttonMoneroBalance";
             this.buttonMoneroBalance.Size = new System.Drawing.Size(62, 20);
@@ -1150,6 +1006,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label16.Location = new System.Drawing.Point(9, 100);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(70, 13);
@@ -1159,6 +1016,7 @@
             // 
             // buttonEthereumBalance
             // 
+            this.buttonEthereumBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.buttonEthereumBalance.Location = new System.Drawing.Point(285, 46);
             this.buttonEthereumBalance.Name = "buttonEthereumBalance";
             this.buttonEthereumBalance.Size = new System.Drawing.Size(62, 20);
@@ -1170,6 +1028,7 @@
             // textBoxZcashAddress
             // 
             this.textBoxZcashAddress.Enabled = false;
+            this.textBoxZcashAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.textBoxZcashAddress.Location = new System.Drawing.Point(100, 98);
             this.textBoxZcashAddress.MaxLength = 512;
             this.textBoxZcashAddress.Name = "textBoxZcashAddress";
@@ -1181,6 +1040,7 @@
             // 
             // buttonViewBalancesAtNiceHash
             // 
+            this.buttonViewBalancesAtNiceHash.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.buttonViewBalancesAtNiceHash.Location = new System.Drawing.Point(285, 20);
             this.buttonViewBalancesAtNiceHash.Name = "buttonViewBalancesAtNiceHash";
             this.buttonViewBalancesAtNiceHash.Size = new System.Drawing.Size(62, 20);
@@ -1195,6 +1055,7 @@
             this.groupBoxPoolParameters.Controls.Add(this.label1);
             this.groupBoxPoolParameters.Controls.Add(this.labelEmail);
             this.groupBoxPoolParameters.Controls.Add(this.textBoxEmail);
+            this.groupBoxPoolParameters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxPoolParameters.Location = new System.Drawing.Point(6, 310);
             this.groupBoxPoolParameters.Name = "groupBoxPoolParameters";
             this.groupBoxPoolParameters.Size = new System.Drawing.Size(414, 78);
@@ -1204,6 +1065,7 @@
             // 
             // textBoxRigID
             // 
+            this.textBoxRigID.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxRigID.Location = new System.Drawing.Point(116, 20);
             this.textBoxRigID.Name = "textBoxRigID";
             this.textBoxRigID.Size = new System.Drawing.Size(285, 20);
@@ -1214,6 +1076,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(8, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 13);
@@ -1223,6 +1086,7 @@
             // labelEmail
             // 
             this.labelEmail.AutoSize = true;
+            this.labelEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelEmail.Location = new System.Drawing.Point(8, 48);
             this.labelEmail.Name = "labelEmail";
             this.labelEmail.Size = new System.Drawing.Size(81, 13);
@@ -1231,6 +1095,7 @@
             // 
             // textBoxEmail
             // 
+            this.textBoxEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxEmail.Location = new System.Drawing.Point(116, 46);
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(285, 20);
@@ -1243,6 +1108,7 @@
             this.groupBoxPoolPriorities.Controls.Add(this.buttonPoolPrioritiesDown);
             this.groupBoxPoolPriorities.Controls.Add(this.buttonPoolPrioritiesUp);
             this.groupBoxPoolPriorities.Controls.Add(this.listBoxPoolPriorities);
+            this.groupBoxPoolPriorities.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxPoolPriorities.Location = new System.Drawing.Point(547, 7);
             this.groupBoxPoolPriorities.Name = "groupBoxPoolPriorities";
             this.groupBoxPoolPriorities.Size = new System.Drawing.Size(167, 164);
@@ -1252,6 +1118,7 @@
             // 
             // buttonPoolPrioritiesDown
             // 
+            this.buttonPoolPrioritiesDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.buttonPoolPrioritiesDown.Location = new System.Drawing.Point(109, 48);
             this.buttonPoolPrioritiesDown.Name = "buttonPoolPrioritiesDown";
             this.buttonPoolPrioritiesDown.Size = new System.Drawing.Size(51, 23);
@@ -1262,6 +1129,7 @@
             // 
             // buttonPoolPrioritiesUp
             // 
+            this.buttonPoolPrioritiesUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.buttonPoolPrioritiesUp.Location = new System.Drawing.Point(109, 20);
             this.buttonPoolPrioritiesUp.Name = "buttonPoolPrioritiesUp";
             this.buttonPoolPrioritiesUp.Size = new System.Drawing.Size(51, 23);
@@ -1272,6 +1140,7 @@
             // 
             // listBoxPoolPriorities
             // 
+            this.listBoxPoolPriorities.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.listBoxPoolPriorities.FormattingEnabled = true;
             this.listBoxPoolPriorities.Items.AddRange(new object[] {
             "NiceHash",
@@ -1301,6 +1170,7 @@
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMonero);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonEthereum);
             this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMostProfitable);
+            this.groupBoxCoinsToMine.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCoinsToMine.Location = new System.Drawing.Point(3, 7);
             this.groupBoxCoinsToMine.Name = "groupBoxCoinsToMine";
             this.groupBoxCoinsToMine.Size = new System.Drawing.Size(535, 167);
@@ -1311,6 +1181,7 @@
             // radioButtonMonacoin
             // 
             this.radioButtonMonacoin.AutoSize = true;
+            this.radioButtonMonacoin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonMonacoin.Location = new System.Drawing.Point(222, 111);
             this.radioButtonMonacoin.Name = "radioButtonMonacoin";
             this.radioButtonMonacoin.Size = new System.Drawing.Size(72, 17);
@@ -1322,6 +1193,7 @@
             // radioButtonFeathercoin
             // 
             this.radioButtonFeathercoin.AutoSize = true;
+            this.radioButtonFeathercoin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonFeathercoin.Location = new System.Drawing.Point(222, 88);
             this.radioButtonFeathercoin.Name = "radioButtonFeathercoin";
             this.radioButtonFeathercoin.Size = new System.Drawing.Size(81, 17);
@@ -1333,6 +1205,7 @@
             // radioButtonPascal
             // 
             this.radioButtonPascal.AutoSize = true;
+            this.radioButtonPascal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonPascal.Location = new System.Drawing.Point(222, 65);
             this.radioButtonPascal.Name = "radioButtonPascal";
             this.radioButtonPascal.Size = new System.Drawing.Size(57, 17);
@@ -1344,6 +1217,7 @@
             // radioButtonLbry
             // 
             this.radioButtonLbry.AutoSize = true;
+            this.radioButtonLbry.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonLbry.Location = new System.Drawing.Point(222, 42);
             this.radioButtonLbry.Name = "radioButtonLbry";
             this.radioButtonLbry.Size = new System.Drawing.Size(45, 17);
@@ -1356,6 +1230,7 @@
             // 
             this.radioButton4.AutoSize = true;
             this.radioButton4.Enabled = false;
+            this.radioButton4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButton4.Location = new System.Drawing.Point(106, 65);
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.Size = new System.Drawing.Size(110, 17);
@@ -1368,6 +1243,7 @@
             // 
             this.radioButton3.AutoSize = true;
             this.radioButton3.Enabled = false;
+            this.radioButton3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButton3.Location = new System.Drawing.Point(106, 88);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(90, 17);
@@ -1379,6 +1255,7 @@
             // radioButtonEthereumPascal
             // 
             this.radioButtonEthereumPascal.AutoSize = true;
+            this.radioButtonEthereumPascal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonEthereumPascal.Location = new System.Drawing.Point(106, 111);
             this.radioButtonEthereumPascal.Name = "radioButtonEthereumPascal";
             this.radioButtonEthereumPascal.Size = new System.Drawing.Size(107, 17);
@@ -1391,6 +1268,7 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Enabled = false;
+            this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButton1.Location = new System.Drawing.Point(106, 42);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(95, 17);
@@ -1403,6 +1281,7 @@
             // 
             this.radioButtonZcash.AutoSize = true;
             this.radioButtonZcash.Enabled = false;
+            this.radioButtonZcash.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonZcash.Location = new System.Drawing.Point(222, 134);
             this.radioButtonZcash.Name = "radioButtonZcash";
             this.radioButtonZcash.Size = new System.Drawing.Size(55, 17);
@@ -1415,6 +1294,7 @@
             // radioButtonMonero
             // 
             this.radioButtonMonero.AutoSize = true;
+            this.radioButtonMonero.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonMonero.Location = new System.Drawing.Point(222, 20);
             this.radioButtonMonero.Name = "radioButtonMonero";
             this.radioButtonMonero.Size = new System.Drawing.Size(61, 17);
@@ -1427,6 +1307,7 @@
             // 
             this.radioButtonEthereum.AutoSize = true;
             this.radioButtonEthereum.Checked = true;
+            this.radioButtonEthereum.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonEthereum.Location = new System.Drawing.Point(106, 20);
             this.radioButtonEthereum.Name = "radioButtonEthereum";
             this.radioButtonEthereum.Size = new System.Drawing.Size(70, 17);
@@ -1440,6 +1321,7 @@
             // 
             this.radioButtonMostProfitable.AutoSize = true;
             this.radioButtonMostProfitable.Enabled = false;
+            this.radioButtonMostProfitable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.radioButtonMostProfitable.Location = new System.Drawing.Point(6, 20);
             this.radioButtonMostProfitable.Name = "radioButtonMostProfitable";
             this.radioButtonMostProfitable.Size = new System.Drawing.Size(94, 17);
@@ -1482,6 +1364,7 @@
             this.groupBoxCustmPool1.Controls.Add(this.label153);
             this.groupBoxCustmPool1.Controls.Add(this.textBoxCustomPool1Login);
             this.groupBoxCustmPool1.Controls.Add(this.label154);
+            this.groupBoxCustmPool1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool1.Location = new System.Drawing.Point(3, 81);
             this.groupBoxCustmPool1.Name = "groupBoxCustmPool1";
             this.groupBoxCustmPool1.Size = new System.Drawing.Size(812, 72);
@@ -1492,6 +1375,7 @@
             // comboBoxCustomPool1SecondaryAlgorithm
             // 
             this.comboBoxCustomPool1SecondaryAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool1SecondaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxCustomPool1SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool1SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
@@ -1506,6 +1390,7 @@
             // label165
             // 
             this.label165.AutoSize = true;
+            this.label165.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label165.Location = new System.Drawing.Point(375, 46);
             this.label165.Name = "label165";
             this.label165.Size = new System.Drawing.Size(29, 13);
@@ -1514,6 +1399,7 @@
             // 
             // numericUpDownCustomPool1SecondaryPort
             // 
+            this.numericUpDownCustomPool1SecondaryPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownCustomPool1SecondaryPort.Location = new System.Drawing.Point(410, 42);
             this.numericUpDownCustomPool1SecondaryPort.Maximum = new decimal(new int[] {
             65535,
@@ -1528,6 +1414,7 @@
             // 
             // textBoxCustomPool1SecondaryHost
             // 
+            this.textBoxCustomPool1SecondaryHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool1SecondaryHost.Location = new System.Drawing.Point(254, 43);
             this.textBoxCustomPool1SecondaryHost.Name = "textBoxCustomPool1SecondaryHost";
             this.textBoxCustomPool1SecondaryHost.Size = new System.Drawing.Size(115, 20);
@@ -1537,6 +1424,7 @@
             // 
             // textBoxCustomPool1SecondaryPassword
             // 
+            this.textBoxCustomPool1SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool1SecondaryPassword.Location = new System.Drawing.Point(692, 42);
             this.textBoxCustomPool1SecondaryPassword.Name = "textBoxCustomPool1SecondaryPassword";
             this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(114, 20);
@@ -1547,6 +1435,7 @@
             // label166
             // 
             this.label166.AutoSize = true;
+            this.label166.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label166.Location = new System.Drawing.Point(216, 46);
             this.label166.Name = "label166";
             this.label166.Size = new System.Drawing.Size(32, 13);
@@ -1556,6 +1445,7 @@
             // label167
             // 
             this.label167.AutoSize = true;
+            this.label167.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label167.Location = new System.Drawing.Point(630, 45);
             this.label167.Name = "label167";
             this.label167.Size = new System.Drawing.Size(56, 13);
@@ -1564,6 +1454,7 @@
             // 
             // textBoxCustomPool1SecondaryLogin
             // 
+            this.textBoxCustomPool1SecondaryLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool1SecondaryLogin.Location = new System.Drawing.Point(510, 41);
             this.textBoxCustomPool1SecondaryLogin.Name = "textBoxCustomPool1SecondaryLogin";
             this.textBoxCustomPool1SecondaryLogin.Size = new System.Drawing.Size(114, 20);
@@ -1574,6 +1465,7 @@
             // label168
             // 
             this.label168.AutoSize = true;
+            this.label168.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label168.Location = new System.Drawing.Point(468, 46);
             this.label168.Name = "label168";
             this.label168.Size = new System.Drawing.Size(36, 13);
@@ -1583,6 +1475,7 @@
             // comboBoxCustomPool1Algorithm
             // 
             this.comboBoxCustomPool1Algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool1Algorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxCustomPool1Algorithm.FormattingEnabled = true;
             this.comboBoxCustomPool1Algorithm.Items.AddRange(new object[] {
             "Ethash",
@@ -1603,6 +1496,7 @@
             // checkBoxCustomPool1Enable
             // 
             this.checkBoxCustomPool1Enable.AutoSize = true;
+            this.checkBoxCustomPool1Enable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxCustomPool1Enable.Location = new System.Drawing.Point(6, 31);
             this.checkBoxCustomPool1Enable.Name = "checkBoxCustomPool1Enable";
             this.checkBoxCustomPool1Enable.Size = new System.Drawing.Size(59, 17);
@@ -1615,6 +1509,7 @@
             // label151
             // 
             this.label151.AutoSize = true;
+            this.label151.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label151.Location = new System.Drawing.Point(375, 19);
             this.label151.Name = "label151";
             this.label151.Size = new System.Drawing.Size(29, 13);
@@ -1623,6 +1518,7 @@
             // 
             // numericUpDownCustomPool1Port
             // 
+            this.numericUpDownCustomPool1Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownCustomPool1Port.Location = new System.Drawing.Point(410, 15);
             this.numericUpDownCustomPool1Port.Maximum = new decimal(new int[] {
             65535,
@@ -1637,6 +1533,7 @@
             // 
             // textBoxCustomPool1Host
             // 
+            this.textBoxCustomPool1Host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool1Host.Location = new System.Drawing.Point(254, 16);
             this.textBoxCustomPool1Host.Name = "textBoxCustomPool1Host";
             this.textBoxCustomPool1Host.Size = new System.Drawing.Size(115, 20);
@@ -1646,6 +1543,7 @@
             // 
             // textBoxCustomPool1Password
             // 
+            this.textBoxCustomPool1Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool1Password.Location = new System.Drawing.Point(692, 15);
             this.textBoxCustomPool1Password.Name = "textBoxCustomPool1Password";
             this.textBoxCustomPool1Password.Size = new System.Drawing.Size(114, 20);
@@ -1656,6 +1554,7 @@
             // label152
             // 
             this.label152.AutoSize = true;
+            this.label152.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label152.Location = new System.Drawing.Point(216, 19);
             this.label152.Name = "label152";
             this.label152.Size = new System.Drawing.Size(32, 13);
@@ -1665,6 +1564,7 @@
             // label153
             // 
             this.label153.AutoSize = true;
+            this.label153.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label153.Location = new System.Drawing.Point(630, 17);
             this.label153.Name = "label153";
             this.label153.Size = new System.Drawing.Size(56, 13);
@@ -1673,6 +1573,7 @@
             // 
             // textBoxCustomPool1Login
             // 
+            this.textBoxCustomPool1Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool1Login.Location = new System.Drawing.Point(510, 14);
             this.textBoxCustomPool1Login.Name = "textBoxCustomPool1Login";
             this.textBoxCustomPool1Login.Size = new System.Drawing.Size(114, 20);
@@ -1683,6 +1584,7 @@
             // label154
             // 
             this.label154.AutoSize = true;
+            this.label154.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label154.Location = new System.Drawing.Point(468, 19);
             this.label154.Name = "label154";
             this.label154.Size = new System.Drawing.Size(36, 13);
@@ -1710,6 +1612,7 @@
             this.groupBoxCustmPool2.Controls.Add(this.label158);
             this.groupBoxCustmPool2.Controls.Add(this.textBoxCustomPool2Login);
             this.groupBoxCustmPool2.Controls.Add(this.label159);
+            this.groupBoxCustmPool2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool2.Location = new System.Drawing.Point(3, 159);
             this.groupBoxCustmPool2.Name = "groupBoxCustmPool2";
             this.groupBoxCustmPool2.Size = new System.Drawing.Size(812, 72);
@@ -1720,6 +1623,7 @@
             // comboBoxCustomPool2SecondaryAlgorithm
             // 
             this.comboBoxCustomPool2SecondaryAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool2SecondaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxCustomPool2SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool2SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
@@ -1734,6 +1638,7 @@
             // label169
             // 
             this.label169.AutoSize = true;
+            this.label169.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label169.Location = new System.Drawing.Point(375, 47);
             this.label169.Name = "label169";
             this.label169.Size = new System.Drawing.Size(29, 13);
@@ -1742,6 +1647,7 @@
             // 
             // numericUpDownCustomPool2SecondaryPort
             // 
+            this.numericUpDownCustomPool2SecondaryPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownCustomPool2SecondaryPort.Location = new System.Drawing.Point(410, 43);
             this.numericUpDownCustomPool2SecondaryPort.Maximum = new decimal(new int[] {
             65535,
@@ -1756,6 +1662,7 @@
             // 
             // textBoxCustomPool2SecondaryHost
             // 
+            this.textBoxCustomPool2SecondaryHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool2SecondaryHost.Location = new System.Drawing.Point(254, 43);
             this.textBoxCustomPool2SecondaryHost.Name = "textBoxCustomPool2SecondaryHost";
             this.textBoxCustomPool2SecondaryHost.Size = new System.Drawing.Size(115, 20);
@@ -1765,6 +1672,7 @@
             // 
             // textBoxCustomPool2SecondaryPassword
             // 
+            this.textBoxCustomPool2SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool2SecondaryPassword.Location = new System.Drawing.Point(692, 43);
             this.textBoxCustomPool2SecondaryPassword.Name = "textBoxCustomPool2SecondaryPassword";
             this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(114, 20);
@@ -1775,6 +1683,7 @@
             // label170
             // 
             this.label170.AutoSize = true;
+            this.label170.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label170.Location = new System.Drawing.Point(216, 47);
             this.label170.Name = "label170";
             this.label170.Size = new System.Drawing.Size(32, 13);
@@ -1784,6 +1693,7 @@
             // label171
             // 
             this.label171.AutoSize = true;
+            this.label171.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label171.Location = new System.Drawing.Point(630, 47);
             this.label171.Name = "label171";
             this.label171.Size = new System.Drawing.Size(56, 13);
@@ -1792,6 +1702,7 @@
             // 
             // textBoxCustomPool2SecondaryLogin
             // 
+            this.textBoxCustomPool2SecondaryLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool2SecondaryLogin.Location = new System.Drawing.Point(510, 43);
             this.textBoxCustomPool2SecondaryLogin.Name = "textBoxCustomPool2SecondaryLogin";
             this.textBoxCustomPool2SecondaryLogin.Size = new System.Drawing.Size(114, 20);
@@ -1802,6 +1713,7 @@
             // label172
             // 
             this.label172.AutoSize = true;
+            this.label172.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label172.Location = new System.Drawing.Point(468, 47);
             this.label172.Name = "label172";
             this.label172.Size = new System.Drawing.Size(36, 13);
@@ -1811,6 +1723,7 @@
             // comboBoxCustomPool2Algorithm
             // 
             this.comboBoxCustomPool2Algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool2Algorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxCustomPool2Algorithm.FormattingEnabled = true;
             this.comboBoxCustomPool2Algorithm.Items.AddRange(new object[] {
             "Ethash",
@@ -1831,6 +1744,7 @@
             // checkBoxCustomPool2Enable
             // 
             this.checkBoxCustomPool2Enable.AutoSize = true;
+            this.checkBoxCustomPool2Enable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxCustomPool2Enable.Location = new System.Drawing.Point(6, 31);
             this.checkBoxCustomPool2Enable.Name = "checkBoxCustomPool2Enable";
             this.checkBoxCustomPool2Enable.Size = new System.Drawing.Size(59, 17);
@@ -1843,6 +1757,7 @@
             // label156
             // 
             this.label156.AutoSize = true;
+            this.label156.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label156.Location = new System.Drawing.Point(375, 21);
             this.label156.Name = "label156";
             this.label156.Size = new System.Drawing.Size(29, 13);
@@ -1851,6 +1766,7 @@
             // 
             // numericUpDownCustomPool2Port
             // 
+            this.numericUpDownCustomPool2Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownCustomPool2Port.Location = new System.Drawing.Point(410, 16);
             this.numericUpDownCustomPool2Port.Maximum = new decimal(new int[] {
             65535,
@@ -1865,6 +1781,7 @@
             // 
             // textBoxCustomPool2Host
             // 
+            this.textBoxCustomPool2Host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool2Host.Location = new System.Drawing.Point(254, 16);
             this.textBoxCustomPool2Host.Name = "textBoxCustomPool2Host";
             this.textBoxCustomPool2Host.Size = new System.Drawing.Size(115, 20);
@@ -1874,6 +1791,7 @@
             // 
             // textBoxCustomPool2Password
             // 
+            this.textBoxCustomPool2Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool2Password.Location = new System.Drawing.Point(692, 16);
             this.textBoxCustomPool2Password.Name = "textBoxCustomPool2Password";
             this.textBoxCustomPool2Password.Size = new System.Drawing.Size(114, 20);
@@ -1884,6 +1802,7 @@
             // label157
             // 
             this.label157.AutoSize = true;
+            this.label157.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label157.Location = new System.Drawing.Point(216, 21);
             this.label157.Name = "label157";
             this.label157.Size = new System.Drawing.Size(32, 13);
@@ -1893,6 +1812,7 @@
             // label158
             // 
             this.label158.AutoSize = true;
+            this.label158.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label158.Location = new System.Drawing.Point(630, 19);
             this.label158.Name = "label158";
             this.label158.Size = new System.Drawing.Size(56, 13);
@@ -1901,6 +1821,7 @@
             // 
             // textBoxCustomPool2Login
             // 
+            this.textBoxCustomPool2Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool2Login.Location = new System.Drawing.Point(510, 16);
             this.textBoxCustomPool2Login.Name = "textBoxCustomPool2Login";
             this.textBoxCustomPool2Login.Size = new System.Drawing.Size(114, 20);
@@ -1911,6 +1832,7 @@
             // label159
             // 
             this.label159.AutoSize = true;
+            this.label159.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label159.Location = new System.Drawing.Point(468, 19);
             this.label159.Name = "label159";
             this.label159.Size = new System.Drawing.Size(36, 13);
@@ -1938,6 +1860,7 @@
             this.groupBoxCustmPool3.Controls.Add(this.label163);
             this.groupBoxCustmPool3.Controls.Add(this.textBoxCustomPool3Login);
             this.groupBoxCustmPool3.Controls.Add(this.label164);
+            this.groupBoxCustmPool3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool3.Location = new System.Drawing.Point(3, 237);
             this.groupBoxCustmPool3.Name = "groupBoxCustmPool3";
             this.groupBoxCustmPool3.Size = new System.Drawing.Size(812, 72);
@@ -1948,6 +1871,7 @@
             // comboBoxCustomPool3SecondaryAlgorithm
             // 
             this.comboBoxCustomPool3SecondaryAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool3SecondaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxCustomPool3SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool3SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
@@ -1962,6 +1886,7 @@
             // label173
             // 
             this.label173.AutoSize = true;
+            this.label173.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label173.Location = new System.Drawing.Point(375, 48);
             this.label173.Name = "label173";
             this.label173.Size = new System.Drawing.Size(29, 13);
@@ -1970,6 +1895,7 @@
             // 
             // numericUpDownCustomPool3SecondaryPort
             // 
+            this.numericUpDownCustomPool3SecondaryPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownCustomPool3SecondaryPort.Location = new System.Drawing.Point(410, 45);
             this.numericUpDownCustomPool3SecondaryPort.Maximum = new decimal(new int[] {
             65535,
@@ -1984,6 +1910,7 @@
             // 
             // textBoxCustomPool3SecondaryHost
             // 
+            this.textBoxCustomPool3SecondaryHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool3SecondaryHost.Location = new System.Drawing.Point(254, 45);
             this.textBoxCustomPool3SecondaryHost.Name = "textBoxCustomPool3SecondaryHost";
             this.textBoxCustomPool3SecondaryHost.Size = new System.Drawing.Size(115, 20);
@@ -1993,6 +1920,7 @@
             // 
             // textBoxCustomPool3SecondaryPassword
             // 
+            this.textBoxCustomPool3SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool3SecondaryPassword.Location = new System.Drawing.Point(692, 46);
             this.textBoxCustomPool3SecondaryPassword.Name = "textBoxCustomPool3SecondaryPassword";
             this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(114, 20);
@@ -2003,6 +1931,7 @@
             // label174
             // 
             this.label174.AutoSize = true;
+            this.label174.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label174.Location = new System.Drawing.Point(216, 48);
             this.label174.Name = "label174";
             this.label174.Size = new System.Drawing.Size(32, 13);
@@ -2012,6 +1941,7 @@
             // label175
             // 
             this.label175.AutoSize = true;
+            this.label175.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label175.Location = new System.Drawing.Point(630, 49);
             this.label175.Name = "label175";
             this.label175.Size = new System.Drawing.Size(56, 13);
@@ -2020,6 +1950,7 @@
             // 
             // textBoxCustomPool3SecondaryLogin
             // 
+            this.textBoxCustomPool3SecondaryLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool3SecondaryLogin.Location = new System.Drawing.Point(510, 45);
             this.textBoxCustomPool3SecondaryLogin.Name = "textBoxCustomPool3SecondaryLogin";
             this.textBoxCustomPool3SecondaryLogin.Size = new System.Drawing.Size(114, 20);
@@ -2030,6 +1961,7 @@
             // label176
             // 
             this.label176.AutoSize = true;
+            this.label176.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label176.Location = new System.Drawing.Point(468, 48);
             this.label176.Name = "label176";
             this.label176.Size = new System.Drawing.Size(36, 13);
@@ -2039,6 +1971,7 @@
             // comboBoxCustomPool3Algorithm
             // 
             this.comboBoxCustomPool3Algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool3Algorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxCustomPool3Algorithm.FormattingEnabled = true;
             this.comboBoxCustomPool3Algorithm.Items.AddRange(new object[] {
             "Ethash",
@@ -2059,6 +1992,7 @@
             // checkBoxCustomPool3Enable
             // 
             this.checkBoxCustomPool3Enable.AutoSize = true;
+            this.checkBoxCustomPool3Enable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxCustomPool3Enable.Location = new System.Drawing.Point(6, 31);
             this.checkBoxCustomPool3Enable.Name = "checkBoxCustomPool3Enable";
             this.checkBoxCustomPool3Enable.Size = new System.Drawing.Size(59, 17);
@@ -2071,6 +2005,7 @@
             // label161
             // 
             this.label161.AutoSize = true;
+            this.label161.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label161.Location = new System.Drawing.Point(375, 17);
             this.label161.Name = "label161";
             this.label161.Size = new System.Drawing.Size(29, 13);
@@ -2079,6 +2014,7 @@
             // 
             // numericUpDownCustomPool3Port
             // 
+            this.numericUpDownCustomPool3Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownCustomPool3Port.Location = new System.Drawing.Point(410, 14);
             this.numericUpDownCustomPool3Port.Maximum = new decimal(new int[] {
             65535,
@@ -2093,6 +2029,7 @@
             // 
             // textBoxCustomPool3Host
             // 
+            this.textBoxCustomPool3Host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool3Host.Location = new System.Drawing.Point(254, 14);
             this.textBoxCustomPool3Host.Name = "textBoxCustomPool3Host";
             this.textBoxCustomPool3Host.Size = new System.Drawing.Size(115, 20);
@@ -2102,6 +2039,7 @@
             // 
             // textBoxCustomPool3Password
             // 
+            this.textBoxCustomPool3Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool3Password.Location = new System.Drawing.Point(692, 15);
             this.textBoxCustomPool3Password.Name = "textBoxCustomPool3Password";
             this.textBoxCustomPool3Password.Size = new System.Drawing.Size(114, 20);
@@ -2112,6 +2050,7 @@
             // label162
             // 
             this.label162.AutoSize = true;
+            this.label162.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label162.Location = new System.Drawing.Point(216, 17);
             this.label162.Name = "label162";
             this.label162.Size = new System.Drawing.Size(32, 13);
@@ -2121,6 +2060,7 @@
             // label163
             // 
             this.label163.AutoSize = true;
+            this.label163.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label163.Location = new System.Drawing.Point(630, 19);
             this.label163.Name = "label163";
             this.label163.Size = new System.Drawing.Size(56, 13);
@@ -2129,6 +2069,7 @@
             // 
             // textBoxCustomPool3Login
             // 
+            this.textBoxCustomPool3Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool3Login.Location = new System.Drawing.Point(510, 14);
             this.textBoxCustomPool3Login.Name = "textBoxCustomPool3Login";
             this.textBoxCustomPool3Login.Size = new System.Drawing.Size(114, 20);
@@ -2139,6 +2080,7 @@
             // label164
             // 
             this.label164.AutoSize = true;
+            this.label164.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label164.Location = new System.Drawing.Point(468, 17);
             this.label164.Name = "label164";
             this.label164.Size = new System.Drawing.Size(36, 13);
@@ -2166,6 +2108,7 @@
             this.groupBoxCustmPool0.Controls.Add(this.label146);
             this.groupBoxCustmPool0.Controls.Add(this.textBoxCustomPool0Login);
             this.groupBoxCustmPool0.Controls.Add(this.label148);
+            this.groupBoxCustmPool0.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool0.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCustmPool0.Name = "groupBoxCustmPool0";
             this.groupBoxCustmPool0.Size = new System.Drawing.Size(812, 72);
@@ -2176,6 +2119,7 @@
             // label149
             // 
             this.label149.AutoSize = true;
+            this.label149.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label149.Location = new System.Drawing.Point(375, 47);
             this.label149.Name = "label149";
             this.label149.Size = new System.Drawing.Size(29, 13);
@@ -2184,6 +2128,7 @@
             // 
             // numericUpDownCustomPool0SecondaryPort
             // 
+            this.numericUpDownCustomPool0SecondaryPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownCustomPool0SecondaryPort.Location = new System.Drawing.Point(410, 43);
             this.numericUpDownCustomPool0SecondaryPort.Maximum = new decimal(new int[] {
             65535,
@@ -2198,6 +2143,7 @@
             // 
             // textBoxCustomPool0SecondaryHost
             // 
+            this.textBoxCustomPool0SecondaryHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool0SecondaryHost.Location = new System.Drawing.Point(254, 43);
             this.textBoxCustomPool0SecondaryHost.Name = "textBoxCustomPool0SecondaryHost";
             this.textBoxCustomPool0SecondaryHost.Size = new System.Drawing.Size(115, 20);
@@ -2207,6 +2153,7 @@
             // 
             // textBoxCustomPool0SecondaryPassword
             // 
+            this.textBoxCustomPool0SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool0SecondaryPassword.Location = new System.Drawing.Point(692, 43);
             this.textBoxCustomPool0SecondaryPassword.Name = "textBoxCustomPool0SecondaryPassword";
             this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(114, 20);
@@ -2217,6 +2164,7 @@
             // label150
             // 
             this.label150.AutoSize = true;
+            this.label150.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label150.Location = new System.Drawing.Point(216, 47);
             this.label150.Name = "label150";
             this.label150.Size = new System.Drawing.Size(32, 13);
@@ -2226,6 +2174,7 @@
             // label155
             // 
             this.label155.AutoSize = true;
+            this.label155.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label155.Location = new System.Drawing.Point(630, 47);
             this.label155.Name = "label155";
             this.label155.Size = new System.Drawing.Size(56, 13);
@@ -2234,6 +2183,7 @@
             // 
             // textBoxCustomPool0SecondaryLogin
             // 
+            this.textBoxCustomPool0SecondaryLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool0SecondaryLogin.Location = new System.Drawing.Point(510, 42);
             this.textBoxCustomPool0SecondaryLogin.Name = "textBoxCustomPool0SecondaryLogin";
             this.textBoxCustomPool0SecondaryLogin.Size = new System.Drawing.Size(114, 20);
@@ -2244,6 +2194,7 @@
             // label160
             // 
             this.label160.AutoSize = true;
+            this.label160.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label160.Location = new System.Drawing.Point(468, 45);
             this.label160.Name = "label160";
             this.label160.Size = new System.Drawing.Size(36, 13);
@@ -2253,6 +2204,7 @@
             // comboBoxCustomPool0SecondaryAlgorithm
             // 
             this.comboBoxCustomPool0SecondaryAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool0SecondaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxCustomPool0SecondaryAlgorithm.FormattingEnabled = true;
             this.comboBoxCustomPool0SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
@@ -2267,6 +2219,7 @@
             // checkBoxCustomPool0Enable
             // 
             this.checkBoxCustomPool0Enable.AutoSize = true;
+            this.checkBoxCustomPool0Enable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxCustomPool0Enable.Location = new System.Drawing.Point(6, 31);
             this.checkBoxCustomPool0Enable.Name = "checkBoxCustomPool0Enable";
             this.checkBoxCustomPool0Enable.Size = new System.Drawing.Size(59, 17);
@@ -2279,6 +2232,7 @@
             // comboBoxCustomPool0Algorithm
             // 
             this.comboBoxCustomPool0Algorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCustomPool0Algorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxCustomPool0Algorithm.FormattingEnabled = true;
             this.comboBoxCustomPool0Algorithm.Items.AddRange(new object[] {
             "Ethash",
@@ -2299,6 +2253,7 @@
             // label147
             // 
             this.label147.AutoSize = true;
+            this.label147.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label147.Location = new System.Drawing.Point(375, 21);
             this.label147.Name = "label147";
             this.label147.Size = new System.Drawing.Size(29, 13);
@@ -2307,6 +2262,7 @@
             // 
             // numericUpDownCustomPool0Port
             // 
+            this.numericUpDownCustomPool0Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownCustomPool0Port.Location = new System.Drawing.Point(410, 17);
             this.numericUpDownCustomPool0Port.Maximum = new decimal(new int[] {
             65535,
@@ -2321,6 +2277,7 @@
             // 
             // textBoxCustomPool0Host
             // 
+            this.textBoxCustomPool0Host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool0Host.Location = new System.Drawing.Point(254, 17);
             this.textBoxCustomPool0Host.Name = "textBoxCustomPool0Host";
             this.textBoxCustomPool0Host.Size = new System.Drawing.Size(115, 20);
@@ -2330,6 +2287,7 @@
             // 
             // textBoxCustomPool0Password
             // 
+            this.textBoxCustomPool0Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool0Password.Location = new System.Drawing.Point(692, 17);
             this.textBoxCustomPool0Password.Name = "textBoxCustomPool0Password";
             this.textBoxCustomPool0Password.Size = new System.Drawing.Size(114, 20);
@@ -2340,6 +2298,7 @@
             // label145
             // 
             this.label145.AutoSize = true;
+            this.label145.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label145.Location = new System.Drawing.Point(216, 21);
             this.label145.Name = "label145";
             this.label145.Size = new System.Drawing.Size(32, 13);
@@ -2349,6 +2308,7 @@
             // label146
             // 
             this.label146.AutoSize = true;
+            this.label146.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label146.Location = new System.Drawing.Point(630, 21);
             this.label146.Name = "label146";
             this.label146.Size = new System.Drawing.Size(56, 13);
@@ -2357,6 +2317,7 @@
             // 
             // textBoxCustomPool0Login
             // 
+            this.textBoxCustomPool0Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool0Login.Location = new System.Drawing.Point(510, 16);
             this.textBoxCustomPool0Login.Name = "textBoxCustomPool0Login";
             this.textBoxCustomPool0Login.Size = new System.Drawing.Size(114, 20);
@@ -2367,6 +2328,7 @@
             // label148
             // 
             this.label148.AutoSize = true;
+            this.label148.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label148.Location = new System.Drawing.Point(468, 19);
             this.label148.Name = "label148";
             this.label148.Size = new System.Drawing.Size(36, 13);
@@ -2390,6 +2352,7 @@
             // 
             // button4
             // 
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.Location = new System.Drawing.Point(652, 61);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(163, 23);
@@ -2400,6 +2363,7 @@
             // 
             // button3
             // 
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.Location = new System.Drawing.Point(652, 96);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(163, 23);
@@ -2410,6 +2374,7 @@
             // 
             // button2
             // 
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(652, 32);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(163, 23);
@@ -2420,6 +2385,7 @@
             // 
             // buttonResetFanControlSettings
             // 
+            this.buttonResetFanControlSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResetFanControlSettings.Location = new System.Drawing.Point(652, 3);
             this.buttonResetFanControlSettings.Name = "buttonResetFanControlSettings";
             this.buttonResetFanControlSettings.Size = new System.Drawing.Size(163, 23);
@@ -2434,6 +2400,7 @@
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox3);
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox2);
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBoxEnablePhymem);
+            this.groupBoxHadrwareAcceleration.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.245F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(3, 294);
             this.groupBoxHadrwareAcceleration.Name = "groupBoxHadrwareAcceleration";
             this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(641, 65);
@@ -2445,6 +2412,7 @@
             // label144
             // 
             this.label144.AutoSize = true;
+            this.label144.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label144.Location = new System.Drawing.Point(6, 43);
             this.label144.Name = "label144";
             this.label144.Size = new System.Drawing.Size(375, 13);
@@ -2455,6 +2423,7 @@
             // 
             this.checkBox3.AutoSize = true;
             this.checkBox3.Enabled = false;
+            this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox3.Location = new System.Drawing.Point(371, 20);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(235, 17);
@@ -2467,6 +2436,7 @@
             // 
             this.checkBox2.AutoSize = true;
             this.checkBox2.Enabled = false;
+            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox2.Location = new System.Drawing.Point(247, 20);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(118, 17);
@@ -2478,6 +2448,7 @@
             // checkBoxEnablePhymem
             // 
             this.checkBoxEnablePhymem.AutoSize = true;
+            this.checkBoxEnablePhymem.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxEnablePhymem.Location = new System.Drawing.Point(6, 20);
             this.checkBoxEnablePhymem.Name = "checkBoxEnablePhymem";
             this.checkBoxEnablePhymem.Size = new System.Drawing.Size(235, 17);
@@ -2517,6 +2488,7 @@
             this.checkBoxAPIMulticast.Checked = true;
             this.checkBoxAPIMulticast.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxAPIMulticast.Enabled = false;
+            this.checkBoxAPIMulticast.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxAPIMulticast.Location = new System.Drawing.Point(108, 34);
             this.checkBoxAPIMulticast.Name = "checkBoxAPIMulticast";
             this.checkBoxAPIMulticast.Size = new System.Drawing.Size(68, 17);
@@ -2550,6 +2522,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label19.Location = new System.Drawing.Point(62, 104);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(81, 13);
@@ -2559,6 +2532,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.Location = new System.Drawing.Point(62, 123);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(138, 13);
@@ -2568,6 +2542,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.Location = new System.Drawing.Point(62, 142);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(136, 13);
@@ -2577,6 +2552,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(6, 104);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(55, 13);
@@ -2586,6 +2562,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label22.Location = new System.Drawing.Point(6, 22);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(39, 13);
@@ -2595,6 +2572,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.Location = new System.Drawing.Point(6, 22);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(39, 13);
@@ -2604,6 +2582,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(8, 22);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(39, 13);
@@ -2613,6 +2592,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.Location = new System.Drawing.Point(6, 48);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(35, 13);
@@ -2621,6 +2601,7 @@
             // 
             // textBoxAdminIPRange
             // 
+            this.textBoxAdminIPRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxAdminIPRange.Location = new System.Drawing.Point(51, 19);
             this.textBoxAdminIPRange.Name = "textBoxAdminIPRange";
             this.textBoxAdminIPRange.Size = new System.Drawing.Size(249, 20);
@@ -2629,6 +2610,7 @@
             // 
             // textBoxDeniedIPRange
             // 
+            this.textBoxDeniedIPRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxDeniedIPRange.Location = new System.Drawing.Point(51, 71);
             this.textBoxDeniedIPRange.Name = "textBoxDeniedIPRange";
             this.textBoxDeniedIPRange.Size = new System.Drawing.Size(249, 20);
@@ -2637,6 +2619,7 @@
             // 
             // textBoxAllowedIPRange
             // 
+            this.textBoxAllowedIPRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxAllowedIPRange.Location = new System.Drawing.Point(51, 45);
             this.textBoxAllowedIPRange.Name = "textBoxAllowedIPRange";
             this.textBoxAllowedIPRange.Size = new System.Drawing.Size(249, 20);
@@ -2648,6 +2631,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.Location = new System.Drawing.Point(6, 74);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
@@ -2657,6 +2641,7 @@
             // numericUpDownAPIPort
             // 
             this.numericUpDownAPIPort.Enabled = false;
+            this.numericUpDownAPIPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownAPIPort.Location = new System.Drawing.Point(43, 31);
             this.numericUpDownAPIPort.Maximum = new decimal(new int[] {
             65536,
@@ -2677,6 +2662,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Enabled = false;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(8, 33);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(29, 13);
@@ -2687,6 +2673,7 @@
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Enabled = false;
+            this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel1.Location = new System.Drawing.Point(210, 8);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(99, 13);
@@ -2699,6 +2686,7 @@
             // 
             this.checkBoxAPIEnabled.AutoSize = true;
             this.checkBoxAPIEnabled.Enabled = false;
+            this.checkBoxAPIEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxAPIEnabled.Location = new System.Drawing.Point(7, 7);
             this.checkBoxAPIEnabled.Name = "checkBoxAPIEnabled";
             this.checkBoxAPIEnabled.Size = new System.Drawing.Size(197, 17);
@@ -2734,6 +2722,7 @@
             // 
             // buttonOpenOpenCLBinaryFolder
             // 
+            this.buttonOpenOpenCLBinaryFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOpenOpenCLBinaryFolder.Location = new System.Drawing.Point(6, 65);
             this.buttonOpenOpenCLBinaryFolder.Name = "buttonOpenOpenCLBinaryFolder";
             this.buttonOpenOpenCLBinaryFolder.Size = new System.Drawing.Size(180, 23);
@@ -2745,6 +2734,7 @@
             // checkBoxReuseCompiledBinaries
             // 
             this.checkBoxReuseCompiledBinaries.AutoSize = true;
+            this.checkBoxReuseCompiledBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxReuseCompiledBinaries.Location = new System.Drawing.Point(6, 42);
             this.checkBoxReuseCompiledBinaries.Name = "checkBoxReuseCompiledBinaries";
             this.checkBoxReuseCompiledBinaries.Size = new System.Drawing.Size(141, 17);
@@ -2758,6 +2748,7 @@
             this.checkBoxUseDefaultOpenCLBinaries.AutoSize = true;
             this.checkBoxUseDefaultOpenCLBinaries.Checked = true;
             this.checkBoxUseDefaultOpenCLBinaries.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseDefaultOpenCLBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxUseDefaultOpenCLBinaries.Location = new System.Drawing.Point(6, 19);
             this.checkBoxUseDefaultOpenCLBinaries.Name = "checkBoxUseDefaultOpenCLBinaries";
             this.checkBoxUseDefaultOpenCLBinaries.Size = new System.Drawing.Size(119, 17);
@@ -2782,6 +2773,7 @@
             // 
             // button11
             // 
+            this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button11.Location = new System.Drawing.Point(138, 45);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(126, 23);
@@ -2792,7 +2784,8 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(138, 15);
+            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.Location = new System.Drawing.Point(138, 16);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(126, 23);
             this.button8.TabIndex = 3;
@@ -2820,6 +2813,7 @@
             this.checkBoxAutomaticBackups.AutoSize = true;
             this.checkBoxAutomaticBackups.Checked = true;
             this.checkBoxAutomaticBackups.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAutomaticBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxAutomaticBackups.Location = new System.Drawing.Point(6, 134);
             this.checkBoxAutomaticBackups.Name = "checkBoxAutomaticBackups";
             this.checkBoxAutomaticBackups.Size = new System.Drawing.Size(235, 17);
@@ -2831,6 +2825,7 @@
             // 
             // buttonDeleteAllSettingsBackups
             // 
+            this.buttonDeleteAllSettingsBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDeleteAllSettingsBackups.Location = new System.Drawing.Point(185, 105);
             this.buttonDeleteAllSettingsBackups.Name = "buttonDeleteAllSettingsBackups";
             this.buttonDeleteAllSettingsBackups.Size = new System.Drawing.Size(67, 23);
@@ -2841,6 +2836,7 @@
             // 
             // buttonDeleteSettingsBackup
             // 
+            this.buttonDeleteSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDeleteSettingsBackup.Location = new System.Drawing.Point(185, 76);
             this.buttonDeleteSettingsBackup.Name = "buttonDeleteSettingsBackup";
             this.buttonDeleteSettingsBackup.Size = new System.Drawing.Size(67, 23);
@@ -2851,6 +2847,7 @@
             // 
             // buttonRestoreSettingsBackup
             // 
+            this.buttonRestoreSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonRestoreSettingsBackup.Location = new System.Drawing.Point(185, 47);
             this.buttonRestoreSettingsBackup.Name = "buttonRestoreSettingsBackup";
             this.buttonRestoreSettingsBackup.Size = new System.Drawing.Size(67, 23);
@@ -2861,6 +2858,7 @@
             // 
             // buttonCreateSettingsBackup
             // 
+            this.buttonCreateSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateSettingsBackup.Location = new System.Drawing.Point(185, 18);
             this.buttonCreateSettingsBackup.Name = "buttonCreateSettingsBackup";
             this.buttonCreateSettingsBackup.Size = new System.Drawing.Size(67, 23);
@@ -2871,6 +2869,7 @@
             // 
             // listBoxSettingBackups
             // 
+            this.listBoxSettingBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listBoxSettingBackups.FormattingEnabled = true;
             this.listBoxSettingBackups.Location = new System.Drawing.Point(6, 20);
             this.listBoxSettingBackups.Name = "listBoxSettingBackups";
@@ -2880,6 +2879,7 @@
             // 
             // button9
             // 
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.Location = new System.Drawing.Point(6, 45);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(126, 23);
@@ -2890,6 +2890,7 @@
             // 
             // buttonSaveSettings
             // 
+            this.buttonSaveSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSaveSettings.Location = new System.Drawing.Point(6, 16);
             this.buttonSaveSettings.Name = "buttonSaveSettings";
             this.buttonSaveSettings.Size = new System.Drawing.Size(126, 23);
@@ -2919,6 +2920,7 @@
             // 
             // button7
             // 
+            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.Location = new System.Drawing.Point(6, 223);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(216, 23);
@@ -2930,6 +2932,7 @@
             // 
             // button6
             // 
+            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.Location = new System.Drawing.Point(6, 20);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(216, 23);
@@ -2941,6 +2944,7 @@
             // 
             // buttonDisableUserAccountControl
             // 
+            this.buttonDisableUserAccountControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDisableUserAccountControl.Location = new System.Drawing.Point(6, 136);
             this.buttonDisableUserAccountControl.Name = "buttonDisableUserAccountControl";
             this.buttonDisableUserAccountControl.Size = new System.Drawing.Size(216, 23);
@@ -2952,6 +2956,7 @@
             // 
             // buttonDisableUserAccountControlSettings
             // 
+            this.buttonDisableUserAccountControlSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDisableUserAccountControlSettings.Location = new System.Drawing.Point(228, 136);
             this.buttonDisableUserAccountControlSettings.Name = "buttonDisableUserAccountControlSettings";
             this.buttonDisableUserAccountControlSettings.Size = new System.Drawing.Size(57, 23);
@@ -2962,6 +2967,7 @@
             // 
             // buttonDownloadDisplayDriverUninstaller
             // 
+            this.buttonDownloadDisplayDriverUninstaller.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDownloadDisplayDriverUninstaller.Location = new System.Drawing.Point(6, 78);
             this.buttonDownloadDisplayDriverUninstaller.Name = "buttonDownloadDisplayDriverUninstaller";
             this.buttonDownloadDisplayDriverUninstaller.Size = new System.Drawing.Size(216, 23);
@@ -2973,6 +2979,7 @@
             // 
             // button1
             // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(228, 49);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(57, 23);
@@ -2983,6 +2990,7 @@
             // 
             // buttonConfigureAutomaticLogin
             // 
+            this.buttonConfigureAutomaticLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonConfigureAutomaticLogin.Location = new System.Drawing.Point(6, 165);
             this.buttonConfigureAutomaticLogin.Name = "buttonConfigureAutomaticLogin";
             this.buttonConfigureAutomaticLogin.Size = new System.Drawing.Size(216, 23);
@@ -2994,6 +3002,7 @@
             // 
             // buttonInstallRecommendedAMDDriver
             // 
+            this.buttonInstallRecommendedAMDDriver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonInstallRecommendedAMDDriver.Location = new System.Drawing.Point(6, 107);
             this.buttonInstallRecommendedAMDDriver.Name = "buttonInstallRecommendedAMDDriver";
             this.buttonInstallRecommendedAMDDriver.Size = new System.Drawing.Size(216, 23);
@@ -3005,6 +3014,7 @@
             // 
             // buttonDisableAuomaticRepair
             // 
+            this.buttonDisableAuomaticRepair.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDisableAuomaticRepair.Location = new System.Drawing.Point(6, 194);
             this.buttonDisableAuomaticRepair.Name = "buttonDisableAuomaticRepair";
             this.buttonDisableAuomaticRepair.Size = new System.Drawing.Size(216, 23);
@@ -3016,6 +3026,7 @@
             // 
             // buttonDisableDriverInstallation
             // 
+            this.buttonDisableDriverInstallation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDisableDriverInstallation.Location = new System.Drawing.Point(6, 49);
             this.buttonDisableDriverInstallation.Name = "buttonDisableDriverInstallation";
             this.buttonDisableDriverInstallation.Size = new System.Drawing.Size(216, 23);
@@ -3042,6 +3053,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(23, 40);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(157, 13);
@@ -3053,6 +3065,7 @@
             this.checkBoxDisableAutoStartPrompt.AutoSize = true;
             this.checkBoxDisableAutoStartPrompt.Checked = true;
             this.checkBoxDisableAutoStartPrompt.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxDisableAutoStartPrompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(6, 82);
             this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
             this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
@@ -3065,6 +3078,7 @@
             // checkBoxAutoStart
             // 
             this.checkBoxAutoStart.AutoSize = true;
+            this.checkBoxAutoStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxAutoStart.Location = new System.Drawing.Point(8, 20);
             this.checkBoxAutoStart.Name = "checkBoxAutoStart";
             this.checkBoxAutoStart.Size = new System.Drawing.Size(104, 17);
@@ -3077,6 +3091,7 @@
             // checkBoxLaunchAtStartup
             // 
             this.checkBoxLaunchAtStartup.AutoSize = true;
+            this.checkBoxLaunchAtStartup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxLaunchAtStartup.Location = new System.Drawing.Point(6, 59);
             this.checkBoxLaunchAtStartup.Name = "checkBoxLaunchAtStartup";
             this.checkBoxLaunchAtStartup.Size = new System.Drawing.Size(163, 17);
@@ -3102,6 +3117,7 @@
             // buttonClearLog
             // 
             this.buttonClearLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClearLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonClearLog.Location = new System.Drawing.Point(904, 36);
             this.buttonClearLog.Name = "buttonClearLog";
             this.buttonClearLog.Size = new System.Drawing.Size(75, 23);
@@ -3113,6 +3129,7 @@
             // buttonOpenLog
             // 
             this.buttonOpenLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOpenLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOpenLog.Location = new System.Drawing.Point(904, 7);
             this.buttonOpenLog.Name = "buttonOpenLog";
             this.buttonOpenLog.Size = new System.Drawing.Size(75, 23);
@@ -3128,6 +3145,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxLog.BackColor = System.Drawing.Color.Black;
             this.richTextBoxLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBoxLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBoxLog.ForeColor = System.Drawing.Color.Lime;
             this.richTextBoxLog.Location = new System.Drawing.Point(6, 7);
             this.richTextBoxLog.Name = "richTextBoxLog";
@@ -3151,6 +3169,7 @@
             this.richTextBoxAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBoxAbout.Location = new System.Drawing.Point(4, 4);
             this.richTextBoxAbout.Name = "richTextBoxAbout";
             this.richTextBoxAbout.ReadOnly = true;
@@ -3243,6 +3262,178 @@
             this.buttonReleaseMemory.Text = "Release Memory";
             this.buttonReleaseMemory.UseVisualStyleBackColor = true;
             this.buttonReleaseMemory.Click += new System.EventHandler(this.buttonReleaseMemory_Click);
+            // 
+            // enabled
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle2;
+            this.enabled.FalseValue = "";
+            this.enabled.HeaderText = "";
+            this.enabled.Name = "enabled";
+            this.enabled.ReadOnly = true;
+            this.enabled.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.enabled.TrueValue = "";
+            this.enabled.Width = 20;
+            // 
+            // id
+            // 
+            this.id.HeaderText = "#";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.id.Width = 24;
+            // 
+            // vendor
+            // 
+            this.vendor.HeaderText = "Vendor";
+            this.vendor.Name = "vendor";
+            this.vendor.ReadOnly = true;
+            this.vendor.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.vendor.Width = 52;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.name.Width = 116;
+            // 
+            // speed
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle3;
+            this.speed.FillWeight = 110F;
+            this.speed.HeaderText = "Speed(s)";
+            this.speed.Name = "speed";
+            this.speed.ReadOnly = true;
+            this.speed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.speed.Width = 144;
+            // 
+            // shares
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle4;
+            this.shares.HeaderText = "Shares";
+            this.shares.Name = "shares";
+            this.shares.ReadOnly = true;
+            this.shares.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.shares.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.shares.Width = 85;
+            // 
+            // activity
+            // 
+            this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.activity.DataPropertyName = "activity";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle5;
+            this.activity.HeaderText = "Act.";
+            this.activity.Name = "activity";
+            this.activity.ReadOnly = true;
+            this.activity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.activity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.activity.Width = 45;
+            // 
+            // temperature
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle6;
+            this.temperature.HeaderText = "Temp.";
+            this.temperature.Name = "temperature";
+            this.temperature.ReadOnly = true;
+            this.temperature.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.temperature.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.temperature.Width = 45;
+            // 
+            // fan
+            // 
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle7;
+            this.fan.HeaderText = "Fan";
+            this.fan.Name = "fan";
+            this.fan.ReadOnly = true;
+            this.fan.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.fan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.fan.Width = 45;
+            // 
+            // power
+            // 
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power.DefaultCellStyle = dataGridViewCellStyle8;
+            this.power.HeaderText = "Power";
+            this.power.Name = "power";
+            this.power.ReadOnly = true;
+            this.power.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.power.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.power.Width = 45;
+            // 
+            // power_limit
+            // 
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle9;
+            this.power_limit.HeaderText = "";
+            this.power_limit.Name = "power_limit";
+            this.power_limit.ReadOnly = true;
+            this.power_limit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.power_limit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.power_limit.Width = 45;
+            // 
+            // core_clock
+            // 
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle10;
+            this.core_clock.HeaderText = "Core";
+            this.core_clock.Name = "core_clock";
+            this.core_clock.ReadOnly = true;
+            this.core_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.core_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.core_clock.Width = 60;
+            // 
+            // core_voltage
+            // 
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle11;
+            this.core_voltage.HeaderText = "";
+            this.core_voltage.Name = "core_voltage";
+            this.core_voltage.ReadOnly = true;
+            this.core_voltage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.core_voltage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.core_voltage.Width = 50;
+            // 
+            // memory_clock
+            // 
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle12;
+            this.memory_clock.HeaderText = "Memory";
+            this.memory_clock.Name = "memory_clock";
+            this.memory_clock.ReadOnly = true;
+            this.memory_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.memory_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.memory_clock.Width = 60;
+            // 
+            // memory_used
+            // 
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_used.DefaultCellStyle = dataGridViewCellStyle13;
+            this.memory_used.HeaderText = "(Used)";
+            this.memory_used.Name = "memory_used";
+            this.memory_used.ReadOnly = true;
+            this.memory_used.Width = 60;
+            // 
+            // memory_reserved
+            // 
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle14;
+            this.memory_reserved.HeaderText = "(Rsvd.)";
+            this.memory_reserved.Name = "memory_reserved";
+            this.memory_reserved.ReadOnly = true;
+            this.memory_reserved.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.memory_reserved.Width = 60;
             // 
             // MainForm
             // 
@@ -3537,22 +3728,6 @@
         private System.Windows.Forms.CheckBox checkBoxReuseCompiledBinaries;
         private System.Windows.Forms.CheckBox checkBoxUseDefaultOpenCLBinaries;
         private System.Windows.Forms.Button buttonReleaseMemory;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn speed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn shares;
-        private System.Windows.Forms.DataGridViewTextBoxColumn activity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn temperature;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fan;
-        private System.Windows.Forms.DataGridViewTextBoxColumn power;
-        private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
-        private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn core_voltage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ComboBox comboBoxSecondGraphType;
         private System.Windows.Forms.ComboBox comboBoxSecondGraphCoverage;
@@ -3583,5 +3758,21 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn speed;
+        private System.Windows.Forms.DataGridViewTextBoxColumn shares;
+        private System.Windows.Forms.DataGridViewTextBoxColumn activity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn temperature;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn power;
+        private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn core_voltage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
     }
 }
