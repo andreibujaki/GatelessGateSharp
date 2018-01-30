@@ -94,7 +94,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.12";
+        public static string appVersion = "1.2.13";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1140,6 +1140,7 @@ namespace GatelessGateSharp {
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_CollectGarbage), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateShareCharts), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_APIListener), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Task_KillInterferingProcesses), mBackgroundTasksCancellationTokenSource.Token);
             mAreSettingsDirty = false;
             checkBoxEnablePhymem.Checked = false;
 
@@ -1889,7 +1890,6 @@ namespace GatelessGateSharp {
         private void UpdateLocalStats() {
             try { DeviceManagementLibrariesMutex.WaitOne(5000); } catch (Exception) { }
             try {
-                KillInterferingProcesses();
                 Text = appName + " (" + (mLatestReleaseDiff == 0 ? "latest release" : mLatestReleaseDiff + " release(s) behind") + ")"; // Set the window title.
 
                 // Pool
@@ -4831,10 +4831,16 @@ namespace GatelessGateSharp {
             process.WaitForExit();
         }
 
-        static void KillInterferingProcesses() {
-            foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" })
-                foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
-                    try { process.Kill(); } catch (Exception) { }
+        private void Task_KillInterferingProcesses(object cancellationToken)
+        {
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" })
+                        foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
+                            try { process.Kill(); } catch (Exception) { }
+                } catch (Exception) { }
+                System.Threading.Thread.Sleep(60 * 1000);
+            }
         }
 
         private void buttonResetAll_Click(object sender, EventArgs e) {

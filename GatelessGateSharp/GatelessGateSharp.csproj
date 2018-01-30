@@ -7,7 +7,7 @@
     <ProjectGuid>{5C6B25E1-991B-4A2A-B9D3-8F5E672384FD}</ProjectGuid>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GatelessGateSharp</RootNamespace>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -302,8 +302,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rem %25WINDIR%25\Microsoft.Net\Framework64\v4.0.30319\ngen.exe install “$(TargetPath)”
-xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
+    <PostBuildEvent>xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)
 copy $(SolutionDir)SQLite\System.Data.SQLite.dll $(TargetDir)

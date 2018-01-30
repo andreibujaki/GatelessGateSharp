@@ -853,16 +853,11 @@
             {
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:1"
+            "PrerequisitesLocation" = "2:3"
             "Url" = "8:"
-            "ComponentsUrl" = "8:"
+            "ComponentsUrl" = "8:https://download.microsoft.com/download/8/E/2/8E2BDDE7-F06E-44CC-A145-56C6B9BBE5DD/NDP471-KB4033344-Web.exe"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
-                    {
-                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.5"
-                    }
                 }
             }
         }
@@ -944,7 +939,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.2.12.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.2.13.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_005BA131E503E55D3259C325B392A218"
@@ -1428,7 +1423,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.2.13.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3F257B72128849FFBA6BAEFBFEC78450"
@@ -2083,7 +2078,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.2.12.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.2.13.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_94470E592BF34FCEBF3FC318A54CC736"
@@ -2294,7 +2289,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.2.12.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.2.13.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_ADA849628BC355DC41F4B2D4F6ACE3E5"
@@ -2838,7 +2833,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpLauncher, Version=1.2.12.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpLauncher, Version=1.2.13.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_DC0D118C4EAC4B149C2356AACC426DCC"
@@ -3276,15 +3271,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
-        "ProductCode" = "8:{35A4385B-2002-420F-9C85-C343B448E288}"
-        "PackageCode" = "8:{BE87E322-AF12-43D7-9505-CFF95D4CD099}"
+        "ProductCode" = "8:{1B5366E7-AE56-42FA-8067-72C81DD35922}"
+        "PackageCode" = "8:{003C3FAF-DFEE-4754-8758-2BD365B6FF1A}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.12"
+        "ProductVersion" = "8:1.2.13"
         "Manufacturer" = "8:Zawawa Software LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
