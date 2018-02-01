@@ -94,7 +94,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.15";
+        public static string appVersion = "1.2.16";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
