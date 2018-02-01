@@ -220,9 +220,11 @@ namespace GatelessGateSharp {
                 Utilities.FixFPU();
 
                 // Scroll down to the bottom.
-                while (Instance.richTextBoxLog.Lines.Length > Parameters.LogMaxNumLines) {
-                    Instance.richTextBoxLog.Select(0, Instance.richTextBoxLog.GetFirstCharIndexFromLine(1));
+                if (Instance.richTextBoxLog.Lines.Length > Parameters.LogMaxNumLines) {
+                    Instance.richTextBoxLog.ReadOnly = false;
+                    Instance.richTextBoxLog.Select(0, Instance.richTextBoxLog.GetFirstCharIndexFromLine(Instance.richTextBoxLog.Lines.Length - Parameters.LogMaxNumLines));
                     Instance.richTextBoxLog.SelectedText = "";
+                    Instance.richTextBoxLog.ReadOnly = true;
                 }
                 Instance.richTextBoxLog.SelectionLength = 0;
                 Instance.richTextBoxLog.SelectionStart = Instance.richTextBoxLog.Text.Length;
@@ -4713,7 +4715,9 @@ namespace GatelessGateSharp {
 
         private void timerUpdateLog_Tick(object sender, EventArgs e) {
             try {
+                timerUpdateLog.Enabled = false;
                 UpdateLog();
+                timerUpdateLog.Enabled = true;
             } catch (Exception ex) {
                 Logger("Exception in timerUpdateLog_Tick(): " + ex.Message + ex.StackTrace);
             }
