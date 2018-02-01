@@ -94,7 +94,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.14";
+        public static string appVersion = "1.2.15";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -1524,8 +1524,8 @@ namespace GatelessGateSharp {
 
                     var newCoreVoltage
                          = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1020 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1020 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1150 :
@@ -1564,7 +1564,7 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" && defaultMemoryClock >= 2000 ? 2200 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 500 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1600 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? defaultMemoryClock :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultMemoryClock :
                                                                                                             defaultMemoryClock);
                     if (newMemoryClock > 0)
@@ -5903,7 +5903,7 @@ namespace GatelessGateSharp {
                         + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data " 
                         + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
                         + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
-                        appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes) {
+                        appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.OK) {
 
                 checkBoxEnableOverclockingForDefaultSettings.Checked = true;
                 foreach (var device in Controller.OpenCLDevices)
@@ -5911,9 +5911,11 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void button10_Click(object sender, EventArgs e)
+        private void buttonRestoreStockSettings_Click(object sender, EventArgs e)
         {
-
+            checkBoxEnableOverclockingForDefaultSettings.Checked = false;
+            foreach (var device in Controller.OpenCLDevices)
+                ResetDeviceSettings(device);
         }
     }
 }
