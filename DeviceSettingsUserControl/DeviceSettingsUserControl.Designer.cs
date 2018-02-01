@@ -529,7 +529,7 @@
             // numericUpDownDevice0EthashPascalPascalIterations
             // 
             this.numericUpDownDevice0EthashPascalPascalIterations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0EthashPascalPascalIterations.Location = new System.Drawing.Point(95, 60);
+            this.numericUpDownDevice0EthashPascalPascalIterations.Location = new System.Drawing.Point(105, 59);
             this.numericUpDownDevice0EthashPascalPascalIterations.Maximum = new decimal(new int[] {
             16,
             0,
@@ -541,7 +541,7 @@
             0,
             0});
             this.numericUpDownDevice0EthashPascalPascalIterations.Name = "numericUpDownDevice0EthashPascalPascalIterations";
-            this.numericUpDownDevice0EthashPascalPascalIterations.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashPascalPascalIterations.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0EthashPascalPascalIterations.TabIndex = 67;
             this.numericUpDownDevice0EthashPascalPascalIterations.Tag = "ethash_pascal_pascal_iterations";
             this.numericUpDownDevice0EthashPascalPascalIterations.Value = new decimal(new int[] {
@@ -574,7 +574,7 @@
             // numericUpDownDevice0EthashPascalIntensity
             // 
             this.numericUpDownDevice0EthashPascalIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0EthashPascalIntensity.Location = new System.Drawing.Point(95, 33);
+            this.numericUpDownDevice0EthashPascalIntensity.Location = new System.Drawing.Point(105, 32);
             this.numericUpDownDevice0EthashPascalIntensity.Maximum = new decimal(new int[] {
             8192,
             0,
@@ -586,7 +586,7 @@
             0,
             0});
             this.numericUpDownDevice0EthashPascalIntensity.Name = "numericUpDownDevice0EthashPascalIntensity";
-            this.numericUpDownDevice0EthashPascalIntensity.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashPascalIntensity.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0EthashPascalIntensity.TabIndex = 59;
             this.numericUpDownDevice0EthashPascalIntensity.Tag = "ethash_pascal_intensity";
             this.numericUpDownDevice0EthashPascalIntensity.Value = new decimal(new int[] {
@@ -599,7 +599,7 @@
             // numericUpDownDevice0EthashPascalThreads
             // 
             this.numericUpDownDevice0EthashPascalThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0EthashPascalThreads.Location = new System.Drawing.Point(95, 7);
+            this.numericUpDownDevice0EthashPascalThreads.Location = new System.Drawing.Point(105, 6);
             this.numericUpDownDevice0EthashPascalThreads.Maximum = new decimal(new int[] {
             4,
             0,
@@ -611,7 +611,7 @@
             0,
             0});
             this.numericUpDownDevice0EthashPascalThreads.Name = "numericUpDownDevice0EthashPascalThreads";
-            this.numericUpDownDevice0EthashPascalThreads.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashPascalThreads.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0EthashPascalThreads.TabIndex = 63;
             this.numericUpDownDevice0EthashPascalThreads.Tag = "ethash_pascal_threads";
             this.numericUpDownDevice0EthashPascalThreads.Value = new decimal(new int[] {
@@ -901,7 +901,7 @@
             // numericUpDownDevice0EthashLocalWorkSize
             // 
             this.numericUpDownDevice0EthashLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0EthashLocalWorkSize.Location = new System.Drawing.Point(95, 59);
+            this.numericUpDownDevice0EthashLocalWorkSize.Location = new System.Drawing.Point(105, 58);
             this.numericUpDownDevice0EthashLocalWorkSize.Maximum = new decimal(new int[] {
             256,
             0,
@@ -913,7 +913,7 @@
             0,
             0});
             this.numericUpDownDevice0EthashLocalWorkSize.Name = "numericUpDownDevice0EthashLocalWorkSize";
-            this.numericUpDownDevice0EthashLocalWorkSize.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashLocalWorkSize.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0EthashLocalWorkSize.TabIndex = 34;
             this.numericUpDownDevice0EthashLocalWorkSize.Tag = "ethash_local_work_size";
             this.numericUpDownDevice0EthashLocalWorkSize.Value = new decimal(new int[] {
@@ -926,7 +926,7 @@
             // numericUpDownDevice0EthashIntensity
             // 
             this.numericUpDownDevice0EthashIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0EthashIntensity.Location = new System.Drawing.Point(95, 33);
+            this.numericUpDownDevice0EthashIntensity.Location = new System.Drawing.Point(105, 32);
             this.numericUpDownDevice0EthashIntensity.Maximum = new decimal(new int[] {
             8192,
             0,
@@ -938,7 +938,7 @@
             0,
             0});
             this.numericUpDownDevice0EthashIntensity.Name = "numericUpDownDevice0EthashIntensity";
-            this.numericUpDownDevice0EthashIntensity.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashIntensity.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0EthashIntensity.TabIndex = 28;
             this.numericUpDownDevice0EthashIntensity.Tag = "ethash_intensity";
             this.numericUpDownDevice0EthashIntensity.Value = new decimal(new int[] {
@@ -951,7 +951,7 @@
             // numericUpDownDevice0EthashThreads
             // 
             this.numericUpDownDevice0EthashThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0EthashThreads.Location = new System.Drawing.Point(95, 7);
+            this.numericUpDownDevice0EthashThreads.Location = new System.Drawing.Point(105, 6);
             this.numericUpDownDevice0EthashThreads.Maximum = new decimal(new int[] {
             4,
             0,
@@ -963,7 +963,7 @@
             0,
             0});
             this.numericUpDownDevice0EthashThreads.Name = "numericUpDownDevice0EthashThreads";
-            this.numericUpDownDevice0EthashThreads.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0EthashThreads.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0EthashThreads.TabIndex = 36;
             this.numericUpDownDevice0EthashThreads.Tag = "ethash_threads";
             this.numericUpDownDevice0EthashThreads.Value = new decimal(new int[] {
@@ -1233,7 +1233,7 @@
             // numericUpDownDevice0CryptoNightThreads
             // 
             this.numericUpDownDevice0CryptoNightThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0CryptoNightThreads.Location = new System.Drawing.Point(95, 7);
+            this.numericUpDownDevice0CryptoNightThreads.Location = new System.Drawing.Point(105, 6);
             this.numericUpDownDevice0CryptoNightThreads.Maximum = new decimal(new int[] {
             4,
             0,
@@ -1245,7 +1245,7 @@
             0,
             0});
             this.numericUpDownDevice0CryptoNightThreads.Name = "numericUpDownDevice0CryptoNightThreads";
-            this.numericUpDownDevice0CryptoNightThreads.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0CryptoNightThreads.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0CryptoNightThreads.TabIndex = 32;
             this.numericUpDownDevice0CryptoNightThreads.Tag = "cryptonight_threads";
             this.numericUpDownDevice0CryptoNightThreads.Value = new decimal(new int[] {
@@ -1278,7 +1278,7 @@
             // numericUpDownDevice0CryptoNightRawIntensity
             // 
             this.numericUpDownDevice0CryptoNightRawIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0CryptoNightRawIntensity.Location = new System.Drawing.Point(95, 33);
+            this.numericUpDownDevice0CryptoNightRawIntensity.Location = new System.Drawing.Point(105, 32);
             this.numericUpDownDevice0CryptoNightRawIntensity.Maximum = new decimal(new int[] {
             4096,
             0,
@@ -1290,7 +1290,7 @@
             0,
             0});
             this.numericUpDownDevice0CryptoNightRawIntensity.Name = "numericUpDownDevice0CryptoNightRawIntensity";
-            this.numericUpDownDevice0CryptoNightRawIntensity.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0CryptoNightRawIntensity.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0CryptoNightRawIntensity.TabIndex = 28;
             this.numericUpDownDevice0CryptoNightRawIntensity.Tag = "cryptonight_raw_intensity";
             this.numericUpDownDevice0CryptoNightRawIntensity.Value = new decimal(new int[] {
@@ -1303,7 +1303,7 @@
             // numericUpDownDevice0CryptoNightLocalWorkSize
             // 
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0CryptoNightLocalWorkSize.Location = new System.Drawing.Point(95, 59);
+            this.numericUpDownDevice0CryptoNightLocalWorkSize.Location = new System.Drawing.Point(105, 58);
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Maximum = new decimal(new int[] {
             64,
             0,
@@ -1315,7 +1315,7 @@
             0,
             0});
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Name = "numericUpDownDevice0CryptoNightLocalWorkSize";
-            this.numericUpDownDevice0CryptoNightLocalWorkSize.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0CryptoNightLocalWorkSize.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0CryptoNightLocalWorkSize.TabIndex = 30;
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Tag = "cryptonight_local_work_size";
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Value = new decimal(new int[] {
@@ -1591,7 +1591,7 @@
             // numericUpDownDevice0LbryLocalWorkSize
             // 
             this.numericUpDownDevice0LbryLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.numericUpDownDevice0LbryLocalWorkSize.Location = new System.Drawing.Point(95, 59);
+            this.numericUpDownDevice0LbryLocalWorkSize.Location = new System.Drawing.Point(105, 58);
             this.numericUpDownDevice0LbryLocalWorkSize.Maximum = new decimal(new int[] {
             256,
             0,
@@ -1603,7 +1603,7 @@
             0,
             0});
             this.numericUpDownDevice0LbryLocalWorkSize.Name = "numericUpDownDevice0LbryLocalWorkSize";
-            this.numericUpDownDevice0LbryLocalWorkSize.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0LbryLocalWorkSize.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0LbryLocalWorkSize.TabIndex = 53;
             this.numericUpDownDevice0LbryLocalWorkSize.Tag = "lbry_local_work_size";
             this.numericUpDownDevice0LbryLocalWorkSize.Value = new decimal(new int[] {
@@ -1616,7 +1616,7 @@
             // numericUpDownDevice0LbryIntensity
             // 
             this.numericUpDownDevice0LbryIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.numericUpDownDevice0LbryIntensity.Location = new System.Drawing.Point(95, 33);
+            this.numericUpDownDevice0LbryIntensity.Location = new System.Drawing.Point(105, 32);
             this.numericUpDownDevice0LbryIntensity.Maximum = new decimal(new int[] {
             8192,
             0,
@@ -1628,7 +1628,7 @@
             0,
             0});
             this.numericUpDownDevice0LbryIntensity.Name = "numericUpDownDevice0LbryIntensity";
-            this.numericUpDownDevice0LbryIntensity.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0LbryIntensity.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0LbryIntensity.TabIndex = 51;
             this.numericUpDownDevice0LbryIntensity.Tag = "lbry_intensity";
             this.numericUpDownDevice0LbryIntensity.Value = new decimal(new int[] {
@@ -1641,7 +1641,7 @@
             // numericUpDownDevice0LbryThreads
             // 
             this.numericUpDownDevice0LbryThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.numericUpDownDevice0LbryThreads.Location = new System.Drawing.Point(95, 7);
+            this.numericUpDownDevice0LbryThreads.Location = new System.Drawing.Point(105, 6);
             this.numericUpDownDevice0LbryThreads.Maximum = new decimal(new int[] {
             4,
             0,
@@ -1653,7 +1653,7 @@
             0,
             0});
             this.numericUpDownDevice0LbryThreads.Name = "numericUpDownDevice0LbryThreads";
-            this.numericUpDownDevice0LbryThreads.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0LbryThreads.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0LbryThreads.TabIndex = 55;
             this.numericUpDownDevice0LbryThreads.Tag = "lbry_threads";
             this.numericUpDownDevice0LbryThreads.Value = new decimal(new int[] {
@@ -1942,7 +1942,7 @@
             // numericUpDownDevice0PascalLocalWorkSize
             // 
             this.numericUpDownDevice0PascalLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0PascalLocalWorkSize.Location = new System.Drawing.Point(95, 59);
+            this.numericUpDownDevice0PascalLocalWorkSize.Location = new System.Drawing.Point(105, 58);
             this.numericUpDownDevice0PascalLocalWorkSize.Maximum = new decimal(new int[] {
             256,
             0,
@@ -1954,7 +1954,7 @@
             0,
             0});
             this.numericUpDownDevice0PascalLocalWorkSize.Name = "numericUpDownDevice0PascalLocalWorkSize";
-            this.numericUpDownDevice0PascalLocalWorkSize.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0PascalLocalWorkSize.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0PascalLocalWorkSize.TabIndex = 61;
             this.numericUpDownDevice0PascalLocalWorkSize.Tag = "pascal_local_work_size";
             this.numericUpDownDevice0PascalLocalWorkSize.Value = new decimal(new int[] {
@@ -1967,7 +1967,7 @@
             // numericUpDownDevice0PascalIntensity
             // 
             this.numericUpDownDevice0PascalIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0PascalIntensity.Location = new System.Drawing.Point(95, 33);
+            this.numericUpDownDevice0PascalIntensity.Location = new System.Drawing.Point(105, 32);
             this.numericUpDownDevice0PascalIntensity.Maximum = new decimal(new int[] {
             8192,
             0,
@@ -1979,7 +1979,7 @@
             0,
             0});
             this.numericUpDownDevice0PascalIntensity.Name = "numericUpDownDevice0PascalIntensity";
-            this.numericUpDownDevice0PascalIntensity.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0PascalIntensity.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0PascalIntensity.TabIndex = 59;
             this.numericUpDownDevice0PascalIntensity.Tag = "pascal_intensity";
             this.numericUpDownDevice0PascalIntensity.Value = new decimal(new int[] {
@@ -1992,7 +1992,7 @@
             // numericUpDownDevice0PascalThreads
             // 
             this.numericUpDownDevice0PascalThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0PascalThreads.Location = new System.Drawing.Point(95, 7);
+            this.numericUpDownDevice0PascalThreads.Location = new System.Drawing.Point(105, 6);
             this.numericUpDownDevice0PascalThreads.Maximum = new decimal(new int[] {
             4,
             0,
@@ -2004,7 +2004,7 @@
             0,
             0});
             this.numericUpDownDevice0PascalThreads.Name = "numericUpDownDevice0PascalThreads";
-            this.numericUpDownDevice0PascalThreads.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0PascalThreads.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0PascalThreads.TabIndex = 63;
             this.numericUpDownDevice0PascalThreads.Tag = "pascal_threads";
             this.numericUpDownDevice0PascalThreads.Value = new decimal(new int[] {
@@ -2273,7 +2273,7 @@
             // numericUpDownDevice0NeoScryptLocalWorkSize
             // 
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0NeoScryptLocalWorkSize.Location = new System.Drawing.Point(95, 59);
+            this.numericUpDownDevice0NeoScryptLocalWorkSize.Location = new System.Drawing.Point(105, 58);
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Maximum = new decimal(new int[] {
             512,
             0,
@@ -2285,7 +2285,7 @@
             0,
             0});
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Name = "numericUpDownDevice0NeoScryptLocalWorkSize";
-            this.numericUpDownDevice0NeoScryptLocalWorkSize.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0NeoScryptLocalWorkSize.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0NeoScryptLocalWorkSize.TabIndex = 125;
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Tag = "neoscrypt_local_work_size";
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Value = new decimal(new int[] {
@@ -2317,7 +2317,7 @@
             // numericUpDownDevice0NeoScryptIntensity
             // 
             this.numericUpDownDevice0NeoScryptIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0NeoScryptIntensity.Location = new System.Drawing.Point(95, 33);
+            this.numericUpDownDevice0NeoScryptIntensity.Location = new System.Drawing.Point(105, 32);
             this.numericUpDownDevice0NeoScryptIntensity.Maximum = new decimal(new int[] {
             8192,
             0,
@@ -2329,7 +2329,7 @@
             0,
             0});
             this.numericUpDownDevice0NeoScryptIntensity.Name = "numericUpDownDevice0NeoScryptIntensity";
-            this.numericUpDownDevice0NeoScryptIntensity.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0NeoScryptIntensity.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0NeoScryptIntensity.TabIndex = 119;
             this.numericUpDownDevice0NeoScryptIntensity.Tag = "neoscrypt_raw_intensity";
             this.numericUpDownDevice0NeoScryptIntensity.Value = new decimal(new int[] {
@@ -2341,7 +2341,7 @@
             // numericUpDownDevice0NeoScryptThreads
             // 
             this.numericUpDownDevice0NeoScryptThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDevice0NeoScryptThreads.Location = new System.Drawing.Point(95, 7);
+            this.numericUpDownDevice0NeoScryptThreads.Location = new System.Drawing.Point(105, 6);
             this.numericUpDownDevice0NeoScryptThreads.Maximum = new decimal(new int[] {
             4,
             0,
@@ -2353,7 +2353,7 @@
             0,
             0});
             this.numericUpDownDevice0NeoScryptThreads.Name = "numericUpDownDevice0NeoScryptThreads";
-            this.numericUpDownDevice0NeoScryptThreads.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDownDevice0NeoScryptThreads.Size = new System.Drawing.Size(47, 20);
             this.numericUpDownDevice0NeoScryptThreads.TabIndex = 121;
             this.numericUpDownDevice0NeoScryptThreads.Tag = "neoscrypt_threads";
             this.numericUpDownDevice0NeoScryptThreads.Value = new decimal(new int[] {
@@ -2621,7 +2621,7 @@
             // numericUpDown35
             // 
             this.numericUpDown35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown35.Location = new System.Drawing.Point(95, 59);
+            this.numericUpDown35.Location = new System.Drawing.Point(105, 58);
             this.numericUpDown35.Maximum = new decimal(new int[] {
             512,
             0,
@@ -2633,7 +2633,7 @@
             0,
             0});
             this.numericUpDown35.Name = "numericUpDown35";
-            this.numericUpDown35.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown35.Size = new System.Drawing.Size(47, 20);
             this.numericUpDown35.TabIndex = 132;
             this.numericUpDown35.Tag = "lyra2rev2_local_work_size";
             this.numericUpDown35.Value = new decimal(new int[] {
@@ -2666,7 +2666,7 @@
             // numericUpDown36
             // 
             this.numericUpDown36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown36.Location = new System.Drawing.Point(95, 33);
+            this.numericUpDown36.Location = new System.Drawing.Point(105, 32);
             this.numericUpDown36.Maximum = new decimal(new int[] {
             8192,
             0,
@@ -2678,7 +2678,7 @@
             0,
             0});
             this.numericUpDown36.Name = "numericUpDown36";
-            this.numericUpDown36.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown36.Size = new System.Drawing.Size(47, 20);
             this.numericUpDown36.TabIndex = 128;
             this.numericUpDown36.Tag = "lyra2rev2_intensity";
             this.numericUpDown36.Value = new decimal(new int[] {
@@ -2691,7 +2691,7 @@
             // numericUpDown37
             // 
             this.numericUpDown37.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown37.Location = new System.Drawing.Point(95, 7);
+            this.numericUpDown37.Location = new System.Drawing.Point(105, 6);
             this.numericUpDown37.Maximum = new decimal(new int[] {
             4,
             0,
@@ -2703,7 +2703,7 @@
             0,
             0});
             this.numericUpDown37.Name = "numericUpDown37";
-            this.numericUpDown37.Size = new System.Drawing.Size(57, 20);
+            this.numericUpDown37.Size = new System.Drawing.Size(47, 20);
             this.numericUpDown37.TabIndex = 130;
             this.numericUpDown37.Tag = "lyra2rev2_threads";
             this.numericUpDown37.Value = new decimal(new int[] {

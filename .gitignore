@@ -218,3 +218,5 @@ SignBinaries.bat
 *.bat
 Setup/Gateless_Gate_Sharp_1.2.12_alpha.7z
 Setup/Gateless_Gate_Sharp_1.2.12_alpha.zip
+*.7z
+Setup/Gateless_Gate_Sharp_1.2.14_alpha.zip

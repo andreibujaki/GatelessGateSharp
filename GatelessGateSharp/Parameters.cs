@@ -8,6 +8,8 @@ namespace GatelessGateSharp {
     public class Parameters {
         public static readonly int WaitTimeForRestartingMinerThreadInMilliseconds = 0;
         public static readonly int TimeoutForFirstJobInMilliseconds = 60000;
+        public static readonly int MaxLogFileSize = 1024 * 1024;
+        public static readonly int LogMaxNumLines = 256;
 
         // I really need the DEVFEE to continue to develop this miner and to make my wife happy. Thank you. - zawawa
         public static readonly int DevFeePercentage = 1;
