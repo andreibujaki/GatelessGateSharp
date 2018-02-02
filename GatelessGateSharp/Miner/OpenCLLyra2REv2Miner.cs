@@ -1245,9 +1245,10 @@ namespace GatelessGateSharp
                                     Queue.Read<UInt32>(mLyra2REv2OutputBuffer, true, 0, sLyra2REv2OutputSize, (IntPtr)lyra2rev2OutputPtr, null);
                                     if (Stratum.GetJob() != null && Stratum.GetJob().Equals(lyra2rev2Job)) {
                                         for (int i = 0; i < mLyra2REv2Output[255]; ++i)
-                                            Stratum.Submit(GatelessGateDevice, lyra2rev2Work, mLyra2REv2Output[i]);
+                                            Stratum.Submit(Device, lyra2rev2Work, mLyra2REv2Output[i]);
                                     }
                                     lyra2rev2StartNonce += (UInt32)mLyra2REv2GlobalWorkSizeArray[0];
+                                    Device.TotalHashesPrimaryAlgorithm += (double)mLyra2REv2GlobalWorkSizeArray[0];
 
                                     sw.Stop();
                                     Speed = ((double)mLyra2REv2GlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
@@ -1261,7 +1262,7 @@ namespace GatelessGateSharp
                     } catch (Exception ex) {
                         MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
                         if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                            this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                            this.UnrecoverableException = new UnrecoverableException(ex, Device);
                             Stop();
                         }
                     }
@@ -1276,7 +1277,7 @@ namespace GatelessGateSharp
             } catch (UnrecoverableException ex) {
                 this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                this.UnrecoverableException = new UnrecoverableException(ex, Device);
             } finally {
                 MarkAsDone();
                 MemoryUsage = 0;

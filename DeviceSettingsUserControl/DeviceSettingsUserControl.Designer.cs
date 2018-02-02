@@ -31,7 +31,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.checkBoxDevice0EthashPascalOverclockingEnabled = new System.Windows.Forms.CheckBox();
             this.numericUpDownDevice0EthashPascalMemoryVoltage = new System.Windows.Forms.NumericUpDown();
             this.label22 = new System.Windows.Forms.Label();
             this.numericUpDownDevice0EthashPascalMemoryClock = new System.Windows.Forms.NumericUpDown();
@@ -50,7 +50,7 @@
             this.numericUpDownDevice0EthashPascalThreads = new System.Windows.Forms.NumericUpDown();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBoxDevice0EthashOverclockingEnabled = new System.Windows.Forms.CheckBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
@@ -69,7 +69,7 @@
             this.numericUpDownDevice0EthashThreads = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBoxDevice0CryptoNightOverclockingEnabled = new System.Windows.Forms.CheckBox();
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
@@ -88,7 +88,7 @@
             this.numericUpDownDevice0CryptoNightLocalWorkSize = new System.Windows.Forms.NumericUpDown();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBoxDevice0LbryOverclockingEnabled = new System.Windows.Forms.CheckBox();
             this.numericUpDown11 = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
             this.numericUpDown12 = new System.Windows.Forms.NumericUpDown();
@@ -107,7 +107,7 @@
             this.numericUpDownDevice0LbryThreads = new System.Windows.Forms.NumericUpDown();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.checkBoxDevice0PascalOverclockingEnabled = new System.Windows.Forms.CheckBox();
             this.numericUpDown16 = new System.Windows.Forms.NumericUpDown();
             this.label17 = new System.Windows.Forms.Label();
             this.numericUpDown17 = new System.Windows.Forms.NumericUpDown();
@@ -126,7 +126,7 @@
             this.numericUpDownDevice0PascalThreads = new System.Windows.Forms.NumericUpDown();
             this.tabPage41 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxDevice0NeoScryptOverclockingEnabled = new System.Windows.Forms.CheckBox();
             this.numericUpDown21 = new System.Windows.Forms.NumericUpDown();
             this.label30 = new System.Windows.Forms.Label();
             this.numericUpDown22 = new System.Windows.Forms.NumericUpDown();
@@ -145,7 +145,7 @@
             this.numericUpDownDevice0NeoScryptThreads = new System.Windows.Forms.NumericUpDown();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled = new System.Windows.Forms.CheckBox();
             this.numericUpDown30 = new System.Windows.Forms.NumericUpDown();
             this.label35 = new System.Windows.Forms.Label();
             this.numericUpDown31 = new System.Windows.Forms.NumericUpDown();
@@ -267,8 +267,8 @@
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(488, 166);
-            this.tabControl1.TabIndex = 33;
-            this.tabControl1.Tag = "neoscrypt_overclocking_power_limit";
+            this.tabControl1.TabIndex = 1;
+            this.tabControl1.Tag = "";
             // 
             // tabPage5
             // 
@@ -288,7 +288,7 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.checkBox7);
+            this.groupBox5.Controls.Add(this.checkBoxDevice0EthashPascalOverclockingEnabled);
             this.groupBox5.Controls.Add(this.numericUpDownDevice0EthashPascalMemoryVoltage);
             this.groupBox5.Controls.Add(this.label22);
             this.groupBox5.Controls.Add(this.numericUpDownDevice0EthashPascalMemoryClock);
@@ -303,23 +303,23 @@
             this.groupBox5.Location = new System.Drawing.Point(158, 7);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(314, 123);
-            this.groupBox5.TabIndex = 123;
+            this.groupBox5.TabIndex = 0;
             this.groupBox5.TabStop = false;
             this.groupBox5.Tag = "overclocking";
             this.groupBox5.Text = "Overclocking/Underclocking";
             // 
-            // checkBox7
+            // checkBoxDevice0EthashPascalOverclockingEnabled
             // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox7.Location = new System.Drawing.Point(6, 19);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(59, 17);
-            this.checkBox7.TabIndex = 232;
-            this.checkBox7.Tag = "ethash_pascal_overclocking_enabled";
-            this.checkBox7.Text = "Enable";
-            this.checkBox7.UseVisualStyleBackColor = true;
-            this.checkBox7.CheckedChanged += new System.EventHandler(this.checkBox7_CheckedChanged);
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.AutoSize = true;
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.Name = "checkBoxDevice0EthashPascalOverclockingEnabled";
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.TabIndex = 0;
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.Tag = "ethash_pascal_overclocking_enabled";
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.Text = "Enable";
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxDevice0EthashPascalOverclockingEnabled.CheckedChanged += new System.EventHandler(this.checkBox7_CheckedChanged);
             // 
             // numericUpDownDevice0EthashPascalMemoryVoltage
             // 
@@ -342,7 +342,7 @@
             0});
             this.numericUpDownDevice0EthashPascalMemoryVoltage.Name = "numericUpDownDevice0EthashPascalMemoryVoltage";
             this.numericUpDownDevice0EthashPascalMemoryVoltage.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownDevice0EthashPascalMemoryVoltage.TabIndex = 46;
+            this.numericUpDownDevice0EthashPascalMemoryVoltage.TabIndex = 5;
             this.numericUpDownDevice0EthashPascalMemoryVoltage.Tag = "ethash_pascal_overclocking_memory_voltage";
             this.numericUpDownDevice0EthashPascalMemoryVoltage.Value = new decimal(new int[] {
             1000,
@@ -382,7 +382,7 @@
             0});
             this.numericUpDownDevice0EthashPascalMemoryClock.Name = "numericUpDownDevice0EthashPascalMemoryClock";
             this.numericUpDownDevice0EthashPascalMemoryClock.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownDevice0EthashPascalMemoryClock.TabIndex = 44;
+            this.numericUpDownDevice0EthashPascalMemoryClock.TabIndex = 4;
             this.numericUpDownDevice0EthashPascalMemoryClock.Tag = "ethash_pascal_overclocking_memory_clock";
             this.numericUpDownDevice0EthashPascalMemoryClock.Value = new decimal(new int[] {
             2000,
@@ -417,7 +417,7 @@
             0});
             this.numericUpDownDevice0EthashPascalPowerLimit.Name = "numericUpDownDevice0EthashPascalPowerLimit";
             this.numericUpDownDevice0EthashPascalPowerLimit.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownDevice0EthashPascalPowerLimit.TabIndex = 42;
+            this.numericUpDownDevice0EthashPascalPowerLimit.TabIndex = 1;
             this.numericUpDownDevice0EthashPascalPowerLimit.Tag = "ethash_pascal_overclocking_power_limit";
             this.numericUpDownDevice0EthashPascalPowerLimit.Value = new decimal(new int[] {
             100,
@@ -457,7 +457,7 @@
             0});
             this.numericUpDown24.Name = "numericUpDown24";
             this.numericUpDown24.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown24.TabIndex = 40;
+            this.numericUpDown24.TabIndex = 3;
             this.numericUpDown24.Tag = "ethash_pascal_overclocking_core_voltage";
             this.numericUpDown24.Value = new decimal(new int[] {
             1000,
@@ -497,7 +497,7 @@
             0});
             this.numericUpDownDevice0EthashPascalCoreClock.Name = "numericUpDownDevice0EthashPascalCoreClock";
             this.numericUpDownDevice0EthashPascalCoreClock.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDownDevice0EthashPascalCoreClock.TabIndex = 38;
+            this.numericUpDownDevice0EthashPascalCoreClock.TabIndex = 2;
             this.numericUpDownDevice0EthashPascalCoreClock.Tag = "ethash_pascal_overclocking_core_clock";
             this.numericUpDownDevice0EthashPascalCoreClock.Value = new decimal(new int[] {
             1280,
@@ -542,7 +542,7 @@
             0});
             this.numericUpDownDevice0EthashPascalPascalIterations.Name = "numericUpDownDevice0EthashPascalPascalIterations";
             this.numericUpDownDevice0EthashPascalPascalIterations.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0EthashPascalPascalIterations.TabIndex = 67;
+            this.numericUpDownDevice0EthashPascalPascalIterations.TabIndex = 2;
             this.numericUpDownDevice0EthashPascalPascalIterations.Tag = "ethash_pascal_pascal_iterations";
             this.numericUpDownDevice0EthashPascalPascalIterations.Value = new decimal(new int[] {
             4,
@@ -587,7 +587,7 @@
             0});
             this.numericUpDownDevice0EthashPascalIntensity.Name = "numericUpDownDevice0EthashPascalIntensity";
             this.numericUpDownDevice0EthashPascalIntensity.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0EthashPascalIntensity.TabIndex = 59;
+            this.numericUpDownDevice0EthashPascalIntensity.TabIndex = 1;
             this.numericUpDownDevice0EthashPascalIntensity.Tag = "ethash_pascal_intensity";
             this.numericUpDownDevice0EthashPascalIntensity.Value = new decimal(new int[] {
             2048,
@@ -612,7 +612,7 @@
             0});
             this.numericUpDownDevice0EthashPascalThreads.Name = "numericUpDownDevice0EthashPascalThreads";
             this.numericUpDownDevice0EthashPascalThreads.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0EthashPascalThreads.TabIndex = 63;
+            this.numericUpDownDevice0EthashPascalThreads.TabIndex = 0;
             this.numericUpDownDevice0EthashPascalThreads.Tag = "ethash_pascal_threads";
             this.numericUpDownDevice0EthashPascalThreads.Value = new decimal(new int[] {
             1,
@@ -640,7 +640,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.checkBox2);
+            this.groupBox1.Controls.Add(this.checkBoxDevice0EthashOverclockingEnabled);
             this.groupBox1.Controls.Add(this.numericUpDown1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.numericUpDown2);
@@ -660,18 +660,18 @@
             this.groupBox1.Tag = "overclocking";
             this.groupBox1.Text = "Overclocking/Underclocking";
             // 
-            // checkBox2
+            // checkBoxDevice0EthashOverclockingEnabled
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox2.Location = new System.Drawing.Point(6, 19);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(59, 17);
-            this.checkBox2.TabIndex = 232;
-            this.checkBox2.Tag = "ethash_overclocking_enabled";
-            this.checkBox2.Text = "Enable";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.checkBoxDevice0EthashOverclockingEnabled.AutoSize = true;
+            this.checkBoxDevice0EthashOverclockingEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDevice0EthashOverclockingEnabled.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxDevice0EthashOverclockingEnabled.Name = "checkBoxDevice0EthashOverclockingEnabled";
+            this.checkBoxDevice0EthashOverclockingEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDevice0EthashOverclockingEnabled.TabIndex = 0;
+            this.checkBoxDevice0EthashOverclockingEnabled.Tag = "ethash_overclocking_enabled";
+            this.checkBoxDevice0EthashOverclockingEnabled.Text = "Enable";
+            this.checkBoxDevice0EthashOverclockingEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxDevice0EthashOverclockingEnabled.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // numericUpDown1
             // 
@@ -694,7 +694,7 @@
             0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown1.TabIndex = 46;
+            this.numericUpDown1.TabIndex = 5;
             this.numericUpDown1.Tag = "ethash_overclocking_memory_voltage";
             this.numericUpDown1.Value = new decimal(new int[] {
             1000,
@@ -734,7 +734,7 @@
             0});
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown2.TabIndex = 44;
+            this.numericUpDown2.TabIndex = 4;
             this.numericUpDown2.Tag = "ethash_overclocking_memory_clock";
             this.numericUpDown2.Value = new decimal(new int[] {
             2000,
@@ -769,7 +769,7 @@
             0});
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown3.TabIndex = 42;
+            this.numericUpDown3.TabIndex = 1;
             this.numericUpDown3.Tag = "ethash_overclocking_power_limit";
             this.numericUpDown3.Value = new decimal(new int[] {
             100,
@@ -809,7 +809,7 @@
             0});
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown4.TabIndex = 40;
+            this.numericUpDown4.TabIndex = 3;
             this.numericUpDown4.Tag = "ethash_overclocking_core_voltage";
             this.numericUpDown4.Value = new decimal(new int[] {
             1000,
@@ -849,7 +849,7 @@
             0});
             this.numericUpDown5.Name = "numericUpDown5";
             this.numericUpDown5.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown5.TabIndex = 38;
+            this.numericUpDown5.TabIndex = 2;
             this.numericUpDown5.Tag = "ethash_overclocking_core_clock";
             this.numericUpDown5.Value = new decimal(new int[] {
             1280,
@@ -914,7 +914,7 @@
             0});
             this.numericUpDownDevice0EthashLocalWorkSize.Name = "numericUpDownDevice0EthashLocalWorkSize";
             this.numericUpDownDevice0EthashLocalWorkSize.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0EthashLocalWorkSize.TabIndex = 34;
+            this.numericUpDownDevice0EthashLocalWorkSize.TabIndex = 2;
             this.numericUpDownDevice0EthashLocalWorkSize.Tag = "ethash_local_work_size";
             this.numericUpDownDevice0EthashLocalWorkSize.Value = new decimal(new int[] {
             192,
@@ -939,7 +939,7 @@
             0});
             this.numericUpDownDevice0EthashIntensity.Name = "numericUpDownDevice0EthashIntensity";
             this.numericUpDownDevice0EthashIntensity.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0EthashIntensity.TabIndex = 28;
+            this.numericUpDownDevice0EthashIntensity.TabIndex = 1;
             this.numericUpDownDevice0EthashIntensity.Tag = "ethash_intensity";
             this.numericUpDownDevice0EthashIntensity.Value = new decimal(new int[] {
             2048,
@@ -964,7 +964,7 @@
             0});
             this.numericUpDownDevice0EthashThreads.Name = "numericUpDownDevice0EthashThreads";
             this.numericUpDownDevice0EthashThreads.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0EthashThreads.TabIndex = 36;
+            this.numericUpDownDevice0EthashThreads.TabIndex = 0;
             this.numericUpDownDevice0EthashThreads.Tag = "ethash_threads";
             this.numericUpDownDevice0EthashThreads.Value = new decimal(new int[] {
             1,
@@ -992,7 +992,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.checkBox3);
+            this.groupBox2.Controls.Add(this.checkBoxDevice0CryptoNightOverclockingEnabled);
             this.groupBox2.Controls.Add(this.numericUpDown6);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.numericUpDown7);
@@ -1012,18 +1012,18 @@
             this.groupBox2.Tag = "overclocking";
             this.groupBox2.Text = "Overclocking/Underclocking";
             // 
-            // checkBox3
+            // checkBoxDevice0CryptoNightOverclockingEnabled
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox3.Location = new System.Drawing.Point(6, 19);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(59, 17);
-            this.checkBox3.TabIndex = 232;
-            this.checkBox3.Tag = "cryptonight_overclocking_enabled";
-            this.checkBox3.Text = "Enable";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.AutoSize = true;
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.Name = "checkBoxDevice0CryptoNightOverclockingEnabled";
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.TabIndex = 0;
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.Tag = "cryptonight_overclocking_enabled";
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.Text = "Enable";
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxDevice0CryptoNightOverclockingEnabled.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // numericUpDown6
             // 
@@ -1046,7 +1046,7 @@
             0});
             this.numericUpDown6.Name = "numericUpDown6";
             this.numericUpDown6.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown6.TabIndex = 46;
+            this.numericUpDown6.TabIndex = 5;
             this.numericUpDown6.Tag = "cryptonight_overclocking_memory_voltage";
             this.numericUpDown6.Value = new decimal(new int[] {
             1000,
@@ -1086,7 +1086,7 @@
             0});
             this.numericUpDown7.Name = "numericUpDown7";
             this.numericUpDown7.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown7.TabIndex = 44;
+            this.numericUpDown7.TabIndex = 4;
             this.numericUpDown7.Tag = "cryptonight_overclocking_memory_clock";
             this.numericUpDown7.Value = new decimal(new int[] {
             2000,
@@ -1121,7 +1121,7 @@
             0});
             this.numericUpDown8.Name = "numericUpDown8";
             this.numericUpDown8.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown8.TabIndex = 42;
+            this.numericUpDown8.TabIndex = 1;
             this.numericUpDown8.Tag = "cryptonight_overclocking_power_limit";
             this.numericUpDown8.Value = new decimal(new int[] {
             100,
@@ -1161,7 +1161,7 @@
             0});
             this.numericUpDown9.Name = "numericUpDown9";
             this.numericUpDown9.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown9.TabIndex = 40;
+            this.numericUpDown9.TabIndex = 3;
             this.numericUpDown9.Tag = "cryptonight_overclocking_core_voltage";
             this.numericUpDown9.Value = new decimal(new int[] {
             1000,
@@ -1201,7 +1201,7 @@
             0});
             this.numericUpDown10.Name = "numericUpDown10";
             this.numericUpDown10.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown10.TabIndex = 38;
+            this.numericUpDown10.TabIndex = 2;
             this.numericUpDown10.Tag = "cryptonight_overclocking_core_clock";
             this.numericUpDown10.Value = new decimal(new int[] {
             1280,
@@ -1246,7 +1246,7 @@
             0});
             this.numericUpDownDevice0CryptoNightThreads.Name = "numericUpDownDevice0CryptoNightThreads";
             this.numericUpDownDevice0CryptoNightThreads.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0CryptoNightThreads.TabIndex = 32;
+            this.numericUpDownDevice0CryptoNightThreads.TabIndex = 0;
             this.numericUpDownDevice0CryptoNightThreads.Tag = "cryptonight_threads";
             this.numericUpDownDevice0CryptoNightThreads.Value = new decimal(new int[] {
             2,
@@ -1291,7 +1291,7 @@
             0});
             this.numericUpDownDevice0CryptoNightRawIntensity.Name = "numericUpDownDevice0CryptoNightRawIntensity";
             this.numericUpDownDevice0CryptoNightRawIntensity.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0CryptoNightRawIntensity.TabIndex = 28;
+            this.numericUpDownDevice0CryptoNightRawIntensity.TabIndex = 1;
             this.numericUpDownDevice0CryptoNightRawIntensity.Tag = "cryptonight_raw_intensity";
             this.numericUpDownDevice0CryptoNightRawIntensity.Value = new decimal(new int[] {
             512,
@@ -1316,7 +1316,7 @@
             0});
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Name = "numericUpDownDevice0CryptoNightLocalWorkSize";
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0CryptoNightLocalWorkSize.TabIndex = 30;
+            this.numericUpDownDevice0CryptoNightLocalWorkSize.TabIndex = 2;
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Tag = "cryptonight_local_work_size";
             this.numericUpDownDevice0CryptoNightLocalWorkSize.Value = new decimal(new int[] {
             8,
@@ -1343,7 +1343,7 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.checkBox4);
+            this.groupBox3.Controls.Add(this.checkBoxDevice0LbryOverclockingEnabled);
             this.groupBox3.Controls.Add(this.numericUpDown11);
             this.groupBox3.Controls.Add(this.label12);
             this.groupBox3.Controls.Add(this.numericUpDown12);
@@ -1358,22 +1358,22 @@
             this.groupBox3.Location = new System.Drawing.Point(158, 7);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(314, 123);
-            this.groupBox3.TabIndex = 123;
+            this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Tag = "overclocking";
             this.groupBox3.Text = "Overclocking/Underclocking";
             // 
-            // checkBox4
+            // checkBoxDevice0LbryOverclockingEnabled
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(6, 19);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(59, 17);
-            this.checkBox4.TabIndex = 232;
-            this.checkBox4.Tag = "lbry_overclocking_enabled";
-            this.checkBox4.Text = "Enable";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            this.checkBoxDevice0LbryOverclockingEnabled.AutoSize = true;
+            this.checkBoxDevice0LbryOverclockingEnabled.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxDevice0LbryOverclockingEnabled.Name = "checkBoxDevice0LbryOverclockingEnabled";
+            this.checkBoxDevice0LbryOverclockingEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDevice0LbryOverclockingEnabled.TabIndex = 0;
+            this.checkBoxDevice0LbryOverclockingEnabled.Tag = "lbry_overclocking_enabled";
+            this.checkBoxDevice0LbryOverclockingEnabled.Text = "Enable";
+            this.checkBoxDevice0LbryOverclockingEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxDevice0LbryOverclockingEnabled.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // numericUpDown11
             // 
@@ -1395,7 +1395,7 @@
             0});
             this.numericUpDown11.Name = "numericUpDown11";
             this.numericUpDown11.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown11.TabIndex = 46;
+            this.numericUpDown11.TabIndex = 6;
             this.numericUpDown11.Tag = "lbry_overclocking_memory_voltage";
             this.numericUpDown11.Value = new decimal(new int[] {
             1000,
@@ -1433,7 +1433,7 @@
             0});
             this.numericUpDown12.Name = "numericUpDown12";
             this.numericUpDown12.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown12.TabIndex = 44;
+            this.numericUpDown12.TabIndex = 5;
             this.numericUpDown12.Tag = "lbry_overclocking_memory_clock";
             this.numericUpDown12.Value = new decimal(new int[] {
             2000,
@@ -1466,7 +1466,7 @@
             0});
             this.numericUpDown13.Name = "numericUpDown13";
             this.numericUpDown13.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown13.TabIndex = 42;
+            this.numericUpDown13.TabIndex = 1;
             this.numericUpDown13.Tag = "lbry_overclocking_power_limit";
             this.numericUpDown13.Value = new decimal(new int[] {
             100,
@@ -1504,7 +1504,7 @@
             0});
             this.numericUpDown14.Name = "numericUpDown14";
             this.numericUpDown14.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown14.TabIndex = 40;
+            this.numericUpDown14.TabIndex = 3;
             this.numericUpDown14.Tag = "lbry_overclocking_core_voltage";
             this.numericUpDown14.Value = new decimal(new int[] {
             1000,
@@ -1542,7 +1542,7 @@
             0});
             this.numericUpDown15.Name = "numericUpDown15";
             this.numericUpDown15.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown15.TabIndex = 38;
+            this.numericUpDown15.TabIndex = 2;
             this.numericUpDown15.Tag = "lbry_overclocking_core_clock";
             this.numericUpDown15.Value = new decimal(new int[] {
             1280,
@@ -1604,7 +1604,7 @@
             0});
             this.numericUpDownDevice0LbryLocalWorkSize.Name = "numericUpDownDevice0LbryLocalWorkSize";
             this.numericUpDownDevice0LbryLocalWorkSize.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0LbryLocalWorkSize.TabIndex = 53;
+            this.numericUpDownDevice0LbryLocalWorkSize.TabIndex = 2;
             this.numericUpDownDevice0LbryLocalWorkSize.Tag = "lbry_local_work_size";
             this.numericUpDownDevice0LbryLocalWorkSize.Value = new decimal(new int[] {
             192,
@@ -1629,7 +1629,7 @@
             0});
             this.numericUpDownDevice0LbryIntensity.Name = "numericUpDownDevice0LbryIntensity";
             this.numericUpDownDevice0LbryIntensity.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0LbryIntensity.TabIndex = 51;
+            this.numericUpDownDevice0LbryIntensity.TabIndex = 1;
             this.numericUpDownDevice0LbryIntensity.Tag = "lbry_intensity";
             this.numericUpDownDevice0LbryIntensity.Value = new decimal(new int[] {
             2048,
@@ -1654,7 +1654,7 @@
             0});
             this.numericUpDownDevice0LbryThreads.Name = "numericUpDownDevice0LbryThreads";
             this.numericUpDownDevice0LbryThreads.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0LbryThreads.TabIndex = 55;
+            this.numericUpDownDevice0LbryThreads.TabIndex = 0;
             this.numericUpDownDevice0LbryThreads.Tag = "lbry_threads";
             this.numericUpDownDevice0LbryThreads.Value = new decimal(new int[] {
             1,
@@ -1681,7 +1681,7 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.checkBox5);
+            this.groupBox4.Controls.Add(this.checkBoxDevice0PascalOverclockingEnabled);
             this.groupBox4.Controls.Add(this.numericUpDown16);
             this.groupBox4.Controls.Add(this.label17);
             this.groupBox4.Controls.Add(this.numericUpDown17);
@@ -1701,18 +1701,18 @@
             this.groupBox4.Tag = "overclocking";
             this.groupBox4.Text = "Overclocking/Underclocking";
             // 
-            // checkBox5
+            // checkBoxDevice0PascalOverclockingEnabled
             // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox5.Location = new System.Drawing.Point(6, 19);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(59, 17);
-            this.checkBox5.TabIndex = 232;
-            this.checkBox5.Tag = "pascal_overclocking_enabled";
-            this.checkBox5.Text = "Enable";
-            this.checkBox5.UseVisualStyleBackColor = true;
-            this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
+            this.checkBoxDevice0PascalOverclockingEnabled.AutoSize = true;
+            this.checkBoxDevice0PascalOverclockingEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDevice0PascalOverclockingEnabled.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxDevice0PascalOverclockingEnabled.Name = "checkBoxDevice0PascalOverclockingEnabled";
+            this.checkBoxDevice0PascalOverclockingEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDevice0PascalOverclockingEnabled.TabIndex = 0;
+            this.checkBoxDevice0PascalOverclockingEnabled.Tag = "pascal_overclocking_enabled";
+            this.checkBoxDevice0PascalOverclockingEnabled.Text = "Enable";
+            this.checkBoxDevice0PascalOverclockingEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxDevice0PascalOverclockingEnabled.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
             // 
             // numericUpDown16
             // 
@@ -1722,7 +1722,7 @@
             0,
             0,
             0});
-            this.numericUpDown16.Location = new System.Drawing.Point(249, 94);
+            this.numericUpDown16.Location = new System.Drawing.Point(246, 89);
             this.numericUpDown16.Maximum = new decimal(new int[] {
             1200,
             0,
@@ -1735,7 +1735,7 @@
             0});
             this.numericUpDown16.Name = "numericUpDown16";
             this.numericUpDown16.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown16.TabIndex = 46;
+            this.numericUpDown16.TabIndex = 5;
             this.numericUpDown16.Tag = "pascal_overclocking_memory_voltage";
             this.numericUpDown16.Value = new decimal(new int[] {
             1000,
@@ -1775,7 +1775,7 @@
             0});
             this.numericUpDown17.Name = "numericUpDown17";
             this.numericUpDown17.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown17.TabIndex = 44;
+            this.numericUpDown17.TabIndex = 4;
             this.numericUpDown17.Tag = "pascal_overclocking_memory_clock";
             this.numericUpDown17.Value = new decimal(new int[] {
             2000,
@@ -1810,7 +1810,7 @@
             0});
             this.numericUpDown18.Name = "numericUpDown18";
             this.numericUpDown18.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown18.TabIndex = 42;
+            this.numericUpDown18.TabIndex = 1;
             this.numericUpDown18.Tag = "pascal_overclocking_power_limit";
             this.numericUpDown18.Value = new decimal(new int[] {
             100,
@@ -1850,7 +1850,7 @@
             0});
             this.numericUpDown19.Name = "numericUpDown19";
             this.numericUpDown19.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown19.TabIndex = 40;
+            this.numericUpDown19.TabIndex = 3;
             this.numericUpDown19.Tag = "pascal_overclocking_core_voltage";
             this.numericUpDown19.Value = new decimal(new int[] {
             1000,
@@ -1890,7 +1890,7 @@
             0});
             this.numericUpDown20.Name = "numericUpDown20";
             this.numericUpDown20.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown20.TabIndex = 38;
+            this.numericUpDown20.TabIndex = 2;
             this.numericUpDown20.Tag = "pascal_overclocking_core_clock";
             this.numericUpDown20.Value = new decimal(new int[] {
             1280,
@@ -1980,7 +1980,7 @@
             0});
             this.numericUpDownDevice0PascalIntensity.Name = "numericUpDownDevice0PascalIntensity";
             this.numericUpDownDevice0PascalIntensity.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0PascalIntensity.TabIndex = 59;
+            this.numericUpDownDevice0PascalIntensity.TabIndex = 1;
             this.numericUpDownDevice0PascalIntensity.Tag = "pascal_intensity";
             this.numericUpDownDevice0PascalIntensity.Value = new decimal(new int[] {
             2048,
@@ -2005,7 +2005,7 @@
             0});
             this.numericUpDownDevice0PascalThreads.Name = "numericUpDownDevice0PascalThreads";
             this.numericUpDownDevice0PascalThreads.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0PascalThreads.TabIndex = 63;
+            this.numericUpDownDevice0PascalThreads.TabIndex = 0;
             this.numericUpDownDevice0PascalThreads.Tag = "pascal_threads";
             this.numericUpDownDevice0PascalThreads.Value = new decimal(new int[] {
             1,
@@ -2032,7 +2032,7 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.checkBox1);
+            this.groupBox6.Controls.Add(this.checkBoxDevice0NeoScryptOverclockingEnabled);
             this.groupBox6.Controls.Add(this.numericUpDown21);
             this.groupBox6.Controls.Add(this.label30);
             this.groupBox6.Controls.Add(this.numericUpDown22);
@@ -2052,18 +2052,18 @@
             this.groupBox6.Tag = "overclocking";
             this.groupBox6.Text = "Overclocking/Underclocking";
             // 
-            // checkBox1
+            // checkBoxDevice0NeoScryptOverclockingEnabled
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.checkBox1.Location = new System.Drawing.Point(6, 19);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(59, 17);
-            this.checkBox1.TabIndex = 232;
-            this.checkBox1.Tag = "neoscrypt_overclocking_enabled";
-            this.checkBox1.Text = "Enable";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.AutoSize = true;
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.Name = "checkBoxDevice0NeoScryptOverclockingEnabled";
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.TabIndex = 0;
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.Tag = "neoscrypt_overclocking_enabled";
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.Text = "Enable";
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxDevice0NeoScryptOverclockingEnabled.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // numericUpDown21
             // 
@@ -2086,7 +2086,7 @@
             0});
             this.numericUpDown21.Name = "numericUpDown21";
             this.numericUpDown21.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown21.TabIndex = 46;
+            this.numericUpDown21.TabIndex = 5;
             this.numericUpDown21.Tag = "neoscrypt_overclocking_memory_voltage";
             this.numericUpDown21.Value = new decimal(new int[] {
             1000,
@@ -2126,7 +2126,7 @@
             0});
             this.numericUpDown22.Name = "numericUpDown22";
             this.numericUpDown22.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown22.TabIndex = 44;
+            this.numericUpDown22.TabIndex = 4;
             this.numericUpDown22.Tag = "neoscrypt_overclocking_memory_clock";
             this.numericUpDown22.Value = new decimal(new int[] {
             2000,
@@ -2161,7 +2161,7 @@
             0});
             this.numericUpDown23.Name = "numericUpDown23";
             this.numericUpDown23.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown23.TabIndex = 42;
+            this.numericUpDown23.TabIndex = 1;
             this.numericUpDown23.Tag = "neoscrypt_overclocking_power_limit";
             this.numericUpDown23.Value = new decimal(new int[] {
             100,
@@ -2201,7 +2201,7 @@
             0});
             this.numericUpDown25.Name = "numericUpDown25";
             this.numericUpDown25.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown25.TabIndex = 40;
+            this.numericUpDown25.TabIndex = 3;
             this.numericUpDown25.Tag = "neoscrypt_overclocking_core_voltage";
             this.numericUpDown25.Value = new decimal(new int[] {
             1000,
@@ -2241,7 +2241,7 @@
             0});
             this.numericUpDown29.Name = "numericUpDown29";
             this.numericUpDown29.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown29.TabIndex = 38;
+            this.numericUpDown29.TabIndex = 2;
             this.numericUpDown29.Tag = "neoscrypt_overclocking_core_clock";
             this.numericUpDown29.Value = new decimal(new int[] {
             1280,
@@ -2286,7 +2286,7 @@
             0});
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Name = "numericUpDownDevice0NeoScryptLocalWorkSize";
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0NeoScryptLocalWorkSize.TabIndex = 125;
+            this.numericUpDownDevice0NeoScryptLocalWorkSize.TabIndex = 2;
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Tag = "neoscrypt_local_work_size";
             this.numericUpDownDevice0NeoScryptLocalWorkSize.Value = new decimal(new int[] {
             256,
@@ -2330,7 +2330,7 @@
             0});
             this.numericUpDownDevice0NeoScryptIntensity.Name = "numericUpDownDevice0NeoScryptIntensity";
             this.numericUpDownDevice0NeoScryptIntensity.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0NeoScryptIntensity.TabIndex = 119;
+            this.numericUpDownDevice0NeoScryptIntensity.TabIndex = 1;
             this.numericUpDownDevice0NeoScryptIntensity.Tag = "neoscrypt_raw_intensity";
             this.numericUpDownDevice0NeoScryptIntensity.Value = new decimal(new int[] {
             256,
@@ -2354,7 +2354,7 @@
             0});
             this.numericUpDownDevice0NeoScryptThreads.Name = "numericUpDownDevice0NeoScryptThreads";
             this.numericUpDownDevice0NeoScryptThreads.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDownDevice0NeoScryptThreads.TabIndex = 121;
+            this.numericUpDownDevice0NeoScryptThreads.TabIndex = 0;
             this.numericUpDownDevice0NeoScryptThreads.Tag = "neoscrypt_threads";
             this.numericUpDownDevice0NeoScryptThreads.Value = new decimal(new int[] {
             1,
@@ -2380,7 +2380,7 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.checkBox6);
+            this.groupBox7.Controls.Add(this.checkBoxDevice0Lyra2REv2OverclockingEnabled);
             this.groupBox7.Controls.Add(this.numericUpDown30);
             this.groupBox7.Controls.Add(this.label35);
             this.groupBox7.Controls.Add(this.numericUpDown31);
@@ -2400,18 +2400,18 @@
             this.groupBox7.Tag = "overclocking";
             this.groupBox7.Text = "Overclocking/Underclocking";
             // 
-            // checkBox6
+            // checkBoxDevice0Lyra2REv2OverclockingEnabled
             // 
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox6.Location = new System.Drawing.Point(6, 19);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(59, 17);
-            this.checkBox6.TabIndex = 232;
-            this.checkBox6.Tag = "lyra2rev2_overclocking_enabled";
-            this.checkBox6.Text = "Enable";
-            this.checkBox6.UseVisualStyleBackColor = true;
-            this.checkBox6.CheckedChanged += new System.EventHandler(this.checkBox6_CheckedChanged);
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.AutoSize = true;
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.Name = "checkBoxDevice0Lyra2REv2OverclockingEnabled";
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.TabIndex = 0;
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.Tag = "lyra2rev2_overclocking_enabled";
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.Text = "Enable";
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxDevice0Lyra2REv2OverclockingEnabled.CheckedChanged += new System.EventHandler(this.checkBox6_CheckedChanged);
             // 
             // numericUpDown30
             // 
@@ -2434,7 +2434,7 @@
             0});
             this.numericUpDown30.Name = "numericUpDown30";
             this.numericUpDown30.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown30.TabIndex = 46;
+            this.numericUpDown30.TabIndex = 5;
             this.numericUpDown30.Tag = "lyra2rev2_overclocking_memory_voltage";
             this.numericUpDown30.Value = new decimal(new int[] {
             1000,
@@ -2474,7 +2474,7 @@
             0});
             this.numericUpDown31.Name = "numericUpDown31";
             this.numericUpDown31.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown31.TabIndex = 44;
+            this.numericUpDown31.TabIndex = 4;
             this.numericUpDown31.Tag = "lyra2rev2_overclocking_memory_clock";
             this.numericUpDown31.Value = new decimal(new int[] {
             2000,
@@ -2509,7 +2509,7 @@
             0});
             this.numericUpDown32.Name = "numericUpDown32";
             this.numericUpDown32.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown32.TabIndex = 42;
+            this.numericUpDown32.TabIndex = 1;
             this.numericUpDown32.Tag = "lyra2rev2_overclocking_power_limit";
             this.numericUpDown32.Value = new decimal(new int[] {
             100,
@@ -2549,7 +2549,7 @@
             0});
             this.numericUpDown33.Name = "numericUpDown33";
             this.numericUpDown33.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown33.TabIndex = 40;
+            this.numericUpDown33.TabIndex = 3;
             this.numericUpDown33.Tag = "lyra2rev2_overclocking_core_voltage";
             this.numericUpDown33.Value = new decimal(new int[] {
             1000,
@@ -2589,7 +2589,7 @@
             0});
             this.numericUpDown34.Name = "numericUpDown34";
             this.numericUpDown34.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown34.TabIndex = 38;
+            this.numericUpDown34.TabIndex = 2;
             this.numericUpDown34.Tag = "lyra2rev2_overclocking_core_clock";
             this.numericUpDown34.Value = new decimal(new int[] {
             1280,
@@ -2634,7 +2634,7 @@
             0});
             this.numericUpDown35.Name = "numericUpDown35";
             this.numericUpDown35.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDown35.TabIndex = 132;
+            this.numericUpDown35.TabIndex = 2;
             this.numericUpDown35.Tag = "lyra2rev2_local_work_size";
             this.numericUpDown35.Value = new decimal(new int[] {
             256,
@@ -2679,7 +2679,7 @@
             0});
             this.numericUpDown36.Name = "numericUpDown36";
             this.numericUpDown36.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDown36.TabIndex = 128;
+            this.numericUpDown36.TabIndex = 1;
             this.numericUpDown36.Tag = "lyra2rev2_intensity";
             this.numericUpDown36.Value = new decimal(new int[] {
             256,
@@ -2704,7 +2704,7 @@
             0});
             this.numericUpDown37.Name = "numericUpDown37";
             this.numericUpDown37.Size = new System.Drawing.Size(47, 20);
-            this.numericUpDown37.TabIndex = 130;
+            this.numericUpDown37.TabIndex = 0;
             this.numericUpDown37.Tag = "lyra2rev2_threads";
             this.numericUpDown37.Value = new decimal(new int[] {
             1,
@@ -2720,7 +2720,7 @@
             this.label188.Location = new System.Drawing.Point(71, 21);
             this.label188.Name = "label188";
             this.label188.Size = new System.Drawing.Size(124, 13);
-            this.label188.TabIndex = 41;
+            this.label188.TabIndex = 0;
             this.label188.Text = "Target Temperature (℃):";
             // 
             // numericUpDown52
@@ -2739,7 +2739,7 @@
             0});
             this.numericUpDown52.Name = "numericUpDown52";
             this.numericUpDown52.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown52.TabIndex = 42;
+            this.numericUpDown52.TabIndex = 2;
             this.numericUpDown52.Tag = "fan_control_target_temperature";
             this.numericUpDown52.Value = new decimal(new int[] {
             75,
@@ -2757,7 +2757,7 @@
             this.fanControlEnabled.Location = new System.Drawing.Point(6, 32);
             this.fanControlEnabled.Name = "fanControlEnabled";
             this.fanControlEnabled.Size = new System.Drawing.Size(59, 17);
-            this.fanControlEnabled.TabIndex = 231;
+            this.fanControlEnabled.TabIndex = 0;
             this.fanControlEnabled.Tag = "fan_control_enabled";
             this.fanControlEnabled.Text = "Enable";
             this.fanControlEnabled.UseVisualStyleBackColor = true;
@@ -2778,7 +2778,7 @@
             this.groupBox13.Location = new System.Drawing.Point(7, 4);
             this.groupBox13.Name = "groupBox13";
             this.groupBox13.Size = new System.Drawing.Size(484, 75);
-            this.groupBox13.TabIndex = 65;
+            this.groupBox13.TabIndex = 0;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Fan Control";
             // 
@@ -2793,7 +2793,7 @@
             0});
             this.numericUpDown28.Name = "numericUpDown28";
             this.numericUpDown28.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown28.TabIndex = 237;
+            this.numericUpDown28.TabIndex = 5;
             this.numericUpDown28.Tag = "fan_control_maximum_fan_speed";
             this.numericUpDown28.Value = new decimal(new int[] {
             100,
@@ -2824,7 +2824,7 @@
             0});
             this.numericUpDown27.Name = "numericUpDown27";
             this.numericUpDown27.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown27.TabIndex = 235;
+            this.numericUpDown27.TabIndex = 4;
             this.numericUpDown27.Tag = "fan_control_minimum_fan_speed";
             this.numericUpDown27.Value = new decimal(new int[] {
             20,
@@ -2859,7 +2859,7 @@
             0});
             this.numericUpDown26.Name = "numericUpDown26";
             this.numericUpDown26.Size = new System.Drawing.Size(57, 20);
-            this.numericUpDown26.TabIndex = 233;
+            this.numericUpDown26.TabIndex = 3;
             this.numericUpDown26.Tag = "fan_control_maximum_temperature";
             this.numericUpDown26.Value = new decimal(new int[] {
             85,
@@ -2875,7 +2875,7 @@
             this.label27.Location = new System.Drawing.Point(71, 47);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(116, 13);
-            this.label27.TabIndex = 232;
+            this.label27.TabIndex = 1;
             this.label27.Tag = "";
             this.label27.Text = "Max. Temperature (℃):";
             // 
@@ -2885,7 +2885,7 @@
             this.buttonResetToDefault.Location = new System.Drawing.Point(497, 38);
             this.buttonResetToDefault.Name = "buttonResetToDefault";
             this.buttonResetToDefault.Size = new System.Drawing.Size(130, 23);
-            this.buttonResetToDefault.TabIndex = 66;
+            this.buttonResetToDefault.TabIndex = 3;
             this.buttonResetToDefault.Text = "Reset to Default";
             this.buttonResetToDefault.UseVisualStyleBackColor = true;
             this.buttonResetToDefault.Click += new System.EventHandler(this.buttonResetToDefault_Click);
@@ -2896,7 +2896,7 @@
             this.buttonCopyToOthers.Location = new System.Drawing.Point(497, 9);
             this.buttonCopyToOthers.Name = "buttonCopyToOthers";
             this.buttonCopyToOthers.Size = new System.Drawing.Size(130, 23);
-            this.buttonCopyToOthers.TabIndex = 67;
+            this.buttonCopyToOthers.TabIndex = 2;
             this.buttonCopyToOthers.Text = "Copy to Similar Devices";
             this.buttonCopyToOthers.UseVisualStyleBackColor = true;
             this.buttonCopyToOthers.Click += new System.EventHandler(this.buttonCopyToOthers_Click);
@@ -2907,7 +2907,7 @@
             this.buttonResetAll.Location = new System.Drawing.Point(497, 67);
             this.buttonResetAll.Name = "buttonResetAll";
             this.buttonResetAll.Size = new System.Drawing.Size(130, 23);
-            this.buttonResetAll.TabIndex = 68;
+            this.buttonResetAll.TabIndex = 4;
             this.buttonResetAll.Text = "Reset All";
             this.buttonResetAll.UseVisualStyleBackColor = true;
             this.buttonResetAll.Visible = false;
@@ -3069,7 +3069,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown52;
         private System.Windows.Forms.Label label188;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBoxDevice0EthashOverclockingEnabled;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
@@ -3081,7 +3081,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown5;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBoxDevice0CryptoNightOverclockingEnabled;
         private System.Windows.Forms.NumericUpDown numericUpDown6;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numericUpDown7;
@@ -3093,7 +3093,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBoxDevice0LbryOverclockingEnabled;
         private System.Windows.Forms.NumericUpDown numericUpDown11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown numericUpDown12;
@@ -3114,7 +3114,7 @@
         private System.Windows.Forms.Button buttonCopyToOthers;
         private System.Windows.Forms.Button buttonResetAll;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.CheckBox checkBox7;
+        private System.Windows.Forms.CheckBox checkBoxDevice0EthashPascalOverclockingEnabled;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalMemoryVoltage;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalMemoryClock;
@@ -3126,7 +3126,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalCoreClock;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBoxDevice0PascalOverclockingEnabled;
         private System.Windows.Forms.NumericUpDown numericUpDown16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.NumericUpDown numericUpDown17;
@@ -3138,7 +3138,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown20;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBoxDevice0NeoScryptOverclockingEnabled;
         private System.Windows.Forms.NumericUpDown numericUpDown21;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.NumericUpDown numericUpDown22;
@@ -3151,7 +3151,7 @@
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.CheckBox checkBox6;
+        private System.Windows.Forms.CheckBox checkBoxDevice0Lyra2REv2OverclockingEnabled;
         private System.Windows.Forms.NumericUpDown numericUpDown30;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.NumericUpDown numericUpDown31;

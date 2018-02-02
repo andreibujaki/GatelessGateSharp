@@ -200,12 +200,13 @@ namespace GatelessGateSharp
                                 if (Stratum.GetJob() != null && Stratum.GetJob().ID.Equals(ethashJobID))
                                 {
                                     for (int i = 0; i < ethashOutput[255]; ++i)
-                                        Stratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
+                                        Stratum.Submit(Device, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
                                 }
                                 ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
 
                                 sw.Stop();
                                 Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                                Device.TotalHashesPrimaryAlgorithm += (double)mEthashGlobalWorkSizeArray[0];
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
                                     MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", Speed / (1000000)));
@@ -217,7 +218,7 @@ namespace GatelessGateSharp
                         MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
                         Speed = 0;
                         if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                            this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                            this.UnrecoverableException = new UnrecoverableException(ex, Device);
                             Stop();
                         } else {
                             MainForm.Logger("Restarting miner thread...");
@@ -234,7 +235,7 @@ namespace GatelessGateSharp
             } catch (UnrecoverableException ex) {
                 this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                this.UnrecoverableException = new UnrecoverableException(ex, Device);
             } finally {
                 MarkAsDone();
                 MemoryUsage = 0;

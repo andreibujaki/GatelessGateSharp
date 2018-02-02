@@ -216,12 +216,13 @@ namespace GatelessGateSharp
                                 if (Stratum.GetJob() != null && Stratum.GetJob().Equals(pascalJob))
                                 {
                                     for (int i = 0; i < mPascalOutput[255]; ++i)
-                                        Stratum.Submit(GatelessGateDevice, pascalWork, mPascalOutput[i]);
+                                        Stratum.Submit(Device, pascalWork, mPascalOutput[i]);
                                 }
                                 pascalStartNonce += (UInt32)mPascalGlobalWorkSizeArray[0];
 
                                 sw.Stop();
                                 Speed = ((double)mPascalGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                                Device.TotalHashesPrimaryAlgorithm += (double)mPascalGlobalWorkSizeArray[0];
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Pascal)", Speed / 1000000));
@@ -232,7 +233,7 @@ namespace GatelessGateSharp
                     } catch (Exception ex) {
                         MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
                         if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                            this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                            this.UnrecoverableException = new UnrecoverableException(ex, Device);
                             Stop();
                         }
                     }
@@ -254,7 +255,7 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 if (program != null)
                     program.Dispose();
-                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                this.UnrecoverableException = new UnrecoverableException(ex, Device);
             }
         }
     }

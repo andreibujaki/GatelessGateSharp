@@ -308,20 +308,22 @@ namespace GatelessGateSharp {
                                 Queue.Read<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
                                 if (PrimaryStratum.GetJob() != null && PrimaryStratum.GetJob().ID.Equals(ethashJobID)) {
                                     for (int i = 0; i < ethashOutput[255]; ++i)
-                                        PrimaryStratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
+                                        PrimaryStratum.Submit(Device, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
                                 }
                                 ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0] * 3 / 4;
 
                                 Queue.Read<UInt32>(pascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
                                 if (SecondaryStratum.GetJob() != null && SecondaryStratum.GetJob().Equals(pascalJob)) {
                                     for (int i = 0; i < mPascalOutput[255]; ++i)
-                                        SecondaryStratum.Submit(GatelessGateDevice, pascalWork, mPascalOutput[i]);
+                                        SecondaryStratum.Submit(Device, pascalWork, mPascalOutput[i]);
                                 }
                                 pascalStartNonce += (UInt32)mEthashGlobalWorkSizeArray[0] * mPascalRatio;
 
                                 sw.Stop();
                                 Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * 0.75;
+                                Device.TotalHashesPrimaryAlgorithm += (double)mEthashGlobalWorkSizeArray[0] * 0.75;
                                 SpeedSecondaryAlgorithm = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mPascalRatio;
+                                Device.TotalHashesSecondaryAlgorithm += (double)mEthashGlobalWorkSizeArray[0] * mPascalRatio;
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Ethash), ", Speed / (1000000)) + String.Format("{0:N2} Mh/s (Pascal)", SpeedSecondaryAlgorithm / (1000000)));
                                     consoleUpdateStopwatch.Restart();
@@ -332,7 +334,7 @@ namespace GatelessGateSharp {
                         MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
                         Speed = 0;
                         if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                            this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                            this.UnrecoverableException = new UnrecoverableException(ex, Device);
                             Stop();
                         } else {
                             MainForm.Logger("Restarting miner thread...");
@@ -349,7 +351,7 @@ namespace GatelessGateSharp {
             } catch (UnrecoverableException ex) {
                 this.UnrecoverableException = ex;
             } catch (Exception ex) {
-                this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                this.UnrecoverableException = new UnrecoverableException(ex, Device);
             } finally {
                 MarkAsDone();
                 MemoryUsage = 0;

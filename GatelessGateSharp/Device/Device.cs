@@ -27,6 +27,8 @@ namespace GatelessGateSharp
         public long MemorySize { get { return GetMemorySize(); } }
         public int AcceptedShares { get { return mAcceptedShares; } }
         public int RejectedShares { get { return mRejectedShares; } }
+        public double TotalHashesPrimaryAlgorithm = 0;
+        public double TotalHashesSecondaryAlgorithm = 0;
 
         public bool OverclockingEnabled { get; set; }
         public int TargetPowerLimit { get; set; }

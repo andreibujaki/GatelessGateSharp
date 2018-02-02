@@ -34,7 +34,7 @@ namespace GatelessGateSharp
         private System.Threading.Thread mMinerThread = null;
         private DateTime mLastAlive = DateTime.Now;
 
-        public OpenCLDevice GatelessGateDevice { get { return mDevice; } }
+        public OpenCLDevice Device { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
         public bool Done { get { return mDone; } }

@@ -130,11 +130,7 @@ namespace GatelessGateSharp
                 { "method", "mining.extranonce.subscribe" },
                 { "params", new List<string> {
             }}}));
-            try {
-                response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
-            } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
-            }
+            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
             //MainForm.Logger("mining.extranonce.subscribe: " + response["result"]); // TODO
             
             WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {

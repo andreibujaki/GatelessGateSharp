@@ -25,7 +25,8 @@ namespace GatelessGateSharp {
         public static Stratum SecondaryStratum { get; set; }
         public static Stratum SecondaryStratumBackup { get; set; }
         public static List<Miner> Miners { get; set; }
-        
+        public static System.Diagnostics.Stopwatch StopWatch = new System.Diagnostics.Stopwatch();
+
 
 
         private Controller() {

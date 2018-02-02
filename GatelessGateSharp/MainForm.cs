@@ -94,8 +94,8 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.16";
-        public static string appName = shortAppName + " " + appVersion + " alpha";
+        public static string appVersion = "1.2.17";
+        public static string appName = shortAppName + " " + appVersion + " beta";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
@@ -147,8 +147,8 @@ namespace GatelessGateSharp {
         private Button[] buttonDeviceResetAllArray;
         private Button[] buttonDeviceCopyToOthersArray;
 
-        private bool ADLInitialized = false;
-        private bool NVMLInitialized = false;
+        public static bool ADLInitialized = false;
+        public static bool NVMLInitialized = false;
         private System.Threading.Mutex DeviceManagementLibrariesMutex = new System.Threading.Mutex();
         private ManagedCuda.Nvml.nvmlDevice[] nvmlDeviceArray;
         private bool phymemLoaded = false;
@@ -167,7 +167,6 @@ namespace GatelessGateSharp {
         private bool mDevFeeMode = true;
         private DateTime mDevFeeModeStartTime = DateTime.Now; // dummy
 
-        private DateTime mStartTime = DateTime.Now;
         private string mCurrentPool = "NiceHash";
 
         public static MainForm Instance { get { return instance; } }
@@ -1433,7 +1432,7 @@ namespace GatelessGateSharp {
             // EthashPascal
             numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
             numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)1024;
-            numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 4 : 4);
+            numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Value = (decimal)4;
 
             // Ethash
             numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = (decimal)1;
@@ -1530,7 +1529,7 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1020 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1150 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1100 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreVoltage :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1100 :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreVoltage :
@@ -1548,7 +1547,7 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1270 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1300 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1300 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1050 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1030 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1000 :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreClock :
@@ -1993,13 +1992,15 @@ namespace GatelessGateSharp {
                     labelCurrentSecondaryPool.Text = "";
                 }
 
-                var elapsedTimeInSeconds = (long)(DateTime.Now - mStartTime).TotalSeconds;
-                if (Controller.AppState != Controller.ApplicationGlobalState.Mining)
+                var elapsedTimeInSeconds = Controller.StopWatch.Elapsed.TotalSeconds;
+                if (elapsedTimeInSeconds == 0)
                     labelElapsedTime.Text = "-";
                 else if (elapsedTimeInSeconds >= 24 * 60 * 60)
                     labelElapsedTime.Text = string.Format("{3} Day{4} {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24, elapsedTimeInSeconds / 60 / 60 / 24 == 1 ? "" : "s");
                 else
                     labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
+                if (elapsedTimeInSeconds > 0 && Controller.AppState == Controller.ApplicationGlobalState.Idle)
+                    labelElapsedTime.Text = labelElapsedTime.Text + " (Paused)";
 
                 Dictionary<string, double> speeds = new Dictionary<string, double>();
                 foreach (var miner in Controller.Miners) {
@@ -2168,7 +2169,7 @@ namespace GatelessGateSharp {
             }
         }
 
-        private int GetAPIPort() {
+        public static int GetAPIPort() {
             if (Instance.numericUpDownAPIPort.InvokeRequired) {
                 return (int)Instance.numericUpDownAPIPort.Invoke(new NoArgReturningIntDelegate(() => {
                     return decimal.ToInt32(Instance.numericUpDownAPIPort.Value);
@@ -2178,15 +2179,15 @@ namespace GatelessGateSharp {
             }
         }
 
-        private IPAddressRange GetAdminIPAddressRange() {
+        public static IPAddressRange GetAdminIPAddressRange() {
             try {
                 string text = null;
-                if (textBoxAdminIPRange.InvokeRequired) {
-                    text = (string)textBoxAdminIPRange.Invoke(new NoArgReturningStringDelegate(() => {
-                        return textBoxAdminIPRange.Text;
+                if (Instance.textBoxAdminIPRange.InvokeRequired) {
+                    text = (string)Instance.textBoxAdminIPRange.Invoke(new NoArgReturningStringDelegate(() => {
+                        return Instance.textBoxAdminIPRange.Text;
                     }));
                 } else {
-                    text = textBoxAdminIPRange.Text;
+                    text = Instance.textBoxAdminIPRange.Text;
                 }
                 return IPAddressRange.Parse(text);
             } catch (Exception ex) {
@@ -2195,15 +2196,15 @@ namespace GatelessGateSharp {
             }
         }
 
-        private IPAddressRange GetAllowedIPAddressRange() {
+        public static IPAddressRange GetAllowedIPAddressRange() {
             try {
                 string text = null;
-                if (textBoxAllowedIPRange.InvokeRequired) {
-                    text = (string)textBoxAllowedIPRange.Invoke(new NoArgReturningStringDelegate(() => {
-                        return textBoxAllowedIPRange.Text;
+                if (Instance.textBoxAllowedIPRange.InvokeRequired) {
+                    text = (string)Instance.textBoxAllowedIPRange.Invoke(new NoArgReturningStringDelegate(() => {
+                        return Instance.textBoxAllowedIPRange.Text;
                     }));
                 } else {
-                    text = textBoxAllowedIPRange.Text;
+                    text = Instance.textBoxAllowedIPRange.Text;
                 }
                 return IPAddressRange.Parse(text);
             } catch (Exception ex) {
@@ -2212,15 +2213,15 @@ namespace GatelessGateSharp {
             }
         }
 
-        private IPAddressRange GetDeniedIPAddressRange() {
+        public static IPAddressRange GetDeniedIPAddressRange() {
             try {
                 string text = null;
-                if (textBoxDeniedIPRange.InvokeRequired) {
-                    text = (string)textBoxDeniedIPRange.Invoke(new NoArgReturningStringDelegate(() => {
-                        return textBoxDeniedIPRange.Text;
+                if (Instance.textBoxDeniedIPRange.InvokeRequired) {
+                    text = (string)Instance.textBoxDeniedIPRange.Invoke(new NoArgReturningStringDelegate(() => {
+                        return Instance.textBoxDeniedIPRange.Text;
                     }));
                 } else {
-                    text = textBoxDeniedIPRange.Text;
+                    text = Instance.textBoxDeniedIPRange.Text;
                 }
                 return IPAddressRange.Parse(text);
             } catch (Exception ex) {
@@ -2345,21 +2346,21 @@ namespace GatelessGateSharp {
             MSG_GPURAWINT = 143
         }
 
-        async void Task_APIListener(object cancellationToken) {
+        public static async void Task_APIListener(object cancellationToken) {
             TcpListener server = null;
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
 
             Logger("API Listener started.");
             Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
-                if (IsAPIEnabled()) {
+                if (MainForm.IsAPIEnabled()) {
                     try {
-                        int port = GetAPIPort();
+                        int port = MainForm.GetAPIPort();
+                        System.Diagnostics.Process.Start("netsh", "advfirewall firewall add rule name=\"Open Port " + port + "\" dir=in action=allow protocol=TCP localport=" + port);
+                        Thread.Sleep(1000);
                         server = new TcpListener(IPAddress.Any, port);
                         server.Start();
 
-                        Logger("API Listener started listening on port " + port + ".");
+                        Logger("Listening to API requests on port " + port + ".");
                         while (!((CancellationToken)cancellationToken).IsCancellationRequested && IsAPIEnabled()) {
                             var task = server.AcceptTcpClientAsync();
                             while (!task.IsCompleted && !((CancellationToken)cancellationToken).IsCancellationRequested && IsAPIEnabled())
@@ -2379,7 +2380,11 @@ namespace GatelessGateSharp {
                                 (admin != null)
                                 && admin.Contains(address)
                                 && accessAllowed;
-                            
+                            if (!accessAllowed) {
+                                client.Close();
+                                continue;
+                            }
+
                             var childSocketThread = new Thread(() => {
                                 try {
                                     Byte[] bytes = new Byte[1024];
@@ -2392,6 +2397,17 @@ namespace GatelessGateSharp {
                                             continue;
                                         }
                                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                                        Dictionary<string, object> message = null;
+                                        try {
+                                            message = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
+                                        } catch (Exception) { }
+                                        string command = null, param = null;
+                                        if (message != null) {
+                                            try {
+                                                command = (string)message["command"];
+                                                param = (string)message["param"];
+                                            } catch (Exception) { }
+                                        }
                                         var unixTimeNow = (ulong)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                                         //Logger("API listener received: " + data);
 
@@ -2403,7 +2419,7 @@ namespace GatelessGateSharp {
                                                             {"Code", 45 },
                                                             {"Msg", "Access denied" },
                                                             {"Description", appName } } } } });
-                                        } else if (data == "{\"command\":\"config\"}") {
+                                        } else if (command == "config") {
                                             data = JsonConvert.SerializeObject(new Dictionary<string, object> { {
                                                         "STATUS", new object[] { new Dictionary<string, object> {
                                                             {"STATUS", "S" },
@@ -2413,21 +2429,35 @@ namespace GatelessGateSharp {
                                                             {"Description", appName} } } }, {
                                                         "CONFIG", new object[] { new Dictionary<string, object> {
                                                             {"GPU Count", Controller.OpenCLDevices.Length},
-                                                            {"Pool Count", 2},
+                                                            {"Pool Count", ((Controller.PrimaryStratum != null) ? 1 : 0)},
                                                             {"ADL", "Y"},
-                                                            {"ADL in use", "Y"},
-                                                            {"Strategy", "Load Balance"},
-                                                            {"Rotate Period", 0},
-                                                            {"Log Interval", 5},
-                                                            {"Device Code", "GPU "},
+                                                            {"ADL in use", (MainForm.ADLInitialized ? "Y" : "N")},
+                                                            //{"Strategy", "Load Balance"},
+                                                            //{"Rotate Period", 0},
+                                                            //{"Log Interval", 5},
+                                                            {"Device Code", "GPU"},
                                                             {"OS", "Windows"},
-                                                            {"Failover-Only", false},
-                                                            {"Failover Switch Delay", 60},
-                                                            {"ScanTime", 7},
-                                                            {"Queue", 1},
-                                                            {"Expiry", 28} } } }, {
+                                                            //{"Failover-Only", false},
+                                                            //{"Failover Switch Delay", 60},
+                                                            //{"ScanTime", 7},
+                                                            //{"Queue", 1},
+                                                            //{"Expiry", 28}
+                                                            } } }, {
                                                         "id", 1 } });
-                                        } else if (data == "{\"command\":\"summary\"}") {
+                                        } else if (command == "summary") {
+                                            double speed = 0;
+                                            int acceptedShares = 0;
+                                            int rejectedShares = 0;
+                                            double totalHashes = 0;
+                                            try {
+                                                foreach (var miner in Controller.Miners)
+                                                    speed += miner.Speed;
+                                                foreach (var device in Controller.OpenCLDevices) {
+                                                    acceptedShares += device.AcceptedShares;
+                                                    rejectedShares += device.RejectedShares;
+                                                    totalHashes += device.TotalHashesPrimaryAlgorithm;
+                                                }
+                                            } catch (Exception) { }
                                             data = JsonConvert.SerializeObject(new Dictionary<string, object> { {
                                                         "STATUS", new object[] { new Dictionary<string, object> {
                                                             {"STATUS", "S" },
@@ -2436,15 +2466,18 @@ namespace GatelessGateSharp {
                                                             {"Msg", "Summary" },
                                                             {"Description", appName } } } }, {
                                                         "SUMMARY", new object[] { new Dictionary<string, object> {
-                                                            { "Elapsed", (ulong)sw.Elapsed.TotalSeconds },
-                                                            { "MHS av", 0.001134 },
-                                                            { "MHS 5s", 0.001133 },
-                                                            { "KHS av", 1.134 },
-                                                            { "KHS 5s", 1.133 },
-                                                            { "Found Blocks", 0 },
-                                                            { "Getworks", 5 },
-                                                            { "Accepted", 5 },
-                                                            { "Rejected", 0 },
+                                                            { "Elapsed", (ulong)Controller.StopWatch.Elapsed.TotalSeconds },
+                                                            { "MHS av", totalHashes / Controller.StopWatch.Elapsed.TotalSeconds / 1000000.0 },
+                                                            { "MHS 5s", speed / 1000000.0 },
+                                                            { "KHS av", totalHashes / Controller.StopWatch.Elapsed.TotalSeconds / 1000.0 },
+                                                            { "KHS 5s", speed / 1000.0 },
+                                                            { "Accepted", acceptedShares },
+                                                            { "Rejected", rejectedShares },
+                                                            { "Total MH", totalHashes },
+                                                            { "Pool Rejected%", (acceptedShares + rejectedShares == 0) ? 0.0 : rejectedShares / (acceptedShares + rejectedShares) * 100.0 },
+                                                            //{ "Found Blocks", 0 },
+                                                            //{ "Getworks", 5 },
+                                                            /*
                                                             { "Hardware Errors", 0 },
                                                             { "Utility", 2.496 },
                                                             { "Discarded", 108 },
@@ -2453,7 +2486,6 @@ namespace GatelessGateSharp {
                                                             { "Local Work", 295 },
                                                             { "Remote Failures", 0 },
                                                             { "Network Blocks", 1 },
-                                                            { "Total MH", 0.1363 },
                                                             { "Work Utility", 2.496 },
                                                             { "Difficulty Accepted", 5.00000000 },
                                                             { "Difficulty Rejected", 0.00000000 },
@@ -2461,12 +2493,62 @@ namespace GatelessGateSharp {
                                                             { "Best Share", 2960.443637 },
                                                             { "Device Hardware%", 0.0000 },
                                                             { "Device Rejected%", 0.0000 },
-                                                            { "Pool Rejected%", 0.0000 },
                                                             { "Pool Stale%", 0.0000 },
                                                             { "Last getwork", unixTimeNow }
+                                                            */
                                                         } } }, {
-                                                        "id", 1 } } );
-                                        } else if (data == "{\"command\":\"devs\"}") {
+                                                        "id", 1 } });
+                                        } else if (command == "devs") {
+                                            object[] devices = new object[Controller.OpenCLDevices.Length];
+                                            foreach (var device in Controller.OpenCLDevices) {
+                                                double speed = 0, averageSpeed =  0;
+                                                try {
+                                                    foreach (var miner in Controller.Miners)
+                                                        if (miner.DeviceIndex == device.DeviceIndex)
+                                                            speed += miner.Speed;
+                                                    averageSpeed = device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
+                                                } catch (Exception) { }
+                                                devices[device.DeviceIndex] = new Dictionary<string, object> {
+                                                    { "GPU", device.DeviceIndex },
+                                                    { "Enabled", "Y" },
+                                                    { "Status", "Alive" },
+                                                    { "Temperature", device.Temperature },
+                                                    { "Fan Percent", device.FanSpeed },
+                                                    { "GPU Clock", device.CoreClock },
+                                                    { "Memory Clock", device.MemoryClock },
+                                                    { "GPU Voltage", device.CoreVoltage },
+                                                    { "GPU Activity", device.Activity },
+                                                    { "MHS av", averageSpeed / 1000000.0 },
+                                                    { "MHS 5s", speed / 1000000.0 },
+                                                    { "KHS av", averageSpeed / 1000.0 },
+                                                    { "KHS 5s", speed / 1000.0 },
+                                                    { "Accepted", device.AcceptedShares },
+                                                    { "Rejected", device.RejectedShares },
+                                                    { "Total MH", device.TotalHashesPrimaryAlgorithm },
+                                                    { "Device Rejected%", (device.AcceptedShares + device.RejectedShares == 0) ? 0.0 : device.RejectedShares / (device.AcceptedShares + device.RejectedShares) * 100.0},
+                                                    { "Device Elapsed", (ulong)Controller.StopWatch.Elapsed.TotalSeconds }
+                                                    /*
+                                                    { "Fan Speed", 862 },
+                                                    { "Powertune", 74.00 },
+                                                    { "Hardware Errors", 0 },
+                                                    { "Utility", 2.496 },
+
+                                                    { "Intensity", "8" },
+                                                    { "XIntensity", 0 },
+                                                    { "RawIntensity", 0 },
+
+                                                    { "Last Share Pool", 0 },
+                                                    { "Last Share Time", unixTimeNow },
+                                                    
+                                                    { "Diff1 Work", 7.000000},
+                                                    { "Difficulty Accepted", 7.00000000},
+                                                    { "Difficulty Rejected", 0.00000000},
+                                                    { "Last Share Difficulty", 1.00000000},
+                                                    { "Last Valid Work", 1517380047},
+                                                    { "Device Hardware%", 0.0000},
+                                                    */
+                                                };
+                                            }
                                             data = JsonConvert.SerializeObject(new Dictionary<string, object> { {
                                                         "STATUS", new object[] { new Dictionary<string, object> {
                                                             {"STATUS", "S" },
@@ -2474,121 +2556,7 @@ namespace GatelessGateSharp {
                                                             {"Code", 9 },
                                                             {"Msg", Controller.OpenCLDevices.Length + " GPU(s)" },
                                                             {"Description", appName } } } }, {
-                                                        "DEVS", new object[] { new Dictionary<string, object> {
-                                                            { "GPU", 0 },
-                                                            { "Enabled", "Y" },
-                                                            { "Status", "Alive" },
-                                                            { "Temperature", 74.00 },
-                                                            { "Fan Speed", 862 },
-                                                            { "Fan Percent", 25 },
-                                                            { "GPU Clock", 1163 },
-                                                            { "Memory Clock", 2000 },
-                                                            { "GPU Voltage", 0.001 },
-                                                            { "GPU Activity", 74.00 },
-                                                            { "Powertune", 74.00 },
-                                                            { "MHS av", 0.001134 },
-                                                            { "MHS 5s", 0.001133 },
-                                                            { "KHS av", 1.134 },
-                                                            { "KHS 5s", 1.133 },
-                                                            { "Accepted", 5 },
-                                                            { "Rejected", 0 },
-                                                            { "Hardware Errors", 0 },
-                                                            { "Utility", 2.496 },
-
-                                                            { "Intensity", "8" },
-                                                            { "XIntensity", 0 },
-                                                            { "RawIntensity", 0 },
-
-                                                            { "Last Share Pool", 0 },
-                                                            { "Last Share Time", unixTimeNow },
-
-                                                            { "Total MH", 0.1309 },
-
-                                                            { "Diff1 Work", 7.000000},
-                                                            { "Difficulty Accepted", 7.00000000},
-                                                            { "Difficulty Rejected", 0.00000000},
-                                                            { "Last Share Difficulty", 1.00000000},
-                                                            { "Last Valid Work", 1517380047},
-                                                            { "Device Hardware%", 0.0000},
-                                                            { "Device Rejected%", 0.0000},
-                                                            { "Device Elapsed", (ulong)sw.Elapsed.TotalSeconds }
-                                                        }, new Dictionary<string, object> {
-                                                            { "GPU", 1 },
-                                                            { "Enabled", "Y" },
-                                                            { "Status", "Alive" },
-                                                            { "Temperature", 74.00 },
-                                                            { "Fan Speed", 862 },
-                                                            { "Fan Percent", 25 },
-                                                            { "GPU Clock", 1163 },
-                                                            { "Memory Clock", 2000 },
-                                                            { "GPU Voltage", 0.001 },
-                                                            { "GPU Activity", 74.00 },
-                                                            { "Powertune", 74.00 },
-                                                            { "MHS av", 0.001134 },
-                                                            { "MHS 5s", 0.001133 },
-                                                            { "KHS av", 1.134 },
-                                                            { "KHS 5s", 1.133 },
-                                                            { "Accepted", 5 },
-                                                            { "Rejected", 0 },
-                                                            { "Hardware Errors", 0 },
-                                                            { "Utility", 2.496 },
-
-                                                            { "Intensity", "8" },
-                                                            { "XIntensity", 0 },
-                                                            { "RawIntensity", 0 },
-
-                                                            { "Last Share Pool", 0 },
-                                                            { "Last Share Time", unixTimeNow },
-
-                                                            { "Total MH", 0.1309 },
-
-                                                            { "Diff1 Work", 7.000000},
-                                                            { "Difficulty Accepted", 7.00000000},
-                                                            { "Difficulty Rejected", 0.00000000},
-                                                            { "Last Share Difficulty", 1.00000000},
-                                                            { "Last Valid Work", 1517380047},
-                                                            { "Device Hardware%", 0.0000},
-                                                            { "Device Rejected%", 0.0000},
-                                                            { "Device Elapsed", (ulong)sw.Elapsed.TotalSeconds }
-                                                        }, new Dictionary<string, object> {
-                                                            { "GPU", 2 },
-                                                            { "Enabled", "Y" },
-                                                            { "Status", "Alive" },
-                                                            { "Temperature", 74.00 },
-                                                            { "Fan Speed", 862 },
-                                                            { "Fan Percent", 25 },
-                                                            { "GPU Clock", 1163 },
-                                                            { "Memory Clock", 2000 },
-                                                            { "GPU Voltage", 0.001 },
-                                                            { "GPU Activity", 74.00 },
-                                                            { "Powertune", 74.00 },
-                                                            { "MHS av", 0.001134 },
-                                                            { "MHS 5s", 0.001133 },
-                                                            { "KHS av", 1.134 },
-                                                            { "KHS 5s", 1.133 },
-                                                            { "Accepted", 5 },
-                                                            { "Rejected", 0 },
-                                                            { "Hardware Errors", 0 },
-                                                            { "Utility", 2.496 },
-
-                                                            { "Intensity", "8" },
-                                                            { "XIntensity", 0 },
-                                                            { "RawIntensity", 0 },
-
-                                                            { "Last Share Pool", 0 },
-                                                            { "Last Share Time", unixTimeNow },
-
-                                                            { "Total MH", 0.1309 },
-
-                                                            { "Diff1 Work", 7.000000},
-                                                            { "Difficulty Accepted", 7.00000000},
-                                                            { "Difficulty Rejected", 0.00000000},
-                                                            { "Last Share Difficulty", 1.00000000},
-                                                            { "Last Valid Work", unixTimeNow },
-                                                            { "Device Hardware%", 0.0000},
-                                                            { "Device Rejected%", 0.0000},
-                                                            { "Device Elapsed", (ulong)sw.Elapsed.TotalSeconds }
-                                                        } } }, {
+                                                        "DEVS", devices }, {
                                                         "id", 1 } } );
                                         } else if (data == "{\"command\":\"pools\"}") {
                                             data = JsonConvert.SerializeObject(new Dictionary<string, object> { {
@@ -2596,13 +2564,47 @@ namespace GatelessGateSharp {
                                                             {"STATUS", "S" },
                                                             {"When", unixTimeNow },
                                                             {"Code", 7 },
-                                                            {"Msg", 2 + " Pool(s)" },
+                                                            {"Msg", ((Controller.PrimaryStratum != null) ? 1 : 0) + " Pool(s)" },
                                                             {"Description", appName } } } }, {
-                                                        "POOLS", new object[] {
-                                                            new Dictionary<string, object> {
-                                                                {"POOL", 0}, {"Name", "MAIN"}, {"URL", "stratum+tcp://us1-zcash.flypool.org:3333"}, {"Profile", ""}, {"Algorithm", "equihash"}, {"Description", ""}, {"Status", "Alive"}, {"Priority", 0}, {"Quota", 99}, {"Long Poll", "N"}, {"Getworks", 1}, {"Accepted", 2}, {"Rejected", 0}, {"Works", 86}, {"Discarded", 84}, {"Stale", 0}, {"Get Failures", 0}, {"Remote Failures", 0}, {"User", "t1NwUDeSKu4BxkD58mtEYKDjzw5toiLfmCu"}, {"Last Share Time", unixTimeNow}, {"Diff1 Shares", 2.000000}, {"Proxy Type", ""}, {"Proxy", ""}, {"Difficulty Accepted", 2.00000000}, {"Difficulty Rejected", 0.00000000}, {"Difficulty Stale", 0.00000000}, {"Last Share Difficulty", 1.00000000}, {"Has Stratum", true}, {"Stratum Active", true}, {"Stratum URL", "us1-zcash.flypool.org"}, {"Has GBT", false}, {"Best Share", 1298.459805}, {"Pool Rejected%", 0.0000}, {"Pool Stale%", 0.0000},
-                                                        }, new Dictionary<string, object> {
-                                                            {"POOL", 1}, {"Name", "SUB"}, {"URL", "stratum+tcp://us1-zcash.flypool.org:3333"}, {"Profile", ""}, {"Algorithm", "equihash"}, {"Description", ""}, {"Status", "Alive"}, {"Priority", 0}, {"Quota", 99}, {"Long Poll", "N"}, {"Getworks", 1}, {"Accepted", 2}, {"Rejected", 0}, {"Works", 86}, {"Discarded", 84}, {"Stale", 0}, {"Get Failures", 0}, {"Remote Failures", 0}, {"User", "t1NwUDeSKu4BxkD58mtEYKDjzw5toiLfmCu"}, {"Last Share Time", unixTimeNow}, {"Diff1 Shares", 2.000000}, {"Proxy Type", ""}, {"Proxy", ""}, {"Difficulty Accepted", 2.00000000}, {"Difficulty Rejected", 0.00000000}, {"Difficulty Stale", 0.00000000}, {"Last Share Difficulty", 1.00000000}, {"Has Stratum", true}, {"Stratum Active", true}, {"Stratum URL", "us1-zcash.flypool.org"}, {"Has GBT", false}, {"Best Share", 1298.459805}, {"Pool Rejected%", 0.0000}, {"Pool Stale%", 0.0000},
+                                                        "POOLS", (Controller.PrimaryStratum == null)
+                                                            ? null
+                                                            : new object[] { new Dictionary<string, object> {
+                                                                {"POOL", 0},
+                                                                { "Name", Controller.PrimaryStratum.ServerAddress },
+                                                                { "URL", "stratum+tcp://" + Controller.PrimaryStratum.ServerAddress + ":" + Controller.PrimaryStratum.ServerPort },
+                                                                { "Profile", ""},
+                                                                { "Algorithm", Controller.PrimaryStratum.AlgorithmName },
+                                                                { "Description", Controller.PrimaryStratum.PoolName },
+                                                                { "Status", "Alive"},
+                                                                /*
+                                                                 * { "Priority", 0},
+                                                                { "Quota", 99},
+                                                                { "Long Poll", "N"},
+                                                                { "Getworks", 1},
+                                                                { "Accepted", 2},
+                                                                { "Rejected", 0},
+                                                                { "Works", 86},
+                                                                { "Discarded", 84},
+                                                                { "Stale", 0},
+                                                                { "Get Failures", 0},
+                                                                { "Remote Failures", 0},
+                                                                { "User", "t1NwUDeSKu4BxkD58mtEYKDjzw5toiLfmCu"},
+                                                                { "Last Share Time", unixTimeNow},
+                                                                { "Diff1 Shares", 2.000000},
+                                                                { "Proxy Type", ""},
+                                                                { "Proxy", ""},
+                                                                { "Difficulty Accepted", 2.00000000},
+                                                                { "Difficulty Rejected", 0.00000000},
+                                                                { "Difficulty Stale", 0.00000000},
+                                                                { "Last Share Difficulty", 1.00000000},
+                                                                { "Has Stratum", true},
+                                                                { "Stratum Active", true},
+                                                                { "Stratum URL", "us1-zcash.flypool.org"},
+                                                                { "Has GBT", false},
+                                                                { "Best Share", 1298.459805},
+                                                                { "Pool Rejected%", 0.0000},
+                                                                { "Pool Stale%", 0.0000},
+                                                                */
                                                         } } }, {
                                                         "id", 1 } });
                                         } else if (data == "{\"command\":\"coin\"}") {
@@ -2614,10 +2616,37 @@ namespace GatelessGateSharp {
                                                             {"Msg", "sgminer coin" },
                                                             {"Description", appName } } } }, {
                                                         "COIN", new object[] { new Dictionary<string, object> {
-                                                            {"Hash Method", "equihash"}, {"Current Block Time", 1517385796.332927}, {"Current Block Hash", "0000000000000000000000000000000000000000000000000000000000000000"}, {"LP", true}, {"Network Difficulty", 0.00000000},
+                                                            { "Hash Method", (Controller.PrimaryStratum == null) ? "" : Controller.PrimaryStratum.AlgorithmName },
+                                                            //{ "Current Block Time", 1517385796.332927},
+                                                            //{ "Current Block Hash", "0000000000000000000000000000000000000000000000000000000000000000"},
+                                                            //{ "LP", true},
+                                                            //{ "Network Difficulty", 0.00000000},
                                                         } } }, {
                                                         "id", 1 } });
                                         } else if (data == "{\"command\":\"notify\"}") {
+                                            object[] devices = new object[Controller.OpenCLDevices.Length];
+                                            foreach (var device in Controller.OpenCLDevices) {
+                                                devices[device.DeviceIndex] = new Dictionary<string, object> {
+                                                            { "NOTIFY", device.DeviceIndex},
+                                                            { "Name", device.GetVendor() + " " + device.GetName() },
+                                                            { "ID", device.DeviceIndex },
+                                                            /*
+                                                            { "Last Well", unixTimeNow},
+                                                            { "Last Not Well", 0},
+                                                            { "Reason Not Well", "None"},
+                                                            { "*Thread Fail Init", 0},
+                                                            { "*Thread Zero Hash", 0},
+                                                            { "*Thread Fail Queue", 0},
+                                                            { "*Dev Sick Idle 60s", 0},
+                                                            { "*Dev Dead Idle 600s", 0},
+                                                            { "*Dev Nostart", 0},
+                                                            { "*Dev Over Heat", 0},
+                                                            { "*Dev Thermal Cutoff", 0},
+                                                            { "*Dev Comms Error", 0},
+                                                            { "*Dev Throttle", 0},
+                                                            */
+                                                };
+                                            }
                                             data = JsonConvert.SerializeObject(new Dictionary<string, object> { {
                                                         "STATUS", new object[] { new Dictionary<string, object> {
                                                             {"STATUS", "S" },
@@ -2625,13 +2654,7 @@ namespace GatelessGateSharp {
                                                             {"Code", 60 },
                                                             {"Msg", "Notify" },
                                                             {"Description", appName } } } }, {
-                                                        "NOTIFY", new object[] { new Dictionary<string, object> {
-                                                            {"NOTIFY", 0}, {"Name", "GPU"}, {"ID", 0}, {"Last Well", unixTimeNow}, {"Last Not Well", 0}, {"Reason Not Well", "None"}, {"*Thread Fail Init", 0}, {"*Thread Zero Hash", 0}, {"*Thread Fail Queue", 0}, {"*Dev Sick Idle 60s", 0}, {"*Dev Dead Idle 600s", 0}, {"*Dev Nostart", 0}, {"*Dev Over Heat", 0}, {"*Dev Thermal Cutoff", 0}, {"*Dev Comms Error", 0}, {"*Dev Throttle", 0},
-                                                        }, new Dictionary<string, object> {
-                                                            {"NOTIFY", 1}, {"Name", "GPU"}, {"ID", 1}, {"Last Well", unixTimeNow}, {"Last Not Well", 0}, {"Reason Not Well", "None"}, {"*Thread Fail Init", 0}, {"*Thread Zero Hash", 0}, {"*Thread Fail Queue", 0}, {"*Dev Sick Idle 60s", 0}, {"*Dev Dead Idle 600s", 0}, {"*Dev Nostart", 0}, {"*Dev Over Heat", 0}, {"*Dev Thermal Cutoff", 0}, {"*Dev Comms Error", 0}, {"*Dev Throttle", 0},
-                                                        }, new Dictionary<string, object> {
-                                                            {"NOTIFY", 2}, {"Name", "GPU"}, {"ID", 2}, {"Last Well", unixTimeNow}, {"Last Not Well", 0}, {"Reason Not Well", "None"}, {"*Thread Fail Init", 0}, {"*Thread Zero Hash", 0}, {"*Thread Fail Queue", 0}, {"*Dev Sick Idle 60s", 0}, {"*Dev Dead Idle 600s", 0}, {"*Dev Nostart", 0}, {"*Dev Over Heat", 0}, {"*Dev Thermal Cutoff", 0}, {"*Dev Comms Error", 0}, {"*Dev Throttle", 0}
-                                                        } } }, {
+                                                        "NOTIFY", devices }, {
                                                         "id", 1 } });
                                         } else if (data == "{\"command\":\"stats\"}") {
                                             data = JsonConvert.SerializeObject(new Dictionary<string, object> { {
@@ -2641,13 +2664,14 @@ namespace GatelessGateSharp {
                                                             {"Code", 70 },
                                                             {"Msg", "sgminer stats" },
                                                             {"Description", appName } } } }, {
-                                                        "NOTIFY", new object[] {
-                                                            new Dictionary<string, object> { {"STATS", 0}, {"ID", "GPU0"}, {"Elapsed", (ulong)sw.Elapsed.TotalSeconds }, {"Calls", 954763}, {"Wait", 34.141733}, {"Max", 5.000288}, {"Min", 0.000000}, },
-                                                            new Dictionary<string, object> { {"STATS", 1}, {"ID", "GPU1"}, {"Elapsed", (ulong)sw.Elapsed.TotalSeconds }, {"Calls", 913823}, {"Wait", 33.403002}, {"Max", 4.994387}, {"Min", 0.000000}, },
-                                                            new Dictionary<string, object> { {"STATS", 2}, {"ID", "GPU2"}, {"Elapsed", (ulong)sw.Elapsed.TotalSeconds }, {"Calls", 1185434}, {"Wait", 34.380935}, {"Max", 4.998388}, {"Min", 0.000000}, },
-                                                            new Dictionary<string, object> { {"STATS", 3}, {"ID", "POOL0"}, {"Elapsed", (ulong)sw.Elapsed.TotalSeconds }, {"Calls", 3031862}, {"Wait", 96.887867}, {"Max", 5.000288}, {"Min", 0.000000}, {"Pool Calls", 0}, {"Pool Attempts", 0}, {"Pool Wait", 0.000000}, {"Pool Max", 0.000000}, {"Pool Min", 99999999.000000}, {"Pool Av", 0.000000}, {"Work Had Roll Time", false}, {"Work Can Roll", false}, {"Work Had Expire", false}, {"Work Roll Time", 0}, {"Work Diff", 1.00000000}, {"Min Diff", 1.00000000}, {"Max Diff", 1.00000000}, {"Min Diff Count", 13870}, {"Max Diff Count", 13870}, {"Times Sent", 358}, {"Bytes Sent", 1009486}, {"Times Recv", 442}, {"Bytes Recv", 34063}, {"Net Bytes Sent", 1009486}, {"Net Bytes Recv", 34063}, },
-                                                            new Dictionary<string, object> { {"STATS", 4}, {"ID", "POOL1"}, {"Elapsed", (ulong)sw.Elapsed.TotalSeconds }, {"Calls", 22151}, {"Wait", 5.037803}, {"Max", 4.992286}, {"Min", 0.000000}, {"Pool Calls", 0}, {"Pool Attempts", 0}, {"Pool Wait", 0.000000}, {"Pool Max", 0.000000}, {"Pool Min", 99999999.000000}, {"Pool Av", 0.000000}, {"Work Had Roll Time", false}, {"Work Can Roll", false}, {"Work Had Expire", false}, {"Work Roll Time", 0}, {"Work Diff", 1.00000000}, {"Min Diff", 1.00000000}, {"Max Diff", 1.00000000}, {"Min Diff Count", 192}, {"Max Diff Count", 192}, {"Times Sent", 91}, {"Bytes Sent", 18166}, {"Times Recv", 255}, {"Bytes Recv", 46804}, {"Net Bytes Sent", 18166}, {"Net Bytes Recv", 46804 } },
-                                                        } }, {
+                                                        "NOTIFY", null
+                                                        /*new object[] {
+                                                            new Dictionary<string, object> { {"STATS", 0}, {"ID", "GPU0"}, {"Elapsed", (ulong)Controller.StopWatch.Elapsed.TotalSeconds }, {"Calls", 954763}, {"Wait", 34.141733}, {"Max", 5.000288}, {"Min", 0.000000}, },
+                                                            new Dictionary<string, object> { {"STATS", 1}, {"ID", "GPU1"}, {"Elapsed", (ulong)Controller.StopWatch.Elapsed.TotalSeconds }, {"Calls", 913823}, {"Wait", 33.403002}, {"Max", 4.994387}, {"Min", 0.000000}, },
+                                                            new Dictionary<string, object> { {"STATS", 2}, {"ID", "GPU2"}, {"Elapsed", (ulong)Controller.StopWatch.Elapsed.TotalSeconds }, {"Calls", 1185434}, {"Wait", 34.380935}, {"Max", 4.998388}, {"Min", 0.000000}, },
+                                                            new Dictionary<string, object> { {"STATS", 3}, {"ID", "POOL0"}, {"Elapsed", (ulong)Controller.StopWatch.Elapsed.TotalSeconds }, {"Calls", 3031862}, {"Wait", 96.887867}, {"Max", 5.000288}, {"Min", 0.000000}, {"Pool Calls", 0}, {"Pool Attempts", 0}, {"Pool Wait", 0.000000}, {"Pool Max", 0.000000}, {"Pool Min", 99999999.000000}, {"Pool Av", 0.000000}, {"Work Had Roll Time", false}, {"Work Can Roll", false}, {"Work Had Expire", false}, {"Work Roll Time", 0}, {"Work Diff", 1.00000000}, {"Min Diff", 1.00000000}, {"Max Diff", 1.00000000}, {"Min Diff Count", 13870}, {"Max Diff Count", 13870}, {"Times Sent", 358}, {"Bytes Sent", 1009486}, {"Times Recv", 442}, {"Bytes Recv", 34063}, {"Net Bytes Sent", 1009486}, {"Net Bytes Recv", 34063}, },
+                                                            new Dictionary<string, object> { {"STATS", 4}, {"ID", "POOL1"}, {"Elapsed", (ulong)Controller.StopWatch.Elapsed.TotalSeconds }, {"Calls", 22151}, {"Wait", 5.037803}, {"Max", 4.992286}, {"Min", 0.000000}, {"Pool Calls", 0}, {"Pool Attempts", 0}, {"Pool Wait", 0.000000}, {"Pool Max", 0.000000}, {"Pool Min", 99999999.000000}, {"Pool Av", 0.000000}, {"Work Had Roll Time", false}, {"Work Can Roll", false}, {"Work Had Expire", false}, {"Work Roll Time", 0}, {"Work Diff", 1.00000000}, {"Min Diff", 1.00000000}, {"Max Diff", 1.00000000}, {"Min Diff Count", 192}, {"Max Diff Count", 192}, {"Times Sent", 91}, {"Bytes Sent", 18166}, {"Times Recv", 255}, {"Bytes Recv", 46804}, {"Net Bytes Sent", 18166}, {"Net Bytes Recv", 46804 } },
+                                                        }*/ }, {
                                                         "id", 1 } });
                                         } else if (data == "{\"command\":\"privileged\"}") {
                                             data = JsonConvert.SerializeObject(new Dictionary<string, object> { {
@@ -4078,7 +4102,8 @@ namespace GatelessGateSharp {
         {
             try {
                 Logger("Stopping miners...");
-                Controller.AppState = Controller.ApplicationGlobalState.Mining;
+                Controller.AppState = Controller.ApplicationGlobalState.Switching;
+                Controller.StopWatch.Stop();
                 timerWatchdog.Enabled = false;
                 if (mDevFeeMode)
                     SetDevFeeMode(false);
@@ -4154,9 +4179,6 @@ namespace GatelessGateSharp {
                 if (checkBoxEnablePhymem.Checked && !PCIExpress.Available && !PCIExpress.LoadPhyMem())
                     MessageBox.Show(Utilities.GetAutoClosingForm(10), "Failed to load phymem.", appName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
-                foreach (var device in Controller.OpenCLDevices)
-                    device.ClearShares();
-
                 Controller.PrimaryStratum = null;
                 Controller.SecondaryStratum = null;
                 Controller.Miners.Clear();
@@ -4186,7 +4208,7 @@ namespace GatelessGateSharp {
                 } else {
                     timerDevFee.Interval = Parameters.DevFeeInitialDelayInSeconds * 1000;
                     timerDevFee.Enabled = true;
-                    mStartTime = DateTime.Now;
+                    Controller.StopWatch.Start();
                     mDevFeeModeStartTime = DateTime.Now;
                     timerWatchdog.Enabled = true;
                     Controller.AppState = Controller.ApplicationGlobalState.Mining;
@@ -4242,11 +4264,16 @@ namespace GatelessGateSharp {
         }
 
         private void UpdateControls() {
-            if (Controller.AppState == Controller.ApplicationGlobalState.Switching)
-                return;
-
             try {
-                buttonStart.Text = Controller.AppState == Controller.ApplicationGlobalState.Mining ? "Stop" : "Start";
+                tabControlMainForm.Enabled = buttonStart.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching);
+
+                buttonBoostPerformance.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                buttonRestoreStockSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+
+                buttonStart.Text
+                    = Controller.StopWatch.Elapsed.TotalSeconds == 0                  ? "Start" :
+                      Controller.AppState == Controller.ApplicationGlobalState.Mining ? "Pause" :
+                                                                                        "Resume";
                 buttonReleaseMemory.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
                 buttonRelaunch.Enabled = true;
 
@@ -4267,35 +4294,47 @@ namespace GatelessGateSharp {
                 textBoxCustomPool2Host.Enabled = textBoxCustomPool2Login.Enabled = textBoxCustomPool2Password.Enabled = comboBoxCustomPool2Algorithm.Enabled = comboBoxCustomPool2SecondaryAlgorithm.Enabled = numericUpDownCustomPool2Port.Enabled = checkBoxCustomPool2Enable.Checked;
                 textBoxCustomPool3Host.Enabled = textBoxCustomPool3Login.Enabled = textBoxCustomPool3Password.Enabled = comboBoxCustomPool3Algorithm.Enabled = comboBoxCustomPool3SecondaryAlgorithm.Enabled = numericUpDownCustomPool3Port.Enabled = checkBoxCustomPool3Enable.Checked;
 
-                if ((string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] != "Ethash" && (string)comboBoxCustomPool0Algorithm.Items[comboBoxCustomPool0Algorithm.SelectedIndex] != "Ethash (NiceHash)") comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] != "Ethash" && (string)comboBoxCustomPool1Algorithm.Items[comboBoxCustomPool1Algorithm.SelectedIndex] != "Ethash (NiceHash)") comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] != "Ethash" && (string)comboBoxCustomPool2Algorithm.Items[comboBoxCustomPool2Algorithm.SelectedIndex] != "Ethash (NiceHash)") comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
-                if ((string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex] != "Ethash" && (string)comboBoxCustomPool3Algorithm.Items[comboBoxCustomPool3Algorithm.SelectedIndex] != "Ethash (NiceHash)") comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool0Algorithm.SelectedItem != "Ethash" && (string)comboBoxCustomPool0Algorithm.SelectedItem != "Ethash (NiceHash)") comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool1Algorithm.SelectedItem != "Ethash" && (string)comboBoxCustomPool1Algorithm.SelectedItem != "Ethash (NiceHash)") comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool2Algorithm.SelectedItem != "Ethash" && (string)comboBoxCustomPool2Algorithm.SelectedItem != "Ethash (NiceHash)") comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex = 0;
+                if ((string)comboBoxCustomPool3Algorithm.SelectedItem != "Ethash" && (string)comboBoxCustomPool3Algorithm.SelectedItem != "Ethash (NiceHash)") comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex = 0;
 
                 textBoxCustomPool0SecondaryHost.Enabled = textBoxCustomPool0SecondaryLogin.Enabled = textBoxCustomPool0SecondaryPassword.Enabled = numericUpDownCustomPool0SecondaryPort.Enabled = checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0;
                 textBoxCustomPool1SecondaryHost.Enabled = textBoxCustomPool1SecondaryLogin.Enabled = textBoxCustomPool1SecondaryPassword.Enabled = numericUpDownCustomPool1SecondaryPort.Enabled = checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0;
                 textBoxCustomPool2SecondaryHost.Enabled = textBoxCustomPool2SecondaryLogin.Enabled = textBoxCustomPool2SecondaryPassword.Enabled = numericUpDownCustomPool2SecondaryPort.Enabled = checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0;
                 textBoxCustomPool3SecondaryHost.Enabled = textBoxCustomPool3SecondaryLogin.Enabled = textBoxCustomPool3SecondaryPassword.Enabled = numericUpDownCustomPool3SecondaryPort.Enabled = checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0;
 
-                tabControlMainForm.Enabled = buttonStart.Enabled = true;
+                tabControlDeviceSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                buttonResetAllSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                buttonResetOverclockingSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                buttonResetFanControlSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                buttonResetAlgorithmSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
 
-                foreach (var device in Controller.OpenCLDevices) {
-                    checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
-                    numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                    numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                if (Controller.OpenCLDevices != null) {
+                    foreach (var device in Controller.OpenCLDevices) {
+                        checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
+                        numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                        numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                        numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                        numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
 
-                    foreach (var algorithm in sAlgorithmList) {
-                        var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
-                        numericUpDownDeviceOverclockingPowerLimitArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).PowerLimit >= 0;
-                        numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).CoreClock >= 0;
-                        numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).MemoryClock >= 0;
-                        numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).CoreVoltage >= 0;
-                        numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).DefaultMemoryVoltage >= 0;
+                        foreach (var algorithm in sAlgorithmList) {
+                            var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                            numericUpDownDeviceOverclockingPowerLimitArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).PowerLimit >= 0;
+                            numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).CoreClock >= 0;
+                            numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).MemoryClock >= 0;
+                            numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).CoreVoltage >= 0;
+                            numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).DefaultMemoryVoltage >= 0;
+                        }
                     }
                 }
 
+                numericUpDownAPIPort.Enabled = !checkBoxAPIEnabled.Checked;
+                groupBoxAPIIPRange.Enabled = !checkBoxAPIEnabled.Checked;
+
+                groupBoxOpenCLBinaries.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+
+                groupBoxUserSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
                 buttonRestoreSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
                 buttonDeleteSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
                 buttonDeleteAllSettingsBackups.Enabled = listBoxSettingBackups.Items.Count > 0;
@@ -4312,10 +4351,6 @@ namespace GatelessGateSharp {
                 cartesianChartShare1Hour.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Hour");
                 cartesianChartShare1Day.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Day");
                 cartesianChartShare1Month.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Month");
-
-                numericUpDownAPIPort.Enabled = checkBoxAPIEnabled.Checked;
-                checkBoxAPIMulticast.Enabled = checkBoxAPIEnabled.Checked;
-                groupBoxAPIIPRange.Enabled = checkBoxAPIEnabled.Checked;
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
             }

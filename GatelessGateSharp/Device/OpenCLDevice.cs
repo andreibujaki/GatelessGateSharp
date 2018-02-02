@@ -94,6 +94,10 @@ namespace GatelessGateSharp
                     else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 3584 / 64) { mName = "Radeon R9 Fury"; } 
                     else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 4096 / 64 && DefaultCoreClock == 1000) { mName = "Radeon R9 Nano"; } 
                     else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 4096 / 64) { mName = "Radeon R9 Fury X"; }
+
+                    else if (mName == "Radeon RX Vega" && mComputeDevice.MaxComputeUnits == 56) { mName = "Radeon RX Vega 56"; }
+                    else if (mName == "Radeon RX Vega" && mComputeDevice.MaxComputeUnits == 64 && GetMemorySize() == 16L * 1024 * 1024 * 1024) { mName = "Radeon RX Vega FE"; }
+                    else if (mName == "Radeon RX Vega" && mComputeDevice.MaxComputeUnits == 64) { mName = "Radeon RX Vega 64"; }
                 } else {
                     mName = mComputeDevice.Name;
                 }
