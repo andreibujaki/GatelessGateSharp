@@ -94,8 +94,8 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.17";
-        public static string appName = shortAppName + " " + appVersion + " beta";
+        public static string appVersion = "1.2.18";
+        public static string appName = shortAppName + " " + appVersion + " stable";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
@@ -1992,7 +1992,7 @@ namespace GatelessGateSharp {
                     labelCurrentSecondaryPool.Text = "";
                 }
 
-                var elapsedTimeInSeconds = Controller.StopWatch.Elapsed.TotalSeconds;
+                var elapsedTimeInSeconds = (long)Controller.StopWatch.Elapsed.TotalSeconds;
                 if (elapsedTimeInSeconds == 0)
                     labelElapsedTime.Text = "-";
                 else if (elapsedTimeInSeconds >= 24 * 60 * 60)
