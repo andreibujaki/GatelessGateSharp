@@ -2754,7 +2754,7 @@
             this.fanControlEnabled.Checked = true;
             this.fanControlEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.fanControlEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fanControlEnabled.Location = new System.Drawing.Point(6, 32);
+            this.fanControlEnabled.Location = new System.Drawing.Point(13, 34);
             this.fanControlEnabled.Name = "fanControlEnabled";
             this.fanControlEnabled.Size = new System.Drawing.Size(59, 17);
             this.fanControlEnabled.TabIndex = 0;

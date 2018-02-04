@@ -94,54 +94,23 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.2.17";
-        public static string appName = shortAppName + " " + appVersion + " beta";
+        public static string appVersion = "1.3.0";
+        public static string appName = shortAppName + " " + appVersion + " devel";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
         private static int mLaunchInterval = 100;
-        public static readonly string[] sAlgorithmList = new string[] { "ethash_pascal", "ethash", "pascal", "neoscrypt", "cryptonight", "lyra2rev2", "lbry" };
         public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|pascal|cryptonight|neoscrypt|lyra2rev2|lbry";
+        public static readonly string[] sAlgorithmList = sAlgorithmListRegexPattern.Split('|');
 
         private bool mAreSettingsDirty = false;
-        private bool mDisableAutomaticSaving = false;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
         private TabPage[] tabPageDeviceArray;
-        private NumericUpDown[] numericUpDownDeviceEthashPascalThreadsArray;
-        private NumericUpDown[] numericUpDownDeviceEthashPascalIntensityArray;
-        private NumericUpDown[] numericUpDownDeviceEthashPascalPascalIterationsArray;
-        private NumericUpDown[] numericUpDownDeviceEthashThreadsArray;
-        private NumericUpDown[] numericUpDownDeviceEthashIntensityArray;
-        private NumericUpDown[] numericUpDownDeviceEthashLocalWorkSizeArray;
-        private NumericUpDown[] numericUpDownDeviceNeoScryptThreadsArray;
-        private NumericUpDown[] numericUpDownDeviceNeoScryptRawIntensityArray;
-        private NumericUpDown[] numericUpDownDeviceNeoScryptLocalWorkSizeArray;
-        private NumericUpDown[] numericUpDownDevicePascalThreadsArray;
-        private NumericUpDown[] numericUpDownDevicePascalIntensityArray;
-        private NumericUpDown[] numericUpDownDevicePascalLocalWorkSizeArray;
-        private NumericUpDown[] numericUpDownDeviceLbryThreadsArray;
-        private NumericUpDown[] numericUpDownDeviceLbryIntensityArray;
-        private NumericUpDown[] numericUpDownDeviceLbryLocalWorkSizeArray;
-        private NumericUpDown[] numericUpDownDeviceLyra2REv2ThreadsArray;
-        private NumericUpDown[] numericUpDownDeviceLyra2REv2IntensityArray;
-        private NumericUpDown[] numericUpDownDeviceLyra2REv2LocalWorkSizeArray;
-        private NumericUpDown[] numericUpDownDeviceCryptoNightThreadsArray;
-        private NumericUpDown[] numericUpDownDeviceCryptoNightRawIntensityArray;
-        private NumericUpDown[] numericUpDownDeviceCryptoNightLocalWorkSizeArray;
 
-        private CheckBox[] checkBoxDeviceFanControlEnabledArray;
-        private NumericUpDown[] numericUpDownDeviceFanControlTargetTemperatureArray;
-        private NumericUpDown[] numericUpDownDeviceFanControlMaximumTemperatureArray;
-        private NumericUpDown[] numericUpDownDeviceFanControlMinimumFanSpeedArray;
-        private NumericUpDown[] numericUpDownDeviceFanControlMaximumFanSpeedArray;
-
-        private Dictionary<Tuple<int, string>, CheckBox> checkBoxDeviceOverclockingEnabledArray;
-        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingPowerLimitArray;
-        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingCoreClockArray;
-        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingCoreVoltageArray;
-        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingMemoryClockArray;
-        private Dictionary<Tuple<int, string>, NumericUpDown> numericUpDownDeviceOverclockingMemoryVoltageArray;
+        // device ID, algorithm/type, pararmeter
+        private Dictionary<Tuple<int, string, string>, CheckBox> checkBoxDeviceParameterArray = new Dictionary<Tuple<int, string, string>, CheckBox> { };
+        private Dictionary<Tuple<int, string, string>, NumericUpDown> numericUpDownDeviceParameterArray = new Dictionary<Tuple<int, string, string>, NumericUpDown> { };
 
         private Button[] buttonDeviceResetToDefaultArray;
         private Button[] buttonDeviceResetAllArray;
@@ -697,93 +666,16 @@ namespace GatelessGateSharp {
                                     if (deviceID >= Controller.OpenCLDevices.Length || deviceVendor != Controller.OpenCLDevices[deviceID].GetVendor() ||
                                         deviceName != Controller.OpenCLDevices[deviceID].GetName())
                                         continue;
-                                    if (name == "ethash_pascal_threads")
-                                        numericUpDownDeviceEthashPascalThreadsArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "ethash_pascal_intensity")
-                                        numericUpDownDeviceEthashPascalIntensityArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "ethash_pascal_pascal_iterations")
-                                        numericUpDownDeviceEthashPascalPascalIterationsArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "lbry_threads")
-                                        numericUpDownDeviceLbryThreadsArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "lbry_intensity")
-                                        numericUpDownDeviceLbryIntensityArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "lbry_local_work_size")
-                                        numericUpDownDeviceLbryLocalWorkSizeArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "lyra2rev2_threads")
-                                        numericUpDownDeviceLyra2REv2ThreadsArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "lyra2rev2_intensity")
-                                        numericUpDownDeviceLyra2REv2IntensityArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "lyra2rev2_local_work_size")
-                                        numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "pascal_threads")
-                                        numericUpDownDevicePascalThreadsArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "pascal_intensity")
-                                        numericUpDownDevicePascalIntensityArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "pascal_local_work_size")
-                                        numericUpDownDevicePascalLocalWorkSizeArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "ethash_threads")
-                                        numericUpDownDeviceEthashThreadsArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "ethash_intensity")
-                                        numericUpDownDeviceEthashIntensityArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "ethash_local_work_size")
-                                        numericUpDownDeviceEthashLocalWorkSizeArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "neoscrypt_threads")
-                                        numericUpDownDeviceNeoScryptThreadsArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "neoscrypt_raw_intensity")
-                                        numericUpDownDeviceNeoScryptRawIntensityArray[deviceID].Value = decimal.Parse(value);
-                                    else if (name == "neoscrypt_local_work_size")
-                                        numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "cryptonight_threads")
-                                        numericUpDownDeviceCryptoNightThreadsArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "cryptonight_intensity")
-                                        numericUpDownDeviceCryptoNightRawIntensityArray[deviceID].Value =
-                                            decimal.Parse(value) * Controller.OpenCLDevices[deviceID].GetMaxComputeUnits();
-                                    else if (name == "cryptonight_raw_intensity")
-                                        numericUpDownDeviceCryptoNightRawIntensityArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "cryptonight_local_work_size")
-                                        numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "fan_control_enabled")
-                                        checkBoxDeviceFanControlEnabledArray[deviceID].Checked =
-                                            (value == "true" ? true : false);
-                                    else if (name == "fan_control_target_temperature")
-                                        numericUpDownDeviceFanControlTargetTemperatureArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "fan_control_maximum_temperature")
-                                        numericUpDownDeviceFanControlMaximumTemperatureArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "fan_control_minimum_fan_speed")
-                                        numericUpDownDeviceFanControlMinimumFanSpeedArray[deviceID].Value =
-                                            decimal.Parse(value);
-                                    else if (name == "fan_control_maximum_fan_speed")
-                                        numericUpDownDeviceFanControlMaximumFanSpeedArray[deviceID].Value =
-                                            decimal.Parse(value);
 
-                                    var regex = new System.Text.RegularExpressions.Regex(@"(" + sAlgorithmListRegexPattern + @")_overclocking_(enabled|power_limit|core_clock|core_voltage|memory_clock|memory_voltage)");
+                                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control)_([a-z_]+)$");
                                     var match = regex.Match(name);
-                                    var algorithm = match.Success ? match.Groups[1].Value : null;
+                                    var type = match.Success ? match.Groups[1].Value : null;
                                     var parameter = match.Success ? match.Groups[2].Value : null;
-                                    var tuple = new Tuple<int, string>(deviceID, algorithm);
-                                    if (parameter == "enabled") {
-                                        checkBoxDeviceOverclockingEnabledArray[tuple].Checked = (value == "true");
-                                    } else if (parameter == "power_limit") {
-                                        numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = decimal.Parse(value);
-                                    } else if (parameter == "core_clock") {
-                                        numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = decimal.Parse(value);
-                                    } else if (parameter == "core_voltage") {
-                                        numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = decimal.Parse(value);
-                                    } else if (parameter == "memory_clock") {
-                                        numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = decimal.Parse(value);
-                                    } else if (parameter == "memory_voltage") {
-                                        numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = decimal.Parse(value);
+                                    var tuple = new Tuple<int, string, string>(deviceID, type, parameter);
+                                    if (parameter == "enabled" || parameter == "overclocking_enabled") {
+                                        checkBoxDeviceParameterArray[tuple].Checked = (value == "true");
+                                    } else if (parameter != null) {
+                                        numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse(value);
                                     }
                                 }
                             }
@@ -802,9 +694,9 @@ namespace GatelessGateSharp {
                 }
                 if (databaseVersion < 2) {
                     foreach (var device in Controller.OpenCLDevices) {
-                        numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
-                        numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
-                        numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value = (decimal)75;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value = (decimal)85;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value = (decimal)50;
                     }
                 }   
                 Logger("Loaded settings.");
@@ -926,119 +818,24 @@ namespace GatelessGateSharp {
                     }
 
                     sql = "insert into device_parameters (device_id, device_vendor, device_name, parameter_name, parameter_value) values (@device_id, @device_vendor, @device_name, @parameter_name, @parameter_value)";
-                    for (var i = 0; i < Controller.OpenCLDevices.Length; ++i) {
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            command.Parameters.AddWithValue("@device_id", i);
-                            command.Parameters.AddWithValue("@device_vendor", Controller.OpenCLDevices[i].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", Controller.OpenCLDevices[i].GetName());
+                    using (var command = new SQLiteCommand(sql, conn)) {
+                        foreach (var key in numericUpDownDeviceParameterArray.Keys) {
+                            command.Parameters.AddWithValue("@device_id", key.Item1);
+                            command.Parameters.AddWithValue("@device_vendor", Controller.OpenCLDevices[key.Item1].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", Controller.OpenCLDevices[key.Item1].GetName());
 
-                            command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_threads");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalThreadsArray[i].Value.ToString());
+                            command.Parameters.AddWithValue("@parameter_name", key.Item2 + "_" + key.Item3);
+                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceParameterArray[key].Value.ToString());
                             command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalIntensityArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "ethash_pascal_pascal_iterations");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashPascalPascalIterationsArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
+                        }
+                        foreach (var key in checkBoxDeviceParameterArray.Keys) {
+                            command.Parameters.AddWithValue("@device_id", key.Item1);
+                            command.Parameters.AddWithValue("@device_vendor", Controller.OpenCLDevices[key.Item1].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", Controller.OpenCLDevices[key.Item1].GetName());
 
-                            command.Parameters.AddWithValue("@parameter_name", "ethash_threads");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashThreadsArray[i].Value.ToString());
+                            command.Parameters.AddWithValue("@parameter_name", key.Item2 + "_" + key.Item3);
+                            command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceParameterArray[key].Checked ? "true" : "false");
                             command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "ethash_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashIntensityArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "ethash_local_work_size");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceEthashLocalWorkSizeArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-
-                            command.Parameters.AddWithValue("@parameter_name", "neoscrypt_threads");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptThreadsArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "neoscrypt_raw_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptRawIntensityArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "neoscrypt_local_work_size");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceNeoScryptLocalWorkSizeArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-
-                            command.Parameters.AddWithValue("@parameter_name", "lbry_threads");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryThreadsArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "lbry_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryIntensityArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "lbry_local_work_size");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLbryLocalWorkSizeArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-
-                            command.Parameters.AddWithValue("@parameter_name", "lyra2rev2_threads");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLyra2REv2ThreadsArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "lyra2rev2_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLyra2REv2IntensityArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "lyra2rev2_local_work_size");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceLyra2REv2LocalWorkSizeArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-
-                            command.Parameters.AddWithValue("@parameter_name", "pascal_threads");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalThreadsArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "pascal_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalIntensityArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "pascal_local_work_size");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDevicePascalLocalWorkSizeArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-
-                            command.Parameters.AddWithValue("@parameter_name", "cryptonight_threads");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightThreadsArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "cryptonight_raw_intensity");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightRawIntensityArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "cryptonight_local_work_size");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceCryptoNightLocalWorkSizeArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-
-                            command.Parameters.AddWithValue("@parameter_name", "fan_control_enabled");
-                            command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceFanControlEnabledArray[i].Checked ? "true" : "false");
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "fan_control_target_temperature");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlTargetTemperatureArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_temperature");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumTemperatureArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "fan_control_minimum_fan_speed");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMinimumFanSpeedArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-                            command.Parameters.AddWithValue("@parameter_name", "fan_control_maximum_fan_speed");
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceFanControlMaximumFanSpeedArray[i].Value.ToString());
-                            command.ExecuteNonQuery();
-
-                            foreach (var algorithm in sAlgorithmList) {
-                                var tuple = new Tuple<int, string>(i, algorithm);
-                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_enabled");
-                                command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceOverclockingEnabledArray[tuple].Checked ? "true" : "false");
-                                command.ExecuteNonQuery();
-                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_power_limit");
-                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value.ToString());
-                                command.ExecuteNonQuery();
-                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_core_clock");
-                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingCoreClockArray[tuple].Value.ToString());
-                                command.ExecuteNonQuery();
-                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_core_voltage");
-                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value.ToString());
-                                command.ExecuteNonQuery();
-                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_memory_clock");
-                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value.ToString());
-                                command.ExecuteNonQuery();
-                                command.Parameters.AddWithValue("@parameter_name", algorithm + "_overclocking_memory_voltage");
-                                command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value.ToString());
-                                command.ExecuteNonQuery();
-                            }
                         }
                     }
                     conn.Close();
@@ -1245,41 +1042,6 @@ namespace GatelessGateSharp {
             }
 
             tabPageDeviceArray = new TabPage[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceEthashPascalThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceEthashPascalIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceEthashPascalPascalIterationsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceEthashThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceEthashIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceEthashLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceNeoScryptThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceNeoScryptRawIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceNeoScryptLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceCryptoNightThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceCryptoNightRawIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceCryptoNightLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDevicePascalThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDevicePascalIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDevicePascalLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceLbryThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceLbryIntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceLbryLocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceLyra2REv2ThreadsArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceLyra2REv2IntensityArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceLyra2REv2LocalWorkSizeArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-
-            checkBoxDeviceFanControlEnabledArray = new CheckBox[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceFanControlTargetTemperatureArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceFanControlMaximumTemperatureArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceFanControlMinimumFanSpeedArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-            numericUpDownDeviceFanControlMaximumFanSpeedArray = new NumericUpDown[Controller.OpenCLDevices.Length];
-
-            checkBoxDeviceOverclockingEnabledArray = new Dictionary<Tuple<int, string>, CheckBox> { };
-            numericUpDownDeviceOverclockingPowerLimitArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
-            numericUpDownDeviceOverclockingCoreClockArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
-            numericUpDownDeviceOverclockingCoreVoltageArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
-            numericUpDownDeviceOverclockingMemoryClockArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
-            numericUpDownDeviceOverclockingMemoryVoltageArray = new Dictionary<Tuple<int, string>, NumericUpDown> { };
-
             buttonDeviceResetToDefaultArray = new Button[Controller.OpenCLDevices.Length];
             buttonDeviceResetAllArray = new Button[Controller.OpenCLDevices.Length];
             buttonDeviceCopyToOthersArray = new Button[Controller.OpenCLDevices.Length];
@@ -1301,92 +1063,20 @@ namespace GatelessGateSharp {
                 uc.ValueChanged += new EventHandler(DeviceSettingsUserControl_ValueChanged);
 
                 tabPageDeviceArray[i] = tp;
-                foreach (var tabPage in uc.Controls[3].Controls) {
-                    foreach (var control in ((TabPage)tabPage).Controls) {
+                    foreach (var control in Utilities.FindAllChildrenByType<Control>(uc)) {
                         var tag = control.GetType().GetProperty("Tag").GetValue(control);
-                        if (tag != null && (string)tag == "ethash_pascal_threads") {
-                            numericUpDownDeviceEthashPascalThreadsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "ethash_pascal_intensity") {
-                            numericUpDownDeviceEthashPascalIntensityArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "ethash_pascal_pascal_iterations") {
-                            numericUpDownDeviceEthashPascalPascalIterationsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "ethash_threads") {
-                            numericUpDownDeviceEthashThreadsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "ethash_intensity") {
-                            numericUpDownDeviceEthashIntensityArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "ethash_local_work_size") {
-                            numericUpDownDeviceEthashLocalWorkSizeArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "neoscrypt_threads") {
-                            numericUpDownDeviceNeoScryptThreadsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "neoscrypt_raw_intensity") {
-                            numericUpDownDeviceNeoScryptRawIntensityArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "neoscrypt_local_work_size") {
-                            numericUpDownDeviceNeoScryptLocalWorkSizeArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "cryptonight_threads") {
-                            numericUpDownDeviceCryptoNightThreadsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "cryptonight_raw_intensity") {
-                            numericUpDownDeviceCryptoNightRawIntensityArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "cryptonight_local_work_size") {
-                            numericUpDownDeviceCryptoNightLocalWorkSizeArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "pascal_threads") {
-                            numericUpDownDevicePascalThreadsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "pascal_intensity") {
-                            numericUpDownDevicePascalIntensityArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "pascal_local_work_size") {
-                            numericUpDownDevicePascalLocalWorkSizeArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "lbry_threads") {
-                            numericUpDownDeviceLbryThreadsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "lbry_intensity") {
-                            numericUpDownDeviceLbryIntensityArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "lbry_local_work_size") {
-                            numericUpDownDeviceLbryLocalWorkSizeArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "lyra2rev2_threads") {
-                            numericUpDownDeviceLyra2REv2ThreadsArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "lyra2rev2_intensity") {
-                            numericUpDownDeviceLyra2REv2IntensityArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "lyra2rev2_local_work_size") {
-                            numericUpDownDeviceLyra2REv2LocalWorkSizeArray[i] = (NumericUpDown)control;
-                        } else if (tag != null && (string)tag == "overclocking") {
-                            foreach (var controlOC in ((GroupBox)control).Controls) {
-                                var tagOC = (string)(controlOC.GetType().GetProperty("Tag").GetValue(controlOC));
-                                if (tagOC == null || tagOC == "")
-                                    continue;
-                                var regex = new System.Text.RegularExpressions.Regex(@"(" + sAlgorithmListRegexPattern + @")_overclocking_(enabled|power_limit|core_clock|core_voltage|memory_clock|memory_voltage)");
-                                var match = regex.Match(tagOC);
-                                var algorithm = match.Success ? match.Groups[1].Value : null;
-                                var parameter = match.Success ? match.Groups[2].Value : null;
-                                if (parameter == "enabled") {
-                                    checkBoxDeviceOverclockingEnabledArray[new Tuple<int, string>(i, algorithm)] = ((CheckBox)controlOC);
-                                } else if (parameter == "power_limit") {
-                                    numericUpDownDeviceOverclockingPowerLimitArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
-                                } else if (parameter == "core_clock") {
-                                    numericUpDownDeviceOverclockingCoreClockArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
-                                } else if (parameter == "core_voltage") {
-                                    numericUpDownDeviceOverclockingCoreVoltageArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
-                                } else if (parameter == "memory_clock") {
-                                    numericUpDownDeviceOverclockingMemoryClockArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
-                                } else if (parameter == "memory_voltage") {
-                                    numericUpDownDeviceOverclockingMemoryVoltageArray[new Tuple<int, string>(i, algorithm)] = ((NumericUpDown)controlOC);
-                                }
-                            }
+                        if (tag == null)
+                            continue;
+                        var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control)_([a-z_]+)$");
+                        var match = regex.Match((string)tag);
+                        var type = match.Success ? match.Groups[1].Value : null;
+                        var parameter = match.Success ? match.Groups[2].Value : null;
+                        if (control.GetType() == typeof(CheckBox)) {
+                            checkBoxDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((CheckBox)control);
+                        } else if (parameter != null) {
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((NumericUpDown)control);
                         }
                     }
-                }
-
-                foreach (var control in ((GroupBox)uc.Controls[4]).Controls) {
-                    var tag = control.GetType().GetProperty("Tag").GetValue(control);
-                    if (tag != null && (string)tag == "fan_control_enabled") {
-                        checkBoxDeviceFanControlEnabledArray[i] = (CheckBox)control;
-                    } else if (tag != null && (string)tag == "fan_control_target_temperature") {
-                        numericUpDownDeviceFanControlTargetTemperatureArray[i] = (NumericUpDown)control;
-                    } else if (tag != null && (string)tag == "fan_control_maximum_temperature") {
-                        numericUpDownDeviceFanControlMaximumTemperatureArray[i] = (NumericUpDown)control;
-                    } else if (tag != null && (string)tag == "fan_control_minimum_fan_speed") {
-                        numericUpDownDeviceFanControlMinimumFanSpeedArray[i] = (NumericUpDown)control;
-                    } else if (tag != null && (string)tag == "fan_control_maximum_fan_speed") {
-                        numericUpDownDeviceFanControlMaximumFanSpeedArray[i] = (NumericUpDown)control;
-                    }
-                }
             }
 
             foreach (var device in Controller.OpenCLDevices)
@@ -1430,39 +1120,39 @@ namespace GatelessGateSharp {
             var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
 
             // EthashPascal
-            numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = (decimal)1024;
-            numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Value = (decimal)4;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "threads")].Value = (decimal)1;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "intensity")].Value = (decimal)1024;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "pascal_iterations")].Value = (decimal)4;
 
             // Ethash
-            numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = (decimal)1024;
-            numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "threads")].Value = (decimal)1;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "intensity")].Value = (decimal)1024;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
 
             // Lbry
-            numericUpDownDeviceLbryThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = (decimal)32;
-            numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "threads")].Value = (decimal)1;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "intensity")].Value = (decimal)32;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
 
             // Lyra2REv2
-            numericUpDownDeviceLyra2REv2ThreadsArray[device.DeviceIndex].Value = (decimal)2;
-            numericUpDownDeviceLyra2REv2IntensityArray[device.DeviceIndex].Value = (decimal)4;
-            numericUpDownDeviceLyra2REv2LocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericUpDownDeviceLyra2REv2LocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "threads")].Value = (decimal)2;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "intensity")].Value = (decimal)4;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
 
             // Pasacal
-            numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = (decimal)2;
-            numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = (decimal)32;
-            numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "threads")].Value = (decimal)2;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "intensity")].Value = (decimal)32;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
 
             // NeoScrypt
-            numericUpDownDeviceNeoScryptThreadsArray[device.DeviceIndex].Value = (decimal)1;
-            numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
-            numericUpDownDeviceNeoScryptRawIntensityArray[device.DeviceIndex].Value
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "threads")].Value = (decimal)1;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "raw_intensity")].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 8 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 8 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 8 * device.GetMaxComputeUnits() :
@@ -1476,9 +1166,9 @@ namespace GatelessGateSharp {
                                                                                                           8 * device.GetMaxComputeUnits());
 
             // CryptoNight
-            numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" && /*!GCN1 &&*/ openCLName != "Fiji" ? 2 : 1);
-            numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
-            numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "threads")].Value = (decimal)(device.GetVendor() == "AMD" && /*!GCN1 &&*/ openCLName != "Fiji" ? 2 : 1);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "local_work_size")].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "raw_intensity")].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 60 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 128 :
@@ -1498,30 +1188,28 @@ namespace GatelessGateSharp {
 
         private void ResetDeviceOverclockingSettings(Device device) {
             foreach (var algorithm in sAlgorithmList) {
-                Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableOverclockingForDefaultSettings.Checked;
 
-                checkBoxDeviceOverclockingEnabledArray[tuple].Checked = checkBoxEnableOverclockingForDefaultSettings.Checked;
+                numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
-                numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = 100;
+                int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock; if (maxCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Maximum = maxCoreClock;
+                int minCoreClock = ((OpenCLDevice)device).MinCoreClock; if (minCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Minimum = minCoreClock;
+                int coreClockStep = ((OpenCLDevice)device).CoreClockStep; if (coreClockStep > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Increment = coreClockStep;
+                int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock; if (defaultCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = defaultCoreClock;
 
-                int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock; if (maxCoreClock > 0) numericUpDownDeviceOverclockingCoreClockArray[tuple].Maximum = maxCoreClock;
-                int minCoreClock = ((OpenCLDevice)device).MinCoreClock; if (minCoreClock > 0) numericUpDownDeviceOverclockingCoreClockArray[tuple].Minimum = minCoreClock;
-                int coreClockStep = ((OpenCLDevice)device).CoreClockStep; if (coreClockStep > 0) numericUpDownDeviceOverclockingCoreClockArray[tuple].Increment = coreClockStep;
-                int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock; if (defaultCoreClock > 0) numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = defaultCoreClock;
+                int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock; if (maxMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Maximum = maxMemoryClock;
+                int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock; if (minMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Minimum = minMemoryClock;
+                int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep; if (memoryClockStep > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Increment = memoryClockStep;
+                int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock; if (defaultMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = defaultMemoryClock;
 
-                int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock; if (maxMemoryClock > 0) numericUpDownDeviceOverclockingMemoryClockArray[tuple].Maximum = maxMemoryClock;
-                int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock; if (minMemoryClock > 0) numericUpDownDeviceOverclockingMemoryClockArray[tuple].Minimum = minMemoryClock;
-                int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep; if (memoryClockStep > 0) numericUpDownDeviceOverclockingMemoryClockArray[tuple].Increment = memoryClockStep;
-                int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock; if (defaultMemoryClock > 0) numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = defaultMemoryClock;
+                numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Maximum = 2000;
+                int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage; if (defaultCoreVoltage > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = defaultCoreVoltage;
 
-                numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Maximum = 2000;
-                int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage; if (defaultCoreVoltage > 0) numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = defaultCoreVoltage;
-
-                numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Maximum = 2000;
-                int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = defaultMemoryVoltage;
+                numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
+                int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
 
                 if (checkBoxEnableOverclockingForDefaultSettings.Checked) {
-                    numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = 120;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
 
                     var newCoreVoltage
                          = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
@@ -1535,7 +1223,7 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreVoltage :
                                                                                                           defaultCoreVoltage);
                     if (newCoreVoltage > 0)
-                        try { numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = (decimal)newCoreVoltage; } catch (Exception) { }
+                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = (decimal)newCoreVoltage; } catch (Exception) { }
 
                     var newCoreClock
                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreClock :
@@ -1553,7 +1241,7 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreClock :
                                                                                                             defaultCoreClock);
                     if (newCoreClock > 0)
-                        try { numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = (decimal)newCoreClock; } catch (Exception) { }
+                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = (decimal)newCoreClock; } catch (Exception) { }
 
                     var newMemoryClock
                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultMemoryClock :
@@ -1569,80 +1257,46 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultMemoryClock :
                                                                                                             defaultMemoryClock);
                     if (newMemoryClock > 0)
-                        try { numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = (decimal)newMemoryClock; } catch (Exception) { }
+                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = (decimal)newMemoryClock; } catch (Exception) { }
                 }
             }
         }
 
         private void ResetDeviceFanControlSettings(Device device) {
             mAreSettingsDirty = true;
-            checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked = true;
-            numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = (decimal)75;
-            numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = (decimal)85;
-            numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = (decimal)50;
-            numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = (decimal)100;
+            checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked = true;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value = (decimal)75;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value = (decimal)85;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value = (decimal)50;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value = (decimal)100;
         }
 
         private void CopyDeviceSettings(int sourceDeviceIndex) {
             mAreSettingsDirty = true;
-            foreach (var device in Controller.OpenCLDevices) {
-                if (sourceDeviceIndex == device.DeviceIndex
-                    || device.GetVendor() != Controller.OpenCLDevices[sourceDeviceIndex].GetVendor()
-                    || device.GetName() != Controller.OpenCLDevices[sourceDeviceIndex].GetName())
+            foreach (var tuple in numericUpDownDeviceParameterArray.Keys) {
+                if (tuple.Item1 != sourceDeviceIndex)
                     continue;
-
-                checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked = checkBoxDeviceFanControlEnabledArray[sourceDeviceIndex].Checked;
-                numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlTargetTemperatureArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlMaximumTemperatureArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlMinimumFanSpeedArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value = numericUpDownDeviceFanControlMaximumFanSpeedArray[sourceDeviceIndex].Value;
-
-                // EthashPascal
-                numericUpDownDeviceEthashPascalThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceEthashPascalThreadsArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceEthashPascalIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceEthashPascalIntensityArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceEthashPascalPascalIterationsArray[device.DeviceIndex].Value = numericUpDownDeviceEthashPascalPascalIterationsArray[sourceDeviceIndex].Value;
-
-                // Ethash
-                numericUpDownDeviceEthashThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceEthashThreadsArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceEthashIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceEthashIntensityArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceEthashLocalWorkSizeArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceEthashLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceEthashLocalWorkSizeArray[sourceDeviceIndex].Value;
-
-                // Lbry
-                numericUpDownDeviceLbryThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceLbryThreadsArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceLbryIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceLbryIntensityArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceLbryLocalWorkSizeArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceLbryLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceLbryLocalWorkSizeArray[sourceDeviceIndex].Value;
-
-                // Pasacal
-                numericUpDownDevicePascalThreadsArray[device.DeviceIndex].Value = numericUpDownDevicePascalThreadsArray[sourceDeviceIndex].Value;
-                numericUpDownDevicePascalIntensityArray[device.DeviceIndex].Value = numericUpDownDevicePascalIntensityArray[sourceDeviceIndex].Value;
-                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDevicePascalLocalWorkSizeArray[sourceDeviceIndex].Value;
-                numericUpDownDevicePascalLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDevicePascalLocalWorkSizeArray[sourceDeviceIndex].Value;
-
-                // CryptoNight
-                numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightThreadsArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightLocalWorkSizeArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value = numericUpDownDeviceCryptoNightRawIntensityArray[sourceDeviceIndex].Value;
-
-                // Lyra2REv2
-                numericUpDownDeviceLyra2REv2ThreadsArray[device.DeviceIndex].Value = numericUpDownDeviceLyra2REv2ThreadsArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceLyra2REv2IntensityArray[device.DeviceIndex].Value = numericUpDownDeviceLyra2REv2IntensityArray[sourceDeviceIndex].Value;
-                numericUpDownDeviceLyra2REv2LocalWorkSizeArray[device.DeviceIndex].Value = numericUpDownDeviceLyra2REv2LocalWorkSizeArray[sourceDeviceIndex].Value;
-
-                foreach (var algorithm in sAlgorithmList) {
-                    Tuple<int, string> tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
-                    Tuple<int, string> source = new Tuple<int, string>(sourceDeviceIndex, algorithm);
-
-                    checkBoxDeviceOverclockingEnabledArray[tuple].Checked = checkBoxDeviceOverclockingEnabledArray[source].Checked;
-                    numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value = numericUpDownDeviceOverclockingPowerLimitArray[source].Value;
-                    numericUpDownDeviceOverclockingCoreClockArray[tuple].Value = numericUpDownDeviceOverclockingCoreClockArray[source].Value;
-                    numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value = numericUpDownDeviceOverclockingMemoryClockArray[source].Value;
-                    numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value = numericUpDownDeviceOverclockingCoreVoltageArray[source].Value;
-                    numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value = numericUpDownDeviceOverclockingMemoryVoltageArray[source].Value;
+                foreach (var device in Controller.OpenCLDevices) {
+                    if (sourceDeviceIndex == device.DeviceIndex
+                        || device.GetVendor() != Controller.OpenCLDevices[sourceDeviceIndex].GetVendor()
+                        || device.GetName() != Controller.OpenCLDevices[sourceDeviceIndex].GetName())
+                        continue;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, tuple.Item2, tuple.Item3)] = numericUpDownDeviceParameterArray[tuple];
+                }
+            }
+            foreach (var tuple in checkBoxDeviceParameterArray.Keys) {
+                if (tuple.Item1 != sourceDeviceIndex)
+                    continue;
+                foreach (var device in Controller.OpenCLDevices) {
+                    if (sourceDeviceIndex == device.DeviceIndex
+                        || device.GetVendor() != Controller.OpenCLDevices[sourceDeviceIndex].GetVendor()
+                        || device.GetName() != Controller.OpenCLDevices[sourceDeviceIndex].GetName())
+                        continue;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, tuple.Item2, tuple.Item3)] = checkBoxDeviceParameterArray[tuple];
                 }
             }
         }
+
 
         #endregion
 
@@ -2057,8 +1711,8 @@ namespace GatelessGateSharp {
                     // hardware monitoring
                     int temperature = device.Temperature;
                     if (temperature >= 0) {
-                        dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Value = temperature.ToString() + "℃";
-                        dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Style.ForeColor =
+                        dataGridViewDevices.Rows[deviceIndex].Cells["Temperature"].Value = temperature.ToString() + "℃";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["Temperature"].Style.ForeColor =
                                                                    temperature >= 85 ? Color.Red :
                                                                    temperature >= 75 ? Color.Purple :
                                                                                        Color.Blue;
@@ -2131,8 +1785,8 @@ namespace GatelessGateSharp {
                     if (NVMLInitialized && device.GetComputeDevice().Vendor.Equals("NVIDIA Corporation")) {
                         uint temp = 0;
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetTemperature(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlTemperatureSensors.Gpu, ref temp);
-                        dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Value = temp.ToString() + "℃";
-                        dataGridViewDevices.Rows[deviceIndex].Cells["temperature"].Style.ForeColor =
+                        dataGridViewDevices.Rows[deviceIndex].Cells["Temperature"].Value = temp.ToString() + "℃";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["Temperature"].Style.ForeColor =
                                                                    temp >= 80 ? Color.Red :
                                                                    temp >= 60 ? Color.Purple :
                                                                                   Color.Blue;
@@ -3618,19 +3272,19 @@ namespace GatelessGateSharp {
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "threads")].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    for (i = 0; i < numericUpDownDeviceCryptoNightThreadsArray[deviceIndex].Value; ++i) {
+                    for (i = 0; i < numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "threads")].Value; ++i) {
                         OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex]);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightRawIntensityArray[deviceIndex]
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "raw_intensity")]
                                 .Value)),
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceCryptoNightLocalWorkSizeArray[deviceIndex]
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "local_work_size")]
                                 .Value)), niceHashMode);
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -3659,13 +3313,13 @@ namespace GatelessGateSharp {
                     OpenCLDualEthashLbryMiner dualMiner = new OpenCLDualEthashLbryMiner(Controller.OpenCLDevices[deviceIndex]);
                     Controller.Miners.Add(dualMiner);
                     dualMiner.Start(stratum,
-                        Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
+                        Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "intensity")]
                             .Value)),
-                        Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex]
+                        Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "local_work_size")]
                             .Value)),
                             stratum2,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "intensity")].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "local_work_size")].Value)));
                     toolStripMainFormProgressBar.Value = ++minerCount;
 
                     for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -3685,20 +3339,20 @@ namespace GatelessGateSharp {
             int deviceIndex, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    minerCount += Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value));
+                    minerCount += Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash_pascal", "threads")].Value));
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    for (int i = 0; i < numericUpDownDeviceEthashPascalThreadsArray[deviceIndex].Value; ++i) {
+                    for (int i = 0; i < numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash_pascal", "threads")].Value; ++i) {
                         OpenCLDualEthashPascalMiner dualMiner = new OpenCLDualEthashPascalMiner(Controller.OpenCLDevices[deviceIndex]);
                         Controller.Miners.Add(dualMiner);
                         dualMiner.Start(stratum,
                                 stratum2,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalIntensityArray[deviceIndex]
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash_pascal", "intensity")]
                                 .Value)),
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceEthashPascalPascalIterationsArray[deviceIndex]
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash_pascal", "pascal_iterations")]
                                 .Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
 
@@ -3719,19 +3373,19 @@ namespace GatelessGateSharp {
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i)
+                    for (i = 0; i < numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "threads")].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    for (i = 0; i < numericUpDownDeviceEthashThreadsArray[deviceIndex].Value; ++i) {
+                    for (i = 0; i < numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "threads")].Value; ++i) {
                         OpenCLEthashMiner miner = new OpenCLEthashMiner(Controller.OpenCLDevices[deviceIndex]);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceEthashIntensityArray[deviceIndex]
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "intensity")]
                                 .Value)),
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceEthashLocalWorkSizeArray[deviceIndex]
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "local_work_size")]
                                 .Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -3751,18 +3405,18 @@ namespace GatelessGateSharp {
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i)
+                    for (i = 0; i < Convert.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "threads")].Value); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    for (i = 0; i < Convert.ToInt32(numericUpDownDeviceLbryThreadsArray[deviceIndex].Value); ++i) {
+                    for (i = 0; i < Convert.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "threads")].Value); ++i) {
                         OpenCLLbryMiner miner = new OpenCLLbryMiner(Controller.OpenCLDevices[deviceIndex]);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceLbryIntensityArray[deviceIndex].Value)),
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceLbryLocalWorkSizeArray[deviceIndex].Value)));
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "intensity")].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "local_work_size")].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
                             Application.DoEvents();
@@ -3781,18 +3435,18 @@ namespace GatelessGateSharp {
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i)
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "pascal", "threads")].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDevicePascalThreadsArray[deviceIndex].Value)); ++i) {
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "pascal", "threads")].Value)); ++i) {
                         OpenCLPascalMiner miner = new OpenCLPascalMiner(Controller.OpenCLDevices[deviceIndex]);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericUpDownDevicePascalIntensityArray[deviceIndex].Value)),
-                            Convert.ToInt32(Math.Round(numericUpDownDevicePascalLocalWorkSizeArray[deviceIndex].Value)));
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "pascal", "intensity")].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "pascal", "local_work_size")].Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
                             Application.DoEvents();
@@ -3811,18 +3465,18 @@ namespace GatelessGateSharp {
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i)
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "neoscrypt", "threads")].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptThreadsArray[deviceIndex].Value)); ++i) {
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "neoscrypt", "threads")].Value)); ++i) {
                         OpenCLNeoScryptMiner miner = new OpenCLNeoScryptMiner(Controller.OpenCLDevices[deviceIndex]);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptRawIntensityArray[deviceIndex].Value)),
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceNeoScryptLocalWorkSizeArray[deviceIndex].Value))
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "neoscrypt", "raw_intensity")].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "neoscrypt", "local_work_size")].Value))
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -3842,18 +3496,18 @@ namespace GatelessGateSharp {
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i)
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lyra2rev2", "threads")].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2ThreadsArray[deviceIndex].Value)); ++i) {
+                    for (i = 0; i < Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lyra2rev2", "threads")].Value)); ++i) {
                         OpenCLLyra2REv2Miner miner = new OpenCLLyra2REv2Miner(Controller.OpenCLDevices[deviceIndex]);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2IntensityArray[deviceIndex].Value)),
-                            Convert.ToInt32(Math.Round(numericUpDownDeviceLyra2REv2LocalWorkSizeArray[deviceIndex].Value))
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lyra2rev2", "intensity")].Value)),
+                            Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lyra2rev2", "local_work_size")].Value))
                             );
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
@@ -3948,21 +3602,21 @@ namespace GatelessGateSharp {
                     if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
                         continue;
                     var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
-                    if (checkBoxDeviceOverclockingEnabledArray[tuple].Checked) {
+                    if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked) {
                         device.SaveOverclockingSettings();
-                        device.TargetPowerLimit = Decimal.ToInt32(numericUpDownDeviceOverclockingPowerLimitArray[tuple].Value);
-                        device.TargetCoreClock = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreClockArray[tuple].Value);
-                        device.TargetMemoryClock = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryClockArray[tuple].Value);
-                        device.TargetCoreVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Value);
-                        device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Value);
+                        device.TargetPowerLimit = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
+                        device.TargetCoreClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
+                        device.TargetMemoryClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
+                        device.TargetCoreVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
+                        device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
                         device.OverclockingEnabled = true;
                         device.UpdateOverclockingSettings();
                     }
-                    if (checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked) {
-                        device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Value);
-                        device.TargetMaxTemperature = Decimal.ToInt32(numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Value);
-                        device.TargetMinFanSpeed = Decimal.ToInt32(numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Value);
-                        device.TargetMaxFanSpeed = Decimal.ToInt32(numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Value);
+                    if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
+                        device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
+                        device.TargetMaxTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value);
+                        device.TargetMinFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value);
+                        device.TargetMaxFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value);
                         device.FanControlEnabled = true;
                         Controller.UpdateFanSpeeds();
                     }
@@ -4312,19 +3966,20 @@ namespace GatelessGateSharp {
 
                 if (Controller.OpenCLDevices != null) {
                     foreach (var device in Controller.OpenCLDevices) {
-                        checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
-                        numericUpDownDeviceFanControlTargetTemperatureArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                        numericUpDownDeviceFanControlMaximumTemperatureArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                        numericUpDownDeviceFanControlMinimumFanSpeedArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
-                        numericUpDownDeviceFanControlMaximumFanSpeedArray[device.DeviceIndex].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxDeviceFanControlEnabledArray[device.DeviceIndex].Checked;
+                        var fanControlEnabled = checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked;
+                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && fanControlEnabled;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && fanControlEnabled;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && fanControlEnabled;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && fanControlEnabled;
 
                         foreach (var algorithm in sAlgorithmList) {
-                            var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
-                            numericUpDownDeviceOverclockingPowerLimitArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).PowerLimit >= 0;
-                            numericUpDownDeviceOverclockingCoreClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).CoreClock >= 0;
-                            numericUpDownDeviceOverclockingMemoryClockArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).MemoryClock >= 0;
-                            numericUpDownDeviceOverclockingCoreVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked; // && ((OpenCLDevice)device).CoreVoltage >= 0;
-                            numericUpDownDeviceOverclockingMemoryVoltageArray[tuple].Enabled = checkBoxDeviceOverclockingEnabledArray[tuple].Checked && ((OpenCLDevice)device).DefaultMemoryVoltage >= 0;
+                            var overclockingEnabled = checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked;
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Enabled = overclockingEnabled; // && ((OpenCLDevice)device).PowerLimit >= 0;
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Enabled = overclockingEnabled && ((OpenCLDevice)device).CoreClock >= 0;
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Enabled = overclockingEnabled && ((OpenCLDevice)device).MemoryClock >= 0;
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Enabled = overclockingEnabled; // && ((OpenCLDevice)device).CoreVoltage >= 0;
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Enabled = overclockingEnabled && ((OpenCLDevice)device).DefaultMemoryVoltage >= 0;
                         }
                     }
                 }
