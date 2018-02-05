@@ -29,21 +29,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
@@ -235,7 +235,6 @@
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabControlDeviceSettings = new System.Windows.Forms.TabControl();
             this.tabPageAPI = new System.Windows.Forms.TabPage();
-            this.checkBoxAPIMulticast = new System.Windows.Forms.CheckBox();
             this.groupBoxAPIIPRange = new System.Windows.Forms.GroupBox();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -827,9 +826,9 @@
             this.dataGridViewDevices.AllowUserToDeleteRows = false;
             this.dataGridViewDevices.AllowUserToResizeColumns = false;
             this.dataGridViewDevices.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle16.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -860,8 +859,8 @@
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.dataGridViewDevices.RowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewDevices.RowsDefaultCellStyle = dataGridViewCellStyle30;
             this.dataGridViewDevices.Size = new System.Drawing.Size(958, 233);
             this.dataGridViewDevices.TabIndex = 3;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
@@ -870,10 +869,10 @@
             // 
             // enabled
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle17.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle17;
             this.enabled.FalseValue = "";
             this.enabled.FillWeight = 50F;
             this.enabled.HeaderText = "";
@@ -910,8 +909,8 @@
             // 
             // speed
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle18;
             this.speed.FillWeight = 180F;
             this.speed.HeaderText = "Speed(s)";
             this.speed.Name = "speed";
@@ -921,8 +920,8 @@
             // 
             // shares
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle19;
             this.shares.FillWeight = 120F;
             this.shares.HeaderText = "Shares";
             this.shares.Name = "shares";
@@ -934,8 +933,8 @@
             // 
             this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle20;
             this.activity.FillWeight = 60F;
             this.activity.HeaderText = "Act.";
             this.activity.Name = "activity";
@@ -946,8 +945,8 @@
             // 
             // temperature
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle21;
             this.temperature.FillWeight = 60F;
             this.temperature.HeaderText = "Temp.";
             this.temperature.Name = "temperature";
@@ -957,8 +956,8 @@
             // 
             // fan
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle22;
             this.fan.FillWeight = 60F;
             this.fan.HeaderText = "Fan";
             this.fan.Name = "fan";
@@ -968,8 +967,8 @@
             // 
             // power
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power.DefaultCellStyle = dataGridViewCellStyle23;
             this.power.FillWeight = 80F;
             this.power.HeaderText = "Power";
             this.power.Name = "power";
@@ -979,8 +978,8 @@
             // 
             // power_limit
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle24;
             this.power_limit.FillWeight = 60F;
             this.power_limit.HeaderText = "";
             this.power_limit.Name = "power_limit";
@@ -990,8 +989,8 @@
             // 
             // core_clock
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle25;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
             this.core_clock.ReadOnly = true;
@@ -1000,8 +999,8 @@
             // 
             // core_voltage
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle26;
             this.core_voltage.HeaderText = "";
             this.core_voltage.Name = "core_voltage";
             this.core_voltage.ReadOnly = true;
@@ -1010,8 +1009,8 @@
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle27;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
             this.memory_clock.ReadOnly = true;
@@ -1020,8 +1019,8 @@
             // 
             // memory_used
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_used.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_used.DefaultCellStyle = dataGridViewCellStyle28;
             this.memory_used.FillWeight = 80F;
             this.memory_used.HeaderText = "(Used)";
             this.memory_used.Name = "memory_used";
@@ -1029,8 +1028,8 @@
             // 
             // memory_reserved
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle29;
             this.memory_reserved.FillWeight = 80F;
             this.memory_reserved.HeaderText = "(Rsvd.)";
             this.memory_reserved.Name = "memory_reserved";
@@ -2704,7 +2703,6 @@
             // 
             // tabPageAPI
             // 
-            this.tabPageAPI.Controls.Add(this.checkBoxAPIMulticast);
             this.tabPageAPI.Controls.Add(this.groupBoxAPIIPRange);
             this.tabPageAPI.Controls.Add(this.numericUpDownAPIPort);
             this.tabPageAPI.Controls.Add(this.label6);
@@ -2717,22 +2715,6 @@
             this.tabPageAPI.TabIndex = 7;
             this.tabPageAPI.Text = "API";
             this.tabPageAPI.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAPIMulticast
-            // 
-            this.checkBoxAPIMulticast.AutoSize = true;
-            this.checkBoxAPIMulticast.Checked = true;
-            this.checkBoxAPIMulticast.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAPIMulticast.Enabled = false;
-            this.checkBoxAPIMulticast.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxAPIMulticast.Location = new System.Drawing.Point(108, 34);
-            this.checkBoxAPIMulticast.Name = "checkBoxAPIMulticast";
-            this.checkBoxAPIMulticast.Size = new System.Drawing.Size(68, 17);
-            this.checkBoxAPIMulticast.TabIndex = 10;
-            this.checkBoxAPIMulticast.Tag = "parameter:api_multicast";
-            this.checkBoxAPIMulticast.Text = "Multicast";
-            this.checkBoxAPIMulticast.UseVisualStyleBackColor = true;
-            this.checkBoxAPIMulticast.Visible = false;
             // 
             // groupBoxAPIIPRange
             // 
@@ -2749,6 +2731,7 @@
             this.groupBoxAPIIPRange.Controls.Add(this.textBoxAllowedIPRange);
             this.groupBoxAPIIPRange.Controls.Add(this.label8);
             this.groupBoxAPIIPRange.Enabled = false;
+            this.groupBoxAPIIPRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBoxAPIIPRange.Location = new System.Drawing.Point(11, 57);
             this.groupBoxAPIIPRange.Name = "groupBoxAPIIPRange";
             this.groupBoxAPIIPRange.Size = new System.Drawing.Size(310, 168);
@@ -2949,6 +2932,7 @@
             this.groupBoxOpenCLBinaries.Controls.Add(this.buttonOpenOpenCLBinaryFolder);
             this.groupBoxOpenCLBinaries.Controls.Add(this.checkBoxReuseCompiledBinaries);
             this.groupBoxOpenCLBinaries.Controls.Add(this.checkBoxUseDefaultOpenCLBinaries);
+            this.groupBoxOpenCLBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBoxOpenCLBinaries.Location = new System.Drawing.Point(3, 119);
             this.groupBoxOpenCLBinaries.Name = "groupBoxOpenCLBinaries";
             this.groupBoxOpenCLBinaries.Size = new System.Drawing.Size(192, 94);
@@ -3000,6 +2984,7 @@
             this.groupBoxUserSettings.Controls.Add(this.groupBoxSettingsBackups);
             this.groupBoxUserSettings.Controls.Add(this.button9);
             this.groupBoxUserSettings.Controls.Add(this.buttonSaveSettings);
+            this.groupBoxUserSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBoxUserSettings.Location = new System.Drawing.Point(500, 4);
             this.groupBoxUserSettings.Name = "groupBoxUserSettings";
             this.groupBoxUserSettings.Size = new System.Drawing.Size(273, 245);
@@ -3037,6 +3022,7 @@
             this.groupBoxSettingsBackups.Controls.Add(this.buttonRestoreSettingsBackup);
             this.groupBoxSettingsBackups.Controls.Add(this.buttonCreateSettingsBackup);
             this.groupBoxSettingsBackups.Controls.Add(this.listBoxSettingBackups);
+            this.groupBoxSettingsBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBoxSettingsBackups.Location = new System.Drawing.Point(6, 77);
             this.groupBoxSettingsBackups.Name = "groupBoxSettingsBackups";
             this.groupBoxSettingsBackups.Size = new System.Drawing.Size(258, 160);
@@ -3147,6 +3133,7 @@
             this.groupBox1.Controls.Add(this.buttonInstallRecommendedAMDDriver);
             this.groupBox1.Controls.Add(this.buttonDisableAuomaticRepair);
             this.groupBox1.Controls.Add(this.buttonDisableDriverInstallation);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBox1.Location = new System.Drawing.Point(201, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(293, 252);
@@ -3278,6 +3265,7 @@
             this.groupBoxAutomation.Controls.Add(this.checkBoxDisableAutoStartPrompt);
             this.groupBoxAutomation.Controls.Add(this.checkBoxAutoStart);
             this.groupBoxAutomation.Controls.Add(this.checkBoxLaunchAtStartup);
+            this.groupBoxAutomation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBoxAutomation.Location = new System.Drawing.Point(3, 3);
             this.groupBoxAutomation.Name = "groupBoxAutomation";
             this.groupBoxAutomation.Size = new System.Drawing.Size(192, 110);
@@ -3418,7 +3406,7 @@
             this.richTextBoxAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBoxAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBoxAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.richTextBoxAbout.Location = new System.Drawing.Point(4, 4);
             this.richTextBoxAbout.Name = "richTextBoxAbout";
             this.richTextBoxAbout.ReadOnly = true;
@@ -3486,12 +3474,14 @@
             // 
             // toolStripMainFormProgressBar
             // 
+            this.toolStripMainFormProgressBar.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripMainFormProgressBar.Name = "toolStripMainFormProgressBar";
             this.toolStripMainFormProgressBar.Size = new System.Drawing.Size(100, 17);
             this.toolStripMainFormProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // toolStripStatusLabel1
             // 
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(158, 18);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabelMessage";
@@ -3821,7 +3811,6 @@
         private System.Windows.Forms.TextBox textBoxDeniedIPRange;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBoxAllowedIPRange;
-        private System.Windows.Forms.CheckBox checkBoxAPIMulticast;
         private System.Windows.Forms.GroupBox groupBoxAPIIPRange;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label18;

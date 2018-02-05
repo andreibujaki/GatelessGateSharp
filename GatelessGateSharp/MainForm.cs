@@ -94,6 +94,7 @@ namespace GatelessGateSharp {
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
+        public static string normalizedShortAppName = "gateless-gate-sharp";
         public static string appVersion = "1.2.18";
         public static string appName = shortAppName + " " + appVersion + " stable";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
@@ -1461,7 +1462,7 @@ namespace GatelessGateSharp {
             // NeoScrypt
             numericUpDownDeviceNeoScryptThreadsArray[device.DeviceIndex].Value = (decimal)1;
             numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
+            numericUpDownDeviceNeoScryptLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
             numericUpDownDeviceNeoScryptRawIntensityArray[device.DeviceIndex].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 8 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 8 * device.GetMaxComputeUnits() :
@@ -1470,6 +1471,7 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 4 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && (new Regex("Vega")).Match(device.GetName()).Success ? 8 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && GCN1 ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 8 * device.GetMaxComputeUnits() :
@@ -1477,7 +1479,10 @@ namespace GatelessGateSharp {
 
             // CryptoNight
             numericUpDownDeviceCryptoNightThreadsArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" && /*!GCN1 &&*/ openCLName != "Fiji" ? 2 : 1);
-            numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value = (decimal)(device.GetVendor() == "AMD" ? 8 : 4);
+            numericUpDownDeviceCryptoNightLocalWorkSizeArray[device.DeviceIndex].Value
+                = (decimal)(device.GetVendor() == "AMD" && (new Regex("Vega")).Match(device.GetName()).Success ? 16 :
+                            device.GetVendor() == "AMD" ? 8 :
+                                                          4);
             numericUpDownDeviceCryptoNightRawIntensityArray[device.DeviceIndex].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 60 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
@@ -1490,6 +1495,9 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 64 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 64 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX Vega 56" ? 112 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX Vega 64" ? 112 :
+                            device.GetVendor() == "AMD" && (new Regex("Vega")).Match(device.GetName()).Success ? 2 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && GCN1 ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" ? 2 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
@@ -1525,11 +1533,11 @@ namespace GatelessGateSharp {
 
                     var newCoreVoltage
                          = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1020 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1020 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1030 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1030 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1100 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1120 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreVoltage :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1100 :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreVoltage :
@@ -1541,10 +1549,10 @@ namespace GatelessGateSharp {
                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "neoscrypt" ? defaultCoreClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "neoscrypt" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "ethash_pascal" ? 1270 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "ethash_pascal" ? 1270 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1270 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1270 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "ethash_pascal" ? 1250 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "ethash_pascal" ? 1250 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1250 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1250 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1300 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1300 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1030 :
@@ -1557,8 +1565,8 @@ namespace GatelessGateSharp {
 
                     var newMemoryClock
                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "neoscrypt" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "neoscrypt" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "neoscrypt" ? 1650 : // defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "neoscrypt" ? 1650 : // defaultMemoryClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && defaultMemoryClock >= 1750 ? 2000 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && defaultMemoryClock >= 1750 ? 2000 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && defaultMemoryClock >= 2000 ? 2200 :
@@ -4158,6 +4166,8 @@ namespace GatelessGateSharp {
                 Controller.AppState = Controller.ApplicationGlobalState.Idle;
                 if (saveStateToFile)
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                UpdateStats();
+                UpdateControls();
 
                 Logger("Stopped miners.");
             } catch (Exception ex) {
@@ -5937,6 +5947,9 @@ namespace GatelessGateSharp {
         {
             if (MessageBox.Show(
                         "PLEASE DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
+                        + "This feature will adjust overclocking settings automatically for better performance. "
+                        + "Although its approach is fairly conservative, it is not without risk and should be used with caution. "
+                        + "You can always confirm the resuls on the \"Devices\" tab page before you start mining.\n\n"
                         + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
                         + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
                         + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data " 

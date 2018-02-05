@@ -111,7 +111,7 @@ namespace GatelessGateSharp
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.subscribe" },
                 { "params", new List<string> {
-                    MainForm.shortAppName + "/" + MainForm.appVersion,
+                    MainForm.normalizedShortAppName + "/" + MainForm.appVersion,
                     "EthereumStratum/1.0.0"
             }}}));
 

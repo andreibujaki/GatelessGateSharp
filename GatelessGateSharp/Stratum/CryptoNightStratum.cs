@@ -107,7 +107,7 @@ namespace GatelessGateSharp
                 { "params", new Dictionary<string, string> {
                     { "login", Username },
                     { "pass", "x" },
-                    { "agent", MainForm.shortAppName + "/" + MainForm.appVersion}}},
+                    { "agent", MainForm.normalizedShortAppName + "/" + MainForm.appVersion}}},
                 { "id", 1 }
             });
             WriteLine(line);
@@ -116,6 +116,8 @@ namespace GatelessGateSharp
                 throw new Exception("Disconnected from stratum server.");
             JContainer result;
             Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
+            if (response.ContainsKey("error") && response["error"] != null)
+                throw new UnrecoverableException((String)(((JContainer)response["error"])["message"]));
             result = ((JContainer)response["result"]);
             var status = (String)(result["status"]);
             if (status != "OK")

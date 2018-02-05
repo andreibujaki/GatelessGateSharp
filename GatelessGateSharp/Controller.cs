@@ -48,6 +48,7 @@ namespace GatelessGateSharp {
                 try {
                     if (Controller.AppState == Controller.ApplicationGlobalState.Mining && PrimaryStratum != null) {
                         // overclocking
+                        /*
                         string algorithm = PrimaryStratum.AlgorithmName;
                         if (SecondaryStratum != null)
                             algorithm += "_" + SecondaryStratum.AlgorithmName;
@@ -57,6 +58,7 @@ namespace GatelessGateSharp {
                                     device.UpdateOverclockingSettings();
                             } catch (Exception) { }
                         }
+                        */
 
                         // memory timings
                         PCIExpress.UpdateMemoryTimings();
