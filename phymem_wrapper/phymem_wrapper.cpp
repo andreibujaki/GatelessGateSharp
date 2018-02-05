@@ -401,7 +401,7 @@ extern "C" {
 	}
 
 	//map physical memory to user space
-	PVOID MapPhyMem(DWORD64 phyAddr, DWORD memSize)
+	__declspec(dllexport) PVOID MapPhyMem(DWORD64 phyAddr, DWORD memSize)
 	{
 		EnterCriticalSection(&phymem_mutex);;
 
@@ -424,7 +424,7 @@ extern "C" {
 	}
 
 	//unmap memory
-	VOID UnmapPhyMem(PVOID pVirAddr, DWORD memSize)
+	__declspec(dllexport) VOID UnmapPhyMem(PVOID pVirAddr, DWORD memSize)
 	{
 		EnterCriticalSection(&phymem_mutex);;
 		PHYMEM_MEM pm;
@@ -562,7 +562,8 @@ extern "C" {
 	}
 
 	//read pci configuration
-	BOOL ReadPCI(DWORD busNum, DWORD devNum, DWORD funcNum,
+	__declspec(dllexport)
+		BOOL ReadPCI(DWORD busNum, DWORD devNum, DWORD funcNum,
 		DWORD regOff, DWORD bytes, PVOID pValue)
 	{
 		EnterCriticalSection(&phymem_mutex);;
@@ -588,7 +589,7 @@ extern "C" {
 	}
 
 	//write pci configuration
-	BOOL WritePCI(DWORD busNum, DWORD devNum, DWORD funcNum,
+	__declspec(dllexport) BOOL WritePCI(DWORD busNum, DWORD devNum, DWORD funcNum,
 		DWORD regOff, DWORD bytes, PVOID pValue)
 	{
 		EnterCriticalSection(&phymem_mutex);;
@@ -609,5 +610,60 @@ extern "C" {
 
 		LeaveCriticalSection(&phymem_mutex);;
 		return TRUE;
+	}
+
+	__declspec(dllexport)
+		BOOL ReadAMDGPURegister(int32_t busNum, int32_t regNo, int32_t *ptrValue)
+	{
+		uint32_t configRegistersBase;
+
+		if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+			return FALSE;
+		configRegistersBase &= 0xfffffff0;
+
+		EnterCriticalSection(&phymem_mutex);;
+		int32_t *virtual_addr = (int32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+		if (!virtual_addr){
+			LeaveCriticalSection(&phymem_mutex);;
+			return FALSE;
+		}
+
+		*ptrValue = *(virtual_addr + regNo);
+
+		UnmapPhyMem(virtual_addr, 256 * 1024);
+		LeaveCriticalSection(&phymem_mutex);;
+
+		return TRUE;
+	}
+
+	__declspec(dllexport)
+		BOOL WriteAMDGPURegister(int32_t busNum, int32_t regNo, int32_t value, int32_t mask)
+	{
+		uint32_t configRegistersBase;
+
+		if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+			return FALSE;
+		configRegistersBase &= 0xfffffff0;
+
+		EnterCriticalSection(&phymem_mutex);
+		int32_t *virtual_addr = (int32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+		if (!virtual_addr){
+			LeaveCriticalSection(&phymem_mutex);;
+			return FALSE;
+		}
+
+#define mmMC_HUB_MISC_STATUS 0x832
+#define MC_HUB_MISC_STATUS__RPB_BUSY_MASK 0x8000
+#define MC_HUB_MISC_STATUS__GFX_BUSY_MASK 0x80000
+
+		BOOL result = FALSE;
+		//if (!(virtual_addr[mmMC_HUB_MISC_STATUS] & (MC_HUB_MISC_STATUS__RPB_BUSY_MASK | MC_HUB_MISC_STATUS__GFX_BUSY_MASK))) {
+		*(virtual_addr + regNo) = value; // (*(virtual_addr + regNo) & ~mask) ^ (value & mask);
+			result = TRUE;
+		//}
+		UnmapPhyMem(virtual_addr, 256 * 1024);
+		LeaveCriticalSection(&phymem_mutex);;
+
+		return result;
 	}
 }

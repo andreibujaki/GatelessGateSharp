@@ -12,7 +12,7 @@
 
 [Dd]ebug/
 [Rr]elease/
-x64/
+Win8.1Debug/
 build/
 [Bb]in/
 [Oo]bj/
@@ -216,3 +216,8 @@ Win8.1Debug/phymem_wrapper.lib
 Setup/Sign.bat
 SignBinaries.bat
 *.bat
+Setup/Gateless_Gate_Sharp_1.2.12_alpha.7z
+Setup/Gateless_Gate_Sharp_1.2.12_alpha.zip
+*.7z
+Setup/Gateless_Gate_Sharp_1.2.14_alpha.zip
+*.zip

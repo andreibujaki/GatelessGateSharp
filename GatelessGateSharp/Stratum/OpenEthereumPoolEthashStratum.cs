@@ -65,33 +65,28 @@ namespace GatelessGateSharp
                     && response["result"] == null
                     && mShareIDs.Contains(response["id"].ToString()))
             {
-                MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
-                ReportShareRejection();
+                ReportRejectedShare();
             }
             else if (response.ContainsKey("result")
                 && response["result"] != null
                 && response["result"].GetType() == typeof(bool)
                 && mShareIDs.Contains(response["id"].ToString()))
             {
-                if ((bool)response["result"] && !MainForm.DevFeeMode)
+                if ((bool)response["result"])
                 {
-                    MainForm.Logger("Share #" + response["id"].ToString() + " accepted.");
-                    ReportShareAcceptance();
+                    ReportAcceptedShare();
                 }
-                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String) && !MainForm.DevFeeMode)
+                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(String))
                 {
-                    MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + (String)response["error"]);
-                    ReportShareRejection();
+                    ReportRejectedShare((String)response["error"]);
                 }
-                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray) && !MainForm.DevFeeMode)
+                else if (response.ContainsKey("error") && response["error"].GetType() == typeof(JArray))
                 {
-                    MainForm.Logger("Share #" + response["id"].ToString() + " rejected: " + ((JArray)response["error"])["message"]);
-                    ReportShareRejection();
+                    ReportRejectedShare((string)(((JArray)response["error"])["message"]));
                 }
-                else if (!(bool)response["result"] && !MainForm.DevFeeMode)
+                else if (!(bool)response["result"])
                 {
-                    MainForm.Logger("Share #" + response["id"].ToString() + " rejected.");
-                    ReportShareRejection();
+                    ReportRejectedShare();
                 }
                 else 
                 {
@@ -118,7 +113,7 @@ namespace GatelessGateSharp
                     regex = new System.Text.RegularExpressions.Regex(@"^0x(.*)................................................$"); // I don't know about this one...
                     mDifficulty = (double)0xffff0000U / (double)Convert.ToUInt64(regex.Replace((string)result[2], "$1"), 16);
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                    MainForm.Logger("Received new job: " + (string)result[0]);
+                    if (!SilentMode) MainForm.Logger("Received new job: " + (string)result[0]);
                 }
             }
             else
@@ -179,13 +174,9 @@ namespace GatelessGateSharp
             }}}));
             try { mMutex.ReleaseMutex(); } catch (Exception) { }
 
-            try {
-                var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
-                if (response["result"] == null)
-                    throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
-            } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
-            }
+            var response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+            if (response["result"] == null)
+                throw (UnrecoverableException = new AuthorizationFailedException());
 
             try { mMutex.WaitOne(5000); } catch (Exception) { }
             WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(new Dictionary<string, Object> {
@@ -206,7 +197,7 @@ namespace GatelessGateSharp
                 return;
 
             try  { mMutex.WaitOne(5000); } catch (Exception) { }
-            RegisterDeviceWithShare(aDevice);
+            ReportSubmittedShare(aDevice);
             try
             {
                 String stringNonce
@@ -221,7 +212,7 @@ namespace GatelessGateSharp
                                       ((output >> 56) & 0xff));
                 mShareIDs.Add(mJsonRPCMessageID.ToString());
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
-                    { "id", mJsonRPCMessageID++ },
+                    { "id", mJsonRPCMessageID },
                     { "jsonrpc", "2.0" },
                     { "method", "eth_submitWork" },
                     { "params", new List<string> {
@@ -230,12 +221,10 @@ namespace GatelessGateSharp
                         "0x" + job.GetMixHash(output) // mix digest
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
+                ++mJsonRPCMessageID;
             }
-            catch (Exception ex)
-            {
-                MainForm.Logger("Failed to submit share: " + ex.Message + ex.StackTrace);
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
+            catch (Exception ex) {
+                MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }

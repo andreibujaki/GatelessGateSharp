@@ -32,16 +32,6 @@ namespace GatelessGateSharp
         public static readonly int sPascalOutputSize = 256;
         public static readonly int sPascalMidstateSize = 32;
 
-        static Mutex mProgramArrayMutex = new Mutex();
-
-        static Dictionary<ProgramArrayIndex, ComputeProgram> mPascalProgramArray = new Dictionary<ProgramArrayIndex, ComputeProgram>();
-        static Dictionary<ProgramArrayIndex, ComputeKernel> mPascalSearchKernelArray = new Dictionary<ProgramArrayIndex, ComputeKernel>();
-        ComputeProgram mPascalProgram;
-        ComputeKernel mPascalSearchKernel = null;
-        private ComputeBuffer<byte> mPascalInputBuffer = null;
-        private ComputeBuffer<byte> mPascalMidstateBuffer = null;
-        private ComputeBuffer<UInt32> mPascalOutputBuffer = null;
-        private PascalStratum mPascalStratum;
         long[] mPascalGlobalWorkSizeArray = new long[] { 0 };
         long[] mPascalLocalWorkSizeArray = new long[] { 0 };
         long[] mPascalGlobalWorkOffsetArray = new long[] { 0 };
@@ -52,62 +42,17 @@ namespace GatelessGateSharp
 
 
         public OpenCLPascalMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Pascal")
+            : base(aGatelessGateDevice, "pascal")
         {
-            try {
-                mPascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize);
-                mPascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sPascalOutputSize);
-                mPascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize);
-            } catch (Exception ex) {
-                throw new UnrecoverableException(ex, GatelessGateDevice);
-            }
         }
 
         public void Start(PascalStratum aPascalStratum, int aPascalIntensity, int aPascalLocalWorkSize)
         {
-            mPascalStratum = aPascalStratum;
+            Stratum = aPascalStratum;
             mPascalGlobalWorkSizeArray[0] = aPascalIntensity * OpenCLDevice.GetMaxComputeUnits() * aPascalLocalWorkSize;
             mPascalLocalWorkSizeArray[0] = aPascalLocalWorkSize;
 
             base.Start();
-        }
-
-        public void BuildPascalProgram()
-        {
-            ComputeDevice computeDevice = OpenCLDevice.GetComputeDevice();
-
-            try { mProgramArrayMutex.WaitOne(5000); } catch (Exception) { }
-
-            if (mPascalProgramArray.ContainsKey(new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])))
-            {
-                mPascalProgram = mPascalProgramArray[new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])];
-                mPascalSearchKernel = mPascalSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])];
-            }
-            else
-            {
-                String source = System.IO.File.ReadAllText(@"Kernels\pascal.cl");
-                mPascalProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\pascal.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? "-O1 " : //"-O1 " :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : //"-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + mPascalLocalWorkSizeArray[0];
-                try
-                {
-                    mPascalProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                    MainForm.Logger(mPascalProgram.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Pascal program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
-                mPascalProgramArray[new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])] = mPascalProgram;
-                mPascalSearchKernelArray[new ProgramArrayIndex(DeviceIndex, mPascalLocalWorkSizeArray[0])] = mPascalSearchKernel = mPascalProgram.CreateKernel("search");
-            }
-
-            try { mProgramArrayMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         // based on HashLib's SHA256 implementation
@@ -122,13 +67,12 @@ namespace GatelessGateSharp
             0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
             0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
         };
-        void CalculatePascalMidState()
-        {
-            uint[] state = new uint[] {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19 };
+        void CalculatePascalMidState() {
+            uint[] state = new uint[] { 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19 };
 
             for (int block = 0; block < 3; ++block) {
                 uint[] data = new uint[80];
-                
+
                 uint A = state[0];
                 uint B = state[1];
                 uint C = state[2];
@@ -139,21 +83,19 @@ namespace GatelessGateSharp
                 uint H = state[7];
 
                 for (int j = 0; j < 16; ++j)
-                    data[j] =   (uint)(mPascalInput[block * 64 + j * 4 + 0] << 24)
+                    data[j] = (uint)(mPascalInput[block * 64 + j * 4 + 0] << 24)
                               | (uint)(mPascalInput[block * 64 + j * 4 + 1] << 16)
                               | (uint)(mPascalInput[block * 64 + j * 4 + 2] << 8)
                               | (uint)(mPascalInput[block * 64 + j * 4 + 3] << 0);
 
-                for (int r = 16; r < 64; r++)
-                {
+                for (int r = 16; r < 64; r++) {
                     uint T = data[r - 2];
                     uint T2 = data[r - 15];
                     data[r] = (((T >> 17) | (T << 15)) ^ ((T >> 19) | (T << 13)) ^ (T >> 10)) + data[r - 7] +
                         (((T2 >> 7) | (T2 << 25)) ^ ((T2 >> 18) | (T2 << 14)) ^ (T2 >> 3)) + data[r - 16];
                 }
 
-                for (int r = 0; r < 64; r++)
-                {
+                for (int r = 0; r < 64; r++) {
                     uint T = s_K[r] + data[r] + H + (((E >> 6) | (E << 26)) ^ ((E >> 11) | (E << 21)) ^ ((E >> 25) |
                              (E << 7))) + ((E & F) ^ (~E & G));
                     uint T2 = (((A >> 2) | (A << 30)) ^ ((A >> 13) | (A << 19)) ^
@@ -178,119 +120,143 @@ namespace GatelessGateSharp
                 state[7] += H;
             }
 
-            for (int j = 0; j < 8; ++j)
-            {
-                mPascalMidstate[j * 4 + 0] = (byte)((state[j] >>  0) & 0xff);
-                mPascalMidstate[j * 4 + 1] = (byte)((state[j] >>  8) & 0xff);
+            for (int j = 0; j < 8; ++j) {
+                mPascalMidstate[j * 4 + 0] = (byte)((state[j] >> 0) & 0xff);
+                mPascalMidstate[j * 4 + 1] = (byte)((state[j] >> 8) & 0xff);
                 mPascalMidstate[j * 4 + 2] = (byte)((state[j] >> 16) & 0xff);
                 mPascalMidstate[j * 4 + 3] = (byte)((state[j] >> 24) & 0xff);
             }
+        }
+
+        public PascalStratum Stratum { get; set; }
+
+        public override void SetPrimaryStratum(Stratum stratum) {
+            Stratum = (PascalStratum)stratum;
         }
 
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         [System.Security.SecurityCritical]
         override unsafe protected void MinerThread()
         {
-            Random r = new Random();
+            ComputeProgram program = null;
+
+            try {
+                Random r = new Random();
             
-            MarkAsAlive();
-
-            MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
-
-            BuildPascalProgram();
-
-            fixed (long* pascalGlobalWorkOffsetArrayPtr = mPascalGlobalWorkOffsetArray)
-            fixed (long* pascalGlobalWorkSizeArrayPtr = mPascalGlobalWorkSizeArray)
-            fixed (long* pascalLocalWorkSizeArrayPtr = mPascalLocalWorkSizeArray)
-            fixed (byte* pascalMidstatePtr = mPascalMidstate)
-            fixed (byte* pascalInputPtr = mPascalInput)
-            fixed (UInt32* pascalOutputPtr = mPascalOutput)
-            while (!Stopped)
-            {
                 MarkAsAlive();
 
-                try
+                MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
+
+                program = BuildProgram("pascal", mPascalLocalWorkSizeArray[0], "-O1", "", "");
+
+                using (var pascalSearchKernel = program.CreateKernel("search"))
+                using (var pascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize))
+                using (var pascalOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, sPascalOutputSize))
+                using (var pascalMidstateBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalMidstateSize))
+                fixed (long* pascalGlobalWorkOffsetArrayPtr = mPascalGlobalWorkOffsetArray)
+                fixed (long* pascalGlobalWorkSizeArrayPtr = mPascalGlobalWorkSizeArray)
+                fixed (long* pascalLocalWorkSizeArrayPtr = mPascalLocalWorkSizeArray)
+                fixed (byte* pascalMidstatePtr = mPascalMidstate)
+                fixed (byte* pascalInputPtr = mPascalInput)
+                fixed (UInt32* pascalOutputPtr = mPascalOutput)
+                while (!Stopped)
                 {
-                    mPascalSearchKernel.SetMemoryArgument(0, mPascalInputBuffer);
-                    mPascalSearchKernel.SetMemoryArgument(1, mPascalOutputBuffer);
-                    mPascalSearchKernel.SetMemoryArgument(4, mPascalMidstateBuffer);
+                    MarkAsAlive();
 
-                    // Wait for the first PascalJob to arrive.
-                    int elapsedTime = 0;
-                    while ((mPascalStratum == null || mPascalStratum.GetJob() == null) && elapsedTime < 60000) {
-                        Thread.Sleep(100);
-                        elapsedTime += 100;
-                    }
-                    if (mPascalStratum == null || mPascalStratum.GetJob() == null)
-                        throw new TimeoutException("Stratum server failed to send a new PascalJob.");
-
-                    System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
-                    PascalStratum.Work pascalWork;
-
-                    while (!Stopped && (pascalWork = mPascalStratum.GetWork()) != null)
+                    try
                     {
-                        MarkAsAlive();
+                        pascalSearchKernel.SetMemoryArgument(0, pascalInputBuffer);
+                        pascalSearchKernel.SetMemoryArgument(1, pascalOutputBuffer);
+                        pascalSearchKernel.SetMemoryArgument(4, pascalMidstateBuffer);
 
-                        var pascalJob = pascalWork.Job;
-                        Array.Copy(pascalWork.Blob, mPascalInput, sPascalInputSize);
-                        CalculatePascalMidState();
-                        Queue.Write<byte>(mPascalMidstateBuffer, true, 0, sPascalMidstateSize, (IntPtr)pascalMidstatePtr, null);
-                        UInt32 pascalStartNonce = (UInt32)(r.Next(0, int.MaxValue));
-                        UInt64 PascalTarget = (UInt64) ((double) 0xffff0000UL / mPascalStratum.Difficulty);
-                        mPascalSearchKernel.SetValueArgument<UInt64>(3, PascalTarget);
-                        Queue.Write<byte>(mPascalInputBuffer, true, 0, sPascalInputSize, (IntPtr)pascalInputPtr, null);
+                        // Wait for the first PascalJob to arrive.
+                        int elapsedTime = 0;
+                        while ((Stratum == null || Stratum.GetJob() == null) && elapsedTime < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped) {
+                            Thread.Sleep(100);
+                            elapsedTime += 100;
+                        }
+                        if (Stratum == null || Stratum.GetJob() == null)
+                            throw new TimeoutException("Stratum server failed to send a new PascalJob.");
 
-                        consoleUpdateStopwatch.Start();
+                        System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
+                        PascalStratum.Work pascalWork;
+                        PascalStratum.Job pascalJob;
 
-                        while (!Stopped && mPascalStratum.GetJob().Equals(pascalJob))
+                        while (!Stopped && (pascalWork = Stratum.GetWork()) != null && (pascalJob = pascalWork.Job) != null)
                         {
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
-
                             MarkAsAlive();
 
-                            mPascalSearchKernel.SetValueArgument<UInt32>(2, pascalStartNonce);
+                            Array.Copy(pascalWork.Blob, mPascalInput, sPascalInputSize);
+                            CalculatePascalMidState();
+                            Queue.Write<byte>(pascalMidstateBuffer, true, 0, sPascalMidstateSize, (IntPtr)pascalMidstatePtr, null);
+                            UInt32 pascalStartNonce = (UInt32)(r.Next(0, int.MaxValue));
+                            UInt64 PascalTarget = (UInt64) ((double) 0xffff0000UL / Stratum.Difficulty);
+                            pascalSearchKernel.SetValueArgument<UInt64>(3, PascalTarget);
+                            Queue.Write<byte>(pascalInputBuffer, true, 0, sPascalInputSize, (IntPtr)pascalInputPtr, null);
 
-                            // Get a new local extranonce if necessary.
-                            if (0xffffffffu - pascalStartNonce < (UInt32)mPascalGlobalWorkSizeArray[0])
-                                break;
+                            consoleUpdateStopwatch.Start();
 
-                            mPascalOutput[255] = 0; // mPascalOutput[255] is used as an atomic counter.
-                            Queue.Write<UInt32>(mPascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
-                            Queue.Execute(mPascalSearchKernel, mPascalGlobalWorkOffsetArray, mPascalGlobalWorkSizeArray, mPascalLocalWorkSizeArray, null);
-                            Queue.Read<UInt32>(mPascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
-                            if (mPascalStratum.GetJob().Equals(pascalJob))
+                            while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(pascalJob))
                             {
-                                for (int i = 0; i < mPascalOutput[255]; ++i)
-                                    mPascalStratum.Submit(GatelessGateDevice, pascalWork, mPascalOutput[i]);
-                            }
-                            pascalStartNonce += (UInt32)mPascalGlobalWorkSizeArray[0];
+                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                                sw.Start();
 
-                            sw.Stop();
-                            Speed = ((double)mPascalGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
-                            if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
-                            {
-                                MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Pascal)", Speed / 1000000));
-                                consoleUpdateStopwatch.Restart();
+                                MarkAsAlive();
+
+                                pascalSearchKernel.SetValueArgument<UInt32>(2, pascalStartNonce);
+
+                                // Get a new local extranonce if necessary.
+                                if (0xffffffffu - pascalStartNonce < (UInt32)mPascalGlobalWorkSizeArray[0])
+                                    break;
+
+                                mPascalOutput[255] = 0; // mPascalOutput[255] is used as an atomic counter.
+                                Queue.Write<UInt32>(pascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
+                                Queue.Execute(pascalSearchKernel, mPascalGlobalWorkOffsetArray, mPascalGlobalWorkSizeArray, mPascalLocalWorkSizeArray, null);
+                                Queue.Read<UInt32>(pascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
+                                if (Stratum.GetJob() != null && Stratum.GetJob().Equals(pascalJob))
+                                {
+                                    for (int i = 0; i < mPascalOutput[255]; ++i)
+                                        Stratum.Submit(Device, pascalWork, mPascalOutput[i]);
+                                }
+                                pascalStartNonce += (UInt32)mPascalGlobalWorkSizeArray[0];
+
+                                sw.Stop();
+                                Speed = ((double)mPascalGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                                Device.TotalHashesPrimaryAlgorithm += (double)mPascalGlobalWorkSizeArray[0];
+                                if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
+                                {
+                                    MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Pascal)", Speed / 1000000));
+                                    consoleUpdateStopwatch.Restart();
+                                }
                             }
                         }
+                    } catch (Exception ex) {
+                        MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
+                        if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                            this.UnrecoverableException = new UnrecoverableException(ex, Device);
+                            Stop();
+                        }
                     }
-                } catch (Exception ex) {
-                    MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
-                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
-                        Stop();
+
+                    Speed = 0;
+
+                    if (!Stopped) {
+                        MainForm.Logger("Restarting miner thread...");
+                        System.Threading.Thread.Sleep(Parameters.WaitTimeForRestartingMinerThreadInMilliseconds);
                     }
                 }
+                MarkAsDone();
 
-                Speed = 0;
-
-                if (!Stopped) {
-                    MainForm.Logger("Restarting miner thread...");
-                    System.Threading.Thread.Sleep(5000);
-                }
+                program.Dispose();
+            } catch (UnrecoverableException ex) {
+                if (program != null)
+                    program.Dispose();
+                this.UnrecoverableException = ex;
+            } catch (Exception ex) {
+                if (program != null)
+                    program.Dispose();
+                this.UnrecoverableException = new UnrecoverableException(ex, Device);
             }
-            MarkAsDone();
         }
     }
 }

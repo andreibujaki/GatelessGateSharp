@@ -56,12 +56,13 @@ namespace GatelessGateSharp
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                 }
-                else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
+                else if (method.Equals("mining.notify"))
                 {
-                    try  { mMutex.WaitOne(5000); } catch (Exception) { }
+                    bool jobChanged = (mJob == null || mJob.ID != (string)parameters[0]);
+                    try { mMutex.WaitOne(5000); } catch (Exception) { }
                     mJob = (EthashStratum.Job)(new Job(this, (string)parameters[0], (string)parameters[1], (string)parameters[2]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                    MainForm.Logger("Received new job: " + parameters[0]);
+                    if (!SilentMode && jobChanged) MainForm.Logger("Received new job: " + parameters[0]);
                     //MainForm.Logger("Seedhash: " + parameters[1]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
@@ -85,15 +86,13 @@ namespace GatelessGateSharp
                 var ID = response["id"];
                 bool result = (bool)response["result"];
 
-                if (result && !MainForm.DevFeeMode)
+                if (result)
                 {
-                    MainForm.Logger("Share #" + ID + " accepted.");
-                    ReportShareAcceptance();
+                    ReportAcceptedShare();
                 }
-                else if (!result && !MainForm.DevFeeMode)
+                else if (!result)
                 {
-                    MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
-                    ReportShareRejection();
+                    ReportRejectedShare((String)(((JArray)response["error"])[1]));
                 }
             }
             else
@@ -112,7 +111,7 @@ namespace GatelessGateSharp
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.subscribe" },
                 { "params", new List<string> {
-                    MainForm.shortAppName + "/" + MainForm.appVersion,
+                    MainForm.normalizedShortAppName + "/" + MainForm.appVersion,
                     "EthereumStratum/1.0.0"
             }}}));
 
@@ -122,7 +121,7 @@ namespace GatelessGateSharp
                 mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
                 mPoolExtranonce = (string)(((JArray)(response["result"]))[1]);
             } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+                throw this.UnrecoverableException = new AuthorizationFailedException();
             }
 
             // mining.extranonce.subscribe
@@ -131,11 +130,7 @@ namespace GatelessGateSharp
                 { "method", "mining.extranonce.subscribe" },
                 { "params", new List<string> {
             }}}));
-            try {
-                response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
-            } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
-            }
+            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
             //MainForm.Logger("mining.extranonce.subscribe: " + response["result"]); // TODO
             
             WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {
@@ -161,7 +156,7 @@ namespace GatelessGateSharp
                 return;
 
             try  { mMutex.WaitOne(5000); } catch (Exception) { }
-            RegisterDeviceWithShare(aDevice);
+            ReportSubmittedShare(aDevice);
             try
             {
                 String stringNonce
@@ -170,7 +165,7 @@ namespace GatelessGateSharp
                          (PoolExtranonce.Length == 4) ? (String.Format("{5:x2}{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff))) :
                                                         (String.Format("{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff))));
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
-                    { "id", mJsonRPCMessageID++ },
+                    { "id", mJsonRPCMessageID },
                     { "method", "mining.submit" },
                     { "params", new List<string> {
                         Username,
@@ -178,12 +173,10 @@ namespace GatelessGateSharp
                         stringNonce
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
+                ++mJsonRPCMessageID;
             }
-            catch (Exception ex)
-            {
-                MainForm.Logger("Failed to submit share: " + ex.Message);
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
+            catch (Exception ex) {
+                MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }

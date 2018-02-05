@@ -13,14 +13,20 @@ using System.Runtime.InteropServices;
 
 namespace GatelessGateSharp
 {
-    class OpenCLDevice : Device
+    public class OpenCLDevice : Device, IDisposable
     {
         private ComputeDevice mComputeDevice;
         private ComputeContext mContext = null;
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
         private List<ComputeDevice> mDeviceList;
         private String mName;
+        private int mCoreClock = -1;
+        private int mCoreVoltage = -1;
+        private bool mCoreVoltageAvailable = true;
+        private int mMemoryClock = -1;
+        private int mMemoryVoltage = -1;
 
+        public int ADLVersion { get; set; }
         public int ADLAdapterIndex { get; set; }
 
         public override String GetVendor() {
@@ -32,7 +38,124 @@ namespace GatelessGateSharp
         }
 
         public override String GetName() {
+            if (mName == null) {
+                if (GetVendor() == "AMD") {
+                    mName = System.Text.Encoding.ASCII.GetString(mComputeDevice.BoardNameAMD)
+                        .Replace("AMD ", "")
+                        .Replace("(TM)", "")
+                        .Replace(" Series", "")
+                        .Replace(" Graphics", "")
+                        .Replace("  ", " ");
+                    mName = (new Regex("[^a-zA-Z0-9]+$")).Replace(mName, ""); // Drop '\0'
+                
+                    if      (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 6)  { mName = "Radeon HD 7730"; } 
+                    else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 8)  { mName = "Radeon HD 7750"; }
+                    else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 10) { mName = "Radeon HD 7770"; } 
+                    else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 14) { mName = "Radeon HD 7790"; } 
+                    else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 16) { mName = "Radeon HD 7850"; } 
+                    else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 20) { mName = "Radeon HD 7870"; }
+                    else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 24) { mName = "Radeon HD 7870 XT"; }
+                    else if (mName == "Radeon HD 7900" && mComputeDevice.MaxComputeUnits == 28) { mName = "Radeon HD 7950"; } 
+                    else if (mName == "Radeon HD 7900" && mComputeDevice.MaxComputeUnits == 32 && DefaultCoreClock == 1050) { mName = "Radeon HD 7970 GE"; }
+                    else if (mName == "Radeon HD 7900" && mComputeDevice.MaxComputeUnits == 32 && DefaultCoreClock != 1000) { mName = "Radeon HD 7970"; } 
+                    else if (mName == "Radeon HD 7900" && mComputeDevice.MaxComputeUnits == 32) { mName = "Radeon HD 7990"; } 
+                
+                    else if (mName == "Radeon R5 200" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R5 240"; }
+                    else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R7 240"; }
+                    else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 250"; }
+                    else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 512 / 64) { mName = "Radeon R7 250E"; }
+                    else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 640 / 64) { mName = "Radeon R7 250X"; }
+                    else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R7 260"; }
+                    else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 896 / 64) { mName = "Radeon R7 260X"; } 
+                    else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R7 265"; } 
+                    else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 270"; } 
+                    else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 270X"; } 
+                    else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 280"; } 
+                    else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2048 / 64) { mName = "Radeon R9 280X"; } 
+                    else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 285"; } 
+                    else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2560 / 64) { mName = "Radeon R9 290"; } 
+                    else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2816 / 64) { mName = "Radeon R9 290X"; }
+                
+                    else if (mName == "Radeon R5 300" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R5 330"; }
+                    else if (mName == "Radeon R5 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R5 340"; } 
+                    else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 340"; } 
+                    else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 350"; }
+                    else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 512 / 64) { mName = "Radeon R7 350"; }
+                    else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R7 360"; }
+                    else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R9 360"; }
+                    else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R7 370"; } 
+                    else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R9 370"; } 
+                    else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 370X"; }
+                    else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 380"; } 
+                    else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 380"; } 
+                    else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2048 / 64) { mName = "Radeon R9 380X"; }
+                    else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2560 / 64) { mName = "Radeon R9 390"; } 
+                    else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2816 / 64) { mName = "Radeon R9 390X"; } 
+                    else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 3584 / 64) { mName = "Radeon R9 Fury"; } 
+                    else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 4096 / 64 && DefaultCoreClock == 1000) { mName = "Radeon R9 Nano"; } 
+                    else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 4096 / 64) { mName = "Radeon R9 Fury X"; }
+
+                    else if (mName == "Radeon RX Vega" && mComputeDevice.MaxComputeUnits == 56) { mName = "Radeon RX Vega 56"; }
+                    else if (mName == "Radeon RX Vega" && mComputeDevice.MaxComputeUnits == 64 && GetMemorySize() == 16L * 1024 * 1024 * 1024) { mName = "Radeon RX Vega FE"; }
+                    else if (mName == "Radeon RX Vega" && mComputeDevice.MaxComputeUnits == 64) { mName = "Radeon RX Vega 64"; }
+                } else {
+                    mName = mComputeDevice.Name;
+                }
+            }
             return mName;
+        }
+
+        private System.Threading.Mutex computeByteBufferListMutex = new System.Threading.Mutex(); 
+        List<ComputeBuffer<byte>> computeByteBufferList = new List<ComputeBuffer<byte>> { };
+
+        public ComputeBuffer<byte> RequestComputeByteBuffer(ComputeMemoryFlags flags, long size) {
+            ComputeBuffer<byte> buffer = null;
+            try {
+                if (!computeByteBufferListMutex.WaitOne(5000)) throw new Exception("Timed out waiting for mutex.");
+
+                for (int i = 0; i < computeByteBufferList.Count; ++i) {
+                    if (size == computeByteBufferList[i].Count && flags == computeByteBufferList[i].Flags) {
+                        buffer = computeByteBufferList[i];
+                        computeByteBufferList.RemoveAt(i);
+                        break;
+                    }
+                }
+            } catch (Exception ex) { MainForm.Logger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
+
+            return (buffer != null) ? buffer : new ComputeBuffer<byte>(Context, flags, size);
+        }
+
+        public void ReleaseComputeByteBuffer(ComputeBuffer<byte> buffer) {
+            try {
+                if (!computeByteBufferListMutex.WaitOne(5000)) throw new Exception("Timed out waiting for mutex.");
+
+                computeByteBufferList.Add(buffer);
+
+            } catch (Exception ex) { MainForm.Logger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
+        }
+
+        public long MemoryUsage {
+            get {
+                long size = 0;
+                try {
+                    if (!computeByteBufferListMutex.WaitOne(5000)) throw new Exception("Timed out waiting for mutex.");
+
+                    for (int i = 0; i < computeByteBufferList.Count; ++i)
+                        size += computeByteBufferList[i].Count;
+                    
+                } catch (Exception ex) { MainForm.Logger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
+
+                return size;
+            }
+        }
+
+        public void ReleaseAllComputeBuffers() {
+            try {
+                mMutex.WaitOne(100);
+                for (int i = 0; i < computeByteBufferList.Count; ++i)
+                    computeByteBufferList[i].Dispose();
+                computeByteBufferList.Clear();
+            } catch (Exception ex) { MainForm.Logger(ex); } finally { mMutex.ReleaseMutex(); }
         }
 
         public List<ComputeDevice> DeviceList { get { return mDeviceList; } }
@@ -56,69 +179,24 @@ namespace GatelessGateSharp
 
         public override long GetMaxComputeUnits() { return mComputeDevice.MaxComputeUnits; }
         public ComputeDevice GetComputeDevice() { return mComputeDevice; }
-        public long          GetMemorySize() { return mComputeDevice.GlobalMemorySize; }
+        public override long GetMemorySize() { return mComputeDevice.GlobalMemorySize; }
 
         public OpenCLDevice(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex)
         {
             ADLAdapterIndex = -1;
             mComputeDevice = aComputeDevice;
-            if (GetVendor() == "AMD") {
-                mName = System.Text.Encoding.ASCII.GetString(mComputeDevice.BoardNameAMD)
-                    .Replace("AMD ", "")
-                    .Replace("(TM)", "")
-                    .Replace(" Series", "")
-                    .Replace(" Graphics", "")
-                    .Replace("  ", " ");
-                mName = (new Regex("[^a-zA-Z0-9]+$")).Replace(mName, ""); // Drop '\0'
-                
-                if      (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 6)  { mName = "Radeon HD 7730"; } 
-                else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 8)  { mName = "Radeon HD 7750"; }
-                else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 10) { mName = "Radeon HD 7770"; } 
-                else if (mName == "Radeon HD 7700" && mComputeDevice.MaxComputeUnits == 14) { mName = "Radeon HD 7790"; } 
-                else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 16) { mName = "Radeon HD 7850"; } 
-                else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 20) { mName = "Radeon HD 7870"; }
-                else if (mName == "Radeon HD 7800" && mComputeDevice.MaxComputeUnits == 24) { mName = "Radeon HD 7870 XT"; }
-                else if (mName == "Radeon HD 7900" && mComputeDevice.MaxComputeUnits == 28) { mName = "Radeon HD 7950"; }
-                else if (mName == "Radeon HD 7900" && mComputeDevice.MaxComputeUnits == 32) { mName = "Radeon HD 7970"; } 
-                
-                else if (mName == "Radeon R5 200" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R5 240"; }
-                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R7 240"; }
-                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 250"; }
-                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 512 / 64) { mName = "Radeon R7 250E"; }
-                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 640 / 64) { mName = "Radeon R7 250X"; }
-                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R7 260"; }
-                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 896 / 64) { mName = "Radeon R7 260X"; } 
-                else if (mName == "Radeon R7 200" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R7 265"; } 
-                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 270"; } 
-                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 270X"; } 
-                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 280"; } 
-                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2048 / 64) { mName = "Radeon R9 280X"; } 
-                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 285"; } 
-                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2560 / 64) { mName = "Radeon R9 290"; } 
-                else if (mName == "Radeon R9 200" && mComputeDevice.MaxComputeUnits == 2816 / 64) { mName = "Radeon R9 290X"; }
-                
-                else if (mName == "Radeon R5 300" && mComputeDevice.MaxComputeUnits == 320 / 64) { mName = "Radeon R5 330"; }
-                else if (mName == "Radeon R5 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R5 340"; } 
-                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 340"; } 
-                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 384 / 64) { mName = "Radeon R7 350"; }
-                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 512 / 64) { mName = "Radeon R7 350"; }
-                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R7 360"; }
-                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 768 / 64) { mName = "Radeon R9 360"; }
-                else if (mName == "Radeon R7 300" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R7 370"; } 
-                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1024 / 64) { mName = "Radeon R9 370"; } 
-                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1280 / 64) { mName = "Radeon R9 370X"; }
-                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 380"; } 
-                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 1792 / 64) { mName = "Radeon R9 380"; } 
-                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2048 / 64) { mName = "Radeon R9 380X"; }
-                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2560 / 64) { mName = "Radeon R9 390"; } 
-                else if (mName == "Radeon R9 300" && mComputeDevice.MaxComputeUnits == 2816 / 64) { mName = "Radeon R9 390X"; } 
-                else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 3584 / 64) { mName = "Radeon R9 Fury"; } 
-                else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 4096 / 64) { mName = "Radeon R9 Nano"; } 
-                else if (mName == "Radeon R9 Fury" && mComputeDevice.MaxComputeUnits == 4096 / 64) { mName = "Radeon R9 Fury X"; }
-            } else {
-                mName = mComputeDevice.Name;
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                ReleaseAllComputeBuffers();
+                if (mContext != null) {
+                    mContext.Dispose();
+                    mContext = null;
+                }
             }
+            base.Dispose(disposing);
         }
 
         public ComputeDevice GetNewComputeDevice()
@@ -183,17 +261,21 @@ namespace GatelessGateSharp
             return devices;
         }
 
-        static List<OpenCLDummyLbryMiner> dummyMinerList = new List<OpenCLDummyLbryMiner> { }; // Keep everything until the miner quits.
+        static IntPtr ADL2Context = IntPtr.Zero;
 
         public static bool InitializeADL(OpenCLDevice[] mDevices) {
             var ADLRet = -1;
             var NumberOfAdapters = 0;
-            if (null != ADL.ADL_Main_Control_Create)
-                ADLRet = ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1);
-            if (ADL.ADL_SUCCESS == ADLRet) {
+
+            if (null == ADL.ADL2_Main_Control_Create
+                || null == ADL.ADL_Main_Control_Create
+                || null == ADL.ADL_Adapter_NumberOfAdapters_Get)
+                return false;
+
+            if (ADL.ADL_SUCCESS == ADL.ADL2_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1, ref ADL2Context)
+                && ADL.ADL_SUCCESS == ADL.ADL_Main_Control_Create(ADL.ADL_Main_Memory_Alloc, 1)) {
                 MainForm.Logger("Successfully initialized AMD Display Library.");
-                if (null != ADL.ADL_Adapter_NumberOfAdapters_Get)
-                    ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
+                ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
                 MainForm.Logger("Number of ADL Adapters: " + NumberOfAdapters.ToString());
 
                 if (0 < NumberOfAdapters) {
@@ -243,60 +325,61 @@ namespace GatelessGateSharp
                                                     ++i;
                                             }
                                         } else {
-                                            OpenCLDummyLbryMiner dummyMiner = new OpenCLDummyLbryMiner(device);
-                                            dummyMinerList.Add(dummyMiner);
-                                            dummyMiner.Start();
+                                            using (OpenCLDummyLbryMiner dummyMiner = new OpenCLDummyLbryMiner(device)) {
+                                                dummyMiner.Start();
 
-                                            int[] activityTotalArray = new int[NumberOfAdapters];
-                                            for (var i = 0; i < NumberOfAdapters; ++i)
-                                                activityTotalArray[i] = 0;
-                                            for (var j = 0; j < 10; ++j) {
+                                                int[] activityTotalArray = new int[NumberOfAdapters];
+                                                for (var i = 0; i < NumberOfAdapters; ++i)
+                                                    activityTotalArray[i] = 0;
+                                                for (var j = 0; j < 200; ++j) {
+                                                    for (var i = 0; i < NumberOfAdapters; ++i) {
+                                                        if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
+                                                            ADLPMActivity OSADLPMActivityData;
+                                                            OSADLPMActivityData = new ADLPMActivity();
+                                                            var activityBuffer = IntPtr.Zero;
+                                                            size = Marshal.SizeOf(OSADLPMActivityData);
+                                                            activityBuffer = Marshal.AllocCoTaskMem((int)size);
+                                                            Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
+
+                                                            if (null != ADL.ADL_Overdrive5_CurrentActivity_Get) {
+                                                                ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(i, activityBuffer);
+                                                                if (ADL.ADL_SUCCESS == ADLRet) {
+                                                                    OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
+                                                                    activityTotalArray[i] += OSADLPMActivityData.iActivityPercent;
+                                                                }
+                                                            }
+                                                        }
+                                                        while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
+                                                            ++i;
+                                                    }
+                                                    System.Windows.Forms.Application.DoEvents();
+                                                    System.Threading.Thread.Sleep(10);
+                                                }
+                                                int candidate = -1;
+                                                int candidateActivity = 0;
                                                 for (var i = 0; i < NumberOfAdapters; ++i) {
                                                     if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
-                                                        ADLPMActivity OSADLPMActivityData;
-                                                        OSADLPMActivityData = new ADLPMActivity();
-                                                        var activityBuffer = IntPtr.Zero;
-                                                        size = Marshal.SizeOf(OSADLPMActivityData);
-                                                        activityBuffer = Marshal.AllocCoTaskMem((int)size);
-                                                        Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
-
-                                                        if (null != ADL.ADL_Overdrive5_CurrentActivity_Get) {
-                                                            ADLRet = ADL.ADL_Overdrive5_CurrentActivity_Get(i, activityBuffer);
-                                                            if (ADL.ADL_SUCCESS == ADLRet) {
-                                                                OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                                                                activityTotalArray[i] += OSADLPMActivityData.iActivityPercent;
-                                                            }
+                                                        if (candidate < 0 || activityTotalArray[i] > candidateActivity) {
+                                                            candidateActivity = activityTotalArray[i];
+                                                            candidate = i;
                                                         }
                                                     }
                                                     while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
                                                         ++i;
                                                 }
-                                                System.Threading.Thread.Sleep(100);
-                                            }
-                                            int candidate = -1;
-                                            int candidateActivity = 0;
-                                            for (var i = 0; i < NumberOfAdapters; ++i) {
-                                                if (OSAdapterInfoData.ADLAdapterInfo[i].AdapterName == boardName && !taken.Contains(OSAdapterInfoData.ADLAdapterInfo[i].BusNumber)) {
-                                                    if (candidate < 0 || activityTotalArray[i] > candidateActivity) {
-                                                        candidateActivity = activityTotalArray[i];
-                                                        candidate = i;
-                                                    }
-                                                }
-                                                while (i + 1 < NumberOfAdapters && OSAdapterInfoData.ADLAdapterInfo[i].BusNumber == OSAdapterInfoData.ADLAdapterInfo[i + 1].BusNumber)
-                                                    ++i;
-                                            }
-                                            device.ADLAdapterIndex = candidate;
-                                            taken.Add(OSAdapterInfoData.ADLAdapterInfo[candidate].BusNumber);
+                                                device.ADLAdapterIndex = candidate;
+                                                taken.Add(OSAdapterInfoData.ADLAdapterInfo[candidate].BusNumber);
 
-                                            dummyMiner.Stop();
-                                            for (int i = 0; i < 50; ++i) {
-                                                if (dummyMiner.Stopped)
-                                                    break;
-                                                System.Threading.Thread.Sleep(100);
-                                            }
-                                            if (!dummyMiner.Stopped) {
-                                                MainForm.Logger("Failed at matching OpenCL devices with ADL devices. Restarting...");
-                                                System.Windows.Forms.Application.Exit();
+                                                dummyMiner.Stop();
+                                                for (int i = 0; i < 50; ++i) {
+                                                    if (dummyMiner.Stopped)
+                                                        break;
+                                                    System.Threading.Thread.Sleep(100);
+                                                }
+                                                if (!dummyMiner.Stopped)
+                                                    MainForm.Logger("Failed to match OpenCL devices with ADL devices. The application may become unstable.");
+                                                GC.Collect();
+                                                GC.WaitForPendingFinalizers();
                                             }
                                         }
                                     }
@@ -318,6 +401,18 @@ namespace GatelessGateSharp
                                     }
                                 }
                             }
+                            
+                            for (int i = 0; i < mDevices.Length; ++i) {
+                                int available = 0, enabled = 0, ADLVersion = 0;
+                                mDevices[i].ADLVersion = -1;
+                                if (ADL.ADL2_Overdrive_Caps != null && ADL.ADL2_Overdrive_Caps(ADL2Context, mDevices[i].ADLAdapterIndex, ref available, ref enabled, ref ADLVersion) == ADL.ADL_SUCCESS
+                                    && available != 0
+                                    //&& enabled != 0
+                                    ) {
+                                    mDevices[i].ADLVersion = ADLVersion;
+                                }
+                            }
+
                         } else {
                             MainForm.Logger("ADL_Adapter_AdapterInfo_Get() returned error code " + ADLRet.ToString());
                         }
@@ -339,53 +434,45 @@ namespace GatelessGateSharp
                 if (ADLAdapterIndex < 0 || null == ADL.ADL_Overdrive5_Temperature_Get)
                     return -1;
 
-                ADLTemperature OSADLTemperatureData;
-                OSADLTemperatureData = new ADLTemperature();
-                var tempBuffer = IntPtr.Zero;
-                var size = Marshal.SizeOf(OSADLTemperatureData);
-                tempBuffer = Marshal.AllocCoTaskMem((int)size);
+                ADLTemperature OSADLTemperatureData = new ADLTemperature();
+                var tempBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLTemperatureData));
                 Marshal.StructureToPtr(OSADLTemperatureData, tempBuffer, false);
-                if (ADL.ADL_Overdrive5_Temperature_Get(ADLAdapterIndex, 0, tempBuffer) != ADL.ADL_SUCCESS)
-                    return -1;
-                OSADLTemperatureData = (ADLTemperature)Marshal.PtrToStructure(tempBuffer, OSADLTemperatureData.GetType());
-                return (OSADLTemperatureData.Temperature / 1000);
+                if (ADL.ADL_Overdrive5_Temperature_Get != null && ADL.ADL_Overdrive5_Temperature_Get(ADLAdapterIndex, 0, tempBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLTemperatureData = (ADLTemperature)Marshal.PtrToStructure(tempBuffer, OSADLTemperatureData.GetType());
+                    return (OSADLTemperatureData.Temperature / 1000);
+                }
+                return -1;
             }
         }
 
         public int FanSpeed {
             get {
-                if (ADLAdapterIndex < 0 || null == ADL.ADL_Overdrive5_FanSpeed_Get)
+                if (ADLAdapterIndex < 0)
                     return -1;
 
-                ADLFanSpeedValue OSADLFanSpeedValueData;
-                OSADLFanSpeedValueData = new ADLFanSpeedValue();
-                var fanSpeedValueBuffer = IntPtr.Zero;
-                var size = Marshal.SizeOf(OSADLFanSpeedValueData);
+                ADLFanSpeedValue OSADLFanSpeedValueData = new ADLFanSpeedValue();
                 OSADLFanSpeedValueData.iSpeedType = 1;
-                fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)size);
+                var fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLFanSpeedValueData));
                 Marshal.StructureToPtr(OSADLFanSpeedValueData, fanSpeedValueBuffer, false);
-
-                if (ADL.ADL_Overdrive5_FanSpeed_Get(ADLAdapterIndex, 0, fanSpeedValueBuffer) != ADL.ADL_SUCCESS)
-                    return -1;
-                OSADLFanSpeedValueData = (ADLFanSpeedValue)Marshal.PtrToStructure(fanSpeedValueBuffer, OSADLFanSpeedValueData.GetType());
-                return OSADLFanSpeedValueData.iFanSpeed;
+                if (ADL.ADL_Overdrive5_FanSpeed_Get != null && ADL.ADL_Overdrive5_FanSpeed_Get(ADLAdapterIndex, 0, fanSpeedValueBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLFanSpeedValueData = (ADLFanSpeedValue)Marshal.PtrToStructure(fanSpeedValueBuffer, OSADLFanSpeedValueData.GetType());
+                    return OSADLFanSpeedValueData.iFanSpeed;
+                }
+                return -1;
             }
 
             set {
-                if (ADLAdapterIndex < 0 || null == ADL.ADL_Overdrive5_FanSpeed_Set)
+                if (ADLAdapterIndex < 0)
                     return;
 
-                if (value < 0) {
+                if (value < 0 && ADL.ADL_Overdrive5_FanSpeedToDefault_Set != null) {
                     ADL.ADL_Overdrive5_FanSpeedToDefault_Set(ADLAdapterIndex, 0);
-                } else {
-                    ADLFanSpeedValue OSADLFanSpeedValueData;
-                    OSADLFanSpeedValueData = new ADLFanSpeedValue();
-                    var fanSpeedValueBuffer = IntPtr.Zero;
-                    var size = Marshal.SizeOf(OSADLFanSpeedValueData);
+                } else if (value >= 0 && ADL.ADL_Overdrive5_FanSpeed_Set != null) {
+                    ADLFanSpeedValue OSADLFanSpeedValueData = new ADLFanSpeedValue();
                     OSADLFanSpeedValueData.iSpeedType = 1;
                     OSADLFanSpeedValueData.iFanSpeed = value;
                     OSADLFanSpeedValueData.iFlags = 0;
-                    fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)size);
+                    var fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLFanSpeedValueData));
                     Marshal.StructureToPtr(OSADLFanSpeedValueData, fanSpeedValueBuffer, false);
                     ADL.ADL_Overdrive5_FanSpeed_Set(ADLAdapterIndex, 0, fanSpeedValueBuffer);
                 }
@@ -394,41 +481,243 @@ namespace GatelessGateSharp
 
         public int Activity {
             get {
-                if (ADLAdapterIndex < 0 || null == ADL.ADL_Overdrive5_CurrentActivity_Get)
+                if (ADLAdapterIndex < 0)
                     return -1;
 
-                // activity
-                ADLPMActivity OSADLPMActivityData;
-                OSADLPMActivityData = new ADLPMActivity();
-                var activityBuffer = IntPtr.Zero;
-                var size = Marshal.SizeOf(OSADLPMActivityData);
-                activityBuffer = Marshal.AllocCoTaskMem((int)size);
+                ADLPMActivity OSADLPMActivityData = new ADLPMActivity();
+                var activityBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLPMActivityData));
                 Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
-
-                if (ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) != ADL.ADL_SUCCESS)
-                    return -1;
-                OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                return OSADLPMActivityData.iActivityPercent;
+                if (ADL.ADL_Overdrive5_CurrentActivity_Get != null && ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
+                    return OSADLPMActivityData.iActivityPercent;
+                }
+                return -1;
             }
         }
-        
+
+        public int PowerLimit {
+            get {
+                if (ADLAdapterIndex < 0)
+                    return -1;
+
+                int currentValue = 0, defaultValue = 0;
+                if (ADL.ADL_Overdrive5_PowerControl_Get != null && ADL.ADL_Overdrive5_PowerControl_Get(ADLAdapterIndex, ref currentValue, ref defaultValue) == ADL.ADL_SUCCESS)
+                    return 100 + currentValue;
+                return -1;
+            }
+            
+            set {
+                if (ADLAdapterIndex < 0)
+                    return;
+
+                if (ADL.ADL_Overdrive5_PowerControl_Set != null && ADL.ADL_Overdrive5_PowerControl_Set(ADLAdapterIndex, value < 0 ? 0 : value - 100) == ADL.ADL_SUCCESS)
+                    return;
+                MainForm.Logger("ADL.ADL_Overdrive5_PowerControl_Set() failed with Device #" + DeviceIndex + ".");
+            }
+        }
+
+        public void ResetOverclockingSettings() {
+            if (ADLAdapterIndex < 0)
+                return;
+
+            // OverDrive 5
+            ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+            OSADLODPerformanceLevelsData.iReserved = 0;
+            var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+            Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+            if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null 
+                && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 1, levelsBuffer) == ADL.ADL_SUCCESS
+                && ADL.ADL_Overdrive5_ODPerformanceLevels_Set != null)
+                ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
+            if (ADL.ADL_Overdrive5_PowerControl_Set != null)
+                ADL.ADL_Overdrive5_PowerControl_Set(ADLAdapterIndex, 0);
+
+            if (ADLVersion < 7)
+                return;
+
+            // OverDrive Next
+            ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+            OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Default;
+            OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+            var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+            Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+            if (ADL.ADL2_OverdriveN_SystemClocks_Set != null) {
+                ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+                ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+            }
+        }
+
+
         public int CoreClock {
             get {
-                if (ADLAdapterIndex < 0 || null == ADL.ADL_Overdrive5_CurrentActivity_Get)
+                if (ADLAdapterIndex < 0)
                     return -1;
 
-                // activity
-                ADLPMActivity OSADLPMActivityData;
-                OSADLPMActivityData = new ADLPMActivity();
-                var activityBuffer = IntPtr.Zero;
-                var size = Marshal.SizeOf(OSADLPMActivityData);
-                activityBuffer = Marshal.AllocCoTaskMem((int)size);
+                ADLPMActivity OSADLPMActivityData = new ADLPMActivity();
+                var activityBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLPMActivityData));
                 Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
+                if (ADL.ADL_Overdrive5_CurrentActivity_Get != null && ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
+                    return OSADLPMActivityData.iEngineClock / 100;
+                }
 
-                if (ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) != ADL.ADL_SUCCESS)
+                return -1;
+            }
+
+            set {
+                bool reset = value < 0;
+
+                if (ADLAdapterIndex < 0)
+                    return;
+                mCoreClock = value;
+
+                // OverDrive 5
+                ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                OSADLODPerformanceLevelsData.iReserved = 0;
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null
+                    && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, reset ? 1 : 0, levelsBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLODPerformanceLevelsData = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+                    //
+                    if (!reset) {
+                        for (int i = 0; i < ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5; ++i) {
+                            OSADLODPerformanceLevelsData.aLevels[i] = OSADLODPerformanceLevelsData.aLevels[ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 - 1];
+                            if (mCoreClock >= 0) OSADLODPerformanceLevelsData.aLevels[i].iEngineClock = mCoreClock * 100;
+                            if (mMemoryClock >= 0) OSADLODPerformanceLevelsData.aLevels[i].iMemoryClock = mMemoryClock * 100;
+                            if (mCoreVoltage >= 0) OSADLODPerformanceLevelsData.aLevels[i].iVddc = mCoreVoltage;
+                        }
+                    }
+                    Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                    if (ADL.ADL_Overdrive5_ODPerformanceLevels_Set != null)
+                        ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
+                }
+
+                if (ADLVersion < 7)
+                    return;
+
+                // OverDrive Next
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)(reset ? ADLODNControlType.ODNControlType_Default : ADLODNControlType.ODNControlType_Current);
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_SystemClocks_Get != null 
+                    && ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLODNPerformanceLevelsData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                    //
+                    OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                    if (!reset) {
+                        int sourceIndex = 0;
+                        for (int i = 1; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                            if (OSADLODNPerformanceLevelsData.aLevels[i].iEnabled != 0)
+                                sourceIndex = i;
+                        for (int i = 1; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i) {
+                            OSADLODNPerformanceLevelsData.aLevels[i].iClock = mCoreClock * 100;
+                            OSADLODNPerformanceLevelsData.aLevels[i].iVddc = (mCoreVoltage >= 0) ? mCoreVoltage : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iVddc;
+                        }
+                        OSADLODNPerformanceLevelsData.aLevels[0].iEnabled = 1;
+                    }
+                    Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                    if (ADL.ADL2_OverdriveN_SystemClocks_Set != null)
+                        ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+                }
+            }
+        }
+
+        public int CoreVoltage {
+            get {
+                if (ADLAdapterIndex < 0)
                     return -1;
-                OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                return OSADLPMActivityData.iEngineClock / 100;
+
+                if (null != ADL.ADL_Overdrive5_CurrentActivity_Get) {
+                    ADLPMActivity OSADLPMActivityData = new ADLPMActivity();
+                    var activityBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLPMActivityData));
+                    Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
+                    if (ADL.ADL_Overdrive5_CurrentActivity_Get != null && ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) == ADL.ADL_SUCCESS) {
+                        OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
+                        mCoreVoltageAvailable = mCoreVoltageAvailable && !(OSADLPMActivityData.iVddc <= 800 || OSADLPMActivityData.iVddc > 2000); // The driver may return garbage.
+                        if (mCoreVoltageAvailable)
+                            return OSADLPMActivityData.iVddc;
+                    }
+                }
+
+                if (ADLVersion < 6)
+                    return -1;
+
+                if (ADL.ADL_Overdrive6_VoltageControl_Get != null) {
+                    int defaultValue = 0, currentValue = 0;
+                    if (ADL.ADL_Overdrive6_VoltageControl_Get != null && ADL.ADL_Overdrive6_VoltageControl_Get(ADLAdapterIndex, ref currentValue, ref defaultValue) == ADL.ADL_SUCCESS)
+                        return currentValue;
+                }
+
+                if (ADLVersion < 7)
+                    return -1;
+
+                ADLODNPerformanceStatus OSODNPerformanceStatusData = new ADLODNPerformanceStatus();
+                var statusBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSODNPerformanceStatusData));
+                Marshal.StructureToPtr(OSODNPerformanceStatusData, statusBuffer, false);
+                if (ADL.ADL2_OverdriveN_PerformanceStatus_Get != null && ADL.ADL2_OverdriveN_PerformanceStatus_Get(ADL2Context, ADLAdapterIndex, statusBuffer) != ADL.ADL_SUCCESS)
+                    return -1;
+                OSODNPerformanceStatusData = (ADLODNPerformanceStatus)Marshal.PtrToStructure(statusBuffer, OSODNPerformanceStatusData.GetType());
+                mCoreVoltageAvailable = mCoreVoltageAvailable && !(OSODNPerformanceStatusData.iVDDC <= 800 || OSODNPerformanceStatusData.iVDDC > 2000); // The driver may return garbage.
+                return (!mCoreVoltageAvailable) ? -1 : OSODNPerformanceStatusData.iVDDC;
+            }
+
+            set {
+                bool reset = value < 0;
+
+                if (ADLAdapterIndex < 0)
+                    return;
+                mCoreVoltage = value;
+
+                // OverDrive 5
+                ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                OSADLODPerformanceLevelsData.iReserved = 0;
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, reset ? 1 : 0, levelsBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLODPerformanceLevelsData = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+                    //
+                    if (!reset) {
+                        for (int i = 0; i < ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5; ++i) {
+                            OSADLODPerformanceLevelsData.aLevels[i] = OSADLODPerformanceLevelsData.aLevels[ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 - 1];
+                            if (mCoreClock >= 0) OSADLODPerformanceLevelsData.aLevels[i].iEngineClock = mCoreClock * 100;
+                            if (mMemoryClock >= 0) OSADLODPerformanceLevelsData.aLevels[i].iMemoryClock = mMemoryClock * 100;
+                            if (mCoreVoltage >= 0) OSADLODPerformanceLevelsData.aLevels[i].iVddc = mCoreVoltage;
+                        }
+                    }
+                    Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                    ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
+                }
+
+                if (ADLVersion < 7)
+                    return;
+
+                // OverDrive Next
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)(reset ? ADLODNControlType.ODNControlType_Default : ADLODNControlType.ODNControlType_Current);
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_SystemClocks_Get != null && ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
+                    return;
+                OSADLODNPerformanceLevelsData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                //
+                OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                if (!reset) {
+                    int sourceIndex = 1;
+                    for (int i = 1; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                        if (OSADLODNPerformanceLevelsData.aLevels[i].iEnabled != 0)
+                            sourceIndex = i;
+                    for (int i = 0; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i) {
+                        OSADLODNPerformanceLevelsData.aLevels[i].iClock = (mCoreClock >= 0) ? (mCoreClock * 100) : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iClock;
+                        OSADLODNPerformanceLevelsData.aLevels[i].iVddc = mCoreVoltage;
+                    }
+                    OSADLODNPerformanceLevelsData.aLevels[0].iEnabled = 1;
+                }
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
             }
         }
 
@@ -444,12 +733,422 @@ namespace GatelessGateSharp
                 var size = Marshal.SizeOf(OSADLPMActivityData);
                 activityBuffer = Marshal.AllocCoTaskMem((int)size);
                 Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
-
-                if (ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) != ADL.ADL_SUCCESS)
+                if (ADL.ADL_Overdrive5_CurrentActivity_Get != null && ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) != ADL.ADL_SUCCESS)
                     return -1;
                 OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
                 return OSADLPMActivityData.iMemoryClock / 100;
             }
+
+            set {
+                bool reset = value < 0;
+
+                if (ADLAdapterIndex < 0)
+                    return;
+                mMemoryClock = value;
+
+                // OverDrive 5
+                ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                OSADLODPerformanceLevelsData.iReserved = 0;
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, reset ? 1 : 0, levelsBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLODPerformanceLevelsData = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+                    //
+                    if (!reset) {
+                        for (int i = 0; i < ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5; ++i) {
+                            OSADLODPerformanceLevelsData.aLevels[i].iVddc = OSADLODPerformanceLevelsData.aLevels[ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 - 1].iVddc;
+                            if (mCoreClock >= 0) OSADLODPerformanceLevelsData.aLevels[i].iEngineClock = mCoreClock * 100;
+                            if (mMemoryClock >= 0) OSADLODPerformanceLevelsData.aLevels[i].iMemoryClock = mMemoryClock * 100;
+                            if (mCoreVoltage >= 0) OSADLODPerformanceLevelsData.aLevels[i].iVddc = mCoreVoltage;
+                        }
+                    }
+                    Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                    ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
+                }
+
+                if (ADLVersion < 7)
+                    return;
+
+                // OverDrive Next
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)(reset ? ADLODNControlType.ODNControlType_Default : ADLODNControlType.ODNControlType_Current);
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_MemoryClocks_Get != null && ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
+                    return;
+                OSADLODNPerformanceLevelsData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                //
+                OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                if (!reset) {
+                    int sourceIndex = 1;
+                    for (int i = 0; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                        if (OSADLODNPerformanceLevelsData.aLevels[i].iEnabled != 0)
+                            sourceIndex = i;
+                    for (int i = 0; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i) {
+                        OSADLODNPerformanceLevelsData.aLevels[i].iClock = mMemoryClock * 100;
+                        OSADLODNPerformanceLevelsData.aLevels[i].iVddc = (mMemoryVoltage >= 0) ? mMemoryVoltage : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iVddc;
+                    }
+                    OSADLODNPerformanceLevelsData.aLevels[0].iEnabled = 1;
+                }
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+            }
+        }
+
+        public int MemoryVoltage {
+            get {
+                if (ADLAdapterIndex < 0 || null == ADL.ADL2_OverdriveN_PerformanceStatus_Get)
+                    return -1;
+
+                ADLODNPerformanceStatus OSODNPerformanceStatusData = new ADLODNPerformanceStatus();
+                var statusBuffer = Marshal.AllocCoTaskMem((int)(Marshal.SizeOf(OSODNPerformanceStatusData)));
+                Marshal.StructureToPtr(OSODNPerformanceStatusData, statusBuffer, false);
+                if (ADL.ADL2_OverdriveN_PerformanceStatus_Get != null && ADL.ADL2_OverdriveN_PerformanceStatus_Get(ADL2Context, ADLAdapterIndex, statusBuffer) != ADL.ADL_SUCCESS)
+                    return -1;
+                OSODNPerformanceStatusData = (ADLODNPerformanceStatus)Marshal.PtrToStructure(statusBuffer, OSODNPerformanceStatusData.GetType());
+                return (OSODNPerformanceStatusData.iVDDC < 800 || OSODNPerformanceStatusData.iVDDC > 2000) ? -1 : OSODNPerformanceStatusData.iVDDC; // The driver may return garbage.
+            }
+
+            set {
+                bool reset = value < 0;
+
+                if (ADLAdapterIndex < 0)
+                    return;
+                mMemoryVoltage = value;
+
+                // OverDrive Next
+                if (ADLVersion < 7)
+                    return;
+
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)(reset ? ADLODNControlType.ODNControlType_Default : ADLODNControlType.ODNControlType_Current);
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_MemoryClocks_Get != null && ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
+                    return;
+                OSADLODNPerformanceLevelsData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                //
+                OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                if (!reset) {
+                    int sourceIndex = 1;
+                    for (int i = 1; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                        if (OSADLODNPerformanceLevelsData.aLevels[i].iEnabled != 0)
+                            sourceIndex = i;
+                    for (int i = 0; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i) {
+                        OSADLODNPerformanceLevelsData.aLevels[i].iClock = (mMemoryClock >= 0) ? (mMemoryClock * 100) : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iClock;
+                        OSADLODNPerformanceLevelsData.aLevels[i].iVddc = mMemoryVoltage;
+                    }
+                    OSADLODNPerformanceLevelsData.aLevels[0].iEnabled = 1;
+                }
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+            }
+        }
+
+        public int MaxCoreClock {
+            get {
+                // OverDrive 5
+                var OSADLParametersData = new ADLODParameters();
+                var parametersBuffer = Marshal.AllocCoTaskMem((int)(OSADLParametersData.iSize = Marshal.SizeOf(OSADLParametersData)));
+                Marshal.StructureToPtr(OSADLParametersData, parametersBuffer, false);
+                if (ADL.ADL_Overdrive5_ODParameters_Get != null && ADL.ADL_Overdrive5_ODParameters_Get(ADLAdapterIndex, parametersBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLParametersData = (ADLODParameters)Marshal.PtrToStructure(parametersBuffer, OSADLParametersData.GetType());
+                    return OSADLParametersData.sEngineClockRange.iMax / 100;
+                }
+
+                return -1;
+            }
+        }
+
+        public int MinCoreClock {
+            get {
+                // OverDrive 5
+                var OSADLParametersData = new ADLODParameters();
+                var parametersBuffer = Marshal.AllocCoTaskMem((int)(OSADLParametersData.iSize = Marshal.SizeOf(OSADLParametersData)));
+                Marshal.StructureToPtr(OSADLParametersData, parametersBuffer, false);
+                if (ADL.ADL_Overdrive5_ODParameters_Get != null && ADL.ADL_Overdrive5_ODParameters_Get(ADLAdapterIndex, parametersBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLParametersData = (ADLODParameters)Marshal.PtrToStructure(parametersBuffer, OSADLParametersData.GetType());
+                    return OSADLParametersData.sEngineClockRange.iMin / 100;
+                }
+
+                return -1;
+            }
+        }
+
+        public int CoreClockStep {
+            get {
+                // OverDrive 5
+                var OSADLParametersData = new ADLODParameters();
+                var parametersBuffer = Marshal.AllocCoTaskMem((int)(OSADLParametersData.iSize = Marshal.SizeOf(OSADLParametersData)));
+                Marshal.StructureToPtr(OSADLParametersData, parametersBuffer, false);
+                if (ADL.ADL_Overdrive5_ODParameters_Get != null && ADL.ADL_Overdrive5_ODParameters_Get(ADLAdapterIndex, parametersBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLParametersData = (ADLODParameters)Marshal.PtrToStructure(parametersBuffer, OSADLParametersData.GetType());
+                    return OSADLParametersData.sEngineClockRange.iStep / 100;
+                }
+
+                return -1;
+            }
+        }
+
+
+        public int MaxMemoryClock {
+            get {
+                // OverDrive 5
+                var OSADLParametersData = new ADLODParameters();
+                var parametersBuffer = Marshal.AllocCoTaskMem((int)(OSADLParametersData.iSize = Marshal.SizeOf(OSADLParametersData)));
+                Marshal.StructureToPtr(OSADLParametersData, parametersBuffer, false);
+                if (ADL.ADL_Overdrive5_ODParameters_Get != null && ADL.ADL_Overdrive5_ODParameters_Get(ADLAdapterIndex, parametersBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLParametersData = (ADLODParameters)Marshal.PtrToStructure(parametersBuffer, OSADLParametersData.GetType());
+                    return OSADLParametersData.sMemoryClockRange.iMax / 100;
+                }
+
+                return -1;
+            }
+        }
+
+        public int MinMemoryClock {
+            get {
+                // OverDrive 5
+                var OSADLParametersData = new ADLODParameters();
+                var parametersBuffer = Marshal.AllocCoTaskMem((int)(OSADLParametersData.iSize = Marshal.SizeOf(OSADLParametersData)));
+                Marshal.StructureToPtr(OSADLParametersData, parametersBuffer, false);
+                if (ADL.ADL_Overdrive5_ODParameters_Get != null && ADL.ADL_Overdrive5_ODParameters_Get(ADLAdapterIndex, parametersBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLParametersData = (ADLODParameters)Marshal.PtrToStructure(parametersBuffer, OSADLParametersData.GetType());
+                    return OSADLParametersData.sMemoryClockRange.iMin / 100;
+                }
+
+                return -1;
+            }
+        }
+
+        public int MemoryClockStep {
+            get {
+                // OverDrive 5
+                var OSADLParametersData = new ADLODParameters();
+                var parametersBuffer = Marshal.AllocCoTaskMem((int)(OSADLParametersData.iSize = Marshal.SizeOf(OSADLParametersData)));
+                Marshal.StructureToPtr(OSADLParametersData, parametersBuffer, false);
+                if (ADL.ADL_Overdrive5_ODParameters_Get != null && ADL.ADL_Overdrive5_ODParameters_Get(ADLAdapterIndex, parametersBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLParametersData = (ADLODParameters)Marshal.PtrToStructure(parametersBuffer, OSADLParametersData.GetType());
+                    return OSADLParametersData.sMemoryClockRange.iStep / 100;
+                }
+
+                return -1;
+            }
+        }     
+
+        public int DefaultCoreClock {
+            get {
+                // OverDrive 5
+                ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                OSADLODPerformanceLevelsData.iReserved = 0;
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 1, levelsBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLODPerformanceLevelsData = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+                    return OSADLODPerformanceLevelsData.aLevels[ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 - 1].iEngineClock / 100;
+                }
+
+                if (ADLVersion < 7)
+                    return -1;
+
+                // OverDrive Next
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Default;
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_SystemClocks_Get != null && ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
+                    return -1;
+                OSADLODNPerformanceLevelsData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                //
+                int sourceIndex = -1;
+                for (int i = 0; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                    if (OSADLODNPerformanceLevelsData.aLevels[i].iEnabled != 0)
+                        sourceIndex = i;
+                return (sourceIndex < 0) ? -1 : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iClock / 100;
+            }
+        }
+
+        public int DefaultMemoryClock {
+            get {
+                // OverDrive 5
+                ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 1, levelsBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLODPerformanceLevelsData = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+                    return OSADLODPerformanceLevelsData.aLevels[ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 - 1].iMemoryClock / 100;
+                }
+
+                if (ADLVersion < 7)
+                    return -1;
+
+                // OverDrive Next
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Default;
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_MemoryClocks_Get != null && ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
+                    return -1;
+                OSADLODNPerformanceLevelsData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                //
+                int sourceIndex = -1;
+                for (int i = 0; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                    if (OSADLODNPerformanceLevelsData.aLevels[i].iEnabled != 0)
+                        sourceIndex = i;
+                return (sourceIndex < 0) ? -1 : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iClock / 100;
+            }
+        }
+
+        public int DefaultCoreVoltage {
+            get {
+                // OverDrive 5
+                ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                OSADLODPerformanceLevelsData.iReserved = 0;
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 1, levelsBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLODPerformanceLevelsData = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+                    return OSADLODPerformanceLevelsData.aLevels[ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 - 1].iVddc;
+                }
+
+                if (ADLVersion < 7)
+                    return -1;
+
+                // OverDrive Next
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Default;
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_SystemClocks_Get != null && ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
+                    return -1;
+                OSADLODNPerformanceLevelsData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                //
+                int sourceIndex = -1;
+                for (int i = 0; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                    if (OSADLODNPerformanceLevelsData.aLevels[i].iEnabled != 0)
+                        sourceIndex = i;
+                return (sourceIndex < 0) ? -1 : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iVddc;
+            }
+        }
+
+        public int DefaultMemoryVoltage {
+            get {
+                if (ADLVersion < 7)
+                    return -1;
+
+                // OverDrive Next
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)ADLODNControlType.ODNControlType_Default;
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_MemoryClocks_Get != null && ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) != ADL.ADL_SUCCESS)
+                    return -1;
+                OSADLODNPerformanceLevelsData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                //
+                int sourceIndex = -1;
+                for (int i = 0; i < OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels; ++i)
+                    if (OSADLODNPerformanceLevelsData.aLevels[i].iEnabled != 0)
+                        sourceIndex = i;
+                return (sourceIndex < 0) ? -1 : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iVddc;
+            }
+        }
+
+        public int Power {
+            get {
+                if (ADLVersion < 6)
+                    return -1;
+
+                int power = 0;
+                if (ADL.ADL_Overdrive6_CurrentPower_Get != null
+                    && ADL.ADL_Overdrive6_CurrentPower_Get(ADLAdapterIndex, 0, ref power) == ADL.ADL_SUCCESS)
+                    return power >> 8;
+                if (ADL.ADL2_Overdrive6_CurrentPower_Get != null
+                    && ADL.ADL2_Overdrive6_CurrentPower_Get(ADL2Context, ADLAdapterIndex, 0, ref power) == ADL.ADL_SUCCESS)
+                    return power >> 8;
+                return -1;
+            }
+        }
+
+        int mPowerControlBackup;
+        ADLODPerformanceLevels sODPerformanceLevelsBackup;
+        ADLODNPerformanceLevels sODNSystemClocksBackup;
+        ADLODNPerformanceLevels sODNMemoryClocksBackup;
+
+        public void SaveOverclockingSettings() {
+            if (ADLAdapterIndex < 0)
+                return;
+
+            int defaultPowerControl = 0;
+            ADL.ADL_Overdrive5_PowerControl_Get(ADLAdapterIndex, ref mPowerControlBackup, ref defaultPowerControl);
+
+            // OverDrive 5
+            ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+            var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+            Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+            if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 0, levelsBuffer) == ADL.ADL_SUCCESS)
+                sODPerformanceLevelsBackup = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+
+            if (ADLVersion < 7)
+                return;
+
+            // OverDrive Next (System Clocks)
+            ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+            OSADLODNPerformanceLevelsData.iMode = (int)(ADLODNControlType.ODNControlType_Current);
+            OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+            var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+            Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+            if (ADL.ADL2_OverdriveN_SystemClocks_Get != null && ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) == ADL.ADL_SUCCESS)
+                sODNSystemClocksBackup = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+
+            // OverDrive Next (Memory Clocks)
+            OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels(); // zero clear
+            OSADLODNPerformanceLevelsData.iMode = (int)(ADLODNControlType.ODNControlType_Current);
+            OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+            ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+            Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+            if (ADL.ADL2_OverdriveN_MemoryClocks_Get != null && ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) == ADL.ADL_SUCCESS)
+                sODNMemoryClocksBackup = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+        }
+
+        public void RestoreOverclockingSettings() {
+            if (ADLAdapterIndex < 0)
+                return;
+
+            ADL.ADL_Overdrive5_PowerControl_Set(ADLAdapterIndex, mPowerControlBackup);
+
+            // OverDrive 5
+            var levelsBuffer = Marshal.AllocCoTaskMem((int)(sODPerformanceLevelsBackup.iSize));
+            Marshal.StructureToPtr(sODPerformanceLevelsBackup, levelsBuffer, false);
+            ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
+
+            if (ADLVersion < 7)
+                return;
+
+            // OverDrive Next (System Clocks)
+            var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(sODNSystemClocksBackup.iSize));
+            Marshal.StructureToPtr(sODNSystemClocksBackup, ODNLevelsBuffer, false);
+            ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+
+            // OverDrive Next (Memory Clocks)
+            ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(sODNMemoryClocksBackup.iSize));
+            Marshal.StructureToPtr(sODNMemoryClocksBackup, ODNLevelsBuffer, false);
+            ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+        }
+
+        public void UpdateOverclockingSettings() {
+            if (!OverclockingEnabled)
+                return;
+            PowerLimit = TargetPowerLimit;
+            CoreClock = TargetCoreClock;
+            MemoryClock = TargetMemoryClock;
+            CoreVoltage = TargetCoreVoltage;
+            MemoryVoltage = TargetMemoryVoltage;
         }
     }
 }

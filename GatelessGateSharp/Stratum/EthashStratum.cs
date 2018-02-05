@@ -60,6 +60,13 @@ namespace GatelessGateSharp
                 mHeaderhash = aHeaderhash;
             }
 
+            public bool Equals(Job aJob) {
+                return aJob != null
+                    && mID == aJob.mID
+                    && mSeedhash == aJob.mSeedhash
+                    && mHeaderhash == aJob.mHeaderhash;
+            }
+
             public int Epoch
             {
                 get
@@ -216,11 +223,6 @@ namespace GatelessGateSharp
                 MainForm.Logger("Generated mix hash (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
                 return Utilities.ByteArrayToString(cmix);
             }
-
-            public bool Equals(Job aJob)
-            {
-                return (mID.Equals(aJob.mID));
-            }
         }
 
         protected Job mJob = null;
@@ -233,7 +235,7 @@ namespace GatelessGateSharp
         }
 
         public EthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "ethash")
         {
         }
 

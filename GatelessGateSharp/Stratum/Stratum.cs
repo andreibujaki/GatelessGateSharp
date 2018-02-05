@@ -52,7 +52,8 @@ namespace GatelessGateSharp {
 
             public UInt64 LocalExtranonce {
                 get {
-                    return (mJob.Stratum.LocalExtranonceSize == 1) ? (mLocalExtranonce & 0xffUL) :
+                    return mJob == null ? 0 : // dummy
+                           (mJob.Stratum.LocalExtranonceSize == 1) ? (mLocalExtranonce & 0xffUL) :
                            (mJob.Stratum.LocalExtranonceSize == 2) ? (mLocalExtranonce & 0xffffUL) :
                            (mJob.Stratum.LocalExtranonceSize == 3) ? (mLocalExtranonce & 0xffffffUL) :
                            (mJob.Stratum.LocalExtranonceSize == 4) ? (mLocalExtranonce & 0xffffffffUL) :
@@ -78,7 +79,7 @@ namespace GatelessGateSharp {
 
             protected Work(Job aJob) {
                 mJob = aJob;
-                mLocalExtranonce = aJob.GetNewLocalExtranonce();
+                mLocalExtranonce = (mJob == null) ? 0 : aJob.GetNewLocalExtranonce();
             }
         }
 
@@ -95,14 +96,17 @@ namespace GatelessGateSharp {
         protected double mDifficulty = 1.0;
         protected String mPoolExtranonce = "";
         protected String mPoolName = "";
+        protected String mAlgorithm = "";
         TcpClient mClient;
         NetworkStream mStream;
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
-        Thread mReconnectThread;
         private List<OpenCLDevice> mDevicesWithShare = new List<OpenCLDevice>();
+        private List<int> mShareIDs = new List<int>();
         private int mLocalExtranonceSize = 1;
+        private bool mReconnectionRequested = false;
+        private int mShareCounter = 0;
 
         public int LocalExtranonceSize {
             get {
@@ -119,96 +123,93 @@ namespace GatelessGateSharp {
         public String Password { get { return mPassword; } }
         public String PoolExtranonce { get { return mPoolExtranonce; } }
         public String PoolName { get { return mPoolName; } }
+        public String AlgorithmName { get { return mAlgorithm; } }
         public double Difficulty { get { return mDifficulty; } }
         public UnrecoverableException UnrecoverableException { get; set; }
+        public bool SilentMode { get; set; }
 
-        protected void RegisterDeviceWithShare(OpenCLDevice aDevice) {
+        protected void ReportSubmittedShare(OpenCLDevice aDevice) {
+            int shareID = -1;
+
             try { mMutex.WaitOne(5000); } catch (Exception) { }
             mDevicesWithShare.Add(aDevice);
+            shareID = mShareCounter;
+            mShareIDs.Add(mShareCounter++);
             try { mMutex.ReleaseMutex(); } catch (Exception) { }
+
+            if (shareID >= 0 && !MainForm.DevFeeMode) {
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted Share #" + shareID + " to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
+            } else {
+                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
+            }
         }
 
-        protected void ReportShareAcceptance() {
-            if (MainForm.DevFeeMode)
-                return;
+        protected void ReportAcceptedShare() {
+            int shareID = -1;
+            OpenCLDevice device = null;
+            
             try { mMutex.WaitOne(5000); } catch (Exception) { }
             if (mDevicesWithShare.Count > 0) {
-                OpenCLDevice device = mDevicesWithShare[0];
+                device = mDevicesWithShare[0];
                 mDevicesWithShare.RemoveAt(0);
+                shareID = mShareIDs[0];
+                mShareIDs.RemoveAt(0);
+            }
+            try { mMutex.ReleaseMutex(); } catch (Exception) { }
+
+            if (!MainForm.DevFeeMode) {
                 device.IncrementAcceptedShares();
+                MainForm.Instance.ReportAcceptedShare();
             }
-            try { mMutex.ReleaseMutex(); } catch (Exception) { }
+
+            if (shareID >= 0 && !MainForm.DevFeeMode) {
+                MainForm.Logger("Share #" + shareID + " accepted.");
+            } else {
+                MainForm.Logger("Share accepted.");
+            }
         }
 
-        protected void ReportShareRejection() {
-            if (MainForm.DevFeeMode)
-                return;
+        protected void ReportRejectedShare(string reason = null) {
+            int shareID = -1;
+            OpenCLDevice device = null;
+
             try { mMutex.WaitOne(5000); } catch (Exception) { }
             if (mDevicesWithShare.Count > 0) {
-                OpenCLDevice device = mDevicesWithShare[0];
+                device = mDevicesWithShare[0];
                 mDevicesWithShare.RemoveAt(0);
-                device.IncrementRejectedShares();
+                shareID = mShareIDs[0];
+                mShareIDs.RemoveAt(0);
             }
             try { mMutex.ReleaseMutex(); } catch (Exception) { }
+
+            if (!MainForm.DevFeeMode) {
+                device.IncrementRejectedShares();
+                MainForm.Instance.ReportRejectedShare();
+            }
+
+            if (shareID >= 0 && !MainForm.DevFeeMode) {
+                MainForm.Logger("Share #" + shareID + " rejected.");
+            } else {
+                MainForm.Logger("Share rejected.");
+            }
         }
 
         public void Stop() {
             mStopped = true;
         }
 
-        public Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName) {
+        public Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, String aAlgorithm) {
             mServerAddress = aServerAddress;
             mServerPort = aServerPort;
             mUsername = aUsername;
             mPassword = aPassword;
             mPoolName = aPoolName;
+            mAlgorithm = aAlgorithm;
+            SilentMode = false;
 
-            Connect();
-        }
-
-        public void Reconnect() {
-            try {
-                mClient.Close();
-                mClient = null;
-            } catch (Exception) { }
-
-            MainForm.Logger("Reconnecting in 10 seconds...");
-            for (int counter = 0; counter < 100; ++counter) {
-                if (Stopped)
-                    break;
-                System.Threading.Thread.Sleep(100);
-            }
-
-            mReconnectThread = new Thread(new ThreadStart(Connect));
-            mReconnectThread.IsBackground = true;
-            mReconnectThread.Start();
-        }
-
-        public void Connect() {
-            try {
-                if (Stopped)
-                    return;
-
-                MainForm.Logger("Connecting to " + ServerAddress + ":" + ServerPort + " as " + Username + "...");
-
-                try { mMutex.WaitOne(5000); } catch (Exception) { }
-
-                UnrecoverableException = null;
-                mClient = new TcpClient(ServerAddress, ServerPort);
-                mStream = mClient.GetStream();
-                mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false);
-                mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII);
-
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
-
-                Authorize();
-
-                mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
-                mStreamReaderThread.IsBackground = true;
-                mStreamReaderThread.Start();
-            } catch (Exception ex) {
-                MainForm.Logger("Exception in Stratum.Connect(): " + ex.ToString());
-            }
+            mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
+            mStreamReaderThread.IsBackground = true;
+            mStreamReaderThread.Start();
         }
 
         protected void WriteLine(String line) {
@@ -226,32 +227,76 @@ namespace GatelessGateSharp {
         protected virtual void Authorize() { }
         protected virtual void ProcessLine(String line) { }
 
+        public void Reconnect() {
+            mReconnectionRequested = true;
+        }
+
         private void StreamReaderThread() {
-            try {
-                while (!Stopped) {
-                    string line;
-                    if ((line = mStreamReader.ReadLine()) == null)
-                        throw new Exception("Disconnected from stratum server.");
-                    if (Stopped)
-                        break;
-                    if (line != "")
-                        ProcessLine(line);
-                }
-            } catch (Exception ex) {
-                MainForm.Logger("Exception in Stratum.StreamReaderThread(): " + ex.ToString());
-                if (ex.Message == "An established connection was aborted by the software in your host machine. ---> System.Net.Sockets.SocketException: An established connection was aborted by the software in your host machine") {
-                    MainForm.Logger("Exception seems fatal. Restarting the application...");
-                    Environment.Exit(1);
-                }
-            }
+            Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+            int errorCount = 0;
 
-            try {
-                mClient.Close();
-                mClient = null;
-            } catch (Exception) { }
+            UnrecoverableException = null; 
+            
+            do {
+                try {
+                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                    sw.Start();
 
-            if (!Stopped && UnrecoverableException == null)
-                Reconnect();
+                    try { mMutex.WaitOne(5000); } catch (Exception) { }
+
+                    mClient = new TcpClient(ServerAddress, ServerPort);
+                    mStream = mClient.GetStream();
+                    mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false, 65536);
+                    mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII, 65536);
+                    mStreamReader.BaseStream.ReadTimeout = 3 * 60 * 1000;
+                    mStreamWriter.BaseStream.WriteTimeout = 10 * 1000;
+                    mReconnectionRequested = false;
+
+                    try { mMutex.ReleaseMutex(); } catch (Exception) { }
+
+                    Authorize();
+
+                    while (!Stopped  && !mReconnectionRequested) {
+                        string line;
+                        try {
+                            line = mStreamReader.ReadLine();
+                        } catch (Exception) {
+                            throw new StratumServerUnavailableException();
+                        }
+                        if (line == null)
+                            throw new StratumServerUnavailableException();
+
+                        if (Stopped)
+                            break;
+                        if (line != "")
+                            ProcessLine(line);
+                        if (sw.ElapsedMilliseconds >= 60 * 60 * 1000)
+                            mReconnectionRequested = true;
+                    }
+                } catch (UnrecoverableException ex) {
+                    this.UnrecoverableException = ex;
+                } catch (Exception ex) {
+                    MainForm.Logger("Exception in Stratum.StreamReaderThread(): " + ex.ToString());
+                    if (UnrecoverableException.IsUnrecoverableException(ex)) {
+                        this.UnrecoverableException = new UnrecoverableException(ex.Message);
+                    } else if (++errorCount < 4) {
+                        MainForm.Logger("Reconnecting to the server...");
+                        System.Threading.Thread.Sleep(5000);
+                    } else {
+                        this.UnrecoverableException = new StratumServerUnavailableException();
+                    }
+                }
+
+                try {
+                    mClient.Close();
+                    mClient = null;
+                } catch (Exception) { }
+            } while (!Stopped && UnrecoverableException == null);
+        }
+
+        ~Stratum() {
+            if (mStreamReaderThread != null)
+                mStreamReaderThread.Abort();
         }
     }
 }

@@ -11,14 +11,12 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class Device
+    public class Device : IDisposable
     {
         private int mDeviceIndex;
         private int mAcceptedShares;
         private int mRejectedShares;
-        private ComputeContext mContext = null;
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
-        private List<ComputeDevice> mDeviceList;
 
         public virtual String GetVendor() { return ""; }
         public virtual String GetName() { return ""; }
@@ -29,12 +27,39 @@ namespace GatelessGateSharp
         public long MemorySize { get { return GetMemorySize(); } }
         public int AcceptedShares { get { return mAcceptedShares; } }
         public int RejectedShares { get { return mRejectedShares; } }
+        public double TotalHashesPrimaryAlgorithm = 0;
+        public double TotalHashesSecondaryAlgorithm = 0;
+
+        public bool OverclockingEnabled { get; set; }
+        public int TargetPowerLimit { get; set; }
+        public int TargetCoreClock { get; set; }
+        public int TargetMemoryClock { get; set; }
+        public int TargetCoreVoltage { get; set; }
+        public int TargetMemoryVoltage { get; set; }
+
+        public bool FanControlEnabled { get; set; }
+        public int TargetMaxFanSpeed { get; set; }
+        public int TargetMinFanSpeed { get; set; }
+        public int TargetTemperature { get; set; }
+        public int TargetMaxTemperature { get; set; }
 
         public Device(int aDeviceIndex)
         {
             mDeviceIndex = aDeviceIndex;
             mAcceptedShares = 0;
             mRejectedShares = 0;
+            OverclockingEnabled = false;
+            FanControlEnabled = false;
+        }
+
+        public void Dispose() {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing) {
         }
 
         public int IncrementAcceptedShares()

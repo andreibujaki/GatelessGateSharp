@@ -59,7 +59,7 @@ namespace GatelessGateSharp
 
 
         public OpenCLDualEthashLbryMiner(OpenCLDevice aGatelessGateDevice)
-            : base(aGatelessGateDevice, "Ethash/Lbry", "Ethash", "Lbry")
+            : base(aGatelessGateDevice, "ethash_lbry", "ethash", "lbry")
         {
             try {
                 mEthashOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, 256);
@@ -68,7 +68,7 @@ namespace GatelessGateSharp
                 mLbryInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 112);
                 mLbryOutputBuffer = new ComputeBuffer<UInt32>(Context, ComputeMemoryFlags.ReadWrite, lbryOutputSize);
             } catch (Exception ex) {
-                throw new UnrecoverableException(ex, GatelessGateDevice);
+                throw new UnrecoverableException(ex, Device);
             }
         }
 
@@ -97,24 +97,7 @@ namespace GatelessGateSharp
             }
             else
             {
-                String source = System.IO.File.ReadAllText(@"Kernels\ethash_lbry.cl");
-                mEthashProgram = new ComputeProgram(Context, source);
-                MainForm.Logger(@"Loaded Kernels\ethash_lbry.cl for Device #" + DeviceIndex + ".");
-                String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? "-O1 " :
-                                       OpenCLDevice.GetVendor() == "NVIDIA" ? "" : // "-cl-nv-opt-level=1 -cl-nv-maxrregcount=256 " :
-                                                                   "")
-                                      + " -IKernels -DWORKSIZE=" + mEthashLocalWorkSizeArray[0];
-                try
-                {
-                    mEthashProgram.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                }
-                catch (Exception)
-                {
-                    MainForm.Logger(mEthashProgram.GetBuildLog(computeDevice));
-                    throw;
-                }
-                MainForm.Logger("Built Ethash program for Device #" + DeviceIndex + ".");
-                MainForm.Logger("Build options: " + buildOptions);
+                mEthashProgram = BuildProgram("ethash_lbry", mEthashLocalWorkSizeArray[0], "-O1", "", "");
                 mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
                 mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");
                 mEthashSearchKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashSearchKernel = mEthashProgram.CreateKernel("search");
@@ -149,7 +132,7 @@ namespace GatelessGateSharp
 
                     // Wait for the first job to arrive.
                     int elapsedTime = 0;
-                    while ((mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < 60000) {
+                    while ((mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped) {
                         Thread.Sleep(100);
                         elapsedTime += 100;
                     }
@@ -158,7 +141,7 @@ namespace GatelessGateSharp
                         MainForm.Logger("Stratum server failed to send a new job.");
                         return;
                     }
-                    
+
                     System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                     EthashStratum.Work ethashWork;
                     LbryStratum.Work lbryWork;
@@ -273,7 +256,7 @@ namespace GatelessGateSharp
                             if (mEthashStratum.GetJob().ID.Equals(ethashJobID))
                             {
                                 for (int i = 0; i < mEthashOutput[255]; ++i)
-                                    mEthashStratum.Submit(GatelessGateDevice, ethashWork.GetJob(), ethashStartNonce + (UInt64)mEthashOutput[i]);
+                                    mEthashStratum.Submit(Device, ethashWork.GetJob(), ethashStartNonce + (UInt64)mEthashOutput[i]);
                             }
                             ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0] * 3 / 4;
 
@@ -288,7 +271,7 @@ namespace GatelessGateSharp
                                         UInt32 word = mLbryOutput[256 + i * 8 + j];
                                         result += String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((word >> 0) & 0xff), ((word >> 8) & 0xff), ((word >> 16) & 0xff), ((word >> 24) & 0xff));
                                     }
-                                    mLbryStratum.Submit(GatelessGateDevice, lbryWork, mLbryOutput[i], result);
+                                    mLbryStratum.Submit(Device, lbryWork, mLbryOutput[i], result);
                                 }
                             }
                             lbryStartNonce += (UInt32)mEthashGlobalWorkSizeArray[0] / 4;
@@ -313,7 +296,7 @@ namespace GatelessGateSharp
                     MainForm.Logger("Exception in miner thread: " + ex.Message + ex.StackTrace);
                     Speed = 0;
                     if (UnrecoverableException.IsUnrecoverableException(ex)) {
-                        this.UnrecoverableException = new UnrecoverableException(ex, GatelessGateDevice);
+                        this.UnrecoverableException = new UnrecoverableException(ex, Device);
                         Stop();
                     } else {
                         MainForm.Logger("Restarting miner thread...");

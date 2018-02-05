@@ -47,9 +47,11 @@ namespace GatelessGateSharp
                 mTarget = aTarget;
             }
 
-            public bool Equals(Job right)
-            {
-                return mID == right.mID && mBlob == right.mBlob && mTarget == right.mTarget;
+            public bool Equals(Job aJob) {
+                return aJob != null
+                    && mID == aJob.mID
+                    && mBlob == aJob.mBlob
+                    && mTarget == aJob.mTarget;
             }
         }
 
@@ -74,7 +76,7 @@ namespace GatelessGateSharp
                     try  {  mMutex.WaitOne(5000); } catch (Exception) { }
                     mJob = new Job(this, (string)parameters["job_id"], (string)parameters["blob"], (string)parameters["target"]);
                     try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
-                    MainForm.Logger("Received new job: " + parameters["job_id"]);
+                    if (!SilentMode) MainForm.Logger("Received new job: " + parameters["job_id"]);
                 }
                 else
                 {
@@ -86,14 +88,10 @@ namespace GatelessGateSharp
                 var ID = response["id"];
                 var error = response["error"];
 
-                if (error == null && !MainForm.DevFeeMode) {
-                    MainForm.Logger("Share accepted.");
-                    ReportShareAcceptance();
-                }
-                else if (error != null && !MainForm.DevFeeMode)
-                {
-                    MainForm.Logger("Share rejected: " + (String)(((JContainer)response["error"])["message"]));
-                    ReportShareRejection();
+                if (error == null) {
+                    ReportAcceptedShare();
+                } else if (error != null) {
+                    ReportRejectedShare((String)(((JContainer)response["error"])["message"]));
                 }
             }
             else
@@ -109,7 +107,7 @@ namespace GatelessGateSharp
                 { "params", new Dictionary<string, string> {
                     { "login", Username },
                     { "pass", "x" },
-                    { "agent", MainForm.shortAppName + "/" + MainForm.appVersion}}},
+                    { "agent", MainForm.normalizedShortAppName + "/" + MainForm.appVersion}}},
                 { "id", 1 }
             });
             WriteLine(line);
@@ -117,15 +115,13 @@ namespace GatelessGateSharp
             if ((line = ReadLine()) == null)
                 throw new Exception("Disconnected from stratum server.");
             JContainer result;
-            try {
-                Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
-                result = ((JContainer)response["result"]);
-                var status = (String)(result["status"]);
-                if (status != "OK")
-                    throw new Exception("Authorization failed.");
-            } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
-            }
+            Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
+            if (response.ContainsKey("error") && response["error"] != null)
+                throw new UnrecoverableException((String)(((JContainer)response["error"])["message"]));
+            result = ((JContainer)response["result"]);
+            var status = (String)(result["status"]);
+            if (status != "OK")
+                throw new AuthorizationFailedException();
 
             try  {  mMutex.WaitOne(5000); } catch (Exception) { }
             mUserID = (String)(result["id"]);
@@ -139,7 +135,7 @@ namespace GatelessGateSharp
                 return;
 
             try  {  mMutex.WaitOne(5000); } catch (Exception) { }
-            RegisterDeviceWithShare(device);
+            ReportSubmittedShare(device);
             try
             {
                 String stringNonce = String.Format("{0:x2}{1:x2}{2:x2}{3:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff));
@@ -152,12 +148,11 @@ namespace GatelessGateSharp
                         { "result", result }}},
                     { "id", 4 }});
                 WriteLine(message);
-                MainForm.Logger("Device #" + device.DeviceIndex + " submitted a share.");
+                MainForm.Logger("Device #" + device.DeviceIndex + " submitted a share to " + ServerAddress + " as " + (Utilities.IsDevFeeAddress(Username) ? "a DEVFEE" : Username) + ".");
             }
             catch (Exception ex)
             {
-                MainForm.Logger("Failed to submit share: " + ex.Message);
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
+                MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
             try  {  mMutex.ReleaseMutex(); } catch (Exception) { }
@@ -169,7 +164,7 @@ namespace GatelessGateSharp
         }
 
         public CryptoNightStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "cryptonight")
         {
         }
     }

@@ -38,38 +38,39 @@ namespace GatelessGateSharp
                 {
                     IHash hash = HashFactory.Crypto.CreateSHA256();
                     byte[] blob = new byte[112];
-                    byte[] coinbase = Utilities.StringToByteArray(Job.Coinbase1
-                        + Job.Stratum.PoolExtranonce
-                        + LocalExtranonceString
-                        + Job.Coinbase2);
-                    byte[] merkle_root = hash.ComputeBytes(hash.ComputeBytes(coinbase).GetBytes()).GetBytes();
-                    foreach (var merkle in Job.Merkles)
-                        merkle_root = hash.ComputeBytes(hash.ComputeBytes(Utilities.StringToByteArray(Utilities.ByteArrayToString(merkle_root) + merkle)).GetBytes()).GetBytes();
-                    Buffer.BlockCopy(Utilities.StringToByteArray(Job.PrevHash), 0, blob, 4, 32);
-                    for (int i = 0; i < 8; ++i)
-                    {
-                        blob[36 + i * 4 + 0] = merkle_root[i * 4 + 3];
-                        blob[36 + i * 4 + 1] = merkle_root[i * 4 + 2];
-                        blob[36 + i * 4 + 2] = merkle_root[i * 4 + 1];
-                        blob[36 + i * 4 + 3] = merkle_root[i * 4 + 0];
+                    if (Job != null) {
+                        byte[] coinbase = Utilities.StringToByteArray(Job.Coinbase1
+                            + Job.Stratum.PoolExtranonce
+                            + LocalExtranonceString
+                            + Job.Coinbase2);
+                        byte[] merkle_root = hash.ComputeBytes(hash.ComputeBytes(coinbase).GetBytes()).GetBytes();
+                        foreach (var merkle in Job.Merkles)
+                            merkle_root = hash.ComputeBytes(hash.ComputeBytes(Utilities.StringToByteArray(Utilities.ByteArrayToString(merkle_root) + merkle)).GetBytes()).GetBytes();
+                        Buffer.BlockCopy(Utilities.StringToByteArray(Job.PrevHash), 0, blob, 4, 32);
+                        for (int i = 0; i < 8; ++i) {
+                            blob[36 + i * 4 + 0] = merkle_root[i * 4 + 3];
+                            blob[36 + i * 4 + 1] = merkle_root[i * 4 + 2];
+                            blob[36 + i * 4 + 2] = merkle_root[i * 4 + 1];
+                            blob[36 + i * 4 + 3] = merkle_root[i * 4 + 0];
+                        }
+                        Buffer.BlockCopy(Utilities.StringToByteArray(Job.Trie), 0, blob, 68, 32);
+
+                        var array = Utilities.StringToByteArray(Job.Version);
+                        blob[0] = array[0];
+                        blob[1] = array[1];
+                        blob[2] = array[2];
+                        blob[3] = array[3];
+                        array = Utilities.StringToByteArray(Job.NTime);
+                        blob[100] = array[0];
+                        blob[101] = array[1];
+                        blob[102] = array[2];
+                        blob[103] = array[3];
+                        array = Utilities.StringToByteArray(Job.NBits);
+                        blob[104] = array[0];
+                        blob[105] = array[1];
+                        blob[106] = array[2];
+                        blob[107] = array[3];
                     }
-                    Buffer.BlockCopy(Utilities.StringToByteArray(Job.Trie), 0, blob, 68, 32);
-                    
-                    var array = Utilities.StringToByteArray(Job.Version);
-                    blob[0] = array[0];
-                    blob[1] = array[1];
-                    blob[2] = array[2];
-                    blob[3] = array[3];
-                    array = Utilities.StringToByteArray(Job.NTime);
-                    blob[100] = array[0];
-                    blob[101] = array[1];
-                    blob[102] = array[2];
-                    blob[103] = array[3];
-                    array = Utilities.StringToByteArray(Job.NBits);
-                    blob[104] = array[0];
-                    blob[105] = array[1];
-                    blob[106] = array[2];
-                    blob[107] = array[3];
 
                     return blob;
                 }
@@ -115,9 +116,16 @@ namespace GatelessGateSharp
                 mNTime = aNTime;
             }
 
-            public bool Equals(Job aJob)
-            {
-                return mID == aJob.mID;
+            public bool Equals(Job aJob) {
+                return aJob != null
+                    && mID == aJob.mID
+                    && mPrevHash == aJob.mPrevHash
+                    && mCoinbase1 == aJob.mCoinbase1
+                    && mCoinbase2 == aJob.mCoinbase2
+                    && mMerkles == aJob.mMerkles
+                    && mVersion == aJob.mVersion
+                    && mNBits == aJob.mNBits
+                    && mNTime == aJob.mNTime;
             }
         }
 
@@ -150,13 +158,14 @@ namespace GatelessGateSharp
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     MainForm.Logger("Difficulty set to " + (double)parameters[0] + ".");
                 }
-                else if (method.Equals("mining.notify") && (mJob == null || mJob.ID != (string)parameters[0]))
+                else if (method.Equals("mining.notify"))
                 {
+                    bool jobChanged = (mJob == null || mJob.ID != (string)parameters[0]);
                     try { mMutex.WaitOne(5000); }
                     catch (Exception) { }
                     mJob = (new Job(this, (string)parameters[0], (string)parameters[1], (string)parameters[2], (string)parameters[3], (string)parameters[4], Array.ConvertAll(((JArray)parameters[5]).ToArray(), item => (string)item), (string)parameters[6], (string)parameters[7], (string)parameters[8]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                    MainForm.Logger("Received new job: " + parameters[0]);
+                    if (!SilentMode && jobChanged) MainForm.Logger("Received new job: " + parameters[0]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {
@@ -183,14 +192,12 @@ namespace GatelessGateSharp
                 {
                     throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
                 }
-                else if ((ID != "1" && ID != "2" && ID != "3") && result && !MainForm.DevFeeMode)
+                else if ((ID != "1" && ID != "2" && ID != "3") && result)
                 {
-                    MainForm.Logger("Share #" + ID + " accepted.");
-                    ReportShareAcceptance();
-                } else if ((ID != "1" && ID != "2" && ID != "3") && !result && !MainForm.DevFeeMode)
+                    ReportAcceptedShare();
+                } else if ((ID != "1" && ID != "2" && ID != "3") && !result)
                 {
-                    MainForm.Logger("Share #" + ID + " rejected: " + (String)(((JArray)response["error"])[1]));
-                    ReportShareRejection();
+                    ReportRejectedShare((String)(((JArray)response["error"])[1]));
                 }
             }
             else
@@ -209,6 +216,7 @@ namespace GatelessGateSharp
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.subscribe" },
                 { "params", new List<string> {
+                    MainForm.normalizedShortAppName + "/" + MainForm.appVersion
             }}}));
 
             try {
@@ -218,7 +226,7 @@ namespace GatelessGateSharp
                 LocalExtranonceSize = (int)(((JArray)(response["result"]))[2]);
                 //MainForm.Logger("mLocalExtranonceSize: " + mLocalExtranonceSize);
             } catch (Exception) {
-                throw this.UnrecoverableException = new UnrecoverableException("Authorization failed.");
+                throw this.UnrecoverableException = new AuthorizationFailedException();
             }
             
             // mining.extranonce.subscribe
@@ -297,12 +305,12 @@ namespace GatelessGateSharp
 
             try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
-            RegisterDeviceWithShare(aDevice);
+            ReportSubmittedShare(aDevice);
             try
             {
                 String stringNonce = (String.Format("{3:x2}{2:x2}{1:x2}{0:x2}", ((aNonce >> 0) & 0xff), ((aNonce >> 8) & 0xff), ((aNonce >> 16) & 0xff), ((aNonce >> 24) & 0xff)));
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
-                    { "id", mJsonRPCMessageID++ },
+                    { "id", mJsonRPCMessageID },
                     { "method", "mining.submit" },
                     { "params", new List<string> {
                         Username,
@@ -312,13 +320,10 @@ namespace GatelessGateSharp
                         stringNonce
                 }}});
                 WriteLine(message);
-                MainForm.Logger("Device #" + aDevice.DeviceIndex + " submitted a share.");
-                //MainForm.Logger("message: " + message);
+                ++mJsonRPCMessageID;
             }
-            catch (Exception ex)
-            {
-                MainForm.Logger("Failed to submit share: " + ex.Message);
-                try { mMutex.ReleaseMutex(); } catch (Exception) { }
+            catch (Exception ex) {
+                MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
 
@@ -326,7 +331,7 @@ namespace GatelessGateSharp
         }
 
         public LbryStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "lbry")
         {
         }
     }

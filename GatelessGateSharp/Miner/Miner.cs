@@ -23,7 +23,7 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class Miner
+    class Miner : IDisposable
     {
         private OpenCLDevice mDevice;
         private bool mStopped = false;
@@ -34,17 +34,18 @@ namespace GatelessGateSharp
         private System.Threading.Thread mMinerThread = null;
         private DateTime mLastAlive = DateTime.Now;
 
-        public OpenCLDevice GatelessGateDevice { get { return mDevice; } }
+        public OpenCLDevice Device { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
         public bool Done { get { return mDone; } }
         public double Speed { get; set; }
-        public double SecondSpeed { get; set; }
+        public double SpeedSecondaryAlgorithm { get; set; }
         public String AlgorithmName { get { return mAlgorithmName; } }
-        public String FirstAlgorithmName { get { return mFirstAlgorithmName; } }
-        public String SecondAlgorithmName { get { return mSecondAlgorithmName; } }
+        public String PrimaryAlgorithmName { get { return mFirstAlgorithmName; } }
+        public String SecondaryAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
         public UnrecoverableException UnrecoverableException { get; set; }
+        public long MemoryUsage { get; set; }
 
         protected Miner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
         {
@@ -53,8 +54,18 @@ namespace GatelessGateSharp
             mFirstAlgorithmName = (aFirstAlgorithmName == "") ? aAlgorithmName : aFirstAlgorithmName;
             mSecondAlgorithmName = aSecondAlgorithmName;
             Speed = 0;
-            SecondSpeed = 0;
+            SpeedSecondaryAlgorithm = 0;
+            MemoryUsage = 0;
         }
+
+        public void Dispose() {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing) { }
 
         ~Miner()
         {
@@ -73,6 +84,7 @@ namespace GatelessGateSharp
             mMinerThread = new System.Threading.Thread(MinerThread);
             mMinerThread.IsBackground = true;
             mMinerThread.Start();
+            mMinerThread.Priority = System.Threading.ThreadPriority.AboveNormal;
         }
 
         unsafe protected virtual void MinerThread() { }
@@ -113,7 +125,7 @@ namespace GatelessGateSharp
         {
             mDone = true;
             Speed = 0;
-            SecondSpeed = 0;
+            SpeedSecondaryAlgorithm = 0;
         }
 
         public bool Alive
@@ -121,8 +133,15 @@ namespace GatelessGateSharp
             get {
                 if (mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5)
                     Speed = 0;
-                return !(mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 60);
+                return !(mMinerThread != null && (DateTime.Now - mLastAlive).TotalSeconds >= 5 * 60);
             }
+        }
+
+        public virtual void SetPrimaryStratum(Stratum stratum) {
+            throw new System.InvalidOperationException();
+        }
+        public virtual void SetSecondaryStratum(Stratum stratum) {
+            throw new System.InvalidOperationException();
         }
     }
 }
