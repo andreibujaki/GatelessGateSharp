@@ -173,6 +173,7 @@ namespace GatelessGateSharp
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.subscribe" },
                 { "params", new List<string> {
+                    MainForm.normalizedShortAppName + "/" + MainForm.appVersion
             }}}));
 
             try {
