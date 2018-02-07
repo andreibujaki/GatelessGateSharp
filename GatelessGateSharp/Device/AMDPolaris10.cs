@@ -1687,53 +1687,212 @@ namespace GatelessGateSharp {
             ixMC_IO_DEBUG_ACMD_OFSCAL_D1 = 0xfe,
             ixMC_IO_DEBUG_CMD_OFSCAL_D1 = 0xff,
         }
+        
+        public class MC_SEQ_RAS_TIMING
+        {
+            public static readonly UInt32 TRCDW_MASK = 0x1f;
+            public static readonly Int32 TRCDW__SHIFT = 0x0;
+            public static readonly UInt32 TRCDWA_MASK = 0x3e0;
+            public static readonly Int32 TRCDWA__SHIFT = 0x5;
+            public static readonly UInt32 TRCDR_MASK = 0x7c00;
+            public static readonly Int32 TRCDR__SHIFT = 0xa;
+            public static readonly UInt32 TRCDRA_MASK = 0xf8000;
+            public static readonly Int32 TRCDRA__SHIFT = 0xf;
+            public static readonly UInt32 TRRD_MASK = 0xf00000;
+            public static readonly Int32 TRRD__SHIFT = 0x14;
+            public static readonly UInt32 TRC_MASK = 0x7f000000;
+            public static readonly Int32 TRC__SHIFT = 0x18;
 
-        public class MC_SEQ_RAS_TIMING {
-            public static BitVector32 Create(int value) { return new BitVector32(value); }
-            public static BitVector32.Section TRCDW = BitVector32.CreateSection(31);
-            public static BitVector32.Section TRCDWA = BitVector32.CreateSection(31, TRCDW);
-            public static BitVector32.Section TRCDR = BitVector32.CreateSection(31, TRCDWA);
-            public static BitVector32.Section TRCDRA = BitVector32.CreateSection(31, TRCDR);
-            public static BitVector32.Section TRRD = BitVector32.CreateSection(15, TRCDRA);
-            public static BitVector32.Section TRC = BitVector32.CreateSection(127, TRRD);
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 TRCDW { get { return (Data & TRCDW_MASK) >> TRCDW__SHIFT; } set { Data = (Data & ~TRCDW_MASK) | ((value << TRCDW__SHIFT) & TRCDW_MASK); Mask = Mask | TRCDW_MASK; } }
+            public UInt32 TRCDWA { get { return (Data & TRCDWA_MASK) >> TRCDWA__SHIFT; } set { Data = (Data & ~TRCDWA_MASK) | ((value << TRCDWA__SHIFT) & TRCDWA_MASK); Mask = Mask | TRCDWA_MASK; } }
+            public UInt32 TRCDR { get { return (Data & TRCDR_MASK) >> TRCDR__SHIFT; } set { Data = (Data & ~TRCDR_MASK) | ((value << TRCDR__SHIFT) & TRCDR_MASK); Mask = Mask | TRCDR_MASK; } }
+            public UInt32 TRCDRA { get { return (Data & TRCDRA_MASK) >> TRCDRA__SHIFT; } set { Data = (Data & ~TRCDRA_MASK) | ((value << TRCDRA__SHIFT) & TRCDRA_MASK); Mask = Mask | TRCDRA_MASK; } }
+            public UInt32 TRRD { get { return (Data & TRRD_MASK) >> TRRD__SHIFT; } set { Data = (Data & ~TRRD_MASK) | ((value << TRRD__SHIFT) & TRRD_MASK); Mask = Mask | TRRD_MASK; } }
+            public UInt32 TRC { get { return (Data & TRC_MASK) >> TRC__SHIFT; } set { Data = (Data & ~TRC_MASK) | ((value << TRC__SHIFT) & TRC_MASK); Mask = Mask | TRC_MASK; } }
+
+            public MC_SEQ_RAS_TIMING(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
         }
 
-        public class MC_SEQ_CAS_TIMING {
-            public static BitVector32 Create(int value) { return new BitVector32(value); }
-            public static BitVector32.Section TNOPW = BitVector32.CreateSection(3);
-            public static BitVector32.Section TNOPR = BitVector32.CreateSection(3,  TNOPW);
-            public static BitVector32.Section TR2W  = BitVector32.CreateSection(31, TNOPR);
-            public static BitVector32.Section TCCDL = BitVector32.CreateSection(7,  TR2W);
-            public static BitVector32.Section TR2R  = BitVector32.CreateSection(15, TCCDL);
-            public static BitVector32.Section TW2R  = BitVector32.CreateSection(31, TR2R);
-            public static BitVector32.Section TCL   = BitVector32.CreateSection(31, TW2R);
+        public class MC_SEQ_CAS_TIMING
+        {
+            public static readonly UInt32 TNOPW_MASK = 0x3;
+            public static readonly Int32 TNOPW__SHIFT = 0x0;
+            public static readonly UInt32 TNOPR_MASK = 0xc;
+            public static readonly Int32 TNOPR__SHIFT = 0x2;
+            public static readonly UInt32 TR2W_MASK = 0x1f0;
+            public static readonly Int32 TR2W__SHIFT = 0x4;
+            public static readonly UInt32 TCCDL_MASK = 0xe00;
+            public static readonly Int32 TCCDL__SHIFT = 0x9;
+            public static readonly UInt32 TR2R_MASK = 0xf000;
+            public static readonly Int32 TR2R__SHIFT = 0xc;
+            public static readonly UInt32 TW2R_MASK = 0x1f0000;
+            public static readonly Int32 TW2R__SHIFT = 0x10;
+            public static readonly UInt32 TCL_MASK = 0x1f000000;
+            public static readonly Int32 TCL__SHIFT = 0x18;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 TNOPW { get { return (Data & TNOPW_MASK) >> TNOPW__SHIFT; } set { Data = (Data & ~TNOPW_MASK) | ((value << TNOPW__SHIFT) & TNOPW_MASK); Mask = Mask | TNOPW_MASK; } }
+            public UInt32 TNOPR { get { return (Data & TNOPR_MASK) >> TNOPR__SHIFT; } set { Data = (Data & ~TNOPR_MASK) | ((value << TNOPR__SHIFT) & TNOPR_MASK); Mask = Mask | TNOPR_MASK; } }
+            public UInt32 TR2W { get { return (Data & TR2W_MASK) >> TR2W__SHIFT; } set { Data = (Data & ~TR2W_MASK) | ((value << TR2W__SHIFT) & TR2W_MASK); Mask = Mask | TR2W_MASK; } }
+            public UInt32 TCCDL { get { return (Data & TCCDL_MASK) >> TCCDL__SHIFT; } set { Data = (Data & ~TCCDL_MASK) | ((value << TCCDL__SHIFT) & TCCDL_MASK); Mask = Mask | TCCDL_MASK; } }
+            public UInt32 TR2R { get { return (Data & TR2R_MASK) >> TR2R__SHIFT; } set { Data = (Data & ~TR2R_MASK) | ((value << TR2R__SHIFT) & TR2R_MASK); Mask = Mask | TR2R_MASK; } }
+            public UInt32 TW2R { get { return (Data & TW2R_MASK) >> TW2R__SHIFT; } set { Data = (Data & ~TW2R_MASK) | ((value << TW2R__SHIFT) & TW2R_MASK); Mask = Mask | TW2R_MASK; } }
+            public UInt32 TCL { get { return (Data & TCL_MASK) >> TCL__SHIFT; } set { Data = (Data & ~TCL_MASK) | ((value << TCL__SHIFT) & TCL_MASK); Mask = Mask | TCL_MASK; } }
+
+            public MC_SEQ_CAS_TIMING(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
         }
 
-        public class MC_SEQ_MISC_TIMING {
-            public static BitVector32 Create(int value) { return new BitVector32(value); }
-            public static BitVector32.Section TRP_WRA = BitVector32.CreateSection(63);           // 0, 5  
-            public static BitVector32.Section TRP_RDA = BitVector32.CreateSection(63,  TRP_WRA); // 8, 13 
-            public static BitVector32.Section TRP     = BitVector32.CreateSection(31,  TRP_RDA); // 15, 19
-            public static BitVector32.Section TRFC    = BitVector32.CreateSection(511, TRP);     // 20, 28
+        public class MC_SEQ_MISC_TIMING2
+        {
+            public static readonly UInt32 PA2RDATA_MASK = 0x7;
+            public static readonly Int32 PA2RDATA__SHIFT = 0x0;
+            public static readonly UInt32 PA2WDATA_MASK = 0x70;
+            public static readonly Int32 PA2WDATA__SHIFT = 0x4;
+            public static readonly UInt32 FAW_MASK = 0x1f00;
+            public static readonly Int32 FAW__SHIFT = 0x8;
+            public static readonly UInt32 TREDC_MASK = 0xe000;
+            public static readonly Int32 TREDC__SHIFT = 0xd;
+            public static readonly UInt32 TWEDC_MASK = 0x1f0000;
+            public static readonly Int32 TWEDC__SHIFT = 0x10;
+            public static readonly UInt32 T32AW_MASK = 0x1e00000;
+            public static readonly Int32 T32AW__SHIFT = 0x15;
+            public static readonly UInt32 TWDATATR_MASK = 0xf0000000;
+            public static readonly Int32 TWDATATR__SHIFT = 0x1c;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 PA2WDATA { get { return (Data & PA2WDATA_MASK) >> PA2WDATA__SHIFT; } set { Data = (Data & ~PA2WDATA_MASK) | ((value << PA2WDATA__SHIFT) & PA2WDATA_MASK); Mask = Mask | PA2WDATA_MASK; } }
+            public UInt32 PA2RDATA { get { return (Data & PA2RDATA_MASK) >> PA2RDATA__SHIFT; } set { Data = (Data & ~PA2RDATA_MASK) | ((value << PA2RDATA__SHIFT) & PA2RDATA_MASK); Mask = Mask | PA2RDATA_MASK; } }
+            public UInt32 FAW { get { return (Data & FAW_MASK) >> FAW__SHIFT; } set { Data = (Data & ~FAW_MASK) | ((value << FAW__SHIFT) & FAW_MASK); Mask = Mask | FAW_MASK; } }
+            public UInt32 TREDC { get { return (Data & TREDC_MASK) >> TREDC__SHIFT; } set { Data = (Data & ~TREDC_MASK) | ((value << TREDC__SHIFT) & TREDC_MASK); Mask = Mask | TREDC_MASK; } }
+            public UInt32 TWEDC { get { return (Data & TWEDC_MASK) >> TWEDC__SHIFT; } set { Data = (Data & ~TWEDC_MASK) | ((value << TWEDC__SHIFT) & TWEDC_MASK); Mask = Mask | TWEDC_MASK; } }
+            public UInt32 T32AW { get { return (Data & T32AW_MASK) >> T32AW__SHIFT; } set { Data = (Data & ~T32AW_MASK) | ((value << T32AW__SHIFT) & T32AW_MASK); Mask = Mask | T32AW_MASK; } }
+            public UInt32 TWDATATR { get { return (Data & TWDATATR_MASK) >> TWDATATR__SHIFT; } set { Data = (Data & ~TWDATATR_MASK) | ((value << TWDATATR__SHIFT) & TWDATATR_MASK); Mask = Mask | TWDATATR_MASK; } }
+
+            public MC_SEQ_MISC_TIMING2(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
         }
 
-        public class MC_SEQ_MISC_TIMING2 {
-            public static BitVector32 Create(int value) { return new BitVector32(value); }
-            public static BitVector32.Section PA2RDATA = BitVector32.CreateSection(7);            // 0, 2    
-            public static BitVector32.Section PA2WDATA = BitVector32.CreateSection(7, PA2RDATA); // 4, 6
-            public static BitVector32.Section FAW      = BitVector32.CreateSection(31, PA2WDATA); // 8, 12
-            public static BitVector32.Section TREDC    = BitVector32.CreateSection(7, FAW);      // 13, 15  
-            public static BitVector32.Section TWEDC = BitVector32.CreateSection(31, TREDC);    // 16, 20
-            public static BitVector32.Section T32AW = BitVector32.CreateSection(15, TWEDC);    // 21, 24 
-            public static BitVector32.Section TWDATATR = BitVector32.CreateSection(15, T32AW);    // 28, 31
+        public class MC_SEQ_MISC_TIMING
+        {
+            public static readonly UInt32 TRP_WRA_MASK = 0x3f;
+            public static readonly Int32 TRP_WRA__SHIFT = 0x0;
+            public static readonly UInt32 TRP_RDA_MASK = 0x3f00;
+            public static readonly Int32 TRP_RDA__SHIFT = 0x8;
+            public static readonly UInt32 TRP_MASK = 0xf8000;
+            public static readonly Int32 TRP__SHIFT = 0xf;
+            public static readonly UInt32 TRFC_MASK = 0x1ff00000;
+            public static readonly Int32 TRFC__SHIFT = 0x14;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 TRP_WRA { get { return (Data & TRP_WRA_MASK) >> TRP_WRA__SHIFT; } set { Data = (Data & ~TRP_WRA_MASK) | ((value << TRP_WRA__SHIFT) & TRP_WRA_MASK); Mask = Mask | TRP_WRA_MASK; } }
+            public UInt32 TRP_RDA { get { return (Data & TRP_RDA_MASK) >> TRP_RDA__SHIFT; } set { Data = (Data & ~TRP_RDA_MASK) | ((value << TRP_RDA__SHIFT) & TRP_RDA_MASK); Mask = Mask | TRP_RDA_MASK; } }
+            public UInt32 TRP { get { return (Data & TRP_MASK) >> TRP__SHIFT; } set { Data = (Data & ~TRP_MASK) | ((value << TRP__SHIFT) & TRP_MASK); Mask = Mask | TRP_MASK; } }
+            public UInt32 TRFC { get { return (Data & TRFC_MASK) >> TRFC__SHIFT; } set { Data = (Data & ~TRFC_MASK) | ((value << TRFC__SHIFT) & TRFC_MASK); Mask = Mask | TRFC_MASK; } }
+
+            public MC_SEQ_MISC_TIMING(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
         }
 
-        public class MC_ARB_DRAM_TIMING {
-            public static BitVector32 Create(int value) { return new BitVector32(value); }
-            public static BitVector32.Section ACTRD     = BitVector32.CreateSection(255); 
-            public static BitVector32.Section ACTWR     = BitVector32.CreateSection(255, ACTRD);
-            public static BitVector32.Section RASMACTRD = BitVector32.CreateSection(255, ACTWR);
-            public static BitVector32.Section RASMACTWR = BitVector32.CreateSection(255, RASMACTRD);
+        public class MC_SEQ_PGM_TIMING {
+            public static readonly UInt32 TCKSRE_MASK = 0x7;
+            public static readonly Int32 TCKSRE__SHIFT = 0x0;
+            public static readonly UInt32 TCKSRX_MASK = 0x70;
+            public static readonly Int32 TCKSRX__SHIFT = 0x4;
+            public static readonly UInt32 TCKE_PULSE_MASK = 0xf00;
+            public static readonly Int32 TCKE_PULSE__SHIFT = 0x8;
+            public static readonly UInt32 TCKE_MASK = 0x3f000;
+            public static readonly Int32 TCKE__SHIFT = 0xc;
+            public static readonly UInt32 SEQ_IDLE_MASK = 0x1c0000;
+            public static readonly Int32 SEQ_IDLE__SHIFT = 0x12;
+            public static readonly UInt32 TCKE_PULSE_MSB_MASK = 0x800000;
+            public static readonly Int32 TCKE_PULSE_MSB__SHIFT = 0x17;
+            public static readonly UInt32 SEQ_IDLE_SS_MASK = 0xff000000;
+            public static readonly Int32 SEQ_IDLE_SS__SHIFT = 0x18;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 TCKSRE { get { return (Data & TCKSRE_MASK) >> TCKSRE__SHIFT; } set { Data = (Data & ~TCKSRE_MASK) | ((value << TCKSRE__SHIFT) & TCKSRE_MASK); Mask = Mask | TCKSRE_MASK; } }
+            public UInt32 TCKSRX { get { return (Data & TCKSRX_MASK) >> TCKSRX__SHIFT; } set { Data = (Data & ~TCKSRX_MASK) | ((value << TCKSRX__SHIFT) & TCKSRX_MASK); Mask = Mask | TCKSRX_MASK; } }
+            public UInt32 TCKE_PULSE { get { return (Data & TCKE_PULSE_MASK) >> TCKE_PULSE__SHIFT; } set { Data = (Data & ~TCKE_PULSE_MASK) | ((value << TCKE_PULSE__SHIFT) & TCKE_PULSE_MASK); Mask = Mask | TCKE_PULSE_MASK; } }
+            public UInt32 TCKE { get { return (Data & TCKE_MASK) >> TCKE__SHIFT; } set { Data = (Data & ~TCKE_MASK) | ((value << TCKE__SHIFT) & TCKE_MASK); Mask = Mask | TCKE_MASK; } }
+            public UInt32 SEQ_IDLE { get { return (Data & SEQ_IDLE_MASK) >> SEQ_IDLE__SHIFT; } set { Data = (Data & ~SEQ_IDLE_MASK) | ((value << SEQ_IDLE__SHIFT) & SEQ_IDLE_MASK); Mask = Mask | SEQ_IDLE_MASK; } }
+            public UInt32 TCKE_PULSE_MSB { get { return (Data & TCKE_PULSE_MSB_MASK) >> TCKE_PULSE_MSB__SHIFT; } set { Data = (Data & ~TCKE_PULSE_MSB_MASK) | ((value << TCKE_PULSE_MSB__SHIFT) & TCKE_PULSE_MSB_MASK); Mask = Mask | TCKE_PULSE_MSB_MASK; } }
+            public UInt32 SEQ_IDLE_SS { get { return (Data & SEQ_IDLE_SS_MASK) >> SEQ_IDLE_SS__SHIFT; } set { Data = (Data & ~SEQ_IDLE_SS_MASK) | ((value << SEQ_IDLE_SS__SHIFT) & SEQ_IDLE_SS_MASK); Mask = Mask | SEQ_IDLE_SS_MASK; } }
+
+            public MC_SEQ_PGM_TIMING(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
+        }
+
+        public class MC_ARB_DRAM_TIMING
+        {
+            public static readonly UInt32 ACTRD_MASK = 0xff;
+            public static readonly Int32 ACTRD__SHIFT = 0x0;
+            public static readonly UInt32 ACTWR_MASK = 0xff00;
+            public static readonly Int32 ACTWR__SHIFT = 0x8;
+            public static readonly UInt32 RASMACTRD_MASK = 0xff0000;
+            public static readonly Int32 RASMACTRD__SHIFT = 0x10;
+            public static readonly UInt32 RASMACTWR_MASK = 0xff000000;
+            public static readonly Int32 RASMACTWR__SHIFT = 0x18;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 ACTRD { get { return (Data & ACTRD_MASK) >> ACTRD__SHIFT; } set { Data = (Data & ~ACTRD_MASK) | ((value << ACTRD__SHIFT) & ACTRD_MASK); Mask = Mask | ACTRD_MASK; } }
+            public UInt32 ACTWR { get { return (Data & ACTWR_MASK) >> ACTWR__SHIFT; } set { Data = (Data & ~ACTWR_MASK) | ((value << ACTWR__SHIFT) & ACTWR_MASK); Mask = Mask | ACTWR_MASK; } }
+            public UInt32 RASMACTRD { get { return (Data & RASMACTRD_MASK) >> RASMACTRD__SHIFT; } set { Data = (Data & ~RASMACTRD_MASK) | ((value << RASMACTRD__SHIFT) & RASMACTRD_MASK); Mask = Mask | RASMACTRD_MASK; } }
+            public UInt32 RASMACTWR { get { return (Data & RASMACTWR_MASK) >> RASMACTWR__SHIFT; } set { Data = (Data & ~RASMACTWR_MASK) | ((value << RASMACTWR__SHIFT) & RASMACTWR_MASK); Mask = Mask | RASMACTWR_MASK; } }
+
+            public MC_ARB_DRAM_TIMING(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
+        }
+
+        public class MC_ARB_DRAM_TIMING2
+        {
+            public static readonly UInt32 RAS2RAS_MASK = 0xff;
+            public static readonly Int32 RAS2RAS__SHIFT = 0x0;
+            public static readonly UInt32 RP_MASK = 0xff00;
+            public static readonly Int32 RP__SHIFT = 0x8;
+            public static readonly UInt32 WRPLUSRP_MASK = 0xff0000;
+            public static readonly Int32 WRPLUSRP__SHIFT = 0x10;
+            public static readonly UInt32 BUS_TURN_MASK = 0x1f000000;
+            public static readonly Int32 BUS_TURN__SHIFT = 0x18;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 RAS2RAS { get { return (Data & RAS2RAS_MASK) >> RAS2RAS__SHIFT; } set { Data = (Data & ~RAS2RAS_MASK) | ((value << RAS2RAS__SHIFT) & RAS2RAS_MASK); Mask = Mask | RAS2RAS_MASK; } }
+            public UInt32 RP { get { return (Data & RP_MASK) >> RP__SHIFT; } set { Data = (Data & ~RP_MASK) | ((value << RP__SHIFT) & RP_MASK); Mask = Mask | RP_MASK; } }
+            public UInt32 WRPLUSRP { get { return (Data & WRPLUSRP_MASK) >> WRPLUSRP__SHIFT; } set { Data = (Data & ~WRPLUSRP_MASK) | ((value << WRPLUSRP__SHIFT) & WRPLUSRP_MASK); Mask = Mask | WRPLUSRP_MASK; } }
+            public UInt32 BUS_TURN { get { return (Data & BUS_TURN_MASK) >> BUS_TURN__SHIFT; } set { Data = (Data & ~BUS_TURN_MASK) | ((value << BUS_TURN__SHIFT) & BUS_TURN_MASK); Mask = Mask | BUS_TURN_MASK; } }
+
+            public MC_ARB_DRAM_TIMING2(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
         }
 
         /*

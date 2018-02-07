@@ -71,7 +71,7 @@ namespace GatelessGateSharp {
                         }
                     }
                     System.Threading.Thread.Sleep(1);
-                } catch (Exception) { }
+                } catch (Exception ex) { MainForm.Logger(ex); }
             }
             MainForm.Logger("Hardware management task finished.");
         }

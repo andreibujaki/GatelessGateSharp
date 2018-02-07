@@ -145,6 +145,9 @@ namespace GatelessGateSharp {
         private static string sLoggerBuffer = "";
 
         public static void Logger(string lines) {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+
             lines = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff") + " [" + System.Threading.Thread.CurrentThread.ManagedThreadId + "] " + lines + "\r\n";
             Console.Write(lines);
             try { Instance.loggerMutex.WaitOne(5000); } catch (Exception) { }
@@ -959,7 +962,6 @@ namespace GatelessGateSharp {
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_APIListener), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_KillInterferingProcesses), mBackgroundTasksCancellationTokenSource.Token);
             mAreSettingsDirty = false;
-            checkBoxEnablePhymem.Checked = false;
 
             // Auto-start mining if necessary.
 #if COMMAND_LINE_VERSION
@@ -2399,7 +2401,6 @@ namespace GatelessGateSharp {
                 foreach (var device in Controller.OpenCLDevices)
                     device.Dispose();
                 Controller.OpenCLDevices = null;
-                PCIExpress.UnloadPhyMem();
 
                 mBackgroundTasksCancellationTokenSource.Dispose();
             } catch (Exception ex) { Logger(ex); }
@@ -3813,6 +3814,8 @@ namespace GatelessGateSharp {
                 Controller.SecondaryStratum = null;
                 Controller.PrimaryStratumBackup = null;
                 Controller.SecondaryStratumBackup = null;
+
+                PCIExpress.UnloadPhyMem();
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -5623,6 +5626,11 @@ namespace GatelessGateSharp {
             checkBoxEnableOverclockingForDefaultSettings.Checked = false;
             foreach (var device in Controller.OpenCLDevices)
                 ResetDeviceSettings(device);
+        }
+
+        private void buttonPrintMemoryTimings_Click(object sender, EventArgs e)
+        {
+            PCIExpress.PrintMemoryTimings();
         }
     }
 }

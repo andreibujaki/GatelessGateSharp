@@ -613,7 +613,7 @@ extern "C" {
 	}
 
 	__declspec(dllexport)
-		BOOL ReadAMDGPURegister(int32_t busNum, int32_t regNo, int32_t *ptrValue)
+		BOOL ReadAMDGPURegister(int32_t busNum, uint32_t regNo, uint32_t *ptrValue)
 	{
 		uint32_t configRegistersBase;
 
@@ -622,7 +622,7 @@ extern "C" {
 		configRegistersBase &= 0xfffffff0;
 
 		EnterCriticalSection(&phymem_mutex);;
-		int32_t *virtual_addr = (int32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+		uint32_t *virtual_addr = (uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
 		if (!virtual_addr){
 			LeaveCriticalSection(&phymem_mutex);;
 			return FALSE;
@@ -637,7 +637,7 @@ extern "C" {
 	}
 
 	__declspec(dllexport)
-		BOOL WriteAMDGPURegister(int32_t busNum, int32_t regNo, int32_t value, int32_t mask)
+		BOOL WriteAMDGPURegister(int32_t busNum, uint32_t regNo, uint32_t value, uint32_t mask)
 	{
 		uint32_t configRegistersBase;
 
@@ -646,7 +646,47 @@ extern "C" {
 		configRegistersBase &= 0xfffffff0;
 
 		EnterCriticalSection(&phymem_mutex);
-		int32_t *virtual_addr = (int32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+		volatile uint32_t *virtual_addr = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+		if (!virtual_addr){
+			LeaveCriticalSection(&phymem_mutex);;
+			return FALSE;
+		}
+
+#define mmMC_HUB_MISC_STATUS 0x832
+#define MC_HUB_MISC_STATUS__RPB_BUSY_MASK 0x8000
+#define MC_HUB_MISC_STATUS__GFX_BUSY_MASK 0x80000
+
+		BOOL result = FALSE;
+		if (!(virtual_addr[mmMC_HUB_MISC_STATUS] & (MC_HUB_MISC_STATUS__RPB_BUSY_MASK | MC_HUB_MISC_STATUS__GFX_BUSY_MASK))) {
+		    *(virtual_addr + regNo) = (*(virtual_addr + regNo) & ~mask) | (value & mask);
+			result = TRUE;
+		}
+		UnmapPhyMem((uint32_t *)virtual_addr, 256 * 1024);
+		LeaveCriticalSection(&phymem_mutex);;
+
+		return result;
+	}
+
+	__declspec(dllexport)
+		BOOL UpdateGMC81Registers(int32_t busNum,
+            uint32_t reg0, uint32_t value0, uint32_t mask0,
+            uint32_t reg1, uint32_t value1, uint32_t mask1,
+            uint32_t reg2, uint32_t value2, uint32_t mask2,
+            uint32_t reg3, uint32_t value3, uint32_t mask3,
+            uint32_t reg4, uint32_t value4, uint32_t mask4,
+            uint32_t reg5, uint32_t value5, uint32_t mask5,
+            uint32_t reg6, uint32_t value6, uint32_t mask6,
+            uint32_t reg7, uint32_t value7, uint32_t mask7,
+            uint32_t reg8, uint32_t value8, uint32_t mask8)
+	{
+		uint32_t configRegistersBase;
+
+		if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+			return FALSE;
+		configRegistersBase &= 0xfffffff0;
+
+		EnterCriticalSection(&phymem_mutex);
+	    volatile uint32_t *virtual_addr = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
 		if (!virtual_addr){
 			LeaveCriticalSection(&phymem_mutex);;
 			return FALSE;
@@ -658,10 +698,18 @@ extern "C" {
 
 		BOOL result = FALSE;
 		//if (!(virtual_addr[mmMC_HUB_MISC_STATUS] & (MC_HUB_MISC_STATUS__RPB_BUSY_MASK | MC_HUB_MISC_STATUS__GFX_BUSY_MASK))) {
-		*(virtual_addr + regNo) = value; // (*(virtual_addr + regNo) & ~mask) ^ (value & mask);
+		    *(virtual_addr + reg0) = (*(virtual_addr + reg0) & ~mask0) | (value0 & mask0);
+		    *(virtual_addr + reg1) = (*(virtual_addr + reg1) & ~mask1) | (value1 & mask1);
+		    *(virtual_addr + reg2) = (*(virtual_addr + reg2) & ~mask2) | (value2 & mask2);
+		    *(virtual_addr + reg3) = (*(virtual_addr + reg3) & ~mask3) | (value3 & mask3);
+		    *(virtual_addr + reg4) = (*(virtual_addr + reg4) & ~mask4) | (value4 & mask4);
+		    *(virtual_addr + reg5) = (*(virtual_addr + reg5) & ~mask5) | (value5 & mask5);
+		    *(virtual_addr + reg6) = (*(virtual_addr + reg6) & ~mask6) | (value6 & mask6);
+		    *(virtual_addr + reg7) = (*(virtual_addr + reg7) & ~mask7) | (value7 & mask7);
+		    *(virtual_addr + reg8) = (*(virtual_addr + reg8) & ~mask8) | (value8 & mask8);
 			result = TRUE;
 		//}
-		UnmapPhyMem(virtual_addr, 256 * 1024);
+		UnmapPhyMem((uint32_t *)virtual_addr, 256 * 1024);
 		LeaveCriticalSection(&phymem_mutex);;
 
 		return result;
