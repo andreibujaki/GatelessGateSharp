@@ -17,13 +17,13 @@ Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry,
 
 The minimum requirements for the miner are as follows:
 
-* Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.*
+* Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures<sup id="a1">[1](#f1)</sup>.
 * 64-bit Windows operating system.
-* [AMD Radeon Software Adrenalin Edition 17.12.2](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.1.1-Release-Notes.aspx) or [18.1.1](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx) for AMD graphics cards.**
+* [AMD Radeon Software Adrenalin Edition 17.12.2](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.1.1-Release-Notes.aspx) or [18.1.1](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx) for AMD graphics cards<sup id="a2">[2](#f2)</sup>.
 
-* The current focus of the project is on AMD.
+<b id="f1">1</b> The current focus of the project is on AMD. [↩](#a1)
 
-** For the best performance, please **turn off AMD CrossFire, if applicable, and choose Compute for GPU Workload in Radeon Settings.
+<b id="f2">2</b> For the best performance, please **turn off AMD CrossFire, if applicable, and choose Compute for GPU Workload in Radeon Settings.** [↩](#a2)
 
 ![Screen Shot](https://i.imgur.com/TNIBhCa.png)
 
