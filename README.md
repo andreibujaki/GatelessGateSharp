@@ -17,10 +17,13 @@ Currently, the miner supports Ethash/daggerhashimoto, CryptoNight, Pascal, Lbry,
 
 The minimum requirements for the miner are as follows:
 
-* Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.
+* Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.*
 * 64-bit Windows operating system.
+* [AMD Radeon Software Adrenalin Edition 17.12.2](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.1.1-Release-Notes.aspx) or [18.1.1](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx) for AMD graphics cards.**
 
-Please note that the current focus of the project is on AMD and this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 17.12.2](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.1.1-Release-Notes.aspx) and [18.1.1](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire, if applicable, and choose Compute for GPU Workload in Radeon Settings.**
+* The current focus of the project is on AMD.
+
+** For the best performance, please **turn off AMD CrossFire, if applicable, and choose Compute for GPU Workload in Radeon Settings.
 
 ![Screen Shot](https://i.imgur.com/TNIBhCa.png)
 
@@ -31,3 +34,7 @@ This miner has a built-in 1% DEVFEE. I must emphasize that **I absolutely need t
 ## About BIOS Mods
 
 Gateless Gate Sharp does not officialy support BIOS mods for other miners such as Claymore's as there are so many modded BIOS'es out there with outrageous parameters, which indicates that people who made them had no idea about what they were doing. You can of course try them at your own risk, but please don't complain to me if they don't work with GGS.
+
+## Troubleshooting
+
+The first thing you should do when things are not working as expected is to **make sure you are using the right driver for your graphics cards and it is properly configured.** Please refer to "Prerequisites" for details.
