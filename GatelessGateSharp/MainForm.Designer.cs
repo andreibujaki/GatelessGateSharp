@@ -64,6 +64,9 @@
             this.comboBoxSecondGraphType = new System.Windows.Forms.ComboBox();
             this.comboBoxSecondGraphCoverage = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.labelCurrentPool = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.buttonRestoreStockSettings = new System.Windows.Forms.Button();
             this.buttonBoostPerformance = new System.Windows.Forms.Button();
             this.labelElapsedTime = new System.Windows.Forms.Label();
@@ -71,11 +74,8 @@
             this.labelCurrentSpeed = new System.Windows.Forms.Label();
             this.labelCurrentSecondaryPool = new System.Windows.Forms.Label();
             this.label70 = new System.Windows.Forms.Label();
-            this.labelCurrentPool = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.comboBoxCurrency = new System.Windows.Forms.ComboBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.labelBalance = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -95,8 +95,8 @@
             this.power = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.power_limit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.core_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.core_voltage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.memory_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memory_info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.memory_used = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.memory_reserved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPagePoolSettings = new System.Windows.Forms.TabPage();
@@ -223,6 +223,7 @@
             this.textBoxCustomPool0Login = new System.Windows.Forms.TextBox();
             this.label148 = new System.Windows.Forms.Label();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
+            this.buttonPrintMemoryTimings = new System.Windows.Forms.Button();
             this.buttonResetOverclockingSettings = new System.Windows.Forms.Button();
             this.buttonResetAllSettings = new System.Windows.Forms.Button();
             this.buttonResetAlgorithmSettings = new System.Windows.Forms.Button();
@@ -253,6 +254,9 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBoxAPIEnabled = new System.Windows.Forms.CheckBox();
             this.tabPageMiscSettings = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.comboBoxCurrency = new System.Windows.Forms.ComboBox();
             this.groupBoxOpenCLBinaries = new System.Windows.Forms.GroupBox();
             this.buttonOpenOpenCLBinaryFolder = new System.Windows.Forms.Button();
             this.checkBoxReuseCompiledBinaries = new System.Windows.Forms.CheckBox();
@@ -305,7 +309,6 @@
             this.timerFailOver = new System.Windows.Forms.Timer(this.components);
             this.buttonReleaseMemory = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.buttonPrintMemoryTimings = new System.Windows.Forms.Button();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -339,6 +342,7 @@
             this.groupBoxAPIIPRange.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).BeginInit();
             this.tabPageMiscSettings.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBoxOpenCLBinaries.SuspendLayout();
             this.groupBoxUserSettings.SuspendLayout();
             this.groupBoxSettingsBackups.SuspendLayout();
@@ -622,6 +626,9 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.labelCurrentPool);
+            this.groupBox3.Controls.Add(this.label7);
+            this.groupBox3.Controls.Add(this.comboBox1);
             this.groupBox3.Controls.Add(this.buttonRestoreStockSettings);
             this.groupBox3.Controls.Add(this.buttonBoostPerformance);
             this.groupBox3.Controls.Add(this.labelElapsedTime);
@@ -629,18 +636,56 @@
             this.groupBox3.Controls.Add(this.labelCurrentSpeed);
             this.groupBox3.Controls.Add(this.labelCurrentSecondaryPool);
             this.groupBox3.Controls.Add(this.label70);
-            this.groupBox3.Controls.Add(this.labelCurrentPool);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Location = new System.Drawing.Point(11, 8);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(326, 136);
+            this.groupBox3.Size = new System.Drawing.Size(326, 166);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Compute";
             // 
+            // labelCurrentPool
+            // 
+            this.labelCurrentPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.labelCurrentPool.Location = new System.Drawing.Point(93, 92);
+            this.labelCurrentPool.Name = "labelCurrentPool";
+            this.labelCurrentPool.Size = new System.Drawing.Size(369, 18);
+            this.labelCurrentPool.TabIndex = 23;
+            this.labelCurrentPool.Text = "-";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label7.Location = new System.Drawing.Point(5, 22);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(50, 13);
+            this.label7.TabIndex = 150;
+            this.label7.Text = "Algorithm";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Ethash",
+            "Ethash (NiceHash)",
+            "CryptoNight",
+            "CryptoNight (NiceHash)",
+            "Lbry",
+            "Pascal",
+            "NeoScrypt",
+            "Lyra2REv2"});
+            this.comboBox1.Location = new System.Drawing.Point(96, 19);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(140, 21);
+            this.comboBox1.TabIndex = 149;
+            this.comboBox1.Tag = "parameter:custom_pool0_algorithm";
+            // 
             // buttonRestoreStockSettings
             // 
-            this.buttonRestoreStockSettings.Location = new System.Drawing.Point(167, 107);
+            this.buttonRestoreStockSettings.Location = new System.Drawing.Point(167, 135);
             this.buttonRestoreStockSettings.Name = "buttonRestoreStockSettings";
             this.buttonRestoreStockSettings.Size = new System.Drawing.Size(153, 23);
             this.buttonRestoreStockSettings.TabIndex = 1;
@@ -650,7 +695,7 @@
             // 
             // buttonBoostPerformance
             // 
-            this.buttonBoostPerformance.Location = new System.Drawing.Point(6, 107);
+            this.buttonBoostPerformance.Location = new System.Drawing.Point(6, 135);
             this.buttonBoostPerformance.Name = "buttonBoostPerformance";
             this.buttonBoostPerformance.Size = new System.Drawing.Size(155, 23);
             this.buttonBoostPerformance.TabIndex = 0;
@@ -661,9 +706,9 @@
             // labelElapsedTime
             // 
             this.labelElapsedTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelElapsedTime.Location = new System.Drawing.Point(93, 20);
+            this.labelElapsedTime.Location = new System.Drawing.Point(93, 47);
             this.labelElapsedTime.Name = "labelElapsedTime";
-            this.labelElapsedTime.Size = new System.Drawing.Size(227, 17);
+            this.labelElapsedTime.Size = new System.Drawing.Size(78, 17);
             this.labelElapsedTime.TabIndex = 143;
             this.labelElapsedTime.Text = "-";
             // 
@@ -671,7 +716,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label3.Location = new System.Drawing.Point(5, 75);
+            this.label3.Location = new System.Drawing.Point(5, 69);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 13);
             this.label3.TabIndex = 7;
@@ -680,7 +725,7 @@
             // labelCurrentSpeed
             // 
             this.labelCurrentSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentSpeed.Location = new System.Drawing.Point(93, 75);
+            this.labelCurrentSpeed.Location = new System.Drawing.Point(93, 69);
             this.labelCurrentSpeed.Name = "labelCurrentSpeed";
             this.labelCurrentSpeed.Size = new System.Drawing.Size(227, 17);
             this.labelCurrentSpeed.TabIndex = 8;
@@ -689,7 +734,7 @@
             // labelCurrentSecondaryPool
             // 
             this.labelCurrentSecondaryPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentSecondaryPool.Location = new System.Drawing.Point(93, 55);
+            this.labelCurrentSecondaryPool.Location = new System.Drawing.Point(93, 110);
             this.labelCurrentSecondaryPool.Name = "labelCurrentSecondaryPool";
             this.labelCurrentSecondaryPool.Size = new System.Drawing.Size(369, 20);
             this.labelCurrentSecondaryPool.TabIndex = 148;
@@ -699,26 +744,17 @@
             // 
             this.label70.AutoSize = true;
             this.label70.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label70.Location = new System.Drawing.Point(5, 37);
+            this.label70.Location = new System.Drawing.Point(5, 92);
             this.label70.Name = "label70";
             this.label70.Size = new System.Drawing.Size(79, 13);
             this.label70.TabIndex = 22;
             this.label70.Text = "Current Pool(s):";
             // 
-            // labelCurrentPool
-            // 
-            this.labelCurrentPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentPool.Location = new System.Drawing.Point(93, 37);
-            this.labelCurrentPool.Name = "labelCurrentPool";
-            this.labelCurrentPool.Size = new System.Drawing.Size(369, 18);
-            this.labelCurrentPool.TabIndex = 23;
-            this.labelCurrentPool.Text = "-";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label4.Location = new System.Drawing.Point(5, 20);
+            this.label4.Location = new System.Drawing.Point(5, 47);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(74, 13);
             this.label4.TabIndex = 142;
@@ -726,50 +762,24 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.comboBoxCurrency);
-            this.groupBox4.Controls.Add(this.label12);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Controls.Add(this.labelBalance);
             this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Controls.Add(this.labelPriceDay);
             this.groupBox4.Controls.Add(this.labelPriceWeek);
             this.groupBox4.Controls.Add(this.labelPriceMonth);
-            this.groupBox4.Location = new System.Drawing.Point(11, 150);
+            this.groupBox4.Location = new System.Drawing.Point(11, 180);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(326, 134);
+            this.groupBox4.Size = new System.Drawing.Size(326, 104);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Profitability";
-            // 
-            // comboBoxCurrency
-            // 
-            this.comboBoxCurrency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCurrency.FormattingEnabled = true;
-            this.comboBoxCurrency.Items.AddRange(new object[] {
-            "USD",
-            "JPY"});
-            this.comboBoxCurrency.Location = new System.Drawing.Point(66, 18);
-            this.comboBoxCurrency.Name = "comboBoxCurrency";
-            this.comboBoxCurrency.Size = new System.Drawing.Size(57, 21);
-            this.comboBoxCurrency.TabIndex = 0;
-            this.comboBoxCurrency.Tag = "parameter:currency";
-            this.comboBoxCurrency.SelectedIndexChanged += new System.EventHandler(this.comboBoxCurrency_SelectedIndexChanged);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label12.Location = new System.Drawing.Point(8, 21);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(52, 13);
-            this.label12.TabIndex = 142;
-            this.label12.Text = "Currency:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label5.Location = new System.Drawing.Point(8, 48);
+            this.label5.Location = new System.Drawing.Point(8, 24);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(88, 13);
             this.label5.TabIndex = 9;
@@ -778,7 +788,7 @@
             // labelBalance
             // 
             this.labelBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelBalance.Location = new System.Drawing.Point(96, 102);
+            this.labelBalance.Location = new System.Drawing.Point(96, 78);
             this.labelBalance.Name = "labelBalance";
             this.labelBalance.Size = new System.Drawing.Size(158, 13);
             this.labelBalance.TabIndex = 10;
@@ -788,7 +798,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label10.Location = new System.Drawing.Point(8, 102);
+            this.label10.Location = new System.Drawing.Point(8, 78);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(49, 13);
             this.label10.TabIndex = 14;
@@ -797,7 +807,7 @@
             // labelPriceDay
             // 
             this.labelPriceDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelPriceDay.Location = new System.Drawing.Point(96, 48);
+            this.labelPriceDay.Location = new System.Drawing.Point(96, 24);
             this.labelPriceDay.Name = "labelPriceDay";
             this.labelPriceDay.Size = new System.Drawing.Size(232, 17);
             this.labelPriceDay.TabIndex = 16;
@@ -806,7 +816,7 @@
             // labelPriceWeek
             // 
             this.labelPriceWeek.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelPriceWeek.Location = new System.Drawing.Point(96, 65);
+            this.labelPriceWeek.Location = new System.Drawing.Point(96, 41);
             this.labelPriceWeek.Name = "labelPriceWeek";
             this.labelPriceWeek.Size = new System.Drawing.Size(232, 17);
             this.labelPriceWeek.TabIndex = 17;
@@ -815,7 +825,7 @@
             // labelPriceMonth
             // 
             this.labelPriceMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelPriceMonth.Location = new System.Drawing.Point(96, 82);
+            this.labelPriceMonth.Location = new System.Drawing.Point(96, 58);
             this.labelPriceMonth.Name = "labelPriceMonth";
             this.labelPriceMonth.Size = new System.Drawing.Size(232, 17);
             this.labelPriceMonth.TabIndex = 141;
@@ -852,8 +862,8 @@
             this.power,
             this.power_limit,
             this.core_clock,
-            this.core_voltage,
             this.memory_clock,
+            this.memory_info,
             this.memory_used,
             this.memory_reserved});
             this.dataGridViewDevices.Location = new System.Drawing.Point(11, 290);
@@ -875,7 +885,7 @@
             dataGridViewCellStyle2.NullValue = false;
             this.enabled.DefaultCellStyle = dataGridViewCellStyle2;
             this.enabled.FalseValue = "";
-            this.enabled.FillWeight = 50F;
+            this.enabled.FillWeight = 30F;
             this.enabled.HeaderText = "";
             this.enabled.Name = "enabled";
             this.enabled.ReadOnly = true;
@@ -884,7 +894,7 @@
             // 
             // id
             // 
-            this.id.FillWeight = 50F;
+            this.id.FillWeight = 30F;
             this.id.HeaderText = "#";
             this.id.Name = "id";
             this.id.ReadOnly = true;
@@ -970,7 +980,7 @@
             // 
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             this.power.DefaultCellStyle = dataGridViewCellStyle8;
-            this.power.FillWeight = 80F;
+            this.power.FillWeight = 60F;
             this.power.HeaderText = "Power";
             this.power.Name = "power";
             this.power.ReadOnly = true;
@@ -992,31 +1002,34 @@
             // 
             dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             this.core_clock.DefaultCellStyle = dataGridViewCellStyle10;
+            this.core_clock.FillWeight = 90F;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
             this.core_clock.ReadOnly = true;
             this.core_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.core_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // core_voltage
-            // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_voltage.DefaultCellStyle = dataGridViewCellStyle11;
-            this.core_voltage.HeaderText = "";
-            this.core_voltage.Name = "core_voltage";
-            this.core_voltage.ReadOnly = true;
-            this.core_voltage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.core_voltage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // memory_clock
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle11;
+            this.memory_clock.FillWeight = 90F;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
             this.memory_clock.ReadOnly = true;
             this.memory_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.memory_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // memory_info
+            // 
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomLeft;
+            this.memory_info.DefaultCellStyle = dataGridViewCellStyle12;
+            this.memory_info.FillWeight = 140F;
+            this.memory_info.HeaderText = "";
+            this.memory_info.Name = "memory_info";
+            this.memory_info.ReadOnly = true;
+            this.memory_info.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.memory_info.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // memory_used
             // 
@@ -2574,6 +2587,16 @@
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
             // 
+            // buttonPrintMemoryTimings
+            // 
+            this.buttonPrintMemoryTimings.Location = new System.Drawing.Point(4, 435);
+            this.buttonPrintMemoryTimings.Name = "buttonPrintMemoryTimings";
+            this.buttonPrintMemoryTimings.Size = new System.Drawing.Size(149, 23);
+            this.buttonPrintMemoryTimings.TabIndex = 6;
+            this.buttonPrintMemoryTimings.Text = "Print Memory Timings";
+            this.buttonPrintMemoryTimings.UseVisualStyleBackColor = true;
+            this.buttonPrintMemoryTimings.Click += new System.EventHandler(this.buttonPrintMemoryTimings_Click);
+            // 
             // buttonResetOverclockingSettings
             // 
             this.buttonResetOverclockingSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2917,6 +2940,7 @@
             // 
             // tabPageMiscSettings
             // 
+            this.tabPageMiscSettings.Controls.Add(this.groupBox2);
             this.tabPageMiscSettings.Controls.Add(this.groupBoxOpenCLBinaries);
             this.tabPageMiscSettings.Controls.Add(this.groupBoxUserSettings);
             this.tabPageMiscSettings.Controls.Add(this.groupBox1);
@@ -2927,6 +2951,41 @@
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.comboBoxCurrency);
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.groupBox2.Location = new System.Drawing.Point(3, 219);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(192, 51);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Profitability";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label12.Location = new System.Drawing.Point(6, 23);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(52, 13);
+            this.label12.TabIndex = 151;
+            this.label12.Text = "Currency:";
+            // 
+            // comboBoxCurrency
+            // 
+            this.comboBoxCurrency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCurrency.FormattingEnabled = true;
+            this.comboBoxCurrency.Items.AddRange(new object[] {
+            "USD",
+            "JPY"});
+            this.comboBoxCurrency.Location = new System.Drawing.Point(64, 20);
+            this.comboBoxCurrency.Name = "comboBoxCurrency";
+            this.comboBoxCurrency.Size = new System.Drawing.Size(57, 21);
+            this.comboBoxCurrency.TabIndex = 1;
+            this.comboBoxCurrency.Tag = "parameter:currency";
             // 
             // groupBoxOpenCLBinaries
             // 
@@ -3288,8 +3347,6 @@
             // checkBoxDisableAutoStartPrompt
             // 
             this.checkBoxDisableAutoStartPrompt.AutoSize = true;
-            this.checkBoxDisableAutoStartPrompt.Checked = true;
-            this.checkBoxDisableAutoStartPrompt.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxDisableAutoStartPrompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(6, 82);
             this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
@@ -3503,16 +3560,6 @@
             this.buttonReleaseMemory.UseVisualStyleBackColor = true;
             this.buttonReleaseMemory.Click += new System.EventHandler(this.buttonReleaseMemory_Click);
             // 
-            // buttonPrintMemoryTimings
-            // 
-            this.buttonPrintMemoryTimings.Location = new System.Drawing.Point(4, 435);
-            this.buttonPrintMemoryTimings.Name = "buttonPrintMemoryTimings";
-            this.buttonPrintMemoryTimings.Size = new System.Drawing.Size(149, 23);
-            this.buttonPrintMemoryTimings.TabIndex = 6;
-            this.buttonPrintMemoryTimings.Text = "Print Memory Timings";
-            this.buttonPrintMemoryTimings.UseVisualStyleBackColor = true;
-            this.buttonPrintMemoryTimings.Click += new System.EventHandler(this.buttonPrintMemoryTimings_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -3578,6 +3625,8 @@
             this.groupBoxAPIIPRange.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).EndInit();
             this.tabPageMiscSettings.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBoxOpenCLBinaries.ResumeLayout(false);
             this.groupBoxOpenCLBinaries.PerformLayout();
             this.groupBoxUserSettings.ResumeLayout(false);
@@ -3754,7 +3803,6 @@
         private System.Windows.Forms.TextBox textBoxLbryAddress;
         private System.Windows.Forms.RadioButton radioButtonFeathercoin;
         private System.Windows.Forms.RadioButton radioButtonMonacoin;
-        private System.Windows.Forms.DataGridView dataGridViewDevices;
         private System.Windows.Forms.Button buttonRelaunch;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.StatusStrip statusStripMainForm;
@@ -3796,8 +3844,6 @@
         private System.Windows.Forms.Button buttonSaveSettings;
         private System.Windows.Forms.Timer timerFailOver;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.ComboBox comboBoxCurrency;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.GroupBox groupBoxOpenCLBinaries;
         private System.Windows.Forms.Button buttonOpenOpenCLBinaryFolder;
         private System.Windows.Forms.CheckBox checkBoxReuseCompiledBinaries;
@@ -3834,6 +3880,20 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.CheckBox checkBoxEnableOverclockingForDefaultSettings;
         private System.Windows.Forms.Button buttonOpenLogContainingFolder;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button buttonBoostPerformance;
+        private System.Windows.Forms.Button buttonRestoreStockSettings;
+        private System.Windows.Forms.Label labelElapsedTime;
+        private System.Windows.Forms.Label labelCurrentSpeed;
+        private System.Windows.Forms.Label labelCurrentSecondaryPool;
+        private System.Windows.Forms.Label labelCurrentPool;
+        private System.Windows.Forms.Button buttonPrintMemoryTimings;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.DataGridView dataGridViewDevices;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox comboBoxCurrency;
         private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
@@ -3846,17 +3906,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn power;
         private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
         private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn core_voltage;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_info;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button buttonBoostPerformance;
-        private System.Windows.Forms.Button buttonRestoreStockSettings;
-        private System.Windows.Forms.Label labelElapsedTime;
-        private System.Windows.Forms.Label labelCurrentSpeed;
-        private System.Windows.Forms.Label labelCurrentSecondaryPool;
-        private System.Windows.Forms.Label labelCurrentPool;
-        private System.Windows.Forms.Button buttonPrintMemoryTimings;
     }
 }

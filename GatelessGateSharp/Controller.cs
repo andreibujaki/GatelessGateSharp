@@ -38,73 +38,59 @@ namespace GatelessGateSharp {
             Miners = new List<Miner>() { };
         }
 
-        public static void Task_HardwareManagement(object cancellationToken) {
+        public static void Task_MemoryTimings(object cancellationToken)
+        {
             var stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
-            MainForm.Logger("Hardware management task started.");
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
-                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && PrimaryStratum != null) {
-                        // overclocking
-                        /*
-                        string algorithm = PrimaryStratum.AlgorithmName;
-                        if (SecondaryStratum != null)
-                            algorithm += "_" + SecondaryStratum.AlgorithmName;
+                    // memory timings
+                    foreach (var device in Controller.OpenCLDevices) {
+                        if (device.MemoryTimingModsEnabled)
+                            device.UpdateMemoryTimings();
+                    }
+                } catch (Exception) { }
+                System.Threading.Thread.Sleep(1);
+            }
+        }
+
+        public static void Task_FanControl(object cancellationToken)
+        {
+            Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+            while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
+                try {
+                    if (AppState == ApplicationGlobalState.Mining) {
                         foreach (var device in Controller.OpenCLDevices) {
-                            try {
-                                if (device.OverclockingEnabled)
-                                    device.UpdateOverclockingSettings();
-                            } catch (Exception) { }
-                        }
-                        */
+                            if (!device.FanControlEnabled)
+                                continue;
 
-                        // memory timings
-                        PCIExpress.UpdateMemoryTimings();
+                            int currentTemperature = device.Temperature;
+                            int targetTemperature = device.TargetTemperature;
+                            int maxTemperature = device.TargetMaxTemperature;
+                            int currentFanSpeed = device.FanSpeed;
+                            int maxFanSpeed = device.TargetMaxFanSpeed;
+                            int minFanSpeed = device.TargetMinFanSpeed;
+                            int newFanSpeed = currentFanSpeed;
 
-                        // fan speeds
-                        if (stopwatch.ElapsedMilliseconds >= 5000) {
-                            Controller.UpdateFanSpeeds();
-                            stopwatch.Reset();
-                            stopwatch.Start();
+                            if (currentTemperature > targetTemperature + 5)
+                                newFanSpeed += 5;
+                            else if (currentTemperature > targetTemperature)
+                                ++newFanSpeed;
+                            else if (currentTemperature < targetTemperature - 5)
+                                newFanSpeed -= 5;
+                            else if (currentTemperature < targetTemperature)
+                                --newFanSpeed;
+                            if (currentTemperature > maxTemperature)
+                                newFanSpeed = maxFanSpeed;
+                            if (newFanSpeed < minFanSpeed)
+                                newFanSpeed = minFanSpeed;
+                            device.FanSpeed = newFanSpeed;
                         }
                     }
-                    System.Threading.Thread.Sleep(1);
-                } catch (Exception ex) { MainForm.Logger(ex); }
-            }
-            MainForm.Logger("Hardware management task finished.");
-        }
-        
-        public static void UpdateFanSpeeds() {
-            foreach (var device in Controller.OpenCLDevices) {
-                if (!device.FanControlEnabled)
-                    continue;
-
-                if (AppState != ApplicationGlobalState.Mining)
-                    continue;
-
-                int currentTemperature = device.Temperature;
-                int targetTemperature = device.TargetTemperature;
-                int maxTemperature = device.TargetMaxTemperature;
-                int currentFanSpeed = device.FanSpeed;
-                int maxFanSpeed = device.TargetMaxFanSpeed;
-                int minFanSpeed = device.TargetMinFanSpeed;
-                int newFanSpeed = currentFanSpeed;
-
-                if (currentTemperature > targetTemperature + 5)
-                    newFanSpeed += 5;
-                else if (currentTemperature > targetTemperature)
-                    ++newFanSpeed;
-                else if (currentTemperature < targetTemperature - 5)
-                    newFanSpeed -= 5;
-                else if (currentTemperature < targetTemperature)
-                    --newFanSpeed;
-                if (currentTemperature > maxTemperature)
-                    newFanSpeed = maxFanSpeed;
-                if (newFanSpeed < minFanSpeed)
-                    newFanSpeed = minFanSpeed;
-                device.FanSpeed = newFanSpeed;
+                } catch (Exception) { }
+                System.Threading.Thread.Sleep(5000);
             }
         }
     }

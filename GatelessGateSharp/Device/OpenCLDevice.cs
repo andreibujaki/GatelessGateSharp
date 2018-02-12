@@ -20,21 +20,27 @@ namespace GatelessGateSharp
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
         private List<ComputeDevice> mDeviceList;
         private String mName;
+        private string mVendor;
         private int mCoreClock = -1;
         private int mCoreVoltage = -1;
         private bool mCoreVoltageAvailable = true;
         private int mMemoryClock = -1;
         private int mMemoryVoltage = -1;
 
+
+
         public int ADLVersion { get; set; }
         public int ADLAdapterIndex { get; set; }
 
         public override String GetVendor() {
-            return (mComputeDevice.Vendor == "Advanced Micro Devices, Inc.") ? "AMD" :
-                    (mComputeDevice.Vendor == "NVIDIA Corporation") ? "NVIDIA" :
-                    (mComputeDevice.Vendor == "Intel Corporation") ? "Intel" :
-                    (mComputeDevice.Vendor == "GenuineIntel") ? "Intel" :
-                    mComputeDevice.Vendor;
+            if (mVendor == null) {
+                mVendor = (mComputeDevice.Vendor == "Advanced Micro Devices, Inc.") ? "AMD" :
+                          (mComputeDevice.Vendor == "NVIDIA Corporation") ? "NVIDIA" :
+                          (mComputeDevice.Vendor == "Intel Corporation") ? "Intel" :
+                          (mComputeDevice.Vendor == "GenuineIntel") ? "Intel" :
+                           mComputeDevice.Vendor;
+            }
+            return mVendor;
         }
 
         public override String GetName() {
@@ -254,7 +260,11 @@ namespace GatelessGateSharp
             var deviceIndex = 0;
             foreach (var computeDevice in computeDevices)
             {
-                devices[deviceIndex] = new OpenCLDevice(deviceIndex, computeDevice);
+                if (computeDevice.Vendor == "Advanced Micro Devices, Inc." && computeDevice.Name == "Ellesmere") {
+                    devices[deviceIndex] = new AMDPolaris10(deviceIndex, computeDevice);
+                } else {
+                    devices[deviceIndex] = new OpenCLDevice(deviceIndex, computeDevice);
+                }
                 deviceIndex++;
             }
 

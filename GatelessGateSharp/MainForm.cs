@@ -725,10 +725,12 @@ namespace GatelessGateSharp {
             try { System.IO.File.Delete(filePath); } catch (Exception) { }
             try { CreateNewDatabase(filePath); } catch (Exception) { }
 
+            System.Data.SQLite.SQLiteTransaction trans = null;
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                     conn.Open();
-                    
+                    trans = conn.BeginTransaction();
+
                     var sql = "insert into pools (name) values (@name)";
                     using (var command = new SQLiteCommand(sql, conn)) {
                         foreach (string poolName in listBoxPoolPriorities.Items) {
@@ -842,6 +844,8 @@ namespace GatelessGateSharp {
                             command.ExecuteNonQuery();
                         }
                     }
+
+                    trans.Commit();
                     conn.Close();
                 }
                 if (System.IO.File.Exists(OldDatabaseFilePath))
@@ -851,6 +855,8 @@ namespace GatelessGateSharp {
                     mAreSettingsDirty = false;
             } catch (Exception ex) {
                 Logger("Exception in UpdateDatabase(): " + ex.Message + ex.StackTrace);
+                if (trans != null)
+                    trans.Rollback();
             }
             MainForm.Instance.Enabled = true;
             if (createBackup && checkBoxAutomaticBackups.Checked)
@@ -860,7 +866,7 @@ namespace GatelessGateSharp {
         void CreateSettingsBackup(string name = null) {
             if (name == null)
                 name = System.DateTime.Now.ToString("yyyy-MM-dd--HHmm") + ".sqlite";
-            SaveSettingsToDatabase(SettingsBackupPathBase + "\\" + name);
+            System.IO.File.Copy(DatabaseFilePath, SettingsBackupPathBase + "\\" + name);
             UpdateSettingBackupList();
         }
 
@@ -951,7 +957,8 @@ namespace GatelessGateSharp {
             Controller.AppState = Controller.ApplicationGlobalState.Idle;
             UpdateControls();
             mBackgroundTasksCancellationTokenSource = new CancellationTokenSource();
-            ThreadPool.QueueUserWorkItem(new WaitCallback(Controller.Task_HardwareManagement), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Controller.Task_FanControl), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Controller.Task_MemoryTimings), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateBitcoinRates), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateAltcoinRates), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdatePoolStats), mBackgroundTasksCancellationTokenSource.Token);
@@ -1756,15 +1763,6 @@ namespace GatelessGateSharp {
                                                                    coreClock < device.DefaultCoreClock ? Color.Blue :
                                                                                   Color.Black;
                     }
-                    int coreVoltage = device.CoreVoltage;
-                    if (coreVoltage >= 0) {
-                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = coreVoltage.ToString() + " mV";
-                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Style.ForeColor =
-                                                                   device.DefaultCoreVoltage < 0 ? Color.Black :
-                                                                   coreVoltage > device.DefaultCoreVoltage ? Color.Red :
-                                                                   coreVoltage < device.DefaultCoreVoltage ? Color.Blue :
-                                                                                  Color.Black;
-                    }
                     int memoryClock = device.MemoryClock;
                     if (memoryClock >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
@@ -1773,6 +1771,9 @@ namespace GatelessGateSharp {
                                                                    memoryClock > device.DefaultMemoryClock ? Color.Red :
                                                                    memoryClock < device.DefaultMemoryClock ? Color.Blue :
                                                                                   Color.Black;
+                    }
+                    if (device.MemoryType != null && device.MemoryVendor != null) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_info"].Value = device.MemoryVendor + " " + device.MemoryType;
                     }
                     long memoryUsed = 0;
                     foreach (var miner in Controller.Miners)
@@ -2019,7 +2020,13 @@ namespace GatelessGateSharp {
                 if (MainForm.IsAPIEnabled()) {
                     try {
                         int port = MainForm.GetAPIPort();
-                        System.Diagnostics.Process.Start("netsh", "advfirewall firewall add rule name=\"Open Port " + port + "\" dir=in action=allow protocol=TCP localport=" + port);
+                        var process = new System.Diagnostics.Process();
+                        var startInfo = new System.Diagnostics.ProcessStartInfo();
+                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                        startInfo.FileName = "netsh";
+                        startInfo.Arguments = "advfirewall firewall add rule name=\"Open Port " + port + "\" dir=in action=allow protocol=TCP localport=" + port;
+                        process.StartInfo = startInfo;
+                        process.Start();
                         Thread.Sleep(1000);
                         server = new TcpListener(IPAddress.Any, port);
                         server.Start();
@@ -2397,7 +2404,8 @@ namespace GatelessGateSharp {
                     SaveSettingsToDatabase();
                 //if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy)
                 //    ADL.ADL_Main_Control_Destroy();
-
+                if (PCIExpress.Available)
+                    PCIExpress.UnloadPhyMem();
                 foreach (var device in Controller.OpenCLDevices)
                     device.Dispose();
                 Controller.OpenCLDevices = null;
@@ -3274,6 +3282,7 @@ namespace GatelessGateSharp {
         }
 
         void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode) {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3305,7 +3314,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLDualEthashLbryMinersWithStratum(EthashStratum stratum, LbryStratum stratum2) {
+        void LaunchOpenCLDualEthashLbryMinersWithStratum(EthashStratum stratum, LbryStratum stratum2)
+        {
+            EnableHardwareManagement(stratum, stratum2);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3340,7 +3351,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLDualEthashPascalMinersWithStratum(EthashStratum stratum, PascalStratum stratum2) {
+        void LaunchOpenCLDualEthashPascalMinersWithStratum(EthashStratum stratum, PascalStratum stratum2)
+        {
+            EnableHardwareManagement(stratum, stratum2);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3374,7 +3387,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLEthashMinersWithStratum(EthashStratum stratum) {
+        void LaunchOpenCLEthashMinersWithStratum(EthashStratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3406,7 +3421,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLLbryMinersWithStratum(LbryStratum stratum) {
+        void LaunchOpenCLLbryMinersWithStratum(LbryStratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3436,7 +3453,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLPascalMinersWithStratum(PascalStratum stratum) {
+        void LaunchOpenCLPascalMinersWithStratum(PascalStratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3466,7 +3485,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLNeoScryptMinersWithStratum(NeoScryptStratum stratum) {
+        void LaunchOpenCLNeoScryptMinersWithStratum(NeoScryptStratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3497,7 +3518,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLLyra2REv2MinersWithStratum(Lyra2REv2Stratum stratum) {
+        void LaunchOpenCLLyra2REv2MinersWithStratum(Lyra2REv2Stratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3591,7 +3614,44 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void LaunchMiners() {
+        private void EnableHardwareManagement(Stratum stratum, Stratum stratum2)
+        {
+            // The basic strategy here is to enable hardware management before launching miners for the sake of stability.
+            // I got better results, as far as stability is concerned, by "teaching" RAM's about modded memory timings
+            // as soon as overclocking kicks in. It seems that switching from one set of memory timings to another is a major source
+            // of instability. - zawawa
+
+            string algorithm = stratum.AlgorithmName;
+            if (stratum2 != null)
+                algorithm += "_" + stratum.AlgorithmName;
+            foreach (var device in Controller.OpenCLDevices) {
+                if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
+                    continue;
+                var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked) {
+                    device.SaveOverclockingSettings();
+                    device.TargetPowerLimit = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
+                    device.TargetCoreClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
+                    device.TargetMemoryClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
+                    device.TargetCoreVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
+                    device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
+                    device.OverclockingEnabled = true;
+                    device.UpdateOverclockingSettings();
+                }
+                device.PrepareMemoryTimingMods(algorithm);
+                if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
+                    device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
+                    device.TargetMaxTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value);
+                    device.TargetMinFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value);
+                    device.TargetMaxFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value);
+                    device.FanControlEnabled = true;
+                }
+            }
+            Thread.Sleep(1000);
+        }
+
+        private void LaunchMiners()
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             GC.Collect();
@@ -3601,35 +3661,6 @@ namespace GatelessGateSharp {
                 LaunchMinersForCustomPools();
             } else {
                 LaunchMinersForDefaultPools();
-            }
-
-            if (Controller.PrimaryStratum != null) {
-                string algorithm = Controller.PrimaryStratum.AlgorithmName;
-                if (Controller.SecondaryStratum != null)
-                    algorithm += "_" + Controller.SecondaryStratum.AlgorithmName;
-                foreach (var device in Controller.OpenCLDevices) {
-                    if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
-                        continue;
-                    var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
-                    if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked) {
-                        device.SaveOverclockingSettings();
-                        device.TargetPowerLimit = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
-                        device.TargetCoreClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
-                        device.TargetMemoryClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
-                        device.TargetCoreVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
-                        device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
-                        device.OverclockingEnabled = true;
-                        device.UpdateOverclockingSettings();
-                    }
-                    if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
-                        device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
-                        device.TargetMaxTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value);
-                        device.TargetMinFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value);
-                        device.TargetMaxFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value);
-                        device.FanControlEnabled = true;
-                        Controller.UpdateFanSpeeds();
-                    }
-                }
             }
         }
 
@@ -3765,7 +3796,9 @@ namespace GatelessGateSharp {
         {
             try {
                 Logger("Stopping miners...");
+
                 Controller.AppState = Controller.ApplicationGlobalState.Switching;
+
                 Controller.StopWatch.Stop();
                 timerWatchdog.Enabled = false;
                 if (mDevFeeMode)
@@ -3784,6 +3817,16 @@ namespace GatelessGateSharp {
                             break;
                         }
                 }
+
+                Thread.Sleep(1000);
+                foreach (var device in Controller.OpenCLDevices) {
+                    if (device.MemoryTimingModsEnabled) {
+                        device.MemoryTimingModsEnabled = false;
+                        device.RestoreMemoryTimings();
+                    }
+                }
+                Thread.Sleep(1000);
+
                 foreach (var device in Controller.OpenCLDevices) {
                     if (device.OverclockingEnabled) {
                         device.OverclockingEnabled = false;
@@ -3794,6 +3837,7 @@ namespace GatelessGateSharp {
                         device.FanSpeed = -1;
                     }
                 }
+
                 if (Controller.PrimaryStratum != null)
                     Controller.PrimaryStratum.Stop();
                 if (Controller.SecondaryStratum != null)
@@ -3814,8 +3858,6 @@ namespace GatelessGateSharp {
                 Controller.SecondaryStratum = null;
                 Controller.PrimaryStratumBackup = null;
                 Controller.SecondaryStratumBackup = null;
-
-                PCIExpress.UnloadPhyMem();
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -3843,8 +3885,6 @@ namespace GatelessGateSharp {
                 tabControlMainForm.SelectedIndex = 0;
                 if (mAreSettingsDirty)
                     SaveSettingsToDatabase();
-                if (checkBoxEnablePhymem.Checked && !PCIExpress.Available && !PCIExpress.LoadPhyMem())
-                    MessageBox.Show(Utilities.GetAutoClosingForm(10), "Failed to load phymem.", appName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
                 Controller.PrimaryStratum = null;
                 Controller.SecondaryStratum = null;
@@ -5426,6 +5466,11 @@ namespace GatelessGateSharp {
 
         private void checkBoxEnablePhymem_CheckedChanged(object sender, EventArgs e) {
             mAreSettingsDirty = true;
+            if (checkBoxEnablePhymem.Checked) {
+                PCIExpress.LoadPhyMem();
+            } else {
+                PCIExpress.UnloadPhyMem();
+            }
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e) {
@@ -5630,7 +5675,7 @@ namespace GatelessGateSharp {
 
         private void buttonPrintMemoryTimings_Click(object sender, EventArgs e)
         {
-            PCIExpress.PrintMemoryTimings();
+            Controller.OpenCLDevices[0].PrintMemoryTimings();
         }
     }
 }

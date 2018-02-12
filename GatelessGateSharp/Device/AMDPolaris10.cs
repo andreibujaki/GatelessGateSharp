@@ -1687,7 +1687,93 @@ namespace GatelessGateSharp {
             ixMC_IO_DEBUG_ACMD_OFSCAL_D1 = 0xfe,
             ixMC_IO_DEBUG_CMD_OFSCAL_D1 = 0xff,
         }
-        
+
+        public class MC_SEQ_WR_CTL_D1
+        {
+            public static readonly UInt32 DAT_DLY_MASK = 0xf;
+            public static readonly Int32 DAT_DLY__SHIFT = 0x0;
+            public static readonly UInt32 DQS_DLY_MASK = 0xf0;
+            public static readonly Int32 DQS_DLY__SHIFT = 0x4;
+            public static readonly UInt32 DQS_XTR_MASK = 0x100;
+            public static readonly Int32 DQS_XTR__SHIFT = 0x8;
+            public static readonly UInt32 DAT_2Y_DLY_MASK = 0x200;
+            public static readonly Int32 DAT_2Y_DLY__SHIFT = 0x9;
+            public static readonly UInt32 ADR_2Y_DLY_MASK = 0x400;
+            public static readonly Int32 ADR_2Y_DLY__SHIFT = 0xa;
+            public static readonly UInt32 CMD_2Y_DLY_MASK = 0x800;
+            public static readonly Int32 CMD_2Y_DLY__SHIFT = 0xb;
+            public static readonly UInt32 OEN_DLY_MASK = 0xf000;
+            public static readonly Int32 OEN_DLY__SHIFT = 0xc;
+            public static readonly UInt32 OEN_EXT_MASK = 0xf0000;
+            public static readonly Int32 OEN_EXT__SHIFT = 0x10;
+            public static readonly UInt32 OEN_SEL_MASK = 0x300000;
+            public static readonly Int32 OEN_SEL__SHIFT = 0x14;
+            public static readonly UInt32 ODT_DLY_MASK = 0xf000000;
+            public static readonly Int32 ODT_DLY__SHIFT = 0x18;
+            public static readonly UInt32 ODT_EXT_MASK = 0x10000000;
+            public static readonly Int32 ODT_EXT__SHIFT = 0x1c;
+            public static readonly UInt32 ADR_DLY_MASK = 0x20000000;
+            public static readonly Int32 ADR_DLY__SHIFT = 0x1d;
+            public static readonly UInt32 CMD_DLY_MASK = 0x40000000;
+            public static readonly Int32 CMD_DLY__SHIFT = 0x1e;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 DAT_DLY { get { return (Data & DAT_DLY_MASK) >> DAT_DLY__SHIFT; } set { Data = (Data & ~DAT_DLY_MASK) | ((value << DAT_DLY__SHIFT) & DAT_DLY_MASK); Mask = Mask | DAT_DLY_MASK; } }
+            public UInt32 DQS_DLY { get { return (Data & DQS_DLY_MASK) >> DQS_DLY__SHIFT; } set { Data = (Data & ~DQS_DLY_MASK) | ((value << DQS_DLY__SHIFT) & DQS_DLY_MASK); Mask = Mask | DQS_DLY_MASK; } }
+            public UInt32 DQS_XTR { get { return (Data & DQS_XTR_MASK) >> DQS_XTR__SHIFT; } set { Data = (Data & ~DQS_XTR_MASK) | ((value << DQS_XTR__SHIFT) & DQS_XTR_MASK); Mask = Mask | DQS_XTR_MASK; } }
+            public UInt32 DAT_2Y_DLY { get { return (Data & DAT_2Y_DLY_MASK) >> DAT_2Y_DLY__SHIFT; } set { Data = (Data & ~DAT_2Y_DLY_MASK) | ((value << DAT_2Y_DLY__SHIFT) & DAT_2Y_DLY_MASK); Mask = Mask | DAT_2Y_DLY_MASK; } }
+            public UInt32 ADR_2Y_DLY { get { return (Data & ADR_2Y_DLY_MASK) >> ADR_2Y_DLY__SHIFT; } set { Data = (Data & ~ADR_2Y_DLY_MASK) | ((value << ADR_2Y_DLY__SHIFT) & ADR_2Y_DLY_MASK); Mask = Mask | ADR_2Y_DLY_MASK; } }
+            public UInt32 CMD_2Y_DLY { get { return (Data & CMD_2Y_DLY_MASK) >> CMD_2Y_DLY__SHIFT; } set { Data = (Data & ~CMD_2Y_DLY_MASK) | ((value << CMD_2Y_DLY__SHIFT) & CMD_2Y_DLY_MASK); Mask = Mask | CMD_2Y_DLY_MASK; } }
+            public UInt32 OEN_DLY { get { return (Data & OEN_DLY_MASK) >> OEN_DLY__SHIFT; } set { Data = (Data & ~OEN_DLY_MASK) | ((value << OEN_DLY__SHIFT) & OEN_DLY_MASK); Mask = Mask | OEN_DLY_MASK; } }
+            public UInt32 OEN_EXT { get { return (Data & OEN_EXT_MASK) >> OEN_EXT__SHIFT; } set { Data = (Data & ~OEN_EXT_MASK) | ((value << OEN_EXT__SHIFT) & OEN_EXT_MASK); Mask = Mask | OEN_EXT_MASK; } }
+            public UInt32 OEN_SEL { get { return (Data & OEN_SEL_MASK) >> OEN_SEL__SHIFT; } set { Data = (Data & ~OEN_SEL_MASK) | ((value << OEN_SEL__SHIFT) & OEN_SEL_MASK); Mask = Mask | OEN_SEL_MASK; } }
+            public UInt32 ODT_DLY { get { return (Data & ODT_DLY_MASK) >> ODT_DLY__SHIFT; } set { Data = (Data & ~ODT_DLY_MASK) | ((value << ODT_DLY__SHIFT) & ODT_DLY_MASK); Mask = Mask | ODT_DLY_MASK; } }
+            public UInt32 ODT_EXT { get { return (Data & ODT_EXT_MASK) >> ODT_EXT__SHIFT; } set { Data = (Data & ~ODT_EXT_MASK) | ((value << ODT_EXT__SHIFT) & ODT_EXT_MASK); Mask = Mask | ODT_EXT_MASK; } }
+            public UInt32 ADR_DLY { get { return (Data & ADR_DLY_MASK) >> ADR_DLY__SHIFT; } set { Data = (Data & ~ADR_DLY_MASK) | ((value << ADR_DLY__SHIFT) & ADR_DLY_MASK); Mask = Mask | ADR_DLY_MASK; } }
+            public UInt32 CMD_DLY { get { return (Data & CMD_DLY_MASK) >> CMD_DLY__SHIFT; } set { Data = (Data & ~CMD_DLY_MASK) | ((value << CMD_DLY__SHIFT) & CMD_DLY_MASK); Mask = Mask | CMD_DLY_MASK; } }
+
+            public MC_SEQ_WR_CTL_D1(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
+        }
+
+        public class MC_SEQ_WR_CTL_2
+        {
+            public static readonly UInt32 DAT_DLY_H_D0_MASK = 0x1;
+            public static readonly Int32 DAT_DLY_H_D0__SHIFT = 0x0;
+            public static readonly UInt32 DQS_DLY_H_D0_MASK = 0x2;
+            public static readonly Int32 DQS_DLY_H_D0__SHIFT = 0x1;
+            public static readonly UInt32 OEN_DLY_H_D0_MASK = 0x4;
+            public static readonly Int32 OEN_DLY_H_D0__SHIFT = 0x2;
+            public static readonly UInt32 DAT_DLY_H_D1_MASK = 0x8;
+            public static readonly Int32 DAT_DLY_H_D1__SHIFT = 0x3;
+            public static readonly UInt32 DQS_DLY_H_D1_MASK = 0x10;
+            public static readonly Int32 DQS_DLY_H_D1__SHIFT = 0x4;
+            public static readonly UInt32 OEN_DLY_H_D1_MASK = 0x20;
+            public static readonly Int32 OEN_DLY_H_D1__SHIFT = 0x5;
+            public static readonly UInt32 WCDR_EN_MASK = 0x40;
+            public static readonly Int32 WCDR_EN__SHIFT = 0x6;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 DAT_DLY_H_D0 { get { return (Data & DAT_DLY_H_D0_MASK) >> DAT_DLY_H_D0__SHIFT; } set { Data = (Data & ~DAT_DLY_H_D0_MASK) | ((value << DAT_DLY_H_D0__SHIFT) & DAT_DLY_H_D0_MASK); Mask = Mask | DAT_DLY_H_D0_MASK; } }
+            public UInt32 DQS_DLY_H_D0 { get { return (Data & DQS_DLY_H_D0_MASK) >> DQS_DLY_H_D0__SHIFT; } set { Data = (Data & ~DQS_DLY_H_D0_MASK) | ((value << DQS_DLY_H_D0__SHIFT) & DQS_DLY_H_D0_MASK); Mask = Mask | DQS_DLY_H_D0_MASK; } }
+            public UInt32 OEN_DLY_H_D0 { get { return (Data & OEN_DLY_H_D0_MASK) >> OEN_DLY_H_D0__SHIFT; } set { Data = (Data & ~OEN_DLY_H_D0_MASK) | ((value << OEN_DLY_H_D0__SHIFT) & OEN_DLY_H_D0_MASK); Mask = Mask | OEN_DLY_H_D0_MASK; } }
+            public UInt32 DAT_DLY_H_D1 { get { return (Data & DAT_DLY_H_D1_MASK) >> DAT_DLY_H_D1__SHIFT; } set { Data = (Data & ~DAT_DLY_H_D1_MASK) | ((value << DAT_DLY_H_D1__SHIFT) & DAT_DLY_H_D1_MASK); Mask = Mask | DAT_DLY_H_D1_MASK; } }
+            public UInt32 DQS_DLY_H_D1 { get { return (Data & DQS_DLY_H_D1_MASK) >> DQS_DLY_H_D1__SHIFT; } set { Data = (Data & ~DQS_DLY_H_D1_MASK) | ((value << DQS_DLY_H_D1__SHIFT) & DQS_DLY_H_D1_MASK); Mask = Mask | DQS_DLY_H_D1_MASK; } }
+            public UInt32 OEN_DLY_H_D1 { get { return (Data & OEN_DLY_H_D1_MASK) >> OEN_DLY_H_D1__SHIFT; } set { Data = (Data & ~OEN_DLY_H_D1_MASK) | ((value << OEN_DLY_H_D1__SHIFT) & OEN_DLY_H_D1_MASK); Mask = Mask | OEN_DLY_H_D1_MASK; } }
+            public UInt32 WCDR_EN { get { return (Data & WCDR_EN_MASK) >> WCDR_EN__SHIFT; } set { Data = (Data & ~WCDR_EN_MASK) | ((value << WCDR_EN__SHIFT) & WCDR_EN_MASK); Mask = Mask | WCDR_EN_MASK; } }
+
+            public MC_SEQ_WR_CTL_2(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
+        }
+
         public class MC_SEQ_RAS_TIMING
         {
             public static readonly UInt32 TRCDW_MASK = 0x1f;
@@ -1713,6 +1799,40 @@ namespace GatelessGateSharp {
             public UInt32 TRC { get { return (Data & TRC_MASK) >> TRC__SHIFT; } set { Data = (Data & ~TRC_MASK) | ((value << TRC__SHIFT) & TRC_MASK); Mask = Mask | TRC_MASK; } }
 
             public MC_SEQ_RAS_TIMING(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
+        }
+
+        public class MC_SEQ_PMG_TIMING
+        {
+            public static readonly UInt32 TCKSRE_MASK = 0x7;
+            public static readonly Int32 TCKSRE__SHIFT = 0x0;
+            public static readonly UInt32 TCKSRX_MASK = 0x70;
+            public static readonly Int32 TCKSRX__SHIFT = 0x4;
+            public static readonly UInt32 TCKE_PULSE_MASK = 0xf00;
+            public static readonly Int32 TCKE_PULSE__SHIFT = 0x8;
+            public static readonly UInt32 TCKE_MASK = 0x3f000;
+            public static readonly Int32 TCKE__SHIFT = 0xc;
+            public static readonly UInt32 SEQ_IDLE_MASK = 0x1c0000;
+            public static readonly Int32 SEQ_IDLE__SHIFT = 0x12;
+            public static readonly UInt32 TCKE_PULSE_MSB_MASK = 0x800000;
+            public static readonly Int32 TCKE_PULSE_MSB__SHIFT = 0x17;
+            public static readonly UInt32 SEQ_IDLE_SS_MASK = 0xff000000;
+            public static readonly Int32 SEQ_IDLE_SS__SHIFT = 0x18;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 TCKSRE { get { return (Data & TCKSRE_MASK) >> TCKSRE__SHIFT; } set { Data = (Data & ~TCKSRE_MASK) | ((value << TCKSRE__SHIFT) & TCKSRE_MASK); Mask = Mask | TCKSRE_MASK; } }
+            public UInt32 TCKSRX { get { return (Data & TCKSRX_MASK) >> TCKSRX__SHIFT; } set { Data = (Data & ~TCKSRX_MASK) | ((value << TCKSRX__SHIFT) & TCKSRX_MASK); Mask = Mask | TCKSRX_MASK; } }
+            public UInt32 TCKE { get { return (Data & TCKE_MASK) >> TCKE__SHIFT; } set { Data = (Data & ~TCKE_MASK) | ((value << TCKE__SHIFT) & TCKE_MASK); Mask = Mask | TCKE_MASK; } }
+            public UInt32 SEQ_IDLE { get { return (Data & SEQ_IDLE_MASK) >> SEQ_IDLE__SHIFT; } set { Data = (Data & ~SEQ_IDLE_MASK) | ((value << SEQ_IDLE__SHIFT) & SEQ_IDLE_MASK); Mask = Mask | SEQ_IDLE_MASK; } }
+            public UInt32 SEQ_IDLE_SS { get { return (Data & SEQ_IDLE_SS_MASK) >> SEQ_IDLE_SS__SHIFT; } set { Data = (Data & ~SEQ_IDLE_SS_MASK) | ((value << SEQ_IDLE_SS__SHIFT) & SEQ_IDLE_SS_MASK); Mask = Mask | SEQ_IDLE_SS_MASK; } }
+            public UInt32 TCKE_PULSE { get { return (Data & TCKE_PULSE_MASK) >> TCKE_PULSE__SHIFT; } set { Data = (Data & ~TCKE_PULSE_MASK) | ((value << TCKE_PULSE__SHIFT) & TCKE_PULSE_MASK); Mask = Mask | TCKE_PULSE_MASK; } }
+            public UInt32 TCKE_PULSE_MSB { get { return (Data & TCKE_PULSE_MSB_MASK) >> TCKE_PULSE_MSB__SHIFT; } set { Data = (Data & ~TCKE_PULSE_MSB_MASK) | ((value << TCKE_PULSE_MSB__SHIFT) & TCKE_PULSE_MSB_MASK); Mask = Mask | TCKE_PULSE_MSB_MASK; } }
+
+            public MC_SEQ_PMG_TIMING(uint aData = 0x0)
             {
                 Data = aData;
                 Mask = 0x0;
@@ -1811,40 +1931,7 @@ namespace GatelessGateSharp {
                 Mask = 0x0;
             }
         }
-
-        public class MC_SEQ_PGM_TIMING {
-            public static readonly UInt32 TCKSRE_MASK = 0x7;
-            public static readonly Int32 TCKSRE__SHIFT = 0x0;
-            public static readonly UInt32 TCKSRX_MASK = 0x70;
-            public static readonly Int32 TCKSRX__SHIFT = 0x4;
-            public static readonly UInt32 TCKE_PULSE_MASK = 0xf00;
-            public static readonly Int32 TCKE_PULSE__SHIFT = 0x8;
-            public static readonly UInt32 TCKE_MASK = 0x3f000;
-            public static readonly Int32 TCKE__SHIFT = 0xc;
-            public static readonly UInt32 SEQ_IDLE_MASK = 0x1c0000;
-            public static readonly Int32 SEQ_IDLE__SHIFT = 0x12;
-            public static readonly UInt32 TCKE_PULSE_MSB_MASK = 0x800000;
-            public static readonly Int32 TCKE_PULSE_MSB__SHIFT = 0x17;
-            public static readonly UInt32 SEQ_IDLE_SS_MASK = 0xff000000;
-            public static readonly Int32 SEQ_IDLE_SS__SHIFT = 0x18;
-
-            public UInt32 Data { get; set; }
-            public UInt32 Mask { get; set; }
-            public UInt32 TCKSRE { get { return (Data & TCKSRE_MASK) >> TCKSRE__SHIFT; } set { Data = (Data & ~TCKSRE_MASK) | ((value << TCKSRE__SHIFT) & TCKSRE_MASK); Mask = Mask | TCKSRE_MASK; } }
-            public UInt32 TCKSRX { get { return (Data & TCKSRX_MASK) >> TCKSRX__SHIFT; } set { Data = (Data & ~TCKSRX_MASK) | ((value << TCKSRX__SHIFT) & TCKSRX_MASK); Mask = Mask | TCKSRX_MASK; } }
-            public UInt32 TCKE_PULSE { get { return (Data & TCKE_PULSE_MASK) >> TCKE_PULSE__SHIFT; } set { Data = (Data & ~TCKE_PULSE_MASK) | ((value << TCKE_PULSE__SHIFT) & TCKE_PULSE_MASK); Mask = Mask | TCKE_PULSE_MASK; } }
-            public UInt32 TCKE { get { return (Data & TCKE_MASK) >> TCKE__SHIFT; } set { Data = (Data & ~TCKE_MASK) | ((value << TCKE__SHIFT) & TCKE_MASK); Mask = Mask | TCKE_MASK; } }
-            public UInt32 SEQ_IDLE { get { return (Data & SEQ_IDLE_MASK) >> SEQ_IDLE__SHIFT; } set { Data = (Data & ~SEQ_IDLE_MASK) | ((value << SEQ_IDLE__SHIFT) & SEQ_IDLE_MASK); Mask = Mask | SEQ_IDLE_MASK; } }
-            public UInt32 TCKE_PULSE_MSB { get { return (Data & TCKE_PULSE_MSB_MASK) >> TCKE_PULSE_MSB__SHIFT; } set { Data = (Data & ~TCKE_PULSE_MSB_MASK) | ((value << TCKE_PULSE_MSB__SHIFT) & TCKE_PULSE_MSB_MASK); Mask = Mask | TCKE_PULSE_MSB_MASK; } }
-            public UInt32 SEQ_IDLE_SS { get { return (Data & SEQ_IDLE_SS_MASK) >> SEQ_IDLE_SS__SHIFT; } set { Data = (Data & ~SEQ_IDLE_SS_MASK) | ((value << SEQ_IDLE_SS__SHIFT) & SEQ_IDLE_SS_MASK); Mask = Mask | SEQ_IDLE_SS_MASK; } }
-
-            public MC_SEQ_PGM_TIMING(uint aData = 0x0)
-            {
-                Data = aData;
-                Mask = 0x0;
-            }
-        }
-
+        
         public class MC_ARB_DRAM_TIMING
         {
             public static readonly UInt32 ACTRD_MASK = 0xff;
@@ -1895,15 +1982,297 @@ namespace GatelessGateSharp {
             }
         }
 
-        /*
-        MC_SEQ_PMG_TIMING
-        MC_SEQ_MISC_TIMING
-        MC_ARB_DRAM_TIMING2
-        static struct umr_bitfield mmMC_ARB_DRAM_TIMING[]
-         */
+        public class MC_SEQ_MISC0
+        {
+            public static readonly UInt32 MT_MASK	 = 0xf0000000;
+            public static readonly Int32 MT__SHIFT	 = 28;
+            public static readonly UInt32 MEMORY_VENDOR_ID_MASK = 0x00000f00;
+            public static readonly Int32 MEMORY_VENDOR_ID__SHIFT = 8;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 MT { get { return (Data & MT_MASK) >> MT__SHIFT; } set { Data = (Data & ~MT_MASK) | ((value << MT__SHIFT) & MT_MASK); Mask = Mask | MT_MASK; } }
+            public UInt32 MEMORY_VENDOR_ID { get { return (Data & MEMORY_VENDOR_ID_MASK) >> MEMORY_VENDOR_ID__SHIFT; } set { Data = (Data & ~MEMORY_VENDOR_ID_MASK) | ((value << MEMORY_VENDOR_ID__SHIFT) & MEMORY_VENDOR_ID_MASK); Mask = Mask | MEMORY_VENDOR_ID_MASK; } }
+
+            public string MemoryType {
+                get {
+                    return (MT == 1) ? "GDDR1" :
+                           (MT == 2) ? "GDDR2" :
+                           (MT == 3) ? "GDDR3" :
+                           (MT == 4) ? "GDDR4" :
+                           (MT == 5) ? "GDDR5" :
+                           (MT == 6) ? "HBM" :
+                           (MT == 11) ? "DDR3" :
+                                       null;
+                }
+            }
+                
+            public string MemoryVendor {
+                get {
+                    return (MEMORY_VENDOR_ID == 1)  ? "Samsung" :
+                           (MEMORY_VENDOR_ID == 2)  ? "Infineon" :
+                           (MEMORY_VENDOR_ID == 3)  ? "Elpida" :
+                           (MEMORY_VENDOR_ID == 4)  ? "Etron" :
+                           (MEMORY_VENDOR_ID == 5)  ? "Nanya" :
+                           (MEMORY_VENDOR_ID == 6)  ? "Hynix" :
+                           (MEMORY_VENDOR_ID == 7)  ? "Mosel" :
+                           (MEMORY_VENDOR_ID == 8)  ? "Winbond" :
+                           (MEMORY_VENDOR_ID == 9)  ? "ESMT" :
+                           (MEMORY_VENDOR_ID == 15) ? "Micron" :
+                                                      null;
+                }
+            }
+
+            public MC_SEQ_MISC0(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
+        }
 
         public AMDPolaris10(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex, aComputeDevice) {
+        }
+
+        string mMemoryType = null;
+
+        public override string GetMemoryType()
+        {
+            return mMemoryType;
+        }
+
+        string mMemoryVendor = null;
+
+        public override string GetMemoryVendor()
+        {
+            return mMemoryVendor;
+        }
+
+        UInt32 ARBTimingsBackup = 0x0;
+        UInt32 ARBTimings2Backup = 0x0;
+        UInt32 PMGTimingsBackup = 0x0;
+        UInt32 RASTimingsBackup = 0x0;
+        UInt32 CASTimingsBackup = 0x0;
+        UInt32 MiscTimingsBackup = 0x0;
+        UInt32 MiscTimings2Backup = 0x0;
+        UInt32 SEQMisc1Backup = 0x0;
+        UInt32 SEQMisc3Backup = 0x0;
+        UInt32 SEQMisc8Backup = 0x0;
+
+        public override void RestoreMemoryTimings()
+        {
+            int busNumber = GetComputeDevice().PciBusIdAMD;
+
+            if (!PCIExpress.Available || busNumber <= 0 || !this.MemoryTimingModsEnabled || ARBTimingsBackup == 0)
+                return;
+
+            PCIExpress.UpdateGMC81Registers(busNumber,
+                ARBTimingsBackup, 0xffffffff,
+                ARBTimings2Backup, 0xffffffff,
+                SEQMisc1Backup,
+                SEQMisc3Backup,
+                SEQMisc8Backup,
+                RASTimingsBackup, 0xffffffff,
+                CASTimingsBackup, 0xffffffff,
+                MiscTimingsBackup, 0xffffffff,
+                MiscTimings2Backup, 0xffffffff,
+                PMGTimingsBackup, 0xffffffff);
+        }
+
+        MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING();
+        MC_ARB_DRAM_TIMING2 ARBTimings2 = new MC_ARB_DRAM_TIMING2();
+        MC_SEQ_PMG_TIMING PMGTimings = new MC_SEQ_PMG_TIMING();
+        MC_SEQ_RAS_TIMING RASTimings = new MC_SEQ_RAS_TIMING();
+        MC_SEQ_CAS_TIMING CASTimings = new MC_SEQ_CAS_TIMING();
+        MC_SEQ_MISC_TIMING miscTimings = new MC_SEQ_MISC_TIMING();
+        MC_SEQ_MISC_TIMING2 miscTimings2 = new MC_SEQ_MISC_TIMING2();
+        UInt32 misc1;
+        UInt32 misc3;
+        UInt32 misc8;
+
+        public override void PrepareMemoryTimingMods(string algorithm)
+        {
+            int busNumber = GetComputeDevice().PciBusIdAMD;
+
+            if (!PCIExpress.Available || busNumber <= 0)
+                return;
+
+            uint misc0Data = 0;
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC0, out misc0Data);
+            MC_SEQ_MISC0 misc0 = new MC_SEQ_MISC0(misc0Data);
+            mMemoryType = misc0.MemoryType;
+            mMemoryVendor = misc0.MemoryVendor;
+
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out ARBTimingsBackup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out ARBTimings2Backup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC1, out SEQMisc1Backup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC3, out SEQMisc3Backup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC8, out SEQMisc8Backup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out PMGTimingsBackup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_RAS_TIMING, out RASTimingsBackup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out CASTimingsBackup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MiscTimingsBackup);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MiscTimings2Backup);
+
+            ARBTimings = new MC_ARB_DRAM_TIMING(ARBTimingsBackup);
+            ARBTimings2 = new MC_ARB_DRAM_TIMING2();
+            PMGTimings = new MC_SEQ_PMG_TIMING();
+            RASTimings = new MC_SEQ_RAS_TIMING();
+            CASTimings = new MC_SEQ_CAS_TIMING();
+            miscTimings = new MC_SEQ_MISC_TIMING();
+            miscTimings2 = new MC_SEQ_MISC_TIMING2();
+
+            if (GetVendor() == "AMD"
+                && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(GetName()).Success
+                && MemoryVendor == "Samsung"
+                && (algorithm == "ethash" || algorithm == "ethash_pascal")) {
+
+                ARBTimings.ACTRD = 18;
+                RASTimings.TRRD = 5;
+                miscTimings2.FAW = 0;
+                miscTimings2.T32AW = 0;
+                misc1 = 0x2014007A;
+                misc3 = 0xA000897A;
+                misc8 = 0x00000002;
+
+                MemoryTimingModsEnabled = true;
+            } else if (GetVendor() == "AMD"
+                && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(GetName()).Success
+                && MemoryVendor == "Elpida"
+                && (algorithm == "ethash" || algorithm == "ethash_pascal")) {
+
+                // 1500: 777000000000000022AA1C00315A6B3CA0550F15B68C1506006AE4007C041420CA8980A9020004C01712262B612B3715
+                ARBTimings.ACTRD = 16;
+                RASTimings.TRRD = 5;
+                miscTimings2.FAW = 0;
+                miscTimings2.T32AW = 0;
+                misc1 = 0x2014047C;
+                misc3 = 0xA98089CA;
+                misc8 = 0xC0040002;
+
+                MemoryTimingModsEnabled = true;
+            } else if (GetVendor() == "AMD" && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][8]0")).Match(GetName()).Success && algorithm == "cryptonight") {
+                ARBTimings.ACTRD = 16;
+                RASTimings.TRRD = 5;
+                miscTimings2.FAW = 0;
+                miscTimings2.T32AW = 0;
+                misc1 = 0x2014007A;
+                misc3 = 0xA000897A;
+                misc8 = 0x00000002;
+
+                MemoryTimingModsEnabled = true;
+            }
+        }
+
+        public override void UpdateMemoryTimings()
+        {
+            int busNumber = GetComputeDevice().PciBusIdAMD;
+
+            if (!PCIExpress.Available || busNumber <= 0 || !this.MemoryTimingModsEnabled) {
+                ++unsuccessfulUpdateCount;
+                return;
+            }
+
+            int result = PCIExpress.UpdateGMC81Registers(
+                busNumber,
+                ARBTimings.Data, ARBTimings.Mask,
+                ARBTimings2.Data, ARBTimings2.Mask,
+                misc1,
+                misc3,
+                misc8,
+                RASTimings.Data, RASTimings.Mask,
+                CASTimings.Data, CASTimings.Mask,
+                miscTimings.Data, miscTimings.Mask,
+                miscTimings2.Data, miscTimings2.Mask,
+                PMGTimings.Data, PMGTimings.Mask);
+            if (result != 0) {
+                ++successfulUpdateCount;
+            } else {
+                ++unsuccessfulUpdateCount;
+            }
+        }
+
+        long successfulUpdateCount = 0;
+        long unsuccessfulUpdateCount = 0;
+
+        public override void PrintMemoryTimings()
+        {
+            int busNumber = GetComputeDevice().PciBusIdAMD;
+
+            if (!PCIExpress.Available || busNumber <= 0)
+                return;
+
+            uint ARBData = 0;
+            uint ARB2Data = 0;
+            uint RASData = 0;
+            uint CASData = 0;
+            uint MISCData = 0;
+            uint MISC2Data = 0;
+            uint PMGData = 0;
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out ARBData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out ARB2Data);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out CASData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_RAS_TIMING, out RASData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MISCData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MISC2Data);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out PMGData);
+            MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING(ARBData);
+            MC_ARB_DRAM_TIMING2 ARB2Timings = new MC_ARB_DRAM_TIMING2(ARB2Data);
+            MC_SEQ_CAS_TIMING CASTimings = new MC_SEQ_CAS_TIMING(CASData);
+            MC_SEQ_RAS_TIMING RASTimings = new MC_SEQ_RAS_TIMING(RASData);
+            MC_SEQ_MISC_TIMING MISCTimings = new MC_SEQ_MISC_TIMING(MISCData);
+            MC_SEQ_MISC_TIMING2 MISC2Timings = new MC_SEQ_MISC_TIMING2(MISC2Data);
+            MC_SEQ_PMG_TIMING PMGTimings = new MC_SEQ_PMG_TIMING(PMGData);
+            MainForm.Logger("=============");
+            MainForm.Logger("ACTRD:    " + ARBTimings.ACTRD);
+            MainForm.Logger("ACTWR:    " + ARBTimings.ACTWR);
+            MainForm.Logger("RASMACTRD:" + ARBTimings.RASMACTRD);
+            MainForm.Logger("RASMACTWR:" + ARBTimings.RASMACTWR);
+            MainForm.Logger("-------------");
+            MainForm.Logger("RAS2RAS:  " + ARB2Timings.RAS2RAS);
+            MainForm.Logger("RP:       " + ARB2Timings.RP);
+            MainForm.Logger("WRPLUSRP: " + ARB2Timings.WRPLUSRP);
+            MainForm.Logger("BUS_TURN: " + ARB2Timings.BUS_TURN);
+            MainForm.Logger("-------------");
+            MainForm.Logger("TRCDW:    " + RASTimings.TRCDW);
+            MainForm.Logger("TRCDWA:   " + RASTimings.TRCDWA);
+            MainForm.Logger("TRCDR:    " + RASTimings.TRCDR);
+            MainForm.Logger("TRCDRA:   " + RASTimings.TRCDRA);
+            MainForm.Logger("TRRD:     " + RASTimings.TRRD);
+            MainForm.Logger("TRC:      " + RASTimings.TRC);
+            MainForm.Logger("-------------");
+            MainForm.Logger("TNOPW:    " + CASTimings.TNOPW);
+            MainForm.Logger("TNOPR:    " + CASTimings.TNOPR);
+            MainForm.Logger("TR2W:     " + CASTimings.TR2W);
+            MainForm.Logger("TCCDL:    " + CASTimings.TCCDL);
+            MainForm.Logger("TR2R:     " + CASTimings.TR2R);
+            MainForm.Logger("TW2R:     " + CASTimings.TW2R);
+            MainForm.Logger("TCL:      " + CASTimings.TCL);
+            MainForm.Logger("-------------");
+            MainForm.Logger("TRP_WRA:  " + MISCTimings.TRP_WRA);
+            MainForm.Logger("TRP_RDA:  " + MISCTimings.TRP_RDA);
+            MainForm.Logger("TRP:      " + MISCTimings.TRP);
+            MainForm.Logger("TRFC:     " + MISCTimings.TRFC);
+            MainForm.Logger("-------------");
+            MainForm.Logger("PA2RDATA: " + MISC2Timings.PA2RDATA);
+            MainForm.Logger("PA2WDATA: " + MISC2Timings.PA2WDATA);
+            MainForm.Logger("FAW:      " + MISC2Timings.FAW);
+            MainForm.Logger("TREDC:    " + MISC2Timings.TREDC);
+            MainForm.Logger("TWEDC:    " + MISC2Timings.TWEDC);
+            MainForm.Logger("T32AW:    " + MISC2Timings.T32AW);
+            MainForm.Logger("TWDATATR: " + MISC2Timings.TWDATATR);
+            MainForm.Logger("-------------");
+            MainForm.Logger("TCKSRE:   " + PMGTimings.TCKSRE);
+            MainForm.Logger("TCKSRX:   " + PMGTimings.TCKSRX);
+            MainForm.Logger("TCKE_PULSE:" + PMGTimings.TCKE_PULSE);
+            MainForm.Logger("TCKE:     " + PMGTimings.TCKE);
+            MainForm.Logger("SEQ_IDLE: " + PMGTimings.SEQ_IDLE);
+            MainForm.Logger("TCKE_PULSE_MSB:" + PMGTimings.TCKE_PULSE_MSB);
+            MainForm.Logger("SEQ_IDLE_SS:" + PMGTimings.SEQ_IDLE_SS);
+            MainForm.Logger("-------------");
+            MainForm.Logger("successfulUpdateCount:   " + successfulUpdateCount);
+            MainForm.Logger("unsuccessfulUpdateCount: " + unsuccessfulUpdateCount);
+            MainForm.Logger("=============");
         }
     }
 }
