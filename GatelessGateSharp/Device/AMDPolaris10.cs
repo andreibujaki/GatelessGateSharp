@@ -1786,7 +1786,7 @@ namespace GatelessGateSharp {
             public static readonly Int32 TRCDRA__SHIFT = 0xf;
             public static readonly UInt32 TRRD_MASK = 0xf00000;
             public static readonly Int32 TRRD__SHIFT = 0x14;
-            public static readonly UInt32 TRC_MASK = 0x7f000000;
+            public static readonly UInt32 TRC_MASK = 0xff000000; // 0x7f000000;
             public static readonly Int32 TRC__SHIFT = 0x18;
 
             public UInt32 Data { get; set; }
@@ -1807,15 +1807,15 @@ namespace GatelessGateSharp {
 
         public class MC_SEQ_PMG_TIMING
         {
-            public static readonly UInt32 TCKSRE_MASK = 0x7;
+            public static readonly UInt32 TCKSRE_MASK = 0xf; // 0x7;
             public static readonly Int32 TCKSRE__SHIFT = 0x0;
-            public static readonly UInt32 TCKSRX_MASK = 0x70;
+            public static readonly UInt32 TCKSRX_MASK = 0xf0; // 0x70;
             public static readonly Int32 TCKSRX__SHIFT = 0x4;
             public static readonly UInt32 TCKE_PULSE_MASK = 0xf00;
             public static readonly Int32 TCKE_PULSE__SHIFT = 0x8;
             public static readonly UInt32 TCKE_MASK = 0x3f000;
             public static readonly Int32 TCKE__SHIFT = 0xc;
-            public static readonly UInt32 SEQ_IDLE_MASK = 0x1c0000;
+            public static readonly UInt32 SEQ_IDLE_MASK = 0x1c0000; // DO NOT CHANGE
             public static readonly Int32 SEQ_IDLE__SHIFT = 0x12;
             public static readonly UInt32 TCKE_PULSE_MSB_MASK = 0x800000;
             public static readonly Int32 TCKE_PULSE_MSB__SHIFT = 0x17;
@@ -1851,9 +1851,9 @@ namespace GatelessGateSharp {
             public static readonly Int32 TCCDL__SHIFT = 0x9;
             public static readonly UInt32 TR2R_MASK = 0xf000;
             public static readonly Int32 TR2R__SHIFT = 0xc;
-            public static readonly UInt32 TW2R_MASK = 0x1f0000;
+            public static readonly UInt32 TW2R_MASK = 0xff0000; // 0x1f0000;
             public static readonly Int32 TW2R__SHIFT = 0x10;
-            public static readonly UInt32 TCL_MASK = 0x1f000000;
+            public static readonly UInt32 TCL_MASK = 0xff000000; // 0x1f000000;
             public static readonly Int32 TCL__SHIFT = 0x18;
 
             public UInt32 Data { get; set; }
@@ -1875,9 +1875,9 @@ namespace GatelessGateSharp {
 
         public class MC_SEQ_MISC_TIMING2
         {
-            public static readonly UInt32 PA2RDATA_MASK = 0x7;
+            public static readonly UInt32 PA2RDATA_MASK = 0xf; // 0x7;
             public static readonly Int32 PA2RDATA__SHIFT = 0x0;
-            public static readonly UInt32 PA2WDATA_MASK = 0x70;
+            public static readonly UInt32 PA2WDATA_MASK = 0xf0; // 0x70;
             public static readonly Int32 PA2WDATA__SHIFT = 0x4;
             public static readonly UInt32 FAW_MASK = 0x1f00;
             public static readonly Int32 FAW__SHIFT = 0x8;
@@ -1885,7 +1885,7 @@ namespace GatelessGateSharp {
             public static readonly Int32 TREDC__SHIFT = 0xd;
             public static readonly UInt32 TWEDC_MASK = 0x1f0000;
             public static readonly Int32 TWEDC__SHIFT = 0x10;
-            public static readonly UInt32 T32AW_MASK = 0x1e00000;
+            public static readonly UInt32 T32AW_MASK = 0x1e00000; // DO NOT CHANGE
             public static readonly Int32 T32AW__SHIFT = 0x15;
             public static readonly UInt32 TWDATATR_MASK = 0xf0000000;
             public static readonly Int32 TWDATATR__SHIFT = 0x1c;
@@ -1909,13 +1909,13 @@ namespace GatelessGateSharp {
 
         public class MC_SEQ_MISC_TIMING
         {
-            public static readonly UInt32 TRP_WRA_MASK = 0x3f;
+            public static readonly UInt32 TRP_WRA_MASK = 0xff; // 0x3f;
             public static readonly Int32 TRP_WRA__SHIFT = 0x0;
-            public static readonly UInt32 TRP_RDA_MASK = 0x3f00;
+            public static readonly UInt32 TRP_RDA_MASK = 0x7f00; // 0x3f00;
             public static readonly Int32 TRP_RDA__SHIFT = 0x8;
             public static readonly UInt32 TRP_MASK = 0xf8000;
             public static readonly Int32 TRP__SHIFT = 0xf;
-            public static readonly UInt32 TRFC_MASK = 0x1ff00000;
+            public static readonly UInt32 TRFC_MASK = 0xfff00000; // 0x1ff00000;
             public static readonly Int32 TRFC__SHIFT = 0x14;
 
             public UInt32 Data { get; set; }
@@ -1965,7 +1965,7 @@ namespace GatelessGateSharp {
             public static readonly Int32 RP__SHIFT = 0x8;
             public static readonly UInt32 WRPLUSRP_MASK = 0xff0000;
             public static readonly Int32 WRPLUSRP__SHIFT = 0x10;
-            public static readonly UInt32 BUS_TURN_MASK = 0x1f000000;
+            public static readonly UInt32 BUS_TURN_MASK = 0xff000000; // 0x1f000000;
             public static readonly Int32 BUS_TURN__SHIFT = 0x18;
 
             public UInt32 Data { get; set; }
@@ -2035,16 +2035,33 @@ namespace GatelessGateSharp {
         }
 
         string mMemoryType = null;
+        string mMemoryVendor = null;
+
+        private void UpdateMemoryInfo()
+        {
+            int busNumber = GetComputeDevice().PciBusIdAMD;
+
+            if (!PCIExpress.Available || busNumber <= 0)
+                return;
+
+            uint misc0Data = 0;
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC0, out misc0Data);
+            MC_SEQ_MISC0 misc0 = new MC_SEQ_MISC0(misc0Data);
+            mMemoryType = misc0.MemoryType;
+            mMemoryVendor = misc0.MemoryVendor;
+        }
 
         public override string GetMemoryType()
         {
+            if (mMemoryType == null)
+                UpdateMemoryInfo();
             return mMemoryType;
         }
 
-        string mMemoryVendor = null;
-
         public override string GetMemoryVendor()
         {
+            if (mMemoryVendor == null)
+                UpdateMemoryInfo();
             return mMemoryVendor;
         }
 
@@ -2114,7 +2131,7 @@ namespace GatelessGateSharp {
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MiscTimingsBackup);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MiscTimings2Backup);
 
-            ARBTimings = new MC_ARB_DRAM_TIMING(ARBTimingsBackup);
+            ARBTimings = new MC_ARB_DRAM_TIMING();
             ARBTimings2 = new MC_ARB_DRAM_TIMING2();
             PMGTimings = new MC_SEQ_PMG_TIMING();
             RASTimings = new MC_SEQ_RAS_TIMING();
@@ -2124,41 +2141,111 @@ namespace GatelessGateSharp {
 
             if (GetVendor() == "AMD"
                 && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(GetName()).Success
-                && MemoryVendor == "Samsung"
-                && (algorithm == "ethash" || algorithm == "ethash_pascal")) {
+                && MemoryVendor == "Samsung") {
+
+                PMGTimings.TCKSRE = 2;
+                PMGTimings.TCKSRX = 2;
+                PMGTimings.TCKE_PULSE = 12;
+                PMGTimings.TCKE = 12;
+                PMGTimings.SEQ_IDLE = 7;
+                PMGTimings.TCKE_PULSE_MSB = 0;
+                //PMGTimings.SEQ_IDLE_SS = 16; // 0;
+
+                RASTimings.TRCDW = 14;
+                RASTimings.TRCDWA = 14;
+                RASTimings.TRCDR = 25;
+                RASTimings.TRCDRA = 25;
+                RASTimings.TRRD = 5;
+                RASTimings.TRC = 70;
+
+                CASTimings.TNOPW = 0;
+                CASTimings.TNOPR = 0;
+                CASTimings.TR2W = 28;
+                CASTimings.TCCDL = 4;
+                CASTimings.TR2R = 5;
+                CASTimings.TW2R = 14;
+                //CASTimings.TCL = 24; // 21;
+
+                miscTimings.TRP_WRA = 50;
+                miscTimings.TRP_RDA = 26;
+                miscTimings.TRP = 27;
+                miscTimings.TRFC = 150;
+
+                miscTimings2.PA2RDATA = 0;
+                miscTimings2.PA2WDATA = 0;
+                miscTimings2.FAW = 0;
+                //miscTimings2.TREDC = 3;
+                //miscTimings2.TWEDC = 25; // 7;
+                miscTimings2.T32AW = 0;
+                miscTimings2.TWDATATR = 0;
+
+                misc1 = 0x20140514;
+                misc3 = 0xA00089FA;
+                misc8 = 0x00000003;
 
                 ARBTimings.ACTRD = 18;
-                RASTimings.TRRD = 5;
-                miscTimings2.FAW = 0;
-                miscTimings2.T32AW = 0;
-                misc1 = 0x2014007A;
-                misc3 = 0xA000897A;
-                misc8 = 0x00000002;
+                ARBTimings.ACTWR = 18;
+                ARBTimings.RASMACTRD = 52;
+                ARBTimings.RASMACTWR = 66;
+
+                ARBTimings2.RAS2RAS = 195;
+                ARBTimings2.RP = 53;
+                ARBTimings2.WRPLUSRP = 60;
+                ARBTimings2.BUS_TURN = 25;
 
                 MemoryTimingModsEnabled = true;
             } else if (GetVendor() == "AMD"
                 && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(GetName()).Success
-                && MemoryVendor == "Elpida"
-                && (algorithm == "ethash" || algorithm == "ethash_pascal")) {
+                && MemoryVendor == "Elpida") {
 
-                // 1500: 777000000000000022AA1C00315A6B3CA0550F15B68C1506006AE4007C041420CA8980A9020004C01712262B612B3715
-                ARBTimings.ACTRD = 16;
+                PMGTimings.TCKSRE = 2;
+                PMGTimings.TCKSRX = 2;
+                PMGTimings.TCKE_PULSE = 10;
+                PMGTimings.TCKE = 10;
+                PMGTimings.SEQ_IDLE = 7;
+                PMGTimings.TCKE_PULSE_MSB = 0;
+                //PMGTimings.SEQ_IDLE_SS = 0;
+
+                RASTimings.TRCDW = 17;
+                RASTimings.TRCDWA = 17;
+                RASTimings.TRCDR = 22;
+                RASTimings.TRCDRA = 22;
                 RASTimings.TRRD = 5;
+                RASTimings.TRC = 54;
+
+                CASTimings.TNOPW = 0;
+                CASTimings.TNOPR = 0;
+                CASTimings.TR2W = 26;
+                //CASTimings.TCCDL = 2;
+                CASTimings.TR2R = 5;
+                CASTimings.TW2R = 15;
+                //CASTimings.TCL = 21;
+
+                //miscTimings.TRP_WRA = 54;
+                //miscTimings.TRP_RDA = 25;
+                //miscTimings.TRP = 22;
+                miscTimings.TRFC = 97;
+
+                miscTimings2.PA2RDATA = 0;
+                miscTimings2.PA2WDATA = 0;
                 miscTimings2.FAW = 0;
-                miscTimings2.T32AW = 0;
+                //miscTimings2.TREDC = 2;
+                //miscTimings2.TWEDC = 2;
+                miscTimings2.T32AW = 4;  
+
                 misc1 = 0x2014047C;
                 misc3 = 0xA98089CA;
                 misc8 = 0xC0040002;
 
-                MemoryTimingModsEnabled = true;
-            } else if (GetVendor() == "AMD" && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][8]0")).Match(GetName()).Success && algorithm == "cryptonight") {
-                ARBTimings.ACTRD = 16;
-                RASTimings.TRRD = 5;
-                miscTimings2.FAW = 0;
-                miscTimings2.T32AW = 0;
-                misc1 = 0x2014007A;
-                misc3 = 0xA000897A;
-                misc8 = 0x00000002;
+                ARBTimings.ACTRD = 23;
+                ARBTimings.ACTWR = 18;
+                ARBTimings.RASMACTRD = 38;
+                ARBTimings.RASMACTWR = 43;
+
+                ARBTimings2.RAS2RAS = 97;
+                ARBTimings2.RP = 43;
+                ARBTimings2.WRPLUSRP = 55;
+                ARBTimings2.BUS_TURN = 21;
 
                 MemoryTimingModsEnabled = true;
             }
@@ -2168,10 +2255,8 @@ namespace GatelessGateSharp {
         {
             int busNumber = GetComputeDevice().PciBusIdAMD;
 
-            if (!PCIExpress.Available || busNumber <= 0 || !this.MemoryTimingModsEnabled) {
-                ++unsuccessfulUpdateCount;
+            if (!PCIExpress.Available || busNumber <= 0 || !this.MemoryTimingModsEnabled)
                 return;
-            }
 
             int result = PCIExpress.UpdateGMC81Registers(
                 busNumber,
@@ -2185,15 +2270,7 @@ namespace GatelessGateSharp {
                 miscTimings.Data, miscTimings.Mask,
                 miscTimings2.Data, miscTimings2.Mask,
                 PMGTimings.Data, PMGTimings.Mask);
-            if (result != 0) {
-                ++successfulUpdateCount;
-            } else {
-                ++unsuccessfulUpdateCount;
-            }
         }
-
-        long successfulUpdateCount = 0;
-        long unsuccessfulUpdateCount = 0;
 
         public override void PrintMemoryTimings()
         {
@@ -2209,6 +2286,7 @@ namespace GatelessGateSharp {
             uint MISCData = 0;
             uint MISC2Data = 0;
             uint PMGData = 0;
+            uint errorData = 0;
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out ARBData);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out ARB2Data);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out CASData);
@@ -2216,6 +2294,7 @@ namespace GatelessGateSharp {
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MISCData);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MISC2Data);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out PMGData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_DRAM_ERROR_INSERTION, out errorData);
             MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING(ARBData);
             MC_ARB_DRAM_TIMING2 ARB2Timings = new MC_ARB_DRAM_TIMING2(ARB2Data);
             MC_SEQ_CAS_TIMING CASTimings = new MC_SEQ_CAS_TIMING(CASData);
@@ -2224,6 +2303,9 @@ namespace GatelessGateSharp {
             MC_SEQ_MISC_TIMING2 MISC2Timings = new MC_SEQ_MISC_TIMING2(MISC2Data);
             MC_SEQ_PMG_TIMING PMGTimings = new MC_SEQ_PMG_TIMING(PMGData);
             MainForm.Logger("=============");
+            MainForm.Logger("Device Index: " + DeviceIndex);
+            MainForm.Logger("PCIe Bus #: " + busNumber);
+            MainForm.Logger("-------------");
             MainForm.Logger("ACTRD:    " + ARBTimings.ACTRD);
             MainForm.Logger("ACTWR:    " + ARBTimings.ACTWR);
             MainForm.Logger("RASMACTRD:" + ARBTimings.RASMACTRD);
@@ -2270,9 +2352,8 @@ namespace GatelessGateSharp {
             MainForm.Logger("TCKE_PULSE_MSB:" + PMGTimings.TCKE_PULSE_MSB);
             MainForm.Logger("SEQ_IDLE_SS:" + PMGTimings.SEQ_IDLE_SS);
             MainForm.Logger("-------------");
-            MainForm.Logger("successfulUpdateCount:   " + successfulUpdateCount);
-            MainForm.Logger("unsuccessfulUpdateCount: " + unsuccessfulUpdateCount);
-            MainForm.Logger("=============");
+            MainForm.Logger("SEQ Error (TX):   " + (errorData & 0xffff));
+            MainForm.Logger("SEQ Error (RX):   " + (errorData >> 16));
         }
     }
 }

@@ -73,7 +73,7 @@ namespace GatelessGateSharp
             if (!mutexResult)
                 return 1;
 
-            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;  
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;  
             System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
 
             Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);

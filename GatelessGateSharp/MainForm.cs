@@ -3623,7 +3623,7 @@ namespace GatelessGateSharp {
 
             string algorithm = stratum.AlgorithmName;
             if (stratum2 != null)
-                algorithm += "_" + stratum.AlgorithmName;
+                algorithm += "_" + stratum2.AlgorithmName;
             foreach (var device in Controller.OpenCLDevices) {
                 if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
                     continue;
@@ -5675,7 +5675,8 @@ namespace GatelessGateSharp {
 
         private void buttonPrintMemoryTimings_Click(object sender, EventArgs e)
         {
-            Controller.OpenCLDevices[0].PrintMemoryTimings();
+            foreach (var device in Controller.OpenCLDevices)
+                device.PrintMemoryTimings();
         }
     }
 }
