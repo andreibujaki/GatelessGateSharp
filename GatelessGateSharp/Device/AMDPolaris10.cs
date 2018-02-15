@@ -2143,7 +2143,7 @@ namespace GatelessGateSharp {
                 misc3 = 0xA98089CA;
                 misc8 = 0xC0040002;
 
-                ARBTimings.ACTRD = 27;
+                ARBTimings.ACTRD = 26;
                 ARBTimings.ACTWR = 17;
                 //ARBTimings.RASMACTRD = 38;
                 //ARBTimings.RASMACTWR = 43;
