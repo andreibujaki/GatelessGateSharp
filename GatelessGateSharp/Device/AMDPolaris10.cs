@@ -2133,54 +2133,20 @@ namespace GatelessGateSharp {
                 && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(GetName()).Success
                 && MemoryVendor == "Elpida") {
 
-                PMGTimings.TCKSRE = 2;
-                PMGTimings.TCKSRX = 2;
-                PMGTimings.TCKE_PULSE = 10;
-                PMGTimings.TCKE = 10;
-                PMGTimings.SEQ_IDLE = 7;
-                PMGTimings.TCKE_PULSE_MSB = 0;
-                //PMGTimings.SEQ_IDLE_SS = 0;
-
-                RASTimings.TRCDW = 17;
-                RASTimings.TRCDWA = 17;
-                RASTimings.TRCDR = 22;
-                RASTimings.TRCDRA = 22;
                 RASTimings.TRRD = 5;
-                RASTimings.TRC = 54;
+                RASTimings.TRC = 70;
 
-                CASTimings.TNOPW = 0;
-                CASTimings.TNOPR = 0;
-                CASTimings.TR2W = 26;
-                CASTimings.TCCDL = 2;
-                CASTimings.TR2R = 5;
-                CASTimings.TW2R = 15;
-                //CASTimings.TCL = 21;
-
-                miscTimings.TRP_WRA = 54;
-                miscTimings.TRP_RDA = 12;
-                miscTimings.TRP = 11;
-                miscTimings.TRFC = 97;
-
-                miscTimings2.PA2RDATA = 0;
-                miscTimings2.PA2WDATA = 0;
                 miscTimings2.FAW = 0;
-                //miscTimings2.TREDC = 2;
-                //miscTimings2.TWEDC = 2;
                 miscTimings2.T32AW = 4;
 
                 misc1 = 0x2014047C;
                 misc3 = 0xA98089CA;
                 misc8 = 0xC0040002;
 
-                ARBTimings.ACTRD = 23;
-                ARBTimings.ACTWR = 18;
-                ARBTimings.RASMACTRD = 38;
-                ARBTimings.RASMACTWR = 43;
-
-                ARBTimings2.RAS2RAS = 97;
-                ARBTimings2.RP = 43;
-                ARBTimings2.WRPLUSRP = 55;
-                ARBTimings2.BUS_TURN = 21;
+                ARBTimings.ACTRD = 27;
+                ARBTimings.ACTWR = 17;
+                //ARBTimings.RASMACTRD = 38;
+                //ARBTimings.RASMACTWR = 43;
 
                 MemoryTimingModsEnabled = true;
             }
