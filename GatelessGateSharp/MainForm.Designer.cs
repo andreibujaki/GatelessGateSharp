@@ -223,7 +223,6 @@
             this.textBoxCustomPool0Login = new System.Windows.Forms.TextBox();
             this.label148 = new System.Windows.Forms.Label();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
-            this.buttonPrintMemoryTimings = new System.Windows.Forms.Button();
             this.buttonResetOverclockingSettings = new System.Windows.Forms.Button();
             this.buttonResetAllSettings = new System.Windows.Forms.Button();
             this.buttonResetAlgorithmSettings = new System.Windows.Forms.Button();
@@ -231,8 +230,6 @@
             this.groupBoxHadrwareAcceleration = new System.Windows.Forms.GroupBox();
             this.checkBoxEnableOverclockingForDefaultSettings = new System.Windows.Forms.CheckBox();
             this.label144 = new System.Windows.Forms.Label();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabControlDeviceSettings = new System.Windows.Forms.TabControl();
             this.tabPageAPI = new System.Windows.Forms.TabPage();
@@ -2573,7 +2570,6 @@
             // 
             // tabPageDeviceSettings
             // 
-            this.tabPageDeviceSettings.Controls.Add(this.buttonPrintMemoryTimings);
             this.tabPageDeviceSettings.Controls.Add(this.buttonResetOverclockingSettings);
             this.tabPageDeviceSettings.Controls.Add(this.buttonResetAllSettings);
             this.tabPageDeviceSettings.Controls.Add(this.buttonResetAlgorithmSettings);
@@ -2587,20 +2583,10 @@
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
             // 
-            // buttonPrintMemoryTimings
-            // 
-            this.buttonPrintMemoryTimings.Location = new System.Drawing.Point(4, 435);
-            this.buttonPrintMemoryTimings.Name = "buttonPrintMemoryTimings";
-            this.buttonPrintMemoryTimings.Size = new System.Drawing.Size(149, 23);
-            this.buttonPrintMemoryTimings.TabIndex = 6;
-            this.buttonPrintMemoryTimings.Text = "Print Memory Timings";
-            this.buttonPrintMemoryTimings.UseVisualStyleBackColor = true;
-            this.buttonPrintMemoryTimings.Click += new System.EventHandler(this.buttonPrintMemoryTimings_Click);
-            // 
             // buttonResetOverclockingSettings
             // 
             this.buttonResetOverclockingSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetOverclockingSettings.Location = new System.Drawing.Point(652, 61);
+            this.buttonResetOverclockingSettings.Location = new System.Drawing.Point(815, 61);
             this.buttonResetOverclockingSettings.Name = "buttonResetOverclockingSettings";
             this.buttonResetOverclockingSettings.Size = new System.Drawing.Size(163, 23);
             this.buttonResetOverclockingSettings.TabIndex = 4;
@@ -2611,7 +2597,7 @@
             // buttonResetAllSettings
             // 
             this.buttonResetAllSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetAllSettings.Location = new System.Drawing.Point(652, 96);
+            this.buttonResetAllSettings.Location = new System.Drawing.Point(815, 96);
             this.buttonResetAllSettings.Name = "buttonResetAllSettings";
             this.buttonResetAllSettings.Size = new System.Drawing.Size(163, 23);
             this.buttonResetAllSettings.TabIndex = 5;
@@ -2622,7 +2608,7 @@
             // buttonResetAlgorithmSettings
             // 
             this.buttonResetAlgorithmSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetAlgorithmSettings.Location = new System.Drawing.Point(652, 32);
+            this.buttonResetAlgorithmSettings.Location = new System.Drawing.Point(815, 32);
             this.buttonResetAlgorithmSettings.Name = "buttonResetAlgorithmSettings";
             this.buttonResetAlgorithmSettings.Size = new System.Drawing.Size(163, 23);
             this.buttonResetAlgorithmSettings.TabIndex = 3;
@@ -2633,7 +2619,7 @@
             // buttonResetFanControlSettings
             // 
             this.buttonResetFanControlSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetFanControlSettings.Location = new System.Drawing.Point(652, 3);
+            this.buttonResetFanControlSettings.Location = new System.Drawing.Point(815, 3);
             this.buttonResetFanControlSettings.Name = "buttonResetFanControlSettings";
             this.buttonResetFanControlSettings.Size = new System.Drawing.Size(163, 23);
             this.buttonResetFanControlSettings.TabIndex = 2;
@@ -2645,13 +2631,11 @@
             // 
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBoxEnableOverclockingForDefaultSettings);
             this.groupBoxHadrwareAcceleration.Controls.Add(this.label144);
-            this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox3);
-            this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBox2);
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBoxEnablePhymem);
             this.groupBoxHadrwareAcceleration.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.245F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(3, 294);
+            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(3, 362);
             this.groupBoxHadrwareAcceleration.Name = "groupBoxHadrwareAcceleration";
-            this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(387, 134);
+            this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(387, 85);
             this.groupBoxHadrwareAcceleration.TabIndex = 1;
             this.groupBoxHadrwareAcceleration.TabStop = false;
             this.groupBoxHadrwareAcceleration.Text = "Hardware Acceleration";
@@ -2672,37 +2656,11 @@
             // 
             this.label144.AutoSize = true;
             this.label144.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label144.Location = new System.Drawing.Point(2, 108);
+            this.label144.Location = new System.Drawing.Point(6, 62);
             this.label144.Name = "label144";
             this.label144.Size = new System.Drawing.Size(375, 13);
             this.label144.TabIndex = 31;
             this.label144.Text = "Note: These features are highly experimental and may cause system instability.";
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Enabled = false;
-            this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox3.Location = new System.Drawing.Point(6, 88);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(235, 17);
-            this.checkBox3.TabIndex = 3;
-            this.checkBox3.Text = "Enable on-the-fly memory timing mods (AMD)";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Enabled = false;
-            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox2.Location = new System.Drawing.Point(6, 65);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(118, 17);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Enable GDS (AMD)";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // checkBoxEnablePhymem
             // 
@@ -2722,7 +2680,7 @@
             this.tabControlDeviceSettings.Location = new System.Drawing.Point(3, 3);
             this.tabControlDeviceSettings.Name = "tabControlDeviceSettings";
             this.tabControlDeviceSettings.SelectedIndex = 0;
-            this.tabControlDeviceSettings.Size = new System.Drawing.Size(643, 285);
+            this.tabControlDeviceSettings.Size = new System.Drawing.Size(806, 353);
             this.tabControlDeviceSettings.TabIndex = 0;
             // 
             // tabPageAPI
@@ -3696,8 +3654,6 @@
         private System.Windows.Forms.TabPage tabPageDeviceSettings;
         private System.Windows.Forms.TabControl tabControlDeviceSettings;
         private System.Windows.Forms.GroupBox groupBoxHadrwareAcceleration;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBoxEnablePhymem;
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.Timer timerAutoStart;
@@ -3887,7 +3843,6 @@
         private System.Windows.Forms.Label labelCurrentSpeed;
         private System.Windows.Forms.Label labelCurrentSecondaryPool;
         private System.Windows.Forms.Label labelCurrentPool;
-        private System.Windows.Forms.Button buttonPrintMemoryTimings;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.DataGridView dataGridViewDevices;

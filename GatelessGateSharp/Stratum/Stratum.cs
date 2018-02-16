@@ -232,7 +232,7 @@ namespace GatelessGateSharp {
         }
 
         private void StreamReaderThread() {
-            Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+            Thread.CurrentThread.Priority = ThreadPriority.Normal;
             int errorCount = 0;
 
             UnrecoverableException = null; 

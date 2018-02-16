@@ -361,5 +361,248 @@ namespace DeviceSettingsUserControl
             if (this.ValueChanged != null)
                 this.ValueChanged(this, new EventArgs());
         }
+
+        private void textBoxSEQ_MISCx_TextChanged(object sender, EventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            string item = textBox.Text;
+            var regex = (new System.Text.RegularExpressions.Regex(@"[^a-fA-F0-9]"));
+            //int n = 0;
+            //if (!int.TryParse(item, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.CurrentInfo, out n) && item != String.Empty) {
+            if (regex.Match(item).Success && item != String.Empty) {
+                textBox.Text = regex.Replace(item, "");
+                textBox.SelectionStart = textBox.Text.Length;
+            }
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void textBoxEthashPascalSEQ_MISC1_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxEthashPascalSEQ_MISC3_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxEthashPascalSEQ_MISC8_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxEthashSEQ_MISC1_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxEthashSEQ_MISC3_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxEthashSEQ_MISC8_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxCryptoNightSEQ_MISC1_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxCryptoNightSEQ_MISC3_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxCryptoNightSEQ_MISC8_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxNeoScryptSEQ_MISC1_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxNeoScryptSEQ_MISC3_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void textBoxNeoScryptSEQ_MISC8_TextChanged(object sender, EventArgs e)
+        {
+            textBoxSEQ_MISCx_TextChanged(sender, e);
+        }
+
+        private void checkBox4_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void checkBox3_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void checkBox2_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown40_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown42_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown39_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown43_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown45_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown44_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown48_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown49_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown47_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown46_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown41_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown38_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown55_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown56_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown54_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown53_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown51_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown50_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown61_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown62_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown60_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown59_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown58_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
+
+        private void numericUpDown57_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.ValueChanged != null)
+                this.ValueChanged(this, new EventArgs());
+        }
     }
 }

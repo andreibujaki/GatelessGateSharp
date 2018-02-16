@@ -580,6 +580,8 @@ end:
         return TRUE;
     }
 
+
+
     __declspec(dllexport)
         BOOL WriteToGMC81Register(int32_t busNum, uint32_t regNo, uint32_t value, uint32_t mask)
     {
@@ -629,10 +631,11 @@ end:
         volatile uint32_t *virtual_addr = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
         if (!virtual_addr)
             return FALSE;
-
-        const uint32_t mmMC_HUB_MISC_STATUS = 0x832;
-        const uint32_t MC_HUB_MISC_STATUS__RPB_BUSY_MASK = 0x8000;
-        const uint32_t MC_HUB_MISC_STATUS__GFX_BUSY_MASK = 0x80000;
+        
+        const uint32_t mmMC_ARB_BUSY_STATUS = 0x9fd;
+        const uint32_t mmMC_SEQ_STATUS_M = 0xa7d;
+        const uint32_t MC_SEQ_STATUS_M__SEQ0_BUSY_MASK = 0x4000;
+        const uint32_t MC_SEQ_STATUS_M__SEQ1_BUSY_MASK = 0x8000;
 
         const uint32_t mmMC_SEQ_MISC1 = 0xa81;
         const uint32_t mmMC_SEQ_MISC3 = 0xa8b;

@@ -43,7 +43,7 @@ namespace GatelessGateSharp {
             var stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+            Thread.CurrentThread.Priority = Parameters.MemoryTimingsTaskPriority;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
                     // memory timings
@@ -52,13 +52,13 @@ namespace GatelessGateSharp {
                             device.UpdateMemoryTimings();
                     }
                 } catch (Exception) { }
-                System.Threading.Thread.Sleep(1);
+                System.Threading.Thread.Sleep(Parameters.MemoryTimingUpdateInterval);
             }
         }
 
         public static void Task_FanControl(object cancellationToken)
         {
-            Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
                     if (AppState == ApplicationGlobalState.Mining) {
@@ -90,7 +90,7 @@ namespace GatelessGateSharp {
                         }
                     }
                 } catch (Exception) { }
-                System.Threading.Thread.Sleep(5000);
+                System.Threading.Thread.Sleep(Parameters.FanControlUpdateInterval);
             }
         }
     }

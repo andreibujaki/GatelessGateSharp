@@ -73,8 +73,8 @@ namespace GatelessGateSharp
             if (!mutexResult)
                 return 1;
 
-            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;  
-            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
+            Process.GetCurrentProcess().PriorityClass = Parameters.ProcessPriority;  
+            System.Threading.Thread.CurrentThread.Priority = Parameters.MainThreadPriority;
 
             Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable("GPU_MAX_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);

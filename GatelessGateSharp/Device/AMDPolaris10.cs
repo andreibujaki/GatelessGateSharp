@@ -2112,44 +2112,17 @@ namespace GatelessGateSharp {
             miscTimings = new MC_SEQ_MISC_TIMING();
             miscTimings2 = new MC_SEQ_MISC_TIMING2();
 
-            if (GetVendor() == "AMD"
-                && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(GetName()).Success
-                && MemoryVendor == "Samsung") {
+            RASTimings.TRRD = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "trrd");
+            RASTimings.TRC = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "trc");
+            miscTimings2.FAW = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "faw");
+            miscTimings2.T32AW = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "t32aw");
+            misc1 = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "seq_misc1");
+            misc3 = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "seq_misc3");
+            misc8 = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "seq_misc8");
+            ARBTimings.ACTRD = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "actrd");
+            ARBTimings.ACTWR = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "actwr");
 
-                RASTimings.TRRD = 5;
-                RASTimings.TRC = 70;
-                miscTimings2.FAW = 0;
-                miscTimings2.T32AW = 0;
-
-                misc1 = 0x20140514;
-                misc3 = 0xA00089FA;
-                misc8 = 0x00000003;
-
-                ARBTimings.ACTRD = 18;
-                ARBTimings.ACTWR = 11;
-
-                MemoryTimingModsEnabled = true;
-            } else if (GetVendor() == "AMD"
-                && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(GetName()).Success
-                && MemoryVendor == "Elpida") {
-
-                RASTimings.TRRD = 5;
-                RASTimings.TRC = 70;
-
-                miscTimings2.FAW = 0;
-                miscTimings2.T32AW = 4;
-
-                misc1 = 0x2014047C;
-                misc3 = 0xA98089CA;
-                misc8 = 0xC0040002;
-
-                ARBTimings.ACTRD = 26;
-                ARBTimings.ACTWR = 17;
-                //ARBTimings.RASMACTRD = 38;
-                //ARBTimings.RASMACTWR = 43;
-
-                MemoryTimingModsEnabled = true;
-            }
+            MemoryTimingModsEnabled = true;
         }
 
         public override void UpdateMemoryTimings()
