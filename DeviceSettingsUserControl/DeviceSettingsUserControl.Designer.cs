@@ -150,86 +150,6 @@
             this.numericUpDownDevice0EthashLocalWorkSize = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownDevice0EthashIntensity = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownDevice0EthashThreads = new System.Windows.Forms.NumericUpDown();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.checkBox44 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown38 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown41 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox45 = new System.Windows.Forms.CheckBox();
-            this.checkBox46 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown46 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown47 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox47 = new System.Windows.Forms.CheckBox();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.checkBox48 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown48 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown49 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox49 = new System.Windows.Forms.CheckBox();
-            this.checkBox50 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown50 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown51 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox51 = new System.Windows.Forms.CheckBox();
-            this.groupBox20 = new System.Windows.Forms.GroupBox();
-            this.checkBox52 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown53 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown54 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox53 = new System.Windows.Forms.CheckBox();
-            this.checkBox54 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown55 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox55 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown56 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox56 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown57 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox21 = new System.Windows.Forms.GroupBox();
-            this.checkBox57 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown58 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox58 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown59 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox59 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown60 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox60 = new System.Windows.Forms.CheckBox();
-            this.checkBox61 = new System.Windows.Forms.CheckBox();
-            this.checkBox62 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown61 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown62 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown90 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox22 = new System.Windows.Forms.GroupBox();
-            this.checkBox63 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown91 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown92 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox64 = new System.Windows.Forms.CheckBox();
-            this.checkBox65 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown93 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown94 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox66 = new System.Windows.Forms.CheckBox();
-            this.groupBox23 = new System.Windows.Forms.GroupBox();
-            this.checkBox67 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown95 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown96 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox68 = new System.Windows.Forms.CheckBox();
-            this.checkBox69 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown97 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown98 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox70 = new System.Windows.Forms.CheckBox();
-            this.groupBox24 = new System.Windows.Forms.GroupBox();
-            this.checkBox71 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown99 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox72 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown100 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox73 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown101 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox74 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown102 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox75 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown103 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox76 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown104 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox77 = new System.Windows.Forms.CheckBox();
-            this.checkBox78 = new System.Windows.Forms.CheckBox();
-            this.checkBox79 = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.checkBox153 = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -250,86 +170,6 @@
             this.label133 = new System.Windows.Forms.Label();
             this.numericUpDownDevice0CryptoNightRawIntensity = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownDevice0CryptoNightLocalWorkSize = new System.Windows.Forms.NumericUpDown();
-            this.groupBox25 = new System.Windows.Forms.GroupBox();
-            this.groupBox26 = new System.Windows.Forms.GroupBox();
-            this.checkBox80 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown105 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown106 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox81 = new System.Windows.Forms.CheckBox();
-            this.checkBox82 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown107 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown108 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox83 = new System.Windows.Forms.CheckBox();
-            this.groupBox27 = new System.Windows.Forms.GroupBox();
-            this.checkBox84 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown109 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown110 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox85 = new System.Windows.Forms.CheckBox();
-            this.checkBox86 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown111 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown112 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox87 = new System.Windows.Forms.CheckBox();
-            this.groupBox28 = new System.Windows.Forms.GroupBox();
-            this.checkBox88 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown113 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown114 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox89 = new System.Windows.Forms.CheckBox();
-            this.checkBox90 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown115 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox91 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown116 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox92 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown117 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox29 = new System.Windows.Forms.GroupBox();
-            this.checkBox93 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown118 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox94 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown119 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox95 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown120 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox96 = new System.Windows.Forms.CheckBox();
-            this.checkBox97 = new System.Windows.Forms.CheckBox();
-            this.checkBox98 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown121 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown122 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown123 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox30 = new System.Windows.Forms.GroupBox();
-            this.checkBox99 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown124 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown125 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox100 = new System.Windows.Forms.CheckBox();
-            this.checkBox101 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown126 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown127 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox102 = new System.Windows.Forms.CheckBox();
-            this.groupBox31 = new System.Windows.Forms.GroupBox();
-            this.checkBox103 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown128 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown129 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox104 = new System.Windows.Forms.CheckBox();
-            this.checkBox105 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown130 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown131 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox106 = new System.Windows.Forms.CheckBox();
-            this.groupBox32 = new System.Windows.Forms.GroupBox();
-            this.checkBox107 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown132 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox108 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown133 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox109 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown134 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox110 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown135 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox111 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown136 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox112 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown137 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox113 = new System.Windows.Forms.CheckBox();
-            this.checkBox114 = new System.Windows.Forms.CheckBox();
-            this.checkBox115 = new System.Windows.Forms.CheckBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
             this.tabPage41 = new System.Windows.Forms.TabPage();
             this.checkBox154 = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -350,86 +190,6 @@
             this.label482 = new System.Windows.Forms.Label();
             this.numericUpDownDevice0NeoScryptIntensity = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownDevice0NeoScryptThreads = new System.Windows.Forms.NumericUpDown();
-            this.groupBox33 = new System.Windows.Forms.GroupBox();
-            this.groupBox34 = new System.Windows.Forms.GroupBox();
-            this.checkBox116 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown138 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown139 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox117 = new System.Windows.Forms.CheckBox();
-            this.checkBox118 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown140 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown141 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox119 = new System.Windows.Forms.CheckBox();
-            this.groupBox35 = new System.Windows.Forms.GroupBox();
-            this.checkBox120 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown142 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown143 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox121 = new System.Windows.Forms.CheckBox();
-            this.checkBox122 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown144 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown145 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox123 = new System.Windows.Forms.CheckBox();
-            this.groupBox36 = new System.Windows.Forms.GroupBox();
-            this.checkBox124 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown146 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown147 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox125 = new System.Windows.Forms.CheckBox();
-            this.checkBox126 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown148 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox127 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown149 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox128 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown150 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox37 = new System.Windows.Forms.GroupBox();
-            this.checkBox129 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown151 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox130 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown152 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox131 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown153 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox132 = new System.Windows.Forms.CheckBox();
-            this.checkBox133 = new System.Windows.Forms.CheckBox();
-            this.checkBox134 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown154 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown155 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown156 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox38 = new System.Windows.Forms.GroupBox();
-            this.checkBox135 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown157 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown158 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox136 = new System.Windows.Forms.CheckBox();
-            this.checkBox137 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown159 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown160 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox138 = new System.Windows.Forms.CheckBox();
-            this.groupBox39 = new System.Windows.Forms.GroupBox();
-            this.checkBox139 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown161 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown162 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox140 = new System.Windows.Forms.CheckBox();
-            this.checkBox141 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown163 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown164 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox142 = new System.Windows.Forms.CheckBox();
-            this.groupBox40 = new System.Windows.Forms.GroupBox();
-            this.checkBox143 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown165 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox144 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown166 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox145 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown167 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox146 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown168 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox147 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown169 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox148 = new System.Windows.Forms.CheckBox();
-            this.numericUpDown170 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox149 = new System.Windows.Forms.CheckBox();
-            this.checkBox150 = new System.Windows.Forms.CheckBox();
-            this.checkBox151 = new System.Windows.Forms.CheckBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.textBox9 = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.checkBox41 = new System.Windows.Forms.CheckBox();
@@ -500,6 +260,249 @@
             this.buttonResetToDefault = new System.Windows.Forms.Button();
             this.buttonCopyToOthers = new System.Windows.Forms.Button();
             this.buttonResetAll = new System.Windows.Forms.Button();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.checkBox44 = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.checkBox45 = new System.Windows.Forms.CheckBox();
+            this.checkBox46 = new System.Windows.Forms.CheckBox();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.checkBox47 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown38 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown41 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox48 = new System.Windows.Forms.CheckBox();
+            this.checkBox49 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown46 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown47 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox50 = new System.Windows.Forms.CheckBox();
+            this.groupBox20 = new System.Windows.Forms.GroupBox();
+            this.checkBox51 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown48 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown49 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox52 = new System.Windows.Forms.CheckBox();
+            this.checkBox53 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown50 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown51 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox54 = new System.Windows.Forms.CheckBox();
+            this.groupBox21 = new System.Windows.Forms.GroupBox();
+            this.checkBox55 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown53 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown54 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox56 = new System.Windows.Forms.CheckBox();
+            this.checkBox57 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown55 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox58 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown56 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox59 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown57 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox22 = new System.Windows.Forms.GroupBox();
+            this.checkBox60 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown58 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox61 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown59 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox62 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown60 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox63 = new System.Windows.Forms.CheckBox();
+            this.checkBox64 = new System.Windows.Forms.CheckBox();
+            this.checkBox65 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown61 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown62 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown90 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox23 = new System.Windows.Forms.GroupBox();
+            this.checkBox66 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown91 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown92 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox67 = new System.Windows.Forms.CheckBox();
+            this.checkBox68 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown93 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown94 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox69 = new System.Windows.Forms.CheckBox();
+            this.groupBox24 = new System.Windows.Forms.GroupBox();
+            this.checkBox70 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown95 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown96 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox71 = new System.Windows.Forms.CheckBox();
+            this.checkBox72 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown97 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown98 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox73 = new System.Windows.Forms.CheckBox();
+            this.groupBox42 = new System.Windows.Forms.GroupBox();
+            this.checkBox74 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown99 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox75 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown100 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox76 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown101 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox77 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown102 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox78 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown103 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox79 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown104 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox25 = new System.Windows.Forms.GroupBox();
+            this.groupBox26 = new System.Windows.Forms.GroupBox();
+            this.checkBox80 = new System.Windows.Forms.CheckBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.checkBox81 = new System.Windows.Forms.CheckBox();
+            this.checkBox82 = new System.Windows.Forms.CheckBox();
+            this.groupBox27 = new System.Windows.Forms.GroupBox();
+            this.checkBox83 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown105 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown106 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox84 = new System.Windows.Forms.CheckBox();
+            this.checkBox85 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown107 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown108 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox86 = new System.Windows.Forms.CheckBox();
+            this.groupBox28 = new System.Windows.Forms.GroupBox();
+            this.checkBox87 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown109 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown110 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox88 = new System.Windows.Forms.CheckBox();
+            this.checkBox89 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown111 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown112 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox90 = new System.Windows.Forms.CheckBox();
+            this.groupBox29 = new System.Windows.Forms.GroupBox();
+            this.checkBox91 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown113 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown114 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox92 = new System.Windows.Forms.CheckBox();
+            this.checkBox93 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown115 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox94 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown116 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox95 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown117 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox30 = new System.Windows.Forms.GroupBox();
+            this.checkBox96 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown118 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox97 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown119 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox98 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown120 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox99 = new System.Windows.Forms.CheckBox();
+            this.checkBox100 = new System.Windows.Forms.CheckBox();
+            this.checkBox101 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown121 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown122 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown123 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox31 = new System.Windows.Forms.GroupBox();
+            this.checkBox102 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown124 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown125 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox103 = new System.Windows.Forms.CheckBox();
+            this.checkBox104 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown126 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown127 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox105 = new System.Windows.Forms.CheckBox();
+            this.groupBox32 = new System.Windows.Forms.GroupBox();
+            this.checkBox106 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown128 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown129 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox107 = new System.Windows.Forms.CheckBox();
+            this.checkBox108 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown130 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown131 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox109 = new System.Windows.Forms.CheckBox();
+            this.groupBox43 = new System.Windows.Forms.GroupBox();
+            this.checkBox110 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown132 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox111 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown133 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox112 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown134 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox113 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown135 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox114 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown136 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox115 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown137 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox33 = new System.Windows.Forms.GroupBox();
+            this.groupBox34 = new System.Windows.Forms.GroupBox();
+            this.checkBox116 = new System.Windows.Forms.CheckBox();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.checkBox117 = new System.Windows.Forms.CheckBox();
+            this.checkBox118 = new System.Windows.Forms.CheckBox();
+            this.groupBox35 = new System.Windows.Forms.GroupBox();
+            this.checkBox119 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown138 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown139 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox120 = new System.Windows.Forms.CheckBox();
+            this.checkBox121 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown140 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown141 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox122 = new System.Windows.Forms.CheckBox();
+            this.groupBox36 = new System.Windows.Forms.GroupBox();
+            this.checkBox123 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown142 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown143 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox124 = new System.Windows.Forms.CheckBox();
+            this.checkBox125 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown144 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown145 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox126 = new System.Windows.Forms.CheckBox();
+            this.groupBox37 = new System.Windows.Forms.GroupBox();
+            this.checkBox127 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown146 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown147 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox128 = new System.Windows.Forms.CheckBox();
+            this.checkBox129 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown148 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox130 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown149 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox131 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown150 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox38 = new System.Windows.Forms.GroupBox();
+            this.checkBox132 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown151 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox133 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown152 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox134 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown153 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox135 = new System.Windows.Forms.CheckBox();
+            this.checkBox136 = new System.Windows.Forms.CheckBox();
+            this.checkBox137 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown154 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown155 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown156 = new System.Windows.Forms.NumericUpDown();
+            this.groupBox39 = new System.Windows.Forms.GroupBox();
+            this.checkBox138 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown157 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown158 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox139 = new System.Windows.Forms.CheckBox();
+            this.checkBox140 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown159 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown160 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox141 = new System.Windows.Forms.CheckBox();
+            this.groupBox40 = new System.Windows.Forms.GroupBox();
+            this.checkBox142 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown161 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown162 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox143 = new System.Windows.Forms.CheckBox();
+            this.checkBox144 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown163 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown164 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox145 = new System.Windows.Forms.CheckBox();
+            this.groupBox44 = new System.Windows.Forms.GroupBox();
+            this.checkBox146 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown165 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox147 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown166 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox148 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown167 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox149 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown168 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox150 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown169 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox151 = new System.Windows.Forms.CheckBox();
+            this.numericUpDown170 = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -563,47 +566,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashLocalWorkSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashThreads)).BeginInit();
-            this.groupBox9.SuspendLayout();
-            this.groupBox10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown41)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown46)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown47)).BeginInit();
-            this.groupBox11.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown48)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown49)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown50)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).BeginInit();
-            this.groupBox20.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown53)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown56)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown57)).BeginInit();
-            this.groupBox21.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown58)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown59)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown60)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown61)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown62)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown90)).BeginInit();
-            this.groupBox22.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown91)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown92)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown93)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown94)).BeginInit();
-            this.groupBox23.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown95)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown96)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown97)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown98)).BeginInit();
-            this.groupBox24.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown99)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown100)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown101)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown102)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown103)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown104)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
@@ -614,47 +576,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0CryptoNightThreads)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0CryptoNightRawIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0CryptoNightLocalWorkSize)).BeginInit();
-            this.groupBox25.SuspendLayout();
-            this.groupBox26.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown105)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown106)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown107)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown108)).BeginInit();
-            this.groupBox27.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown109)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown110)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown111)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown112)).BeginInit();
-            this.groupBox28.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown113)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown114)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown115)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown116)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown117)).BeginInit();
-            this.groupBox29.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown118)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown119)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown120)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown121)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown122)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown123)).BeginInit();
-            this.groupBox30.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown124)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown125)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown126)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown127)).BeginInit();
-            this.groupBox31.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown128)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown129)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown130)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown131)).BeginInit();
-            this.groupBox32.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown132)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown133)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown134)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown135)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown136)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown137)).BeginInit();
             this.tabPage41.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
@@ -665,47 +586,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptLocalWorkSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptThreads)).BeginInit();
-            this.groupBox33.SuspendLayout();
-            this.groupBox34.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown138)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown139)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown140)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown141)).BeginInit();
-            this.groupBox35.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown142)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown143)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown144)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown145)).BeginInit();
-            this.groupBox36.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown146)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown147)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown148)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown149)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown150)).BeginInit();
-            this.groupBox37.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown151)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown152)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown153)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown154)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown155)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown156)).BeginInit();
-            this.groupBox38.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown157)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown158)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown159)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown160)).BeginInit();
-            this.groupBox39.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown161)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown162)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown163)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown164)).BeginInit();
-            this.groupBox40.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown165)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown166)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown167)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown168)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown169)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown170)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
@@ -741,6 +621,132 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown28)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown27)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown26)).BeginInit();
+            this.groupBox9.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            this.groupBox11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown41)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown46)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown47)).BeginInit();
+            this.groupBox20.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown48)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown49)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown50)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).BeginInit();
+            this.groupBox21.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown53)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown56)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown57)).BeginInit();
+            this.groupBox22.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown58)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown59)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown60)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown61)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown62)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown90)).BeginInit();
+            this.groupBox23.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown91)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown92)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown93)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown94)).BeginInit();
+            this.groupBox24.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown95)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown96)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown97)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown98)).BeginInit();
+            this.groupBox42.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown99)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown100)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown101)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown102)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown103)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown104)).BeginInit();
+            this.groupBox25.SuspendLayout();
+            this.groupBox26.SuspendLayout();
+            this.groupBox27.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown105)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown106)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown107)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown108)).BeginInit();
+            this.groupBox28.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown109)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown110)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown111)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown112)).BeginInit();
+            this.groupBox29.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown113)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown114)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown115)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown116)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown117)).BeginInit();
+            this.groupBox30.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown118)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown119)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown120)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown121)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown122)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown123)).BeginInit();
+            this.groupBox31.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown124)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown125)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown126)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown127)).BeginInit();
+            this.groupBox32.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown128)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown129)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown130)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown131)).BeginInit();
+            this.groupBox43.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown132)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown133)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown134)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown135)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown136)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown137)).BeginInit();
+            this.groupBox33.SuspendLayout();
+            this.groupBox34.SuspendLayout();
+            this.groupBox35.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown138)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown139)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown140)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown141)).BeginInit();
+            this.groupBox36.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown142)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown143)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown144)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown145)).BeginInit();
+            this.groupBox37.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown146)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown147)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown148)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown149)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown150)).BeginInit();
+            this.groupBox38.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown151)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown152)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown153)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown154)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown155)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown156)).BeginInit();
+            this.groupBox39.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown157)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown158)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown159)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown160)).BeginInit();
+            this.groupBox40.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown161)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown162)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown163)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown164)).BeginInit();
+            this.groupBox44.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown165)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown166)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown167)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown168)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown169)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown170)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -2658,1122 +2664,6 @@
             0,
             0});
             // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.groupBox10);
-            this.groupBox9.Controls.Add(this.groupBox11);
-            this.groupBox9.Controls.Add(this.groupBox20);
-            this.groupBox9.Controls.Add(this.groupBox21);
-            this.groupBox9.Controls.Add(this.groupBox22);
-            this.groupBox9.Controls.Add(this.groupBox23);
-            this.groupBox9.Controls.Add(this.groupBox24);
-            this.groupBox9.Controls.Add(this.checkBox77);
-            this.groupBox9.Controls.Add(this.checkBox78);
-            this.groupBox9.Controls.Add(this.checkBox79);
-            this.groupBox9.Controls.Add(this.textBox1);
-            this.groupBox9.Controls.Add(this.textBox2);
-            this.groupBox9.Controls.Add(this.textBox3);
-            this.groupBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox9.Location = new System.Drawing.Point(171, 6);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(600, 333);
-            this.groupBox9.TabIndex = 49;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Tag = "memory_timings_polaris10";
-            this.groupBox9.Text = "Memory Timings";
-            // 
-            // groupBox10
-            // 
-            this.groupBox10.Controls.Add(this.checkBox44);
-            this.groupBox10.Controls.Add(this.numericUpDown38);
-            this.groupBox10.Controls.Add(this.numericUpDown41);
-            this.groupBox10.Controls.Add(this.checkBox45);
-            this.groupBox10.Controls.Add(this.checkBox46);
-            this.groupBox10.Controls.Add(this.numericUpDown46);
-            this.groupBox10.Controls.Add(this.numericUpDown47);
-            this.groupBox10.Controls.Add(this.checkBox47);
-            this.groupBox10.Location = new System.Drawing.Point(310, 194);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(119, 129);
-            this.groupBox10.TabIndex = 85;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "SEQ MISC2";
-            // 
-            // checkBox44
-            // 
-            this.checkBox44.AutoSize = true;
-            this.checkBox44.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox44.Location = new System.Drawing.Point(6, 98);
-            this.checkBox44.Name = "checkBox44";
-            this.checkBox44.Size = new System.Drawing.Size(69, 17);
-            this.checkBox44.TabIndex = 67;
-            this.checkBox44.Tag = "twedc_enabled";
-            this.checkBox44.Text = "TWEDC:";
-            this.checkBox44.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown38
-            // 
-            this.numericUpDown38.Enabled = false;
-            this.numericUpDown38.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown38.Location = new System.Drawing.Point(76, 71);
-            this.numericUpDown38.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.numericUpDown38.Name = "numericUpDown38";
-            this.numericUpDown38.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown38.TabIndex = 65;
-            this.numericUpDown38.Tag = "tredc";
-            // 
-            // numericUpDown41
-            // 
-            this.numericUpDown41.Enabled = false;
-            this.numericUpDown41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown41.Location = new System.Drawing.Point(76, 97);
-            this.numericUpDown41.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown41.Name = "numericUpDown41";
-            this.numericUpDown41.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown41.TabIndex = 66;
-            this.numericUpDown41.Tag = "twedc";
-            // 
-            // checkBox45
-            // 
-            this.checkBox45.AutoSize = true;
-            this.checkBox45.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox45.Location = new System.Drawing.Point(6, 72);
-            this.checkBox45.Name = "checkBox45";
-            this.checkBox45.Size = new System.Drawing.Size(66, 17);
-            this.checkBox45.TabIndex = 68;
-            this.checkBox45.Tag = "tredc_enabled";
-            this.checkBox45.Text = "TREDC:";
-            this.checkBox45.UseVisualStyleBackColor = true;
-            // 
-            // checkBox46
-            // 
-            this.checkBox46.AutoSize = true;
-            this.checkBox46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox46.Location = new System.Drawing.Point(6, 46);
-            this.checkBox46.Name = "checkBox46";
-            this.checkBox46.Size = new System.Drawing.Size(66, 17);
-            this.checkBox46.TabIndex = 63;
-            this.checkBox46.Tag = "t32aw_enabled";
-            this.checkBox46.Text = "T32AW:";
-            this.checkBox46.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown46
-            // 
-            this.numericUpDown46.Enabled = false;
-            this.numericUpDown46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown46.Location = new System.Drawing.Point(75, 19);
-            this.numericUpDown46.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown46.Name = "numericUpDown46";
-            this.numericUpDown46.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown46.TabIndex = 4;
-            this.numericUpDown46.Tag = "faw";
-            // 
-            // numericUpDown47
-            // 
-            this.numericUpDown47.Enabled = false;
-            this.numericUpDown47.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown47.Location = new System.Drawing.Point(75, 45);
-            this.numericUpDown47.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown47.Name = "numericUpDown47";
-            this.numericUpDown47.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown47.TabIndex = 46;
-            this.numericUpDown47.Tag = "t32aw";
-            // 
-            // checkBox47
-            // 
-            this.checkBox47.AutoSize = true;
-            this.checkBox47.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox47.Location = new System.Drawing.Point(6, 20);
-            this.checkBox47.Name = "checkBox47";
-            this.checkBox47.Size = new System.Drawing.Size(53, 17);
-            this.checkBox47.TabIndex = 64;
-            this.checkBox47.Tag = "faw_enabled";
-            this.checkBox47.Text = "FAW:";
-            this.checkBox47.UseVisualStyleBackColor = true;
-            // 
-            // groupBox11
-            // 
-            this.groupBox11.Controls.Add(this.checkBox48);
-            this.groupBox11.Controls.Add(this.numericUpDown48);
-            this.groupBox11.Controls.Add(this.numericUpDown49);
-            this.groupBox11.Controls.Add(this.checkBox49);
-            this.groupBox11.Controls.Add(this.checkBox50);
-            this.groupBox11.Controls.Add(this.numericUpDown50);
-            this.groupBox11.Controls.Add(this.numericUpDown51);
-            this.groupBox11.Controls.Add(this.checkBox51);
-            this.groupBox11.Location = new System.Drawing.Point(164, 194);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(140, 129);
-            this.groupBox11.TabIndex = 84;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "SEQ MISC";
-            // 
-            // checkBox48
-            // 
-            this.checkBox48.AutoSize = true;
-            this.checkBox48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox48.Location = new System.Drawing.Point(6, 98);
-            this.checkBox48.Name = "checkBox48";
-            this.checkBox48.Size = new System.Drawing.Size(57, 17);
-            this.checkBox48.TabIndex = 75;
-            this.checkBox48.Tag = "trfc_enabled";
-            this.checkBox48.Text = "TRFC:";
-            this.checkBox48.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown48
-            // 
-            this.numericUpDown48.Enabled = false;
-            this.numericUpDown48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown48.Location = new System.Drawing.Point(93, 71);
-            this.numericUpDown48.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown48.Name = "numericUpDown48";
-            this.numericUpDown48.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown48.TabIndex = 73;
-            this.numericUpDown48.Tag = "trp";
-            // 
-            // numericUpDown49
-            // 
-            this.numericUpDown49.Enabled = false;
-            this.numericUpDown49.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown49.Location = new System.Drawing.Point(93, 97);
-            this.numericUpDown49.Maximum = new decimal(new int[] {
-            511,
-            0,
-            0,
-            0});
-            this.numericUpDown49.Name = "numericUpDown49";
-            this.numericUpDown49.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown49.TabIndex = 74;
-            this.numericUpDown49.Tag = "trfc";
-            // 
-            // checkBox49
-            // 
-            this.checkBox49.AutoSize = true;
-            this.checkBox49.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox49.Location = new System.Drawing.Point(6, 72);
-            this.checkBox49.Name = "checkBox49";
-            this.checkBox49.Size = new System.Drawing.Size(51, 17);
-            this.checkBox49.TabIndex = 76;
-            this.checkBox49.Tag = "trp_enabled";
-            this.checkBox49.Text = "TRP:";
-            this.checkBox49.UseVisualStyleBackColor = true;
-            // 
-            // checkBox50
-            // 
-            this.checkBox50.AutoSize = true;
-            this.checkBox50.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox50.Location = new System.Drawing.Point(6, 45);
-            this.checkBox50.Name = "checkBox50";
-            this.checkBox50.Size = new System.Drawing.Size(80, 17);
-            this.checkBox50.TabIndex = 71;
-            this.checkBox50.Tag = "trp_rda_enabled";
-            this.checkBox50.Text = "TRP_RDA:";
-            this.checkBox50.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown50
-            // 
-            this.numericUpDown50.Enabled = false;
-            this.numericUpDown50.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown50.Location = new System.Drawing.Point(93, 18);
-            this.numericUpDown50.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown50.Name = "numericUpDown50";
-            this.numericUpDown50.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown50.TabIndex = 69;
-            this.numericUpDown50.Tag = "trp_wda";
-            // 
-            // numericUpDown51
-            // 
-            this.numericUpDown51.Enabled = false;
-            this.numericUpDown51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown51.Location = new System.Drawing.Point(93, 44);
-            this.numericUpDown51.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown51.Name = "numericUpDown51";
-            this.numericUpDown51.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown51.TabIndex = 70;
-            this.numericUpDown51.Tag = "trp_rda";
-            // 
-            // checkBox51
-            // 
-            this.checkBox51.AutoSize = true;
-            this.checkBox51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox51.Location = new System.Drawing.Point(6, 19);
-            this.checkBox51.Name = "checkBox51";
-            this.checkBox51.Size = new System.Drawing.Size(83, 17);
-            this.checkBox51.TabIndex = 72;
-            this.checkBox51.Tag = "trp_wda_enabled";
-            this.checkBox51.Text = "TRP_WDA:";
-            this.checkBox51.UseVisualStyleBackColor = true;
-            // 
-            // groupBox20
-            // 
-            this.groupBox20.Controls.Add(this.checkBox52);
-            this.groupBox20.Controls.Add(this.numericUpDown53);
-            this.groupBox20.Controls.Add(this.numericUpDown54);
-            this.groupBox20.Controls.Add(this.checkBox53);
-            this.groupBox20.Controls.Add(this.checkBox54);
-            this.groupBox20.Controls.Add(this.numericUpDown55);
-            this.groupBox20.Controls.Add(this.checkBox55);
-            this.groupBox20.Controls.Add(this.numericUpDown56);
-            this.groupBox20.Controls.Add(this.checkBox56);
-            this.groupBox20.Controls.Add(this.numericUpDown57);
-            this.groupBox20.Location = new System.Drawing.Point(301, 14);
-            this.groupBox20.Name = "groupBox20";
-            this.groupBox20.Size = new System.Drawing.Size(128, 174);
-            this.groupBox20.TabIndex = 83;
-            this.groupBox20.TabStop = false;
-            this.groupBox20.Text = "SEQ CAS";
-            // 
-            // checkBox52
-            // 
-            this.checkBox52.AutoSize = true;
-            this.checkBox52.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox52.Location = new System.Drawing.Point(6, 102);
-            this.checkBox52.Name = "checkBox52";
-            this.checkBox52.Size = new System.Drawing.Size(61, 17);
-            this.checkBox52.TabIndex = 82;
-            this.checkBox52.Tag = "tw2r_enabled";
-            this.checkBox52.Text = "TW2R:";
-            this.checkBox52.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown53
-            // 
-            this.numericUpDown53.Enabled = false;
-            this.numericUpDown53.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown53.Location = new System.Drawing.Point(81, 101);
-            this.numericUpDown53.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown53.Name = "numericUpDown53";
-            this.numericUpDown53.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown53.TabIndex = 81;
-            this.numericUpDown53.Tag = "tw2r";
-            // 
-            // numericUpDown54
-            // 
-            this.numericUpDown54.Enabled = false;
-            this.numericUpDown54.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown54.Location = new System.Drawing.Point(81, 22);
-            this.numericUpDown54.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown54.Name = "numericUpDown54";
-            this.numericUpDown54.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown54.TabIndex = 70;
-            this.numericUpDown54.Tag = "tr2w";
-            // 
-            // checkBox53
-            // 
-            this.checkBox53.AutoSize = true;
-            this.checkBox53.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox53.Location = new System.Drawing.Point(6, 24);
-            this.checkBox53.Name = "checkBox53";
-            this.checkBox53.Size = new System.Drawing.Size(61, 17);
-            this.checkBox53.TabIndex = 79;
-            this.checkBox53.Tag = "tr2w_enabled";
-            this.checkBox53.Text = "TR2W:";
-            this.checkBox53.UseVisualStyleBackColor = true;
-            // 
-            // checkBox54
-            // 
-            this.checkBox54.AutoSize = true;
-            this.checkBox54.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox54.Location = new System.Drawing.Point(6, 50);
-            this.checkBox54.Name = "checkBox54";
-            this.checkBox54.Size = new System.Drawing.Size(64, 17);
-            this.checkBox54.TabIndex = 78;
-            this.checkBox54.Tag = "tccdl_enabled";
-            this.checkBox54.Text = "TCCDL:";
-            this.checkBox54.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown55
-            // 
-            this.numericUpDown55.Enabled = false;
-            this.numericUpDown55.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown55.Location = new System.Drawing.Point(81, 49);
-            this.numericUpDown55.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.numericUpDown55.Name = "numericUpDown55";
-            this.numericUpDown55.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown55.TabIndex = 71;
-            this.numericUpDown55.Tag = "tccdl";
-            // 
-            // checkBox55
-            // 
-            this.checkBox55.AutoSize = true;
-            this.checkBox55.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox55.Location = new System.Drawing.Point(6, 76);
-            this.checkBox55.Name = "checkBox55";
-            this.checkBox55.Size = new System.Drawing.Size(58, 17);
-            this.checkBox55.TabIndex = 77;
-            this.checkBox55.Tag = "tr2r_enabled";
-            this.checkBox55.Text = "TR2R:";
-            this.checkBox55.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown56
-            // 
-            this.numericUpDown56.Enabled = false;
-            this.numericUpDown56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown56.Location = new System.Drawing.Point(81, 75);
-            this.numericUpDown56.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown56.Name = "numericUpDown56";
-            this.numericUpDown56.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown56.TabIndex = 72;
-            this.numericUpDown56.Tag = "tr2r";
-            // 
-            // checkBox56
-            // 
-            this.checkBox56.AutoSize = true;
-            this.checkBox56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox56.Location = new System.Drawing.Point(6, 129);
-            this.checkBox56.Name = "checkBox56";
-            this.checkBox56.Size = new System.Drawing.Size(49, 17);
-            this.checkBox56.TabIndex = 76;
-            this.checkBox56.Tag = "tcl_enabled";
-            this.checkBox56.Text = "TCL:";
-            this.checkBox56.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown57
-            // 
-            this.numericUpDown57.Enabled = false;
-            this.numericUpDown57.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown57.Location = new System.Drawing.Point(81, 128);
-            this.numericUpDown57.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown57.Name = "numericUpDown57";
-            this.numericUpDown57.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown57.TabIndex = 73;
-            this.numericUpDown57.Tag = "tcl";
-            // 
-            // groupBox21
-            // 
-            this.groupBox21.Controls.Add(this.checkBox57);
-            this.groupBox21.Controls.Add(this.numericUpDown58);
-            this.groupBox21.Controls.Add(this.checkBox58);
-            this.groupBox21.Controls.Add(this.numericUpDown59);
-            this.groupBox21.Controls.Add(this.checkBox59);
-            this.groupBox21.Controls.Add(this.numericUpDown60);
-            this.groupBox21.Controls.Add(this.checkBox60);
-            this.groupBox21.Controls.Add(this.checkBox61);
-            this.groupBox21.Controls.Add(this.checkBox62);
-            this.groupBox21.Controls.Add(this.numericUpDown61);
-            this.groupBox21.Controls.Add(this.numericUpDown62);
-            this.groupBox21.Controls.Add(this.numericUpDown90);
-            this.groupBox21.Location = new System.Drawing.Point(164, 14);
-            this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(130, 174);
-            this.groupBox21.TabIndex = 83;
-            this.groupBox21.TabStop = false;
-            this.groupBox21.Text = "SEQ RAS";
-            // 
-            // checkBox57
-            // 
-            this.checkBox57.AutoSize = true;
-            this.checkBox57.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox57.Location = new System.Drawing.Point(6, 19);
-            this.checkBox57.Name = "checkBox57";
-            this.checkBox57.Size = new System.Drawing.Size(70, 17);
-            this.checkBox57.TabIndex = 80;
-            this.checkBox57.Tag = "trcdw_enabled";
-            this.checkBox57.Text = "TRCDW:";
-            this.checkBox57.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown58
-            // 
-            this.numericUpDown58.Enabled = false;
-            this.numericUpDown58.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown58.Location = new System.Drawing.Point(83, 43);
-            this.numericUpDown58.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown58.Name = "numericUpDown58";
-            this.numericUpDown58.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown58.TabIndex = 70;
-            this.numericUpDown58.Tag = "trcdwa";
-            // 
-            // checkBox58
-            // 
-            this.checkBox58.AutoSize = true;
-            this.checkBox58.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox58.Location = new System.Drawing.Point(6, 45);
-            this.checkBox58.Name = "checkBox58";
-            this.checkBox58.Size = new System.Drawing.Size(77, 17);
-            this.checkBox58.TabIndex = 79;
-            this.checkBox58.Tag = "trcdwa_enabled";
-            this.checkBox58.Text = "TRCDWA:";
-            this.checkBox58.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown59
-            // 
-            this.numericUpDown59.Enabled = false;
-            this.numericUpDown59.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown59.Location = new System.Drawing.Point(83, 17);
-            this.numericUpDown59.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown59.Name = "numericUpDown59";
-            this.numericUpDown59.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown59.TabIndex = 69;
-            this.numericUpDown59.Tag = "trcdw";
-            // 
-            // checkBox59
-            // 
-            this.checkBox59.AutoSize = true;
-            this.checkBox59.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox59.Location = new System.Drawing.Point(6, 70);
-            this.checkBox59.Name = "checkBox59";
-            this.checkBox59.Size = new System.Drawing.Size(67, 17);
-            this.checkBox59.TabIndex = 78;
-            this.checkBox59.Tag = "trcdr_enabled";
-            this.checkBox59.Text = "TRCDR:";
-            this.checkBox59.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown60
-            // 
-            this.numericUpDown60.Enabled = false;
-            this.numericUpDown60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown60.Location = new System.Drawing.Point(83, 69);
-            this.numericUpDown60.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown60.Name = "numericUpDown60";
-            this.numericUpDown60.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown60.TabIndex = 71;
-            this.numericUpDown60.Tag = "trcdr";
-            // 
-            // checkBox60
-            // 
-            this.checkBox60.AutoSize = true;
-            this.checkBox60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox60.Location = new System.Drawing.Point(6, 124);
-            this.checkBox60.Name = "checkBox60";
-            this.checkBox60.Size = new System.Drawing.Size(60, 17);
-            this.checkBox60.TabIndex = 66;
-            this.checkBox60.Tag = "trrd_enabled";
-            this.checkBox60.Text = "TRRD:";
-            this.checkBox60.UseVisualStyleBackColor = true;
-            // 
-            // checkBox61
-            // 
-            this.checkBox61.AutoSize = true;
-            this.checkBox61.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox61.Location = new System.Drawing.Point(6, 96);
-            this.checkBox61.Name = "checkBox61";
-            this.checkBox61.Size = new System.Drawing.Size(74, 17);
-            this.checkBox61.TabIndex = 77;
-            this.checkBox61.Tag = "trcdra_enabled";
-            this.checkBox61.Text = "TRCDRA:";
-            this.checkBox61.UseVisualStyleBackColor = true;
-            // 
-            // checkBox62
-            // 
-            this.checkBox62.AutoSize = true;
-            this.checkBox62.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox62.Location = new System.Drawing.Point(6, 150);
-            this.checkBox62.Name = "checkBox62";
-            this.checkBox62.Size = new System.Drawing.Size(51, 17);
-            this.checkBox62.TabIndex = 65;
-            this.checkBox62.Tag = "trc_enabled";
-            this.checkBox62.Text = "TRC:";
-            this.checkBox62.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown61
-            // 
-            this.numericUpDown61.Enabled = false;
-            this.numericUpDown61.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown61.Location = new System.Drawing.Point(83, 95);
-            this.numericUpDown61.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown61.Name = "numericUpDown61";
-            this.numericUpDown61.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown61.TabIndex = 72;
-            this.numericUpDown61.Tag = "trcdra";
-            // 
-            // numericUpDown62
-            // 
-            this.numericUpDown62.Enabled = false;
-            this.numericUpDown62.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown62.Location = new System.Drawing.Point(83, 147);
-            this.numericUpDown62.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown62.Name = "numericUpDown62";
-            this.numericUpDown62.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown62.TabIndex = 2;
-            this.numericUpDown62.Tag = "trc";
-            // 
-            // numericUpDown90
-            // 
-            this.numericUpDown90.Enabled = false;
-            this.numericUpDown90.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown90.Location = new System.Drawing.Point(83, 121);
-            this.numericUpDown90.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown90.Name = "numericUpDown90";
-            this.numericUpDown90.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown90.TabIndex = 1;
-            this.numericUpDown90.Tag = "trrd";
-            // 
-            // groupBox22
-            // 
-            this.groupBox22.Controls.Add(this.checkBox63);
-            this.groupBox22.Controls.Add(this.numericUpDown91);
-            this.groupBox22.Controls.Add(this.numericUpDown92);
-            this.groupBox22.Controls.Add(this.checkBox64);
-            this.groupBox22.Controls.Add(this.checkBox65);
-            this.groupBox22.Controls.Add(this.numericUpDown93);
-            this.groupBox22.Controls.Add(this.numericUpDown94);
-            this.groupBox22.Controls.Add(this.checkBox66);
-            this.groupBox22.Location = new System.Drawing.Point(6, 176);
-            this.groupBox22.Name = "groupBox22";
-            this.groupBox22.Size = new System.Drawing.Size(150, 128);
-            this.groupBox22.TabIndex = 83;
-            this.groupBox22.TabStop = false;
-            this.groupBox22.Text = "ARB DRAM2";
-            // 
-            // checkBox63
-            // 
-            this.checkBox63.AutoSize = true;
-            this.checkBox63.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox63.Location = new System.Drawing.Point(6, 75);
-            this.checkBox63.Name = "checkBox63";
-            this.checkBox63.Size = new System.Drawing.Size(91, 17);
-            this.checkBox63.TabIndex = 66;
-            this.checkBox63.Tag = "wrplusrp_enabled";
-            this.checkBox63.Text = "WRPLUSRP:";
-            this.checkBox63.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown91
-            // 
-            this.numericUpDown91.Enabled = false;
-            this.numericUpDown91.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown91.Location = new System.Drawing.Point(105, 73);
-            this.numericUpDown91.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown91.Name = "numericUpDown91";
-            this.numericUpDown91.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown91.TabIndex = 63;
-            this.numericUpDown91.Tag = "wrplusrp";
-            // 
-            // numericUpDown92
-            // 
-            this.numericUpDown92.Enabled = false;
-            this.numericUpDown92.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown92.Location = new System.Drawing.Point(105, 100);
-            this.numericUpDown92.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown92.Name = "numericUpDown92";
-            this.numericUpDown92.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown92.TabIndex = 64;
-            this.numericUpDown92.Tag = "bus_turn";
-            // 
-            // checkBox64
-            // 
-            this.checkBox64.AutoSize = true;
-            this.checkBox64.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox64.Location = new System.Drawing.Point(6, 102);
-            this.checkBox64.Name = "checkBox64";
-            this.checkBox64.Size = new System.Drawing.Size(88, 17);
-            this.checkBox64.TabIndex = 65;
-            this.checkBox64.Tag = "bus_turn_enabled";
-            this.checkBox64.Text = "BUS_TURN:";
-            this.checkBox64.UseVisualStyleBackColor = true;
-            // 
-            // checkBox65
-            // 
-            this.checkBox65.AutoSize = true;
-            this.checkBox65.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox65.Location = new System.Drawing.Point(6, 21);
-            this.checkBox65.Name = "checkBox65";
-            this.checkBox65.Size = new System.Drawing.Size(79, 17);
-            this.checkBox65.TabIndex = 62;
-            this.checkBox65.Tag = "ras2ras_enabled";
-            this.checkBox65.Text = "RAS2RAS:";
-            this.checkBox65.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown93
-            // 
-            this.numericUpDown93.Enabled = false;
-            this.numericUpDown93.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown93.Location = new System.Drawing.Point(105, 19);
-            this.numericUpDown93.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown93.Name = "numericUpDown93";
-            this.numericUpDown93.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown93.TabIndex = 48;
-            this.numericUpDown93.Tag = "ras2ras";
-            // 
-            // numericUpDown94
-            // 
-            this.numericUpDown94.Enabled = false;
-            this.numericUpDown94.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown94.Location = new System.Drawing.Point(105, 46);
-            this.numericUpDown94.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown94.Name = "numericUpDown94";
-            this.numericUpDown94.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown94.TabIndex = 50;
-            this.numericUpDown94.Tag = "rp";
-            // 
-            // checkBox66
-            // 
-            this.checkBox66.AutoSize = true;
-            this.checkBox66.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox66.Location = new System.Drawing.Point(6, 48);
-            this.checkBox66.Name = "checkBox66";
-            this.checkBox66.Size = new System.Drawing.Size(44, 17);
-            this.checkBox66.TabIndex = 61;
-            this.checkBox66.Tag = "rp_enabled";
-            this.checkBox66.Text = "RP:";
-            this.checkBox66.UseVisualStyleBackColor = true;
-            // 
-            // groupBox23
-            // 
-            this.groupBox23.Controls.Add(this.checkBox67);
-            this.groupBox23.Controls.Add(this.numericUpDown95);
-            this.groupBox23.Controls.Add(this.numericUpDown96);
-            this.groupBox23.Controls.Add(this.checkBox68);
-            this.groupBox23.Controls.Add(this.checkBox69);
-            this.groupBox23.Controls.Add(this.numericUpDown97);
-            this.groupBox23.Controls.Add(this.numericUpDown98);
-            this.groupBox23.Controls.Add(this.checkBox70);
-            this.groupBox23.Location = new System.Drawing.Point(6, 42);
-            this.groupBox23.Name = "groupBox23";
-            this.groupBox23.Size = new System.Drawing.Size(150, 128);
-            this.groupBox23.TabIndex = 82;
-            this.groupBox23.TabStop = false;
-            this.groupBox23.Text = "ARB DRAM1";
-            // 
-            // checkBox67
-            // 
-            this.checkBox67.AutoSize = true;
-            this.checkBox67.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox67.Location = new System.Drawing.Point(6, 75);
-            this.checkBox67.Name = "checkBox67";
-            this.checkBox67.Size = new System.Drawing.Size(97, 17);
-            this.checkBox67.TabIndex = 66;
-            this.checkBox67.Tag = "rasmactrd_enabled";
-            this.checkBox67.Text = "RASMACTRD:";
-            this.checkBox67.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown95
-            // 
-            this.numericUpDown95.Enabled = false;
-            this.numericUpDown95.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown95.Location = new System.Drawing.Point(105, 74);
-            this.numericUpDown95.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown95.Name = "numericUpDown95";
-            this.numericUpDown95.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown95.TabIndex = 63;
-            this.numericUpDown95.Tag = "rasmactrd";
-            // 
-            // numericUpDown96
-            // 
-            this.numericUpDown96.Enabled = false;
-            this.numericUpDown96.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown96.Location = new System.Drawing.Point(105, 101);
-            this.numericUpDown96.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown96.Name = "numericUpDown96";
-            this.numericUpDown96.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown96.TabIndex = 64;
-            this.numericUpDown96.Tag = "rasmactwr";
-            // 
-            // checkBox68
-            // 
-            this.checkBox68.AutoSize = true;
-            this.checkBox68.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox68.Location = new System.Drawing.Point(6, 102);
-            this.checkBox68.Name = "checkBox68";
-            this.checkBox68.Size = new System.Drawing.Size(100, 17);
-            this.checkBox68.TabIndex = 65;
-            this.checkBox68.Tag = "rasmactwr_enabled";
-            this.checkBox68.Text = "RASMACTWR:";
-            this.checkBox68.UseVisualStyleBackColor = true;
-            // 
-            // checkBox69
-            // 
-            this.checkBox69.AutoSize = true;
-            this.checkBox69.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox69.Location = new System.Drawing.Point(6, 21);
-            this.checkBox69.Name = "checkBox69";
-            this.checkBox69.Size = new System.Drawing.Size(66, 17);
-            this.checkBox69.TabIndex = 62;
-            this.checkBox69.Tag = "actrd_enabled";
-            this.checkBox69.Text = "ACTRD:";
-            this.checkBox69.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown97
-            // 
-            this.numericUpDown97.Enabled = false;
-            this.numericUpDown97.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown97.Location = new System.Drawing.Point(105, 20);
-            this.numericUpDown97.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown97.Name = "numericUpDown97";
-            this.numericUpDown97.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown97.TabIndex = 48;
-            this.numericUpDown97.Tag = "actrd";
-            // 
-            // numericUpDown98
-            // 
-            this.numericUpDown98.Enabled = false;
-            this.numericUpDown98.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown98.Location = new System.Drawing.Point(105, 47);
-            this.numericUpDown98.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown98.Name = "numericUpDown98";
-            this.numericUpDown98.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown98.TabIndex = 50;
-            this.numericUpDown98.Tag = "actwr";
-            // 
-            // checkBox70
-            // 
-            this.checkBox70.AutoSize = true;
-            this.checkBox70.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox70.Location = new System.Drawing.Point(6, 48);
-            this.checkBox70.Name = "checkBox70";
-            this.checkBox70.Size = new System.Drawing.Size(69, 17);
-            this.checkBox70.TabIndex = 61;
-            this.checkBox70.Tag = "actwr_enabled";
-            this.checkBox70.Text = "ACTWR:";
-            this.checkBox70.UseVisualStyleBackColor = true;
-            // 
-            // groupBox24
-            // 
-            this.groupBox24.Controls.Add(this.checkBox71);
-            this.groupBox24.Controls.Add(this.numericUpDown99);
-            this.groupBox24.Controls.Add(this.checkBox72);
-            this.groupBox24.Controls.Add(this.numericUpDown100);
-            this.groupBox24.Controls.Add(this.checkBox73);
-            this.groupBox24.Controls.Add(this.numericUpDown101);
-            this.groupBox24.Controls.Add(this.checkBox74);
-            this.groupBox24.Controls.Add(this.numericUpDown102);
-            this.groupBox24.Controls.Add(this.checkBox75);
-            this.groupBox24.Controls.Add(this.numericUpDown103);
-            this.groupBox24.Controls.Add(this.checkBox76);
-            this.groupBox24.Controls.Add(this.numericUpDown104);
-            this.groupBox24.Location = new System.Drawing.Point(436, 14);
-            this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(154, 174);
-            this.groupBox24.TabIndex = 81;
-            this.groupBox24.TabStop = false;
-            this.groupBox24.Text = "SEQ PMG";
-            // 
-            // checkBox71
-            // 
-            this.checkBox71.AutoSize = true;
-            this.checkBox71.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox71.Location = new System.Drawing.Point(6, 122);
-            this.checkBox71.Name = "checkBox71";
-            this.checkBox71.Size = new System.Drawing.Size(81, 17);
-            this.checkBox71.TabIndex = 82;
-            this.checkBox71.Tag = "seq_idle_enabled";
-            this.checkBox71.Text = "SEQ_IDLE:";
-            this.checkBox71.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown99
-            // 
-            this.numericUpDown99.Enabled = false;
-            this.numericUpDown99.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown99.Location = new System.Drawing.Point(108, 121);
-            this.numericUpDown99.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown99.Name = "numericUpDown99";
-            this.numericUpDown99.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown99.TabIndex = 81;
-            this.numericUpDown99.Tag = "seq_idle";
-            // 
-            // checkBox72
-            // 
-            this.checkBox72.AutoSize = true;
-            this.checkBox72.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox72.Location = new System.Drawing.Point(6, 19);
-            this.checkBox72.Name = "checkBox72";
-            this.checkBox72.Size = new System.Drawing.Size(72, 17);
-            this.checkBox72.TabIndex = 80;
-            this.checkBox72.Tag = "tcksre_enabled";
-            this.checkBox72.Text = "TCKSRE:";
-            this.checkBox72.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown100
-            // 
-            this.numericUpDown100.Enabled = false;
-            this.numericUpDown100.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown100.Location = new System.Drawing.Point(108, 43);
-            this.numericUpDown100.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown100.Name = "numericUpDown100";
-            this.numericUpDown100.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown100.TabIndex = 70;
-            this.numericUpDown100.Tag = "tcksrx";
-            // 
-            // checkBox73
-            // 
-            this.checkBox73.AutoSize = true;
-            this.checkBox73.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox73.Location = new System.Drawing.Point(6, 45);
-            this.checkBox73.Name = "checkBox73";
-            this.checkBox73.Size = new System.Drawing.Size(72, 17);
-            this.checkBox73.TabIndex = 79;
-            this.checkBox73.Tag = "tcksrx_enabled";
-            this.checkBox73.Text = "TCKSRX:";
-            this.checkBox73.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown101
-            // 
-            this.numericUpDown101.Enabled = false;
-            this.numericUpDown101.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown101.Location = new System.Drawing.Point(108, 17);
-            this.numericUpDown101.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown101.Name = "numericUpDown101";
-            this.numericUpDown101.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown101.TabIndex = 69;
-            this.numericUpDown101.Tag = "tcksre";
-            // 
-            // checkBox74
-            // 
-            this.checkBox74.AutoSize = true;
-            this.checkBox74.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox74.Location = new System.Drawing.Point(6, 70);
-            this.checkBox74.Name = "checkBox74";
-            this.checkBox74.Size = new System.Drawing.Size(98, 17);
-            this.checkBox74.TabIndex = 78;
-            this.checkBox74.Tag = "tcke_pulse_enabled";
-            this.checkBox74.Text = "TCKE_PULSE:";
-            this.checkBox74.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown102
-            // 
-            this.numericUpDown102.Enabled = false;
-            this.numericUpDown102.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown102.Location = new System.Drawing.Point(108, 69);
-            this.numericUpDown102.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown102.Name = "numericUpDown102";
-            this.numericUpDown102.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown102.TabIndex = 71;
-            this.numericUpDown102.Tag = "tcke_pulse";
-            // 
-            // checkBox75
-            // 
-            this.checkBox75.AutoSize = true;
-            this.checkBox75.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox75.Location = new System.Drawing.Point(6, 96);
-            this.checkBox75.Name = "checkBox75";
-            this.checkBox75.Size = new System.Drawing.Size(57, 17);
-            this.checkBox75.TabIndex = 77;
-            this.checkBox75.Tag = "tcke_enabled";
-            this.checkBox75.Text = "TCKE:";
-            this.checkBox75.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown103
-            // 
-            this.numericUpDown103.Enabled = false;
-            this.numericUpDown103.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown103.Location = new System.Drawing.Point(108, 95);
-            this.numericUpDown103.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown103.Name = "numericUpDown103";
-            this.numericUpDown103.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown103.TabIndex = 72;
-            this.numericUpDown103.Tag = "tcke";
-            // 
-            // checkBox76
-            // 
-            this.checkBox76.AutoSize = true;
-            this.checkBox76.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox76.Location = new System.Drawing.Point(6, 148);
-            this.checkBox76.Name = "checkBox76";
-            this.checkBox76.Size = new System.Drawing.Size(101, 17);
-            this.checkBox76.TabIndex = 75;
-            this.checkBox76.Tag = "seq_idle_ss_enabled";
-            this.checkBox76.Text = "SEQ_IDLE_SS:";
-            this.checkBox76.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown104
-            // 
-            this.numericUpDown104.Enabled = false;
-            this.numericUpDown104.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown104.Location = new System.Drawing.Point(108, 147);
-            this.numericUpDown104.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown104.Name = "numericUpDown104";
-            this.numericUpDown104.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown104.TabIndex = 74;
-            this.numericUpDown104.Tag = "seq_idle_ss";
-            // 
-            // checkBox77
-            // 
-            this.checkBox77.AutoSize = true;
-            this.checkBox77.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox77.Location = new System.Drawing.Point(436, 225);
-            this.checkBox77.Name = "checkBox77";
-            this.checkBox77.Size = new System.Drawing.Size(89, 17);
-            this.checkBox77.TabIndex = 68;
-            this.checkBox77.Tag = "seq_misc3_enabled";
-            this.checkBox77.Text = "SEQ_MISC3:";
-            this.checkBox77.UseVisualStyleBackColor = true;
-            // 
-            // checkBox78
-            // 
-            this.checkBox78.AutoSize = true;
-            this.checkBox78.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox78.Location = new System.Drawing.Point(436, 252);
-            this.checkBox78.Name = "checkBox78";
-            this.checkBox78.Size = new System.Drawing.Size(89, 17);
-            this.checkBox78.TabIndex = 67;
-            this.checkBox78.Tag = "seq_misc8_enabled";
-            this.checkBox78.Text = "SEQ_MISC8:";
-            this.checkBox78.UseVisualStyleBackColor = true;
-            // 
-            // checkBox79
-            // 
-            this.checkBox79.AutoSize = true;
-            this.checkBox79.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox79.Location = new System.Drawing.Point(436, 198);
-            this.checkBox79.Name = "checkBox79";
-            this.checkBox79.Size = new System.Drawing.Size(89, 17);
-            this.checkBox79.TabIndex = 60;
-            this.checkBox79.Tag = "seq_misc1_enabled";
-            this.checkBox79.Text = "SEQ_MISC1:";
-            this.checkBox79.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox1.Location = new System.Drawing.Point(526, 250);
-            this.textBox1.MaxLength = 8;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(64, 20);
-            this.textBox1.TabIndex = 56;
-            this.textBox1.Tag = "seq_misc8";
-            this.textBox1.Text = "00000000";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Enabled = false;
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox2.Location = new System.Drawing.Point(526, 223);
-            this.textBox2.MaxLength = 8;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(64, 20);
-            this.textBox2.TabIndex = 54;
-            this.textBox2.Tag = "seq_misc3";
-            this.textBox2.Text = "00000000";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox3.Location = new System.Drawing.Point(526, 196);
-            this.textBox3.MaxLength = 8;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(64, 20);
-            this.textBox3.TabIndex = 52;
-            this.textBox3.Tag = "seq_misc1";
-            this.textBox3.Text = "00000000";
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.checkBox153);
@@ -4132,1122 +3022,6 @@
             0,
             0});
             // 
-            // groupBox25
-            // 
-            this.groupBox25.Controls.Add(this.groupBox26);
-            this.groupBox25.Controls.Add(this.groupBox27);
-            this.groupBox25.Controls.Add(this.groupBox28);
-            this.groupBox25.Controls.Add(this.groupBox29);
-            this.groupBox25.Controls.Add(this.groupBox30);
-            this.groupBox25.Controls.Add(this.groupBox31);
-            this.groupBox25.Controls.Add(this.groupBox32);
-            this.groupBox25.Controls.Add(this.checkBox113);
-            this.groupBox25.Controls.Add(this.checkBox114);
-            this.groupBox25.Controls.Add(this.checkBox115);
-            this.groupBox25.Controls.Add(this.textBox4);
-            this.groupBox25.Controls.Add(this.textBox5);
-            this.groupBox25.Controls.Add(this.textBox6);
-            this.groupBox25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox25.Location = new System.Drawing.Point(171, 6);
-            this.groupBox25.Name = "groupBox25";
-            this.groupBox25.Size = new System.Drawing.Size(600, 333);
-            this.groupBox25.TabIndex = 50;
-            this.groupBox25.TabStop = false;
-            this.groupBox25.Tag = "memory_timings_polaris10";
-            this.groupBox25.Text = "Memory Timings";
-            // 
-            // groupBox26
-            // 
-            this.groupBox26.Controls.Add(this.checkBox80);
-            this.groupBox26.Controls.Add(this.numericUpDown105);
-            this.groupBox26.Controls.Add(this.numericUpDown106);
-            this.groupBox26.Controls.Add(this.checkBox81);
-            this.groupBox26.Controls.Add(this.checkBox82);
-            this.groupBox26.Controls.Add(this.numericUpDown107);
-            this.groupBox26.Controls.Add(this.numericUpDown108);
-            this.groupBox26.Controls.Add(this.checkBox83);
-            this.groupBox26.Location = new System.Drawing.Point(310, 194);
-            this.groupBox26.Name = "groupBox26";
-            this.groupBox26.Size = new System.Drawing.Size(119, 129);
-            this.groupBox26.TabIndex = 85;
-            this.groupBox26.TabStop = false;
-            this.groupBox26.Text = "SEQ MISC2";
-            // 
-            // checkBox80
-            // 
-            this.checkBox80.AutoSize = true;
-            this.checkBox80.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox80.Location = new System.Drawing.Point(6, 98);
-            this.checkBox80.Name = "checkBox80";
-            this.checkBox80.Size = new System.Drawing.Size(69, 17);
-            this.checkBox80.TabIndex = 67;
-            this.checkBox80.Tag = "twedc_enabled";
-            this.checkBox80.Text = "TWEDC:";
-            this.checkBox80.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown105
-            // 
-            this.numericUpDown105.Enabled = false;
-            this.numericUpDown105.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown105.Location = new System.Drawing.Point(76, 71);
-            this.numericUpDown105.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.numericUpDown105.Name = "numericUpDown105";
-            this.numericUpDown105.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown105.TabIndex = 65;
-            this.numericUpDown105.Tag = "tredc";
-            // 
-            // numericUpDown106
-            // 
-            this.numericUpDown106.Enabled = false;
-            this.numericUpDown106.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown106.Location = new System.Drawing.Point(76, 97);
-            this.numericUpDown106.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown106.Name = "numericUpDown106";
-            this.numericUpDown106.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown106.TabIndex = 66;
-            this.numericUpDown106.Tag = "twedc";
-            // 
-            // checkBox81
-            // 
-            this.checkBox81.AutoSize = true;
-            this.checkBox81.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox81.Location = new System.Drawing.Point(6, 72);
-            this.checkBox81.Name = "checkBox81";
-            this.checkBox81.Size = new System.Drawing.Size(66, 17);
-            this.checkBox81.TabIndex = 68;
-            this.checkBox81.Tag = "tredc_enabled";
-            this.checkBox81.Text = "TREDC:";
-            this.checkBox81.UseVisualStyleBackColor = true;
-            // 
-            // checkBox82
-            // 
-            this.checkBox82.AutoSize = true;
-            this.checkBox82.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox82.Location = new System.Drawing.Point(6, 46);
-            this.checkBox82.Name = "checkBox82";
-            this.checkBox82.Size = new System.Drawing.Size(66, 17);
-            this.checkBox82.TabIndex = 63;
-            this.checkBox82.Tag = "t32aw_enabled";
-            this.checkBox82.Text = "T32AW:";
-            this.checkBox82.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown107
-            // 
-            this.numericUpDown107.Enabled = false;
-            this.numericUpDown107.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown107.Location = new System.Drawing.Point(75, 19);
-            this.numericUpDown107.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown107.Name = "numericUpDown107";
-            this.numericUpDown107.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown107.TabIndex = 4;
-            this.numericUpDown107.Tag = "faw";
-            // 
-            // numericUpDown108
-            // 
-            this.numericUpDown108.Enabled = false;
-            this.numericUpDown108.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown108.Location = new System.Drawing.Point(75, 45);
-            this.numericUpDown108.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown108.Name = "numericUpDown108";
-            this.numericUpDown108.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown108.TabIndex = 46;
-            this.numericUpDown108.Tag = "t32aw";
-            // 
-            // checkBox83
-            // 
-            this.checkBox83.AutoSize = true;
-            this.checkBox83.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox83.Location = new System.Drawing.Point(6, 20);
-            this.checkBox83.Name = "checkBox83";
-            this.checkBox83.Size = new System.Drawing.Size(53, 17);
-            this.checkBox83.TabIndex = 64;
-            this.checkBox83.Tag = "faw_enabled";
-            this.checkBox83.Text = "FAW:";
-            this.checkBox83.UseVisualStyleBackColor = true;
-            // 
-            // groupBox27
-            // 
-            this.groupBox27.Controls.Add(this.checkBox84);
-            this.groupBox27.Controls.Add(this.numericUpDown109);
-            this.groupBox27.Controls.Add(this.numericUpDown110);
-            this.groupBox27.Controls.Add(this.checkBox85);
-            this.groupBox27.Controls.Add(this.checkBox86);
-            this.groupBox27.Controls.Add(this.numericUpDown111);
-            this.groupBox27.Controls.Add(this.numericUpDown112);
-            this.groupBox27.Controls.Add(this.checkBox87);
-            this.groupBox27.Location = new System.Drawing.Point(164, 194);
-            this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(140, 129);
-            this.groupBox27.TabIndex = 84;
-            this.groupBox27.TabStop = false;
-            this.groupBox27.Text = "SEQ MISC";
-            // 
-            // checkBox84
-            // 
-            this.checkBox84.AutoSize = true;
-            this.checkBox84.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox84.Location = new System.Drawing.Point(6, 98);
-            this.checkBox84.Name = "checkBox84";
-            this.checkBox84.Size = new System.Drawing.Size(57, 17);
-            this.checkBox84.TabIndex = 75;
-            this.checkBox84.Tag = "trfc_enabled";
-            this.checkBox84.Text = "TRFC:";
-            this.checkBox84.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown109
-            // 
-            this.numericUpDown109.Enabled = false;
-            this.numericUpDown109.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown109.Location = new System.Drawing.Point(93, 71);
-            this.numericUpDown109.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown109.Name = "numericUpDown109";
-            this.numericUpDown109.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown109.TabIndex = 73;
-            this.numericUpDown109.Tag = "trp";
-            // 
-            // numericUpDown110
-            // 
-            this.numericUpDown110.Enabled = false;
-            this.numericUpDown110.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown110.Location = new System.Drawing.Point(93, 97);
-            this.numericUpDown110.Maximum = new decimal(new int[] {
-            511,
-            0,
-            0,
-            0});
-            this.numericUpDown110.Name = "numericUpDown110";
-            this.numericUpDown110.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown110.TabIndex = 74;
-            this.numericUpDown110.Tag = "trfc";
-            // 
-            // checkBox85
-            // 
-            this.checkBox85.AutoSize = true;
-            this.checkBox85.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox85.Location = new System.Drawing.Point(6, 72);
-            this.checkBox85.Name = "checkBox85";
-            this.checkBox85.Size = new System.Drawing.Size(51, 17);
-            this.checkBox85.TabIndex = 76;
-            this.checkBox85.Tag = "trp_enabled";
-            this.checkBox85.Text = "TRP:";
-            this.checkBox85.UseVisualStyleBackColor = true;
-            // 
-            // checkBox86
-            // 
-            this.checkBox86.AutoSize = true;
-            this.checkBox86.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox86.Location = new System.Drawing.Point(6, 45);
-            this.checkBox86.Name = "checkBox86";
-            this.checkBox86.Size = new System.Drawing.Size(80, 17);
-            this.checkBox86.TabIndex = 71;
-            this.checkBox86.Tag = "trp_rda_enabled";
-            this.checkBox86.Text = "TRP_RDA:";
-            this.checkBox86.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown111
-            // 
-            this.numericUpDown111.Enabled = false;
-            this.numericUpDown111.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown111.Location = new System.Drawing.Point(93, 18);
-            this.numericUpDown111.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown111.Name = "numericUpDown111";
-            this.numericUpDown111.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown111.TabIndex = 69;
-            this.numericUpDown111.Tag = "trp_wda";
-            // 
-            // numericUpDown112
-            // 
-            this.numericUpDown112.Enabled = false;
-            this.numericUpDown112.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown112.Location = new System.Drawing.Point(93, 44);
-            this.numericUpDown112.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown112.Name = "numericUpDown112";
-            this.numericUpDown112.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown112.TabIndex = 70;
-            this.numericUpDown112.Tag = "trp_rda";
-            // 
-            // checkBox87
-            // 
-            this.checkBox87.AutoSize = true;
-            this.checkBox87.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox87.Location = new System.Drawing.Point(6, 19);
-            this.checkBox87.Name = "checkBox87";
-            this.checkBox87.Size = new System.Drawing.Size(83, 17);
-            this.checkBox87.TabIndex = 72;
-            this.checkBox87.Tag = "trp_wda_enabled";
-            this.checkBox87.Text = "TRP_WDA:";
-            this.checkBox87.UseVisualStyleBackColor = true;
-            // 
-            // groupBox28
-            // 
-            this.groupBox28.Controls.Add(this.checkBox88);
-            this.groupBox28.Controls.Add(this.numericUpDown113);
-            this.groupBox28.Controls.Add(this.numericUpDown114);
-            this.groupBox28.Controls.Add(this.checkBox89);
-            this.groupBox28.Controls.Add(this.checkBox90);
-            this.groupBox28.Controls.Add(this.numericUpDown115);
-            this.groupBox28.Controls.Add(this.checkBox91);
-            this.groupBox28.Controls.Add(this.numericUpDown116);
-            this.groupBox28.Controls.Add(this.checkBox92);
-            this.groupBox28.Controls.Add(this.numericUpDown117);
-            this.groupBox28.Location = new System.Drawing.Point(301, 14);
-            this.groupBox28.Name = "groupBox28";
-            this.groupBox28.Size = new System.Drawing.Size(128, 174);
-            this.groupBox28.TabIndex = 83;
-            this.groupBox28.TabStop = false;
-            this.groupBox28.Text = "SEQ CAS";
-            // 
-            // checkBox88
-            // 
-            this.checkBox88.AutoSize = true;
-            this.checkBox88.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox88.Location = new System.Drawing.Point(6, 102);
-            this.checkBox88.Name = "checkBox88";
-            this.checkBox88.Size = new System.Drawing.Size(61, 17);
-            this.checkBox88.TabIndex = 82;
-            this.checkBox88.Tag = "tw2r_enabled";
-            this.checkBox88.Text = "TW2R:";
-            this.checkBox88.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown113
-            // 
-            this.numericUpDown113.Enabled = false;
-            this.numericUpDown113.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown113.Location = new System.Drawing.Point(81, 101);
-            this.numericUpDown113.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown113.Name = "numericUpDown113";
-            this.numericUpDown113.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown113.TabIndex = 81;
-            this.numericUpDown113.Tag = "tw2r";
-            // 
-            // numericUpDown114
-            // 
-            this.numericUpDown114.Enabled = false;
-            this.numericUpDown114.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown114.Location = new System.Drawing.Point(81, 22);
-            this.numericUpDown114.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown114.Name = "numericUpDown114";
-            this.numericUpDown114.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown114.TabIndex = 70;
-            this.numericUpDown114.Tag = "tr2w";
-            // 
-            // checkBox89
-            // 
-            this.checkBox89.AutoSize = true;
-            this.checkBox89.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox89.Location = new System.Drawing.Point(6, 24);
-            this.checkBox89.Name = "checkBox89";
-            this.checkBox89.Size = new System.Drawing.Size(61, 17);
-            this.checkBox89.TabIndex = 79;
-            this.checkBox89.Tag = "tr2w_enabled";
-            this.checkBox89.Text = "TR2W:";
-            this.checkBox89.UseVisualStyleBackColor = true;
-            // 
-            // checkBox90
-            // 
-            this.checkBox90.AutoSize = true;
-            this.checkBox90.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox90.Location = new System.Drawing.Point(6, 50);
-            this.checkBox90.Name = "checkBox90";
-            this.checkBox90.Size = new System.Drawing.Size(64, 17);
-            this.checkBox90.TabIndex = 78;
-            this.checkBox90.Tag = "tccdl_enabled";
-            this.checkBox90.Text = "TCCDL:";
-            this.checkBox90.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown115
-            // 
-            this.numericUpDown115.Enabled = false;
-            this.numericUpDown115.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown115.Location = new System.Drawing.Point(81, 49);
-            this.numericUpDown115.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.numericUpDown115.Name = "numericUpDown115";
-            this.numericUpDown115.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown115.TabIndex = 71;
-            this.numericUpDown115.Tag = "tccdl";
-            // 
-            // checkBox91
-            // 
-            this.checkBox91.AutoSize = true;
-            this.checkBox91.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox91.Location = new System.Drawing.Point(6, 76);
-            this.checkBox91.Name = "checkBox91";
-            this.checkBox91.Size = new System.Drawing.Size(58, 17);
-            this.checkBox91.TabIndex = 77;
-            this.checkBox91.Tag = "tr2r_enabled";
-            this.checkBox91.Text = "TR2R:";
-            this.checkBox91.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown116
-            // 
-            this.numericUpDown116.Enabled = false;
-            this.numericUpDown116.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown116.Location = new System.Drawing.Point(81, 75);
-            this.numericUpDown116.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown116.Name = "numericUpDown116";
-            this.numericUpDown116.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown116.TabIndex = 72;
-            this.numericUpDown116.Tag = "tr2r";
-            // 
-            // checkBox92
-            // 
-            this.checkBox92.AutoSize = true;
-            this.checkBox92.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox92.Location = new System.Drawing.Point(6, 129);
-            this.checkBox92.Name = "checkBox92";
-            this.checkBox92.Size = new System.Drawing.Size(49, 17);
-            this.checkBox92.TabIndex = 76;
-            this.checkBox92.Tag = "tcl_enabled";
-            this.checkBox92.Text = "TCL:";
-            this.checkBox92.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown117
-            // 
-            this.numericUpDown117.Enabled = false;
-            this.numericUpDown117.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown117.Location = new System.Drawing.Point(81, 128);
-            this.numericUpDown117.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown117.Name = "numericUpDown117";
-            this.numericUpDown117.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown117.TabIndex = 73;
-            this.numericUpDown117.Tag = "tcl";
-            // 
-            // groupBox29
-            // 
-            this.groupBox29.Controls.Add(this.checkBox93);
-            this.groupBox29.Controls.Add(this.numericUpDown118);
-            this.groupBox29.Controls.Add(this.checkBox94);
-            this.groupBox29.Controls.Add(this.numericUpDown119);
-            this.groupBox29.Controls.Add(this.checkBox95);
-            this.groupBox29.Controls.Add(this.numericUpDown120);
-            this.groupBox29.Controls.Add(this.checkBox96);
-            this.groupBox29.Controls.Add(this.checkBox97);
-            this.groupBox29.Controls.Add(this.checkBox98);
-            this.groupBox29.Controls.Add(this.numericUpDown121);
-            this.groupBox29.Controls.Add(this.numericUpDown122);
-            this.groupBox29.Controls.Add(this.numericUpDown123);
-            this.groupBox29.Location = new System.Drawing.Point(164, 14);
-            this.groupBox29.Name = "groupBox29";
-            this.groupBox29.Size = new System.Drawing.Size(130, 174);
-            this.groupBox29.TabIndex = 83;
-            this.groupBox29.TabStop = false;
-            this.groupBox29.Text = "SEQ RAS";
-            // 
-            // checkBox93
-            // 
-            this.checkBox93.AutoSize = true;
-            this.checkBox93.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox93.Location = new System.Drawing.Point(6, 19);
-            this.checkBox93.Name = "checkBox93";
-            this.checkBox93.Size = new System.Drawing.Size(70, 17);
-            this.checkBox93.TabIndex = 80;
-            this.checkBox93.Tag = "trcdw_enabled";
-            this.checkBox93.Text = "TRCDW:";
-            this.checkBox93.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown118
-            // 
-            this.numericUpDown118.Enabled = false;
-            this.numericUpDown118.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown118.Location = new System.Drawing.Point(83, 43);
-            this.numericUpDown118.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown118.Name = "numericUpDown118";
-            this.numericUpDown118.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown118.TabIndex = 70;
-            this.numericUpDown118.Tag = "trcdwa";
-            // 
-            // checkBox94
-            // 
-            this.checkBox94.AutoSize = true;
-            this.checkBox94.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox94.Location = new System.Drawing.Point(6, 45);
-            this.checkBox94.Name = "checkBox94";
-            this.checkBox94.Size = new System.Drawing.Size(77, 17);
-            this.checkBox94.TabIndex = 79;
-            this.checkBox94.Tag = "trcdwa_enabled";
-            this.checkBox94.Text = "TRCDWA:";
-            this.checkBox94.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown119
-            // 
-            this.numericUpDown119.Enabled = false;
-            this.numericUpDown119.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown119.Location = new System.Drawing.Point(83, 17);
-            this.numericUpDown119.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown119.Name = "numericUpDown119";
-            this.numericUpDown119.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown119.TabIndex = 69;
-            this.numericUpDown119.Tag = "trcdw";
-            // 
-            // checkBox95
-            // 
-            this.checkBox95.AutoSize = true;
-            this.checkBox95.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox95.Location = new System.Drawing.Point(6, 70);
-            this.checkBox95.Name = "checkBox95";
-            this.checkBox95.Size = new System.Drawing.Size(67, 17);
-            this.checkBox95.TabIndex = 78;
-            this.checkBox95.Tag = "trcdr_enabled";
-            this.checkBox95.Text = "TRCDR:";
-            this.checkBox95.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown120
-            // 
-            this.numericUpDown120.Enabled = false;
-            this.numericUpDown120.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown120.Location = new System.Drawing.Point(83, 69);
-            this.numericUpDown120.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown120.Name = "numericUpDown120";
-            this.numericUpDown120.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown120.TabIndex = 71;
-            this.numericUpDown120.Tag = "trcdr";
-            // 
-            // checkBox96
-            // 
-            this.checkBox96.AutoSize = true;
-            this.checkBox96.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox96.Location = new System.Drawing.Point(6, 124);
-            this.checkBox96.Name = "checkBox96";
-            this.checkBox96.Size = new System.Drawing.Size(60, 17);
-            this.checkBox96.TabIndex = 66;
-            this.checkBox96.Tag = "trrd_enabled";
-            this.checkBox96.Text = "TRRD:";
-            this.checkBox96.UseVisualStyleBackColor = true;
-            // 
-            // checkBox97
-            // 
-            this.checkBox97.AutoSize = true;
-            this.checkBox97.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox97.Location = new System.Drawing.Point(6, 96);
-            this.checkBox97.Name = "checkBox97";
-            this.checkBox97.Size = new System.Drawing.Size(74, 17);
-            this.checkBox97.TabIndex = 77;
-            this.checkBox97.Tag = "trcdra_enabled";
-            this.checkBox97.Text = "TRCDRA:";
-            this.checkBox97.UseVisualStyleBackColor = true;
-            // 
-            // checkBox98
-            // 
-            this.checkBox98.AutoSize = true;
-            this.checkBox98.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox98.Location = new System.Drawing.Point(6, 150);
-            this.checkBox98.Name = "checkBox98";
-            this.checkBox98.Size = new System.Drawing.Size(51, 17);
-            this.checkBox98.TabIndex = 65;
-            this.checkBox98.Tag = "trc_enabled";
-            this.checkBox98.Text = "TRC:";
-            this.checkBox98.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown121
-            // 
-            this.numericUpDown121.Enabled = false;
-            this.numericUpDown121.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown121.Location = new System.Drawing.Point(83, 95);
-            this.numericUpDown121.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown121.Name = "numericUpDown121";
-            this.numericUpDown121.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown121.TabIndex = 72;
-            this.numericUpDown121.Tag = "trcdra";
-            // 
-            // numericUpDown122
-            // 
-            this.numericUpDown122.Enabled = false;
-            this.numericUpDown122.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown122.Location = new System.Drawing.Point(83, 147);
-            this.numericUpDown122.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown122.Name = "numericUpDown122";
-            this.numericUpDown122.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown122.TabIndex = 2;
-            this.numericUpDown122.Tag = "trc";
-            // 
-            // numericUpDown123
-            // 
-            this.numericUpDown123.Enabled = false;
-            this.numericUpDown123.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown123.Location = new System.Drawing.Point(83, 121);
-            this.numericUpDown123.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown123.Name = "numericUpDown123";
-            this.numericUpDown123.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown123.TabIndex = 1;
-            this.numericUpDown123.Tag = "trrd";
-            // 
-            // groupBox30
-            // 
-            this.groupBox30.Controls.Add(this.checkBox99);
-            this.groupBox30.Controls.Add(this.numericUpDown124);
-            this.groupBox30.Controls.Add(this.numericUpDown125);
-            this.groupBox30.Controls.Add(this.checkBox100);
-            this.groupBox30.Controls.Add(this.checkBox101);
-            this.groupBox30.Controls.Add(this.numericUpDown126);
-            this.groupBox30.Controls.Add(this.numericUpDown127);
-            this.groupBox30.Controls.Add(this.checkBox102);
-            this.groupBox30.Location = new System.Drawing.Point(6, 176);
-            this.groupBox30.Name = "groupBox30";
-            this.groupBox30.Size = new System.Drawing.Size(150, 128);
-            this.groupBox30.TabIndex = 83;
-            this.groupBox30.TabStop = false;
-            this.groupBox30.Text = "ARB DRAM2";
-            // 
-            // checkBox99
-            // 
-            this.checkBox99.AutoSize = true;
-            this.checkBox99.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox99.Location = new System.Drawing.Point(6, 75);
-            this.checkBox99.Name = "checkBox99";
-            this.checkBox99.Size = new System.Drawing.Size(91, 17);
-            this.checkBox99.TabIndex = 66;
-            this.checkBox99.Tag = "wrplusrp_enabled";
-            this.checkBox99.Text = "WRPLUSRP:";
-            this.checkBox99.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown124
-            // 
-            this.numericUpDown124.Enabled = false;
-            this.numericUpDown124.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown124.Location = new System.Drawing.Point(105, 73);
-            this.numericUpDown124.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown124.Name = "numericUpDown124";
-            this.numericUpDown124.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown124.TabIndex = 63;
-            this.numericUpDown124.Tag = "wrplusrp";
-            // 
-            // numericUpDown125
-            // 
-            this.numericUpDown125.Enabled = false;
-            this.numericUpDown125.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown125.Location = new System.Drawing.Point(105, 100);
-            this.numericUpDown125.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown125.Name = "numericUpDown125";
-            this.numericUpDown125.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown125.TabIndex = 64;
-            this.numericUpDown125.Tag = "bus_turn";
-            // 
-            // checkBox100
-            // 
-            this.checkBox100.AutoSize = true;
-            this.checkBox100.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox100.Location = new System.Drawing.Point(6, 102);
-            this.checkBox100.Name = "checkBox100";
-            this.checkBox100.Size = new System.Drawing.Size(88, 17);
-            this.checkBox100.TabIndex = 65;
-            this.checkBox100.Tag = "bus_turn_enabled";
-            this.checkBox100.Text = "BUS_TURN:";
-            this.checkBox100.UseVisualStyleBackColor = true;
-            // 
-            // checkBox101
-            // 
-            this.checkBox101.AutoSize = true;
-            this.checkBox101.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox101.Location = new System.Drawing.Point(6, 21);
-            this.checkBox101.Name = "checkBox101";
-            this.checkBox101.Size = new System.Drawing.Size(79, 17);
-            this.checkBox101.TabIndex = 62;
-            this.checkBox101.Tag = "ras2ras_enabled";
-            this.checkBox101.Text = "RAS2RAS:";
-            this.checkBox101.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown126
-            // 
-            this.numericUpDown126.Enabled = false;
-            this.numericUpDown126.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown126.Location = new System.Drawing.Point(105, 19);
-            this.numericUpDown126.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown126.Name = "numericUpDown126";
-            this.numericUpDown126.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown126.TabIndex = 48;
-            this.numericUpDown126.Tag = "ras2ras";
-            // 
-            // numericUpDown127
-            // 
-            this.numericUpDown127.Enabled = false;
-            this.numericUpDown127.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown127.Location = new System.Drawing.Point(105, 46);
-            this.numericUpDown127.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown127.Name = "numericUpDown127";
-            this.numericUpDown127.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown127.TabIndex = 50;
-            this.numericUpDown127.Tag = "rp";
-            // 
-            // checkBox102
-            // 
-            this.checkBox102.AutoSize = true;
-            this.checkBox102.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox102.Location = new System.Drawing.Point(6, 48);
-            this.checkBox102.Name = "checkBox102";
-            this.checkBox102.Size = new System.Drawing.Size(44, 17);
-            this.checkBox102.TabIndex = 61;
-            this.checkBox102.Tag = "rp_enabled";
-            this.checkBox102.Text = "RP:";
-            this.checkBox102.UseVisualStyleBackColor = true;
-            // 
-            // groupBox31
-            // 
-            this.groupBox31.Controls.Add(this.checkBox103);
-            this.groupBox31.Controls.Add(this.numericUpDown128);
-            this.groupBox31.Controls.Add(this.numericUpDown129);
-            this.groupBox31.Controls.Add(this.checkBox104);
-            this.groupBox31.Controls.Add(this.checkBox105);
-            this.groupBox31.Controls.Add(this.numericUpDown130);
-            this.groupBox31.Controls.Add(this.numericUpDown131);
-            this.groupBox31.Controls.Add(this.checkBox106);
-            this.groupBox31.Location = new System.Drawing.Point(6, 42);
-            this.groupBox31.Name = "groupBox31";
-            this.groupBox31.Size = new System.Drawing.Size(150, 128);
-            this.groupBox31.TabIndex = 82;
-            this.groupBox31.TabStop = false;
-            this.groupBox31.Text = "ARB DRAM1";
-            // 
-            // checkBox103
-            // 
-            this.checkBox103.AutoSize = true;
-            this.checkBox103.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox103.Location = new System.Drawing.Point(6, 75);
-            this.checkBox103.Name = "checkBox103";
-            this.checkBox103.Size = new System.Drawing.Size(97, 17);
-            this.checkBox103.TabIndex = 66;
-            this.checkBox103.Tag = "rasmactrd_enabled";
-            this.checkBox103.Text = "RASMACTRD:";
-            this.checkBox103.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown128
-            // 
-            this.numericUpDown128.Enabled = false;
-            this.numericUpDown128.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown128.Location = new System.Drawing.Point(105, 74);
-            this.numericUpDown128.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown128.Name = "numericUpDown128";
-            this.numericUpDown128.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown128.TabIndex = 63;
-            this.numericUpDown128.Tag = "rasmactrd";
-            // 
-            // numericUpDown129
-            // 
-            this.numericUpDown129.Enabled = false;
-            this.numericUpDown129.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown129.Location = new System.Drawing.Point(105, 101);
-            this.numericUpDown129.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown129.Name = "numericUpDown129";
-            this.numericUpDown129.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown129.TabIndex = 64;
-            this.numericUpDown129.Tag = "rasmactwr";
-            // 
-            // checkBox104
-            // 
-            this.checkBox104.AutoSize = true;
-            this.checkBox104.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox104.Location = new System.Drawing.Point(6, 102);
-            this.checkBox104.Name = "checkBox104";
-            this.checkBox104.Size = new System.Drawing.Size(100, 17);
-            this.checkBox104.TabIndex = 65;
-            this.checkBox104.Tag = "rasmactwr_enabled";
-            this.checkBox104.Text = "RASMACTWR:";
-            this.checkBox104.UseVisualStyleBackColor = true;
-            // 
-            // checkBox105
-            // 
-            this.checkBox105.AutoSize = true;
-            this.checkBox105.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox105.Location = new System.Drawing.Point(6, 21);
-            this.checkBox105.Name = "checkBox105";
-            this.checkBox105.Size = new System.Drawing.Size(66, 17);
-            this.checkBox105.TabIndex = 62;
-            this.checkBox105.Tag = "actrd_enabled";
-            this.checkBox105.Text = "ACTRD:";
-            this.checkBox105.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown130
-            // 
-            this.numericUpDown130.Enabled = false;
-            this.numericUpDown130.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown130.Location = new System.Drawing.Point(105, 20);
-            this.numericUpDown130.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown130.Name = "numericUpDown130";
-            this.numericUpDown130.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown130.TabIndex = 48;
-            this.numericUpDown130.Tag = "actrd";
-            // 
-            // numericUpDown131
-            // 
-            this.numericUpDown131.Enabled = false;
-            this.numericUpDown131.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown131.Location = new System.Drawing.Point(105, 47);
-            this.numericUpDown131.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown131.Name = "numericUpDown131";
-            this.numericUpDown131.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown131.TabIndex = 50;
-            this.numericUpDown131.Tag = "actwr";
-            // 
-            // checkBox106
-            // 
-            this.checkBox106.AutoSize = true;
-            this.checkBox106.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox106.Location = new System.Drawing.Point(6, 48);
-            this.checkBox106.Name = "checkBox106";
-            this.checkBox106.Size = new System.Drawing.Size(69, 17);
-            this.checkBox106.TabIndex = 61;
-            this.checkBox106.Tag = "actwr_enabled";
-            this.checkBox106.Text = "ACTWR:";
-            this.checkBox106.UseVisualStyleBackColor = true;
-            // 
-            // groupBox32
-            // 
-            this.groupBox32.Controls.Add(this.checkBox107);
-            this.groupBox32.Controls.Add(this.numericUpDown132);
-            this.groupBox32.Controls.Add(this.checkBox108);
-            this.groupBox32.Controls.Add(this.numericUpDown133);
-            this.groupBox32.Controls.Add(this.checkBox109);
-            this.groupBox32.Controls.Add(this.numericUpDown134);
-            this.groupBox32.Controls.Add(this.checkBox110);
-            this.groupBox32.Controls.Add(this.numericUpDown135);
-            this.groupBox32.Controls.Add(this.checkBox111);
-            this.groupBox32.Controls.Add(this.numericUpDown136);
-            this.groupBox32.Controls.Add(this.checkBox112);
-            this.groupBox32.Controls.Add(this.numericUpDown137);
-            this.groupBox32.Location = new System.Drawing.Point(436, 14);
-            this.groupBox32.Name = "groupBox32";
-            this.groupBox32.Size = new System.Drawing.Size(154, 174);
-            this.groupBox32.TabIndex = 81;
-            this.groupBox32.TabStop = false;
-            this.groupBox32.Text = "SEQ PMG";
-            // 
-            // checkBox107
-            // 
-            this.checkBox107.AutoSize = true;
-            this.checkBox107.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox107.Location = new System.Drawing.Point(6, 122);
-            this.checkBox107.Name = "checkBox107";
-            this.checkBox107.Size = new System.Drawing.Size(81, 17);
-            this.checkBox107.TabIndex = 82;
-            this.checkBox107.Tag = "seq_idle_enabled";
-            this.checkBox107.Text = "SEQ_IDLE:";
-            this.checkBox107.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown132
-            // 
-            this.numericUpDown132.Enabled = false;
-            this.numericUpDown132.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown132.Location = new System.Drawing.Point(108, 121);
-            this.numericUpDown132.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown132.Name = "numericUpDown132";
-            this.numericUpDown132.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown132.TabIndex = 81;
-            this.numericUpDown132.Tag = "seq_idle";
-            // 
-            // checkBox108
-            // 
-            this.checkBox108.AutoSize = true;
-            this.checkBox108.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox108.Location = new System.Drawing.Point(6, 19);
-            this.checkBox108.Name = "checkBox108";
-            this.checkBox108.Size = new System.Drawing.Size(72, 17);
-            this.checkBox108.TabIndex = 80;
-            this.checkBox108.Tag = "tcksre_enabled";
-            this.checkBox108.Text = "TCKSRE:";
-            this.checkBox108.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown133
-            // 
-            this.numericUpDown133.Enabled = false;
-            this.numericUpDown133.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown133.Location = new System.Drawing.Point(108, 43);
-            this.numericUpDown133.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown133.Name = "numericUpDown133";
-            this.numericUpDown133.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown133.TabIndex = 70;
-            this.numericUpDown133.Tag = "tcksrx";
-            // 
-            // checkBox109
-            // 
-            this.checkBox109.AutoSize = true;
-            this.checkBox109.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox109.Location = new System.Drawing.Point(6, 45);
-            this.checkBox109.Name = "checkBox109";
-            this.checkBox109.Size = new System.Drawing.Size(72, 17);
-            this.checkBox109.TabIndex = 79;
-            this.checkBox109.Tag = "tcksrx_enabled";
-            this.checkBox109.Text = "TCKSRX:";
-            this.checkBox109.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown134
-            // 
-            this.numericUpDown134.Enabled = false;
-            this.numericUpDown134.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown134.Location = new System.Drawing.Point(108, 17);
-            this.numericUpDown134.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown134.Name = "numericUpDown134";
-            this.numericUpDown134.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown134.TabIndex = 69;
-            this.numericUpDown134.Tag = "tcksre";
-            // 
-            // checkBox110
-            // 
-            this.checkBox110.AutoSize = true;
-            this.checkBox110.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox110.Location = new System.Drawing.Point(6, 70);
-            this.checkBox110.Name = "checkBox110";
-            this.checkBox110.Size = new System.Drawing.Size(98, 17);
-            this.checkBox110.TabIndex = 78;
-            this.checkBox110.Tag = "tcke_pulse_enabled";
-            this.checkBox110.Text = "TCKE_PULSE:";
-            this.checkBox110.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown135
-            // 
-            this.numericUpDown135.Enabled = false;
-            this.numericUpDown135.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown135.Location = new System.Drawing.Point(108, 69);
-            this.numericUpDown135.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown135.Name = "numericUpDown135";
-            this.numericUpDown135.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown135.TabIndex = 71;
-            this.numericUpDown135.Tag = "tcke_pulse";
-            // 
-            // checkBox111
-            // 
-            this.checkBox111.AutoSize = true;
-            this.checkBox111.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox111.Location = new System.Drawing.Point(6, 96);
-            this.checkBox111.Name = "checkBox111";
-            this.checkBox111.Size = new System.Drawing.Size(57, 17);
-            this.checkBox111.TabIndex = 77;
-            this.checkBox111.Tag = "tcke_enabled";
-            this.checkBox111.Text = "TCKE:";
-            this.checkBox111.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown136
-            // 
-            this.numericUpDown136.Enabled = false;
-            this.numericUpDown136.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown136.Location = new System.Drawing.Point(108, 95);
-            this.numericUpDown136.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown136.Name = "numericUpDown136";
-            this.numericUpDown136.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown136.TabIndex = 72;
-            this.numericUpDown136.Tag = "tcke";
-            // 
-            // checkBox112
-            // 
-            this.checkBox112.AutoSize = true;
-            this.checkBox112.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox112.Location = new System.Drawing.Point(6, 148);
-            this.checkBox112.Name = "checkBox112";
-            this.checkBox112.Size = new System.Drawing.Size(101, 17);
-            this.checkBox112.TabIndex = 75;
-            this.checkBox112.Tag = "seq_idle_ss_enabled";
-            this.checkBox112.Text = "SEQ_IDLE_SS:";
-            this.checkBox112.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown137
-            // 
-            this.numericUpDown137.Enabled = false;
-            this.numericUpDown137.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown137.Location = new System.Drawing.Point(108, 147);
-            this.numericUpDown137.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown137.Name = "numericUpDown137";
-            this.numericUpDown137.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown137.TabIndex = 74;
-            this.numericUpDown137.Tag = "seq_idle_ss";
-            // 
-            // checkBox113
-            // 
-            this.checkBox113.AutoSize = true;
-            this.checkBox113.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox113.Location = new System.Drawing.Point(436, 225);
-            this.checkBox113.Name = "checkBox113";
-            this.checkBox113.Size = new System.Drawing.Size(89, 17);
-            this.checkBox113.TabIndex = 68;
-            this.checkBox113.Tag = "seq_misc3_enabled";
-            this.checkBox113.Text = "SEQ_MISC3:";
-            this.checkBox113.UseVisualStyleBackColor = true;
-            // 
-            // checkBox114
-            // 
-            this.checkBox114.AutoSize = true;
-            this.checkBox114.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox114.Location = new System.Drawing.Point(436, 252);
-            this.checkBox114.Name = "checkBox114";
-            this.checkBox114.Size = new System.Drawing.Size(89, 17);
-            this.checkBox114.TabIndex = 67;
-            this.checkBox114.Tag = "seq_misc8_enabled";
-            this.checkBox114.Text = "SEQ_MISC8:";
-            this.checkBox114.UseVisualStyleBackColor = true;
-            // 
-            // checkBox115
-            // 
-            this.checkBox115.AutoSize = true;
-            this.checkBox115.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox115.Location = new System.Drawing.Point(436, 198);
-            this.checkBox115.Name = "checkBox115";
-            this.checkBox115.Size = new System.Drawing.Size(89, 17);
-            this.checkBox115.TabIndex = 60;
-            this.checkBox115.Tag = "seq_misc1_enabled";
-            this.checkBox115.Text = "SEQ_MISC1:";
-            this.checkBox115.UseVisualStyleBackColor = true;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Enabled = false;
-            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox4.Location = new System.Drawing.Point(526, 250);
-            this.textBox4.MaxLength = 8;
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(64, 20);
-            this.textBox4.TabIndex = 56;
-            this.textBox4.Tag = "seq_misc8";
-            this.textBox4.Text = "00000000";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Enabled = false;
-            this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox5.Location = new System.Drawing.Point(526, 223);
-            this.textBox5.MaxLength = 8;
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(64, 20);
-            this.textBox5.TabIndex = 54;
-            this.textBox5.Tag = "seq_misc3";
-            this.textBox5.Text = "00000000";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Enabled = false;
-            this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox6.Location = new System.Drawing.Point(526, 196);
-            this.textBox6.MaxLength = 8;
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(64, 20);
-            this.textBox6.TabIndex = 52;
-            this.textBox6.Tag = "seq_misc1";
-            this.textBox6.Text = "00000000";
-            // 
             // tabPage41
             // 
             this.tabPage41.Controls.Add(this.checkBox154);
@@ -5604,1158 +3378,6 @@
             0,
             0,
             0});
-            // 
-            // groupBox33
-            // 
-            this.groupBox33.Controls.Add(this.groupBox34);
-            this.groupBox33.Controls.Add(this.groupBox35);
-            this.groupBox33.Controls.Add(this.groupBox36);
-            this.groupBox33.Controls.Add(this.groupBox37);
-            this.groupBox33.Controls.Add(this.groupBox38);
-            this.groupBox33.Controls.Add(this.groupBox39);
-            this.groupBox33.Controls.Add(this.groupBox40);
-            this.groupBox33.Controls.Add(this.checkBox149);
-            this.groupBox33.Controls.Add(this.checkBox150);
-            this.groupBox33.Controls.Add(this.checkBox151);
-            this.groupBox33.Controls.Add(this.textBox7);
-            this.groupBox33.Controls.Add(this.textBox8);
-            this.groupBox33.Controls.Add(this.textBox9);
-            this.groupBox33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox33.Location = new System.Drawing.Point(171, 7);
-            this.groupBox33.Name = "groupBox33";
-            this.groupBox33.Size = new System.Drawing.Size(600, 333);
-            this.groupBox33.TabIndex = 128;
-            this.groupBox33.TabStop = false;
-            this.groupBox33.Tag = "memory_timings_polaris10";
-            this.groupBox33.Text = "Memory Timings";
-            // 
-            // groupBox34
-            // 
-            this.groupBox34.Controls.Add(this.checkBox116);
-            this.groupBox34.Controls.Add(this.numericUpDown138);
-            this.groupBox34.Controls.Add(this.numericUpDown139);
-            this.groupBox34.Controls.Add(this.checkBox117);
-            this.groupBox34.Controls.Add(this.checkBox118);
-            this.groupBox34.Controls.Add(this.numericUpDown140);
-            this.groupBox34.Controls.Add(this.numericUpDown141);
-            this.groupBox34.Controls.Add(this.checkBox119);
-            this.groupBox34.Location = new System.Drawing.Point(310, 194);
-            this.groupBox34.Name = "groupBox34";
-            this.groupBox34.Size = new System.Drawing.Size(119, 129);
-            this.groupBox34.TabIndex = 85;
-            this.groupBox34.TabStop = false;
-            this.groupBox34.Text = "SEQ MISC2";
-            // 
-            // checkBox116
-            // 
-            this.checkBox116.AutoSize = true;
-            this.checkBox116.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox116.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox116.Location = new System.Drawing.Point(6, 98);
-            this.checkBox116.Name = "checkBox116";
-            this.checkBox116.Size = new System.Drawing.Size(69, 17);
-            this.checkBox116.TabIndex = 67;
-            this.checkBox116.Tag = "twedc_enabled";
-            this.checkBox116.Text = "TWEDC:";
-            this.checkBox116.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown138
-            // 
-            this.numericUpDown138.Enabled = false;
-            this.numericUpDown138.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown138.Location = new System.Drawing.Point(76, 71);
-            this.numericUpDown138.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.numericUpDown138.Name = "numericUpDown138";
-            this.numericUpDown138.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown138.TabIndex = 65;
-            this.numericUpDown138.Tag = "tredc";
-            // 
-            // numericUpDown139
-            // 
-            this.numericUpDown139.Enabled = false;
-            this.numericUpDown139.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown139.Location = new System.Drawing.Point(76, 97);
-            this.numericUpDown139.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown139.Name = "numericUpDown139";
-            this.numericUpDown139.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown139.TabIndex = 66;
-            this.numericUpDown139.Tag = "twedc";
-            // 
-            // checkBox117
-            // 
-            this.checkBox117.AutoSize = true;
-            this.checkBox117.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox117.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox117.Location = new System.Drawing.Point(6, 72);
-            this.checkBox117.Name = "checkBox117";
-            this.checkBox117.Size = new System.Drawing.Size(66, 17);
-            this.checkBox117.TabIndex = 68;
-            this.checkBox117.Tag = "tredc_enabled";
-            this.checkBox117.Text = "TREDC:";
-            this.checkBox117.UseVisualStyleBackColor = true;
-            // 
-            // checkBox118
-            // 
-            this.checkBox118.AutoSize = true;
-            this.checkBox118.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox118.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox118.Location = new System.Drawing.Point(6, 46);
-            this.checkBox118.Name = "checkBox118";
-            this.checkBox118.Size = new System.Drawing.Size(66, 17);
-            this.checkBox118.TabIndex = 63;
-            this.checkBox118.Tag = "t32aw_enabled";
-            this.checkBox118.Text = "T32AW:";
-            this.checkBox118.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown140
-            // 
-            this.numericUpDown140.Enabled = false;
-            this.numericUpDown140.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown140.Location = new System.Drawing.Point(75, 19);
-            this.numericUpDown140.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown140.Name = "numericUpDown140";
-            this.numericUpDown140.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown140.TabIndex = 4;
-            this.numericUpDown140.Tag = "faw";
-            // 
-            // numericUpDown141
-            // 
-            this.numericUpDown141.Enabled = false;
-            this.numericUpDown141.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown141.Location = new System.Drawing.Point(75, 45);
-            this.numericUpDown141.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown141.Name = "numericUpDown141";
-            this.numericUpDown141.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown141.TabIndex = 46;
-            this.numericUpDown141.Tag = "t32aw";
-            // 
-            // checkBox119
-            // 
-            this.checkBox119.AutoSize = true;
-            this.checkBox119.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox119.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox119.Location = new System.Drawing.Point(6, 20);
-            this.checkBox119.Name = "checkBox119";
-            this.checkBox119.Size = new System.Drawing.Size(53, 17);
-            this.checkBox119.TabIndex = 64;
-            this.checkBox119.Tag = "faw_enabled";
-            this.checkBox119.Text = "FAW:";
-            this.checkBox119.UseVisualStyleBackColor = true;
-            // 
-            // groupBox35
-            // 
-            this.groupBox35.Controls.Add(this.checkBox120);
-            this.groupBox35.Controls.Add(this.numericUpDown142);
-            this.groupBox35.Controls.Add(this.numericUpDown143);
-            this.groupBox35.Controls.Add(this.checkBox121);
-            this.groupBox35.Controls.Add(this.checkBox122);
-            this.groupBox35.Controls.Add(this.numericUpDown144);
-            this.groupBox35.Controls.Add(this.numericUpDown145);
-            this.groupBox35.Controls.Add(this.checkBox123);
-            this.groupBox35.Location = new System.Drawing.Point(164, 194);
-            this.groupBox35.Name = "groupBox35";
-            this.groupBox35.Size = new System.Drawing.Size(140, 129);
-            this.groupBox35.TabIndex = 84;
-            this.groupBox35.TabStop = false;
-            this.groupBox35.Text = "SEQ MISC";
-            // 
-            // checkBox120
-            // 
-            this.checkBox120.AutoSize = true;
-            this.checkBox120.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox120.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox120.Location = new System.Drawing.Point(6, 98);
-            this.checkBox120.Name = "checkBox120";
-            this.checkBox120.Size = new System.Drawing.Size(57, 17);
-            this.checkBox120.TabIndex = 75;
-            this.checkBox120.Tag = "trfc_enabled";
-            this.checkBox120.Text = "TRFC:";
-            this.checkBox120.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown142
-            // 
-            this.numericUpDown142.Enabled = false;
-            this.numericUpDown142.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown142.Location = new System.Drawing.Point(93, 71);
-            this.numericUpDown142.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown142.Name = "numericUpDown142";
-            this.numericUpDown142.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown142.TabIndex = 73;
-            this.numericUpDown142.Tag = "trp";
-            // 
-            // numericUpDown143
-            // 
-            this.numericUpDown143.Enabled = false;
-            this.numericUpDown143.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown143.Location = new System.Drawing.Point(93, 97);
-            this.numericUpDown143.Maximum = new decimal(new int[] {
-            511,
-            0,
-            0,
-            0});
-            this.numericUpDown143.Name = "numericUpDown143";
-            this.numericUpDown143.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown143.TabIndex = 74;
-            this.numericUpDown143.Tag = "trfc";
-            // 
-            // checkBox121
-            // 
-            this.checkBox121.AutoSize = true;
-            this.checkBox121.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox121.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox121.Location = new System.Drawing.Point(6, 72);
-            this.checkBox121.Name = "checkBox121";
-            this.checkBox121.Size = new System.Drawing.Size(51, 17);
-            this.checkBox121.TabIndex = 76;
-            this.checkBox121.Tag = "trp_enabled";
-            this.checkBox121.Text = "TRP:";
-            this.checkBox121.UseVisualStyleBackColor = true;
-            // 
-            // checkBox122
-            // 
-            this.checkBox122.AutoSize = true;
-            this.checkBox122.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox122.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox122.Location = new System.Drawing.Point(6, 45);
-            this.checkBox122.Name = "checkBox122";
-            this.checkBox122.Size = new System.Drawing.Size(80, 17);
-            this.checkBox122.TabIndex = 71;
-            this.checkBox122.Tag = "trp_rda_enabled";
-            this.checkBox122.Text = "TRP_RDA:";
-            this.checkBox122.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown144
-            // 
-            this.numericUpDown144.Enabled = false;
-            this.numericUpDown144.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown144.Location = new System.Drawing.Point(93, 18);
-            this.numericUpDown144.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown144.Name = "numericUpDown144";
-            this.numericUpDown144.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown144.TabIndex = 69;
-            this.numericUpDown144.Tag = "trp_wda";
-            // 
-            // numericUpDown145
-            // 
-            this.numericUpDown145.Enabled = false;
-            this.numericUpDown145.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown145.Location = new System.Drawing.Point(93, 44);
-            this.numericUpDown145.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown145.Name = "numericUpDown145";
-            this.numericUpDown145.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown145.TabIndex = 70;
-            this.numericUpDown145.Tag = "trp_rda";
-            // 
-            // checkBox123
-            // 
-            this.checkBox123.AutoSize = true;
-            this.checkBox123.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox123.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox123.Location = new System.Drawing.Point(6, 19);
-            this.checkBox123.Name = "checkBox123";
-            this.checkBox123.Size = new System.Drawing.Size(83, 17);
-            this.checkBox123.TabIndex = 72;
-            this.checkBox123.Tag = "trp_wda_enabled";
-            this.checkBox123.Text = "TRP_WDA:";
-            this.checkBox123.UseVisualStyleBackColor = true;
-            // 
-            // groupBox36
-            // 
-            this.groupBox36.Controls.Add(this.checkBox124);
-            this.groupBox36.Controls.Add(this.numericUpDown146);
-            this.groupBox36.Controls.Add(this.numericUpDown147);
-            this.groupBox36.Controls.Add(this.checkBox125);
-            this.groupBox36.Controls.Add(this.checkBox126);
-            this.groupBox36.Controls.Add(this.numericUpDown148);
-            this.groupBox36.Controls.Add(this.checkBox127);
-            this.groupBox36.Controls.Add(this.numericUpDown149);
-            this.groupBox36.Controls.Add(this.checkBox128);
-            this.groupBox36.Controls.Add(this.numericUpDown150);
-            this.groupBox36.Location = new System.Drawing.Point(301, 14);
-            this.groupBox36.Name = "groupBox36";
-            this.groupBox36.Size = new System.Drawing.Size(128, 174);
-            this.groupBox36.TabIndex = 83;
-            this.groupBox36.TabStop = false;
-            this.groupBox36.Text = "SEQ CAS";
-            // 
-            // checkBox124
-            // 
-            this.checkBox124.AutoSize = true;
-            this.checkBox124.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox124.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox124.Location = new System.Drawing.Point(6, 102);
-            this.checkBox124.Name = "checkBox124";
-            this.checkBox124.Size = new System.Drawing.Size(61, 17);
-            this.checkBox124.TabIndex = 82;
-            this.checkBox124.Tag = "tw2r_enabled";
-            this.checkBox124.Text = "TW2R:";
-            this.checkBox124.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown146
-            // 
-            this.numericUpDown146.Enabled = false;
-            this.numericUpDown146.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown146.Location = new System.Drawing.Point(81, 101);
-            this.numericUpDown146.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown146.Name = "numericUpDown146";
-            this.numericUpDown146.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown146.TabIndex = 81;
-            this.numericUpDown146.Tag = "tw2r";
-            // 
-            // numericUpDown147
-            // 
-            this.numericUpDown147.Enabled = false;
-            this.numericUpDown147.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown147.Location = new System.Drawing.Point(81, 22);
-            this.numericUpDown147.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown147.Name = "numericUpDown147";
-            this.numericUpDown147.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown147.TabIndex = 70;
-            this.numericUpDown147.Tag = "tr2w";
-            // 
-            // checkBox125
-            // 
-            this.checkBox125.AutoSize = true;
-            this.checkBox125.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox125.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox125.Location = new System.Drawing.Point(6, 24);
-            this.checkBox125.Name = "checkBox125";
-            this.checkBox125.Size = new System.Drawing.Size(61, 17);
-            this.checkBox125.TabIndex = 79;
-            this.checkBox125.Tag = "tr2w_enabled";
-            this.checkBox125.Text = "TR2W:";
-            this.checkBox125.UseVisualStyleBackColor = true;
-            // 
-            // checkBox126
-            // 
-            this.checkBox126.AutoSize = true;
-            this.checkBox126.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox126.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox126.Location = new System.Drawing.Point(6, 50);
-            this.checkBox126.Name = "checkBox126";
-            this.checkBox126.Size = new System.Drawing.Size(64, 17);
-            this.checkBox126.TabIndex = 78;
-            this.checkBox126.Tag = "tccdl_enabled";
-            this.checkBox126.Text = "TCCDL:";
-            this.checkBox126.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown148
-            // 
-            this.numericUpDown148.Enabled = false;
-            this.numericUpDown148.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown148.Location = new System.Drawing.Point(81, 49);
-            this.numericUpDown148.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.numericUpDown148.Name = "numericUpDown148";
-            this.numericUpDown148.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown148.TabIndex = 71;
-            this.numericUpDown148.Tag = "tccdl";
-            // 
-            // checkBox127
-            // 
-            this.checkBox127.AutoSize = true;
-            this.checkBox127.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox127.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox127.Location = new System.Drawing.Point(6, 76);
-            this.checkBox127.Name = "checkBox127";
-            this.checkBox127.Size = new System.Drawing.Size(58, 17);
-            this.checkBox127.TabIndex = 77;
-            this.checkBox127.Tag = "tr2r_enabled";
-            this.checkBox127.Text = "TR2R:";
-            this.checkBox127.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown149
-            // 
-            this.numericUpDown149.Enabled = false;
-            this.numericUpDown149.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown149.Location = new System.Drawing.Point(81, 75);
-            this.numericUpDown149.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown149.Name = "numericUpDown149";
-            this.numericUpDown149.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown149.TabIndex = 72;
-            this.numericUpDown149.Tag = "tr2r";
-            // 
-            // checkBox128
-            // 
-            this.checkBox128.AutoSize = true;
-            this.checkBox128.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox128.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox128.Location = new System.Drawing.Point(6, 129);
-            this.checkBox128.Name = "checkBox128";
-            this.checkBox128.Size = new System.Drawing.Size(49, 17);
-            this.checkBox128.TabIndex = 76;
-            this.checkBox128.Tag = "tcl_enabled";
-            this.checkBox128.Text = "TCL:";
-            this.checkBox128.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown150
-            // 
-            this.numericUpDown150.Enabled = false;
-            this.numericUpDown150.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown150.Location = new System.Drawing.Point(81, 128);
-            this.numericUpDown150.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown150.Name = "numericUpDown150";
-            this.numericUpDown150.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown150.TabIndex = 73;
-            this.numericUpDown150.Tag = "tcl";
-            // 
-            // groupBox37
-            // 
-            this.groupBox37.Controls.Add(this.checkBox129);
-            this.groupBox37.Controls.Add(this.numericUpDown151);
-            this.groupBox37.Controls.Add(this.checkBox130);
-            this.groupBox37.Controls.Add(this.numericUpDown152);
-            this.groupBox37.Controls.Add(this.checkBox131);
-            this.groupBox37.Controls.Add(this.numericUpDown153);
-            this.groupBox37.Controls.Add(this.checkBox132);
-            this.groupBox37.Controls.Add(this.checkBox133);
-            this.groupBox37.Controls.Add(this.checkBox134);
-            this.groupBox37.Controls.Add(this.numericUpDown154);
-            this.groupBox37.Controls.Add(this.numericUpDown155);
-            this.groupBox37.Controls.Add(this.numericUpDown156);
-            this.groupBox37.Location = new System.Drawing.Point(164, 14);
-            this.groupBox37.Name = "groupBox37";
-            this.groupBox37.Size = new System.Drawing.Size(130, 174);
-            this.groupBox37.TabIndex = 83;
-            this.groupBox37.TabStop = false;
-            this.groupBox37.Text = "SEQ RAS";
-            // 
-            // checkBox129
-            // 
-            this.checkBox129.AutoSize = true;
-            this.checkBox129.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox129.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox129.Location = new System.Drawing.Point(6, 19);
-            this.checkBox129.Name = "checkBox129";
-            this.checkBox129.Size = new System.Drawing.Size(70, 17);
-            this.checkBox129.TabIndex = 80;
-            this.checkBox129.Tag = "trcdw_enabled";
-            this.checkBox129.Text = "TRCDW:";
-            this.checkBox129.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown151
-            // 
-            this.numericUpDown151.Enabled = false;
-            this.numericUpDown151.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown151.Location = new System.Drawing.Point(83, 43);
-            this.numericUpDown151.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown151.Name = "numericUpDown151";
-            this.numericUpDown151.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown151.TabIndex = 70;
-            this.numericUpDown151.Tag = "trcdwa";
-            // 
-            // checkBox130
-            // 
-            this.checkBox130.AutoSize = true;
-            this.checkBox130.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox130.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox130.Location = new System.Drawing.Point(6, 45);
-            this.checkBox130.Name = "checkBox130";
-            this.checkBox130.Size = new System.Drawing.Size(77, 17);
-            this.checkBox130.TabIndex = 79;
-            this.checkBox130.Tag = "trcdwa_enabled";
-            this.checkBox130.Text = "TRCDWA:";
-            this.checkBox130.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown152
-            // 
-            this.numericUpDown152.Enabled = false;
-            this.numericUpDown152.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown152.Location = new System.Drawing.Point(83, 17);
-            this.numericUpDown152.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown152.Name = "numericUpDown152";
-            this.numericUpDown152.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown152.TabIndex = 69;
-            this.numericUpDown152.Tag = "trcdw";
-            // 
-            // checkBox131
-            // 
-            this.checkBox131.AutoSize = true;
-            this.checkBox131.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox131.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox131.Location = new System.Drawing.Point(6, 70);
-            this.checkBox131.Name = "checkBox131";
-            this.checkBox131.Size = new System.Drawing.Size(67, 17);
-            this.checkBox131.TabIndex = 78;
-            this.checkBox131.Tag = "trcdr_enabled";
-            this.checkBox131.Text = "TRCDR:";
-            this.checkBox131.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown153
-            // 
-            this.numericUpDown153.Enabled = false;
-            this.numericUpDown153.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown153.Location = new System.Drawing.Point(83, 69);
-            this.numericUpDown153.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown153.Name = "numericUpDown153";
-            this.numericUpDown153.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown153.TabIndex = 71;
-            this.numericUpDown153.Tag = "trcdr";
-            // 
-            // checkBox132
-            // 
-            this.checkBox132.AutoSize = true;
-            this.checkBox132.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox132.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox132.Location = new System.Drawing.Point(6, 124);
-            this.checkBox132.Name = "checkBox132";
-            this.checkBox132.Size = new System.Drawing.Size(60, 17);
-            this.checkBox132.TabIndex = 66;
-            this.checkBox132.Tag = "trrd_enabled";
-            this.checkBox132.Text = "TRRD:";
-            this.checkBox132.UseVisualStyleBackColor = true;
-            // 
-            // checkBox133
-            // 
-            this.checkBox133.AutoSize = true;
-            this.checkBox133.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox133.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox133.Location = new System.Drawing.Point(6, 96);
-            this.checkBox133.Name = "checkBox133";
-            this.checkBox133.Size = new System.Drawing.Size(74, 17);
-            this.checkBox133.TabIndex = 77;
-            this.checkBox133.Tag = "trcdra_enabled";
-            this.checkBox133.Text = "TRCDRA:";
-            this.checkBox133.UseVisualStyleBackColor = true;
-            // 
-            // checkBox134
-            // 
-            this.checkBox134.AutoSize = true;
-            this.checkBox134.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox134.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox134.Location = new System.Drawing.Point(6, 150);
-            this.checkBox134.Name = "checkBox134";
-            this.checkBox134.Size = new System.Drawing.Size(51, 17);
-            this.checkBox134.TabIndex = 65;
-            this.checkBox134.Tag = "trc_enabled";
-            this.checkBox134.Text = "TRC:";
-            this.checkBox134.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown154
-            // 
-            this.numericUpDown154.Enabled = false;
-            this.numericUpDown154.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown154.Location = new System.Drawing.Point(83, 95);
-            this.numericUpDown154.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown154.Name = "numericUpDown154";
-            this.numericUpDown154.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown154.TabIndex = 72;
-            this.numericUpDown154.Tag = "trcdra";
-            // 
-            // numericUpDown155
-            // 
-            this.numericUpDown155.Enabled = false;
-            this.numericUpDown155.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown155.Location = new System.Drawing.Point(83, 147);
-            this.numericUpDown155.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown155.Name = "numericUpDown155";
-            this.numericUpDown155.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown155.TabIndex = 2;
-            this.numericUpDown155.Tag = "trc";
-            // 
-            // numericUpDown156
-            // 
-            this.numericUpDown156.Enabled = false;
-            this.numericUpDown156.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown156.Location = new System.Drawing.Point(83, 121);
-            this.numericUpDown156.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown156.Name = "numericUpDown156";
-            this.numericUpDown156.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown156.TabIndex = 1;
-            this.numericUpDown156.Tag = "trrd";
-            // 
-            // groupBox38
-            // 
-            this.groupBox38.Controls.Add(this.checkBox135);
-            this.groupBox38.Controls.Add(this.numericUpDown157);
-            this.groupBox38.Controls.Add(this.numericUpDown158);
-            this.groupBox38.Controls.Add(this.checkBox136);
-            this.groupBox38.Controls.Add(this.checkBox137);
-            this.groupBox38.Controls.Add(this.numericUpDown159);
-            this.groupBox38.Controls.Add(this.numericUpDown160);
-            this.groupBox38.Controls.Add(this.checkBox138);
-            this.groupBox38.Location = new System.Drawing.Point(6, 176);
-            this.groupBox38.Name = "groupBox38";
-            this.groupBox38.Size = new System.Drawing.Size(150, 128);
-            this.groupBox38.TabIndex = 83;
-            this.groupBox38.TabStop = false;
-            this.groupBox38.Text = "ARB DRAM2";
-            // 
-            // checkBox135
-            // 
-            this.checkBox135.AutoSize = true;
-            this.checkBox135.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox135.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox135.Location = new System.Drawing.Point(6, 75);
-            this.checkBox135.Name = "checkBox135";
-            this.checkBox135.Size = new System.Drawing.Size(91, 17);
-            this.checkBox135.TabIndex = 66;
-            this.checkBox135.Tag = "wrplusrp_enabled";
-            this.checkBox135.Text = "WRPLUSRP:";
-            this.checkBox135.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown157
-            // 
-            this.numericUpDown157.Enabled = false;
-            this.numericUpDown157.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown157.Location = new System.Drawing.Point(105, 73);
-            this.numericUpDown157.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown157.Name = "numericUpDown157";
-            this.numericUpDown157.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown157.TabIndex = 63;
-            this.numericUpDown157.Tag = "wrplusrp";
-            // 
-            // numericUpDown158
-            // 
-            this.numericUpDown158.Enabled = false;
-            this.numericUpDown158.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown158.Location = new System.Drawing.Point(105, 100);
-            this.numericUpDown158.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown158.Name = "numericUpDown158";
-            this.numericUpDown158.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown158.TabIndex = 64;
-            this.numericUpDown158.Tag = "bus_turn";
-            // 
-            // checkBox136
-            // 
-            this.checkBox136.AutoSize = true;
-            this.checkBox136.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox136.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox136.Location = new System.Drawing.Point(6, 102);
-            this.checkBox136.Name = "checkBox136";
-            this.checkBox136.Size = new System.Drawing.Size(88, 17);
-            this.checkBox136.TabIndex = 65;
-            this.checkBox136.Tag = "bus_turn_enabled";
-            this.checkBox136.Text = "BUS_TURN:";
-            this.checkBox136.UseVisualStyleBackColor = true;
-            // 
-            // checkBox137
-            // 
-            this.checkBox137.AutoSize = true;
-            this.checkBox137.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox137.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox137.Location = new System.Drawing.Point(6, 21);
-            this.checkBox137.Name = "checkBox137";
-            this.checkBox137.Size = new System.Drawing.Size(79, 17);
-            this.checkBox137.TabIndex = 62;
-            this.checkBox137.Tag = "ras2ras_enabled";
-            this.checkBox137.Text = "RAS2RAS:";
-            this.checkBox137.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown159
-            // 
-            this.numericUpDown159.Enabled = false;
-            this.numericUpDown159.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown159.Location = new System.Drawing.Point(105, 19);
-            this.numericUpDown159.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown159.Name = "numericUpDown159";
-            this.numericUpDown159.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown159.TabIndex = 48;
-            this.numericUpDown159.Tag = "ras2ras";
-            // 
-            // numericUpDown160
-            // 
-            this.numericUpDown160.Enabled = false;
-            this.numericUpDown160.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown160.Location = new System.Drawing.Point(105, 46);
-            this.numericUpDown160.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown160.Name = "numericUpDown160";
-            this.numericUpDown160.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown160.TabIndex = 50;
-            this.numericUpDown160.Tag = "rp";
-            // 
-            // checkBox138
-            // 
-            this.checkBox138.AutoSize = true;
-            this.checkBox138.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox138.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox138.Location = new System.Drawing.Point(6, 48);
-            this.checkBox138.Name = "checkBox138";
-            this.checkBox138.Size = new System.Drawing.Size(44, 17);
-            this.checkBox138.TabIndex = 61;
-            this.checkBox138.Tag = "rp_enabled";
-            this.checkBox138.Text = "RP:";
-            this.checkBox138.UseVisualStyleBackColor = true;
-            // 
-            // groupBox39
-            // 
-            this.groupBox39.Controls.Add(this.checkBox139);
-            this.groupBox39.Controls.Add(this.numericUpDown161);
-            this.groupBox39.Controls.Add(this.numericUpDown162);
-            this.groupBox39.Controls.Add(this.checkBox140);
-            this.groupBox39.Controls.Add(this.checkBox141);
-            this.groupBox39.Controls.Add(this.numericUpDown163);
-            this.groupBox39.Controls.Add(this.numericUpDown164);
-            this.groupBox39.Controls.Add(this.checkBox142);
-            this.groupBox39.Location = new System.Drawing.Point(6, 42);
-            this.groupBox39.Name = "groupBox39";
-            this.groupBox39.Size = new System.Drawing.Size(150, 128);
-            this.groupBox39.TabIndex = 82;
-            this.groupBox39.TabStop = false;
-            this.groupBox39.Text = "ARB DRAM1";
-            // 
-            // checkBox139
-            // 
-            this.checkBox139.AutoSize = true;
-            this.checkBox139.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox139.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox139.Location = new System.Drawing.Point(6, 75);
-            this.checkBox139.Name = "checkBox139";
-            this.checkBox139.Size = new System.Drawing.Size(97, 17);
-            this.checkBox139.TabIndex = 66;
-            this.checkBox139.Tag = "rasmactrd_enabled";
-            this.checkBox139.Text = "RASMACTRD:";
-            this.checkBox139.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown161
-            // 
-            this.numericUpDown161.Enabled = false;
-            this.numericUpDown161.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown161.Location = new System.Drawing.Point(105, 74);
-            this.numericUpDown161.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown161.Name = "numericUpDown161";
-            this.numericUpDown161.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown161.TabIndex = 63;
-            this.numericUpDown161.Tag = "rasmactrd";
-            // 
-            // numericUpDown162
-            // 
-            this.numericUpDown162.Enabled = false;
-            this.numericUpDown162.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown162.Location = new System.Drawing.Point(105, 101);
-            this.numericUpDown162.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown162.Name = "numericUpDown162";
-            this.numericUpDown162.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown162.TabIndex = 64;
-            this.numericUpDown162.Tag = "rasmactwr";
-            // 
-            // checkBox140
-            // 
-            this.checkBox140.AutoSize = true;
-            this.checkBox140.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox140.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox140.Location = new System.Drawing.Point(6, 102);
-            this.checkBox140.Name = "checkBox140";
-            this.checkBox140.Size = new System.Drawing.Size(100, 17);
-            this.checkBox140.TabIndex = 65;
-            this.checkBox140.Tag = "rasmactwr_enabled";
-            this.checkBox140.Text = "RASMACTWR:";
-            this.checkBox140.UseVisualStyleBackColor = true;
-            // 
-            // checkBox141
-            // 
-            this.checkBox141.AutoSize = true;
-            this.checkBox141.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox141.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox141.Location = new System.Drawing.Point(6, 21);
-            this.checkBox141.Name = "checkBox141";
-            this.checkBox141.Size = new System.Drawing.Size(66, 17);
-            this.checkBox141.TabIndex = 62;
-            this.checkBox141.Tag = "actrd_enabled";
-            this.checkBox141.Text = "ACTRD:";
-            this.checkBox141.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown163
-            // 
-            this.numericUpDown163.Enabled = false;
-            this.numericUpDown163.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown163.Location = new System.Drawing.Point(105, 20);
-            this.numericUpDown163.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown163.Name = "numericUpDown163";
-            this.numericUpDown163.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown163.TabIndex = 48;
-            this.numericUpDown163.Tag = "actrd";
-            // 
-            // numericUpDown164
-            // 
-            this.numericUpDown164.Enabled = false;
-            this.numericUpDown164.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown164.Location = new System.Drawing.Point(105, 47);
-            this.numericUpDown164.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown164.Name = "numericUpDown164";
-            this.numericUpDown164.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown164.TabIndex = 50;
-            this.numericUpDown164.Tag = "actwr";
-            // 
-            // checkBox142
-            // 
-            this.checkBox142.AutoSize = true;
-            this.checkBox142.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox142.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox142.Location = new System.Drawing.Point(6, 48);
-            this.checkBox142.Name = "checkBox142";
-            this.checkBox142.Size = new System.Drawing.Size(69, 17);
-            this.checkBox142.TabIndex = 61;
-            this.checkBox142.Tag = "actwr_enabled";
-            this.checkBox142.Text = "ACTWR:";
-            this.checkBox142.UseVisualStyleBackColor = true;
-            // 
-            // groupBox40
-            // 
-            this.groupBox40.Controls.Add(this.checkBox143);
-            this.groupBox40.Controls.Add(this.numericUpDown165);
-            this.groupBox40.Controls.Add(this.checkBox144);
-            this.groupBox40.Controls.Add(this.numericUpDown166);
-            this.groupBox40.Controls.Add(this.checkBox145);
-            this.groupBox40.Controls.Add(this.numericUpDown167);
-            this.groupBox40.Controls.Add(this.checkBox146);
-            this.groupBox40.Controls.Add(this.numericUpDown168);
-            this.groupBox40.Controls.Add(this.checkBox147);
-            this.groupBox40.Controls.Add(this.numericUpDown169);
-            this.groupBox40.Controls.Add(this.checkBox148);
-            this.groupBox40.Controls.Add(this.numericUpDown170);
-            this.groupBox40.Location = new System.Drawing.Point(436, 14);
-            this.groupBox40.Name = "groupBox40";
-            this.groupBox40.Size = new System.Drawing.Size(154, 174);
-            this.groupBox40.TabIndex = 81;
-            this.groupBox40.TabStop = false;
-            this.groupBox40.Text = "SEQ PMG";
-            // 
-            // checkBox143
-            // 
-            this.checkBox143.AutoSize = true;
-            this.checkBox143.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox143.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox143.Location = new System.Drawing.Point(6, 122);
-            this.checkBox143.Name = "checkBox143";
-            this.checkBox143.Size = new System.Drawing.Size(81, 17);
-            this.checkBox143.TabIndex = 82;
-            this.checkBox143.Tag = "seq_idle_enabled";
-            this.checkBox143.Text = "SEQ_IDLE:";
-            this.checkBox143.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown165
-            // 
-            this.numericUpDown165.Enabled = false;
-            this.numericUpDown165.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown165.Location = new System.Drawing.Point(108, 121);
-            this.numericUpDown165.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown165.Name = "numericUpDown165";
-            this.numericUpDown165.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown165.TabIndex = 81;
-            this.numericUpDown165.Tag = "seq_idle";
-            // 
-            // checkBox144
-            // 
-            this.checkBox144.AutoSize = true;
-            this.checkBox144.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox144.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox144.Location = new System.Drawing.Point(6, 19);
-            this.checkBox144.Name = "checkBox144";
-            this.checkBox144.Size = new System.Drawing.Size(72, 17);
-            this.checkBox144.TabIndex = 80;
-            this.checkBox144.Tag = "tcksre_enabled";
-            this.checkBox144.Text = "TCKSRE:";
-            this.checkBox144.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown166
-            // 
-            this.numericUpDown166.Enabled = false;
-            this.numericUpDown166.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown166.Location = new System.Drawing.Point(108, 43);
-            this.numericUpDown166.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown166.Name = "numericUpDown166";
-            this.numericUpDown166.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown166.TabIndex = 70;
-            this.numericUpDown166.Tag = "tcksrx";
-            // 
-            // checkBox145
-            // 
-            this.checkBox145.AutoSize = true;
-            this.checkBox145.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox145.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox145.Location = new System.Drawing.Point(6, 45);
-            this.checkBox145.Name = "checkBox145";
-            this.checkBox145.Size = new System.Drawing.Size(72, 17);
-            this.checkBox145.TabIndex = 79;
-            this.checkBox145.Tag = "tcksrx_enabled";
-            this.checkBox145.Text = "TCKSRX:";
-            this.checkBox145.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown167
-            // 
-            this.numericUpDown167.Enabled = false;
-            this.numericUpDown167.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown167.Location = new System.Drawing.Point(108, 17);
-            this.numericUpDown167.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.numericUpDown167.Name = "numericUpDown167";
-            this.numericUpDown167.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown167.TabIndex = 69;
-            this.numericUpDown167.Tag = "tcksre";
-            // 
-            // checkBox146
-            // 
-            this.checkBox146.AutoSize = true;
-            this.checkBox146.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox146.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox146.Location = new System.Drawing.Point(6, 70);
-            this.checkBox146.Name = "checkBox146";
-            this.checkBox146.Size = new System.Drawing.Size(98, 17);
-            this.checkBox146.TabIndex = 78;
-            this.checkBox146.Tag = "tcke_pulse_enabled";
-            this.checkBox146.Text = "TCKE_PULSE:";
-            this.checkBox146.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown168
-            // 
-            this.numericUpDown168.Enabled = false;
-            this.numericUpDown168.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown168.Location = new System.Drawing.Point(108, 69);
-            this.numericUpDown168.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numericUpDown168.Name = "numericUpDown168";
-            this.numericUpDown168.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown168.TabIndex = 71;
-            this.numericUpDown168.Tag = "tcke_pulse";
-            // 
-            // checkBox147
-            // 
-            this.checkBox147.AutoSize = true;
-            this.checkBox147.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox147.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox147.Location = new System.Drawing.Point(6, 96);
-            this.checkBox147.Name = "checkBox147";
-            this.checkBox147.Size = new System.Drawing.Size(57, 17);
-            this.checkBox147.TabIndex = 77;
-            this.checkBox147.Tag = "tcke_enabled";
-            this.checkBox147.Text = "TCKE:";
-            this.checkBox147.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown169
-            // 
-            this.numericUpDown169.Enabled = false;
-            this.numericUpDown169.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown169.Location = new System.Drawing.Point(108, 95);
-            this.numericUpDown169.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.numericUpDown169.Name = "numericUpDown169";
-            this.numericUpDown169.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown169.TabIndex = 72;
-            this.numericUpDown169.Tag = "tcke";
-            // 
-            // checkBox148
-            // 
-            this.checkBox148.AutoSize = true;
-            this.checkBox148.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox148.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox148.Location = new System.Drawing.Point(6, 148);
-            this.checkBox148.Name = "checkBox148";
-            this.checkBox148.Size = new System.Drawing.Size(101, 17);
-            this.checkBox148.TabIndex = 75;
-            this.checkBox148.Tag = "seq_idle_ss_enabled";
-            this.checkBox148.Text = "SEQ_IDLE_SS:";
-            this.checkBox148.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown170
-            // 
-            this.numericUpDown170.Enabled = false;
-            this.numericUpDown170.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown170.Location = new System.Drawing.Point(108, 147);
-            this.numericUpDown170.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.numericUpDown170.Name = "numericUpDown170";
-            this.numericUpDown170.Size = new System.Drawing.Size(37, 20);
-            this.numericUpDown170.TabIndex = 74;
-            this.numericUpDown170.Tag = "seq_idle_ss";
-            // 
-            // checkBox149
-            // 
-            this.checkBox149.AutoSize = true;
-            this.checkBox149.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox149.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox149.Location = new System.Drawing.Point(436, 225);
-            this.checkBox149.Name = "checkBox149";
-            this.checkBox149.Size = new System.Drawing.Size(89, 17);
-            this.checkBox149.TabIndex = 68;
-            this.checkBox149.Tag = "seq_misc3_enabled";
-            this.checkBox149.Text = "SEQ_MISC3:";
-            this.checkBox149.UseVisualStyleBackColor = true;
-            // 
-            // checkBox150
-            // 
-            this.checkBox150.AutoSize = true;
-            this.checkBox150.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox150.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox150.Location = new System.Drawing.Point(436, 252);
-            this.checkBox150.Name = "checkBox150";
-            this.checkBox150.Size = new System.Drawing.Size(89, 17);
-            this.checkBox150.TabIndex = 67;
-            this.checkBox150.Tag = "seq_misc8_enabled";
-            this.checkBox150.Text = "SEQ_MISC8:";
-            this.checkBox150.UseVisualStyleBackColor = true;
-            // 
-            // checkBox151
-            // 
-            this.checkBox151.AutoSize = true;
-            this.checkBox151.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox151.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.checkBox151.Location = new System.Drawing.Point(436, 198);
-            this.checkBox151.Name = "checkBox151";
-            this.checkBox151.Size = new System.Drawing.Size(89, 17);
-            this.checkBox151.TabIndex = 60;
-            this.checkBox151.Tag = "seq_misc1_enabled";
-            this.checkBox151.Text = "SEQ_MISC1:";
-            this.checkBox151.UseVisualStyleBackColor = true;
-            // 
-            // textBox7
-            // 
-            this.textBox7.Enabled = false;
-            this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox7.Location = new System.Drawing.Point(526, 250);
-            this.textBox7.MaxLength = 8;
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(64, 20);
-            this.textBox7.TabIndex = 56;
-            this.textBox7.Tag = "seq_misc8";
-            this.textBox7.Text = "00000000";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Enabled = false;
-            this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox8.Location = new System.Drawing.Point(526, 223);
-            this.textBox8.MaxLength = 8;
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(64, 20);
-            this.textBox8.TabIndex = 54;
-            this.textBox8.Tag = "seq_misc3";
-            this.textBox8.Text = "00000000";
-            // 
-            // textBox9
-            // 
-            this.textBox9.Enabled = false;
-            this.textBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBox9.Location = new System.Drawing.Point(526, 196);
-            this.textBox9.MaxLength = 8;
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(64, 20);
-            this.textBox9.TabIndex = 52;
-            this.textBox9.Tag = "seq_misc1";
-            this.textBox9.Text = "00000000";
             // 
             // tabPage4
             // 
@@ -7980,6 +4602,3555 @@
             this.buttonResetAll.Visible = false;
             this.buttonResetAll.Click += new System.EventHandler(this.buttonResetAll_Click);
             // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.groupBox10);
+            this.groupBox9.Controls.Add(this.groupBox11);
+            this.groupBox9.Controls.Add(this.groupBox20);
+            this.groupBox9.Controls.Add(this.groupBox21);
+            this.groupBox9.Controls.Add(this.groupBox22);
+            this.groupBox9.Controls.Add(this.groupBox23);
+            this.groupBox9.Controls.Add(this.groupBox24);
+            this.groupBox9.Controls.Add(this.groupBox42);
+            this.groupBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox9.Location = new System.Drawing.Point(171, 6);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(600, 333);
+            this.groupBox9.TabIndex = 49;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Tag = "memory_timings_polaris10";
+            this.groupBox9.Text = "Memory Timings";
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.checkBox44);
+            this.groupBox10.Controls.Add(this.textBox1);
+            this.groupBox10.Controls.Add(this.textBox2);
+            this.groupBox10.Controls.Add(this.textBox3);
+            this.groupBox10.Controls.Add(this.checkBox45);
+            this.groupBox10.Controls.Add(this.checkBox46);
+            this.groupBox10.Enabled = false;
+            this.groupBox10.Location = new System.Drawing.Point(431, 194);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(159, 129);
+            this.groupBox10.TabIndex = 86;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Tag = "other_seq_registers";
+            this.groupBox10.Text = "Other SEQ Registers";
+            // 
+            // checkBox44
+            // 
+            this.checkBox44.AutoSize = true;
+            this.checkBox44.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox44.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox44.Location = new System.Drawing.Point(6, 19);
+            this.checkBox44.Name = "checkBox44";
+            this.checkBox44.Size = new System.Drawing.Size(89, 17);
+            this.checkBox44.TabIndex = 60;
+            this.checkBox44.Tag = "seq_misc1_enabled";
+            this.checkBox44.Text = "SEQ_MISC1:";
+            this.checkBox44.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Enabled = false;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox1.Location = new System.Drawing.Point(96, 17);
+            this.textBox1.MaxLength = 8;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(55, 20);
+            this.textBox1.TabIndex = 52;
+            this.textBox1.Tag = "seq_misc1";
+            this.textBox1.Text = "00000000";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Enabled = false;
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox2.Location = new System.Drawing.Point(96, 44);
+            this.textBox2.MaxLength = 8;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(55, 20);
+            this.textBox2.TabIndex = 54;
+            this.textBox2.Tag = "seq_misc3";
+            this.textBox2.Text = "00000000";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Enabled = false;
+            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox3.Location = new System.Drawing.Point(96, 71);
+            this.textBox3.MaxLength = 8;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(55, 20);
+            this.textBox3.TabIndex = 56;
+            this.textBox3.Tag = "seq_misc8";
+            this.textBox3.Text = "00000000";
+            // 
+            // checkBox45
+            // 
+            this.checkBox45.AutoSize = true;
+            this.checkBox45.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox45.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox45.Location = new System.Drawing.Point(6, 73);
+            this.checkBox45.Name = "checkBox45";
+            this.checkBox45.Size = new System.Drawing.Size(89, 17);
+            this.checkBox45.TabIndex = 67;
+            this.checkBox45.Tag = "seq_misc8_enabled";
+            this.checkBox45.Text = "SEQ_MISC8:";
+            this.checkBox45.UseVisualStyleBackColor = true;
+            // 
+            // checkBox46
+            // 
+            this.checkBox46.AutoSize = true;
+            this.checkBox46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox46.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox46.Location = new System.Drawing.Point(6, 46);
+            this.checkBox46.Name = "checkBox46";
+            this.checkBox46.Size = new System.Drawing.Size(89, 17);
+            this.checkBox46.TabIndex = 68;
+            this.checkBox46.Tag = "seq_misc3_enabled";
+            this.checkBox46.Text = "SEQ_MISC3:";
+            this.checkBox46.UseVisualStyleBackColor = true;
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.checkBox47);
+            this.groupBox11.Controls.Add(this.numericUpDown38);
+            this.groupBox11.Controls.Add(this.numericUpDown41);
+            this.groupBox11.Controls.Add(this.checkBox48);
+            this.groupBox11.Controls.Add(this.checkBox49);
+            this.groupBox11.Controls.Add(this.numericUpDown46);
+            this.groupBox11.Controls.Add(this.numericUpDown47);
+            this.groupBox11.Controls.Add(this.checkBox50);
+            this.groupBox11.Enabled = false;
+            this.groupBox11.Location = new System.Drawing.Point(301, 194);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(124, 129);
+            this.groupBox11.TabIndex = 85;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Tag = "seq_misc_timings_2";
+            this.groupBox11.Text = "SEQ MISC Timings 2";
+            // 
+            // checkBox47
+            // 
+            this.checkBox47.AutoSize = true;
+            this.checkBox47.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox47.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox47.Location = new System.Drawing.Point(6, 98);
+            this.checkBox47.Name = "checkBox47";
+            this.checkBox47.Size = new System.Drawing.Size(69, 17);
+            this.checkBox47.TabIndex = 67;
+            this.checkBox47.Tag = "twedc_enabled";
+            this.checkBox47.Text = "TWEDC:";
+            this.checkBox47.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown38
+            // 
+            this.numericUpDown38.Enabled = false;
+            this.numericUpDown38.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown38.Location = new System.Drawing.Point(80, 71);
+            this.numericUpDown38.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.numericUpDown38.Name = "numericUpDown38";
+            this.numericUpDown38.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown38.TabIndex = 65;
+            this.numericUpDown38.Tag = "tredc";
+            // 
+            // numericUpDown41
+            // 
+            this.numericUpDown41.Enabled = false;
+            this.numericUpDown41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown41.Location = new System.Drawing.Point(80, 97);
+            this.numericUpDown41.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown41.Name = "numericUpDown41";
+            this.numericUpDown41.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown41.TabIndex = 66;
+            this.numericUpDown41.Tag = "twedc";
+            // 
+            // checkBox48
+            // 
+            this.checkBox48.AutoSize = true;
+            this.checkBox48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox48.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox48.Location = new System.Drawing.Point(6, 72);
+            this.checkBox48.Name = "checkBox48";
+            this.checkBox48.Size = new System.Drawing.Size(66, 17);
+            this.checkBox48.TabIndex = 68;
+            this.checkBox48.Tag = "tredc_enabled";
+            this.checkBox48.Text = "TREDC:";
+            this.checkBox48.UseVisualStyleBackColor = true;
+            // 
+            // checkBox49
+            // 
+            this.checkBox49.AutoSize = true;
+            this.checkBox49.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox49.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox49.Location = new System.Drawing.Point(6, 46);
+            this.checkBox49.Name = "checkBox49";
+            this.checkBox49.Size = new System.Drawing.Size(66, 17);
+            this.checkBox49.TabIndex = 63;
+            this.checkBox49.Tag = "t32aw_enabled";
+            this.checkBox49.Text = "T32AW:";
+            this.checkBox49.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown46
+            // 
+            this.numericUpDown46.Enabled = false;
+            this.numericUpDown46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown46.Location = new System.Drawing.Point(79, 19);
+            this.numericUpDown46.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown46.Name = "numericUpDown46";
+            this.numericUpDown46.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown46.TabIndex = 4;
+            this.numericUpDown46.Tag = "faw";
+            // 
+            // numericUpDown47
+            // 
+            this.numericUpDown47.Enabled = false;
+            this.numericUpDown47.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown47.Location = new System.Drawing.Point(79, 45);
+            this.numericUpDown47.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown47.Name = "numericUpDown47";
+            this.numericUpDown47.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown47.TabIndex = 46;
+            this.numericUpDown47.Tag = "t32aw";
+            // 
+            // checkBox50
+            // 
+            this.checkBox50.AutoSize = true;
+            this.checkBox50.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox50.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox50.Location = new System.Drawing.Point(6, 20);
+            this.checkBox50.Name = "checkBox50";
+            this.checkBox50.Size = new System.Drawing.Size(53, 17);
+            this.checkBox50.TabIndex = 64;
+            this.checkBox50.Tag = "faw_enabled";
+            this.checkBox50.Text = "FAW:";
+            this.checkBox50.UseVisualStyleBackColor = true;
+            // 
+            // groupBox20
+            // 
+            this.groupBox20.Controls.Add(this.checkBox51);
+            this.groupBox20.Controls.Add(this.numericUpDown48);
+            this.groupBox20.Controls.Add(this.numericUpDown49);
+            this.groupBox20.Controls.Add(this.checkBox52);
+            this.groupBox20.Controls.Add(this.checkBox53);
+            this.groupBox20.Controls.Add(this.numericUpDown50);
+            this.groupBox20.Controls.Add(this.numericUpDown51);
+            this.groupBox20.Controls.Add(this.checkBox54);
+            this.groupBox20.Enabled = false;
+            this.groupBox20.Location = new System.Drawing.Point(164, 194);
+            this.groupBox20.Name = "groupBox20";
+            this.groupBox20.Size = new System.Drawing.Size(130, 129);
+            this.groupBox20.TabIndex = 84;
+            this.groupBox20.TabStop = false;
+            this.groupBox20.Tag = "seq_misc_timings";
+            this.groupBox20.Text = "SEQ MISC Timings";
+            // 
+            // checkBox51
+            // 
+            this.checkBox51.AutoSize = true;
+            this.checkBox51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox51.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox51.Location = new System.Drawing.Point(6, 98);
+            this.checkBox51.Name = "checkBox51";
+            this.checkBox51.Size = new System.Drawing.Size(57, 17);
+            this.checkBox51.TabIndex = 75;
+            this.checkBox51.Tag = "trfc_enabled";
+            this.checkBox51.Text = "TRFC:";
+            this.checkBox51.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown48
+            // 
+            this.numericUpDown48.Enabled = false;
+            this.numericUpDown48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown48.Location = new System.Drawing.Point(86, 71);
+            this.numericUpDown48.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown48.Name = "numericUpDown48";
+            this.numericUpDown48.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown48.TabIndex = 73;
+            this.numericUpDown48.Tag = "trp";
+            // 
+            // numericUpDown49
+            // 
+            this.numericUpDown49.Enabled = false;
+            this.numericUpDown49.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown49.Location = new System.Drawing.Point(86, 97);
+            this.numericUpDown49.Maximum = new decimal(new int[] {
+            4095,
+            0,
+            0,
+            0});
+            this.numericUpDown49.Name = "numericUpDown49";
+            this.numericUpDown49.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown49.TabIndex = 74;
+            this.numericUpDown49.Tag = "trfc";
+            // 
+            // checkBox52
+            // 
+            this.checkBox52.AutoSize = true;
+            this.checkBox52.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox52.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox52.Location = new System.Drawing.Point(6, 72);
+            this.checkBox52.Name = "checkBox52";
+            this.checkBox52.Size = new System.Drawing.Size(51, 17);
+            this.checkBox52.TabIndex = 76;
+            this.checkBox52.Tag = "trp_enabled";
+            this.checkBox52.Text = "TRP:";
+            this.checkBox52.UseVisualStyleBackColor = true;
+            // 
+            // checkBox53
+            // 
+            this.checkBox53.AutoSize = true;
+            this.checkBox53.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox53.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox53.Location = new System.Drawing.Point(6, 45);
+            this.checkBox53.Name = "checkBox53";
+            this.checkBox53.Size = new System.Drawing.Size(80, 17);
+            this.checkBox53.TabIndex = 71;
+            this.checkBox53.Tag = "trp_rda_enabled";
+            this.checkBox53.Text = "TRP_RDA:";
+            this.checkBox53.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown50
+            // 
+            this.numericUpDown50.Enabled = false;
+            this.numericUpDown50.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown50.Location = new System.Drawing.Point(86, 18);
+            this.numericUpDown50.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown50.Name = "numericUpDown50";
+            this.numericUpDown50.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown50.TabIndex = 69;
+            this.numericUpDown50.Tag = "trp_wra";
+            // 
+            // numericUpDown51
+            // 
+            this.numericUpDown51.Enabled = false;
+            this.numericUpDown51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown51.Location = new System.Drawing.Point(86, 44);
+            this.numericUpDown51.Maximum = new decimal(new int[] {
+            127,
+            0,
+            0,
+            0});
+            this.numericUpDown51.Name = "numericUpDown51";
+            this.numericUpDown51.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown51.TabIndex = 70;
+            this.numericUpDown51.Tag = "trp_rda";
+            // 
+            // checkBox54
+            // 
+            this.checkBox54.AutoSize = true;
+            this.checkBox54.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox54.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox54.Location = new System.Drawing.Point(6, 19);
+            this.checkBox54.Name = "checkBox54";
+            this.checkBox54.Size = new System.Drawing.Size(83, 17);
+            this.checkBox54.TabIndex = 72;
+            this.checkBox54.Tag = "trp_wra_enabled";
+            this.checkBox54.Text = "TRP_WRA:";
+            this.checkBox54.UseVisualStyleBackColor = true;
+            // 
+            // groupBox21
+            // 
+            this.groupBox21.Controls.Add(this.checkBox55);
+            this.groupBox21.Controls.Add(this.numericUpDown53);
+            this.groupBox21.Controls.Add(this.numericUpDown54);
+            this.groupBox21.Controls.Add(this.checkBox56);
+            this.groupBox21.Controls.Add(this.checkBox57);
+            this.groupBox21.Controls.Add(this.numericUpDown55);
+            this.groupBox21.Controls.Add(this.checkBox58);
+            this.groupBox21.Controls.Add(this.numericUpDown56);
+            this.groupBox21.Controls.Add(this.checkBox59);
+            this.groupBox21.Controls.Add(this.numericUpDown57);
+            this.groupBox21.Enabled = false;
+            this.groupBox21.Location = new System.Drawing.Point(301, 14);
+            this.groupBox21.Name = "groupBox21";
+            this.groupBox21.Size = new System.Drawing.Size(124, 174);
+            this.groupBox21.TabIndex = 83;
+            this.groupBox21.TabStop = false;
+            this.groupBox21.Tag = "seq_cas_timings";
+            this.groupBox21.Text = "SEQ CAS Timings";
+            // 
+            // checkBox55
+            // 
+            this.checkBox55.AutoSize = true;
+            this.checkBox55.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox55.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox55.Location = new System.Drawing.Point(6, 97);
+            this.checkBox55.Name = "checkBox55";
+            this.checkBox55.Size = new System.Drawing.Size(61, 17);
+            this.checkBox55.TabIndex = 82;
+            this.checkBox55.Tag = "tw2r_enabled";
+            this.checkBox55.Text = "TW2R:";
+            this.checkBox55.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown53
+            // 
+            this.numericUpDown53.Enabled = false;
+            this.numericUpDown53.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown53.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown53.Location = new System.Drawing.Point(79, 96);
+            this.numericUpDown53.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown53.Name = "numericUpDown53";
+            this.numericUpDown53.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown53.TabIndex = 81;
+            this.numericUpDown53.Tag = "tw2r";
+            // 
+            // numericUpDown54
+            // 
+            this.numericUpDown54.Enabled = false;
+            this.numericUpDown54.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown54.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown54.Location = new System.Drawing.Point(79, 17);
+            this.numericUpDown54.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown54.Name = "numericUpDown54";
+            this.numericUpDown54.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown54.TabIndex = 70;
+            this.numericUpDown54.Tag = "tr2w";
+            // 
+            // checkBox56
+            // 
+            this.checkBox56.AutoSize = true;
+            this.checkBox56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox56.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox56.Location = new System.Drawing.Point(6, 19);
+            this.checkBox56.Name = "checkBox56";
+            this.checkBox56.Size = new System.Drawing.Size(61, 17);
+            this.checkBox56.TabIndex = 79;
+            this.checkBox56.Tag = "tr2w_enabled";
+            this.checkBox56.Text = "TR2W:";
+            this.checkBox56.UseVisualStyleBackColor = true;
+            // 
+            // checkBox57
+            // 
+            this.checkBox57.AutoSize = true;
+            this.checkBox57.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox57.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox57.Location = new System.Drawing.Point(6, 45);
+            this.checkBox57.Name = "checkBox57";
+            this.checkBox57.Size = new System.Drawing.Size(64, 17);
+            this.checkBox57.TabIndex = 78;
+            this.checkBox57.Tag = "tccdl_enabled";
+            this.checkBox57.Text = "TCCDL:";
+            this.checkBox57.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown55
+            // 
+            this.numericUpDown55.Enabled = false;
+            this.numericUpDown55.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown55.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown55.Location = new System.Drawing.Point(79, 44);
+            this.numericUpDown55.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.numericUpDown55.Name = "numericUpDown55";
+            this.numericUpDown55.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown55.TabIndex = 71;
+            this.numericUpDown55.Tag = "tccdl";
+            // 
+            // checkBox58
+            // 
+            this.checkBox58.AutoSize = true;
+            this.checkBox58.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox58.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox58.Location = new System.Drawing.Point(6, 71);
+            this.checkBox58.Name = "checkBox58";
+            this.checkBox58.Size = new System.Drawing.Size(58, 17);
+            this.checkBox58.TabIndex = 77;
+            this.checkBox58.Tag = "tr2r_enabled";
+            this.checkBox58.Text = "TR2R:";
+            this.checkBox58.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown56
+            // 
+            this.numericUpDown56.Enabled = false;
+            this.numericUpDown56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown56.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown56.Location = new System.Drawing.Point(79, 70);
+            this.numericUpDown56.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown56.Name = "numericUpDown56";
+            this.numericUpDown56.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown56.TabIndex = 72;
+            this.numericUpDown56.Tag = "tr2r";
+            // 
+            // checkBox59
+            // 
+            this.checkBox59.AutoSize = true;
+            this.checkBox59.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox59.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox59.Location = new System.Drawing.Point(6, 124);
+            this.checkBox59.Name = "checkBox59";
+            this.checkBox59.Size = new System.Drawing.Size(49, 17);
+            this.checkBox59.TabIndex = 76;
+            this.checkBox59.Tag = "tcl_enabled";
+            this.checkBox59.Text = "TCL:";
+            this.checkBox59.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown57
+            // 
+            this.numericUpDown57.Enabled = false;
+            this.numericUpDown57.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown57.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown57.Location = new System.Drawing.Point(79, 123);
+            this.numericUpDown57.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown57.Name = "numericUpDown57";
+            this.numericUpDown57.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown57.TabIndex = 73;
+            this.numericUpDown57.Tag = "tcl";
+            // 
+            // groupBox22
+            // 
+            this.groupBox22.Controls.Add(this.checkBox60);
+            this.groupBox22.Controls.Add(this.numericUpDown58);
+            this.groupBox22.Controls.Add(this.checkBox61);
+            this.groupBox22.Controls.Add(this.numericUpDown59);
+            this.groupBox22.Controls.Add(this.checkBox62);
+            this.groupBox22.Controls.Add(this.numericUpDown60);
+            this.groupBox22.Controls.Add(this.checkBox63);
+            this.groupBox22.Controls.Add(this.checkBox64);
+            this.groupBox22.Controls.Add(this.checkBox65);
+            this.groupBox22.Controls.Add(this.numericUpDown61);
+            this.groupBox22.Controls.Add(this.numericUpDown62);
+            this.groupBox22.Controls.Add(this.numericUpDown90);
+            this.groupBox22.Enabled = false;
+            this.groupBox22.Location = new System.Drawing.Point(164, 14);
+            this.groupBox22.Name = "groupBox22";
+            this.groupBox22.Size = new System.Drawing.Size(130, 174);
+            this.groupBox22.TabIndex = 83;
+            this.groupBox22.TabStop = false;
+            this.groupBox22.Tag = "seq_ras_timings";
+            this.groupBox22.Text = "SEQ RAS Timings";
+            // 
+            // checkBox60
+            // 
+            this.checkBox60.AutoSize = true;
+            this.checkBox60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox60.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox60.Location = new System.Drawing.Point(6, 19);
+            this.checkBox60.Name = "checkBox60";
+            this.checkBox60.Size = new System.Drawing.Size(70, 17);
+            this.checkBox60.TabIndex = 80;
+            this.checkBox60.Tag = "trcdw_enabled";
+            this.checkBox60.Text = "TRCDW:";
+            this.checkBox60.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown58
+            // 
+            this.numericUpDown58.Enabled = false;
+            this.numericUpDown58.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown58.Location = new System.Drawing.Point(87, 43);
+            this.numericUpDown58.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown58.Name = "numericUpDown58";
+            this.numericUpDown58.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown58.TabIndex = 70;
+            this.numericUpDown58.Tag = "trcdwa";
+            // 
+            // checkBox61
+            // 
+            this.checkBox61.AutoSize = true;
+            this.checkBox61.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox61.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox61.Location = new System.Drawing.Point(6, 45);
+            this.checkBox61.Name = "checkBox61";
+            this.checkBox61.Size = new System.Drawing.Size(77, 17);
+            this.checkBox61.TabIndex = 79;
+            this.checkBox61.Tag = "trcdwa_enabled";
+            this.checkBox61.Text = "TRCDWA:";
+            this.checkBox61.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown59
+            // 
+            this.numericUpDown59.Enabled = false;
+            this.numericUpDown59.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown59.Location = new System.Drawing.Point(87, 17);
+            this.numericUpDown59.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown59.Name = "numericUpDown59";
+            this.numericUpDown59.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown59.TabIndex = 69;
+            this.numericUpDown59.Tag = "trcdw";
+            // 
+            // checkBox62
+            // 
+            this.checkBox62.AutoSize = true;
+            this.checkBox62.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox62.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox62.Location = new System.Drawing.Point(6, 70);
+            this.checkBox62.Name = "checkBox62";
+            this.checkBox62.Size = new System.Drawing.Size(67, 17);
+            this.checkBox62.TabIndex = 78;
+            this.checkBox62.Tag = "trcdr_enabled";
+            this.checkBox62.Text = "TRCDR:";
+            this.checkBox62.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown60
+            // 
+            this.numericUpDown60.Enabled = false;
+            this.numericUpDown60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown60.Location = new System.Drawing.Point(87, 69);
+            this.numericUpDown60.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown60.Name = "numericUpDown60";
+            this.numericUpDown60.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown60.TabIndex = 71;
+            this.numericUpDown60.Tag = "trcdr";
+            // 
+            // checkBox63
+            // 
+            this.checkBox63.AutoSize = true;
+            this.checkBox63.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox63.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox63.Location = new System.Drawing.Point(6, 124);
+            this.checkBox63.Name = "checkBox63";
+            this.checkBox63.Size = new System.Drawing.Size(60, 17);
+            this.checkBox63.TabIndex = 66;
+            this.checkBox63.Tag = "trrd_enabled";
+            this.checkBox63.Text = "TRRD:";
+            this.checkBox63.UseVisualStyleBackColor = true;
+            // 
+            // checkBox64
+            // 
+            this.checkBox64.AutoSize = true;
+            this.checkBox64.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox64.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox64.Location = new System.Drawing.Point(6, 96);
+            this.checkBox64.Name = "checkBox64";
+            this.checkBox64.Size = new System.Drawing.Size(74, 17);
+            this.checkBox64.TabIndex = 77;
+            this.checkBox64.Tag = "trcdra_enabled";
+            this.checkBox64.Text = "TRCDRA:";
+            this.checkBox64.UseVisualStyleBackColor = true;
+            // 
+            // checkBox65
+            // 
+            this.checkBox65.AutoSize = true;
+            this.checkBox65.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox65.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox65.Location = new System.Drawing.Point(6, 150);
+            this.checkBox65.Name = "checkBox65";
+            this.checkBox65.Size = new System.Drawing.Size(51, 17);
+            this.checkBox65.TabIndex = 65;
+            this.checkBox65.Tag = "trc_enabled";
+            this.checkBox65.Text = "TRC:";
+            this.checkBox65.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown61
+            // 
+            this.numericUpDown61.Enabled = false;
+            this.numericUpDown61.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown61.Location = new System.Drawing.Point(87, 95);
+            this.numericUpDown61.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown61.Name = "numericUpDown61";
+            this.numericUpDown61.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown61.TabIndex = 72;
+            this.numericUpDown61.Tag = "trcdra";
+            // 
+            // numericUpDown62
+            // 
+            this.numericUpDown62.Enabled = false;
+            this.numericUpDown62.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown62.Location = new System.Drawing.Point(87, 147);
+            this.numericUpDown62.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown62.Name = "numericUpDown62";
+            this.numericUpDown62.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown62.TabIndex = 2;
+            this.numericUpDown62.Tag = "trc";
+            // 
+            // numericUpDown90
+            // 
+            this.numericUpDown90.Enabled = false;
+            this.numericUpDown90.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown90.Location = new System.Drawing.Point(87, 121);
+            this.numericUpDown90.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown90.Name = "numericUpDown90";
+            this.numericUpDown90.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown90.TabIndex = 1;
+            this.numericUpDown90.Tag = "trrd";
+            // 
+            // groupBox23
+            // 
+            this.groupBox23.Controls.Add(this.checkBox66);
+            this.groupBox23.Controls.Add(this.numericUpDown91);
+            this.groupBox23.Controls.Add(this.numericUpDown92);
+            this.groupBox23.Controls.Add(this.checkBox67);
+            this.groupBox23.Controls.Add(this.checkBox68);
+            this.groupBox23.Controls.Add(this.numericUpDown93);
+            this.groupBox23.Controls.Add(this.numericUpDown94);
+            this.groupBox23.Controls.Add(this.checkBox69);
+            this.groupBox23.Enabled = false;
+            this.groupBox23.Location = new System.Drawing.Point(6, 176);
+            this.groupBox23.Name = "groupBox23";
+            this.groupBox23.Size = new System.Drawing.Size(150, 128);
+            this.groupBox23.TabIndex = 83;
+            this.groupBox23.TabStop = false;
+            this.groupBox23.Tag = "arb_dram_timings_2";
+            this.groupBox23.Text = "ARB DRAM Timings 2";
+            // 
+            // checkBox66
+            // 
+            this.checkBox66.AutoSize = true;
+            this.checkBox66.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox66.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox66.Location = new System.Drawing.Point(6, 75);
+            this.checkBox66.Name = "checkBox66";
+            this.checkBox66.Size = new System.Drawing.Size(91, 17);
+            this.checkBox66.TabIndex = 66;
+            this.checkBox66.Tag = "wrplusrp_enabled";
+            this.checkBox66.Text = "WRPLUSRP:";
+            this.checkBox66.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown91
+            // 
+            this.numericUpDown91.Enabled = false;
+            this.numericUpDown91.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown91.Location = new System.Drawing.Point(105, 73);
+            this.numericUpDown91.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown91.Name = "numericUpDown91";
+            this.numericUpDown91.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown91.TabIndex = 63;
+            this.numericUpDown91.Tag = "wrplusrp";
+            // 
+            // numericUpDown92
+            // 
+            this.numericUpDown92.Enabled = false;
+            this.numericUpDown92.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown92.Location = new System.Drawing.Point(105, 100);
+            this.numericUpDown92.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown92.Name = "numericUpDown92";
+            this.numericUpDown92.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown92.TabIndex = 64;
+            this.numericUpDown92.Tag = "bus_turn";
+            // 
+            // checkBox67
+            // 
+            this.checkBox67.AutoSize = true;
+            this.checkBox67.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox67.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox67.Location = new System.Drawing.Point(6, 102);
+            this.checkBox67.Name = "checkBox67";
+            this.checkBox67.Size = new System.Drawing.Size(88, 17);
+            this.checkBox67.TabIndex = 65;
+            this.checkBox67.Tag = "bus_turn_enabled";
+            this.checkBox67.Text = "BUS_TURN:";
+            this.checkBox67.UseVisualStyleBackColor = true;
+            // 
+            // checkBox68
+            // 
+            this.checkBox68.AutoSize = true;
+            this.checkBox68.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox68.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox68.Location = new System.Drawing.Point(6, 21);
+            this.checkBox68.Name = "checkBox68";
+            this.checkBox68.Size = new System.Drawing.Size(79, 17);
+            this.checkBox68.TabIndex = 62;
+            this.checkBox68.Tag = "ras2ras_enabled";
+            this.checkBox68.Text = "RAS2RAS:";
+            this.checkBox68.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown93
+            // 
+            this.numericUpDown93.Enabled = false;
+            this.numericUpDown93.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown93.Location = new System.Drawing.Point(105, 19);
+            this.numericUpDown93.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown93.Name = "numericUpDown93";
+            this.numericUpDown93.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown93.TabIndex = 48;
+            this.numericUpDown93.Tag = "ras2ras";
+            // 
+            // numericUpDown94
+            // 
+            this.numericUpDown94.Enabled = false;
+            this.numericUpDown94.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown94.Location = new System.Drawing.Point(105, 46);
+            this.numericUpDown94.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown94.Name = "numericUpDown94";
+            this.numericUpDown94.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown94.TabIndex = 50;
+            this.numericUpDown94.Tag = "rp";
+            // 
+            // checkBox69
+            // 
+            this.checkBox69.AutoSize = true;
+            this.checkBox69.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox69.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox69.Location = new System.Drawing.Point(6, 48);
+            this.checkBox69.Name = "checkBox69";
+            this.checkBox69.Size = new System.Drawing.Size(44, 17);
+            this.checkBox69.TabIndex = 61;
+            this.checkBox69.Tag = "rp_enabled";
+            this.checkBox69.Text = "RP:";
+            this.checkBox69.UseVisualStyleBackColor = true;
+            // 
+            // groupBox24
+            // 
+            this.groupBox24.Controls.Add(this.checkBox70);
+            this.groupBox24.Controls.Add(this.numericUpDown95);
+            this.groupBox24.Controls.Add(this.numericUpDown96);
+            this.groupBox24.Controls.Add(this.checkBox71);
+            this.groupBox24.Controls.Add(this.checkBox72);
+            this.groupBox24.Controls.Add(this.numericUpDown97);
+            this.groupBox24.Controls.Add(this.numericUpDown98);
+            this.groupBox24.Controls.Add(this.checkBox73);
+            this.groupBox24.Enabled = false;
+            this.groupBox24.Location = new System.Drawing.Point(6, 42);
+            this.groupBox24.Name = "groupBox24";
+            this.groupBox24.Size = new System.Drawing.Size(150, 128);
+            this.groupBox24.TabIndex = 82;
+            this.groupBox24.TabStop = false;
+            this.groupBox24.Tag = "arb_dram_timings";
+            this.groupBox24.Text = "ARB DRAM Timings";
+            // 
+            // checkBox70
+            // 
+            this.checkBox70.AutoSize = true;
+            this.checkBox70.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox70.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox70.Location = new System.Drawing.Point(6, 75);
+            this.checkBox70.Name = "checkBox70";
+            this.checkBox70.Size = new System.Drawing.Size(97, 17);
+            this.checkBox70.TabIndex = 66;
+            this.checkBox70.Tag = "rasmactrd_enabled";
+            this.checkBox70.Text = "RASMACTRD:";
+            this.checkBox70.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown95
+            // 
+            this.numericUpDown95.Enabled = false;
+            this.numericUpDown95.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown95.Location = new System.Drawing.Point(105, 74);
+            this.numericUpDown95.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown95.Name = "numericUpDown95";
+            this.numericUpDown95.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown95.TabIndex = 63;
+            this.numericUpDown95.Tag = "rasmactrd";
+            // 
+            // numericUpDown96
+            // 
+            this.numericUpDown96.Enabled = false;
+            this.numericUpDown96.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown96.Location = new System.Drawing.Point(105, 101);
+            this.numericUpDown96.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown96.Name = "numericUpDown96";
+            this.numericUpDown96.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown96.TabIndex = 64;
+            this.numericUpDown96.Tag = "rasmactwr";
+            // 
+            // checkBox71
+            // 
+            this.checkBox71.AutoSize = true;
+            this.checkBox71.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox71.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox71.Location = new System.Drawing.Point(6, 102);
+            this.checkBox71.Name = "checkBox71";
+            this.checkBox71.Size = new System.Drawing.Size(100, 17);
+            this.checkBox71.TabIndex = 65;
+            this.checkBox71.Tag = "rasmactwr_enabled";
+            this.checkBox71.Text = "RASMACTWR:";
+            this.checkBox71.UseVisualStyleBackColor = true;
+            // 
+            // checkBox72
+            // 
+            this.checkBox72.AutoSize = true;
+            this.checkBox72.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox72.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox72.Location = new System.Drawing.Point(6, 21);
+            this.checkBox72.Name = "checkBox72";
+            this.checkBox72.Size = new System.Drawing.Size(66, 17);
+            this.checkBox72.TabIndex = 62;
+            this.checkBox72.Tag = "actrd_enabled";
+            this.checkBox72.Text = "ACTRD:";
+            this.checkBox72.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown97
+            // 
+            this.numericUpDown97.Enabled = false;
+            this.numericUpDown97.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown97.Location = new System.Drawing.Point(105, 20);
+            this.numericUpDown97.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown97.Name = "numericUpDown97";
+            this.numericUpDown97.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown97.TabIndex = 48;
+            this.numericUpDown97.Tag = "actrd";
+            // 
+            // numericUpDown98
+            // 
+            this.numericUpDown98.Enabled = false;
+            this.numericUpDown98.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown98.Location = new System.Drawing.Point(105, 47);
+            this.numericUpDown98.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown98.Name = "numericUpDown98";
+            this.numericUpDown98.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown98.TabIndex = 50;
+            this.numericUpDown98.Tag = "actwr";
+            // 
+            // checkBox73
+            // 
+            this.checkBox73.AutoSize = true;
+            this.checkBox73.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox73.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox73.Location = new System.Drawing.Point(6, 48);
+            this.checkBox73.Name = "checkBox73";
+            this.checkBox73.Size = new System.Drawing.Size(69, 17);
+            this.checkBox73.TabIndex = 61;
+            this.checkBox73.Tag = "actwr_enabled";
+            this.checkBox73.Text = "ACTWR:";
+            this.checkBox73.UseVisualStyleBackColor = true;
+            // 
+            // groupBox42
+            // 
+            this.groupBox42.Controls.Add(this.checkBox74);
+            this.groupBox42.Controls.Add(this.numericUpDown99);
+            this.groupBox42.Controls.Add(this.checkBox75);
+            this.groupBox42.Controls.Add(this.numericUpDown100);
+            this.groupBox42.Controls.Add(this.checkBox76);
+            this.groupBox42.Controls.Add(this.numericUpDown101);
+            this.groupBox42.Controls.Add(this.checkBox77);
+            this.groupBox42.Controls.Add(this.numericUpDown102);
+            this.groupBox42.Controls.Add(this.checkBox78);
+            this.groupBox42.Controls.Add(this.numericUpDown103);
+            this.groupBox42.Controls.Add(this.checkBox79);
+            this.groupBox42.Controls.Add(this.numericUpDown104);
+            this.groupBox42.Enabled = false;
+            this.groupBox42.Location = new System.Drawing.Point(431, 14);
+            this.groupBox42.Name = "groupBox42";
+            this.groupBox42.Size = new System.Drawing.Size(159, 174);
+            this.groupBox42.TabIndex = 81;
+            this.groupBox42.TabStop = false;
+            this.groupBox42.Tag = "seq_pmg_timings";
+            this.groupBox42.Text = "SEQ PMG Timings";
+            // 
+            // checkBox74
+            // 
+            this.checkBox74.AutoSize = true;
+            this.checkBox74.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox74.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox74.Location = new System.Drawing.Point(6, 122);
+            this.checkBox74.Name = "checkBox74";
+            this.checkBox74.Size = new System.Drawing.Size(81, 17);
+            this.checkBox74.TabIndex = 82;
+            this.checkBox74.Tag = "seq_idle_enabled";
+            this.checkBox74.Text = "SEQ_IDLE:";
+            this.checkBox74.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown99
+            // 
+            this.numericUpDown99.Enabled = false;
+            this.numericUpDown99.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown99.Location = new System.Drawing.Point(113, 121);
+            this.numericUpDown99.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown99.Name = "numericUpDown99";
+            this.numericUpDown99.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown99.TabIndex = 81;
+            this.numericUpDown99.Tag = "seq_idle";
+            // 
+            // checkBox75
+            // 
+            this.checkBox75.AutoSize = true;
+            this.checkBox75.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox75.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox75.Location = new System.Drawing.Point(6, 19);
+            this.checkBox75.Name = "checkBox75";
+            this.checkBox75.Size = new System.Drawing.Size(72, 17);
+            this.checkBox75.TabIndex = 80;
+            this.checkBox75.Tag = "tcksre_enabled";
+            this.checkBox75.Text = "TCKSRE:";
+            this.checkBox75.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown100
+            // 
+            this.numericUpDown100.Enabled = false;
+            this.numericUpDown100.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown100.Location = new System.Drawing.Point(113, 43);
+            this.numericUpDown100.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown100.Name = "numericUpDown100";
+            this.numericUpDown100.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown100.TabIndex = 70;
+            this.numericUpDown100.Tag = "tcksrx";
+            // 
+            // checkBox76
+            // 
+            this.checkBox76.AutoSize = true;
+            this.checkBox76.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox76.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox76.Location = new System.Drawing.Point(6, 45);
+            this.checkBox76.Name = "checkBox76";
+            this.checkBox76.Size = new System.Drawing.Size(72, 17);
+            this.checkBox76.TabIndex = 79;
+            this.checkBox76.Tag = "tcksrx_enabled";
+            this.checkBox76.Text = "TCKSRX:";
+            this.checkBox76.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown101
+            // 
+            this.numericUpDown101.Enabled = false;
+            this.numericUpDown101.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown101.Location = new System.Drawing.Point(113, 17);
+            this.numericUpDown101.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown101.Name = "numericUpDown101";
+            this.numericUpDown101.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown101.TabIndex = 69;
+            this.numericUpDown101.Tag = "tcksre";
+            // 
+            // checkBox77
+            // 
+            this.checkBox77.AutoSize = true;
+            this.checkBox77.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox77.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox77.Location = new System.Drawing.Point(6, 70);
+            this.checkBox77.Name = "checkBox77";
+            this.checkBox77.Size = new System.Drawing.Size(98, 17);
+            this.checkBox77.TabIndex = 78;
+            this.checkBox77.Tag = "tcke_pulse_enabled";
+            this.checkBox77.Text = "TCKE_PULSE:";
+            this.checkBox77.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown102
+            // 
+            this.numericUpDown102.Enabled = false;
+            this.numericUpDown102.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown102.Location = new System.Drawing.Point(113, 69);
+            this.numericUpDown102.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown102.Name = "numericUpDown102";
+            this.numericUpDown102.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown102.TabIndex = 71;
+            this.numericUpDown102.Tag = "tcke_pulse";
+            // 
+            // checkBox78
+            // 
+            this.checkBox78.AutoSize = true;
+            this.checkBox78.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox78.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox78.Location = new System.Drawing.Point(6, 96);
+            this.checkBox78.Name = "checkBox78";
+            this.checkBox78.Size = new System.Drawing.Size(57, 17);
+            this.checkBox78.TabIndex = 77;
+            this.checkBox78.Tag = "tcke_enabled";
+            this.checkBox78.Text = "TCKE:";
+            this.checkBox78.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown103
+            // 
+            this.numericUpDown103.Enabled = false;
+            this.numericUpDown103.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown103.Location = new System.Drawing.Point(113, 95);
+            this.numericUpDown103.Maximum = new decimal(new int[] {
+            63,
+            0,
+            0,
+            0});
+            this.numericUpDown103.Name = "numericUpDown103";
+            this.numericUpDown103.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown103.TabIndex = 72;
+            this.numericUpDown103.Tag = "tcke";
+            // 
+            // checkBox79
+            // 
+            this.checkBox79.AutoSize = true;
+            this.checkBox79.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox79.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox79.Location = new System.Drawing.Point(6, 148);
+            this.checkBox79.Name = "checkBox79";
+            this.checkBox79.Size = new System.Drawing.Size(101, 17);
+            this.checkBox79.TabIndex = 75;
+            this.checkBox79.Tag = "seq_idle_ss_enabled";
+            this.checkBox79.Text = "SEQ_IDLE_SS:";
+            this.checkBox79.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown104
+            // 
+            this.numericUpDown104.Enabled = false;
+            this.numericUpDown104.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown104.Location = new System.Drawing.Point(113, 147);
+            this.numericUpDown104.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown104.Name = "numericUpDown104";
+            this.numericUpDown104.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown104.TabIndex = 74;
+            this.numericUpDown104.Tag = "seq_idle_ss";
+            // 
+            // groupBox25
+            // 
+            this.groupBox25.Controls.Add(this.groupBox26);
+            this.groupBox25.Controls.Add(this.groupBox27);
+            this.groupBox25.Controls.Add(this.groupBox28);
+            this.groupBox25.Controls.Add(this.groupBox29);
+            this.groupBox25.Controls.Add(this.groupBox30);
+            this.groupBox25.Controls.Add(this.groupBox31);
+            this.groupBox25.Controls.Add(this.groupBox32);
+            this.groupBox25.Controls.Add(this.groupBox43);
+            this.groupBox25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox25.Location = new System.Drawing.Point(171, 6);
+            this.groupBox25.Name = "groupBox25";
+            this.groupBox25.Size = new System.Drawing.Size(600, 333);
+            this.groupBox25.TabIndex = 50;
+            this.groupBox25.TabStop = false;
+            this.groupBox25.Tag = "memory_timings_polaris10";
+            this.groupBox25.Text = "Memory Timings";
+            // 
+            // groupBox26
+            // 
+            this.groupBox26.Controls.Add(this.checkBox80);
+            this.groupBox26.Controls.Add(this.textBox4);
+            this.groupBox26.Controls.Add(this.textBox5);
+            this.groupBox26.Controls.Add(this.textBox6);
+            this.groupBox26.Controls.Add(this.checkBox81);
+            this.groupBox26.Controls.Add(this.checkBox82);
+            this.groupBox26.Enabled = false;
+            this.groupBox26.Location = new System.Drawing.Point(431, 194);
+            this.groupBox26.Name = "groupBox26";
+            this.groupBox26.Size = new System.Drawing.Size(159, 129);
+            this.groupBox26.TabIndex = 86;
+            this.groupBox26.TabStop = false;
+            this.groupBox26.Tag = "other_seq_registers";
+            this.groupBox26.Text = "Other SEQ Registers";
+            // 
+            // checkBox80
+            // 
+            this.checkBox80.AutoSize = true;
+            this.checkBox80.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox80.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox80.Location = new System.Drawing.Point(6, 19);
+            this.checkBox80.Name = "checkBox80";
+            this.checkBox80.Size = new System.Drawing.Size(89, 17);
+            this.checkBox80.TabIndex = 60;
+            this.checkBox80.Tag = "seq_misc1_enabled";
+            this.checkBox80.Text = "SEQ_MISC1:";
+            this.checkBox80.UseVisualStyleBackColor = true;
+            // 
+            // textBox4
+            // 
+            this.textBox4.Enabled = false;
+            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox4.Location = new System.Drawing.Point(96, 17);
+            this.textBox4.MaxLength = 8;
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(55, 20);
+            this.textBox4.TabIndex = 52;
+            this.textBox4.Tag = "seq_misc1";
+            this.textBox4.Text = "00000000";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Enabled = false;
+            this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox5.Location = new System.Drawing.Point(96, 44);
+            this.textBox5.MaxLength = 8;
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(55, 20);
+            this.textBox5.TabIndex = 54;
+            this.textBox5.Tag = "seq_misc3";
+            this.textBox5.Text = "00000000";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Enabled = false;
+            this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox6.Location = new System.Drawing.Point(96, 71);
+            this.textBox6.MaxLength = 8;
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(55, 20);
+            this.textBox6.TabIndex = 56;
+            this.textBox6.Tag = "seq_misc8";
+            this.textBox6.Text = "00000000";
+            // 
+            // checkBox81
+            // 
+            this.checkBox81.AutoSize = true;
+            this.checkBox81.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox81.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox81.Location = new System.Drawing.Point(6, 73);
+            this.checkBox81.Name = "checkBox81";
+            this.checkBox81.Size = new System.Drawing.Size(89, 17);
+            this.checkBox81.TabIndex = 67;
+            this.checkBox81.Tag = "seq_misc8_enabled";
+            this.checkBox81.Text = "SEQ_MISC8:";
+            this.checkBox81.UseVisualStyleBackColor = true;
+            // 
+            // checkBox82
+            // 
+            this.checkBox82.AutoSize = true;
+            this.checkBox82.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox82.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox82.Location = new System.Drawing.Point(6, 46);
+            this.checkBox82.Name = "checkBox82";
+            this.checkBox82.Size = new System.Drawing.Size(89, 17);
+            this.checkBox82.TabIndex = 68;
+            this.checkBox82.Tag = "seq_misc3_enabled";
+            this.checkBox82.Text = "SEQ_MISC3:";
+            this.checkBox82.UseVisualStyleBackColor = true;
+            // 
+            // groupBox27
+            // 
+            this.groupBox27.Controls.Add(this.checkBox83);
+            this.groupBox27.Controls.Add(this.numericUpDown105);
+            this.groupBox27.Controls.Add(this.numericUpDown106);
+            this.groupBox27.Controls.Add(this.checkBox84);
+            this.groupBox27.Controls.Add(this.checkBox85);
+            this.groupBox27.Controls.Add(this.numericUpDown107);
+            this.groupBox27.Controls.Add(this.numericUpDown108);
+            this.groupBox27.Controls.Add(this.checkBox86);
+            this.groupBox27.Enabled = false;
+            this.groupBox27.Location = new System.Drawing.Point(301, 194);
+            this.groupBox27.Name = "groupBox27";
+            this.groupBox27.Size = new System.Drawing.Size(124, 129);
+            this.groupBox27.TabIndex = 85;
+            this.groupBox27.TabStop = false;
+            this.groupBox27.Tag = "seq_misc_timings_2";
+            this.groupBox27.Text = "SEQ MISC Timings 2";
+            // 
+            // checkBox83
+            // 
+            this.checkBox83.AutoSize = true;
+            this.checkBox83.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox83.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox83.Location = new System.Drawing.Point(6, 98);
+            this.checkBox83.Name = "checkBox83";
+            this.checkBox83.Size = new System.Drawing.Size(69, 17);
+            this.checkBox83.TabIndex = 67;
+            this.checkBox83.Tag = "twedc_enabled";
+            this.checkBox83.Text = "TWEDC:";
+            this.checkBox83.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown105
+            // 
+            this.numericUpDown105.Enabled = false;
+            this.numericUpDown105.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown105.Location = new System.Drawing.Point(80, 71);
+            this.numericUpDown105.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.numericUpDown105.Name = "numericUpDown105";
+            this.numericUpDown105.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown105.TabIndex = 65;
+            this.numericUpDown105.Tag = "tredc";
+            // 
+            // numericUpDown106
+            // 
+            this.numericUpDown106.Enabled = false;
+            this.numericUpDown106.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown106.Location = new System.Drawing.Point(80, 97);
+            this.numericUpDown106.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown106.Name = "numericUpDown106";
+            this.numericUpDown106.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown106.TabIndex = 66;
+            this.numericUpDown106.Tag = "twedc";
+            // 
+            // checkBox84
+            // 
+            this.checkBox84.AutoSize = true;
+            this.checkBox84.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox84.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox84.Location = new System.Drawing.Point(6, 72);
+            this.checkBox84.Name = "checkBox84";
+            this.checkBox84.Size = new System.Drawing.Size(66, 17);
+            this.checkBox84.TabIndex = 68;
+            this.checkBox84.Tag = "tredc_enabled";
+            this.checkBox84.Text = "TREDC:";
+            this.checkBox84.UseVisualStyleBackColor = true;
+            // 
+            // checkBox85
+            // 
+            this.checkBox85.AutoSize = true;
+            this.checkBox85.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox85.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox85.Location = new System.Drawing.Point(6, 46);
+            this.checkBox85.Name = "checkBox85";
+            this.checkBox85.Size = new System.Drawing.Size(66, 17);
+            this.checkBox85.TabIndex = 63;
+            this.checkBox85.Tag = "t32aw_enabled";
+            this.checkBox85.Text = "T32AW:";
+            this.checkBox85.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown107
+            // 
+            this.numericUpDown107.Enabled = false;
+            this.numericUpDown107.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown107.Location = new System.Drawing.Point(79, 19);
+            this.numericUpDown107.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown107.Name = "numericUpDown107";
+            this.numericUpDown107.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown107.TabIndex = 4;
+            this.numericUpDown107.Tag = "faw";
+            // 
+            // numericUpDown108
+            // 
+            this.numericUpDown108.Enabled = false;
+            this.numericUpDown108.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown108.Location = new System.Drawing.Point(79, 45);
+            this.numericUpDown108.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown108.Name = "numericUpDown108";
+            this.numericUpDown108.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown108.TabIndex = 46;
+            this.numericUpDown108.Tag = "t32aw";
+            // 
+            // checkBox86
+            // 
+            this.checkBox86.AutoSize = true;
+            this.checkBox86.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox86.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox86.Location = new System.Drawing.Point(6, 20);
+            this.checkBox86.Name = "checkBox86";
+            this.checkBox86.Size = new System.Drawing.Size(53, 17);
+            this.checkBox86.TabIndex = 64;
+            this.checkBox86.Tag = "faw_enabled";
+            this.checkBox86.Text = "FAW:";
+            this.checkBox86.UseVisualStyleBackColor = true;
+            // 
+            // groupBox28
+            // 
+            this.groupBox28.Controls.Add(this.checkBox87);
+            this.groupBox28.Controls.Add(this.numericUpDown109);
+            this.groupBox28.Controls.Add(this.numericUpDown110);
+            this.groupBox28.Controls.Add(this.checkBox88);
+            this.groupBox28.Controls.Add(this.checkBox89);
+            this.groupBox28.Controls.Add(this.numericUpDown111);
+            this.groupBox28.Controls.Add(this.numericUpDown112);
+            this.groupBox28.Controls.Add(this.checkBox90);
+            this.groupBox28.Enabled = false;
+            this.groupBox28.Location = new System.Drawing.Point(164, 194);
+            this.groupBox28.Name = "groupBox28";
+            this.groupBox28.Size = new System.Drawing.Size(130, 129);
+            this.groupBox28.TabIndex = 84;
+            this.groupBox28.TabStop = false;
+            this.groupBox28.Tag = "seq_misc_timings";
+            this.groupBox28.Text = "SEQ MISC Timings";
+            // 
+            // checkBox87
+            // 
+            this.checkBox87.AutoSize = true;
+            this.checkBox87.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox87.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox87.Location = new System.Drawing.Point(6, 98);
+            this.checkBox87.Name = "checkBox87";
+            this.checkBox87.Size = new System.Drawing.Size(57, 17);
+            this.checkBox87.TabIndex = 75;
+            this.checkBox87.Tag = "trfc_enabled";
+            this.checkBox87.Text = "TRFC:";
+            this.checkBox87.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown109
+            // 
+            this.numericUpDown109.Enabled = false;
+            this.numericUpDown109.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown109.Location = new System.Drawing.Point(86, 71);
+            this.numericUpDown109.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown109.Name = "numericUpDown109";
+            this.numericUpDown109.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown109.TabIndex = 73;
+            this.numericUpDown109.Tag = "trp";
+            // 
+            // numericUpDown110
+            // 
+            this.numericUpDown110.Enabled = false;
+            this.numericUpDown110.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown110.Location = new System.Drawing.Point(86, 97);
+            this.numericUpDown110.Maximum = new decimal(new int[] {
+            4095,
+            0,
+            0,
+            0});
+            this.numericUpDown110.Name = "numericUpDown110";
+            this.numericUpDown110.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown110.TabIndex = 74;
+            this.numericUpDown110.Tag = "trfc";
+            // 
+            // checkBox88
+            // 
+            this.checkBox88.AutoSize = true;
+            this.checkBox88.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox88.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox88.Location = new System.Drawing.Point(6, 72);
+            this.checkBox88.Name = "checkBox88";
+            this.checkBox88.Size = new System.Drawing.Size(51, 17);
+            this.checkBox88.TabIndex = 76;
+            this.checkBox88.Tag = "trp_enabled";
+            this.checkBox88.Text = "TRP:";
+            this.checkBox88.UseVisualStyleBackColor = true;
+            // 
+            // checkBox89
+            // 
+            this.checkBox89.AutoSize = true;
+            this.checkBox89.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox89.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox89.Location = new System.Drawing.Point(6, 45);
+            this.checkBox89.Name = "checkBox89";
+            this.checkBox89.Size = new System.Drawing.Size(80, 17);
+            this.checkBox89.TabIndex = 71;
+            this.checkBox89.Tag = "trp_rda_enabled";
+            this.checkBox89.Text = "TRP_RDA:";
+            this.checkBox89.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown111
+            // 
+            this.numericUpDown111.Enabled = false;
+            this.numericUpDown111.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown111.Location = new System.Drawing.Point(86, 18);
+            this.numericUpDown111.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown111.Name = "numericUpDown111";
+            this.numericUpDown111.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown111.TabIndex = 69;
+            this.numericUpDown111.Tag = "trp_wra";
+            // 
+            // numericUpDown112
+            // 
+            this.numericUpDown112.Enabled = false;
+            this.numericUpDown112.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown112.Location = new System.Drawing.Point(86, 44);
+            this.numericUpDown112.Maximum = new decimal(new int[] {
+            127,
+            0,
+            0,
+            0});
+            this.numericUpDown112.Name = "numericUpDown112";
+            this.numericUpDown112.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown112.TabIndex = 70;
+            this.numericUpDown112.Tag = "trp_rda";
+            // 
+            // checkBox90
+            // 
+            this.checkBox90.AutoSize = true;
+            this.checkBox90.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox90.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox90.Location = new System.Drawing.Point(6, 19);
+            this.checkBox90.Name = "checkBox90";
+            this.checkBox90.Size = new System.Drawing.Size(83, 17);
+            this.checkBox90.TabIndex = 72;
+            this.checkBox90.Tag = "trp_wra_enabled";
+            this.checkBox90.Text = "TRP_WRA:";
+            this.checkBox90.UseVisualStyleBackColor = true;
+            // 
+            // groupBox29
+            // 
+            this.groupBox29.Controls.Add(this.checkBox91);
+            this.groupBox29.Controls.Add(this.numericUpDown113);
+            this.groupBox29.Controls.Add(this.numericUpDown114);
+            this.groupBox29.Controls.Add(this.checkBox92);
+            this.groupBox29.Controls.Add(this.checkBox93);
+            this.groupBox29.Controls.Add(this.numericUpDown115);
+            this.groupBox29.Controls.Add(this.checkBox94);
+            this.groupBox29.Controls.Add(this.numericUpDown116);
+            this.groupBox29.Controls.Add(this.checkBox95);
+            this.groupBox29.Controls.Add(this.numericUpDown117);
+            this.groupBox29.Enabled = false;
+            this.groupBox29.Location = new System.Drawing.Point(301, 14);
+            this.groupBox29.Name = "groupBox29";
+            this.groupBox29.Size = new System.Drawing.Size(124, 174);
+            this.groupBox29.TabIndex = 83;
+            this.groupBox29.TabStop = false;
+            this.groupBox29.Tag = "seq_cas_timings";
+            this.groupBox29.Text = "SEQ CAS Timings";
+            // 
+            // checkBox91
+            // 
+            this.checkBox91.AutoSize = true;
+            this.checkBox91.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox91.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox91.Location = new System.Drawing.Point(6, 97);
+            this.checkBox91.Name = "checkBox91";
+            this.checkBox91.Size = new System.Drawing.Size(61, 17);
+            this.checkBox91.TabIndex = 82;
+            this.checkBox91.Tag = "tw2r_enabled";
+            this.checkBox91.Text = "TW2R:";
+            this.checkBox91.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown113
+            // 
+            this.numericUpDown113.Enabled = false;
+            this.numericUpDown113.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown113.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown113.Location = new System.Drawing.Point(79, 96);
+            this.numericUpDown113.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown113.Name = "numericUpDown113";
+            this.numericUpDown113.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown113.TabIndex = 81;
+            this.numericUpDown113.Tag = "tw2r";
+            // 
+            // numericUpDown114
+            // 
+            this.numericUpDown114.Enabled = false;
+            this.numericUpDown114.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown114.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown114.Location = new System.Drawing.Point(79, 17);
+            this.numericUpDown114.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown114.Name = "numericUpDown114";
+            this.numericUpDown114.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown114.TabIndex = 70;
+            this.numericUpDown114.Tag = "tr2w";
+            // 
+            // checkBox92
+            // 
+            this.checkBox92.AutoSize = true;
+            this.checkBox92.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox92.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox92.Location = new System.Drawing.Point(6, 19);
+            this.checkBox92.Name = "checkBox92";
+            this.checkBox92.Size = new System.Drawing.Size(61, 17);
+            this.checkBox92.TabIndex = 79;
+            this.checkBox92.Tag = "tr2w_enabled";
+            this.checkBox92.Text = "TR2W:";
+            this.checkBox92.UseVisualStyleBackColor = true;
+            // 
+            // checkBox93
+            // 
+            this.checkBox93.AutoSize = true;
+            this.checkBox93.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox93.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox93.Location = new System.Drawing.Point(6, 45);
+            this.checkBox93.Name = "checkBox93";
+            this.checkBox93.Size = new System.Drawing.Size(64, 17);
+            this.checkBox93.TabIndex = 78;
+            this.checkBox93.Tag = "tccdl_enabled";
+            this.checkBox93.Text = "TCCDL:";
+            this.checkBox93.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown115
+            // 
+            this.numericUpDown115.Enabled = false;
+            this.numericUpDown115.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown115.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown115.Location = new System.Drawing.Point(79, 44);
+            this.numericUpDown115.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.numericUpDown115.Name = "numericUpDown115";
+            this.numericUpDown115.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown115.TabIndex = 71;
+            this.numericUpDown115.Tag = "tccdl";
+            // 
+            // checkBox94
+            // 
+            this.checkBox94.AutoSize = true;
+            this.checkBox94.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox94.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox94.Location = new System.Drawing.Point(6, 71);
+            this.checkBox94.Name = "checkBox94";
+            this.checkBox94.Size = new System.Drawing.Size(58, 17);
+            this.checkBox94.TabIndex = 77;
+            this.checkBox94.Tag = "tr2r_enabled";
+            this.checkBox94.Text = "TR2R:";
+            this.checkBox94.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown116
+            // 
+            this.numericUpDown116.Enabled = false;
+            this.numericUpDown116.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown116.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown116.Location = new System.Drawing.Point(79, 70);
+            this.numericUpDown116.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown116.Name = "numericUpDown116";
+            this.numericUpDown116.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown116.TabIndex = 72;
+            this.numericUpDown116.Tag = "tr2r";
+            // 
+            // checkBox95
+            // 
+            this.checkBox95.AutoSize = true;
+            this.checkBox95.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox95.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox95.Location = new System.Drawing.Point(6, 124);
+            this.checkBox95.Name = "checkBox95";
+            this.checkBox95.Size = new System.Drawing.Size(49, 17);
+            this.checkBox95.TabIndex = 76;
+            this.checkBox95.Tag = "tcl_enabled";
+            this.checkBox95.Text = "TCL:";
+            this.checkBox95.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown117
+            // 
+            this.numericUpDown117.Enabled = false;
+            this.numericUpDown117.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown117.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown117.Location = new System.Drawing.Point(79, 123);
+            this.numericUpDown117.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown117.Name = "numericUpDown117";
+            this.numericUpDown117.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown117.TabIndex = 73;
+            this.numericUpDown117.Tag = "tcl";
+            // 
+            // groupBox30
+            // 
+            this.groupBox30.Controls.Add(this.checkBox96);
+            this.groupBox30.Controls.Add(this.numericUpDown118);
+            this.groupBox30.Controls.Add(this.checkBox97);
+            this.groupBox30.Controls.Add(this.numericUpDown119);
+            this.groupBox30.Controls.Add(this.checkBox98);
+            this.groupBox30.Controls.Add(this.numericUpDown120);
+            this.groupBox30.Controls.Add(this.checkBox99);
+            this.groupBox30.Controls.Add(this.checkBox100);
+            this.groupBox30.Controls.Add(this.checkBox101);
+            this.groupBox30.Controls.Add(this.numericUpDown121);
+            this.groupBox30.Controls.Add(this.numericUpDown122);
+            this.groupBox30.Controls.Add(this.numericUpDown123);
+            this.groupBox30.Enabled = false;
+            this.groupBox30.Location = new System.Drawing.Point(164, 14);
+            this.groupBox30.Name = "groupBox30";
+            this.groupBox30.Size = new System.Drawing.Size(130, 174);
+            this.groupBox30.TabIndex = 83;
+            this.groupBox30.TabStop = false;
+            this.groupBox30.Tag = "seq_ras_timings";
+            this.groupBox30.Text = "SEQ RAS Timings";
+            // 
+            // checkBox96
+            // 
+            this.checkBox96.AutoSize = true;
+            this.checkBox96.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox96.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox96.Location = new System.Drawing.Point(6, 19);
+            this.checkBox96.Name = "checkBox96";
+            this.checkBox96.Size = new System.Drawing.Size(70, 17);
+            this.checkBox96.TabIndex = 80;
+            this.checkBox96.Tag = "trcdw_enabled";
+            this.checkBox96.Text = "TRCDW:";
+            this.checkBox96.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown118
+            // 
+            this.numericUpDown118.Enabled = false;
+            this.numericUpDown118.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown118.Location = new System.Drawing.Point(87, 43);
+            this.numericUpDown118.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown118.Name = "numericUpDown118";
+            this.numericUpDown118.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown118.TabIndex = 70;
+            this.numericUpDown118.Tag = "trcdwa";
+            // 
+            // checkBox97
+            // 
+            this.checkBox97.AutoSize = true;
+            this.checkBox97.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox97.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox97.Location = new System.Drawing.Point(6, 45);
+            this.checkBox97.Name = "checkBox97";
+            this.checkBox97.Size = new System.Drawing.Size(77, 17);
+            this.checkBox97.TabIndex = 79;
+            this.checkBox97.Tag = "trcdwa_enabled";
+            this.checkBox97.Text = "TRCDWA:";
+            this.checkBox97.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown119
+            // 
+            this.numericUpDown119.Enabled = false;
+            this.numericUpDown119.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown119.Location = new System.Drawing.Point(87, 17);
+            this.numericUpDown119.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown119.Name = "numericUpDown119";
+            this.numericUpDown119.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown119.TabIndex = 69;
+            this.numericUpDown119.Tag = "trcdw";
+            // 
+            // checkBox98
+            // 
+            this.checkBox98.AutoSize = true;
+            this.checkBox98.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox98.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox98.Location = new System.Drawing.Point(6, 70);
+            this.checkBox98.Name = "checkBox98";
+            this.checkBox98.Size = new System.Drawing.Size(67, 17);
+            this.checkBox98.TabIndex = 78;
+            this.checkBox98.Tag = "trcdr_enabled";
+            this.checkBox98.Text = "TRCDR:";
+            this.checkBox98.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown120
+            // 
+            this.numericUpDown120.Enabled = false;
+            this.numericUpDown120.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown120.Location = new System.Drawing.Point(87, 69);
+            this.numericUpDown120.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown120.Name = "numericUpDown120";
+            this.numericUpDown120.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown120.TabIndex = 71;
+            this.numericUpDown120.Tag = "trcdr";
+            // 
+            // checkBox99
+            // 
+            this.checkBox99.AutoSize = true;
+            this.checkBox99.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox99.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox99.Location = new System.Drawing.Point(6, 124);
+            this.checkBox99.Name = "checkBox99";
+            this.checkBox99.Size = new System.Drawing.Size(60, 17);
+            this.checkBox99.TabIndex = 66;
+            this.checkBox99.Tag = "trrd_enabled";
+            this.checkBox99.Text = "TRRD:";
+            this.checkBox99.UseVisualStyleBackColor = true;
+            // 
+            // checkBox100
+            // 
+            this.checkBox100.AutoSize = true;
+            this.checkBox100.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox100.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox100.Location = new System.Drawing.Point(6, 96);
+            this.checkBox100.Name = "checkBox100";
+            this.checkBox100.Size = new System.Drawing.Size(74, 17);
+            this.checkBox100.TabIndex = 77;
+            this.checkBox100.Tag = "trcdra_enabled";
+            this.checkBox100.Text = "TRCDRA:";
+            this.checkBox100.UseVisualStyleBackColor = true;
+            // 
+            // checkBox101
+            // 
+            this.checkBox101.AutoSize = true;
+            this.checkBox101.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox101.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox101.Location = new System.Drawing.Point(6, 150);
+            this.checkBox101.Name = "checkBox101";
+            this.checkBox101.Size = new System.Drawing.Size(51, 17);
+            this.checkBox101.TabIndex = 65;
+            this.checkBox101.Tag = "trc_enabled";
+            this.checkBox101.Text = "TRC:";
+            this.checkBox101.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown121
+            // 
+            this.numericUpDown121.Enabled = false;
+            this.numericUpDown121.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown121.Location = new System.Drawing.Point(87, 95);
+            this.numericUpDown121.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown121.Name = "numericUpDown121";
+            this.numericUpDown121.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown121.TabIndex = 72;
+            this.numericUpDown121.Tag = "trcdra";
+            // 
+            // numericUpDown122
+            // 
+            this.numericUpDown122.Enabled = false;
+            this.numericUpDown122.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown122.Location = new System.Drawing.Point(87, 147);
+            this.numericUpDown122.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown122.Name = "numericUpDown122";
+            this.numericUpDown122.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown122.TabIndex = 2;
+            this.numericUpDown122.Tag = "trc";
+            // 
+            // numericUpDown123
+            // 
+            this.numericUpDown123.Enabled = false;
+            this.numericUpDown123.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown123.Location = new System.Drawing.Point(87, 121);
+            this.numericUpDown123.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown123.Name = "numericUpDown123";
+            this.numericUpDown123.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown123.TabIndex = 1;
+            this.numericUpDown123.Tag = "trrd";
+            // 
+            // groupBox31
+            // 
+            this.groupBox31.Controls.Add(this.checkBox102);
+            this.groupBox31.Controls.Add(this.numericUpDown124);
+            this.groupBox31.Controls.Add(this.numericUpDown125);
+            this.groupBox31.Controls.Add(this.checkBox103);
+            this.groupBox31.Controls.Add(this.checkBox104);
+            this.groupBox31.Controls.Add(this.numericUpDown126);
+            this.groupBox31.Controls.Add(this.numericUpDown127);
+            this.groupBox31.Controls.Add(this.checkBox105);
+            this.groupBox31.Enabled = false;
+            this.groupBox31.Location = new System.Drawing.Point(6, 176);
+            this.groupBox31.Name = "groupBox31";
+            this.groupBox31.Size = new System.Drawing.Size(150, 128);
+            this.groupBox31.TabIndex = 83;
+            this.groupBox31.TabStop = false;
+            this.groupBox31.Tag = "arb_dram_timings_2";
+            this.groupBox31.Text = "ARB DRAM Timings 2";
+            // 
+            // checkBox102
+            // 
+            this.checkBox102.AutoSize = true;
+            this.checkBox102.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox102.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox102.Location = new System.Drawing.Point(6, 75);
+            this.checkBox102.Name = "checkBox102";
+            this.checkBox102.Size = new System.Drawing.Size(91, 17);
+            this.checkBox102.TabIndex = 66;
+            this.checkBox102.Tag = "wrplusrp_enabled";
+            this.checkBox102.Text = "WRPLUSRP:";
+            this.checkBox102.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown124
+            // 
+            this.numericUpDown124.Enabled = false;
+            this.numericUpDown124.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown124.Location = new System.Drawing.Point(105, 73);
+            this.numericUpDown124.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown124.Name = "numericUpDown124";
+            this.numericUpDown124.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown124.TabIndex = 63;
+            this.numericUpDown124.Tag = "wrplusrp";
+            // 
+            // numericUpDown125
+            // 
+            this.numericUpDown125.Enabled = false;
+            this.numericUpDown125.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown125.Location = new System.Drawing.Point(105, 100);
+            this.numericUpDown125.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown125.Name = "numericUpDown125";
+            this.numericUpDown125.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown125.TabIndex = 64;
+            this.numericUpDown125.Tag = "bus_turn";
+            // 
+            // checkBox103
+            // 
+            this.checkBox103.AutoSize = true;
+            this.checkBox103.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox103.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox103.Location = new System.Drawing.Point(6, 102);
+            this.checkBox103.Name = "checkBox103";
+            this.checkBox103.Size = new System.Drawing.Size(88, 17);
+            this.checkBox103.TabIndex = 65;
+            this.checkBox103.Tag = "bus_turn_enabled";
+            this.checkBox103.Text = "BUS_TURN:";
+            this.checkBox103.UseVisualStyleBackColor = true;
+            // 
+            // checkBox104
+            // 
+            this.checkBox104.AutoSize = true;
+            this.checkBox104.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox104.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox104.Location = new System.Drawing.Point(6, 21);
+            this.checkBox104.Name = "checkBox104";
+            this.checkBox104.Size = new System.Drawing.Size(79, 17);
+            this.checkBox104.TabIndex = 62;
+            this.checkBox104.Tag = "ras2ras_enabled";
+            this.checkBox104.Text = "RAS2RAS:";
+            this.checkBox104.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown126
+            // 
+            this.numericUpDown126.Enabled = false;
+            this.numericUpDown126.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown126.Location = new System.Drawing.Point(105, 19);
+            this.numericUpDown126.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown126.Name = "numericUpDown126";
+            this.numericUpDown126.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown126.TabIndex = 48;
+            this.numericUpDown126.Tag = "ras2ras";
+            // 
+            // numericUpDown127
+            // 
+            this.numericUpDown127.Enabled = false;
+            this.numericUpDown127.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown127.Location = new System.Drawing.Point(105, 46);
+            this.numericUpDown127.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown127.Name = "numericUpDown127";
+            this.numericUpDown127.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown127.TabIndex = 50;
+            this.numericUpDown127.Tag = "rp";
+            // 
+            // checkBox105
+            // 
+            this.checkBox105.AutoSize = true;
+            this.checkBox105.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox105.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox105.Location = new System.Drawing.Point(6, 48);
+            this.checkBox105.Name = "checkBox105";
+            this.checkBox105.Size = new System.Drawing.Size(44, 17);
+            this.checkBox105.TabIndex = 61;
+            this.checkBox105.Tag = "rp_enabled";
+            this.checkBox105.Text = "RP:";
+            this.checkBox105.UseVisualStyleBackColor = true;
+            // 
+            // groupBox32
+            // 
+            this.groupBox32.Controls.Add(this.checkBox106);
+            this.groupBox32.Controls.Add(this.numericUpDown128);
+            this.groupBox32.Controls.Add(this.numericUpDown129);
+            this.groupBox32.Controls.Add(this.checkBox107);
+            this.groupBox32.Controls.Add(this.checkBox108);
+            this.groupBox32.Controls.Add(this.numericUpDown130);
+            this.groupBox32.Controls.Add(this.numericUpDown131);
+            this.groupBox32.Controls.Add(this.checkBox109);
+            this.groupBox32.Enabled = false;
+            this.groupBox32.Location = new System.Drawing.Point(6, 42);
+            this.groupBox32.Name = "groupBox32";
+            this.groupBox32.Size = new System.Drawing.Size(150, 128);
+            this.groupBox32.TabIndex = 82;
+            this.groupBox32.TabStop = false;
+            this.groupBox32.Tag = "arb_dram_timings";
+            this.groupBox32.Text = "ARB DRAM Timings";
+            // 
+            // checkBox106
+            // 
+            this.checkBox106.AutoSize = true;
+            this.checkBox106.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox106.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox106.Location = new System.Drawing.Point(6, 75);
+            this.checkBox106.Name = "checkBox106";
+            this.checkBox106.Size = new System.Drawing.Size(97, 17);
+            this.checkBox106.TabIndex = 66;
+            this.checkBox106.Tag = "rasmactrd_enabled";
+            this.checkBox106.Text = "RASMACTRD:";
+            this.checkBox106.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown128
+            // 
+            this.numericUpDown128.Enabled = false;
+            this.numericUpDown128.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown128.Location = new System.Drawing.Point(105, 74);
+            this.numericUpDown128.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown128.Name = "numericUpDown128";
+            this.numericUpDown128.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown128.TabIndex = 63;
+            this.numericUpDown128.Tag = "rasmactrd";
+            // 
+            // numericUpDown129
+            // 
+            this.numericUpDown129.Enabled = false;
+            this.numericUpDown129.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown129.Location = new System.Drawing.Point(105, 101);
+            this.numericUpDown129.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown129.Name = "numericUpDown129";
+            this.numericUpDown129.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown129.TabIndex = 64;
+            this.numericUpDown129.Tag = "rasmactwr";
+            // 
+            // checkBox107
+            // 
+            this.checkBox107.AutoSize = true;
+            this.checkBox107.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox107.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox107.Location = new System.Drawing.Point(6, 102);
+            this.checkBox107.Name = "checkBox107";
+            this.checkBox107.Size = new System.Drawing.Size(100, 17);
+            this.checkBox107.TabIndex = 65;
+            this.checkBox107.Tag = "rasmactwr_enabled";
+            this.checkBox107.Text = "RASMACTWR:";
+            this.checkBox107.UseVisualStyleBackColor = true;
+            // 
+            // checkBox108
+            // 
+            this.checkBox108.AutoSize = true;
+            this.checkBox108.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox108.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox108.Location = new System.Drawing.Point(6, 21);
+            this.checkBox108.Name = "checkBox108";
+            this.checkBox108.Size = new System.Drawing.Size(66, 17);
+            this.checkBox108.TabIndex = 62;
+            this.checkBox108.Tag = "actrd_enabled";
+            this.checkBox108.Text = "ACTRD:";
+            this.checkBox108.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown130
+            // 
+            this.numericUpDown130.Enabled = false;
+            this.numericUpDown130.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown130.Location = new System.Drawing.Point(105, 20);
+            this.numericUpDown130.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown130.Name = "numericUpDown130";
+            this.numericUpDown130.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown130.TabIndex = 48;
+            this.numericUpDown130.Tag = "actrd";
+            // 
+            // numericUpDown131
+            // 
+            this.numericUpDown131.Enabled = false;
+            this.numericUpDown131.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown131.Location = new System.Drawing.Point(105, 47);
+            this.numericUpDown131.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown131.Name = "numericUpDown131";
+            this.numericUpDown131.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown131.TabIndex = 50;
+            this.numericUpDown131.Tag = "actwr";
+            // 
+            // checkBox109
+            // 
+            this.checkBox109.AutoSize = true;
+            this.checkBox109.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox109.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox109.Location = new System.Drawing.Point(6, 48);
+            this.checkBox109.Name = "checkBox109";
+            this.checkBox109.Size = new System.Drawing.Size(69, 17);
+            this.checkBox109.TabIndex = 61;
+            this.checkBox109.Tag = "actwr_enabled";
+            this.checkBox109.Text = "ACTWR:";
+            this.checkBox109.UseVisualStyleBackColor = true;
+            // 
+            // groupBox43
+            // 
+            this.groupBox43.Controls.Add(this.checkBox110);
+            this.groupBox43.Controls.Add(this.numericUpDown132);
+            this.groupBox43.Controls.Add(this.checkBox111);
+            this.groupBox43.Controls.Add(this.numericUpDown133);
+            this.groupBox43.Controls.Add(this.checkBox112);
+            this.groupBox43.Controls.Add(this.numericUpDown134);
+            this.groupBox43.Controls.Add(this.checkBox113);
+            this.groupBox43.Controls.Add(this.numericUpDown135);
+            this.groupBox43.Controls.Add(this.checkBox114);
+            this.groupBox43.Controls.Add(this.numericUpDown136);
+            this.groupBox43.Controls.Add(this.checkBox115);
+            this.groupBox43.Controls.Add(this.numericUpDown137);
+            this.groupBox43.Enabled = false;
+            this.groupBox43.Location = new System.Drawing.Point(431, 14);
+            this.groupBox43.Name = "groupBox43";
+            this.groupBox43.Size = new System.Drawing.Size(159, 174);
+            this.groupBox43.TabIndex = 81;
+            this.groupBox43.TabStop = false;
+            this.groupBox43.Tag = "seq_pmg_timings";
+            this.groupBox43.Text = "SEQ PMG Timings";
+            // 
+            // checkBox110
+            // 
+            this.checkBox110.AutoSize = true;
+            this.checkBox110.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox110.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox110.Location = new System.Drawing.Point(6, 122);
+            this.checkBox110.Name = "checkBox110";
+            this.checkBox110.Size = new System.Drawing.Size(81, 17);
+            this.checkBox110.TabIndex = 82;
+            this.checkBox110.Tag = "seq_idle_enabled";
+            this.checkBox110.Text = "SEQ_IDLE:";
+            this.checkBox110.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown132
+            // 
+            this.numericUpDown132.Enabled = false;
+            this.numericUpDown132.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown132.Location = new System.Drawing.Point(113, 121);
+            this.numericUpDown132.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown132.Name = "numericUpDown132";
+            this.numericUpDown132.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown132.TabIndex = 81;
+            this.numericUpDown132.Tag = "seq_idle";
+            // 
+            // checkBox111
+            // 
+            this.checkBox111.AutoSize = true;
+            this.checkBox111.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox111.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox111.Location = new System.Drawing.Point(6, 19);
+            this.checkBox111.Name = "checkBox111";
+            this.checkBox111.Size = new System.Drawing.Size(72, 17);
+            this.checkBox111.TabIndex = 80;
+            this.checkBox111.Tag = "tcksre_enabled";
+            this.checkBox111.Text = "TCKSRE:";
+            this.checkBox111.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown133
+            // 
+            this.numericUpDown133.Enabled = false;
+            this.numericUpDown133.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown133.Location = new System.Drawing.Point(113, 43);
+            this.numericUpDown133.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown133.Name = "numericUpDown133";
+            this.numericUpDown133.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown133.TabIndex = 70;
+            this.numericUpDown133.Tag = "tcksrx";
+            // 
+            // checkBox112
+            // 
+            this.checkBox112.AutoSize = true;
+            this.checkBox112.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox112.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox112.Location = new System.Drawing.Point(6, 45);
+            this.checkBox112.Name = "checkBox112";
+            this.checkBox112.Size = new System.Drawing.Size(72, 17);
+            this.checkBox112.TabIndex = 79;
+            this.checkBox112.Tag = "tcksrx_enabled";
+            this.checkBox112.Text = "TCKSRX:";
+            this.checkBox112.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown134
+            // 
+            this.numericUpDown134.Enabled = false;
+            this.numericUpDown134.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown134.Location = new System.Drawing.Point(113, 17);
+            this.numericUpDown134.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown134.Name = "numericUpDown134";
+            this.numericUpDown134.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown134.TabIndex = 69;
+            this.numericUpDown134.Tag = "tcksre";
+            // 
+            // checkBox113
+            // 
+            this.checkBox113.AutoSize = true;
+            this.checkBox113.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox113.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox113.Location = new System.Drawing.Point(6, 70);
+            this.checkBox113.Name = "checkBox113";
+            this.checkBox113.Size = new System.Drawing.Size(98, 17);
+            this.checkBox113.TabIndex = 78;
+            this.checkBox113.Tag = "tcke_pulse_enabled";
+            this.checkBox113.Text = "TCKE_PULSE:";
+            this.checkBox113.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown135
+            // 
+            this.numericUpDown135.Enabled = false;
+            this.numericUpDown135.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown135.Location = new System.Drawing.Point(113, 69);
+            this.numericUpDown135.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown135.Name = "numericUpDown135";
+            this.numericUpDown135.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown135.TabIndex = 71;
+            this.numericUpDown135.Tag = "tcke_pulse";
+            // 
+            // checkBox114
+            // 
+            this.checkBox114.AutoSize = true;
+            this.checkBox114.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox114.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox114.Location = new System.Drawing.Point(6, 96);
+            this.checkBox114.Name = "checkBox114";
+            this.checkBox114.Size = new System.Drawing.Size(57, 17);
+            this.checkBox114.TabIndex = 77;
+            this.checkBox114.Tag = "tcke_enabled";
+            this.checkBox114.Text = "TCKE:";
+            this.checkBox114.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown136
+            // 
+            this.numericUpDown136.Enabled = false;
+            this.numericUpDown136.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown136.Location = new System.Drawing.Point(113, 95);
+            this.numericUpDown136.Maximum = new decimal(new int[] {
+            63,
+            0,
+            0,
+            0});
+            this.numericUpDown136.Name = "numericUpDown136";
+            this.numericUpDown136.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown136.TabIndex = 72;
+            this.numericUpDown136.Tag = "tcke";
+            // 
+            // checkBox115
+            // 
+            this.checkBox115.AutoSize = true;
+            this.checkBox115.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox115.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox115.Location = new System.Drawing.Point(6, 148);
+            this.checkBox115.Name = "checkBox115";
+            this.checkBox115.Size = new System.Drawing.Size(101, 17);
+            this.checkBox115.TabIndex = 75;
+            this.checkBox115.Tag = "seq_idle_ss_enabled";
+            this.checkBox115.Text = "SEQ_IDLE_SS:";
+            this.checkBox115.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown137
+            // 
+            this.numericUpDown137.Enabled = false;
+            this.numericUpDown137.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown137.Location = new System.Drawing.Point(113, 147);
+            this.numericUpDown137.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown137.Name = "numericUpDown137";
+            this.numericUpDown137.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown137.TabIndex = 74;
+            this.numericUpDown137.Tag = "seq_idle_ss";
+            // 
+            // groupBox33
+            // 
+            this.groupBox33.Controls.Add(this.groupBox34);
+            this.groupBox33.Controls.Add(this.groupBox35);
+            this.groupBox33.Controls.Add(this.groupBox36);
+            this.groupBox33.Controls.Add(this.groupBox37);
+            this.groupBox33.Controls.Add(this.groupBox38);
+            this.groupBox33.Controls.Add(this.groupBox39);
+            this.groupBox33.Controls.Add(this.groupBox44);
+            this.groupBox33.Controls.Add(this.groupBox40);
+            this.groupBox33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox33.Location = new System.Drawing.Point(171, 6);
+            this.groupBox33.Name = "groupBox33";
+            this.groupBox33.Size = new System.Drawing.Size(600, 333);
+            this.groupBox33.TabIndex = 128;
+            this.groupBox33.TabStop = false;
+            this.groupBox33.Tag = "memory_timings_polaris10";
+            this.groupBox33.Text = "Memory Timings";
+            // 
+            // groupBox34
+            // 
+            this.groupBox34.Controls.Add(this.checkBox116);
+            this.groupBox34.Controls.Add(this.textBox7);
+            this.groupBox34.Controls.Add(this.textBox8);
+            this.groupBox34.Controls.Add(this.textBox9);
+            this.groupBox34.Controls.Add(this.checkBox117);
+            this.groupBox34.Controls.Add(this.checkBox118);
+            this.groupBox34.Enabled = false;
+            this.groupBox34.Location = new System.Drawing.Point(431, 194);
+            this.groupBox34.Name = "groupBox34";
+            this.groupBox34.Size = new System.Drawing.Size(159, 129);
+            this.groupBox34.TabIndex = 86;
+            this.groupBox34.TabStop = false;
+            this.groupBox34.Tag = "other_seq_registers";
+            this.groupBox34.Text = "Other SEQ Registers";
+            // 
+            // checkBox116
+            // 
+            this.checkBox116.AutoSize = true;
+            this.checkBox116.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox116.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox116.Location = new System.Drawing.Point(6, 19);
+            this.checkBox116.Name = "checkBox116";
+            this.checkBox116.Size = new System.Drawing.Size(89, 17);
+            this.checkBox116.TabIndex = 60;
+            this.checkBox116.Tag = "seq_misc1_enabled";
+            this.checkBox116.Text = "SEQ_MISC1:";
+            this.checkBox116.UseVisualStyleBackColor = true;
+            // 
+            // textBox7
+            // 
+            this.textBox7.Enabled = false;
+            this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox7.Location = new System.Drawing.Point(96, 17);
+            this.textBox7.MaxLength = 8;
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(55, 20);
+            this.textBox7.TabIndex = 52;
+            this.textBox7.Tag = "seq_misc1";
+            this.textBox7.Text = "00000000";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Enabled = false;
+            this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox8.Location = new System.Drawing.Point(96, 44);
+            this.textBox8.MaxLength = 8;
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(55, 20);
+            this.textBox8.TabIndex = 54;
+            this.textBox8.Tag = "seq_misc3";
+            this.textBox8.Text = "00000000";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Enabled = false;
+            this.textBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBox9.Location = new System.Drawing.Point(96, 71);
+            this.textBox9.MaxLength = 8;
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(55, 20);
+            this.textBox9.TabIndex = 56;
+            this.textBox9.Tag = "seq_misc8";
+            this.textBox9.Text = "00000000";
+            // 
+            // checkBox117
+            // 
+            this.checkBox117.AutoSize = true;
+            this.checkBox117.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox117.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox117.Location = new System.Drawing.Point(6, 73);
+            this.checkBox117.Name = "checkBox117";
+            this.checkBox117.Size = new System.Drawing.Size(89, 17);
+            this.checkBox117.TabIndex = 67;
+            this.checkBox117.Tag = "seq_misc8_enabled";
+            this.checkBox117.Text = "SEQ_MISC8:";
+            this.checkBox117.UseVisualStyleBackColor = true;
+            // 
+            // checkBox118
+            // 
+            this.checkBox118.AutoSize = true;
+            this.checkBox118.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox118.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox118.Location = new System.Drawing.Point(6, 46);
+            this.checkBox118.Name = "checkBox118";
+            this.checkBox118.Size = new System.Drawing.Size(89, 17);
+            this.checkBox118.TabIndex = 68;
+            this.checkBox118.Tag = "seq_misc3_enabled";
+            this.checkBox118.Text = "SEQ_MISC3:";
+            this.checkBox118.UseVisualStyleBackColor = true;
+            // 
+            // groupBox35
+            // 
+            this.groupBox35.Controls.Add(this.checkBox119);
+            this.groupBox35.Controls.Add(this.numericUpDown138);
+            this.groupBox35.Controls.Add(this.numericUpDown139);
+            this.groupBox35.Controls.Add(this.checkBox120);
+            this.groupBox35.Controls.Add(this.checkBox121);
+            this.groupBox35.Controls.Add(this.numericUpDown140);
+            this.groupBox35.Controls.Add(this.numericUpDown141);
+            this.groupBox35.Controls.Add(this.checkBox122);
+            this.groupBox35.Enabled = false;
+            this.groupBox35.Location = new System.Drawing.Point(301, 194);
+            this.groupBox35.Name = "groupBox35";
+            this.groupBox35.Size = new System.Drawing.Size(124, 129);
+            this.groupBox35.TabIndex = 85;
+            this.groupBox35.TabStop = false;
+            this.groupBox35.Tag = "seq_misc_timings_2";
+            this.groupBox35.Text = "SEQ MISC Timings 2";
+            // 
+            // checkBox119
+            // 
+            this.checkBox119.AutoSize = true;
+            this.checkBox119.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox119.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox119.Location = new System.Drawing.Point(6, 98);
+            this.checkBox119.Name = "checkBox119";
+            this.checkBox119.Size = new System.Drawing.Size(69, 17);
+            this.checkBox119.TabIndex = 67;
+            this.checkBox119.Tag = "twedc_enabled";
+            this.checkBox119.Text = "TWEDC:";
+            this.checkBox119.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown138
+            // 
+            this.numericUpDown138.Enabled = false;
+            this.numericUpDown138.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown138.Location = new System.Drawing.Point(80, 71);
+            this.numericUpDown138.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.numericUpDown138.Name = "numericUpDown138";
+            this.numericUpDown138.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown138.TabIndex = 65;
+            this.numericUpDown138.Tag = "tredc";
+            // 
+            // numericUpDown139
+            // 
+            this.numericUpDown139.Enabled = false;
+            this.numericUpDown139.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown139.Location = new System.Drawing.Point(80, 97);
+            this.numericUpDown139.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown139.Name = "numericUpDown139";
+            this.numericUpDown139.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown139.TabIndex = 66;
+            this.numericUpDown139.Tag = "twedc";
+            // 
+            // checkBox120
+            // 
+            this.checkBox120.AutoSize = true;
+            this.checkBox120.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox120.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox120.Location = new System.Drawing.Point(6, 72);
+            this.checkBox120.Name = "checkBox120";
+            this.checkBox120.Size = new System.Drawing.Size(66, 17);
+            this.checkBox120.TabIndex = 68;
+            this.checkBox120.Tag = "tredc_enabled";
+            this.checkBox120.Text = "TREDC:";
+            this.checkBox120.UseVisualStyleBackColor = true;
+            // 
+            // checkBox121
+            // 
+            this.checkBox121.AutoSize = true;
+            this.checkBox121.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox121.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox121.Location = new System.Drawing.Point(6, 46);
+            this.checkBox121.Name = "checkBox121";
+            this.checkBox121.Size = new System.Drawing.Size(66, 17);
+            this.checkBox121.TabIndex = 63;
+            this.checkBox121.Tag = "t32aw_enabled";
+            this.checkBox121.Text = "T32AW:";
+            this.checkBox121.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown140
+            // 
+            this.numericUpDown140.Enabled = false;
+            this.numericUpDown140.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown140.Location = new System.Drawing.Point(79, 19);
+            this.numericUpDown140.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown140.Name = "numericUpDown140";
+            this.numericUpDown140.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown140.TabIndex = 4;
+            this.numericUpDown140.Tag = "faw";
+            // 
+            // numericUpDown141
+            // 
+            this.numericUpDown141.Enabled = false;
+            this.numericUpDown141.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown141.Location = new System.Drawing.Point(79, 45);
+            this.numericUpDown141.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown141.Name = "numericUpDown141";
+            this.numericUpDown141.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown141.TabIndex = 46;
+            this.numericUpDown141.Tag = "t32aw";
+            // 
+            // checkBox122
+            // 
+            this.checkBox122.AutoSize = true;
+            this.checkBox122.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox122.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox122.Location = new System.Drawing.Point(6, 20);
+            this.checkBox122.Name = "checkBox122";
+            this.checkBox122.Size = new System.Drawing.Size(53, 17);
+            this.checkBox122.TabIndex = 64;
+            this.checkBox122.Tag = "faw_enabled";
+            this.checkBox122.Text = "FAW:";
+            this.checkBox122.UseVisualStyleBackColor = true;
+            // 
+            // groupBox36
+            // 
+            this.groupBox36.Controls.Add(this.checkBox123);
+            this.groupBox36.Controls.Add(this.numericUpDown142);
+            this.groupBox36.Controls.Add(this.numericUpDown143);
+            this.groupBox36.Controls.Add(this.checkBox124);
+            this.groupBox36.Controls.Add(this.checkBox125);
+            this.groupBox36.Controls.Add(this.numericUpDown144);
+            this.groupBox36.Controls.Add(this.numericUpDown145);
+            this.groupBox36.Controls.Add(this.checkBox126);
+            this.groupBox36.Enabled = false;
+            this.groupBox36.Location = new System.Drawing.Point(164, 194);
+            this.groupBox36.Name = "groupBox36";
+            this.groupBox36.Size = new System.Drawing.Size(130, 129);
+            this.groupBox36.TabIndex = 84;
+            this.groupBox36.TabStop = false;
+            this.groupBox36.Tag = "seq_misc_timings";
+            this.groupBox36.Text = "SEQ MISC Timings";
+            // 
+            // checkBox123
+            // 
+            this.checkBox123.AutoSize = true;
+            this.checkBox123.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox123.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox123.Location = new System.Drawing.Point(6, 98);
+            this.checkBox123.Name = "checkBox123";
+            this.checkBox123.Size = new System.Drawing.Size(57, 17);
+            this.checkBox123.TabIndex = 75;
+            this.checkBox123.Tag = "trfc_enabled";
+            this.checkBox123.Text = "TRFC:";
+            this.checkBox123.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown142
+            // 
+            this.numericUpDown142.Enabled = false;
+            this.numericUpDown142.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown142.Location = new System.Drawing.Point(86, 71);
+            this.numericUpDown142.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown142.Name = "numericUpDown142";
+            this.numericUpDown142.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown142.TabIndex = 73;
+            this.numericUpDown142.Tag = "trp";
+            // 
+            // numericUpDown143
+            // 
+            this.numericUpDown143.Enabled = false;
+            this.numericUpDown143.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown143.Location = new System.Drawing.Point(86, 97);
+            this.numericUpDown143.Maximum = new decimal(new int[] {
+            4095,
+            0,
+            0,
+            0});
+            this.numericUpDown143.Name = "numericUpDown143";
+            this.numericUpDown143.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown143.TabIndex = 74;
+            this.numericUpDown143.Tag = "trfc";
+            // 
+            // checkBox124
+            // 
+            this.checkBox124.AutoSize = true;
+            this.checkBox124.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox124.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox124.Location = new System.Drawing.Point(6, 72);
+            this.checkBox124.Name = "checkBox124";
+            this.checkBox124.Size = new System.Drawing.Size(51, 17);
+            this.checkBox124.TabIndex = 76;
+            this.checkBox124.Tag = "trp_enabled";
+            this.checkBox124.Text = "TRP:";
+            this.checkBox124.UseVisualStyleBackColor = true;
+            // 
+            // checkBox125
+            // 
+            this.checkBox125.AutoSize = true;
+            this.checkBox125.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox125.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox125.Location = new System.Drawing.Point(6, 45);
+            this.checkBox125.Name = "checkBox125";
+            this.checkBox125.Size = new System.Drawing.Size(80, 17);
+            this.checkBox125.TabIndex = 71;
+            this.checkBox125.Tag = "trp_rda_enabled";
+            this.checkBox125.Text = "TRP_RDA:";
+            this.checkBox125.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown144
+            // 
+            this.numericUpDown144.Enabled = false;
+            this.numericUpDown144.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown144.Location = new System.Drawing.Point(86, 18);
+            this.numericUpDown144.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown144.Name = "numericUpDown144";
+            this.numericUpDown144.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown144.TabIndex = 69;
+            this.numericUpDown144.Tag = "trp_wra";
+            // 
+            // numericUpDown145
+            // 
+            this.numericUpDown145.Enabled = false;
+            this.numericUpDown145.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown145.Location = new System.Drawing.Point(86, 44);
+            this.numericUpDown145.Maximum = new decimal(new int[] {
+            127,
+            0,
+            0,
+            0});
+            this.numericUpDown145.Name = "numericUpDown145";
+            this.numericUpDown145.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown145.TabIndex = 70;
+            this.numericUpDown145.Tag = "trp_rda";
+            // 
+            // checkBox126
+            // 
+            this.checkBox126.AutoSize = true;
+            this.checkBox126.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox126.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox126.Location = new System.Drawing.Point(6, 19);
+            this.checkBox126.Name = "checkBox126";
+            this.checkBox126.Size = new System.Drawing.Size(83, 17);
+            this.checkBox126.TabIndex = 72;
+            this.checkBox126.Tag = "trp_wra_enabled";
+            this.checkBox126.Text = "TRP_WRA:";
+            this.checkBox126.UseVisualStyleBackColor = true;
+            // 
+            // groupBox37
+            // 
+            this.groupBox37.Controls.Add(this.checkBox127);
+            this.groupBox37.Controls.Add(this.numericUpDown146);
+            this.groupBox37.Controls.Add(this.numericUpDown147);
+            this.groupBox37.Controls.Add(this.checkBox128);
+            this.groupBox37.Controls.Add(this.checkBox129);
+            this.groupBox37.Controls.Add(this.numericUpDown148);
+            this.groupBox37.Controls.Add(this.checkBox130);
+            this.groupBox37.Controls.Add(this.numericUpDown149);
+            this.groupBox37.Controls.Add(this.checkBox131);
+            this.groupBox37.Controls.Add(this.numericUpDown150);
+            this.groupBox37.Enabled = false;
+            this.groupBox37.Location = new System.Drawing.Point(301, 14);
+            this.groupBox37.Name = "groupBox37";
+            this.groupBox37.Size = new System.Drawing.Size(124, 174);
+            this.groupBox37.TabIndex = 83;
+            this.groupBox37.TabStop = false;
+            this.groupBox37.Tag = "seq_cas_timings";
+            this.groupBox37.Text = "SEQ CAS Timings";
+            // 
+            // checkBox127
+            // 
+            this.checkBox127.AutoSize = true;
+            this.checkBox127.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox127.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox127.Location = new System.Drawing.Point(6, 97);
+            this.checkBox127.Name = "checkBox127";
+            this.checkBox127.Size = new System.Drawing.Size(61, 17);
+            this.checkBox127.TabIndex = 82;
+            this.checkBox127.Tag = "tw2r_enabled";
+            this.checkBox127.Text = "TW2R:";
+            this.checkBox127.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown146
+            // 
+            this.numericUpDown146.Enabled = false;
+            this.numericUpDown146.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown146.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown146.Location = new System.Drawing.Point(79, 96);
+            this.numericUpDown146.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown146.Name = "numericUpDown146";
+            this.numericUpDown146.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown146.TabIndex = 81;
+            this.numericUpDown146.Tag = "tw2r";
+            // 
+            // numericUpDown147
+            // 
+            this.numericUpDown147.Enabled = false;
+            this.numericUpDown147.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown147.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown147.Location = new System.Drawing.Point(79, 17);
+            this.numericUpDown147.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown147.Name = "numericUpDown147";
+            this.numericUpDown147.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown147.TabIndex = 70;
+            this.numericUpDown147.Tag = "tr2w";
+            // 
+            // checkBox128
+            // 
+            this.checkBox128.AutoSize = true;
+            this.checkBox128.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox128.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox128.Location = new System.Drawing.Point(6, 19);
+            this.checkBox128.Name = "checkBox128";
+            this.checkBox128.Size = new System.Drawing.Size(61, 17);
+            this.checkBox128.TabIndex = 79;
+            this.checkBox128.Tag = "tr2w_enabled";
+            this.checkBox128.Text = "TR2W:";
+            this.checkBox128.UseVisualStyleBackColor = true;
+            // 
+            // checkBox129
+            // 
+            this.checkBox129.AutoSize = true;
+            this.checkBox129.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox129.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox129.Location = new System.Drawing.Point(6, 45);
+            this.checkBox129.Name = "checkBox129";
+            this.checkBox129.Size = new System.Drawing.Size(64, 17);
+            this.checkBox129.TabIndex = 78;
+            this.checkBox129.Tag = "tccdl_enabled";
+            this.checkBox129.Text = "TCCDL:";
+            this.checkBox129.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown148
+            // 
+            this.numericUpDown148.Enabled = false;
+            this.numericUpDown148.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown148.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown148.Location = new System.Drawing.Point(79, 44);
+            this.numericUpDown148.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.numericUpDown148.Name = "numericUpDown148";
+            this.numericUpDown148.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown148.TabIndex = 71;
+            this.numericUpDown148.Tag = "tccdl";
+            // 
+            // checkBox130
+            // 
+            this.checkBox130.AutoSize = true;
+            this.checkBox130.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox130.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox130.Location = new System.Drawing.Point(6, 71);
+            this.checkBox130.Name = "checkBox130";
+            this.checkBox130.Size = new System.Drawing.Size(58, 17);
+            this.checkBox130.TabIndex = 77;
+            this.checkBox130.Tag = "tr2r_enabled";
+            this.checkBox130.Text = "TR2R:";
+            this.checkBox130.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown149
+            // 
+            this.numericUpDown149.Enabled = false;
+            this.numericUpDown149.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown149.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown149.Location = new System.Drawing.Point(79, 70);
+            this.numericUpDown149.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown149.Name = "numericUpDown149";
+            this.numericUpDown149.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown149.TabIndex = 72;
+            this.numericUpDown149.Tag = "tr2r";
+            // 
+            // checkBox131
+            // 
+            this.checkBox131.AutoSize = true;
+            this.checkBox131.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox131.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox131.Location = new System.Drawing.Point(6, 124);
+            this.checkBox131.Name = "checkBox131";
+            this.checkBox131.Size = new System.Drawing.Size(49, 17);
+            this.checkBox131.TabIndex = 76;
+            this.checkBox131.Tag = "tcl_enabled";
+            this.checkBox131.Text = "TCL:";
+            this.checkBox131.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown150
+            // 
+            this.numericUpDown150.Enabled = false;
+            this.numericUpDown150.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown150.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(1)))));
+            this.numericUpDown150.Location = new System.Drawing.Point(79, 123);
+            this.numericUpDown150.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown150.Name = "numericUpDown150";
+            this.numericUpDown150.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown150.TabIndex = 73;
+            this.numericUpDown150.Tag = "tcl";
+            // 
+            // groupBox38
+            // 
+            this.groupBox38.Controls.Add(this.checkBox132);
+            this.groupBox38.Controls.Add(this.numericUpDown151);
+            this.groupBox38.Controls.Add(this.checkBox133);
+            this.groupBox38.Controls.Add(this.numericUpDown152);
+            this.groupBox38.Controls.Add(this.checkBox134);
+            this.groupBox38.Controls.Add(this.numericUpDown153);
+            this.groupBox38.Controls.Add(this.checkBox135);
+            this.groupBox38.Controls.Add(this.checkBox136);
+            this.groupBox38.Controls.Add(this.checkBox137);
+            this.groupBox38.Controls.Add(this.numericUpDown154);
+            this.groupBox38.Controls.Add(this.numericUpDown155);
+            this.groupBox38.Controls.Add(this.numericUpDown156);
+            this.groupBox38.Enabled = false;
+            this.groupBox38.Location = new System.Drawing.Point(164, 14);
+            this.groupBox38.Name = "groupBox38";
+            this.groupBox38.Size = new System.Drawing.Size(130, 174);
+            this.groupBox38.TabIndex = 83;
+            this.groupBox38.TabStop = false;
+            this.groupBox38.Tag = "seq_ras_timings";
+            this.groupBox38.Text = "SEQ RAS Timings";
+            // 
+            // checkBox132
+            // 
+            this.checkBox132.AutoSize = true;
+            this.checkBox132.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox132.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox132.Location = new System.Drawing.Point(6, 19);
+            this.checkBox132.Name = "checkBox132";
+            this.checkBox132.Size = new System.Drawing.Size(70, 17);
+            this.checkBox132.TabIndex = 80;
+            this.checkBox132.Tag = "trcdw_enabled";
+            this.checkBox132.Text = "TRCDW:";
+            this.checkBox132.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown151
+            // 
+            this.numericUpDown151.Enabled = false;
+            this.numericUpDown151.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown151.Location = new System.Drawing.Point(87, 43);
+            this.numericUpDown151.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown151.Name = "numericUpDown151";
+            this.numericUpDown151.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown151.TabIndex = 70;
+            this.numericUpDown151.Tag = "trcdwa";
+            // 
+            // checkBox133
+            // 
+            this.checkBox133.AutoSize = true;
+            this.checkBox133.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox133.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox133.Location = new System.Drawing.Point(6, 45);
+            this.checkBox133.Name = "checkBox133";
+            this.checkBox133.Size = new System.Drawing.Size(77, 17);
+            this.checkBox133.TabIndex = 79;
+            this.checkBox133.Tag = "trcdwa_enabled";
+            this.checkBox133.Text = "TRCDWA:";
+            this.checkBox133.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown152
+            // 
+            this.numericUpDown152.Enabled = false;
+            this.numericUpDown152.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown152.Location = new System.Drawing.Point(87, 17);
+            this.numericUpDown152.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown152.Name = "numericUpDown152";
+            this.numericUpDown152.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown152.TabIndex = 69;
+            this.numericUpDown152.Tag = "trcdw";
+            // 
+            // checkBox134
+            // 
+            this.checkBox134.AutoSize = true;
+            this.checkBox134.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox134.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox134.Location = new System.Drawing.Point(6, 70);
+            this.checkBox134.Name = "checkBox134";
+            this.checkBox134.Size = new System.Drawing.Size(67, 17);
+            this.checkBox134.TabIndex = 78;
+            this.checkBox134.Tag = "trcdr_enabled";
+            this.checkBox134.Text = "TRCDR:";
+            this.checkBox134.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown153
+            // 
+            this.numericUpDown153.Enabled = false;
+            this.numericUpDown153.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown153.Location = new System.Drawing.Point(87, 69);
+            this.numericUpDown153.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown153.Name = "numericUpDown153";
+            this.numericUpDown153.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown153.TabIndex = 71;
+            this.numericUpDown153.Tag = "trcdr";
+            // 
+            // checkBox135
+            // 
+            this.checkBox135.AutoSize = true;
+            this.checkBox135.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox135.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox135.Location = new System.Drawing.Point(6, 124);
+            this.checkBox135.Name = "checkBox135";
+            this.checkBox135.Size = new System.Drawing.Size(60, 17);
+            this.checkBox135.TabIndex = 66;
+            this.checkBox135.Tag = "trrd_enabled";
+            this.checkBox135.Text = "TRRD:";
+            this.checkBox135.UseVisualStyleBackColor = true;
+            // 
+            // checkBox136
+            // 
+            this.checkBox136.AutoSize = true;
+            this.checkBox136.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox136.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox136.Location = new System.Drawing.Point(6, 96);
+            this.checkBox136.Name = "checkBox136";
+            this.checkBox136.Size = new System.Drawing.Size(74, 17);
+            this.checkBox136.TabIndex = 77;
+            this.checkBox136.Tag = "trcdra_enabled";
+            this.checkBox136.Text = "TRCDRA:";
+            this.checkBox136.UseVisualStyleBackColor = true;
+            // 
+            // checkBox137
+            // 
+            this.checkBox137.AutoSize = true;
+            this.checkBox137.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox137.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox137.Location = new System.Drawing.Point(6, 150);
+            this.checkBox137.Name = "checkBox137";
+            this.checkBox137.Size = new System.Drawing.Size(51, 17);
+            this.checkBox137.TabIndex = 65;
+            this.checkBox137.Tag = "trc_enabled";
+            this.checkBox137.Text = "TRC:";
+            this.checkBox137.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown154
+            // 
+            this.numericUpDown154.Enabled = false;
+            this.numericUpDown154.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown154.Location = new System.Drawing.Point(87, 95);
+            this.numericUpDown154.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown154.Name = "numericUpDown154";
+            this.numericUpDown154.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown154.TabIndex = 72;
+            this.numericUpDown154.Tag = "trcdra";
+            // 
+            // numericUpDown155
+            // 
+            this.numericUpDown155.Enabled = false;
+            this.numericUpDown155.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown155.Location = new System.Drawing.Point(87, 147);
+            this.numericUpDown155.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown155.Name = "numericUpDown155";
+            this.numericUpDown155.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown155.TabIndex = 2;
+            this.numericUpDown155.Tag = "trc";
+            // 
+            // numericUpDown156
+            // 
+            this.numericUpDown156.Enabled = false;
+            this.numericUpDown156.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown156.Location = new System.Drawing.Point(87, 121);
+            this.numericUpDown156.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown156.Name = "numericUpDown156";
+            this.numericUpDown156.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown156.TabIndex = 1;
+            this.numericUpDown156.Tag = "trrd";
+            // 
+            // groupBox39
+            // 
+            this.groupBox39.Controls.Add(this.checkBox138);
+            this.groupBox39.Controls.Add(this.numericUpDown157);
+            this.groupBox39.Controls.Add(this.numericUpDown158);
+            this.groupBox39.Controls.Add(this.checkBox139);
+            this.groupBox39.Controls.Add(this.checkBox140);
+            this.groupBox39.Controls.Add(this.numericUpDown159);
+            this.groupBox39.Controls.Add(this.numericUpDown160);
+            this.groupBox39.Controls.Add(this.checkBox141);
+            this.groupBox39.Enabled = false;
+            this.groupBox39.Location = new System.Drawing.Point(6, 176);
+            this.groupBox39.Name = "groupBox39";
+            this.groupBox39.Size = new System.Drawing.Size(150, 128);
+            this.groupBox39.TabIndex = 83;
+            this.groupBox39.TabStop = false;
+            this.groupBox39.Tag = "arb_dram_timings_2";
+            this.groupBox39.Text = "ARB DRAM Timings 2";
+            // 
+            // checkBox138
+            // 
+            this.checkBox138.AutoSize = true;
+            this.checkBox138.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox138.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox138.Location = new System.Drawing.Point(6, 75);
+            this.checkBox138.Name = "checkBox138";
+            this.checkBox138.Size = new System.Drawing.Size(91, 17);
+            this.checkBox138.TabIndex = 66;
+            this.checkBox138.Tag = "wrplusrp_enabled";
+            this.checkBox138.Text = "WRPLUSRP:";
+            this.checkBox138.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown157
+            // 
+            this.numericUpDown157.Enabled = false;
+            this.numericUpDown157.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown157.Location = new System.Drawing.Point(105, 73);
+            this.numericUpDown157.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown157.Name = "numericUpDown157";
+            this.numericUpDown157.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown157.TabIndex = 63;
+            this.numericUpDown157.Tag = "wrplusrp";
+            // 
+            // numericUpDown158
+            // 
+            this.numericUpDown158.Enabled = false;
+            this.numericUpDown158.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown158.Location = new System.Drawing.Point(105, 100);
+            this.numericUpDown158.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown158.Name = "numericUpDown158";
+            this.numericUpDown158.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown158.TabIndex = 64;
+            this.numericUpDown158.Tag = "bus_turn";
+            // 
+            // checkBox139
+            // 
+            this.checkBox139.AutoSize = true;
+            this.checkBox139.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox139.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox139.Location = new System.Drawing.Point(6, 102);
+            this.checkBox139.Name = "checkBox139";
+            this.checkBox139.Size = new System.Drawing.Size(88, 17);
+            this.checkBox139.TabIndex = 65;
+            this.checkBox139.Tag = "bus_turn_enabled";
+            this.checkBox139.Text = "BUS_TURN:";
+            this.checkBox139.UseVisualStyleBackColor = true;
+            // 
+            // checkBox140
+            // 
+            this.checkBox140.AutoSize = true;
+            this.checkBox140.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox140.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox140.Location = new System.Drawing.Point(6, 21);
+            this.checkBox140.Name = "checkBox140";
+            this.checkBox140.Size = new System.Drawing.Size(79, 17);
+            this.checkBox140.TabIndex = 62;
+            this.checkBox140.Tag = "ras2ras_enabled";
+            this.checkBox140.Text = "RAS2RAS:";
+            this.checkBox140.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown159
+            // 
+            this.numericUpDown159.Enabled = false;
+            this.numericUpDown159.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown159.Location = new System.Drawing.Point(105, 19);
+            this.numericUpDown159.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown159.Name = "numericUpDown159";
+            this.numericUpDown159.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown159.TabIndex = 48;
+            this.numericUpDown159.Tag = "ras2ras";
+            // 
+            // numericUpDown160
+            // 
+            this.numericUpDown160.Enabled = false;
+            this.numericUpDown160.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown160.Location = new System.Drawing.Point(105, 46);
+            this.numericUpDown160.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown160.Name = "numericUpDown160";
+            this.numericUpDown160.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown160.TabIndex = 50;
+            this.numericUpDown160.Tag = "rp";
+            // 
+            // checkBox141
+            // 
+            this.checkBox141.AutoSize = true;
+            this.checkBox141.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox141.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox141.Location = new System.Drawing.Point(6, 48);
+            this.checkBox141.Name = "checkBox141";
+            this.checkBox141.Size = new System.Drawing.Size(44, 17);
+            this.checkBox141.TabIndex = 61;
+            this.checkBox141.Tag = "rp_enabled";
+            this.checkBox141.Text = "RP:";
+            this.checkBox141.UseVisualStyleBackColor = true;
+            // 
+            // groupBox40
+            // 
+            this.groupBox40.Controls.Add(this.checkBox142);
+            this.groupBox40.Controls.Add(this.numericUpDown161);
+            this.groupBox40.Controls.Add(this.numericUpDown162);
+            this.groupBox40.Controls.Add(this.checkBox143);
+            this.groupBox40.Controls.Add(this.checkBox144);
+            this.groupBox40.Controls.Add(this.numericUpDown163);
+            this.groupBox40.Controls.Add(this.numericUpDown164);
+            this.groupBox40.Controls.Add(this.checkBox145);
+            this.groupBox40.Enabled = false;
+            this.groupBox40.Location = new System.Drawing.Point(6, 42);
+            this.groupBox40.Name = "groupBox40";
+            this.groupBox40.Size = new System.Drawing.Size(150, 128);
+            this.groupBox40.TabIndex = 82;
+            this.groupBox40.TabStop = false;
+            this.groupBox40.Tag = "arb_dram_timings";
+            this.groupBox40.Text = "ARB DRAM Timings";
+            // 
+            // checkBox142
+            // 
+            this.checkBox142.AutoSize = true;
+            this.checkBox142.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox142.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox142.Location = new System.Drawing.Point(6, 75);
+            this.checkBox142.Name = "checkBox142";
+            this.checkBox142.Size = new System.Drawing.Size(97, 17);
+            this.checkBox142.TabIndex = 66;
+            this.checkBox142.Tag = "rasmactrd_enabled";
+            this.checkBox142.Text = "RASMACTRD:";
+            this.checkBox142.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown161
+            // 
+            this.numericUpDown161.Enabled = false;
+            this.numericUpDown161.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown161.Location = new System.Drawing.Point(105, 74);
+            this.numericUpDown161.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown161.Name = "numericUpDown161";
+            this.numericUpDown161.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown161.TabIndex = 63;
+            this.numericUpDown161.Tag = "rasmactrd";
+            // 
+            // numericUpDown162
+            // 
+            this.numericUpDown162.Enabled = false;
+            this.numericUpDown162.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown162.Location = new System.Drawing.Point(105, 101);
+            this.numericUpDown162.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown162.Name = "numericUpDown162";
+            this.numericUpDown162.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown162.TabIndex = 64;
+            this.numericUpDown162.Tag = "rasmactwr";
+            // 
+            // checkBox143
+            // 
+            this.checkBox143.AutoSize = true;
+            this.checkBox143.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox143.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox143.Location = new System.Drawing.Point(6, 102);
+            this.checkBox143.Name = "checkBox143";
+            this.checkBox143.Size = new System.Drawing.Size(100, 17);
+            this.checkBox143.TabIndex = 65;
+            this.checkBox143.Tag = "rasmactwr_enabled";
+            this.checkBox143.Text = "RASMACTWR:";
+            this.checkBox143.UseVisualStyleBackColor = true;
+            // 
+            // checkBox144
+            // 
+            this.checkBox144.AutoSize = true;
+            this.checkBox144.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox144.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox144.Location = new System.Drawing.Point(6, 21);
+            this.checkBox144.Name = "checkBox144";
+            this.checkBox144.Size = new System.Drawing.Size(66, 17);
+            this.checkBox144.TabIndex = 62;
+            this.checkBox144.Tag = "actrd_enabled";
+            this.checkBox144.Text = "ACTRD:";
+            this.checkBox144.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown163
+            // 
+            this.numericUpDown163.Enabled = false;
+            this.numericUpDown163.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown163.Location = new System.Drawing.Point(105, 20);
+            this.numericUpDown163.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown163.Name = "numericUpDown163";
+            this.numericUpDown163.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown163.TabIndex = 48;
+            this.numericUpDown163.Tag = "actrd";
+            // 
+            // numericUpDown164
+            // 
+            this.numericUpDown164.Enabled = false;
+            this.numericUpDown164.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown164.Location = new System.Drawing.Point(105, 47);
+            this.numericUpDown164.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown164.Name = "numericUpDown164";
+            this.numericUpDown164.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown164.TabIndex = 50;
+            this.numericUpDown164.Tag = "actwr";
+            // 
+            // checkBox145
+            // 
+            this.checkBox145.AutoSize = true;
+            this.checkBox145.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox145.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox145.Location = new System.Drawing.Point(6, 48);
+            this.checkBox145.Name = "checkBox145";
+            this.checkBox145.Size = new System.Drawing.Size(69, 17);
+            this.checkBox145.TabIndex = 61;
+            this.checkBox145.Tag = "actwr_enabled";
+            this.checkBox145.Text = "ACTWR:";
+            this.checkBox145.UseVisualStyleBackColor = true;
+            // 
+            // groupBox44
+            // 
+            this.groupBox44.Controls.Add(this.checkBox146);
+            this.groupBox44.Controls.Add(this.numericUpDown165);
+            this.groupBox44.Controls.Add(this.checkBox147);
+            this.groupBox44.Controls.Add(this.numericUpDown166);
+            this.groupBox44.Controls.Add(this.checkBox148);
+            this.groupBox44.Controls.Add(this.numericUpDown167);
+            this.groupBox44.Controls.Add(this.checkBox149);
+            this.groupBox44.Controls.Add(this.numericUpDown168);
+            this.groupBox44.Controls.Add(this.checkBox150);
+            this.groupBox44.Controls.Add(this.numericUpDown169);
+            this.groupBox44.Controls.Add(this.checkBox151);
+            this.groupBox44.Controls.Add(this.numericUpDown170);
+            this.groupBox44.Enabled = false;
+            this.groupBox44.Location = new System.Drawing.Point(431, 14);
+            this.groupBox44.Name = "groupBox44";
+            this.groupBox44.Size = new System.Drawing.Size(159, 174);
+            this.groupBox44.TabIndex = 81;
+            this.groupBox44.TabStop = false;
+            this.groupBox44.Tag = "seq_pmg_timings";
+            this.groupBox44.Text = "SEQ PMG Timings";
+            // 
+            // checkBox146
+            // 
+            this.checkBox146.AutoSize = true;
+            this.checkBox146.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox146.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox146.Location = new System.Drawing.Point(6, 122);
+            this.checkBox146.Name = "checkBox146";
+            this.checkBox146.Size = new System.Drawing.Size(81, 17);
+            this.checkBox146.TabIndex = 82;
+            this.checkBox146.Tag = "seq_idle_enabled";
+            this.checkBox146.Text = "SEQ_IDLE:";
+            this.checkBox146.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown165
+            // 
+            this.numericUpDown165.Enabled = false;
+            this.numericUpDown165.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown165.Location = new System.Drawing.Point(113, 121);
+            this.numericUpDown165.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown165.Name = "numericUpDown165";
+            this.numericUpDown165.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown165.TabIndex = 81;
+            this.numericUpDown165.Tag = "seq_idle";
+            // 
+            // checkBox147
+            // 
+            this.checkBox147.AutoSize = true;
+            this.checkBox147.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox147.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox147.Location = new System.Drawing.Point(6, 19);
+            this.checkBox147.Name = "checkBox147";
+            this.checkBox147.Size = new System.Drawing.Size(72, 17);
+            this.checkBox147.TabIndex = 80;
+            this.checkBox147.Tag = "tcksre_enabled";
+            this.checkBox147.Text = "TCKSRE:";
+            this.checkBox147.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown166
+            // 
+            this.numericUpDown166.Enabled = false;
+            this.numericUpDown166.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown166.Location = new System.Drawing.Point(113, 43);
+            this.numericUpDown166.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown166.Name = "numericUpDown166";
+            this.numericUpDown166.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown166.TabIndex = 70;
+            this.numericUpDown166.Tag = "tcksrx";
+            // 
+            // checkBox148
+            // 
+            this.checkBox148.AutoSize = true;
+            this.checkBox148.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox148.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox148.Location = new System.Drawing.Point(6, 45);
+            this.checkBox148.Name = "checkBox148";
+            this.checkBox148.Size = new System.Drawing.Size(72, 17);
+            this.checkBox148.TabIndex = 79;
+            this.checkBox148.Tag = "tcksrx_enabled";
+            this.checkBox148.Text = "TCKSRX:";
+            this.checkBox148.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown167
+            // 
+            this.numericUpDown167.Enabled = false;
+            this.numericUpDown167.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown167.Location = new System.Drawing.Point(113, 17);
+            this.numericUpDown167.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown167.Name = "numericUpDown167";
+            this.numericUpDown167.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown167.TabIndex = 69;
+            this.numericUpDown167.Tag = "tcksre";
+            // 
+            // checkBox149
+            // 
+            this.checkBox149.AutoSize = true;
+            this.checkBox149.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox149.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox149.Location = new System.Drawing.Point(6, 70);
+            this.checkBox149.Name = "checkBox149";
+            this.checkBox149.Size = new System.Drawing.Size(98, 17);
+            this.checkBox149.TabIndex = 78;
+            this.checkBox149.Tag = "tcke_pulse_enabled";
+            this.checkBox149.Text = "TCKE_PULSE:";
+            this.checkBox149.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown168
+            // 
+            this.numericUpDown168.Enabled = false;
+            this.numericUpDown168.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown168.Location = new System.Drawing.Point(113, 69);
+            this.numericUpDown168.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numericUpDown168.Name = "numericUpDown168";
+            this.numericUpDown168.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown168.TabIndex = 71;
+            this.numericUpDown168.Tag = "tcke_pulse";
+            // 
+            // checkBox150
+            // 
+            this.checkBox150.AutoSize = true;
+            this.checkBox150.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox150.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox150.Location = new System.Drawing.Point(6, 96);
+            this.checkBox150.Name = "checkBox150";
+            this.checkBox150.Size = new System.Drawing.Size(57, 17);
+            this.checkBox150.TabIndex = 77;
+            this.checkBox150.Tag = "tcke_enabled";
+            this.checkBox150.Text = "TCKE:";
+            this.checkBox150.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown169
+            // 
+            this.numericUpDown169.Enabled = false;
+            this.numericUpDown169.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown169.Location = new System.Drawing.Point(113, 95);
+            this.numericUpDown169.Maximum = new decimal(new int[] {
+            63,
+            0,
+            0,
+            0});
+            this.numericUpDown169.Name = "numericUpDown169";
+            this.numericUpDown169.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown169.TabIndex = 72;
+            this.numericUpDown169.Tag = "tcke";
+            // 
+            // checkBox151
+            // 
+            this.checkBox151.AutoSize = true;
+            this.checkBox151.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox151.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.checkBox151.Location = new System.Drawing.Point(6, 148);
+            this.checkBox151.Name = "checkBox151";
+            this.checkBox151.Size = new System.Drawing.Size(101, 17);
+            this.checkBox151.TabIndex = 75;
+            this.checkBox151.Tag = "seq_idle_ss_enabled";
+            this.checkBox151.Text = "SEQ_IDLE_SS:";
+            this.checkBox151.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown170
+            // 
+            this.numericUpDown170.Enabled = false;
+            this.numericUpDown170.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown170.Location = new System.Drawing.Point(113, 147);
+            this.numericUpDown170.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numericUpDown170.Name = "numericUpDown170";
+            this.numericUpDown170.Size = new System.Drawing.Size(37, 20);
+            this.numericUpDown170.TabIndex = 74;
+            this.numericUpDown170.Tag = "seq_idle_ss";
+            // 
             // DeviceSettingsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -8067,55 +8238,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashLocalWorkSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashIntensity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashThreads)).EndInit();
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown41)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown46)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown47)).EndInit();
-            this.groupBox11.ResumeLayout(false);
-            this.groupBox11.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown48)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown49)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown50)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).EndInit();
-            this.groupBox20.ResumeLayout(false);
-            this.groupBox20.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown53)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown56)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown57)).EndInit();
-            this.groupBox21.ResumeLayout(false);
-            this.groupBox21.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown58)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown59)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown60)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown61)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown62)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown90)).EndInit();
-            this.groupBox22.ResumeLayout(false);
-            this.groupBox22.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown91)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown92)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown93)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown94)).EndInit();
-            this.groupBox23.ResumeLayout(false);
-            this.groupBox23.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown95)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown96)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown97)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown98)).EndInit();
-            this.groupBox24.ResumeLayout(false);
-            this.groupBox24.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown99)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown100)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown101)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown102)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown103)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown104)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -8128,55 +8250,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0CryptoNightThreads)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0CryptoNightRawIntensity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0CryptoNightLocalWorkSize)).EndInit();
-            this.groupBox25.ResumeLayout(false);
-            this.groupBox25.PerformLayout();
-            this.groupBox26.ResumeLayout(false);
-            this.groupBox26.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown105)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown106)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown107)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown108)).EndInit();
-            this.groupBox27.ResumeLayout(false);
-            this.groupBox27.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown109)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown110)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown111)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown112)).EndInit();
-            this.groupBox28.ResumeLayout(false);
-            this.groupBox28.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown113)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown114)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown115)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown116)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown117)).EndInit();
-            this.groupBox29.ResumeLayout(false);
-            this.groupBox29.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown118)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown119)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown120)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown121)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown122)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown123)).EndInit();
-            this.groupBox30.ResumeLayout(false);
-            this.groupBox30.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown124)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown125)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown126)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown127)).EndInit();
-            this.groupBox31.ResumeLayout(false);
-            this.groupBox31.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown128)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown129)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown130)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown131)).EndInit();
-            this.groupBox32.ResumeLayout(false);
-            this.groupBox32.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown132)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown133)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown134)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown135)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown136)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown137)).EndInit();
             this.tabPage41.ResumeLayout(false);
             this.tabPage41.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -8189,55 +8262,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptLocalWorkSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptIntensity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0NeoScryptThreads)).EndInit();
-            this.groupBox33.ResumeLayout(false);
-            this.groupBox33.PerformLayout();
-            this.groupBox34.ResumeLayout(false);
-            this.groupBox34.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown138)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown139)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown140)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown141)).EndInit();
-            this.groupBox35.ResumeLayout(false);
-            this.groupBox35.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown142)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown143)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown144)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown145)).EndInit();
-            this.groupBox36.ResumeLayout(false);
-            this.groupBox36.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown146)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown147)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown148)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown149)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown150)).EndInit();
-            this.groupBox37.ResumeLayout(false);
-            this.groupBox37.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown151)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown152)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown153)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown154)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown155)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown156)).EndInit();
-            this.groupBox38.ResumeLayout(false);
-            this.groupBox38.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown157)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown158)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown159)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown160)).EndInit();
-            this.groupBox39.ResumeLayout(false);
-            this.groupBox39.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown161)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown162)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown163)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown164)).EndInit();
-            this.groupBox40.ResumeLayout(false);
-            this.groupBox40.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown165)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown166)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown167)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown168)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown169)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown170)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -8280,6 +8304,156 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown28)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown27)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown26)).EndInit();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown41)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown46)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown47)).EndInit();
+            this.groupBox20.ResumeLayout(false);
+            this.groupBox20.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown48)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown49)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown50)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown51)).EndInit();
+            this.groupBox21.ResumeLayout(false);
+            this.groupBox21.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown53)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown56)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown57)).EndInit();
+            this.groupBox22.ResumeLayout(false);
+            this.groupBox22.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown58)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown59)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown60)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown61)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown62)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown90)).EndInit();
+            this.groupBox23.ResumeLayout(false);
+            this.groupBox23.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown91)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown92)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown93)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown94)).EndInit();
+            this.groupBox24.ResumeLayout(false);
+            this.groupBox24.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown95)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown96)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown97)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown98)).EndInit();
+            this.groupBox42.ResumeLayout(false);
+            this.groupBox42.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown99)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown100)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown101)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown102)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown103)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown104)).EndInit();
+            this.groupBox25.ResumeLayout(false);
+            this.groupBox26.ResumeLayout(false);
+            this.groupBox26.PerformLayout();
+            this.groupBox27.ResumeLayout(false);
+            this.groupBox27.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown105)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown106)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown107)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown108)).EndInit();
+            this.groupBox28.ResumeLayout(false);
+            this.groupBox28.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown109)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown110)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown111)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown112)).EndInit();
+            this.groupBox29.ResumeLayout(false);
+            this.groupBox29.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown113)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown114)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown115)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown116)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown117)).EndInit();
+            this.groupBox30.ResumeLayout(false);
+            this.groupBox30.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown118)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown119)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown120)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown121)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown122)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown123)).EndInit();
+            this.groupBox31.ResumeLayout(false);
+            this.groupBox31.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown124)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown125)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown126)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown127)).EndInit();
+            this.groupBox32.ResumeLayout(false);
+            this.groupBox32.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown128)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown129)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown130)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown131)).EndInit();
+            this.groupBox43.ResumeLayout(false);
+            this.groupBox43.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown132)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown133)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown134)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown135)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown136)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown137)).EndInit();
+            this.groupBox33.ResumeLayout(false);
+            this.groupBox34.ResumeLayout(false);
+            this.groupBox34.PerformLayout();
+            this.groupBox35.ResumeLayout(false);
+            this.groupBox35.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown138)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown139)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown140)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown141)).EndInit();
+            this.groupBox36.ResumeLayout(false);
+            this.groupBox36.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown142)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown143)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown144)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown145)).EndInit();
+            this.groupBox37.ResumeLayout(false);
+            this.groupBox37.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown146)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown147)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown148)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown149)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown150)).EndInit();
+            this.groupBox38.ResumeLayout(false);
+            this.groupBox38.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown151)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown152)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown153)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown154)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown155)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown156)).EndInit();
+            this.groupBox39.ResumeLayout(false);
+            this.groupBox39.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown157)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown158)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown159)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown160)).EndInit();
+            this.groupBox40.ResumeLayout(false);
+            this.groupBox40.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown161)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown162)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown163)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown164)).EndInit();
+            this.groupBox44.ResumeLayout(false);
+            this.groupBox44.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown165)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown166)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown167)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown168)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown169)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown170)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -8517,246 +8691,249 @@
         private System.Windows.Forms.CheckBox checkBox152;
         private System.Windows.Forms.CheckBox checkBox153;
         private System.Windows.Forms.CheckBox checkBox154;
+        private System.Windows.Forms.GroupBox groupBox41;
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.CheckBox checkBox44;
-        private System.Windows.Forms.NumericUpDown numericUpDown38;
-        private System.Windows.Forms.NumericUpDown numericUpDown41;
-        private System.Windows.Forms.CheckBox checkBox45;
-        private System.Windows.Forms.CheckBox checkBox46;
-        private System.Windows.Forms.NumericUpDown numericUpDown46;
-        private System.Windows.Forms.NumericUpDown numericUpDown47;
-        private System.Windows.Forms.CheckBox checkBox47;
-        private System.Windows.Forms.GroupBox groupBox11;
-        private System.Windows.Forms.CheckBox checkBox48;
-        private System.Windows.Forms.NumericUpDown numericUpDown48;
-        private System.Windows.Forms.NumericUpDown numericUpDown49;
-        private System.Windows.Forms.CheckBox checkBox49;
-        private System.Windows.Forms.CheckBox checkBox50;
-        private System.Windows.Forms.NumericUpDown numericUpDown50;
-        private System.Windows.Forms.NumericUpDown numericUpDown51;
-        private System.Windows.Forms.CheckBox checkBox51;
-        private System.Windows.Forms.GroupBox groupBox20;
-        private System.Windows.Forms.CheckBox checkBox52;
-        private System.Windows.Forms.NumericUpDown numericUpDown53;
-        private System.Windows.Forms.NumericUpDown numericUpDown54;
-        private System.Windows.Forms.CheckBox checkBox53;
-        private System.Windows.Forms.CheckBox checkBox54;
-        private System.Windows.Forms.NumericUpDown numericUpDown55;
-        private System.Windows.Forms.CheckBox checkBox55;
-        private System.Windows.Forms.NumericUpDown numericUpDown56;
-        private System.Windows.Forms.CheckBox checkBox56;
-        private System.Windows.Forms.NumericUpDown numericUpDown57;
-        private System.Windows.Forms.GroupBox groupBox21;
-        private System.Windows.Forms.CheckBox checkBox57;
-        private System.Windows.Forms.NumericUpDown numericUpDown58;
-        private System.Windows.Forms.CheckBox checkBox58;
-        private System.Windows.Forms.NumericUpDown numericUpDown59;
-        private System.Windows.Forms.CheckBox checkBox59;
-        private System.Windows.Forms.NumericUpDown numericUpDown60;
-        private System.Windows.Forms.CheckBox checkBox60;
-        private System.Windows.Forms.CheckBox checkBox61;
-        private System.Windows.Forms.CheckBox checkBox62;
-        private System.Windows.Forms.NumericUpDown numericUpDown61;
-        private System.Windows.Forms.NumericUpDown numericUpDown62;
-        private System.Windows.Forms.NumericUpDown numericUpDown90;
-        private System.Windows.Forms.GroupBox groupBox22;
-        private System.Windows.Forms.CheckBox checkBox63;
-        private System.Windows.Forms.NumericUpDown numericUpDown91;
-        private System.Windows.Forms.NumericUpDown numericUpDown92;
-        private System.Windows.Forms.CheckBox checkBox64;
-        private System.Windows.Forms.CheckBox checkBox65;
-        private System.Windows.Forms.NumericUpDown numericUpDown93;
-        private System.Windows.Forms.NumericUpDown numericUpDown94;
-        private System.Windows.Forms.CheckBox checkBox66;
-        private System.Windows.Forms.GroupBox groupBox23;
-        private System.Windows.Forms.CheckBox checkBox67;
-        private System.Windows.Forms.NumericUpDown numericUpDown95;
-        private System.Windows.Forms.NumericUpDown numericUpDown96;
-        private System.Windows.Forms.CheckBox checkBox68;
-        private System.Windows.Forms.CheckBox checkBox69;
-        private System.Windows.Forms.NumericUpDown numericUpDown97;
-        private System.Windows.Forms.NumericUpDown numericUpDown98;
-        private System.Windows.Forms.CheckBox checkBox70;
-        private System.Windows.Forms.GroupBox groupBox24;
-        private System.Windows.Forms.CheckBox checkBox71;
-        private System.Windows.Forms.NumericUpDown numericUpDown99;
-        private System.Windows.Forms.CheckBox checkBox72;
-        private System.Windows.Forms.NumericUpDown numericUpDown100;
-        private System.Windows.Forms.CheckBox checkBox73;
-        private System.Windows.Forms.NumericUpDown numericUpDown101;
-        private System.Windows.Forms.CheckBox checkBox74;
-        private System.Windows.Forms.NumericUpDown numericUpDown102;
-        private System.Windows.Forms.CheckBox checkBox75;
-        private System.Windows.Forms.NumericUpDown numericUpDown103;
-        private System.Windows.Forms.CheckBox checkBox76;
-        private System.Windows.Forms.NumericUpDown numericUpDown104;
-        private System.Windows.Forms.CheckBox checkBox77;
-        private System.Windows.Forms.CheckBox checkBox78;
-        private System.Windows.Forms.CheckBox checkBox79;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.CheckBox checkBox45;
+        private System.Windows.Forms.CheckBox checkBox46;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.CheckBox checkBox47;
+        private System.Windows.Forms.NumericUpDown numericUpDown38;
+        private System.Windows.Forms.NumericUpDown numericUpDown41;
+        private System.Windows.Forms.CheckBox checkBox48;
+        private System.Windows.Forms.CheckBox checkBox49;
+        private System.Windows.Forms.NumericUpDown numericUpDown46;
+        private System.Windows.Forms.NumericUpDown numericUpDown47;
+        private System.Windows.Forms.CheckBox checkBox50;
+        private System.Windows.Forms.GroupBox groupBox20;
+        private System.Windows.Forms.CheckBox checkBox51;
+        private System.Windows.Forms.NumericUpDown numericUpDown48;
+        private System.Windows.Forms.NumericUpDown numericUpDown49;
+        private System.Windows.Forms.CheckBox checkBox52;
+        private System.Windows.Forms.CheckBox checkBox53;
+        private System.Windows.Forms.NumericUpDown numericUpDown50;
+        private System.Windows.Forms.NumericUpDown numericUpDown51;
+        private System.Windows.Forms.CheckBox checkBox54;
+        private System.Windows.Forms.GroupBox groupBox21;
+        private System.Windows.Forms.CheckBox checkBox55;
+        private System.Windows.Forms.NumericUpDown numericUpDown53;
+        private System.Windows.Forms.NumericUpDown numericUpDown54;
+        private System.Windows.Forms.CheckBox checkBox56;
+        private System.Windows.Forms.CheckBox checkBox57;
+        private System.Windows.Forms.NumericUpDown numericUpDown55;
+        private System.Windows.Forms.CheckBox checkBox58;
+        private System.Windows.Forms.NumericUpDown numericUpDown56;
+        private System.Windows.Forms.CheckBox checkBox59;
+        private System.Windows.Forms.NumericUpDown numericUpDown57;
+        private System.Windows.Forms.GroupBox groupBox22;
+        private System.Windows.Forms.CheckBox checkBox60;
+        private System.Windows.Forms.NumericUpDown numericUpDown58;
+        private System.Windows.Forms.CheckBox checkBox61;
+        private System.Windows.Forms.NumericUpDown numericUpDown59;
+        private System.Windows.Forms.CheckBox checkBox62;
+        private System.Windows.Forms.NumericUpDown numericUpDown60;
+        private System.Windows.Forms.CheckBox checkBox63;
+        private System.Windows.Forms.CheckBox checkBox64;
+        private System.Windows.Forms.CheckBox checkBox65;
+        private System.Windows.Forms.NumericUpDown numericUpDown61;
+        private System.Windows.Forms.NumericUpDown numericUpDown62;
+        private System.Windows.Forms.NumericUpDown numericUpDown90;
+        private System.Windows.Forms.GroupBox groupBox23;
+        private System.Windows.Forms.CheckBox checkBox66;
+        private System.Windows.Forms.NumericUpDown numericUpDown91;
+        private System.Windows.Forms.NumericUpDown numericUpDown92;
+        private System.Windows.Forms.CheckBox checkBox67;
+        private System.Windows.Forms.CheckBox checkBox68;
+        private System.Windows.Forms.NumericUpDown numericUpDown93;
+        private System.Windows.Forms.NumericUpDown numericUpDown94;
+        private System.Windows.Forms.CheckBox checkBox69;
+        private System.Windows.Forms.GroupBox groupBox24;
+        private System.Windows.Forms.CheckBox checkBox70;
+        private System.Windows.Forms.NumericUpDown numericUpDown95;
+        private System.Windows.Forms.NumericUpDown numericUpDown96;
+        private System.Windows.Forms.CheckBox checkBox71;
+        private System.Windows.Forms.CheckBox checkBox72;
+        private System.Windows.Forms.NumericUpDown numericUpDown97;
+        private System.Windows.Forms.NumericUpDown numericUpDown98;
+        private System.Windows.Forms.CheckBox checkBox73;
+        private System.Windows.Forms.GroupBox groupBox42;
+        private System.Windows.Forms.CheckBox checkBox74;
+        private System.Windows.Forms.NumericUpDown numericUpDown99;
+        private System.Windows.Forms.CheckBox checkBox75;
+        private System.Windows.Forms.NumericUpDown numericUpDown100;
+        private System.Windows.Forms.CheckBox checkBox76;
+        private System.Windows.Forms.NumericUpDown numericUpDown101;
+        private System.Windows.Forms.CheckBox checkBox77;
+        private System.Windows.Forms.NumericUpDown numericUpDown102;
+        private System.Windows.Forms.CheckBox checkBox78;
+        private System.Windows.Forms.NumericUpDown numericUpDown103;
+        private System.Windows.Forms.CheckBox checkBox79;
+        private System.Windows.Forms.NumericUpDown numericUpDown104;
         private System.Windows.Forms.GroupBox groupBox25;
         private System.Windows.Forms.GroupBox groupBox26;
         private System.Windows.Forms.CheckBox checkBox80;
-        private System.Windows.Forms.NumericUpDown numericUpDown105;
-        private System.Windows.Forms.NumericUpDown numericUpDown106;
-        private System.Windows.Forms.CheckBox checkBox81;
-        private System.Windows.Forms.CheckBox checkBox82;
-        private System.Windows.Forms.NumericUpDown numericUpDown107;
-        private System.Windows.Forms.NumericUpDown numericUpDown108;
-        private System.Windows.Forms.CheckBox checkBox83;
-        private System.Windows.Forms.GroupBox groupBox27;
-        private System.Windows.Forms.CheckBox checkBox84;
-        private System.Windows.Forms.NumericUpDown numericUpDown109;
-        private System.Windows.Forms.NumericUpDown numericUpDown110;
-        private System.Windows.Forms.CheckBox checkBox85;
-        private System.Windows.Forms.CheckBox checkBox86;
-        private System.Windows.Forms.NumericUpDown numericUpDown111;
-        private System.Windows.Forms.NumericUpDown numericUpDown112;
-        private System.Windows.Forms.CheckBox checkBox87;
-        private System.Windows.Forms.GroupBox groupBox28;
-        private System.Windows.Forms.CheckBox checkBox88;
-        private System.Windows.Forms.NumericUpDown numericUpDown113;
-        private System.Windows.Forms.NumericUpDown numericUpDown114;
-        private System.Windows.Forms.CheckBox checkBox89;
-        private System.Windows.Forms.CheckBox checkBox90;
-        private System.Windows.Forms.NumericUpDown numericUpDown115;
-        private System.Windows.Forms.CheckBox checkBox91;
-        private System.Windows.Forms.NumericUpDown numericUpDown116;
-        private System.Windows.Forms.CheckBox checkBox92;
-        private System.Windows.Forms.NumericUpDown numericUpDown117;
-        private System.Windows.Forms.GroupBox groupBox29;
-        private System.Windows.Forms.CheckBox checkBox93;
-        private System.Windows.Forms.NumericUpDown numericUpDown118;
-        private System.Windows.Forms.CheckBox checkBox94;
-        private System.Windows.Forms.NumericUpDown numericUpDown119;
-        private System.Windows.Forms.CheckBox checkBox95;
-        private System.Windows.Forms.NumericUpDown numericUpDown120;
-        private System.Windows.Forms.CheckBox checkBox96;
-        private System.Windows.Forms.CheckBox checkBox97;
-        private System.Windows.Forms.CheckBox checkBox98;
-        private System.Windows.Forms.NumericUpDown numericUpDown121;
-        private System.Windows.Forms.NumericUpDown numericUpDown122;
-        private System.Windows.Forms.NumericUpDown numericUpDown123;
-        private System.Windows.Forms.GroupBox groupBox30;
-        private System.Windows.Forms.CheckBox checkBox99;
-        private System.Windows.Forms.NumericUpDown numericUpDown124;
-        private System.Windows.Forms.NumericUpDown numericUpDown125;
-        private System.Windows.Forms.CheckBox checkBox100;
-        private System.Windows.Forms.CheckBox checkBox101;
-        private System.Windows.Forms.NumericUpDown numericUpDown126;
-        private System.Windows.Forms.NumericUpDown numericUpDown127;
-        private System.Windows.Forms.CheckBox checkBox102;
-        private System.Windows.Forms.GroupBox groupBox31;
-        private System.Windows.Forms.CheckBox checkBox103;
-        private System.Windows.Forms.NumericUpDown numericUpDown128;
-        private System.Windows.Forms.NumericUpDown numericUpDown129;
-        private System.Windows.Forms.CheckBox checkBox104;
-        private System.Windows.Forms.CheckBox checkBox105;
-        private System.Windows.Forms.NumericUpDown numericUpDown130;
-        private System.Windows.Forms.NumericUpDown numericUpDown131;
-        private System.Windows.Forms.CheckBox checkBox106;
-        private System.Windows.Forms.GroupBox groupBox32;
-        private System.Windows.Forms.CheckBox checkBox107;
-        private System.Windows.Forms.NumericUpDown numericUpDown132;
-        private System.Windows.Forms.CheckBox checkBox108;
-        private System.Windows.Forms.NumericUpDown numericUpDown133;
-        private System.Windows.Forms.CheckBox checkBox109;
-        private System.Windows.Forms.NumericUpDown numericUpDown134;
-        private System.Windows.Forms.CheckBox checkBox110;
-        private System.Windows.Forms.NumericUpDown numericUpDown135;
-        private System.Windows.Forms.CheckBox checkBox111;
-        private System.Windows.Forms.NumericUpDown numericUpDown136;
-        private System.Windows.Forms.CheckBox checkBox112;
-        private System.Windows.Forms.NumericUpDown numericUpDown137;
-        private System.Windows.Forms.CheckBox checkBox113;
-        private System.Windows.Forms.CheckBox checkBox114;
-        private System.Windows.Forms.CheckBox checkBox115;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.CheckBox checkBox81;
+        private System.Windows.Forms.CheckBox checkBox82;
+        private System.Windows.Forms.GroupBox groupBox27;
+        private System.Windows.Forms.CheckBox checkBox83;
+        private System.Windows.Forms.NumericUpDown numericUpDown105;
+        private System.Windows.Forms.NumericUpDown numericUpDown106;
+        private System.Windows.Forms.CheckBox checkBox84;
+        private System.Windows.Forms.CheckBox checkBox85;
+        private System.Windows.Forms.NumericUpDown numericUpDown107;
+        private System.Windows.Forms.NumericUpDown numericUpDown108;
+        private System.Windows.Forms.CheckBox checkBox86;
+        private System.Windows.Forms.GroupBox groupBox28;
+        private System.Windows.Forms.CheckBox checkBox87;
+        private System.Windows.Forms.NumericUpDown numericUpDown109;
+        private System.Windows.Forms.NumericUpDown numericUpDown110;
+        private System.Windows.Forms.CheckBox checkBox88;
+        private System.Windows.Forms.CheckBox checkBox89;
+        private System.Windows.Forms.NumericUpDown numericUpDown111;
+        private System.Windows.Forms.NumericUpDown numericUpDown112;
+        private System.Windows.Forms.CheckBox checkBox90;
+        private System.Windows.Forms.GroupBox groupBox29;
+        private System.Windows.Forms.CheckBox checkBox91;
+        private System.Windows.Forms.NumericUpDown numericUpDown113;
+        private System.Windows.Forms.NumericUpDown numericUpDown114;
+        private System.Windows.Forms.CheckBox checkBox92;
+        private System.Windows.Forms.CheckBox checkBox93;
+        private System.Windows.Forms.NumericUpDown numericUpDown115;
+        private System.Windows.Forms.CheckBox checkBox94;
+        private System.Windows.Forms.NumericUpDown numericUpDown116;
+        private System.Windows.Forms.CheckBox checkBox95;
+        private System.Windows.Forms.NumericUpDown numericUpDown117;
+        private System.Windows.Forms.GroupBox groupBox30;
+        private System.Windows.Forms.CheckBox checkBox96;
+        private System.Windows.Forms.NumericUpDown numericUpDown118;
+        private System.Windows.Forms.CheckBox checkBox97;
+        private System.Windows.Forms.NumericUpDown numericUpDown119;
+        private System.Windows.Forms.CheckBox checkBox98;
+        private System.Windows.Forms.NumericUpDown numericUpDown120;
+        private System.Windows.Forms.CheckBox checkBox99;
+        private System.Windows.Forms.CheckBox checkBox100;
+        private System.Windows.Forms.CheckBox checkBox101;
+        private System.Windows.Forms.NumericUpDown numericUpDown121;
+        private System.Windows.Forms.NumericUpDown numericUpDown122;
+        private System.Windows.Forms.NumericUpDown numericUpDown123;
+        private System.Windows.Forms.GroupBox groupBox31;
+        private System.Windows.Forms.CheckBox checkBox102;
+        private System.Windows.Forms.NumericUpDown numericUpDown124;
+        private System.Windows.Forms.NumericUpDown numericUpDown125;
+        private System.Windows.Forms.CheckBox checkBox103;
+        private System.Windows.Forms.CheckBox checkBox104;
+        private System.Windows.Forms.NumericUpDown numericUpDown126;
+        private System.Windows.Forms.NumericUpDown numericUpDown127;
+        private System.Windows.Forms.CheckBox checkBox105;
+        private System.Windows.Forms.GroupBox groupBox32;
+        private System.Windows.Forms.CheckBox checkBox106;
+        private System.Windows.Forms.NumericUpDown numericUpDown128;
+        private System.Windows.Forms.NumericUpDown numericUpDown129;
+        private System.Windows.Forms.CheckBox checkBox107;
+        private System.Windows.Forms.CheckBox checkBox108;
+        private System.Windows.Forms.NumericUpDown numericUpDown130;
+        private System.Windows.Forms.NumericUpDown numericUpDown131;
+        private System.Windows.Forms.CheckBox checkBox109;
+        private System.Windows.Forms.GroupBox groupBox43;
+        private System.Windows.Forms.CheckBox checkBox110;
+        private System.Windows.Forms.NumericUpDown numericUpDown132;
+        private System.Windows.Forms.CheckBox checkBox111;
+        private System.Windows.Forms.NumericUpDown numericUpDown133;
+        private System.Windows.Forms.CheckBox checkBox112;
+        private System.Windows.Forms.NumericUpDown numericUpDown134;
+        private System.Windows.Forms.CheckBox checkBox113;
+        private System.Windows.Forms.NumericUpDown numericUpDown135;
+        private System.Windows.Forms.CheckBox checkBox114;
+        private System.Windows.Forms.NumericUpDown numericUpDown136;
+        private System.Windows.Forms.CheckBox checkBox115;
+        private System.Windows.Forms.NumericUpDown numericUpDown137;
         private System.Windows.Forms.GroupBox groupBox33;
         private System.Windows.Forms.GroupBox groupBox34;
         private System.Windows.Forms.CheckBox checkBox116;
-        private System.Windows.Forms.NumericUpDown numericUpDown138;
-        private System.Windows.Forms.NumericUpDown numericUpDown139;
-        private System.Windows.Forms.CheckBox checkBox117;
-        private System.Windows.Forms.CheckBox checkBox118;
-        private System.Windows.Forms.NumericUpDown numericUpDown140;
-        private System.Windows.Forms.NumericUpDown numericUpDown141;
-        private System.Windows.Forms.CheckBox checkBox119;
-        private System.Windows.Forms.GroupBox groupBox35;
-        private System.Windows.Forms.CheckBox checkBox120;
-        private System.Windows.Forms.NumericUpDown numericUpDown142;
-        private System.Windows.Forms.NumericUpDown numericUpDown143;
-        private System.Windows.Forms.CheckBox checkBox121;
-        private System.Windows.Forms.CheckBox checkBox122;
-        private System.Windows.Forms.NumericUpDown numericUpDown144;
-        private System.Windows.Forms.NumericUpDown numericUpDown145;
-        private System.Windows.Forms.CheckBox checkBox123;
-        private System.Windows.Forms.GroupBox groupBox36;
-        private System.Windows.Forms.CheckBox checkBox124;
-        private System.Windows.Forms.NumericUpDown numericUpDown146;
-        private System.Windows.Forms.NumericUpDown numericUpDown147;
-        private System.Windows.Forms.CheckBox checkBox125;
-        private System.Windows.Forms.CheckBox checkBox126;
-        private System.Windows.Forms.NumericUpDown numericUpDown148;
-        private System.Windows.Forms.CheckBox checkBox127;
-        private System.Windows.Forms.NumericUpDown numericUpDown149;
-        private System.Windows.Forms.CheckBox checkBox128;
-        private System.Windows.Forms.NumericUpDown numericUpDown150;
-        private System.Windows.Forms.GroupBox groupBox37;
-        private System.Windows.Forms.CheckBox checkBox129;
-        private System.Windows.Forms.NumericUpDown numericUpDown151;
-        private System.Windows.Forms.CheckBox checkBox130;
-        private System.Windows.Forms.NumericUpDown numericUpDown152;
-        private System.Windows.Forms.CheckBox checkBox131;
-        private System.Windows.Forms.NumericUpDown numericUpDown153;
-        private System.Windows.Forms.CheckBox checkBox132;
-        private System.Windows.Forms.CheckBox checkBox133;
-        private System.Windows.Forms.CheckBox checkBox134;
-        private System.Windows.Forms.NumericUpDown numericUpDown154;
-        private System.Windows.Forms.NumericUpDown numericUpDown155;
-        private System.Windows.Forms.NumericUpDown numericUpDown156;
-        private System.Windows.Forms.GroupBox groupBox38;
-        private System.Windows.Forms.CheckBox checkBox135;
-        private System.Windows.Forms.NumericUpDown numericUpDown157;
-        private System.Windows.Forms.NumericUpDown numericUpDown158;
-        private System.Windows.Forms.CheckBox checkBox136;
-        private System.Windows.Forms.CheckBox checkBox137;
-        private System.Windows.Forms.NumericUpDown numericUpDown159;
-        private System.Windows.Forms.NumericUpDown numericUpDown160;
-        private System.Windows.Forms.CheckBox checkBox138;
-        private System.Windows.Forms.GroupBox groupBox39;
-        private System.Windows.Forms.CheckBox checkBox139;
-        private System.Windows.Forms.NumericUpDown numericUpDown161;
-        private System.Windows.Forms.NumericUpDown numericUpDown162;
-        private System.Windows.Forms.CheckBox checkBox140;
-        private System.Windows.Forms.CheckBox checkBox141;
-        private System.Windows.Forms.NumericUpDown numericUpDown163;
-        private System.Windows.Forms.NumericUpDown numericUpDown164;
-        private System.Windows.Forms.CheckBox checkBox142;
-        private System.Windows.Forms.GroupBox groupBox40;
-        private System.Windows.Forms.CheckBox checkBox143;
-        private System.Windows.Forms.NumericUpDown numericUpDown165;
-        private System.Windows.Forms.CheckBox checkBox144;
-        private System.Windows.Forms.NumericUpDown numericUpDown166;
-        private System.Windows.Forms.CheckBox checkBox145;
-        private System.Windows.Forms.NumericUpDown numericUpDown167;
-        private System.Windows.Forms.CheckBox checkBox146;
-        private System.Windows.Forms.NumericUpDown numericUpDown168;
-        private System.Windows.Forms.CheckBox checkBox147;
-        private System.Windows.Forms.NumericUpDown numericUpDown169;
-        private System.Windows.Forms.CheckBox checkBox148;
-        private System.Windows.Forms.NumericUpDown numericUpDown170;
-        private System.Windows.Forms.CheckBox checkBox149;
-        private System.Windows.Forms.CheckBox checkBox150;
-        private System.Windows.Forms.CheckBox checkBox151;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.GroupBox groupBox41;
+        private System.Windows.Forms.CheckBox checkBox117;
+        private System.Windows.Forms.CheckBox checkBox118;
+        private System.Windows.Forms.GroupBox groupBox35;
+        private System.Windows.Forms.CheckBox checkBox119;
+        private System.Windows.Forms.NumericUpDown numericUpDown138;
+        private System.Windows.Forms.NumericUpDown numericUpDown139;
+        private System.Windows.Forms.CheckBox checkBox120;
+        private System.Windows.Forms.CheckBox checkBox121;
+        private System.Windows.Forms.NumericUpDown numericUpDown140;
+        private System.Windows.Forms.NumericUpDown numericUpDown141;
+        private System.Windows.Forms.CheckBox checkBox122;
+        private System.Windows.Forms.GroupBox groupBox36;
+        private System.Windows.Forms.CheckBox checkBox123;
+        private System.Windows.Forms.NumericUpDown numericUpDown142;
+        private System.Windows.Forms.NumericUpDown numericUpDown143;
+        private System.Windows.Forms.CheckBox checkBox124;
+        private System.Windows.Forms.CheckBox checkBox125;
+        private System.Windows.Forms.NumericUpDown numericUpDown144;
+        private System.Windows.Forms.NumericUpDown numericUpDown145;
+        private System.Windows.Forms.CheckBox checkBox126;
+        private System.Windows.Forms.GroupBox groupBox37;
+        private System.Windows.Forms.CheckBox checkBox127;
+        private System.Windows.Forms.NumericUpDown numericUpDown146;
+        private System.Windows.Forms.NumericUpDown numericUpDown147;
+        private System.Windows.Forms.CheckBox checkBox128;
+        private System.Windows.Forms.CheckBox checkBox129;
+        private System.Windows.Forms.NumericUpDown numericUpDown148;
+        private System.Windows.Forms.CheckBox checkBox130;
+        private System.Windows.Forms.NumericUpDown numericUpDown149;
+        private System.Windows.Forms.CheckBox checkBox131;
+        private System.Windows.Forms.NumericUpDown numericUpDown150;
+        private System.Windows.Forms.GroupBox groupBox38;
+        private System.Windows.Forms.CheckBox checkBox132;
+        private System.Windows.Forms.NumericUpDown numericUpDown151;
+        private System.Windows.Forms.CheckBox checkBox133;
+        private System.Windows.Forms.NumericUpDown numericUpDown152;
+        private System.Windows.Forms.CheckBox checkBox134;
+        private System.Windows.Forms.NumericUpDown numericUpDown153;
+        private System.Windows.Forms.CheckBox checkBox135;
+        private System.Windows.Forms.CheckBox checkBox136;
+        private System.Windows.Forms.CheckBox checkBox137;
+        private System.Windows.Forms.NumericUpDown numericUpDown154;
+        private System.Windows.Forms.NumericUpDown numericUpDown155;
+        private System.Windows.Forms.NumericUpDown numericUpDown156;
+        private System.Windows.Forms.GroupBox groupBox39;
+        private System.Windows.Forms.CheckBox checkBox138;
+        private System.Windows.Forms.NumericUpDown numericUpDown157;
+        private System.Windows.Forms.NumericUpDown numericUpDown158;
+        private System.Windows.Forms.CheckBox checkBox139;
+        private System.Windows.Forms.CheckBox checkBox140;
+        private System.Windows.Forms.NumericUpDown numericUpDown159;
+        private System.Windows.Forms.NumericUpDown numericUpDown160;
+        private System.Windows.Forms.CheckBox checkBox141;
+        private System.Windows.Forms.GroupBox groupBox44;
+        private System.Windows.Forms.CheckBox checkBox146;
+        private System.Windows.Forms.NumericUpDown numericUpDown165;
+        private System.Windows.Forms.CheckBox checkBox147;
+        private System.Windows.Forms.NumericUpDown numericUpDown166;
+        private System.Windows.Forms.CheckBox checkBox148;
+        private System.Windows.Forms.NumericUpDown numericUpDown167;
+        private System.Windows.Forms.CheckBox checkBox149;
+        private System.Windows.Forms.NumericUpDown numericUpDown168;
+        private System.Windows.Forms.CheckBox checkBox150;
+        private System.Windows.Forms.NumericUpDown numericUpDown169;
+        private System.Windows.Forms.CheckBox checkBox151;
+        private System.Windows.Forms.NumericUpDown numericUpDown170;
+        private System.Windows.Forms.GroupBox groupBox40;
+        private System.Windows.Forms.CheckBox checkBox142;
+        private System.Windows.Forms.NumericUpDown numericUpDown161;
+        private System.Windows.Forms.NumericUpDown numericUpDown162;
+        private System.Windows.Forms.CheckBox checkBox143;
+        private System.Windows.Forms.CheckBox checkBox144;
+        private System.Windows.Forms.NumericUpDown numericUpDown163;
+        private System.Windows.Forms.NumericUpDown numericUpDown164;
+        private System.Windows.Forms.CheckBox checkBox145;
     }
 }
