@@ -37,6 +37,7 @@ namespace GatelessGateSharp {
         private long[] mEthashGlobalWorkOffsetArray = new long[1];
         private long[] mEthashGlobalWorkSizeArray = new long[1];
         private long[] mEthashLocalWorkSizeArray = new long[1];
+        private int mEthashIntensity;
 
         UInt32[] mPascalOutput = new UInt32[sPascalOutputSize];
         byte[] mPascalInput = new byte[sPascalInputSize];
@@ -50,7 +51,7 @@ namespace GatelessGateSharp {
         public void Start(EthashStratum aEthashStratum, PascalStratum aPascalStratum, int aEthashIntensity, int aPascalIterations) {
             PrimaryStratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = 256;
-            mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * OpenCLDevice.GetComputeDevice().MaxComputeUnits;
+            mEthashIntensity = aEthashIntensity;
 
             SecondaryStratum = aPascalStratum;
             mPascalRatio = (UInt32)aPascalIterations;
@@ -281,6 +282,9 @@ namespace GatelessGateSharp {
 
                                 MarkAsAlive();
 
+                                mEthashGlobalWorkOffsetArray[0] = 0;
+                                mEthashGlobalWorkSizeArray[0] = mEthashIntensity * mEthashLocalWorkSizeArray[0] * OpenCLDevice.GetComputeDevice().MaxComputeUnits;
+
                                 // Get a new local extranonce if necessary.
                                 if ((ethashStartNonce & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8)) + (ulong)mEthashGlobalWorkSizeArray[0] * 3 / 4) >= ((ulong)0x1 << (64 - (ethashExtranonceByteArray.Length * 8 + 8))))
                                     break;
@@ -300,7 +304,6 @@ namespace GatelessGateSharp {
 
                                 ethashOutput[255] = 0; // ethashOutput[255] is used as an atomic counter.
                                 Queue.Write<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
-                                mEthashGlobalWorkOffsetArray[0] = 0;
                                 mPascalOutput[255] = 0; // mPascalOutput[255] is used as an atomic counter.
                                 Queue.Write<UInt32>(pascalOutputBuffer, true, 0, sPascalOutputSize, (IntPtr)pascalOutputPtr, null);
                                 Queue.Execute(searchKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);

@@ -659,15 +659,15 @@ end:
         if (mask0) *(virtual_addr + mmMC_ARB_DRAM_TIMING) = (*(virtual_addr + mmMC_ARB_DRAM_TIMING) & ~mask0) | (value0 & mask0);
         if (mask1) *(virtual_addr + mmMC_ARB_DRAM_TIMING2) = (*(virtual_addr + mmMC_ARB_DRAM_TIMING2) & ~mask1) | (value1 & mask1);
 
-        if (value2) *(virtual_addr + mmMC_SEQ_MISC1) = value2;
-        if (value3) *(virtual_addr + mmMC_SEQ_MISC3) = value3;
-        if (value4) *(virtual_addr + mmMC_SEQ_MISC8) = value4;
-
         if (mask5) *(virtual_addr + mmMC_SEQ_RAS_TIMING) = (*(virtual_addr + mmMC_SEQ_RAS_TIMING) & ~mask5) | (value5 & mask5);
         if (mask6) *(virtual_addr + mmMC_SEQ_CAS_TIMING) = (*(virtual_addr + mmMC_SEQ_CAS_TIMING) & ~mask6) | (value6 & mask6);
         if (mask7) *(virtual_addr + mmMC_SEQ_MISC_TIMING) = (*(virtual_addr + mmMC_SEQ_MISC_TIMING) & ~mask7) | (value7 & mask7);
         if (mask8) *(virtual_addr + mmMC_SEQ_MISC_TIMING2) = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask8) | (value8 & mask8);
         if (mask9) *(virtual_addr + mmMC_SEQ_PMG_TIMING) = (*(virtual_addr + mmMC_SEQ_PMG_TIMING) & ~mask9) | (value9 & mask9);
+
+        if (value2) *(virtual_addr + mmMC_SEQ_MISC1) = value2;
+        if (value3) *(virtual_addr + mmMC_SEQ_MISC3) = value3;
+        if (value4) *(virtual_addr + mmMC_SEQ_MISC8) = value4;
 
         if (mask5) *(virtual_addr + mmMC_SEQ_RAS_TIMING_LP) = *(virtual_addr + mmMC_SEQ_RAS_TIMING);
         if (mask6) *(virtual_addr + mmMC_SEQ_CAS_TIMING_LP) = *(virtual_addr + mmMC_SEQ_CAS_TIMING);

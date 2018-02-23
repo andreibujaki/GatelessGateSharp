@@ -1,4 +1,4 @@
-﻿using System;
+﻿           using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,30 +12,76 @@ namespace GatelessGateSharp {
         public enum ApplicationGlobalState {
             Idle = 0,
             Mining = 1,
-            Switching = 2
+            Switching = 2,
+            Initializing = 3
         };
 
+        public enum ApplicationBenchmarkState
+        {
+            NotRunning,
+            Running
+        };
 
+        public class BenchmarkEntry
+        {
+            public List<BenchmarkParameter> Parameters { get; set; }
+            public List<BenchmarkResult> Results { get; set; }
+            public int Remaining { get; set; }
+
+            public BenchmarkEntry()
+            {
+                Parameters = new List<BenchmarkParameter> { };
+                Results = new List<BenchmarkResult> { };
+            }
+        }
+
+        public class BenchmarkParameter
+        {
+            public string Name { get; }
+            public string Value { get; }
+            public string OriginalValue { get; }
+
+            public BenchmarkParameter(string aName, string aValue, string aOriginalValue)
+            {
+                Name = aName;
+                Value = aValue;
+                OriginalValue = aOriginalValue;
+            }
+        }
+
+        public class BenchmarkResult
+        {
+            public string SpeedPrimaryAlgorithm { get; set; }
+            public string SpeedSecondaryAlgorithm { get; set; }
+        }
 
         private static Controller sInstance = new Controller(); // only for initialization
         public static ApplicationGlobalState AppState { get; set; }
+        public static ApplicationBenchmarkState BenchmarkState { get; set; }
+
         public static OpenCLDevice[] OpenCLDevices { get; set; }
         public static Stratum PrimaryStratum { get; set; }
         public static Stratum PrimaryStratumBackup { get; set; }
         public static Stratum SecondaryStratum { get; set; }
         public static Stratum SecondaryStratumBackup { get; set; }
         public static List<Miner> Miners { get; set; }
+        public static List<BenchmarkEntry> BenchmarkEntries { get; set; }
+        public static List<BenchmarkEntry> CompletedBenchmarkEntries { get; set; }
         public static System.Diagnostics.Stopwatch StopWatch = new System.Diagnostics.Stopwatch();
+        public static System.Diagnostics.Stopwatch BenchmarkStopwatch = new System.Diagnostics.Stopwatch();
 
+        private Controller()
+        {
+            AppState = ApplicationGlobalState.Initializing;
+            BenchmarkState = ApplicationBenchmarkState.NotRunning;
 
-
-        private Controller() {
-            AppState = ApplicationGlobalState.Switching;
             PrimaryStratum = null;
             PrimaryStratumBackup = null;
             SecondaryStratum = null;
             SecondaryStratumBackup = null;
             Miners = new List<Miner>() { };
+            BenchmarkEntries = new List<BenchmarkEntry>() { };
+            CompletedBenchmarkEntries = new List<BenchmarkEntry>() { };
         }
 
         public static void Task_MemoryTimings(object cancellationToken)

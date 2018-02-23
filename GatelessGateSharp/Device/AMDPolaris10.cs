@@ -2112,15 +2112,51 @@ namespace GatelessGateSharp {
             miscTimings = new MC_SEQ_MISC_TIMING();
             miscTimings2 = new MC_SEQ_MISC_TIMING2();
 
-            RASTimings.TRRD = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "trrd");
-            RASTimings.TRC = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "trc");
-            miscTimings2.FAW = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "faw");
-            miscTimings2.T32AW = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "t32aw");
-            misc1 = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "seq_misc1");
-            misc3 = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "seq_misc3");
-            misc8 = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "seq_misc8");
-            ARBTimings.ACTRD = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "actrd");
-            ARBTimings.ACTWR = MainForm.GetMemoryTiming(DeviceIndex, algorithm, "actwr");
+            uint value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_actrd", out value)) ARBTimings.ACTRD = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_actwr", out value)) ARBTimings.ACTWR = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_rasmactrd", out value)) ARBTimings.RASMACTRD = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_rasmactwr", out value)) ARBTimings.RASMACTWR = value;
+
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_ras2ras", out value)) ARBTimings2.RAS2RAS = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_rp", out value)) ARBTimings2.RP = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_wrplusrp", out value)) ARBTimings2.WRPLUSRP = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_bus_turn", out value)) ARBTimings2.BUS_TURN = value;
+
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdw", out value)) RASTimings.TRCDW = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdwa", out value)) RASTimings.TRCDWA = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdr", out value)) RASTimings.TRCDR = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdra", out value)) RASTimings.TRCDRA = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trrd", out value)) RASTimings.TRRD = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trc", out value)) RASTimings.TRC = value;
+
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tr2w", out value)) CASTimings.TR2W = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tr2r", out value)) CASTimings.TR2R = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tw2r", out value)) CASTimings.TW2R = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tccdl", out value)) CASTimings.TCCDL = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tcl", out value)) CASTimings.TCL = value;
+
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trp_wra", out value)) miscTimings.TRP_WRA = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trp_rda", out value)) miscTimings.TRP_RDA = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trp", out value)) miscTimings.TRP = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trfc", out value)) miscTimings.TRFC = value;
+
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_faw", out value)) miscTimings2.FAW = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_t32aw", out value)) miscTimings2.T32AW = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tredc", out value)) miscTimings2.TREDC = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_twedc", out value)) miscTimings2.TWEDC = value;
+            //if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_twdatatr", out value)) miscTimings2.TWDATATR = value;
+
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tcksre", out value)) PMGTimings.TCKSRE = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tcksrx", out value)) PMGTimings.TCKSRX = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tcke_pulse", out value)) { PMGTimings.TCKE_PULSE = value; PMGTimings.TCKE_PULSE_MSB = value >> 4; }
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_tcke", out value)) PMGTimings.TCKE = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_seq_idle", out value)) PMGTimings.SEQ_IDLE = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_seq_idle_ss", out value)) PMGTimings.SEQ_IDLE_SS = value;
+
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_seq_misc1", out value)) misc1 = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_seq_misc3", out value)) misc3 = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_seq_misc8", out value)) misc8 = value;
 
             MemoryTimingModsEnabled = true;
         }
@@ -2160,7 +2196,6 @@ namespace GatelessGateSharp {
             uint MISCData = 0;
             uint MISC2Data = 0;
             uint PMGData = 0;
-            uint errorData = 0;
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out ARBData);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out ARB2Data);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out CASData);
@@ -2168,7 +2203,6 @@ namespace GatelessGateSharp {
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MISCData);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MISC2Data);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out PMGData);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_DRAM_ERROR_INSERTION, out errorData);
             MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING(ARBData);
             MC_ARB_DRAM_TIMING2 ARB2Timings = new MC_ARB_DRAM_TIMING2(ARB2Data);
             MC_SEQ_CAS_TIMING CASTimings = new MC_SEQ_CAS_TIMING(CASData);
@@ -2225,9 +2259,6 @@ namespace GatelessGateSharp {
             MainForm.Logger("SEQ_IDLE: " + PMGTimings.SEQ_IDLE);
             MainForm.Logger("TCKE_PULSE_MSB:" + PMGTimings.TCKE_PULSE_MSB);
             MainForm.Logger("SEQ_IDLE_SS:" + PMGTimings.SEQ_IDLE_SS);
-            MainForm.Logger("-------------");
-            MainForm.Logger("SEQ Error (TX):   " + (errorData & 0xffff));
-            MainForm.Logger("SEQ Error (RX):   " + (errorData >> 16));
         }
     }
 }

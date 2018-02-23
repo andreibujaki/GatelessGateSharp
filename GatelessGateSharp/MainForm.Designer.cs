@@ -29,21 +29,30 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle48 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle42 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle46 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle47 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
@@ -66,7 +75,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.labelCurrentPool = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBoxDefaultAlgorithm = new System.Windows.Forms.ComboBox();
             this.buttonRestoreStockSettings = new System.Windows.Forms.Button();
             this.buttonBoostPerformance = new System.Windows.Forms.Button();
             this.labelElapsedTime = new System.Windows.Forms.Label();
@@ -128,19 +137,6 @@
             this.buttonPoolPrioritiesDown = new System.Windows.Forms.Button();
             this.buttonPoolPrioritiesUp = new System.Windows.Forms.Button();
             this.listBoxPoolPriorities = new System.Windows.Forms.ListBox();
-            this.groupBoxCoinsToMine = new System.Windows.Forms.GroupBox();
-            this.radioButtonMonacoin = new System.Windows.Forms.RadioButton();
-            this.radioButtonFeathercoin = new System.Windows.Forms.RadioButton();
-            this.radioButtonPascal = new System.Windows.Forms.RadioButton();
-            this.radioButtonLbry = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButtonEthereumPascal = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButtonZcash = new System.Windows.Forms.RadioButton();
-            this.radioButtonMonero = new System.Windows.Forms.RadioButton();
-            this.radioButtonEthereum = new System.Windows.Forms.RadioButton();
-            this.radioButtonMostProfitable = new System.Windows.Forms.RadioButton();
             this.tabPageCustomPoolSettings = new System.Windows.Forms.TabPage();
             this.groupBoxCustmPool1 = new System.Windows.Forms.GroupBox();
             this.comboBoxCustomPool1SecondaryAlgorithm = new System.Windows.Forms.ComboBox();
@@ -232,6 +228,18 @@
             this.label144 = new System.Windows.Forms.Label();
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabControlDeviceSettings = new System.Windows.Forms.TabControl();
+            this.tabPageBenchmarks = new System.Windows.Forms.TabPage();
+            this.dataGridViewBenchmarks = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumnBenchmarksDeviceIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnBenchmarksDeviceVendor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnBenchmarksDeviceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageAPI = new System.Windows.Forms.TabPage();
             this.groupBoxAPIIPRange = new System.Windows.Forms.GroupBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -306,6 +314,10 @@
             this.timerFailOver = new System.Windows.Forms.Timer(this.components);
             this.buttonReleaseMemory = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.buttonRunBenchmarks = new System.Windows.Forms.Button();
+            this.timerBenchmarks = new System.Windows.Forms.Timer(this.components);
+            this.timerResetStopwatch = new System.Windows.Forms.Timer(this.components);
+            this.buttonPrintMemoryTimings = new System.Windows.Forms.Button();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -319,7 +331,6 @@
             this.groupBoxWalletAddresses.SuspendLayout();
             this.groupBoxPoolParameters.SuspendLayout();
             this.groupBoxPoolPriorities.SuspendLayout();
-            this.groupBoxCoinsToMine.SuspendLayout();
             this.tabPageCustomPoolSettings.SuspendLayout();
             this.groupBoxCustmPool1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool1SecondaryPort)).BeginInit();
@@ -335,6 +346,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool0Port)).BeginInit();
             this.tabPageDeviceSettings.SuspendLayout();
             this.groupBoxHadrwareAcceleration.SuspendLayout();
+            this.tabPageBenchmarks.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBenchmarks)).BeginInit();
             this.tabPageAPI.SuspendLayout();
             this.groupBoxAPIIPRange.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).BeginInit();
@@ -359,6 +372,7 @@
             this.tabControlMainForm.Controls.Add(this.tabPagePoolSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageCustomPoolSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageDeviceSettings);
+            this.tabControlMainForm.Controls.Add(this.tabPageBenchmarks);
             this.tabControlMainForm.Controls.Add(this.tabPageAPI);
             this.tabControlMainForm.Controls.Add(this.tabPageMiscSettings);
             this.tabControlMainForm.Controls.Add(this.tabPageLog);
@@ -367,7 +381,7 @@
             this.tabControlMainForm.Location = new System.Drawing.Point(11, 8);
             this.tabControlMainForm.Name = "tabControlMainForm";
             this.tabControlMainForm.SelectedIndex = 0;
-            this.tabControlMainForm.Size = new System.Drawing.Size(989, 559);
+            this.tabControlMainForm.Size = new System.Drawing.Size(985, 611);
             this.tabControlMainForm.TabIndex = 0;
             this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
             // 
@@ -380,7 +394,7 @@
             this.tabPageDashboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
-            this.tabPageDashboard.Size = new System.Drawing.Size(981, 533);
+            this.tabPageDashboard.Size = new System.Drawing.Size(977, 585);
             this.tabPageDashboard.TabIndex = 2;
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
@@ -413,8 +427,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.cartesianChartSpeedPrimaryAlgorithm);
             this.splitContainer1.Panel2.Controls.Add(this.comboBoxSecondGraphType);
             this.splitContainer1.Panel2.Controls.Add(this.comboBoxSecondGraphCoverage);
-            this.splitContainer1.Size = new System.Drawing.Size(626, 276);
-            this.splitContainer1.SplitterDistance = 311;
+            this.splitContainer1.Size = new System.Drawing.Size(622, 276);
+            this.splitContainer1.SplitterDistance = 309;
             this.splitContainer1.TabIndex = 2;
             // 
             // cartesianChartCPUUsage
@@ -425,7 +439,7 @@
             this.cartesianChartCPUUsage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartCPUUsage.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartCPUUsage.Name = "cartesianChartCPUUsage";
-            this.cartesianChartCPUUsage.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartCPUUsage.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartCPUUsage.TabIndex = 154;
             this.cartesianChartCPUUsage.Text = "cartesianChart1";
             // 
@@ -437,7 +451,7 @@
             this.cartesianChartPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartPower.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartPower.Name = "cartesianChartPower";
-            this.cartesianChartPower.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartPower.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartPower.TabIndex = 154;
             this.cartesianChartPower.Visible = false;
             // 
@@ -449,7 +463,7 @@
             this.cartesianChartTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartTemperature.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartTemperature.Name = "cartesianChartTemperature";
-            this.cartesianChartTemperature.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartTemperature.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartTemperature.TabIndex = 145;
             this.cartesianChartTemperature.Text = "cartesianChart1";
             // 
@@ -461,7 +475,7 @@
             this.cartesianChartDeviceActivity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartDeviceActivity.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartDeviceActivity.Name = "cartesianChartDeviceActivity";
-            this.cartesianChartDeviceActivity.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartDeviceActivity.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartDeviceActivity.TabIndex = 153;
             // 
             // cartesianChartFanSpeed
@@ -472,7 +486,7 @@
             this.cartesianChartFanSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartFanSpeed.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartFanSpeed.Name = "cartesianChartFanSpeed";
-            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartFanSpeed.TabIndex = 152;
             this.cartesianChartFanSpeed.Text = "cartesianChart1";
             // 
@@ -490,7 +504,7 @@
             "CPU Usage"});
             this.comboBoxGraphType.Location = new System.Drawing.Point(0, 3);
             this.comboBoxGraphType.Name = "comboBoxGraphType";
-            this.comboBoxGraphType.Size = new System.Drawing.Size(225, 21);
+            this.comboBoxGraphType.Size = new System.Drawing.Size(223, 21);
             this.comboBoxGraphType.TabIndex = 0;
             this.comboBoxGraphType.Tag = "parameter:graph_type";
             this.comboBoxGraphType.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphType_SelectedIndexChanged);
@@ -506,7 +520,7 @@
             "1 Hour",
             "1 Day",
             "1 Month"});
-            this.comboBoxGraphCoverage.Location = new System.Drawing.Point(233, 3);
+            this.comboBoxGraphCoverage.Location = new System.Drawing.Point(231, 3);
             this.comboBoxGraphCoverage.Name = "comboBoxGraphCoverage";
             this.comboBoxGraphCoverage.Size = new System.Drawing.Size(78, 21);
             this.comboBoxGraphCoverage.TabIndex = 1;
@@ -521,7 +535,7 @@
             this.cartesianChartShare1Month.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartShare1Month.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartShare1Month.Name = "cartesianChartShare1Month";
-            this.cartesianChartShare1Month.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartShare1Month.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartShare1Month.TabIndex = 157;
             this.cartesianChartShare1Month.Text = "cartesianChart4";
             // 
@@ -533,7 +547,7 @@
             this.cartesianChartShare1Day.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartShare1Day.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartShare1Day.Name = "cartesianChartShare1Day";
-            this.cartesianChartShare1Day.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartShare1Day.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartShare1Day.TabIndex = 156;
             this.cartesianChartShare1Day.Text = "cartesianChart3";
             // 
@@ -545,7 +559,7 @@
             this.cartesianChartShare1Hour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartShare1Hour.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartShare1Hour.Name = "cartesianChartShare1Hour";
-            this.cartesianChartShare1Hour.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartShare1Hour.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartShare1Hour.TabIndex = 155;
             this.cartesianChartShare1Hour.Text = "cartesianChart2";
             // 
@@ -557,7 +571,7 @@
             this.cartesianChartShare1Minute.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartShare1Minute.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartShare1Minute.Name = "cartesianChartShare1Minute";
-            this.cartesianChartShare1Minute.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartShare1Minute.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartShare1Minute.TabIndex = 154;
             this.cartesianChartShare1Minute.Text = "cartesianChart1";
             // 
@@ -569,7 +583,7 @@
             this.cartesianChartSpeedSecondaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartSpeedSecondaryAlgorithm.Name = "cartesianChartSpeedSecondaryAlgorithm";
-            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartSpeedSecondaryAlgorithm.TabIndex = 153;
             this.cartesianChartSpeedSecondaryAlgorithm.Text = "cartesianChart1";
             // 
@@ -581,7 +595,7 @@
             this.cartesianChartSpeedPrimaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartSpeedPrimaryAlgorithm.Location = new System.Drawing.Point(0, 27);
             this.cartesianChartSpeedPrimaryAlgorithm.Name = "cartesianChartSpeedPrimaryAlgorithm";
-            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(311, 249);
+            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(309, 249);
             this.cartesianChartSpeedPrimaryAlgorithm.TabIndex = 151;
             this.cartesianChartSpeedPrimaryAlgorithm.Text = "cartesianChart1";
             // 
@@ -598,7 +612,7 @@
             "Share"});
             this.comboBoxSecondGraphType.Location = new System.Drawing.Point(0, 3);
             this.comboBoxSecondGraphType.Name = "comboBoxSecondGraphType";
-            this.comboBoxSecondGraphType.Size = new System.Drawing.Size(225, 21);
+            this.comboBoxSecondGraphType.Size = new System.Drawing.Size(223, 21);
             this.comboBoxSecondGraphType.TabIndex = 0;
             this.comboBoxSecondGraphType.Tag = "parameter:second_graph_type";
             this.comboBoxSecondGraphType.SelectedIndexChanged += new System.EventHandler(this.comboBoxSecondGraphType_SelectedIndexChanged);
@@ -614,7 +628,7 @@
             "1 Hour",
             "1 Day",
             "1 Month"});
-            this.comboBoxSecondGraphCoverage.Location = new System.Drawing.Point(233, 3);
+            this.comboBoxSecondGraphCoverage.Location = new System.Drawing.Point(231, 3);
             this.comboBoxSecondGraphCoverage.Name = "comboBoxSecondGraphCoverage";
             this.comboBoxSecondGraphCoverage.Size = new System.Drawing.Size(78, 21);
             this.comboBoxSecondGraphCoverage.TabIndex = 1;
@@ -625,7 +639,7 @@
             // 
             this.groupBox3.Controls.Add(this.labelCurrentPool);
             this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Controls.Add(this.comboBox1);
+            this.groupBox3.Controls.Add(this.comboBoxDefaultAlgorithm);
             this.groupBox3.Controls.Add(this.buttonRestoreStockSettings);
             this.groupBox3.Controls.Add(this.buttonBoostPerformance);
             this.groupBox3.Controls.Add(this.labelElapsedTime);
@@ -644,7 +658,7 @@
             // labelCurrentPool
             // 
             this.labelCurrentPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentPool.Location = new System.Drawing.Point(93, 92);
+            this.labelCurrentPool.Location = new System.Drawing.Point(106, 92);
             this.labelCurrentPool.Name = "labelCurrentPool";
             this.labelCurrentPool.Size = new System.Drawing.Size(369, 18);
             this.labelCurrentPool.TabIndex = 23;
@@ -656,29 +670,30 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.label7.Location = new System.Drawing.Point(5, 22);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(50, 13);
+            this.label7.Size = new System.Drawing.Size(90, 13);
             this.label7.TabIndex = 150;
-            this.label7.Text = "Algorithm";
+            this.label7.Text = "Default Algorithm:";
             // 
-            // comboBox1
+            // comboBoxDefaultAlgorithm
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBoxDefaultAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDefaultAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxDefaultAlgorithm.FormattingEnabled = true;
+            this.comboBoxDefaultAlgorithm.Items.AddRange(new object[] {
+            "Ethash/Pascal",
             "Ethash",
-            "Ethash (NiceHash)",
             "CryptoNight",
-            "CryptoNight (NiceHash)",
+            "NeoScrypt",
             "Lbry",
             "Pascal",
-            "NeoScrypt",
-            "Lyra2REv2"});
-            this.comboBox1.Location = new System.Drawing.Point(96, 19);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(140, 21);
-            this.comboBox1.TabIndex = 149;
-            this.comboBox1.Tag = "parameter:custom_pool0_algorithm";
+            "Lyra2REv2",
+            "Custom Pools"});
+            this.comboBoxDefaultAlgorithm.Location = new System.Drawing.Point(109, 19);
+            this.comboBoxDefaultAlgorithm.Name = "comboBoxDefaultAlgorithm";
+            this.comboBoxDefaultAlgorithm.Size = new System.Drawing.Size(211, 21);
+            this.comboBoxDefaultAlgorithm.TabIndex = 149;
+            this.comboBoxDefaultAlgorithm.Tag = "parameter:default_algorithm";
+            this.comboBoxDefaultAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxDefaultAlgorithm_SelectedIndexChanged);
             // 
             // buttonRestoreStockSettings
             // 
@@ -703,9 +718,9 @@
             // labelElapsedTime
             // 
             this.labelElapsedTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelElapsedTime.Location = new System.Drawing.Point(93, 47);
+            this.labelElapsedTime.Location = new System.Drawing.Point(106, 47);
             this.labelElapsedTime.Name = "labelElapsedTime";
-            this.labelElapsedTime.Size = new System.Drawing.Size(78, 17);
+            this.labelElapsedTime.Size = new System.Drawing.Size(265, 22);
             this.labelElapsedTime.TabIndex = 143;
             this.labelElapsedTime.Text = "-";
             // 
@@ -722,7 +737,7 @@
             // labelCurrentSpeed
             // 
             this.labelCurrentSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentSpeed.Location = new System.Drawing.Point(93, 69);
+            this.labelCurrentSpeed.Location = new System.Drawing.Point(106, 69);
             this.labelCurrentSpeed.Name = "labelCurrentSpeed";
             this.labelCurrentSpeed.Size = new System.Drawing.Size(227, 17);
             this.labelCurrentSpeed.TabIndex = 8;
@@ -731,7 +746,7 @@
             // labelCurrentSecondaryPool
             // 
             this.labelCurrentSecondaryPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentSecondaryPool.Location = new System.Drawing.Point(93, 110);
+            this.labelCurrentSecondaryPool.Location = new System.Drawing.Point(106, 110);
             this.labelCurrentSecondaryPool.Name = "labelCurrentSecondaryPool";
             this.labelCurrentSecondaryPool.Size = new System.Drawing.Size(369, 20);
             this.labelCurrentSecondaryPool.TabIndex = 148;
@@ -834,9 +849,9 @@
             this.dataGridViewDevices.AllowUserToDeleteRows = false;
             this.dataGridViewDevices.AllowUserToResizeColumns = false;
             this.dataGridViewDevices.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle25.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle25;
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -867,9 +882,9 @@
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.dataGridViewDevices.RowsDefaultCellStyle = dataGridViewCellStyle15;
-            this.dataGridViewDevices.Size = new System.Drawing.Size(958, 233);
+            dataGridViewCellStyle39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewDevices.RowsDefaultCellStyle = dataGridViewCellStyle39;
+            this.dataGridViewDevices.Size = new System.Drawing.Size(954, 285);
             this.dataGridViewDevices.TabIndex = 3;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
             this.dataGridViewDevices.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellValueChanged);
@@ -877,10 +892,10 @@
             // 
             // enabled
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle26.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle26;
             this.enabled.FalseValue = "";
             this.enabled.FillWeight = 30F;
             this.enabled.HeaderText = "";
@@ -917,8 +932,8 @@
             // 
             // speed
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle27;
             this.speed.FillWeight = 180F;
             this.speed.HeaderText = "Speed(s)";
             this.speed.Name = "speed";
@@ -928,8 +943,8 @@
             // 
             // shares
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle28;
             this.shares.FillWeight = 120F;
             this.shares.HeaderText = "Shares";
             this.shares.Name = "shares";
@@ -941,8 +956,8 @@
             // 
             this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle29;
             this.activity.FillWeight = 60F;
             this.activity.HeaderText = "Act.";
             this.activity.Name = "activity";
@@ -953,8 +968,8 @@
             // 
             // temperature
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle30;
             this.temperature.FillWeight = 60F;
             this.temperature.HeaderText = "Temp.";
             this.temperature.Name = "temperature";
@@ -964,8 +979,8 @@
             // 
             // fan
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle31;
             this.fan.FillWeight = 60F;
             this.fan.HeaderText = "Fan";
             this.fan.Name = "fan";
@@ -975,8 +990,8 @@
             // 
             // power
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power.DefaultCellStyle = dataGridViewCellStyle32;
             this.power.FillWeight = 60F;
             this.power.HeaderText = "Power";
             this.power.Name = "power";
@@ -986,8 +1001,8 @@
             // 
             // power_limit
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle33;
             this.power_limit.FillWeight = 60F;
             this.power_limit.HeaderText = "";
             this.power_limit.Name = "power_limit";
@@ -997,8 +1012,8 @@
             // 
             // core_clock
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle34;
             this.core_clock.FillWeight = 90F;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
@@ -1008,8 +1023,8 @@
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle35;
             this.memory_clock.FillWeight = 90F;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
@@ -1019,8 +1034,8 @@
             // 
             // memory_info
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomLeft;
-            this.memory_info.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomLeft;
+            this.memory_info.DefaultCellStyle = dataGridViewCellStyle36;
             this.memory_info.FillWeight = 140F;
             this.memory_info.HeaderText = "";
             this.memory_info.Name = "memory_info";
@@ -1030,8 +1045,8 @@
             // 
             // memory_used
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_used.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_used.DefaultCellStyle = dataGridViewCellStyle37;
             this.memory_used.FillWeight = 80F;
             this.memory_used.HeaderText = "(Used)";
             this.memory_used.Name = "memory_used";
@@ -1039,8 +1054,8 @@
             // 
             // memory_reserved
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle38;
             this.memory_reserved.FillWeight = 80F;
             this.memory_reserved.HeaderText = "(Rsvd.)";
             this.memory_reserved.Name = "memory_reserved";
@@ -1052,11 +1067,10 @@
             this.tabPagePoolSettings.Controls.Add(this.groupBoxWalletAddresses);
             this.tabPagePoolSettings.Controls.Add(this.groupBoxPoolParameters);
             this.tabPagePoolSettings.Controls.Add(this.groupBoxPoolPriorities);
-            this.tabPagePoolSettings.Controls.Add(this.groupBoxCoinsToMine);
             this.tabPagePoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPagePoolSettings.Name = "tabPagePoolSettings";
             this.tabPagePoolSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePoolSettings.Size = new System.Drawing.Size(981, 533);
+            this.tabPagePoolSettings.Size = new System.Drawing.Size(977, 585);
             this.tabPagePoolSettings.TabIndex = 0;
             this.tabPagePoolSettings.Text = "Default Pools";
             this.tabPagePoolSettings.UseVisualStyleBackColor = true;
@@ -1342,7 +1356,7 @@
             this.groupBoxPoolPriorities.Controls.Add(this.buttonPoolPrioritiesUp);
             this.groupBoxPoolPriorities.Controls.Add(this.listBoxPoolPriorities);
             this.groupBoxPoolPriorities.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxPoolPriorities.Location = new System.Drawing.Point(547, 7);
+            this.groupBoxPoolPriorities.Location = new System.Drawing.Point(6, 6);
             this.groupBoxPoolPriorities.Name = "groupBoxPoolPriorities";
             this.groupBoxPoolPriorities.Size = new System.Drawing.Size(167, 164);
             this.groupBoxPoolPriorities.TabIndex = 1;
@@ -1389,180 +1403,6 @@
             this.listBoxPoolPriorities.TabIndex = 0;
             this.listBoxPoolPriorities.SelectedIndexChanged += new System.EventHandler(this.listBoxPoolPriorities_SelectedIndexChanged);
             // 
-            // groupBoxCoinsToMine
-            // 
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMonacoin);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonFeathercoin);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonPascal);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonLbry);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButton4);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButton3);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonEthereumPascal);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButton1);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonZcash);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMonero);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonEthereum);
-            this.groupBoxCoinsToMine.Controls.Add(this.radioButtonMostProfitable);
-            this.groupBoxCoinsToMine.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxCoinsToMine.Location = new System.Drawing.Point(3, 7);
-            this.groupBoxCoinsToMine.Name = "groupBoxCoinsToMine";
-            this.groupBoxCoinsToMine.Size = new System.Drawing.Size(535, 167);
-            this.groupBoxCoinsToMine.TabIndex = 0;
-            this.groupBoxCoinsToMine.TabStop = false;
-            this.groupBoxCoinsToMine.Text = "Coin(s) to Mine";
-            // 
-            // radioButtonMonacoin
-            // 
-            this.radioButtonMonacoin.AutoSize = true;
-            this.radioButtonMonacoin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonMonacoin.Location = new System.Drawing.Point(222, 111);
-            this.radioButtonMonacoin.Name = "radioButtonMonacoin";
-            this.radioButtonMonacoin.Size = new System.Drawing.Size(72, 17);
-            this.radioButtonMonacoin.TabIndex = 10;
-            this.radioButtonMonacoin.Text = "Monacoin";
-            this.radioButtonMonacoin.UseVisualStyleBackColor = true;
-            this.radioButtonMonacoin.CheckedChanged += new System.EventHandler(this.radioButtonMonacoin_CheckedChanged);
-            // 
-            // radioButtonFeathercoin
-            // 
-            this.radioButtonFeathercoin.AutoSize = true;
-            this.radioButtonFeathercoin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonFeathercoin.Location = new System.Drawing.Point(222, 88);
-            this.radioButtonFeathercoin.Name = "radioButtonFeathercoin";
-            this.radioButtonFeathercoin.Size = new System.Drawing.Size(81, 17);
-            this.radioButtonFeathercoin.TabIndex = 9;
-            this.radioButtonFeathercoin.Text = "Feathercoin";
-            this.radioButtonFeathercoin.UseVisualStyleBackColor = true;
-            this.radioButtonFeathercoin.CheckedChanged += new System.EventHandler(this.radioButtonFeathercoin_CheckedChanged);
-            // 
-            // radioButtonPascal
-            // 
-            this.radioButtonPascal.AutoSize = true;
-            this.radioButtonPascal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonPascal.Location = new System.Drawing.Point(222, 65);
-            this.radioButtonPascal.Name = "radioButtonPascal";
-            this.radioButtonPascal.Size = new System.Drawing.Size(57, 17);
-            this.radioButtonPascal.TabIndex = 8;
-            this.radioButtonPascal.Text = "Pascal";
-            this.radioButtonPascal.UseVisualStyleBackColor = true;
-            this.radioButtonPascal.CheckedChanged += new System.EventHandler(this.radioButtonPascal_CheckedChanged);
-            // 
-            // radioButtonLbry
-            // 
-            this.radioButtonLbry.AutoSize = true;
-            this.radioButtonLbry.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonLbry.Location = new System.Drawing.Point(222, 42);
-            this.radioButtonLbry.Name = "radioButtonLbry";
-            this.radioButtonLbry.Size = new System.Drawing.Size(45, 17);
-            this.radioButtonLbry.TabIndex = 7;
-            this.radioButtonLbry.Text = "Lbry";
-            this.radioButtonLbry.UseVisualStyleBackColor = true;
-            this.radioButtonLbry.CheckedChanged += new System.EventHandler(this.radioButtonLbry_CheckedChanged);
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Enabled = false;
-            this.radioButton4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButton4.Location = new System.Drawing.Point(106, 65);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(110, 17);
-            this.radioButton4.TabIndex = 3;
-            this.radioButton4.Text = "Ethereum/Decred";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Enabled = false;
-            this.radioButton3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButton3.Location = new System.Drawing.Point(106, 88);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(90, 17);
-            this.radioButton3.TabIndex = 4;
-            this.radioButton3.Text = "Ethereum/Sia";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
-            // 
-            // radioButtonEthereumPascal
-            // 
-            this.radioButtonEthereumPascal.AutoSize = true;
-            this.radioButtonEthereumPascal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonEthereumPascal.Location = new System.Drawing.Point(106, 111);
-            this.radioButtonEthereumPascal.Name = "radioButtonEthereumPascal";
-            this.radioButtonEthereumPascal.Size = new System.Drawing.Size(107, 17);
-            this.radioButtonEthereumPascal.TabIndex = 5;
-            this.radioButtonEthereumPascal.Text = "Ethereum/Pascal";
-            this.radioButtonEthereumPascal.UseVisualStyleBackColor = true;
-            this.radioButtonEthereumPascal.CheckedChanged += new System.EventHandler(this.radioButtonEthereumPascal_CheckedChanged);
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Enabled = false;
-            this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButton1.Location = new System.Drawing.Point(106, 42);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(95, 17);
-            this.radioButton1.TabIndex = 2;
-            this.radioButton1.Text = "Ethereum/Lbry";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // radioButtonZcash
-            // 
-            this.radioButtonZcash.AutoSize = true;
-            this.radioButtonZcash.Enabled = false;
-            this.radioButtonZcash.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonZcash.Location = new System.Drawing.Point(222, 134);
-            this.radioButtonZcash.Name = "radioButtonZcash";
-            this.radioButtonZcash.Size = new System.Drawing.Size(55, 17);
-            this.radioButtonZcash.TabIndex = 11;
-            this.radioButtonZcash.Text = "Zcash";
-            this.radioButtonZcash.UseVisualStyleBackColor = true;
-            this.radioButtonZcash.Visible = false;
-            this.radioButtonZcash.CheckedChanged += new System.EventHandler(this.radioButtonZcash_CheckedChanged);
-            // 
-            // radioButtonMonero
-            // 
-            this.radioButtonMonero.AutoSize = true;
-            this.radioButtonMonero.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonMonero.Location = new System.Drawing.Point(222, 20);
-            this.radioButtonMonero.Name = "radioButtonMonero";
-            this.radioButtonMonero.Size = new System.Drawing.Size(61, 17);
-            this.radioButtonMonero.TabIndex = 6;
-            this.radioButtonMonero.Text = "Monero";
-            this.radioButtonMonero.UseVisualStyleBackColor = true;
-            this.radioButtonMonero.CheckedChanged += new System.EventHandler(this.radioButtonMonero_CheckedChanged);
-            // 
-            // radioButtonEthereum
-            // 
-            this.radioButtonEthereum.AutoSize = true;
-            this.radioButtonEthereum.Checked = true;
-            this.radioButtonEthereum.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonEthereum.Location = new System.Drawing.Point(106, 20);
-            this.radioButtonEthereum.Name = "radioButtonEthereum";
-            this.radioButtonEthereum.Size = new System.Drawing.Size(70, 17);
-            this.radioButtonEthereum.TabIndex = 1;
-            this.radioButtonEthereum.TabStop = true;
-            this.radioButtonEthereum.Text = "Ethereum";
-            this.radioButtonEthereum.UseVisualStyleBackColor = true;
-            this.radioButtonEthereum.CheckedChanged += new System.EventHandler(this.radioButtonEthereum_CheckedChanged);
-            // 
-            // radioButtonMostProfitable
-            // 
-            this.radioButtonMostProfitable.AutoSize = true;
-            this.radioButtonMostProfitable.Enabled = false;
-            this.radioButtonMostProfitable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.radioButtonMostProfitable.Location = new System.Drawing.Point(6, 20);
-            this.radioButtonMostProfitable.Name = "radioButtonMostProfitable";
-            this.radioButtonMostProfitable.Size = new System.Drawing.Size(94, 17);
-            this.radioButtonMostProfitable.TabIndex = 0;
-            this.radioButtonMostProfitable.Text = "Most profitable";
-            this.radioButtonMostProfitable.UseVisualStyleBackColor = true;
-            this.radioButtonMostProfitable.CheckedChanged += new System.EventHandler(this.radioButtonMostProfitable_CheckedChanged);
-            // 
             // tabPageCustomPoolSettings
             // 
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool1);
@@ -1571,7 +1411,7 @@
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool0);
             this.tabPageCustomPoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustomPoolSettings.Name = "tabPageCustomPoolSettings";
-            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(981, 533);
+            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(977, 585);
             this.tabPageCustomPoolSettings.TabIndex = 6;
             this.tabPageCustomPoolSettings.Text = "Custom Pools";
             this.tabPageCustomPoolSettings.UseVisualStyleBackColor = true;
@@ -2578,7 +2418,7 @@
             this.tabPageDeviceSettings.Controls.Add(this.tabControlDeviceSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
-            this.tabPageDeviceSettings.Size = new System.Drawing.Size(981, 533);
+            this.tabPageDeviceSettings.Size = new System.Drawing.Size(977, 585);
             this.tabPageDeviceSettings.TabIndex = 3;
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
@@ -2588,7 +2428,7 @@
             this.buttonResetOverclockingSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResetOverclockingSettings.Location = new System.Drawing.Point(815, 61);
             this.buttonResetOverclockingSettings.Name = "buttonResetOverclockingSettings";
-            this.buttonResetOverclockingSettings.Size = new System.Drawing.Size(163, 23);
+            this.buttonResetOverclockingSettings.Size = new System.Drawing.Size(159, 23);
             this.buttonResetOverclockingSettings.TabIndex = 4;
             this.buttonResetOverclockingSettings.Text = "Reset Overclocking Settings";
             this.buttonResetOverclockingSettings.UseVisualStyleBackColor = true;
@@ -2599,7 +2439,7 @@
             this.buttonResetAllSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResetAllSettings.Location = new System.Drawing.Point(815, 96);
             this.buttonResetAllSettings.Name = "buttonResetAllSettings";
-            this.buttonResetAllSettings.Size = new System.Drawing.Size(163, 23);
+            this.buttonResetAllSettings.Size = new System.Drawing.Size(159, 23);
             this.buttonResetAllSettings.TabIndex = 5;
             this.buttonResetAllSettings.Text = "Reset All";
             this.buttonResetAllSettings.UseVisualStyleBackColor = true;
@@ -2610,7 +2450,7 @@
             this.buttonResetAlgorithmSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResetAlgorithmSettings.Location = new System.Drawing.Point(815, 32);
             this.buttonResetAlgorithmSettings.Name = "buttonResetAlgorithmSettings";
-            this.buttonResetAlgorithmSettings.Size = new System.Drawing.Size(163, 23);
+            this.buttonResetAlgorithmSettings.Size = new System.Drawing.Size(159, 23);
             this.buttonResetAlgorithmSettings.TabIndex = 3;
             this.buttonResetAlgorithmSettings.Text = "Reset Algorithm Settings";
             this.buttonResetAlgorithmSettings.UseVisualStyleBackColor = true;
@@ -2621,7 +2461,7 @@
             this.buttonResetFanControlSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResetFanControlSettings.Location = new System.Drawing.Point(815, 3);
             this.buttonResetFanControlSettings.Name = "buttonResetFanControlSettings";
-            this.buttonResetFanControlSettings.Size = new System.Drawing.Size(163, 23);
+            this.buttonResetFanControlSettings.Size = new System.Drawing.Size(159, 23);
             this.buttonResetFanControlSettings.TabIndex = 2;
             this.buttonResetFanControlSettings.Text = "Reset Fan-Control Settings";
             this.buttonResetFanControlSettings.UseVisualStyleBackColor = true;
@@ -2633,7 +2473,7 @@
             this.groupBoxHadrwareAcceleration.Controls.Add(this.label144);
             this.groupBoxHadrwareAcceleration.Controls.Add(this.checkBoxEnablePhymem);
             this.groupBoxHadrwareAcceleration.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.245F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(3, 362);
+            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(3, 497);
             this.groupBoxHadrwareAcceleration.Name = "groupBoxHadrwareAcceleration";
             this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(387, 85);
             this.groupBoxHadrwareAcceleration.TabIndex = 1;
@@ -2680,8 +2520,164 @@
             this.tabControlDeviceSettings.Location = new System.Drawing.Point(3, 3);
             this.tabControlDeviceSettings.Name = "tabControlDeviceSettings";
             this.tabControlDeviceSettings.SelectedIndex = 0;
-            this.tabControlDeviceSettings.Size = new System.Drawing.Size(806, 353);
+            this.tabControlDeviceSettings.Size = new System.Drawing.Size(806, 488);
             this.tabControlDeviceSettings.TabIndex = 0;
+            // 
+            // tabPageBenchmarks
+            // 
+            this.tabPageBenchmarks.Controls.Add(this.dataGridViewBenchmarks);
+            this.tabPageBenchmarks.Location = new System.Drawing.Point(4, 22);
+            this.tabPageBenchmarks.Name = "tabPageBenchmarks";
+            this.tabPageBenchmarks.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBenchmarks.Size = new System.Drawing.Size(977, 585);
+            this.tabPageBenchmarks.TabIndex = 8;
+            this.tabPageBenchmarks.Text = "Benchmarks";
+            this.tabPageBenchmarks.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewBenchmarks
+            // 
+            this.dataGridViewBenchmarks.AllowUserToAddRows = false;
+            this.dataGridViewBenchmarks.AllowUserToDeleteRows = false;
+            this.dataGridViewBenchmarks.AllowUserToResizeColumns = false;
+            this.dataGridViewBenchmarks.AllowUserToResizeRows = false;
+            dataGridViewCellStyle40.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle40.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridViewBenchmarks.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle40;
+            this.dataGridViewBenchmarks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewBenchmarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewBenchmarks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridViewBenchmarks.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridViewBenchmarks.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dataGridViewBenchmarks.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dataGridViewBenchmarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewBenchmarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumnBenchmarksDeviceIndex,
+            this.dataGridViewTextBoxColumnBenchmarksDeviceVendor,
+            this.dataGridViewTextBoxColumnBenchmarksDeviceName,
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5,
+            this.dataGridViewTextBoxColumn9,
+            this.dataGridViewTextBoxColumn10,
+            this.dataGridViewTextBoxColumn11,
+            this.dataGridViewTextBoxColumn12,
+            this.dataGridViewTextBoxColumn13});
+            this.dataGridViewBenchmarks.Location = new System.Drawing.Point(6, 3);
+            this.dataGridViewBenchmarks.Name = "dataGridViewBenchmarks";
+            this.dataGridViewBenchmarks.ReadOnly = true;
+            this.dataGridViewBenchmarks.RowHeadersVisible = false;
+            dataGridViewCellStyle48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewBenchmarks.RowsDefaultCellStyle = dataGridViewCellStyle48;
+            this.dataGridViewBenchmarks.Size = new System.Drawing.Size(965, 233);
+            this.dataGridViewBenchmarks.TabIndex = 5;
+            // 
+            // dataGridViewTextBoxColumnBenchmarksDeviceIndex
+            // 
+            this.dataGridViewTextBoxColumnBenchmarksDeviceIndex.FillWeight = 30F;
+            this.dataGridViewTextBoxColumnBenchmarksDeviceIndex.HeaderText = "#";
+            this.dataGridViewTextBoxColumnBenchmarksDeviceIndex.Name = "dataGridViewTextBoxColumnBenchmarksDeviceIndex";
+            this.dataGridViewTextBoxColumnBenchmarksDeviceIndex.ReadOnly = true;
+            this.dataGridViewTextBoxColumnBenchmarksDeviceIndex.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumnBenchmarksDeviceIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumnBenchmarksDeviceVendor
+            // 
+            this.dataGridViewTextBoxColumnBenchmarksDeviceVendor.FillWeight = 80F;
+            this.dataGridViewTextBoxColumnBenchmarksDeviceVendor.HeaderText = "Vendor";
+            this.dataGridViewTextBoxColumnBenchmarksDeviceVendor.Name = "dataGridViewTextBoxColumnBenchmarksDeviceVendor";
+            this.dataGridViewTextBoxColumnBenchmarksDeviceVendor.ReadOnly = true;
+            this.dataGridViewTextBoxColumnBenchmarksDeviceVendor.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumnBenchmarksDeviceName
+            // 
+            this.dataGridViewTextBoxColumnBenchmarksDeviceName.FillWeight = 200F;
+            this.dataGridViewTextBoxColumnBenchmarksDeviceName.HeaderText = "Name";
+            this.dataGridViewTextBoxColumnBenchmarksDeviceName.Name = "dataGridViewTextBoxColumnBenchmarksDeviceName";
+            this.dataGridViewTextBoxColumnBenchmarksDeviceName.ReadOnly = true;
+            this.dataGridViewTextBoxColumnBenchmarksDeviceName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumnBenchmarksDeviceName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewCellStyle41.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle41;
+            this.dataGridViewTextBoxColumn4.FillWeight = 180F;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Ethash/Pascal";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewTextBoxColumn4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle42;
+            this.dataGridViewTextBoxColumn5.FillWeight = 180F;
+            this.dataGridViewTextBoxColumn5.HeaderText = "Ethash";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.ReadOnly = true;
+            this.dataGridViewTextBoxColumn5.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn9
+            // 
+            this.dataGridViewTextBoxColumn9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn9.DataPropertyName = "cryptonight";
+            dataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn9.DefaultCellStyle = dataGridViewCellStyle43;
+            this.dataGridViewTextBoxColumn9.FillWeight = 180F;
+            this.dataGridViewTextBoxColumn9.HeaderText = "CryptoNight";
+            this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
+            this.dataGridViewTextBoxColumn9.ReadOnly = true;
+            this.dataGridViewTextBoxColumn9.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn9.Width = 118;
+            // 
+            // dataGridViewTextBoxColumn10
+            // 
+            dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn10.DefaultCellStyle = dataGridViewCellStyle44;
+            this.dataGridViewTextBoxColumn10.FillWeight = 180F;
+            this.dataGridViewTextBoxColumn10.HeaderText = "NeoScrypt";
+            this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
+            this.dataGridViewTextBoxColumn10.ReadOnly = true;
+            this.dataGridViewTextBoxColumn10.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn10.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn11
+            // 
+            dataGridViewCellStyle45.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn11.DefaultCellStyle = dataGridViewCellStyle45;
+            this.dataGridViewTextBoxColumn11.FillWeight = 180F;
+            this.dataGridViewTextBoxColumn11.HeaderText = "Pascal";
+            this.dataGridViewTextBoxColumn11.Name = "dataGridViewTextBoxColumn11";
+            this.dataGridViewTextBoxColumn11.ReadOnly = true;
+            this.dataGridViewTextBoxColumn11.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn12
+            // 
+            dataGridViewCellStyle46.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn12.DefaultCellStyle = dataGridViewCellStyle46;
+            this.dataGridViewTextBoxColumn12.FillWeight = 180F;
+            this.dataGridViewTextBoxColumn12.HeaderText = "Lbry";
+            this.dataGridViewTextBoxColumn12.Name = "dataGridViewTextBoxColumn12";
+            this.dataGridViewTextBoxColumn12.ReadOnly = true;
+            this.dataGridViewTextBoxColumn12.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn13
+            // 
+            this.dataGridViewTextBoxColumn13.DataPropertyName = "lyra2rev2";
+            dataGridViewCellStyle47.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn13.DefaultCellStyle = dataGridViewCellStyle47;
+            this.dataGridViewTextBoxColumn13.FillWeight = 180F;
+            this.dataGridViewTextBoxColumn13.HeaderText = "Lyra2REv2";
+            this.dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
+            this.dataGridViewTextBoxColumn13.ReadOnly = true;
+            this.dataGridViewTextBoxColumn13.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn13.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tabPageAPI
             // 
@@ -2693,7 +2689,7 @@
             this.tabPageAPI.Location = new System.Drawing.Point(4, 22);
             this.tabPageAPI.Name = "tabPageAPI";
             this.tabPageAPI.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAPI.Size = new System.Drawing.Size(981, 533);
+            this.tabPageAPI.Size = new System.Drawing.Size(977, 585);
             this.tabPageAPI.TabIndex = 7;
             this.tabPageAPI.Text = "API";
             this.tabPageAPI.UseVisualStyleBackColor = true;
@@ -2905,7 +2901,7 @@
             this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
             this.tabPageMiscSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageMiscSettings.Name = "tabPageMiscSettings";
-            this.tabPageMiscSettings.Size = new System.Drawing.Size(981, 533);
+            this.tabPageMiscSettings.Size = new System.Drawing.Size(977, 585);
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
@@ -3343,6 +3339,7 @@
             // 
             // tabPageLog
             // 
+            this.tabPageLog.Controls.Add(this.buttonPrintMemoryTimings);
             this.tabPageLog.Controls.Add(this.buttonOpenLogContainingFolder);
             this.tabPageLog.Controls.Add(this.buttonClearLog);
             this.tabPageLog.Controls.Add(this.buttonOpenLog);
@@ -3350,7 +3347,7 @@
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
             this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(981, 533);
+            this.tabPageLog.Size = new System.Drawing.Size(977, 585);
             this.tabPageLog.TabIndex = 1;
             this.tabPageLog.Text = "Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -3361,7 +3358,7 @@
             this.buttonOpenLogContainingFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOpenLogContainingFolder.Location = new System.Drawing.Point(833, 36);
             this.buttonOpenLogContainingFolder.Name = "buttonOpenLogContainingFolder";
-            this.buttonOpenLogContainingFolder.Size = new System.Drawing.Size(142, 23);
+            this.buttonOpenLogContainingFolder.Size = new System.Drawing.Size(138, 23);
             this.buttonOpenLogContainingFolder.TabIndex = 2;
             this.buttonOpenLogContainingFolder.Text = "Open Containing Folder";
             this.buttonOpenLogContainingFolder.UseVisualStyleBackColor = true;
@@ -3373,7 +3370,7 @@
             this.buttonClearLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonClearLog.Location = new System.Drawing.Point(833, 65);
             this.buttonClearLog.Name = "buttonClearLog";
-            this.buttonClearLog.Size = new System.Drawing.Size(142, 23);
+            this.buttonClearLog.Size = new System.Drawing.Size(138, 23);
             this.buttonClearLog.TabIndex = 3;
             this.buttonClearLog.Text = "Clear Log";
             this.buttonClearLog.UseVisualStyleBackColor = true;
@@ -3385,7 +3382,7 @@
             this.buttonOpenLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOpenLog.Location = new System.Drawing.Point(833, 7);
             this.buttonOpenLog.Name = "buttonOpenLog";
-            this.buttonOpenLog.Size = new System.Drawing.Size(142, 23);
+            this.buttonOpenLog.Size = new System.Drawing.Size(138, 23);
             this.buttonOpenLog.TabIndex = 1;
             this.buttonOpenLog.Text = "Open Log File";
             this.buttonOpenLog.UseVisualStyleBackColor = true;
@@ -3403,7 +3400,7 @@
             this.richTextBoxLog.Location = new System.Drawing.Point(6, 7);
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(821, 476);
+            this.richTextBoxLog.Size = new System.Drawing.Size(821, 572);
             this.richTextBoxLog.TabIndex = 0;
             this.richTextBoxLog.Text = "";
             // 
@@ -3412,7 +3409,7 @@
             this.tabPageAbout.Controls.Add(this.richTextBoxAbout);
             this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
             this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Size = new System.Drawing.Size(981, 533);
+            this.tabPageAbout.Size = new System.Drawing.Size(977, 585);
             this.tabPageAbout.TabIndex = 5;
             this.tabPageAbout.Text = "About";
             this.tabPageAbout.UseVisualStyleBackColor = true;
@@ -3426,7 +3423,7 @@
             this.richTextBoxAbout.Location = new System.Drawing.Point(4, 4);
             this.richTextBoxAbout.Name = "richTextBoxAbout";
             this.richTextBoxAbout.ReadOnly = true;
-            this.richTextBoxAbout.Size = new System.Drawing.Size(974, 482);
+            this.richTextBoxAbout.Size = new System.Drawing.Size(970, 578);
             this.richTextBoxAbout.TabIndex = 0;
             this.richTextBoxAbout.Text = resources.GetString("richTextBoxAbout.Text");
             // 
@@ -3458,7 +3455,7 @@
             // buttonRelaunch
             // 
             this.buttonRelaunch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRelaunch.Location = new System.Drawing.Point(753, 573);
+            this.buttonRelaunch.Location = new System.Drawing.Point(749, 625);
             this.buttonRelaunch.Name = "buttonRelaunch";
             this.buttonRelaunch.Size = new System.Drawing.Size(121, 23);
             this.buttonRelaunch.TabIndex = 2;
@@ -3470,7 +3467,7 @@
             // 
             this.buttonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonStart.Enabled = false;
-            this.buttonStart.Location = new System.Drawing.Point(878, 573);
+            this.buttonStart.Location = new System.Drawing.Point(874, 625);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(121, 23);
             this.buttonStart.TabIndex = 3;
@@ -3483,9 +3480,9 @@
             this.statusStripMainForm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMainFormProgressBar,
             this.toolStripStatusLabel1});
-            this.statusStripMainForm.Location = new System.Drawing.Point(0, 606);
+            this.statusStripMainForm.Location = new System.Drawing.Point(0, 658);
             this.statusStripMainForm.Name = "statusStripMainForm";
-            this.statusStripMainForm.Size = new System.Drawing.Size(1012, 23);
+            this.statusStripMainForm.Size = new System.Drawing.Size(1008, 23);
             this.statusStripMainForm.TabIndex = 5;
             // 
             // toolStripMainFormProgressBar
@@ -3510,7 +3507,7 @@
             // buttonReleaseMemory
             // 
             this.buttonReleaseMemory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonReleaseMemory.Location = new System.Drawing.Point(628, 573);
+            this.buttonReleaseMemory.Location = new System.Drawing.Point(624, 625);
             this.buttonReleaseMemory.Name = "buttonReleaseMemory";
             this.buttonReleaseMemory.Size = new System.Drawing.Size(121, 23);
             this.buttonReleaseMemory.TabIndex = 1;
@@ -3518,11 +3515,45 @@
             this.buttonReleaseMemory.UseVisualStyleBackColor = true;
             this.buttonReleaseMemory.Click += new System.EventHandler(this.buttonReleaseMemory_Click);
             // 
+            // buttonRunBenchmarks
+            // 
+            this.buttonRunBenchmarks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRunBenchmarks.Location = new System.Drawing.Point(497, 625);
+            this.buttonRunBenchmarks.Name = "buttonRunBenchmarks";
+            this.buttonRunBenchmarks.Size = new System.Drawing.Size(121, 23);
+            this.buttonRunBenchmarks.TabIndex = 6;
+            this.buttonRunBenchmarks.Text = "Run Benchmarks";
+            this.buttonRunBenchmarks.UseVisualStyleBackColor = true;
+            this.buttonRunBenchmarks.Click += new System.EventHandler(this.buttonRunBenchmarks_Click);
+            // 
+            // timerBenchmarks
+            // 
+            this.timerBenchmarks.Interval = 120000;
+            this.timerBenchmarks.Tick += new System.EventHandler(this.timerBenchmarks_Tick);
+            // 
+            // timerResetStopwatch
+            // 
+            this.timerResetStopwatch.Interval = 60000;
+            this.timerResetStopwatch.Tick += new System.EventHandler(this.timerResetStopwatch_Tick);
+            // 
+            // buttonPrintMemoryTimings
+            // 
+            this.buttonPrintMemoryTimings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPrintMemoryTimings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonPrintMemoryTimings.Location = new System.Drawing.Point(833, 94);
+            this.buttonPrintMemoryTimings.Name = "buttonPrintMemoryTimings";
+            this.buttonPrintMemoryTimings.Size = new System.Drawing.Size(138, 23);
+            this.buttonPrintMemoryTimings.TabIndex = 4;
+            this.buttonPrintMemoryTimings.Text = "Print Memory Timings";
+            this.buttonPrintMemoryTimings.UseVisualStyleBackColor = true;
+            this.buttonPrintMemoryTimings.Click += new System.EventHandler(this.buttonPrintMemoryTimings_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1012, 629);
+            this.ClientSize = new System.Drawing.Size(1008, 681);
+            this.Controls.Add(this.buttonRunBenchmarks);
             this.Controls.Add(this.buttonRelaunch);
             this.Controls.Add(this.statusStripMainForm);
             this.Controls.Add(this.buttonReleaseMemory);
@@ -3532,7 +3563,7 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1028, 668);
+            this.MinimumSize = new System.Drawing.Size(1024, 720);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Gateless Gate Sharp";
@@ -3555,8 +3586,6 @@
             this.groupBoxPoolParameters.ResumeLayout(false);
             this.groupBoxPoolParameters.PerformLayout();
             this.groupBoxPoolPriorities.ResumeLayout(false);
-            this.groupBoxCoinsToMine.ResumeLayout(false);
-            this.groupBoxCoinsToMine.PerformLayout();
             this.tabPageCustomPoolSettings.ResumeLayout(false);
             this.groupBoxCustmPool1.ResumeLayout(false);
             this.groupBoxCustmPool1.PerformLayout();
@@ -3577,6 +3606,8 @@
             this.tabPageDeviceSettings.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.PerformLayout();
+            this.tabPageBenchmarks.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBenchmarks)).EndInit();
             this.tabPageAPI.ResumeLayout(false);
             this.tabPageAPI.PerformLayout();
             this.groupBoxAPIIPRange.ResumeLayout(false);
@@ -3624,11 +3655,6 @@
         private System.Windows.Forms.Button buttonMoneroBalance;
         private System.Windows.Forms.Button buttonEthereumBalance;
         private System.Windows.Forms.Button buttonViewBalancesAtNiceHash;
-        private System.Windows.Forms.GroupBox groupBoxCoinsToMine;
-        private System.Windows.Forms.RadioButton radioButtonZcash;
-        private System.Windows.Forms.RadioButton radioButtonMonero;
-        private System.Windows.Forms.RadioButton radioButtonEthereum;
-        private System.Windows.Forms.RadioButton radioButtonMostProfitable;
         private System.Windows.Forms.Label label70;
         private System.Windows.Forms.Timer timerStatsUpdates;
         private System.Windows.Forms.RichTextBox richTextBoxLog;
@@ -3706,11 +3732,6 @@
         private System.Windows.Forms.TextBox textBoxCustomPool3Login;
         private System.Windows.Forms.Label label164;
         private System.Windows.Forms.RichTextBox richTextBoxAbout;
-        private System.Windows.Forms.RadioButton radioButtonLbry;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButtonEthereumPascal;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ComboBox comboBoxCustomPool1Algorithm;
         private System.Windows.Forms.ComboBox comboBoxCustomPool2Algorithm;
         private System.Windows.Forms.ComboBox comboBoxCustomPool3Algorithm;
@@ -3750,15 +3771,12 @@
         private System.Windows.Forms.TextBox textBoxCustomPool0SecondaryLogin;
         private System.Windows.Forms.Label label160;
         private System.Windows.Forms.ComboBox comboBoxCustomPool0SecondaryAlgorithm;
-        private System.Windows.Forms.RadioButton radioButtonPascal;
         private System.Windows.Forms.TextBox textBoxPascalAddress;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Button buttonViewPascalBalance;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button buttonLbryBalance;
         private System.Windows.Forms.TextBox textBoxLbryAddress;
-        private System.Windows.Forms.RadioButton radioButtonFeathercoin;
-        private System.Windows.Forms.RadioButton radioButtonMonacoin;
         private System.Windows.Forms.Button buttonRelaunch;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.StatusStrip statusStripMainForm;
@@ -3844,7 +3862,7 @@
         private System.Windows.Forms.Label labelCurrentSecondaryPool;
         private System.Windows.Forms.Label labelCurrentPool;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBoxDefaultAlgorithm;
         private System.Windows.Forms.DataGridView dataGridViewDevices;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label12;
@@ -3865,5 +3883,21 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_info;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
+        private System.Windows.Forms.TabPage tabPageBenchmarks;
+        private System.Windows.Forms.Button buttonRunBenchmarks;
+        private System.Windows.Forms.Timer timerBenchmarks;
+        private System.Windows.Forms.DataGridView dataGridViewBenchmarks;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnBenchmarksDeviceIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnBenchmarksDeviceVendor;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnBenchmarksDeviceName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn12;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
+        private System.Windows.Forms.Timer timerResetStopwatch;
+        private System.Windows.Forms.Button buttonPrintMemoryTimings;
     }
 }
