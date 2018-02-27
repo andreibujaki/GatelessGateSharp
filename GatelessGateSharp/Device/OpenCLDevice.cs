@@ -421,6 +421,8 @@ namespace GatelessGateSharp
                                     ) {
                                     mDevices[i].ADLVersion = ADLVersion;
                                 }
+                                //if (ADL.ADL_SUCCESS != (ADLRet = ADL.ADL2_Overdrive6_ThermalLimitUnlock_Set(ADL2Context, mDevices[i].ADLAdapterIndex, 0x00000001, 1)))
+                                //    MainForm.Logger("Failed to unlock thermal limits for Device #" + i + ": " + ADLRet);
                             }
 
                         } else {

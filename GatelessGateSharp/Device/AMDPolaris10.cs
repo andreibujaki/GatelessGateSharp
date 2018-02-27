@@ -1782,7 +1782,7 @@ namespace GatelessGateSharp {
             public static readonly UInt32 TRCDR_MASK  =     0x7c00; public static readonly Int32 TRCDR__SHIFT  = 10;
             public static readonly UInt32 TRCDRA_MASK =    0xf8000; public static readonly Int32 TRCDRA__SHIFT = 15;
             public static readonly UInt32 TRRD_MASK   =   0xf00000; public static readonly Int32 TRRD__SHIFT   = 20;
-            public static readonly UInt32 TRC_MASK    = 0xff000000; public static readonly Int32 TRC__SHIFT    = 24; // 0x7f000000
+            public static readonly UInt32 TRC_MASK    = 0xff000000u; public static readonly Int32 TRC__SHIFT    = 24; // 0x7f000000
 
             public UInt32 Data { get; set; }
             public UInt32 Mask { get; set; }
@@ -1809,7 +1809,7 @@ namespace GatelessGateSharp {
             public static readonly UInt32 TCKE_MASK           =    0x3f000; public static readonly Int32 TCKE__SHIFT           = 12;
             public static readonly UInt32 SEQ_IDLE_MASK       =   0x7c0000; public static readonly Int32 SEQ_IDLE__SHIFT       = 18; // 0x1c0000
             public static readonly UInt32 TCKE_PULSE_MSB_MASK =   0x800000; public static readonly Int32 TCKE_PULSE_MSB__SHIFT = 23;
-            public static readonly UInt32 SEQ_IDLE_SS_MASK    = 0xff000000; public static readonly Int32 SEQ_IDLE_SS__SHIFT    = 24;
+            public static readonly UInt32 SEQ_IDLE_SS_MASK    = 0xff000000u; public static readonly Int32 SEQ_IDLE_SS__SHIFT    = 24;
 
             public UInt32 Data { get; set; }
             public UInt32 Mask { get; set; }
@@ -1836,7 +1836,7 @@ namespace GatelessGateSharp {
             public static readonly UInt32 TCCDL_MASK =      0xe00; public static readonly Int32 TCCDL__SHIFT = 0x9;
             public static readonly UInt32 TR2R_MASK  =     0xf000; public static readonly Int32 TR2R__SHIFT = 0xc;
             public static readonly UInt32 TW2R_MASK  =   0xff0000; public static readonly Int32 TW2R__SHIFT = 0x10; // 0x1f0000
-            public static readonly UInt32 TCL_MASK   = 0xff000000; public static readonly Int32 TCL__SHIFT = 0x18; // 0x1f000000
+            public static readonly UInt32 TCL_MASK   = 0xff000000u; public static readonly Int32 TCL__SHIFT = 0x18; // 0x1f000000
 
             public UInt32 Data { get; set; }
             public UInt32 Mask { get; set; }
@@ -1864,7 +1864,7 @@ namespace GatelessGateSharp {
             public static readonly UInt32 TREDC_MASK    =     0xe000; public static readonly Int32 TREDC__SHIFT    = 13;
             public static readonly UInt32 TWEDC_MASK    =   0x1f0000; public static readonly Int32 TWEDC__SHIFT    = 16;
             public static readonly UInt32 T32AW_MASK    =  0xfe00000; public static readonly Int32 T32AW__SHIFT    = 21; // 0x1e00000
-            public static readonly UInt32 TWDATATR_MASK = 0xf0000000; public static readonly Int32 TWDATATR__SHIFT = 28;
+            public static readonly UInt32 TWDATATR_MASK = 0xf0000000u; public static readonly Int32 TWDATATR__SHIFT = 28;
 
             public UInt32 Data { get; set; }
             public UInt32 Mask { get; set; }
@@ -1889,7 +1889,7 @@ namespace GatelessGateSharp {
             public static readonly UInt32 TRP_WRA_MASK =       0xff; public static readonly Int32 TRP_WRA__SHIFT = 0x0; // 0x3f
             public static readonly UInt32 TRP_RDA_MASK =     0x7f00; public static readonly Int32 TRP_RDA__SHIFT = 0x8; // 0x3f00
             public static readonly UInt32 TRP_MASK     =    0xf8000; public static readonly Int32 TRP__SHIFT = 0xf;
-            public static readonly UInt32 TRFC_MASK    = 0xfff00000; public static readonly Int32 TRFC__SHIFT = 0x14; // 0x1ff00000
+            public static readonly UInt32 TRFC_MASK    = 0xfff00000u; public static readonly Int32 TRFC__SHIFT = 0x14; // 0x1ff00000
 
             public UInt32 Data { get; set; }
             public UInt32 Mask { get; set; }
@@ -1913,7 +1913,7 @@ namespace GatelessGateSharp {
             public static readonly Int32 ACTWR__SHIFT = 0x8;
             public static readonly UInt32 RASMACTRD_MASK = 0xff0000;
             public static readonly Int32 RASMACTRD__SHIFT = 0x10;
-            public static readonly UInt32 RASMACTWR_MASK = 0xff000000;
+            public static readonly UInt32 RASMACTWR_MASK = 0xff000000u;
             public static readonly Int32 RASMACTWR__SHIFT = 0x18;
 
             public UInt32 Data { get; set; }
@@ -1938,7 +1938,7 @@ namespace GatelessGateSharp {
             public static readonly Int32 RP__SHIFT = 0x8;
             public static readonly UInt32 WRPLUSRP_MASK = 0xff0000;
             public static readonly Int32 WRPLUSRP__SHIFT = 0x10;
-            public static readonly UInt32 BUS_TURN_MASK = 0xff000000; // 0x1f000000
+            public static readonly UInt32 BUS_TURN_MASK = 0xff000000u; // 0x1f000000
             public static readonly Int32 BUS_TURN__SHIFT = 0x18;
 
             public UInt32 Data { get; set; }
@@ -1957,7 +1957,7 @@ namespace GatelessGateSharp {
 
         public class MC_SEQ_MISC0
         {
-            public static readonly UInt32 MT_MASK	 = 0xf0000000;
+            public static readonly UInt32 MT_MASK	 = 0xf0000000u;
             public static readonly Int32 MT__SHIFT	 = 28;
             public static readonly UInt32 MEMORY_VENDOR_ID_MASK = 0x00000f00;
             public static readonly Int32 MEMORY_VENDOR_ID__SHIFT = 8;

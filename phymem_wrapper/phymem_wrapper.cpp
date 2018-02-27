@@ -628,15 +628,12 @@ end:
             return FALSE;
         configRegistersBase &= 0xfffffff0;
 
-        volatile uint32_t *virtual_addr = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+        volatile uint32_t *virtual_addr = (volatile uint32_t *)MapPhyMem(configRegistersBase + 8192, 1024);
         if (!virtual_addr)
             return FALSE;
-        
-        const uint32_t mmMC_ARB_BUSY_STATUS = 0x9fd;
-        const uint32_t mmMC_SEQ_STATUS_M = 0xa7d;
-        const uint32_t MC_SEQ_STATUS_M__SEQ0_BUSY_MASK = 0x4000;
-        const uint32_t MC_SEQ_STATUS_M__SEQ1_BUSY_MASK = 0x8000;
 
+        virtual_addr -= 2048;
+        
         const uint32_t mmMC_SEQ_MISC1 = 0xa81;
         const uint32_t mmMC_SEQ_MISC3 = 0xa8b;
         const uint32_t mmMC_SEQ_MISC8 = 0xa5f;
@@ -664,7 +661,7 @@ end:
         if (mask7) *(virtual_addr + mmMC_SEQ_MISC_TIMING) = (*(virtual_addr + mmMC_SEQ_MISC_TIMING) & ~mask7) | (value7 & mask7);
         if (mask8) *(virtual_addr + mmMC_SEQ_MISC_TIMING2) = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask8) | (value8 & mask8);
         if (mask9) *(virtual_addr + mmMC_SEQ_PMG_TIMING) = (*(virtual_addr + mmMC_SEQ_PMG_TIMING) & ~mask9) | (value9 & mask9);
-
+        
         if (value2) *(virtual_addr + mmMC_SEQ_MISC1) = value2;
         if (value3) *(virtual_addr + mmMC_SEQ_MISC3) = value3;
         if (value4) *(virtual_addr + mmMC_SEQ_MISC8) = value4;
@@ -675,7 +672,7 @@ end:
         if (mask8) *(virtual_addr + mmMC_SEQ_MISC_TIMING2_LP) = *(virtual_addr + mmMC_SEQ_MISC_TIMING2);
         if (mask9) *(virtual_addr + mmMC_SEQ_PMG_TIMING_LP) = *(virtual_addr + mmMC_SEQ_PMG_TIMING);
 
-        UnmapPhyMem((uint32_t *)virtual_addr, 256 * 1024);
+        UnmapPhyMem((uint32_t *)virtual_addr + 2048, 1024);
 
         return true;
     }

@@ -94,11 +94,12 @@ namespace GatelessGateSharp {
                 try {
                     // memory timings
                     foreach (var device in Controller.OpenCLDevices) {
-                        if (device.MemoryTimingModsEnabled)
+                        if (device.MemoryTimingModsEnabled) {
                             device.UpdateMemoryTimings();
+                            System.Threading.Thread.Sleep(Parameters.MemoryTimingUpdateInterval);
+                        }
                     }
                 } catch (Exception) { }
-                System.Threading.Thread.Sleep(Parameters.MemoryTimingUpdateInterval);
             }
         }
 

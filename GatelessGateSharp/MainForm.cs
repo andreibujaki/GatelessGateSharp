@@ -101,15 +101,14 @@ namespace GatelessGateSharp
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
         public static string appVersion = "1.3.0";
-        public static string appName = shortAppName + " " + appVersion + " devel";
+        public static string appName = shortAppName + " " + appVersion + " prealpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharpState.txt";
-        private static int mLaunchInterval = 100;
-        public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|pascal|cryptonight|neoscrypt|lyra2rev2|lbry";
+        private static int mLaunchInterval = 1000;
+        public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|cryptonight|neoscrypt|pascal|lbry|lyra2rev2";
         public static readonly string[] sAlgorithmList = sAlgorithmListRegexPattern.Split('|');
-        public static readonly string[] sAlgorithmList_MemoryTimingMods = new string[] { "ethash_pascal", "ethash", "cryptonight", "neoscrypt" };
         private bool mAreSettingsDirty = false;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
@@ -120,6 +119,7 @@ namespace GatelessGateSharp
         private Dictionary<Tuple<int, string, string>, NumericUpDown> numericUpDownDeviceParameterArray = new Dictionary<Tuple<int, string, string>, NumericUpDown> { };
         private Dictionary<Tuple<int, string, string>, TextBox> textBoxDeviceParameterArray = new Dictionary<Tuple<int, string, string>, TextBox> { };
         private Dictionary<Tuple<int, string, string>, GroupBox> groupBoxDeviceParameterArray = new Dictionary<Tuple<int, string, string>, GroupBox> { };
+        private Dictionary<int, TabControl> tabControlAlgorithmsArray = new Dictionary<int, TabControl> { };
 
         private Button[] buttonDeviceResetToDefaultArray;
         private Button[] buttonDeviceResetAllArray;
@@ -694,7 +694,7 @@ namespace GatelessGateSharp
                                         deviceName != Controller.OpenCLDevices[deviceID].GetName())
                                         continue;
 
-                                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control)_([a-z_0-9]+)$");
+                                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
                                     var match = regex.Match(name);
                                     var type = match.Success ? match.Groups[1].Value : null;
                                     var parameter = match.Success ? match.Groups[2].Value : null;
@@ -1152,11 +1152,13 @@ namespace GatelessGateSharp
                     var tag = control.Tag;
                     if (tag == null)
                         continue;
-                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control)_([a-z_0-9]+)$");
+                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
                     var match = regex.Match((string)tag);
                     var type = match.Success ? match.Groups[1].Value : null;
                     var parameter = match.Success ? match.Groups[2].Value : null;
-                    if (control.GetType() == typeof(GroupBox)) {
+                    if (parameter == "algorithms") {
+                        tabControlAlgorithmsArray[i] = (TabControl)control;
+                    } else if (control.GetType() == typeof(GroupBox)) {
                         groupBoxDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = (GroupBox)control;
                     } else if (control.GetType() == typeof(CheckBox)) {
                         checkBoxDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((CheckBox)control);
@@ -1227,7 +1229,7 @@ namespace GatelessGateSharp
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
 
             // Lbry
-            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "threads")].Value = (decimal)1;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "threads")].Value = (decimal)2;
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "intensity")].Value = (decimal)32;
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
@@ -1292,7 +1294,7 @@ namespace GatelessGateSharp
         private void ResetDeviceOverclockingSettings(Device device)
         {
             foreach (var algorithm in sAlgorithmList) {
-                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableOverclockingForDefaultSettings.Checked;
+                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
 
                 numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
@@ -1312,13 +1314,13 @@ namespace GatelessGateSharp
                 numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
                 int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
 
-                if (checkBoxEnableOverclockingForDefaultSettings.Checked) {
+                if (checkBoxEnableHardwareAccelerationForDefaultSettings.Checked) {
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
 
                     var newCoreVoltage
                          = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1030 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1030 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 920 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 920 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1120 :
@@ -1329,16 +1331,21 @@ namespace GatelessGateSharp
                     if (newCoreVoltage > 0)
                         try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = (decimal)newCoreVoltage; } catch (Exception) { }
 
+                    var newMemoryVoltage
+                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 960 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 960 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1000 :
+                                                                                                 defaultMemoryVoltage);
+                    if (newMemoryVoltage > 0)
+                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = (decimal)newMemoryVoltage; } catch (Exception) { }
+
                     var newCoreClock
                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "neoscrypt" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "neoscrypt" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "ethash_pascal" ? 1250 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "ethash_pascal" ? 1250 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1250 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1250 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1300 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1300 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? defaultCoreClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1030 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1000 :
@@ -1349,12 +1356,10 @@ namespace GatelessGateSharp
 
                     var newMemoryClock
                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "neoscrypt" ? 1650 : // defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "neoscrypt" ? 1650 : // defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && defaultMemoryClock >= 1750 ? 2000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && defaultMemoryClock >= 1750 ? 2000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && defaultMemoryClock >= 2000 ? 2200 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" && defaultMemoryClock >= 2000 ? 2200 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? defaultMemoryClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 500 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultMemoryClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? defaultMemoryClock :
@@ -1368,51 +1373,60 @@ namespace GatelessGateSharp
 
         private void ResetDeviceMemoryTimingSettings(Device device)
         {
-            foreach (var algorithm in sAlgorithmList_MemoryTimingMods) {
-                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
+            foreach (var algorithm in sAlgorithmList) {
+                bool ethash = (new Regex(@"^ethash")).Match(algorithm).Success;
+                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
                 if (device.GetVendor() == "AMD"
                     && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
                     && device.MemoryVendor == "Elpida") {
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = (Decimal)25;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = (Decimal)20;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = (Decimal)41;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = (Decimal)46;
+                    if (algorithm == "neoscrypt")
+                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value = (Decimal)105;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value = (Decimal)46;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value = (Decimal)59;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value = (Decimal)22;
+                    if (algorithm == "ethash") {
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 18;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 15;
+                    } else {
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 18;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 15;
+                    }
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = 30;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = 34;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value = (Decimal)19;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdwa")].Value = (Decimal)19;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value = (Decimal)24;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdra")].Value = (Decimal)24;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value = (Decimal)5;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value = (Decimal)65;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value = 78;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value = 33;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value = 43;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value = 16;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value = (Decimal)186;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value = (Decimal)13;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value = (Decimal)12;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = (Decimal)105;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value = 21;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdwa")].Value = 21;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value = 26;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdra")].Value = 26;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value = 5;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value = 70;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value = (Decimal)27;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value = (Decimal)2;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value = (Decimal)5;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value = (Decimal)16;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = (Decimal)22;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value = 190;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value = 14;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value = 13;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = 113;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = (Decimal)5;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = (Decimal)6;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = (Decimal)3;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = (Decimal)6;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value = 28;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value = 2;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value = 5;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value = 16;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = 23;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksre")].Value = (Decimal)2;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksrx")].Value = (Decimal)2;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcke_pulse")].Value = (Decimal)10;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcke")].Value = (Decimal)10;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_idle")].Value = (Decimal)7;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_idle_ss")].Value = (Decimal)0;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = 8;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = 6;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksre")].Value = 2;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksrx")].Value = 2;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcke_pulse")].Value = 10;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcke")].Value = 10;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_idle")].Value = 7;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_idle_ss")].Value = 16;
 
                     textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = "20140604";
                     textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")].Text = "AA4089EA";
@@ -1435,10 +1449,10 @@ namespace GatelessGateSharp
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc_enabled")].Checked = true;
 
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra_enabled")].Checked = false;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda_enabled")].Checked = false;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_enabled")].Checked = false;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc_enabled")].Checked = false;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra_enabled")].Checked = true;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda_enabled")].Checked = true;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_enabled")].Checked = true;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc_enabled")].Checked = true;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl_enabled")].Checked = true;
@@ -1447,9 +1461,9 @@ namespace GatelessGateSharp
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl_enabled")].Checked = false;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw_enabled")].Checked = true;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc_enabled")].Checked = false;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc_enabled")].Checked = false;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw_enabled")].Checked = true;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksre_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksrx_enabled")].Checked = true;
@@ -1464,47 +1478,53 @@ namespace GatelessGateSharp
 
                 } else if (device.GetVendor() == "AMD"
                            && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
-                           && device.MemoryVendor == "Samsung") {
+                           /* && device.MemoryVendor == "Samsung" */) {
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value     = (Decimal)23;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value     = (Decimal)14;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = (Decimal)43;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = (Decimal)52;
+                    // 555000000000000022CC1C00AD595B41C0570E14B00B450A0068C70003011420FA8900A003000000170E2B34A42A3116
+                    if (ethash) { // == "ethash") {
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 18;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 18;
+                    } else {
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 18;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 18;
+                    }
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = 37;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = 45;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value   = (Decimal)164;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value        = (Decimal)42;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value  = (Decimal)49;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value  = (Decimal)22;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value   = 140;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value        = 33;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value  = 40;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value  = 16;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value     = (Decimal)13;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdwa")].Value    = (Decimal)13;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value     = (Decimal)22;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdra")].Value    = (Decimal)22;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value      = (Decimal)5;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value       = (Decimal)65;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value     = 17;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdwa")].Value    = 17;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value     = 29;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdra")].Value    = 29;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value      = 5;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value       = 87;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value   = (Decimal)176;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value   = (Decimal)11;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value       = (Decimal)10;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value      = (Decimal)164;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value   = 63;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value   = 79;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value       = 13;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value      = 219;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value      = (Decimal)28;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value     = (Decimal)3;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value      = (Decimal)5;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value      = (Decimal)14;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value       = (Decimal)20;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value      = 31;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value     = 3;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value      = 5;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value      = 17;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value       = 24;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value       = (Decimal)0;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value     = (Decimal)0;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value     = (Decimal)3;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value     = (Decimal)7;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value       = 0;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value     = 3;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value     = 25;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value     = 0;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksre")].Value    = (Decimal)2;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksrx")].Value    = (Decimal)2;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcke_pulse")].Value = (Decimal)12;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcke")].Value      = (Decimal)12;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_idle")].Value  = (Decimal)7;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_idle_ss")].Value = (Decimal)0;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksre")].Value    = 2;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksrx")].Value    = 2;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcke_pulse")].Value = 12;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcke")].Value      = 12;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_idle")].Value  = 7;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_idle_ss")].Value = 16;
 
                     textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = "20140103";
                     textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")].Text = "A00089FA";
@@ -1527,10 +1547,10 @@ namespace GatelessGateSharp
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc_enabled")].Checked = true;
 
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra_enabled")].Checked = false;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda_enabled")].Checked = false;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_enabled")].Checked = false;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc_enabled")].Checked = false;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra_enabled")].Checked = true;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda_enabled")].Checked = true;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_enabled")].Checked = true;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc_enabled")].Checked = true;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl_enabled")].Checked = true;
@@ -1539,9 +1559,9 @@ namespace GatelessGateSharp
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl_enabled")].Checked = false;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw_enabled")].Checked = true;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc_enabled")].Checked = false;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc_enabled")].Checked = false;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw_enabled")].Checked = true;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksre_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksrx_enabled")].Checked = true;
@@ -4086,7 +4106,7 @@ namespace GatelessGateSharp
                     device.OverclockingEnabled = true;
                     device.UpdateOverclockingSettings();
                 }
-                if (sAlgorithmList_MemoryTimingMods.Contains(algorithm) && checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked)
+                if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked)
                     device.PrepareMemoryTimingMods(algorithm);
                 if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
                     device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
@@ -4359,7 +4379,10 @@ namespace GatelessGateSharp
                 if (unrecoverableException != null || Controller.PrimaryStratum == null || !Controller.Miners.Any()) {
                     StopMiners();
 
-                    if (MessageBox.Show(
+                    if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                        Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                        MessageBox.Show((unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner.") + "\nBenchmarks have been aborted.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    } else if (MessageBox.Show(
                         Utilities.GetAutoClosingForm(20),
                         (unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner.") + "\nWould you like to stop mining now?",
                         appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes) {
@@ -4497,7 +4520,7 @@ namespace GatelessGateSharp
                             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Enabled = overclockingEnabled && ((OpenCLDevice)device).DefaultMemoryVoltage >= 0;
                         }
 
-                        foreach (var algorithm in sAlgorithmList_MemoryTimingMods) {
+                        foreach (var algorithm in sAlgorithmList) {
                             checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Visible = (device.GetType() == typeof(AMDPolaris10));
                             groupBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10")].Visible = (device.GetType() == typeof(AMDPolaris10));
                             var memoryTimingEnabled = checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked;
@@ -4876,8 +4899,12 @@ namespace GatelessGateSharp
                     Controller.AppState = Controller.ApplicationGlobalState.Switching;
                     tabControlMainForm.Enabled = buttonStart.Enabled = false;
                     StopMiners();
-                    if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes)
+                    if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                        Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                        MessageBox.Show(ex.Message + "\nBenchmarks have been aborted.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    } else if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes) { 
                         timerAutoStart.Enabled = true;
+                    }
                 } else {
                     foreach (var miner in Controller.Miners) {
                         if (!miner.Alive) {
@@ -4886,6 +4913,8 @@ namespace GatelessGateSharp
                         }
                     }
                 }
+                UpdateStats();
+                UpdateControls();
             } catch (Exception ex) {
                 Logger("Exception in timerWatchdog_Tick(): " + ex.Message + ex.StackTrace);
             }
@@ -5608,7 +5637,7 @@ namespace GatelessGateSharp
         {
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
-                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" })
+                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" , "RadeonSettings" })
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
                             try { process.Kill(); } catch (Exception) { }
                 } catch (Exception) { }
@@ -6105,7 +6134,7 @@ namespace GatelessGateSharp
             } else {
                 PCIExpress.UnloadPhyMem();
                 foreach (var device in Controller.OpenCLDevices) {
-                    foreach (var algorithm in sAlgorithmList_MemoryTimingMods)
+                    foreach (var algorithm in sAlgorithmList)
                         checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
                 }
             }
@@ -6309,10 +6338,10 @@ namespace GatelessGateSharp
         private void buttonBoostPerformance_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(
-                        "PLEASE DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
-                        + "This feature will adjust overclocking settings automatically for better performance. "
-                        + "Although its approach is fairly conservative, it is not without risk and should be used with caution. "
-                        + "You can always confirm the resuls on the \"Devices\" tab page before you start mining.\n\n"
+                        "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
+                        + "This feature will adjust overclocking/memory timing settings automatically for better performance. "
+                        + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
+                        + "You can always confirm the results on the \"Devices\" tab page before you start mining.\n\n"
                         + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
                         + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
                         + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
@@ -6320,7 +6349,7 @@ namespace GatelessGateSharp
                         + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
                         appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.OK) {
 
-                checkBoxEnableOverclockingForDefaultSettings.Checked = true;
+                checkBoxEnableHardwareAccelerationForDefaultSettings.Checked = true;
                 foreach (var device in Controller.OpenCLDevices)
                     ResetDeviceSettings(device);
             }
@@ -6328,7 +6357,7 @@ namespace GatelessGateSharp
 
         private void buttonRestoreStockSettings_Click(object sender, EventArgs e)
         {
-            checkBoxEnableOverclockingForDefaultSettings.Checked = false;
+            checkBoxEnableHardwareAccelerationForDefaultSettings.Checked = false;
             foreach (var device in Controller.OpenCLDevices)
                 ResetDeviceSettings(device);
         }
@@ -6394,6 +6423,10 @@ namespace GatelessGateSharp
             mAreSettingsDirty = true;
             if (Controller.AppState != Controller.ApplicationGlobalState.Initializing && Controller.AppState != Controller.ApplicationGlobalState.Idle)
                 timerFailOver.Enabled = true;
+            if (comboBoxDefaultAlgorithm.SelectedIndex < comboBoxDefaultAlgorithm.Items.Count - 1) {
+                foreach (var pair in tabControlAlgorithmsArray)
+                    pair.Value.SelectedIndex = comboBoxDefaultAlgorithm.SelectedIndex;
+            }
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -6457,6 +6490,9 @@ namespace GatelessGateSharp
                 timerBenchmarks.Enabled = false;
                 timerResetStopwatch.Enabled = false;
                 Controller.StopWatch.Reset();
+
+                UpdateStats();
+                UpdateControls();
             }
         }
 
@@ -6478,7 +6514,8 @@ namespace GatelessGateSharp
                     foreach (DataGridViewColumn column in dataGridViewBenchmarks.Columns) {
                         if (column.HeaderText == GetPrettyAlgorithmName(defaultAlgorithm)) {
                             dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value
-                                = (ConvertHashrateToString(device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString();
+                                = (ConvertHashrateToString(device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString()
+                                + (device.TotalHashesSecondaryAlgorithm <= 0 ? "" : ", " + (ConvertHashrateToString(device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString());
                             break;
                         }
                     }
@@ -6514,6 +6551,7 @@ namespace GatelessGateSharp
                         device.ClearShares();
                         device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
                     }
+                    tabControlMainForm.SelectedIndex = 4;
                 }
             }
         }
@@ -6530,6 +6568,23 @@ namespace GatelessGateSharp
                     device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
                 }
             }
+        }
+
+        private void dataGridViewBenchmarks_SelectionChanged(object sender, EventArgs e)
+        {
+            dataGridViewBenchmarks.ClearSelection();
+        }
+
+        private void buttonSelectAllDevices_Click(object sender, EventArgs e)
+        {
+            foreach (var device in Controller.OpenCLDevices)
+                dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = true;
+        }
+
+        private void buttonDeselectAllDevices_Click(object sender, EventArgs e)
+        {
+            foreach (var device in Controller.OpenCLDevices)
+                dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = false;
         }
     }
 }
