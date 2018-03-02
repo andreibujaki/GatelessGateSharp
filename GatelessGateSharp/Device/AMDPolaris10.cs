@@ -2203,6 +2203,8 @@ namespace GatelessGateSharp {
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MISCData);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MISC2Data);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out PMGData);
+            uint MC_SEQ_WR_CTL_D1Data = 0;
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_WR_CTL_D1, out MC_SEQ_WR_CTL_D1Data); ;
             MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING(ARBData);
             MC_ARB_DRAM_TIMING2 ARB2Timings = new MC_ARB_DRAM_TIMING2(ARB2Data);
             MC_SEQ_CAS_TIMING CASTimings = new MC_SEQ_CAS_TIMING(CASData);
@@ -2213,6 +2215,7 @@ namespace GatelessGateSharp {
             MainForm.Logger("=============");
             MainForm.Logger("Device Index: " + DeviceIndex);
             MainForm.Logger("PCIe Bus #: " + busNumber);
+            MainForm.Logger("mmMC_SEQ_WR_CTL_D1: 0x" + String.Format("{0:x8}", MC_SEQ_WR_CTL_D1Data));
             MainForm.Logger("-------------");
             MainForm.Logger("ACTRD:    " + ARBTimings.ACTRD);
             MainForm.Logger("ACTWR:    " + ARBTimings.ACTWR);

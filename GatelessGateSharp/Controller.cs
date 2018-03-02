@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 
 namespace GatelessGateSharp {
-    class Controller {
+    public class Controller {
         public enum ApplicationGlobalState {
             Idle = 0,
             Mining = 1,
@@ -19,40 +19,52 @@ namespace GatelessGateSharp {
         public enum ApplicationBenchmarkState
         {
             NotRunning,
-            Running
+            Running,
+            Resuming
         };
 
+        [System.SerializableAttribute()]
         public class BenchmarkEntry
         {
-            public List<BenchmarkParameter> Parameters { get; set; }
-            public List<BenchmarkResult> Results { get; set; }
-            public int Remaining { get; set; }
-
-            public BenchmarkEntry()
-            {
-                Parameters = new List<BenchmarkParameter> { };
-                Results = new List<BenchmarkResult> { };
-            }
+            public List<BenchmarkParameter> Parameters = new List<BenchmarkParameter> { };
+            public List<BenchmarkResult> Results = new List<BenchmarkResult> { };
+            public int Remaining;
         }
 
+        [System.SerializableAttribute()]
         public class BenchmarkParameter
         {
-            public string Name { get; }
-            public string Value { get; }
-            public string OriginalValue { get; }
+            public string Name;
+            public string Value;
+            public List<string> OriginalValues = new List<string> { };
 
             public BenchmarkParameter(string aName, string aValue, string aOriginalValue)
             {
                 Name = aName;
                 Value = aValue;
-                OriginalValue = aOriginalValue;
+                OriginalValues.Add(aOriginalValue);
+            }
+
+            public BenchmarkParameter(string aName, string aValue, List<string> aOriginalValues)
+            {
+                Name = aName;
+                Value = aValue;
+                OriginalValues = aOriginalValues;
+            }
+
+            public BenchmarkParameter()
+            {
+                Name = "";
+                Value = "";
             }
         }
 
+        [System.SerializableAttribute()]
         public class BenchmarkResult
         {
-            public string SpeedPrimaryAlgorithm { get; set; }
-            public string SpeedSecondaryAlgorithm { get; set; }
+            public bool Success;
+            public double SpeedPrimaryAlgorithm;
+            public double SpeedSecondaryAlgorithm;
         }
 
         private static Controller sInstance = new Controller(); // only for initialization
@@ -66,7 +78,7 @@ namespace GatelessGateSharp {
         public static Stratum SecondaryStratumBackup { get; set; }
         public static List<Miner> Miners { get; set; }
         public static List<BenchmarkEntry> BenchmarkEntries { get; set; }
-        public static List<BenchmarkEntry> CompletedBenchmarkEntries { get; set; }
+        public static List<BenchmarkEntry> BenchmarkRecords { get; set; }
         public static System.Diagnostics.Stopwatch StopWatch = new System.Diagnostics.Stopwatch();
         public static System.Diagnostics.Stopwatch BenchmarkStopwatch = new System.Diagnostics.Stopwatch();
 
@@ -81,7 +93,7 @@ namespace GatelessGateSharp {
             SecondaryStratumBackup = null;
             Miners = new List<Miner>() { };
             BenchmarkEntries = new List<BenchmarkEntry>() { };
-            CompletedBenchmarkEntries = new List<BenchmarkEntry>() { };
+            BenchmarkRecords = new List<BenchmarkEntry>() { };
         }
 
         public static void Task_MemoryTimings(object cancellationToken)

@@ -23,7 +23,7 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class Miner : IDisposable
+    public class Miner : IDisposable
     {
         private OpenCLDevice mDevice;
         private bool mStopped = false;

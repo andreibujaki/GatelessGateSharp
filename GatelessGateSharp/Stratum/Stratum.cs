@@ -11,7 +11,7 @@ using System.IO;
 
 
 namespace GatelessGateSharp {
-    class Stratum {
+    public class Stratum {
         public class Job {
             private Mutex mMutex = new Mutex();
             static Random r = new Random();

@@ -14,9 +14,7 @@ namespace GatelessGateSharp {
         public static readonly int MemoryTimingUpdateInterval = 1;
 
         public static readonly int FanControlUpdateInterval = 5000;
-
-        public static readonly int BenchmarkPreparationDurationInMilliseconds = 60000;
-        public static readonly int BenchmarkDurationInMilliseconds = 60000;
+        
         public static readonly int WaitTimeForRestartingMinerThreadInMilliseconds = 0;
         public static readonly int TimeoutForFirstJobInMilliseconds = 60000;
         public static readonly int MaxLogFileSize = 1024 * 1024;
