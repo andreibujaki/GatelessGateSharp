@@ -20,15 +20,45 @@ namespace GatelessGateSharp {
         {
             NotRunning,
             Running,
-            Resuming
+            Resuming,
+            CoolingDown
+        };
+
+        public enum ApplicationOptimizerState
+        {
+            NotRunning,
+            Running,
         };
 
         [System.SerializableAttribute()]
         public class BenchmarkEntry
         {
+            public int ID;
             public List<BenchmarkParameter> Parameters = new List<BenchmarkParameter> { };
             public List<BenchmarkResult> Results = new List<BenchmarkResult> { };
             public int Remaining;
+            public int SuccessCount;
+            public double SpeedPrimaryAlgorithm;
+            public double SpeedSecondaryAlgorithm;
+        }
+
+        [System.SerializableAttribute()]
+        public class OptimizerEntry
+        {
+            public int ID;
+            public string FirstParameter = null;
+            public string SecondParameter = null;
+            public string FirstParameterWithValues = null;
+            public string SecondParameterWithValues = null;
+
+            public int SuccessCount;
+            public int ResultCount;
+            public double SpeedPrimaryAlgorithm;
+            public double SpeedSecondaryAlgorithm;
+
+            public OptimizerEntry() { }
+            public OptimizerEntry(OptimizerEntry aEntry) { FirstParameter = aEntry.FirstParameter; SecondParameter = aEntry.SecondParameter; }
+            public OptimizerEntry(string aFirstParameter, string aSecondParameter) { FirstParameter = aFirstParameter; SecondParameter = aSecondParameter; }
         }
 
         [System.SerializableAttribute()]
@@ -67,34 +97,22 @@ namespace GatelessGateSharp {
             public double SpeedSecondaryAlgorithm;
         }
 
-        private static Controller sInstance = new Controller(); // only for initialization
-        public static ApplicationGlobalState AppState { get; set; }
-        public static ApplicationBenchmarkState BenchmarkState { get; set; }
+        public static ApplicationGlobalState AppState = ApplicationGlobalState.Initializing;
+        public static ApplicationBenchmarkState BenchmarkState = ApplicationBenchmarkState.NotRunning;
+        public static List<BenchmarkEntry> BenchmarkEntries = new List<BenchmarkEntry>() { };
+        public static List<BenchmarkEntry> BenchmarkRecords = new List<BenchmarkEntry>() { };
+        public static ApplicationOptimizerState OptimizerState = ApplicationOptimizerState.NotRunning;
+        public static List<OptimizerEntry> OptimizerEntries = new List<OptimizerEntry>() { };
+        public static List<OptimizerEntry> OptimizerRecords = new List<OptimizerEntry>() { };
 
-        public static OpenCLDevice[] OpenCLDevices { get; set; }
-        public static Stratum PrimaryStratum { get; set; }
-        public static Stratum PrimaryStratumBackup { get; set; }
-        public static Stratum SecondaryStratum { get; set; }
-        public static Stratum SecondaryStratumBackup { get; set; }
-        public static List<Miner> Miners { get; set; }
-        public static List<BenchmarkEntry> BenchmarkEntries { get; set; }
-        public static List<BenchmarkEntry> BenchmarkRecords { get; set; }
+        public static OpenCLDevice[] OpenCLDevices;
+        public static Stratum PrimaryStratum;
+        public static Stratum PrimaryStratumBackup;
+        public static Stratum SecondaryStratum;
+        public static Stratum SecondaryStratumBackup;
+        public static List<Miner> Miners = new List<Miner>() { };
         public static System.Diagnostics.Stopwatch StopWatch = new System.Diagnostics.Stopwatch();
         public static System.Diagnostics.Stopwatch BenchmarkStopwatch = new System.Diagnostics.Stopwatch();
-
-        private Controller()
-        {
-            AppState = ApplicationGlobalState.Initializing;
-            BenchmarkState = ApplicationBenchmarkState.NotRunning;
-
-            PrimaryStratum = null;
-            PrimaryStratumBackup = null;
-            SecondaryStratum = null;
-            SecondaryStratumBackup = null;
-            Miners = new List<Miner>() { };
-            BenchmarkEntries = new List<BenchmarkEntry>() { };
-            BenchmarkRecords = new List<BenchmarkEntry>() { };
-        }
 
         public static void Task_MemoryTimings(object cancellationToken)
         {
@@ -108,6 +126,7 @@ namespace GatelessGateSharp {
                     foreach (var device in Controller.OpenCLDevices) {
                         if (device.MemoryTimingModsEnabled) {
                             device.UpdateMemoryTimings();
+                            //device.PrintMemoryTimings();
                             System.Threading.Thread.Sleep(Parameters.MemoryTimingUpdateInterval);
                         }
                     }

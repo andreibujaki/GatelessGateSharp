@@ -43,9 +43,9 @@ namespace GatelessGateSharp
         public int TargetTemperature { get; set; }
         public int TargetMaxTemperature { get; set; }
 
+        public virtual void SaveDefaultMemoryTimings() { }
         public bool MemoryTimingModsEnabled { get; set; }
         public virtual void UpdateMemoryTimings() { }
-        public virtual void RestoreMemoryTimings() { }
         public virtual void PrintMemoryTimings() { }
         public virtual void PrepareMemoryTimingMods(string algorithm) { }
 

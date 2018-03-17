@@ -111,6 +111,8 @@ namespace GatelessGateSharp
         private static string mAppStateFileName = "GatelessGateSharp_State.txt";
         private static string mBenchmarkEntriesFileName = "GatelessGateSharp_BenchmarkEntries.xml";
         private static string mBenchmarkResultsFileName = "GatelessGateSharp_BenchmarkRecords.xml";
+        private static string mOptimizerEntriesFileName = "GatelessGateSharp_OptimizerEntries.xml";
+        private static string mOptimizerResultsFileName = "GatelessGateSharp_OptimizerRecords.xml";
         private static int mLaunchInterval = 1000;
         public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|cryptonight|neoscrypt|pascal|lbry|lyra2rev2";
         public static readonly string[] sAlgorithmList = sAlgorithmListRegexPattern.Split('|');
@@ -434,6 +436,14 @@ namespace GatelessGateSharp
 
         static string BenchmarkRecordsFilePath {
             get { return AppDataPathBase + "\\" + mBenchmarkResultsFileName; }
+        }
+
+        static string OptimizerEntriesFilePath {
+            get { return AppDataPathBase + "\\" + mOptimizerEntriesFileName; }
+        }
+
+        static string OptimizerRecordsFilePath {
+            get { return AppDataPathBase + "\\" + mOptimizerResultsFileName; }
         }
 
         static string OldDatabaseFilePath {
@@ -1055,15 +1065,34 @@ namespace GatelessGateSharp
                 try {
                     using (var reader = new System.IO.StreamReader(BenchmarkEntriesFilePath))
                         Controller.BenchmarkEntries = (List<Controller.BenchmarkEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Deserialize(reader);
-                    System.IO.File.Delete(BenchmarkEntriesFilePath);
+                } catch (Exception ex) { Logger(ex); }
+            }
+            if (System.IO.File.Exists(BenchmarkRecordsFilePath)) {
+                try {
                     using (var reader = new System.IO.StreamReader(BenchmarkRecordsFilePath))
                         Controller.BenchmarkRecords = (List<Controller.BenchmarkEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Deserialize(reader);
-                    System.IO.File.Delete(BenchmarkRecordsFilePath);
+                    UpdateBenchmarkRecords();
+                } catch (Exception ex) { Logger(ex); }
+            }
+
+            if (System.IO.File.Exists(OptimizerEntriesFilePath)) {
+                try {
+                    using (var reader = new System.IO.StreamReader(OptimizerEntriesFilePath))
+                        Controller.OptimizerEntries = (List<Controller.OptimizerEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Deserialize(reader);
+                } catch (Exception ex) { Logger(ex); }
+            }
+            if (System.IO.File.Exists(OptimizerRecordsFilePath)) {
+                try {
+                    using (var reader = new System.IO.StreamReader(OptimizerRecordsFilePath))
+                        Controller.OptimizerRecords = (List<Controller.OptimizerEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Deserialize(reader);
+                    UpdateOptimizerRecords();
                 } catch (Exception ex) { Logger(ex); }
             }
 
             if (Controller.BenchmarkEntries.Count > 0) {
                 // Resume benchmarking.
+                if (Controller.OptimizerEntries.Count > 0)
+                    Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
                 Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
                 splashScreen.Dispose();
                 Application.DoEvents();
@@ -1385,8 +1414,8 @@ namespace GatelessGateSharp
                          = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1030 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1030 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1120 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreVoltage :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1100 :
@@ -1398,7 +1427,7 @@ namespace GatelessGateSharp
                     var newMemoryVoltage
                          = (device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1010 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1000 :
                                                                                                  defaultMemoryVoltage);
                     if (newMemoryVoltage > 0)
@@ -1463,9 +1492,7 @@ namespace GatelessGateSharp
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value = 16;
 
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value = 21;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdwa")].Value = 21;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value = 26;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdra")].Value = 26;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value = 6;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value = 70;
 
@@ -1507,9 +1534,7 @@ namespace GatelessGateSharp
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn_enabled")].Checked = true;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw_enabled")].Checked = true;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdwa_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr_enabled")].Checked = true;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdra_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc_enabled")].Checked = true;
 
@@ -1522,7 +1547,7 @@ namespace GatelessGateSharp
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r_enabled")].Checked = true;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl_enabled")].Checked = true;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl_enabled")].Checked = false;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc_enabled")].Checked = true;
@@ -1544,44 +1569,41 @@ namespace GatelessGateSharp
                            && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
                            /* && device.MemoryVendor == "Samsung" */) {
 
-                    // 555000000000000022CC1C00AD595B41C0570E14B00B450A0068C70003011420FA8900A003000000170E2B34A42A3116
                     if (ethash) { // == "ethash") {
-                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 16;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 14;
                         numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 18;
                     } else {
-                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 16;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 14;
                         numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 18;
                     }
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = 37;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = 45;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = 39;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = 43;
 
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value   = 140;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value        = 33;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value  = 40;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value  = 16;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value        = 32;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value  = 39;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value  = 18;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value     = 17;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdwa")].Value    = 17;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value     = 29;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdra")].Value    = 29;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value      = 5;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value       = 70;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value     = 16;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value     = 26;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value      = 7;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value       = 72;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value   = 63;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value   = 79;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value       = 13;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value   = 66;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value   = 80;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value       = 14;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value      = 219;
 
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value      = 31;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value     = 3;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value      = 5;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value      = 17;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value      = 6;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value      = 16;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value       = 24;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value       = 8;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value       = 1;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value     = 3;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value     = 25;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value     = 6;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value     = 25; // 7
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value     = 1;
 
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksre")].Value    = 2;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcksrx")].Value    = 2;
@@ -1605,9 +1627,7 @@ namespace GatelessGateSharp
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn_enabled")].Checked = true;
 
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw_enabled")].Checked = true;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdwa_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr_enabled")].Checked = true;
-                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdra_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd_enabled")].Checked = true;
                     checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc_enabled")].Checked = true;
 
@@ -2074,23 +2094,25 @@ namespace GatelessGateSharp
                 }
 
                 var benchmarking = Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running;
+                var optimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running;
                 var elapsedTimeInSeconds = benchmarking ? (long)Controller.BenchmarkStopwatch.Elapsed.TotalSeconds : (long)Controller.StopWatch.Elapsed.TotalSeconds;
+
                 if (benchmarking) {
-                    labelElapsedTime.Text = "Benchmarking...";
-                    var remaining = ((Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count - 1) * (int)numericUpDownBenchmarkingRepeats.Value + Controller.BenchmarkEntries[0].Remaining) * (((int)numericUpDownBenchmarkingWait.Value * 1000) + ((int)numericUpDownBenchmarkingLength.Value * 1000)) / 1000 - elapsedTimeInSeconds;
-                    if (remaining > 0)
-                        labelElapsedTime.Text += " (" + string.Format("{2:00}:{1:00}:{0:00}", remaining % 60, remaining / 60 % 60, remaining / 60 / 60 % 24) + " remaining)";
+                    var remaining = (Controller.BenchmarkEntries.Count * (int)numericUpDownBenchmarkingRepeats.Value) * ((int)numericUpDownBenchmarkingWait.Value + (int)numericUpDownBenchmarkingLength.Value);
+                    labelBenchmarkingRemaining.Text = "About " + (remaining / 60) + " minutes";
                 } else {
-                    if (elapsedTimeInSeconds == 0) {
-                        labelElapsedTime.Text = "-";
-                    } else if (elapsedTimeInSeconds >= 24 * 60 * 60) {
-                        labelElapsedTime.Text = string.Format("{3} Day{4} {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24, elapsedTimeInSeconds / 60 / 60 / 24 == 1 ? "" : "s");
-                    } else {
-                        labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
-                    }
-                    if (elapsedTimeInSeconds > 0 && Controller.AppState == Controller.ApplicationGlobalState.Idle)
-                        labelElapsedTime.Text = labelElapsedTime.Text + " (Paused)";
+                    labelBenchmarkingRemaining.Text = "-";
                 }
+
+                if (elapsedTimeInSeconds == 0) {
+                    labelElapsedTime.Text = "-";
+                } else if (elapsedTimeInSeconds >= 24 * 60 * 60) {
+                    labelElapsedTime.Text = string.Format("{3} Day{4} {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24, elapsedTimeInSeconds / 60 / 60 / 24 == 1 ? "" : "s");
+                } else {
+                    labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
+                }
+                if (elapsedTimeInSeconds > 0 && Controller.AppState == Controller.ApplicationGlobalState.Idle)
+                    labelElapsedTime.Text = labelElapsedTime.Text + " (Paused)";
 
                 Dictionary<string, double> speeds = new Dictionary<string, double>();
                 foreach (var miner in Controller.Miners) {
@@ -2110,6 +2132,7 @@ namespace GatelessGateSharp
                     }
                 }
                 labelCurrentSpeed.Text = "-";
+                labelBenchmarkingSpeed.Text = "-";
                 foreach (var algorithm in speeds.Keys) {
                     if (labelCurrentSpeed.Text == "-") {
                         labelCurrentSpeed.Text = ConvertHashrateToString(speeds[algorithm]) + " (" + algorithm + ")";
@@ -2117,6 +2140,10 @@ namespace GatelessGateSharp
                         labelCurrentSpeed.Text += ", " + ConvertHashrateToString(speeds[algorithm]) + " (" + algorithm + ")";
                     }
                 }
+                if (benchmarking)
+                    labelBenchmarkingSpeed.Text = labelCurrentSpeed.Text;
+                if (optimization)
+                    labelOptimizationSpeed.Text = labelCurrentSpeed.Text;
 
                 UpdateCharts();
 
@@ -2824,10 +2851,12 @@ namespace GatelessGateSharp
                 mBackgroundTasksCancellationTokenSource.Cancel();
 
                 if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
-                    buttonRunBenchmarks_Click();
+                    StopBenchmarks();
                 } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining) {
                     StopMiners(false);
                 }
+                try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                 if (e.CloseReason == CloseReason.UserClosing) {
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                     Program.KillMonitor = true;
@@ -4148,14 +4177,18 @@ namespace GatelessGateSharp
 
         private void EnableHardwareManagement(Stratum stratum, Stratum stratum2)
         {
-            // The basic strategy here is to enable hardware management before launching miners for the sake of stability.
-            // I got better results, as far as stability is concerned, by "teaching" RAM's about modded memory timings
-            // as soon as overclocking kicks in. It seems that switching from one set of memory timings to another is a major source
-            // of instability. - zawawa
-
             string algorithm = stratum.AlgorithmName;
             if (stratum2 != null)
                 algorithm += "_" + stratum2.AlgorithmName;
+            foreach (var device in Controller.OpenCLDevices) {
+                if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
+                    continue;
+                var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked) {
+                    device.PrepareMemoryTimingMods(algorithm);
+                    device.UpdateMemoryTimings();
+                }
+            }
             foreach (var device in Controller.OpenCLDevices) {
                 if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
                     continue;
@@ -4170,8 +4203,11 @@ namespace GatelessGateSharp
                     device.OverclockingEnabled = true;
                     device.UpdateOverclockingSettings();
                 }
-                if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked)
-                    device.PrepareMemoryTimingMods(algorithm);
+            }
+            foreach (var device in Controller.OpenCLDevices) {
+                if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
+                    continue;
+                var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
                 if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
                     device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
                     device.TargetMaxTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value);
@@ -4180,7 +4216,6 @@ namespace GatelessGateSharp
                     device.FanControlEnabled = true;
                 }
             }
-            Thread.Sleep(1000);
         }
 
         private void LaunchMiners()
@@ -4195,6 +4230,7 @@ namespace GatelessGateSharp
             } else {
                 LaunchMinersForDefaultPools();
             }
+            toolStripMainFormProgressBar.Style = ProgressBarStyle.Marquee;
         }
 
         private void LaunchMinersForDefaultPools()
@@ -4353,15 +4389,12 @@ namespace GatelessGateSharp
                         }
                 }
 
-                Thread.Sleep(1000);
                 foreach (var device in Controller.OpenCLDevices) {
                     if (device.MemoryTimingModsEnabled) {
+                        //device.RestoreMemoryTimings();
                         device.MemoryTimingModsEnabled = false;
-                        device.RestoreMemoryTimings();
                     }
                 }
-                Thread.Sleep(1000);
-
                 foreach (var device in Controller.OpenCLDevices) {
                     if (device.OverclockingEnabled) {
                         device.OverclockingEnabled = false;
@@ -4400,7 +4433,7 @@ namespace GatelessGateSharp
                 Controller.AppState = Controller.ApplicationGlobalState.Idle;
                 if (saveStateToFile)
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
-                UpdateStats();
+                toolStripMainFormProgressBar.Style = ProgressBarStyle.Continuous;
                 UpdateControls();
 
                 Logger("Stopped miners.");
@@ -4419,7 +4452,8 @@ namespace GatelessGateSharp
                 UpdateControls();
                 Application.DoEvents();
                 Controller.StopWatch.Start();
-                tabControlMainForm.SelectedIndex = 0;
+                if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                    tabControlMainForm.SelectedIndex = 0;
                 if (mAreSettingsDirty)
                     SaveSettingsToDatabase();
 
@@ -4463,7 +4497,6 @@ namespace GatelessGateSharp
                 StopMiners();
             }
 
-            UpdateStats();
             UpdateControls();
         }
 
@@ -4512,16 +4545,28 @@ namespace GatelessGateSharp
         private void UpdateControls()
         {
             try {
-                tabControlMainForm.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching);
-                comboBoxDefaultAlgorithm.Enabled = buttonStart.Enabled = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) 
+                tabControlMainForm.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown);
+                comboBoxDefaultAlgorithm.Enabled = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) 
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
                                       && (Controller.AppState != Controller.ApplicationGlobalState.Switching);
+                buttonStart.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
+                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
                 buttonRunBenchmarks.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
-                                              && (Controller.AppState == Controller.ApplicationGlobalState.Idle
-                                                  || (Controller.AppState == Controller.ApplicationGlobalState.Mining
-                                                      && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running));
+                                              && (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
+                                              && !(Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
+                buttonRunOptimizer.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
+                                              && ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running)
+                                                   || (Controller.AppState == Controller.ApplicationGlobalState.Idle 
+                                                       && Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning 
+                                                       && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning));
 
-                buttonBoostPerformance.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                buttonRestoreStockSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                buttonBoostPerformance.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle)
+                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
+                buttonRestoreStockSettings.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle)
+                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
 
                 buttonStart.Text
                     = Controller.StopWatch.Elapsed.TotalSeconds == 0 ? "Start" :
@@ -4531,8 +4576,16 @@ namespace GatelessGateSharp
                     = (Controller.AppState == Controller.ApplicationGlobalState.Mining
                        && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) ? "Abort Benchmarking" :
                                                                                                        "Run Benchmarks";
-                buttonReleaseMemory.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                buttonRelaunch.Enabled = Controller.AppState  == Controller.ApplicationGlobalState.Idle;
+                buttonRunOptimizer.Text
+                    = (Controller.AppState == Controller.ApplicationGlobalState.Mining
+                       && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? "Stop Optimizer" :
+                                                                                                       "Run Optimizer";
+                buttonReleaseMemory.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle
+                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
+                buttonRelaunch.Enabled = Controller.AppState  == Controller.ApplicationGlobalState.Idle
+                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
 
                 groupBoxPoolPriorities.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle && !CustomPoolEnabled;
                 groupBoxPoolParameters.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle && !CustomPoolEnabled;
@@ -4617,12 +4670,16 @@ namespace GatelessGateSharp
                 cartesianChartShare1Day.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Day");
                 cartesianChartShare1Month.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Month");
 
+                checkBoxBenchmarkingDoNotRepeatAfterFailure.Enabled = checkBoxBenchmarkingRandomizeOrder.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
+                checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRandomizeOrder.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
                 groupBoxBenchmarkingAlgorithms.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
                 groupBoxBenchmarkingFirstParameter.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
                 groupBoxBenchmarkingSecondParameter.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && checkBoxBenchmarkingFirstParameterEnabled.Checked;
-                groupBoxBenchmarkingOtherParameters.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
-                comboBoxBenchmarkingFirstParameter.Enabled = numericUpDownBenchmarkingFirstParameterMinimum.Enabled = numericUpDownBenchmarkingFirstParameterMaximum.Enabled = numericUpDownBenchmarkingFirstParameterStep.Enabled = checkBoxBenchmarkingFirstParameterEnabled.Checked;
-                comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterMinimum.Enabled = numericUpDownBenchmarkingSecondParameterMaximum.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
+                numericUpDownBenchmarkingRepeats.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
+                numericUpDownBenchmarkingWait.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
+                numericUpDownBenchmarkingLength.Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
+                comboBoxBenchmarkingFirstParameter.Enabled = numericUpDownBenchmarkingFirstParameterStart.Enabled = numericUpDownBenchmarkingFirstParameterEnd.Enabled = numericUpDownBenchmarkingFirstParameterStep.Enabled = checkBoxBenchmarkingFirstParameterEnabled.Checked;
+                comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterStart.Enabled = numericUpDownBenchmarkingSecondParameterEnd.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
             }
@@ -4635,7 +4692,6 @@ namespace GatelessGateSharp
                 listBoxPoolPriorities.Items.Insert(selectedIndex - 1, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex + 1);
                 listBoxPoolPriorities.SelectedIndex = selectedIndex - 1;
-                UpdateStats();
             }
         }
 
@@ -4646,7 +4702,6 @@ namespace GatelessGateSharp
                 listBoxPoolPriorities.Items.Insert(selectedIndex + 2, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex);
                 listBoxPoolPriorities.SelectedIndex = selectedIndex + 1;
-                UpdateStats();
             }
         }
 
@@ -4984,7 +5039,6 @@ namespace GatelessGateSharp
                         }
                     }
                 }
-                UpdateStats();
                 UpdateControls();
             } catch (Exception ex) {
                 Logger("Exception in timerWatchdog_Tick(): " + ex.Message + ex.StackTrace);
@@ -5014,9 +5068,7 @@ namespace GatelessGateSharp
                 timerUpdateLog.Enabled = false;
                 UpdateLog();
                 timerUpdateLog.Enabled = true;
-            } catch (Exception ex) {
-                Logger("Exception in timerUpdateLog_Tick(): " + ex.Message + ex.StackTrace);
-            }
+            } catch (Exception ex) { Logger(ex); }
         }
 
         private void checkBoxLaunchAtStartup_CheckedChanged(object sender, EventArgs e)
@@ -5036,446 +5088,6 @@ namespace GatelessGateSharp
             } catch (Exception) {
                 MessageBox.Show("Failed to complete the operation.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void checkBoxGPU0Enable_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU1Enable_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU2Enable_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU3Enable_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU4Enable_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU5Enable_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU6Enable_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU7Enable_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateStats();
-        }
-
-        private void labelGPU0ID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0Vendor_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0Name_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0Speed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0Shares_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0Activity_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0Temp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0Fan_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0CoreClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU0MemoryClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1ID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1Vendor_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1Name_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1Speed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1Shares_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1Activity_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1Temp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1Fan_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1CoreClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU1MemoryClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2ID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2Vendor_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2Name_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2Speed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2Shares_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2Activity_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2Temp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2Fan_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2CoreClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU2MemoryClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3Vendor_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3ID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3Name_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3Speed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3Shares_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3Activity_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3Temp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3Fan_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3CoreClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU3MemoryClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4ID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4Vendor_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4Name_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4Speed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4Shares_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4Activity_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4Temp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4Fan_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4CoreClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU4MemoryClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5ID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5Vendor_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5Name_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5Speed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5Shares_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5Activity_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5Temp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5Fan_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5CoreClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU5MemoryClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6ID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6Vendor_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6Name_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6Speed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6Shares_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6Activity_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6Temp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6Fan_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6CoreClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU6MemoryClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7ID_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7Vendor_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7Name_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7Speed_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7Shares_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7Activity_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7Temp_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7Fan_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7CoreClock_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelGPU7MemoryClock_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void buttonClearLog_Click(object sender, EventArgs e)
@@ -5636,7 +5248,7 @@ namespace GatelessGateSharp
         {
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
-                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" })
+                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU", "RadeonSettings" })
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
                             try { process.Kill(); } catch (Exception) { }
                 } catch (Exception) { }
@@ -5929,6 +5541,8 @@ namespace GatelessGateSharp
             mAreSettingsDirty = true;
             if (checkBoxEnablePhymem.Checked) {
                 PCIExpress.LoadPhyMem();
+                foreach (var device in Controller.OpenCLDevices)
+                    device.SaveDefaultMemoryTimings();
             } else {
                 PCIExpress.UnloadPhyMem();
                 foreach (var device in Controller.OpenCLDevices) {
@@ -6222,23 +5836,64 @@ namespace GatelessGateSharp
             } catch (Exception ex) { Logger(ex); }
         }
 
-        private void buttonRunBenchmarks_Click(object sender = null, EventArgs e = null)
+        private void SaveOptimizerState()
+        {
+            try {
+                using (var stream = System.IO.File.Open(OptimizerEntriesFilePath, System.IO.FileMode.Create))
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) {
+                    (new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Serialize(sw, Controller.OptimizerEntries);
+                    sw.Flush();
+#pragma warning disable 618, 612
+                    NativeMethods.FlushFileBuffers(stream.Handle);
+#pragma warning restore 618, 612
+                    sw.Close();
+                }
+                using (var stream = System.IO.File.Open(OptimizerRecordsFilePath, System.IO.FileMode.Create))
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) {
+                    (new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Serialize(sw, Controller.OptimizerRecords);
+                    sw.Flush();
+#pragma warning disable 618, 612
+                    NativeMethods.FlushFileBuffers(stream.Handle);
+#pragma warning restore 618, 612
+                    sw.Close();
+                }
+                Thread.Sleep(500);
+            } catch (Exception ex) { Logger(ex); }
+        }
+
+        private void StartBenchmarks()
         {
             if (Controller.AppState == Controller.ApplicationGlobalState.Idle
                 && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) {
 
-                timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000) + ((int)numericUpDownBenchmarkingLength.Value * 1000);
-                timerBenchmarks.Enabled = true;
-                timerResetStopwatch.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000);
-                timerResetStopwatch.Enabled = true;
+                int benchmarkEntryID = 0;
+                if (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
+                    tabControlMainForm.SelectedIndex = 4;
+
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    timerBenchmarks.Interval = ((int)numericUpDownOptimizationWait.Value * 1000) + ((int)numericUpDownOptimizationLength.Value * 1000);
+                    timerResetStopwatch.Interval = ((int)numericUpDownOptimizationWait.Value * 1000);
+                } else {
+                    timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000) + ((int)numericUpDownBenchmarkingLength.Value * 1000);
+                    timerResetStopwatch.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000);
+                }
+                timerBenchmarks.Enabled = false;
+                timerResetStopwatch.Enabled = false;
 
                 if (mAreSettingsDirty)
                     SaveSettingsToDatabase();
 
-                // Set up benchmarks.
                 Controller.BenchmarkEntries.Clear();
                 Controller.BenchmarkRecords.Clear();
                 List<string> algorithmList = new List<string> { };
+                var enabledDeviceCount = 0;
+                var deviceIndex = -1;
+                foreach (var device in Controller.OpenCLDevices) {
+                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        deviceIndex = device.DeviceIndex;
+                        ++enabledDeviceCount;
+                    }
+                }
                 if (checkBoxBenchmarkingEthashPascalEnabled.Checked) algorithmList.Add("ethash_pascal");
                 if (checkBoxBenchmarkingEthashEnabled.Checked) algorithmList.Add("ethash");
                 if (checkBoxBenchmarkingCryptoNightEnabled.Checked) algorithmList.Add("cryptonight");
@@ -6246,12 +5901,61 @@ namespace GatelessGateSharp
                 if (checkBoxBenchmarkingPascalEnabled.Checked) algorithmList.Add("pascal");
                 if (checkBoxBenchmarkingLbryEnabled.Checked) algorithmList.Add("lbry");
                 if (checkBoxBenchmarkingLyra2REv2Enabled.Checked) algorithmList.Add("lyra2rev2");
+
+                // Set up automatic optimizations.
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    String paramType = algorithmList[0];
+
+                    var firstParamName = Controller.OptimizerEntries[0].FirstParameter;
+                    var secondParamName = Controller.OptimizerEntries[0].SecondParameter;
+
+                    if (secondParamName == null) {
+                        // Set up the first parameter.
+                        int multiplier = checkBoxOptimizationExtendRange.Checked ? 2 : 1;
+                        var numericUpDown = numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, paramType, firstParamName)];
+                        var value = (int)numericUpDown.Value;
+                        var min = (value - numericUpDown.Increment * multiplier >= numericUpDown.Minimum) ? value - numericUpDown.Increment * multiplier : (int)numericUpDown.Minimum;
+                        var max = (value + numericUpDown.Increment * multiplier <= numericUpDown.Maximum) ? value + numericUpDown.Increment * multiplier : (int)numericUpDown.Maximum;
+                        checkBoxBenchmarkingFirstParameterEnabled.Checked = true;
+                        numericUpDownBenchmarkingFirstParameterStart.Value = min;
+                        numericUpDownBenchmarkingFirstParameterEnd.Value = max;
+                        numericUpDownBenchmarkingFirstParameterStep.Value = numericUpDown.Increment;
+                        comboBoxBenchmarkingFirstParameter.SelectedIndex = comboBoxBenchmarkingFirstParameter.FindStringExact(paramType + "_" + firstParamName);
+
+                        checkBoxBenchmarkingSecondParameterEnabled.Checked = false;
+                    } else {
+                        // Set up the first parameter.
+                        var numericUpDown = numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, paramType, firstParamName)];
+                        var value = (int)numericUpDown.Value;
+                        var min = (value - numericUpDown.Increment >= numericUpDown.Minimum) ? value - numericUpDown.Increment : (int)numericUpDown.Minimum;
+                        var max = (value + numericUpDown.Increment <= numericUpDown.Maximum) ? value + numericUpDown.Increment : (int)numericUpDown.Maximum;
+                        checkBoxBenchmarkingFirstParameterEnabled.Checked = true;
+                        numericUpDownBenchmarkingFirstParameterStart.Value = min;
+                        numericUpDownBenchmarkingFirstParameterEnd.Value = max;
+                        numericUpDownBenchmarkingFirstParameterStep.Value = numericUpDown.Increment;
+                        comboBoxBenchmarkingFirstParameter.SelectedIndex = comboBoxBenchmarkingFirstParameter.FindStringExact(paramType + "_" + firstParamName);
+
+                        // Set up the second parameter.
+                        checkBoxBenchmarkingSecondParameterEnabled.Checked = true;
+                        numericUpDown = numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, paramType, secondParamName)];
+                        value = (int)numericUpDown.Value;
+                        min = (value - numericUpDown.Increment >= numericUpDown.Minimum) ? value - numericUpDown.Increment : (int)numericUpDown.Minimum;
+                        max = (value + numericUpDown.Increment <= numericUpDown.Maximum) ? value + numericUpDown.Increment : (int)numericUpDown.Maximum;
+                        numericUpDownBenchmarkingSecondParameterStart.Value = min;
+                        numericUpDownBenchmarkingSecondParameterEnd.Value = max;
+                        numericUpDownBenchmarkingSecondParameterStep.Value = numericUpDown.Increment;
+                        comboBoxBenchmarkingSecondParameter.SelectedIndex = comboBoxBenchmarkingSecondParameter.FindStringExact(paramType + "_" + secondParamName);
+                    }
+                }
+
+                // Set up benchmarks.
                 if (!checkBoxBenchmarkingFirstParameterEnabled.Checked) {
                     foreach (var algorithm in algorithmList) {
                         var param0 = new Controller.BenchmarkParameter("default_algorithm", algorithm, DefaultAlgorithm);
                         var entry = new Controller.BenchmarkEntry();
+                        entry.ID = benchmarkEntryID++;
                         entry.Parameters.Add(param0);
-                        entry.Remaining = (int)numericUpDownBenchmarkingRepeats.Value;
+                        entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
                         Controller.BenchmarkEntries.Add(entry);
                     }
                 } else if (!checkBoxBenchmarkingSecondParameterEnabled.Checked) {
@@ -6264,15 +5968,19 @@ namespace GatelessGateSharp
                             param1OriginalValues.Add(numericUpDownDeviceParameterArray[tuple1].Value.ToString());
                         }
 
-                        for (int i = (int)numericUpDownBenchmarkingFirstParameterMinimum.Value;
-                            i <= (int)numericUpDownBenchmarkingFirstParameterMaximum.Value;
-                            i += (int)numericUpDownBenchmarkingFirstParameterStep.Value) {
+                        int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
+                                        ? (int)numericUpDownBenchmarkingFirstParameterStep.Value
+                                        : -(int)numericUpDownBenchmarkingFirstParameterStep.Value;
+                        for (int i = (int)numericUpDownBenchmarkingFirstParameterStart.Value;
+                            iStep >= 0 ? i <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value : i >= (int)numericUpDownBenchmarkingFirstParameterEnd.Value;
+                            i += iStep) {
 
                             var param1 = new Controller.BenchmarkParameter((string)comboBoxBenchmarkingFirstParameter.SelectedItem, i.ToString(), param1OriginalValues);
                             var entry = new Controller.BenchmarkEntry();
+                            entry.ID = benchmarkEntryID++;
                             entry.Parameters.Add(param0);
                             entry.Parameters.Add(param1);
-                            entry.Remaining = (int)numericUpDownBenchmarkingRepeats.Value;
+                            entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
                             Controller.BenchmarkEntries.Add(entry);
                         }
                     }
@@ -6289,30 +5997,41 @@ namespace GatelessGateSharp
                             param2OriginalValues.Add(numericUpDownDeviceParameterArray[tuple2].Value.ToString());
                         }
 
-                        for (int i = (int)numericUpDownBenchmarkingFirstParameterMinimum.Value;
-                            i <= (int)numericUpDownBenchmarkingFirstParameterMaximum.Value;
-                            i += (int)numericUpDownBenchmarkingFirstParameterStep.Value) {
+                        int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
+                                        ? (int)numericUpDownBenchmarkingFirstParameterStep.Value
+                                        : -(int)numericUpDownBenchmarkingFirstParameterStep.Value;
+                        for (int i = (int)numericUpDownBenchmarkingFirstParameterStart.Value;
+                            iStep >= 0 ? i <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value : i >= (int)numericUpDownBenchmarkingFirstParameterEnd.Value;
+                            i += iStep) {
 
                             var param1 = new Controller.BenchmarkParameter((string)comboBoxBenchmarkingFirstParameter.SelectedItem, i.ToString(), param1OriginalValues);
 
-                            for (int j = (int)numericUpDownBenchmarkingSecondParameterMinimum.Value;
-                                j <= (int)numericUpDownBenchmarkingSecondParameterMaximum.Value;
-                                j += (int)numericUpDownBenchmarkingSecondParameterStep.Value) {
+                            int jStep = (int)numericUpDownBenchmarkingSecondParameterStart.Value <= (int)numericUpDownBenchmarkingSecondParameterEnd.Value
+                                            ? (int)numericUpDownBenchmarkingSecondParameterStep.Value
+                                            : -(int)numericUpDownBenchmarkingSecondParameterStep.Value;
+                            for (int j = (int)numericUpDownBenchmarkingSecondParameterStart.Value;
+                                jStep >= 0 ? j <= (int)numericUpDownBenchmarkingSecondParameterEnd.Value : j >= (int)numericUpDownBenchmarkingSecondParameterEnd.Value;
+                                j += jStep) {
 
                                 var param2 = new Controller.BenchmarkParameter((string)comboBoxBenchmarkingSecondParameter.SelectedItem, j.ToString(), param2OriginalValues);
                                 var entry = new Controller.BenchmarkEntry();
+                                entry.ID = benchmarkEntryID++;
                                 entry.Parameters.Add(param0);
                                 entry.Parameters.Add(param1);
                                 entry.Parameters.Add(param2);
-                                entry.Remaining = (int)numericUpDownBenchmarkingRepeats.Value;
+                                entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
                                 Controller.BenchmarkEntries.Add(entry);
                             }
                         }
                     }
                 }
+                if ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? checkBoxOptimizationRandomizeOrder.Checked : checkBoxBenchmarkingRandomizeOrder.Checked)
+                    Controller.BenchmarkEntries.Shuffle();
                 SaveBenchmarkState();
 
                 // Start the first benchmark.
+                progressBarBenchmarking.Value = 0;
+                dataGridViewBenchmarkingResults.Rows.Clear();
                 foreach (var param in Controller.BenchmarkEntries[0].Parameters)
                     SetBenchmarkParameter(param);
                 foreach (var device in Controller.OpenCLDevices) {
@@ -6320,19 +6039,25 @@ namespace GatelessGateSharp
                     device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
                 }
                 mAreSettingsDirty = false;
-                Controller.BenchmarkStopwatch.Reset();
-                Controller.BenchmarkStopwatch.Start();
-                Controller.StopWatch.Reset();
-                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
-                buttonStart_Click();
 
-            } else if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                foreach (var device in Controller.OpenCLDevices) {
+                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        device.FanControlEnabled = true;
+                        device.FanSpeed = 100;
+                    }
+                }
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
+                Logger("Cooling down before benchmark...");
+                Application.DoEvents();
+                UpdateControls();
+                UpdateBenchmarkRecords();
+                timerStartNextBenchmark.Enabled = true;
+            }
+        }
 
-                try {
-                    System.IO.File.Delete(BenchmarkEntriesFilePath);
-                    System.IO.File.Delete(BenchmarkRecordsFilePath);
-                } catch (Exception ex) { Logger(ex); }
-
+        private void StopBenchmarks()
+        {
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
                 buttonStart_Click();
                 foreach (var param in Controller.BenchmarkEntries[0].Parameters)
                     SetBenchmarkParameter(param, true);
@@ -6342,114 +6067,258 @@ namespace GatelessGateSharp
                 timerBenchmarks.Enabled = false;
                 timerResetStopwatch.Enabled = false;
                 Controller.StopWatch.Reset();
+                progressBarBenchmarking.Value = 0;
 
-                UpdateStats();
                 UpdateControls();
+            }
+        }
+
+        private void buttonRunBenchmarks_Click(object sender = null, EventArgs e = null)
+        {
+            Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) {
+                StartBenchmarks();
+            } else {
+                StopBenchmarks();
+                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                LoadSettingsFromDatabase();
             }
         }
 
         private void timerBenchmarks_Tick(object sender, EventArgs e)
         {
+            bool parametersUpdated = false;
+
             timerResetStopwatch.Enabled = false;
+            timerBenchmarks.Enabled = false;
+
+            if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running
+                && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
+                return;
+
+            // Handle previous failure.
             var result = new Controller.BenchmarkResult();
             result.Success = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running);
             if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Resuming) {
+                tabControlMainForm.SelectedIndex = 4;
                 timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000) + ((int)numericUpDownBenchmarkingLength.Value * 1000);
-                timerBenchmarks.Enabled = true;
                 Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
             }
-
-            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
-                string defaultAlgorithm = null;
-                foreach (var param in Controller.BenchmarkEntries[0].Parameters) {
-                    if (param.Name == "default_algorithm") {
-                        defaultAlgorithm = param.Value;
+            
+            // Update result table.
+            string defaultAlgorithm = null;
+            foreach (var param in Controller.BenchmarkEntries[0].Parameters) {
+                if (param.Name == "default_algorithm") {
+                    defaultAlgorithm = param.Value;
+                    break;
+                }
+            }
+            foreach (var device in Controller.OpenCLDevices) {
+                if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
+                    continue;
+                foreach (DataGridViewColumn column in dataGridViewBenchmarks.Columns) {
+                    if (column.HeaderText == GetPrettyAlgorithmName(defaultAlgorithm) && Controller.StopWatch.Elapsed.TotalSeconds > 0) {
+                        dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value
+                            = (ConvertHashrateToString(device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString()
+                            + (device.TotalHashesSecondaryAlgorithm <= 0 ? "" : ", " + (ConvertHashrateToString(device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString());
                         break;
                     }
                 }
+            }
+            if (false) {
                 foreach (var device in Controller.OpenCLDevices) {
                     if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
                         continue;
-                    foreach (DataGridViewColumn column in dataGridViewBenchmarks.Columns) {
-                        if (column.HeaderText == GetPrettyAlgorithmName(defaultAlgorithm)) {
-                            result.SpeedPrimaryAlgorithm += device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
-                            result.SpeedSecondaryAlgorithm += device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
-                            dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value
-                                = (ConvertHashrateToString(device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString()
-                                + (device.TotalHashesSecondaryAlgorithm <= 0 ? "" : ", " + (ConvertHashrateToString(device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString());
-                            break;
-                        }
-                    }
+                    result.SpeedPrimaryAlgorithm += device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
+                    result.SpeedSecondaryAlgorithm += device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
                 }
+            } else {
+                foreach (var miner in Controller.Miners) {
+                    result.SpeedPrimaryAlgorithm += miner.Speed;
+                    result.SpeedSecondaryAlgorithm += miner.SpeedSecondaryAlgorithm;
+                }
+            }
+            progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
 
-                if (Controller.BenchmarkEntries[0].Remaining > 1) {
-                    // Repeat the same benchmark.
-                    timerResetStopwatch.Enabled = true;
-                    if (result.Success)
-                        buttonStart_Click();
-                    Controller.BenchmarkEntries[0].Results.Add(result);
-                    Controller.BenchmarkEntries[0].Remaining -= 1;
-                    SaveBenchmarkState();
-                    foreach (var param in Controller.BenchmarkEntries[0].Parameters)
-                        SetBenchmarkParameter(param);
-                    Controller.BenchmarkStopwatch.Reset();
-                    Controller.BenchmarkStopwatch.Start();
-                    foreach (var device in Controller.OpenCLDevices) {
-                        device.ClearShares();
-                        device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
-                    }
-                    //foreach (var device in Controller.OpenCLDevices)
-                    //    device.ReleaseAllComputeBuffers();
-                    buttonStart_Click();
-                } else if (Controller.BenchmarkEntries.Count > 1) {
-                    // Start the next benchmark.
-                    timerResetStopwatch.Enabled = true;
-                    if (result.Success)
-                        buttonStart_Click();
-                    Controller.BenchmarkEntries[0].Results.Add(result);
-                    Controller.BenchmarkEntries[0].Remaining -= 1;
-                    Controller.BenchmarkRecords.Add(Controller.BenchmarkEntries[0]);
-                    Controller.BenchmarkEntries.RemoveAt(0);
-                    SaveBenchmarkState();
-                    foreach (var param in Controller.BenchmarkEntries[0].Parameters)
-                        SetBenchmarkParameter(param);
-                    mAreSettingsDirty = false;
-                    Controller.StopWatch.Reset();
-                    foreach (var device in Controller.OpenCLDevices) {
-                        device.ClearShares();
-                        device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
-                    }
-                    //foreach (var device in Controller.OpenCLDevices)
-                    //    device.ReleaseAllComputeBuffers();
-                    buttonStart_Click();
-                } else {
-                    // Finish benchmarking.
-                    Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
-                    if (result.Success)
-                        buttonStart_Click();
-                    try {
-                        System.IO.File.Delete(BenchmarkEntriesFilePath);
-                        System.IO.File.Delete(BenchmarkRecordsFilePath);
-                    } catch (Exception ex) { Logger(ex); }
-                    foreach (var param in Controller.BenchmarkEntries[0].Parameters)
-                        SetBenchmarkParameter(param, true);
-                    mAreSettingsDirty = false;
-                    Controller.BenchmarkEntries[0].Results.Add(result);
-                    Controller.BenchmarkEntries[0].Remaining -= 1;
-                    Controller.BenchmarkRecords.Add(Controller.BenchmarkEntries[0]);
-                    Controller.BenchmarkEntries.Clear();
-                    Controller.StopWatch.Reset();
-                    foreach (var device in Controller.OpenCLDevices) {
-                        device.ClearShares();
-                        device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
-                    }
-                    tabControlMainForm.SelectedIndex = 4;
+            // Restart if there is a sudden speed drop.
+            if (Controller.BenchmarkEntries[0].Results.Count > 0 && result.Success && Controller.BenchmarkEntries[0].SpeedPrimaryAlgorithm * 0.9 > result.SpeedPrimaryAlgorithm) {
+
+                var process = new System.Diagnostics.Process();
+                var startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+                startInfo.FileName = "shutdown";
+                startInfo.Arguments = "/r /t 0";
+                process.StartInfo = startInfo;
+                process.Start();
+
+                Program.Kill();
+            }
+
+            List<string> algorithmList = new List<string> { };
+            if (checkBoxBenchmarkingEthashPascalEnabled.Checked) algorithmList.Add("ethash_pascal");
+            if (checkBoxBenchmarkingEthashEnabled.Checked) algorithmList.Add("ethash");
+            if (checkBoxBenchmarkingCryptoNightEnabled.Checked) algorithmList.Add("cryptonight");
+            if (checkBoxBenchmarkingNeoScryptEnabled.Checked) algorithmList.Add("neoscrypt");
+            if (checkBoxBenchmarkingPascalEnabled.Checked) algorithmList.Add("pascal");
+            if (checkBoxBenchmarkingLbryEnabled.Checked) algorithmList.Add("lbry");
+            if (checkBoxBenchmarkingLyra2REv2Enabled.Checked) algorithmList.Add("lyra2rev2");
+            String paramType = algorithmList[0];
+            var deviceIndex = -1;
+            foreach (var device in Controller.OpenCLDevices) {
+                if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                    deviceIndex = device.DeviceIndex;
+                    break;
                 }
             }
 
-            // Update benchmark records.
+            // Update the current benchmark entry.
+            if (result.Success)
+                buttonStart_Click(); // Stop the previous benchmark.
+            Controller.BenchmarkEntries[0].Results.Add(result);
+            Controller.BenchmarkEntries[0].Remaining -= 1;
+            foreach (var param in Controller.BenchmarkEntries[0].Parameters)
+                SetBenchmarkParameter(param, true);
+            mAreSettingsDirty = false;
+            var doNotRepeatAfterFailure = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? checkBoxOptimizationDoNotRepeatAfterFailure.Checked  : checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked;
+            if (Controller.BenchmarkEntries[0].Remaining <= 0 || (doNotRepeatAfterFailure && !result.Success)) {
+                Controller.BenchmarkEntries[0].Remaining = 0;
+                Controller.BenchmarkRecords.Add(Controller.BenchmarkEntries[0]);
+                Controller.BenchmarkEntries.RemoveAt(0);
+            } else {
+                //Controller.BenchmarkEntries.Add(Controller.BenchmarkEntries[0]);
+                //Controller.BenchmarkEntries.RemoveAt(0);
+            }
+            UpdateBenchmarkRecords();
+
+            // Check the current benchmark status.
+            int candidateCount = 0;
+            Controller.BenchmarkEntry bestRecord = null, prevRecord = null;
+            foreach (var record in Controller.BenchmarkRecords.Concat(Controller.BenchmarkEntries)) {
+                record.SuccessCount = 0;
+                record.SpeedPrimaryAlgorithm = 0;
+                record.SpeedSecondaryAlgorithm = 0;
+                foreach (var r in record.Results) {
+                    if (r.Success) {
+                        ++record.SuccessCount;
+                        record.SpeedPrimaryAlgorithm += r.SpeedPrimaryAlgorithm;
+                        record.SpeedSecondaryAlgorithm += r.SpeedSecondaryAlgorithm;
+                    }
+                }
+                if (record.SuccessCount > 0) {
+                    record.SpeedPrimaryAlgorithm /= record.SuccessCount;
+                    record.SpeedSecondaryAlgorithm /= record.SuccessCount;
+                }
+                if (bestRecord == null || record.SuccessCount > bestRecord.SuccessCount) {
+                    candidateCount = 1;
+                } else if (bestRecord != null && record.SuccessCount == bestRecord.SuccessCount) {
+                    ++candidateCount;
+                }
+                if (bestRecord == null
+                    || (record.SuccessCount > bestRecord.SuccessCount)
+                    || (record.SuccessCount >= bestRecord.SuccessCount && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm)) {
+
+                    bestRecord = record;
+                }
+            }
+
+            var done = (Controller.BenchmarkEntries.Count <= 0);
+            var updateParameters = (done && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running);
+
+            // Continue if there are multiple candidates.
+            /*
+            if (updateParameters
+                && candidateCount >= 2
+                && bestRecord.SuccessCount < bestRecord.Results.Count
+                && bestRecord.Results.Count <= (int)numericUpDownBenchmarkingRepeats.Value) {
+                // Repeat!
+                for (int i = Controller.BenchmarkRecords.Count - 1; i >= 0; --i) {
+                    Controller.BenchmarkRecords[i].SuccessCount = 0;
+                    foreach (var r in Controller.BenchmarkRecords[i].Results) {
+                        if (r.Success)
+                            ++Controller.BenchmarkRecords[i].SuccessCount;
+                    }
+                    if (Controller.BenchmarkRecords[i].SuccessCount >= bestRecord.SuccessCount) {
+                        Controller.BenchmarkRecords[i].Remaining += (int)numericUpDownBenchmarkingRepeats.Value;
+                        Controller.BenchmarkEntries.Add(Controller.BenchmarkRecords[i]);
+                        Controller.BenchmarkRecords.RemoveAt(i);
+                    }
+                }
+                done = false;
+            }
+            */
+
+            if (done && updateParameters) {
+                var entry = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? new Controller.OptimizerEntry(Controller.OptimizerEntries[0]) : new Controller.OptimizerEntry();
+                entry.FirstParameterWithValues = "";
+                entry.SecondParameterWithValues = "";
+                if (bestRecord.SuccessCount > 0) {
+                    foreach (var param in bestRecord.Parameters) {
+                        SetBenchmarkParameter(param);
+                        parametersUpdated = parametersUpdated || (param.Value != param.OriginalValues[deviceIndex]);
+                    }
+                    mAreSettingsDirty = true;
+                    SaveSettingsToDatabase();
+                    entry.SuccessCount = bestRecord.SuccessCount;
+                    entry.ResultCount = bestRecord.Results.Count;
+                    entry.SpeedPrimaryAlgorithm = bestRecord.SpeedPrimaryAlgorithm;
+                    entry.SpeedSecondaryAlgorithm = bestRecord.SpeedSecondaryAlgorithm;
+                    entry.FirstParameterWithValues = entry.FirstParameter + ": " + bestRecord.Parameters[1].OriginalValues[deviceIndex] + "→" + bestRecord.Parameters[1].Value;
+                    if (entry.SecondParameter != null)
+                        entry.SecondParameterWithValues = entry.SecondParameter + ": " + bestRecord.Parameters[2].OriginalValues[deviceIndex] + "→" + bestRecord.Parameters[2].Value;
+                }
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    Controller.OptimizerRecords.Add(entry);
+                    UpdateOptimizerRecords();
+                    SaveOptimizerState();
+                }
+            }
+            
+            if (!done) {
+                SaveBenchmarkState();
+                foreach (var device in Controller.OpenCLDevices) {
+                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        device.FanControlEnabled = true;
+                        device.FanSpeed = 100;
+                    }
+                }
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
+                progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
+                Logger("Cooling down before benchmark...");
+                UpdateControls();
+                Application.DoEvents();
+                timerStartNextBenchmark.Enabled = true;
+            } else {
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                Controller.StopWatch.Reset();
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.ClearShares();
+                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
+                }
+                tabControlMainForm.SelectedIndex = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? 5 : 4;
+                progressBarBenchmarking.Value = 100;
+                LoadSettingsFromDatabase();
+
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    //if (!parametersUpdated) {
+                        var entry = Controller.OptimizerEntries[0];
+                        Controller.OptimizerEntries.RemoveAt(0);
+                        Controller.OptimizerEntries.Add(entry);
+                        SaveOptimizerState();
+                    //}
+                    Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                    StartBenchmarks();
+                } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.OptimizerEntries.Count <= 0) {
+                    Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+                    try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                }
+            }
+        }
+
+        private void UpdateBenchmarkRecords()
+        { 
             dataGridViewBenchmarkingResults.Rows.Clear();
-            foreach (var record in Controller.BenchmarkRecords) {
+            foreach (var record in Controller.BenchmarkEntries.Concat(Controller.BenchmarkRecords).OrderBy(o => o.ID)) {
                 dataGridViewBenchmarkingResults.Rows.Add();
                 dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsAlgorithm"].Value = record.Parameters[0].Value;
                 int successCount = 0;
@@ -6462,12 +6331,72 @@ namespace GatelessGateSharp
                         totalSpeedSecondary += r.SpeedSecondaryAlgorithm;
                     }
                 }
-                dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsSuccessRate"].Value = (String.Format("{0:0}", ((double)successCount / record.Results.Count * 100)) + "% (" + successCount + "/" + record.Results.Count + ")");
-                dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsSuccessRate"].Style.ForeColor = (successCount >= record.Results.Count) ? Color.Green : Color.Red;
-                dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsAverageSpeedPrimaryAlgorithm"].Value = ConvertHashrateToString(totalSpeedPrimary / successCount);
-                dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsAverageSpeedSecondaryAlgorithm"].Value = (totalSpeedSecondary > 0) ? ConvertHashrateToString(totalSpeedSecondary / successCount) : "-";                dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsSuccessRate"].Value = (String.Format("{0:0}", ((double)successCount / record.Results.Count * 100)) + "% (" + successCount + "/" + record.Results.Count + ")");
-                if (record.Parameters.Count >= 2) dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsFirstParameter"].Value = record.Parameters[1].Value;
-                if (record.Parameters.Count >= 3) dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsSecondParameter"].Value = record.Parameters[2].Value;
+                if (record.Results.Count > 0) {
+                    dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsSuccessRate"].Value = successCount + "/" + record.Results.Count + " (" + (successCount * 100 / record.Results.Count) + "%)";
+                    dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsSuccessRate"].Style.ForeColor = (successCount >= record.Results.Count) ? Color.Green : Color.Red;
+                }
+                if (successCount > 0) {
+                    dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsAverageSpeedPrimaryAlgorithm"].Value = ConvertHashrateToString(totalSpeedPrimary / successCount);
+                    dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsAverageSpeedSecondaryAlgorithm"].Value = (totalSpeedSecondary > 0) ? ConvertHashrateToString(totalSpeedSecondary / successCount) : "-";
+                }
+                if (record.Parameters.Count >= 2) {
+                    var s = record.Parameters[1].Name;
+                    var regex = new Regex(@"^(" + sAlgorithmListRegexPattern + @")_memory_timings_polaris10_");
+                    if (regex.Match(s).Success) {
+                        s = regex.Replace(s, "");
+                        s = s.ToUpper();
+                    }
+                    s = (new Regex(@"^(" + sAlgorithmListRegexPattern + @")_overclocking_")).Replace(s, "");
+                    s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
+                    s = (new Regex(@"^memory_clock$")).Replace(s, "Memory Clock");
+                    s = (new Regex(@"^core_voltage$")).Replace(s, "Core Voltage");
+                    s = (new Regex(@"^memory_voltage$")).Replace(s, "Memory Voltage");
+                    dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsFirstParameter"].Value = s + ": " + record.Parameters[1].Value;
+                }
+                if (record.Parameters.Count >= 3) {
+                    var s = record.Parameters[2].Name;
+                    var regex = new Regex(@"(" + sAlgorithmListRegexPattern + @")_memory_timings_polaris10_");
+                    if (regex.Match(s).Success) {
+                        s = regex.Replace(s, "");
+                        s = s.ToUpper();
+                    }
+                    s = (new Regex(@"^(" + sAlgorithmListRegexPattern + @")_overclocking_")).Replace(s, "");
+                    s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
+                    s = (new Regex(@"^memory_clock$")).Replace(s, "Memory Clock");
+                    s = (new Regex(@"^core_voltage$")).Replace(s, "Core Voltage");
+                    s = (new Regex(@"^memory_voltage$")).Replace(s, "Memory Voltage");
+                    dataGridViewBenchmarkingResults.Rows[dataGridViewBenchmarkingResults.Rows.Count - 1].Cells["dataGridViewTextBoxBenchmarkingResultsSecondParameter"].Value = s + ": " + record.Parameters[2].Value;
+                }
+            }
+        }
+
+        private void UpdateOptimizerRecords()
+        {
+            dataGridViewOptimizerRecords.Rows.Clear();
+            foreach (Controller.OptimizerEntry record in Controller.OptimizerRecords) {
+                dataGridViewOptimizerRecords.Rows.Add();
+                if (record.ResultCount > 0) {
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Value = record.SuccessCount + "/" + record.ResultCount + " (" + (record.SuccessCount * 100 / record.ResultCount) + "%)";
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Style.ForeColor = (record.SuccessCount >= record.ResultCount) ? Color.Green : Color.Red;
+                }
+                if (record.SuccessCount > 0) {
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeedPrimaryAlgorithm"].Value = ConvertHashrateToString(record.SpeedPrimaryAlgorithm);
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeedSecondaryAlgorithm"].Value = (record.SpeedSecondaryAlgorithm > 0) ? ConvertHashrateToString(record.SpeedSecondaryAlgorithm) : "-";
+                }
+                var s = record.FirstParameterWithValues;
+                var regex = new Regex(@"memory_timings_polaris10_");
+                if (regex.Match(s).Success) {
+                    s = regex.Replace(s, "");
+                    s = s.ToUpper();
+                }
+                dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsFirstParameter"].Value = s;
+                s = record.SecondParameterWithValues;
+                regex = new Regex(@"memory_timings_polaris10_");
+                if (regex.Match(s).Success) {
+                    s = regex.Replace(s, "");
+                    s = s.ToUpper();
+                }
+                dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSecondParameter"].Value = s;
             }
         }
 
@@ -6500,6 +6429,80 @@ namespace GatelessGateSharp
         {
             foreach (var device in Controller.OpenCLDevices)
                 dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = false;
+        }
+
+        private void buttonOptimizer_Click(object sender, EventArgs e)
+        {
+            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) {
+                tabControlMainForm.SelectedIndex = 5;
+                Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
+                Controller.OptimizerEntries.Clear();
+                Controller.OptimizerRecords.Clear();
+                UpdateOptimizerRecords();
+
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trc", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trfc", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_ras2ras", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_bus_turn", null));
+
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rp", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_wrplusrp", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_actrd", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_actwr", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rasmactrd", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rasmactwr", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdw", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdr", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tr2w", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tw2r", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tr2r", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp_wra", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp_rda", null));
+
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trrd", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tccdl", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_faw", null));
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_t32aw", null));
+
+                SaveOptimizerState();
+                StartBenchmarks();
+            } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                StopBenchmarks();
+                Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+                Controller.OptimizerEntries.Clear();
+                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                LoadSettingsFromDatabase();
+                UpdateControls();
+            }
+        }
+
+        private void timerStartNextBenchmark_Tick(object sender, EventArgs e)
+        {
+            timerStartNextBenchmark.Enabled = false;
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.CoolingDown) {
+                foreach (var device in Controller.OpenCLDevices) {
+                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        device.FanControlEnabled = false;
+                        device.FanSpeed = -1;
+                    }
+                }
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
+                foreach (var param in Controller.BenchmarkEntries[0].Parameters)
+                    SetBenchmarkParameter(param);
+                mAreSettingsDirty = false;
+                Controller.BenchmarkStopwatch.Reset();
+                Controller.BenchmarkStopwatch.Start();
+                Controller.StopWatch.Reset();
+                timerResetStopwatch.Enabled = true;
+                timerBenchmarks.Enabled = true;
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.ClearShares();
+                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
+                }
+                buttonStart_Click();
+            }
         }
     }
 }

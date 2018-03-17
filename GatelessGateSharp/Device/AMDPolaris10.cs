@@ -2003,8 +2003,53 @@ namespace GatelessGateSharp {
             }
         }
 
+        UInt32 mDefaultMisc1Data;
+        UInt32 mDefaultMisc3Data;
+        UInt32 mDefaultMisc8Data;
+
+        MC_ARB_DRAM_TIMING mDefaultARBTimings;
+        MC_ARB_DRAM_TIMING2 mDefaultARB2Timings;
+        MC_SEQ_CAS_TIMING mDefaultCASTimings;
+        MC_SEQ_RAS_TIMING mDefaultRASTimings;
+        MC_SEQ_MISC_TIMING mDefaultMISCTimings;
+        MC_SEQ_MISC_TIMING2 mDefaultMISC2Timings;
+        MC_SEQ_PMG_TIMING mDefaultPMGTimings;
+
         public AMDPolaris10(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex, aComputeDevice) {
+        }
+
+        public override void SaveDefaultMemoryTimings()
+        {
+            int busNumber = GetComputeDevice().PciBusIdAMD;
+            if (!PCIExpress.Available || busNumber <= 0)
+                return;
+
+            uint mDefaultARBData = 0;
+            uint mDefaultARB2Data = 0;
+            uint mDefaultRASData = 0;
+            uint mDefaultCASData = 0;
+            uint mDefaultMISCData = 0;
+            uint mDefaultMISC2Data = 0;
+            uint mDefaultPMGData = 0;
+
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out mDefaultARBData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out mDefaultARB2Data);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out mDefaultCASData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_RAS_TIMING, out mDefaultRASData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out mDefaultMISCData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out mDefaultMISC2Data);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out mDefaultPMGData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC1, out mDefaultMisc1Data);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC3, out mDefaultMisc3Data);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC8, out mDefaultMisc8Data);
+            mDefaultARBTimings = new MC_ARB_DRAM_TIMING(mDefaultARBData);
+            mDefaultARB2Timings = new MC_ARB_DRAM_TIMING2(mDefaultARB2Data);
+            mDefaultCASTimings = new MC_SEQ_CAS_TIMING(mDefaultCASData);
+            mDefaultRASTimings = new MC_SEQ_RAS_TIMING(mDefaultRASData);
+            mDefaultMISCTimings = new MC_SEQ_MISC_TIMING(mDefaultMISCData);
+            mDefaultMISC2Timings = new MC_SEQ_MISC_TIMING2(mDefaultMISC2Data);
+            mDefaultPMGTimings = new MC_SEQ_PMG_TIMING(mDefaultPMGData);
         }
 
         string mMemoryType = null;
@@ -2024,6 +2069,8 @@ namespace GatelessGateSharp {
             mMemoryVendor = misc0.MemoryVendor;
         }
 
+
+
         public override string GetMemoryType()
         {
             if (mMemoryType == null)
@@ -2036,37 +2083,6 @@ namespace GatelessGateSharp {
             if (mMemoryVendor == null)
                 UpdateMemoryInfo();
             return mMemoryVendor;
-        }
-
-        UInt32 ARBTimingsBackup = 0x0;
-        UInt32 ARBTimings2Backup = 0x0;
-        UInt32 PMGTimingsBackup = 0x0;
-        UInt32 RASTimingsBackup = 0x0;
-        UInt32 CASTimingsBackup = 0x0;
-        UInt32 MiscTimingsBackup = 0x0;
-        UInt32 MiscTimings2Backup = 0x0;
-        UInt32 SEQMisc1Backup = 0x0;
-        UInt32 SEQMisc3Backup = 0x0;
-        UInt32 SEQMisc8Backup = 0x0;
-
-        public override void RestoreMemoryTimings()
-        {
-            int busNumber = GetComputeDevice().PciBusIdAMD;
-
-            if (!PCIExpress.Available || busNumber <= 0 || !this.MemoryTimingModsEnabled || ARBTimingsBackup == 0)
-                return;
-
-            PCIExpress.UpdateGMC81Registers(busNumber,
-                ARBTimingsBackup, 0xffffffff,
-                ARBTimings2Backup, 0xffffffff,
-                SEQMisc1Backup,
-                SEQMisc3Backup,
-                SEQMisc8Backup,
-                RASTimingsBackup, 0xffffffff,
-                CASTimingsBackup, 0xffffffff,
-                MiscTimingsBackup, 0xffffffff,
-                MiscTimings2Backup, 0xffffffff,
-                PMGTimingsBackup, 0xffffffff);
         }
 
         MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING();
@@ -2093,17 +2109,6 @@ namespace GatelessGateSharp {
             mMemoryType = misc0.MemoryType;
             mMemoryVendor = misc0.MemoryVendor;
 
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out ARBTimingsBackup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out ARBTimings2Backup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC1, out SEQMisc1Backup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC3, out SEQMisc3Backup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC8, out SEQMisc8Backup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out PMGTimingsBackup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_RAS_TIMING, out RASTimingsBackup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out CASTimingsBackup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MiscTimingsBackup);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MiscTimings2Backup);
-
             ARBTimings = new MC_ARB_DRAM_TIMING();
             ARBTimings2 = new MC_ARB_DRAM_TIMING2();
             PMGTimings = new MC_SEQ_PMG_TIMING();
@@ -2123,10 +2128,8 @@ namespace GatelessGateSharp {
             if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_wrplusrp", out value)) ARBTimings2.WRPLUSRP = value;
             if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_bus_turn", out value)) ARBTimings2.BUS_TURN = value;
 
-            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdw", out value)) RASTimings.TRCDW = value;
-            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdwa", out value)) RASTimings.TRCDWA = value;
-            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdr", out value)) RASTimings.TRCDR = value;
-            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdra", out value)) RASTimings.TRCDRA = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdw", out value)) RASTimings.TRCDW = RASTimings.TRCDWA = value;
+            if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trcdr", out value)) RASTimings.TRCDR = RASTimings.TRCDRA = value;
             if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trrd", out value)) RASTimings.TRRD = value;
             if (MainForm.GetMemoryTiming(DeviceIndex, algorithm, "polaris10_trc", out value)) RASTimings.TRC = value;
 
@@ -2167,19 +2170,38 @@ namespace GatelessGateSharp {
 
             if (!PCIExpress.Available || busNumber <= 0 || !this.MemoryTimingModsEnabled)
                 return;
-            
-            int result = PCIExpress.UpdateGMC81Registers(
-                busNumber,
-                ARBTimings.Data, ARBTimings.Mask,
-                ARBTimings2.Data, ARBTimings2.Mask,
-                misc1,
-                misc3,
-                misc8,
-                RASTimings.Data, RASTimings.Mask,
-                CASTimings.Data, CASTimings.Mask,
-                miscTimings.Data, miscTimings.Mask,
-                miscTimings2.Data, miscTimings2.Mask,
-                PMGTimings.Data, PMGTimings.Mask);
+
+            uint currentCASData = 0;
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out currentCASData);
+            MC_SEQ_CAS_TIMING currentCASTimings = new MC_SEQ_CAS_TIMING(currentCASData);
+
+            if (currentCASTimings.TCL == mDefaultCASTimings.TCL) {
+                int result = PCIExpress.UpdateGMC81Registers(
+                    busNumber,
+                    mDefaultARBTimings.Data, mDefaultARBTimings.Mask,
+                    mDefaultARB2Timings.Data, mDefaultARB2Timings.Mask,
+                    mDefaultMisc1Data,
+                    mDefaultMisc3Data,
+                    mDefaultMisc8Data,
+                    mDefaultRASTimings.Data, mDefaultRASTimings.Mask,
+                    mDefaultCASTimings.Data, mDefaultCASTimings.Mask,
+                    mDefaultMISCTimings.Data, mDefaultMISCTimings.Mask,
+                    mDefaultMISC2Timings.Data, mDefaultMISC2Timings.Mask,
+                    mDefaultPMGTimings.Data, mDefaultPMGTimings.Mask);
+            } else {
+                int result = PCIExpress.UpdateGMC81Registers(
+                    busNumber,
+                    ARBTimings.Data, ARBTimings.Mask,
+                    ARBTimings2.Data, ARBTimings2.Mask,
+                    misc1,
+                    misc3,
+                    misc8,
+                    RASTimings.Data, RASTimings.Mask,
+                    CASTimings.Data, CASTimings.Mask,
+                    miscTimings.Data, miscTimings.Mask,
+                    miscTimings2.Data, miscTimings2.Mask,
+                    PMGTimings.Data, PMGTimings.Mask);
+            }
         }
 
         public override void PrintMemoryTimings()
@@ -2203,8 +2225,6 @@ namespace GatelessGateSharp {
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MISCData);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MISC2Data);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out PMGData);
-            uint MC_SEQ_WR_CTL_D1Data = 0;
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_WR_CTL_D1, out MC_SEQ_WR_CTL_D1Data); ;
             MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING(ARBData);
             MC_ARB_DRAM_TIMING2 ARB2Timings = new MC_ARB_DRAM_TIMING2(ARB2Data);
             MC_SEQ_CAS_TIMING CASTimings = new MC_SEQ_CAS_TIMING(CASData);
@@ -2212,10 +2232,23 @@ namespace GatelessGateSharp {
             MC_SEQ_MISC_TIMING MISCTimings = new MC_SEQ_MISC_TIMING(MISCData);
             MC_SEQ_MISC_TIMING2 MISC2Timings = new MC_SEQ_MISC_TIMING2(MISC2Data);
             MC_SEQ_PMG_TIMING PMGTimings = new MC_SEQ_PMG_TIMING(PMGData);
+            //if (CASTimings.TCL == 24)
+            //    return;
             MainForm.Logger("=============");
             MainForm.Logger("Device Index: " + DeviceIndex);
             MainForm.Logger("PCIe Bus #: " + busNumber);
-            MainForm.Logger("mmMC_SEQ_WR_CTL_D1: 0x" + String.Format("{0:x8}", MC_SEQ_WR_CTL_D1Data));
+            uint MC_SEQ_WR_CTL_D1Data = 0;
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_WR_CTL_D1, out MC_SEQ_WR_CTL_D1Data);
+            MainForm.Logger("MC_SEQ_WR_CTL_D1: 0x" + String.Format("{0:x8}", MC_SEQ_WR_CTL_D1Data));
+            uint MC_SEQ_MISC1Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC1, out MC_SEQ_MISC1Data); MainForm.Logger("MC_SEQ_MISC1: 0x" + String.Format("{0:x8}", MC_SEQ_MISC1Data));
+            uint MC_SEQ_MISC2Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_RESERVE_M, out MC_SEQ_MISC2Data); MainForm.Logger("MC_SEQ_MISC2: 0x" + String.Format("{0:x8}", MC_SEQ_MISC2Data));
+            uint MC_SEQ_MISC3Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC3, out MC_SEQ_MISC3Data); MainForm.Logger("MC_SEQ_MISC3: 0x" + String.Format("{0:x8}", MC_SEQ_MISC3Data));
+            uint MC_SEQ_MISC4Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC4, out MC_SEQ_MISC4Data); MainForm.Logger("MC_SEQ_MISC4: 0x" + String.Format("{0:x8}", MC_SEQ_MISC4Data));
+            uint MC_SEQ_MISC5Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC5, out MC_SEQ_MISC5Data); MainForm.Logger("MC_SEQ_MISC5: 0x" + String.Format("{0:x8}", MC_SEQ_MISC5Data));
+            uint MC_SEQ_MISC6Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC6, out MC_SEQ_MISC6Data); MainForm.Logger("MC_SEQ_MISC6: 0x" + String.Format("{0:x8}", MC_SEQ_MISC6Data));
+            uint MC_SEQ_MISC7Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC7, out MC_SEQ_MISC7Data); MainForm.Logger("MC_SEQ_MISC7: 0x" + String.Format("{0:x8}", MC_SEQ_MISC7Data));
+            uint MC_SEQ_MISC8Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC8, out MC_SEQ_MISC8Data); MainForm.Logger("MC_SEQ_MISC8: 0x" + String.Format("{0:x8}", MC_SEQ_MISC8Data));
+            uint MC_SEQ_MISC9Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC9, out MC_SEQ_MISC9Data); MainForm.Logger("MC_SEQ_MISC9: 0x" + String.Format("{0:x8}", MC_SEQ_MISC9Data));
             MainForm.Logger("-------------");
             MainForm.Logger("ACTRD:    " + ARBTimings.ACTRD);
             MainForm.Logger("ACTWR:    " + ARBTimings.ACTWR);

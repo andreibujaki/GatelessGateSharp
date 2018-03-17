@@ -801,7 +801,7 @@ namespace GatelessGateSharp
                         OSADLODNPerformanceLevelsData.aLevels[i].iClock = mMemoryClock * 100;
                         OSADLODNPerformanceLevelsData.aLevels[i].iVddc = (mMemoryVoltage >= 0) ? mMemoryVoltage : OSADLODNPerformanceLevelsData.aLevels[sourceIndex].iVddc;
                     }
-                    OSADLODNPerformanceLevelsData.aLevels[0].iEnabled = 1;
+                    //OSADLODNPerformanceLevelsData.aLevels[0].iEnabled = 1;
                 }
                 Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
                 ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
@@ -1156,11 +1156,11 @@ namespace GatelessGateSharp
         public void UpdateOverclockingSettings() {
             if (!OverclockingEnabled)
                 return;
-            PowerLimit = TargetPowerLimit;
-            CoreClock = TargetCoreClock;
             MemoryClock = TargetMemoryClock;
-            CoreVoltage = TargetCoreVoltage;
             MemoryVoltage = TargetMemoryVoltage;
+            CoreClock = TargetCoreClock;
+            CoreVoltage = TargetCoreVoltage;
+            PowerLimit = TargetPowerLimit;
         }
     }
 }

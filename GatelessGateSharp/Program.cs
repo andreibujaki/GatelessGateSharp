@@ -57,6 +57,8 @@ namespace GatelessGateSharp
         public static bool KillMonitor { get; set; }
         public static void Exit() { Application.Exit(); }
         public static void Exit(bool killMonitor) { KillMonitor = killMonitor; Application.Exit(); }
+        public static void Kill() { try { monitor.Kill(); } catch (Exception) { } System.Environment.Exit(1); }
+        static Process monitor = null;
 
         /// <summary>
         /// The main entry point for the application.
@@ -93,7 +95,6 @@ namespace GatelessGateSharp
             // Launch monitor
             foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharpMonitor"))
                 try { process.Kill(); } catch (Exception) { }
-            Process monitor = null;
             try
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo();

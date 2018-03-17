@@ -188,9 +188,9 @@ namespace GatelessGateSharp {
             }
 
             if (shareID >= 0 && !MainForm.DevFeeMode) {
-                MainForm.Logger("Share #" + shareID + " rejected.");
+                MainForm.Logger("Share #" + shareID + " rejected" + (reason == null ? "." : ": " + reason));
             } else {
-                MainForm.Logger("Share rejected.");
+                MainForm.Logger("Share rejected" + (reason == null ? "." : ": " + reason));
             }
         }
 
