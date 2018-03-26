@@ -38,7 +38,11 @@ namespace GatelessGateSharp {
             uint value6, uint mask6,
             uint value7, uint mask7,
             uint value8, uint mask8,
-            uint value9, uint mask9);
+            uint value9, uint mask9,
+            uint value10,
+            uint value11, uint mask11,
+            uint value12, uint mask12,
+            uint value13, uint mask13);
         
         [StructLayout(LayoutKind.Sequential)]
         internal class PCIConfigurationSpace {

@@ -38,6 +38,7 @@ namespace GatelessGateSharp {
             public List<BenchmarkResult> Results = new List<BenchmarkResult> { };
             public int Remaining;
             public int SuccessCount;
+            public int StabilityScore;
             public double SpeedPrimaryAlgorithm;
             public double SpeedSecondaryAlgorithm;
         }
@@ -126,7 +127,6 @@ namespace GatelessGateSharp {
                     foreach (var device in Controller.OpenCLDevices) {
                         if (device.MemoryTimingModsEnabled) {
                             device.UpdateMemoryTimings();
-                            //device.PrintMemoryTimings();
                             System.Threading.Thread.Sleep(Parameters.MemoryTimingUpdateInterval);
                         }
                     }
