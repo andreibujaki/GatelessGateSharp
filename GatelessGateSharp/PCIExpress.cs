@@ -31,18 +31,19 @@ namespace GatelessGateSharp {
         public static extern int UpdateGMC81Registers(int busNum,
             uint value, uint mask,
             uint value1, uint mask1,
-            uint value2,
-            uint value3,
-            uint value4,   
+            uint value2, uint mask2,
+            uint value3, uint mask3,
+            uint value4, uint mask4,
             uint value5, uint mask5,
             uint value6, uint mask6,
             uint value7, uint mask7,
             uint value8, uint mask8,
             uint value9, uint mask9,
-            uint value10,
+            uint value10, uint mask10,
             uint value11, uint mask11,
             uint value12, uint mask12,
-            uint value13, uint mask13);
+            uint value13, uint mask13,
+            uint value14, uint mask14);
         
         [StructLayout(LayoutKind.Sequential)]
         internal class PCIConfigurationSpace {

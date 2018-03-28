@@ -73,6 +73,16 @@ namespace DeviceSettingsUserControl
             if (this.ButtonCopyToOthersClicked != null)
                 this.ButtonCopyToOthersClicked(this, new EventArgs());
         }
+
+        private void groupBox8_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxEthashPascalSEQ_MISC8_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public static class Utilities
