@@ -1099,33 +1099,32 @@ namespace GatelessGateSharp
             int defaultPowerControl = 0;
             ADL.ADL_Overdrive5_PowerControl_Get(ADLAdapterIndex, ref mPowerControlBackup, ref defaultPowerControl);
 
-            // OverDrive 5
-            ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
-            var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
-            Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
-            if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 0, levelsBuffer) == ADL.ADL_SUCCESS)
-                sODPerformanceLevelsBackup = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+            if (ADLVersion < 7) {
+                // OverDrive 5
+                ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null && ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 0, levelsBuffer) == ADL.ADL_SUCCESS)
+                    sODPerformanceLevelsBackup = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+            } else {
+                // OverDrive Next (System Clocks)
+                ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
+                OSADLODNPerformanceLevelsData.iMode = (int)(ADLODNControlType.ODNControlType_Current);
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_SystemClocks_Get != null && ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) == ADL.ADL_SUCCESS)
+                    sODNSystemClocksBackup = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
 
-            if (ADLVersion < 7)
-                return;
-
-            // OverDrive Next (System Clocks)
-            ADLODNPerformanceLevels OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels();
-            OSADLODNPerformanceLevelsData.iMode = (int)(ADLODNControlType.ODNControlType_Current);
-            OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
-            var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
-            Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
-            if (ADL.ADL2_OverdriveN_SystemClocks_Get != null && ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) == ADL.ADL_SUCCESS)
-                sODNSystemClocksBackup = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
-
-            // OverDrive Next (Memory Clocks)
-            OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels(); // zero clear
-            OSADLODNPerformanceLevelsData.iMode = (int)(ADLODNControlType.ODNControlType_Current);
-            OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
-            ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
-            Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
-            if (ADL.ADL2_OverdriveN_MemoryClocks_Get != null && ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) == ADL.ADL_SUCCESS)
-                sODNMemoryClocksBackup = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+                // OverDrive Next (Memory Clocks)
+                OSADLODNPerformanceLevelsData = new ADLODNPerformanceLevels(); // zero clear
+                OSADLODNPerformanceLevelsData.iMode = (int)(ADLODNControlType.ODNControlType_Current);
+                OSADLODNPerformanceLevelsData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODNPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODNPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODNPerformanceLevelsData, ODNLevelsBuffer, false);
+                if (ADL.ADL2_OverdriveN_MemoryClocks_Get != null && ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer) == ADL.ADL_SUCCESS)
+                    sODNMemoryClocksBackup = (ADLODNPerformanceLevels)Marshal.PtrToStructure(ODNLevelsBuffer, OSADLODNPerformanceLevelsData.GetType());
+            }
         }
 
         public void RestoreOverclockingSettings() {
@@ -1134,23 +1133,22 @@ namespace GatelessGateSharp
 
             ADL.ADL_Overdrive5_PowerControl_Set(ADLAdapterIndex, mPowerControlBackup);
 
-            // OverDrive 5
-            var levelsBuffer = Marshal.AllocCoTaskMem((int)(sODPerformanceLevelsBackup.iSize));
-            Marshal.StructureToPtr(sODPerformanceLevelsBackup, levelsBuffer, false);
-            ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
+            if (ADLVersion < 7) {
+                // OverDrive 5
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(sODPerformanceLevelsBackup.iSize));
+                Marshal.StructureToPtr(sODPerformanceLevelsBackup, levelsBuffer, false);
+                ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
+            } else {
+                // OverDrive Next (System Clocks)
+                var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(sODNSystemClocksBackup.iSize));
+                Marshal.StructureToPtr(sODNSystemClocksBackup, ODNLevelsBuffer, false);
+                ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
 
-            if (ADLVersion < 7)
-                return;
-
-            // OverDrive Next (System Clocks)
-            var ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(sODNSystemClocksBackup.iSize));
-            Marshal.StructureToPtr(sODNSystemClocksBackup, ODNLevelsBuffer, false);
-            ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
-
-            // OverDrive Next (Memory Clocks)
-            ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(sODNMemoryClocksBackup.iSize));
-            Marshal.StructureToPtr(sODNMemoryClocksBackup, ODNLevelsBuffer, false);
-            ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+                // OverDrive Next (Memory Clocks)
+                ODNLevelsBuffer = Marshal.AllocCoTaskMem((int)(sODNMemoryClocksBackup.iSize));
+                Marshal.StructureToPtr(sODNMemoryClocksBackup, ODNLevelsBuffer, false);
+                ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, ODNLevelsBuffer);
+            }
         }
 
         public void UpdateOverclockingSettings() {

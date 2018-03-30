@@ -673,7 +673,8 @@ end:
                                   uint32_t value11, uint32_t mask11,
                                   uint32_t value12, uint32_t mask12,
                                   uint32_t value13, uint32_t mask13,
-                                  uint32_t value14, uint32_t mask14)
+                                  uint32_t value14, uint32_t mask14,
+                                  uint32_t default_value3)
     {
         BOOL ret = true;  
         uint32_t configRegistersBase = configRegistersBaseArray[busNum];
@@ -723,31 +724,26 @@ end:
         const uint32_t mmGRBM_STATUS = 0x2004;
         const uint32_t GRBM_STATUS__GUI_ACTIVE_MASK = 0x80000000;
         
-        if ((*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (value3 & 0xff000000)) {
-            // *(virtual_addr + mmMC_SEQ_RD_CTL_D0) = 0x00f03278;
-            // *(virtual_addr + mmMC_SEQ_RD_CTL_D1) = 0x00f0c178;
-            // *(virtual_addr + mmMC_SEQ_WR_CTL_D0) = 0x2035f1ff;
-            // *(virtual_addr + mmMC_SEQ_WR_CTL_D1) = 0x2035f1ff;
-            // *(virtual_addr + mmMC_SEQ_WR_CTL_2) = 0x00000000;
+        if ((*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) != (default_value3 & 0xff000000)) {
 
-            *(virtual_addr + mmMC_ARB_DRAM_TIMING) = (*(virtual_addr + mmMC_ARB_DRAM_TIMING) & ~mask0) | (value0 & mask0);
-            *(virtual_addr + mmMC_ARB_DRAM_TIMING2) = (*(virtual_addr + mmMC_ARB_DRAM_TIMING2) & ~mask1) | (value1 & mask1);
+            *(virtual_addr + mmMC_ARB_DRAM_TIMING) = value0;
+            *(virtual_addr + mmMC_ARB_DRAM_TIMING2) = value1;
 
-            *(virtual_addr + mmMC_SEQ_RAS_TIMING) = (*(virtual_addr + mmMC_SEQ_RAS_TIMING) & ~mask2) | (value2 & mask2);
-            *(virtual_addr + mmMC_SEQ_CAS_TIMING) = (*(virtual_addr + mmMC_SEQ_CAS_TIMING) & ~mask3) | (value3 & mask3);
-            *(virtual_addr + mmMC_SEQ_MISC_TIMING) = (*(virtual_addr + mmMC_SEQ_MISC_TIMING) & ~mask4) | (value4 & mask4);
-            *(virtual_addr + mmMC_SEQ_MISC_TIMING2) = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
-            *(virtual_addr + mmMC_SEQ_PMG_TIMING) = (*(virtual_addr + mmMC_SEQ_PMG_TIMING) & ~mask6) | (value6 & mask6);
+            *(virtual_addr + mmMC_SEQ_RAS_TIMING) = value2;
+            *(virtual_addr + mmMC_SEQ_CAS_TIMING) = value3;
+            *(virtual_addr + mmMC_SEQ_MISC_TIMING) = value4;
+            *(virtual_addr + mmMC_SEQ_MISC_TIMING2) = value5;
+            *(virtual_addr + mmMC_SEQ_PMG_TIMING) = value6;
 
-			*(virtual_addr + mmMC_PHY_TIMING_D0) = (*(virtual_addr + mmMC_PHY_TIMING_D0) & ~mask7) | (value7 & mask7);
-			*(virtual_addr + mmMC_PHY_TIMING_D1) = (*(virtual_addr + mmMC_PHY_TIMING_D1) & ~mask8) | (value8 & mask8);
-			*(virtual_addr + mmMC_PHY_TIMING_2) = (*(virtual_addr + mmMC_PHY_TIMING_2) & ~mask9) | (value9 & mask9);
+			*(virtual_addr + mmMC_PHY_TIMING_D0) = value7;
+			*(virtual_addr + mmMC_PHY_TIMING_D1) = value8;
+            *(virtual_addr + mmMC_PHY_TIMING_2) = value9;
 
             *(virtual_addr + mmMC_SEQ_MISC1) = value10;
             *(virtual_addr + mmMC_SEQ_MISC3) = value11;
-			*(virtual_addr + mmMC_SEQ_MISC4) = value12;
-			*(virtual_addr + mmMC_SEQ_MISC8) = value13;
-			*(virtual_addr + mmMC_SEQ_MISC9) = value14;
+            *(virtual_addr + mmMC_SEQ_MISC4) = value12;
+            *(virtual_addr + mmMC_SEQ_MISC8) = value13;
+            *(virtual_addr + mmMC_SEQ_MISC9) = value14;
         }
 
         UnmapPhyMem((uint32_t *)virtual_addr, 256 * 1024);

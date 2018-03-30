@@ -1574,7 +1574,7 @@ namespace GatelessGateSharp
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value   = 160;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value        = 36;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value  = 39;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value  = 14;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value  = 19;
 
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value     = 16;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value     = 26;
@@ -1587,12 +1587,12 @@ namespace GatelessGateSharp
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value      = 219;
 
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value      = 29;
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value     = 5;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value     = 4;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value      = 8;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value      = 18;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value       = 24;
 
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value       = 8;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value       = 7;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value     = 3;
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value     = 25; // 7
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value     = 4;
@@ -4191,8 +4191,6 @@ namespace GatelessGateSharp
                     device.TargetCoreVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
                     device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
                     device.OverclockingEnabled = true;
-                    device.UpdateOverclockingSettings();
-                    device.UpdateMemoryTimings();
                 }
             }
             foreach (var device in Controller.OpenCLDevices) {
@@ -4389,7 +4387,7 @@ namespace GatelessGateSharp
                 foreach (var device in Controller.OpenCLDevices) {
                     if (device.OverclockingEnabled) {
                         device.OverclockingEnabled = false;
-                        device.RestoreOverclockingSettings();
+                        //device.RestoreOverclockingSettings();
                     }
                     if (device.FanControlEnabled) {
                         device.FanControlEnabled = false;
@@ -5713,51 +5711,36 @@ namespace GatelessGateSharp
         delegate uint MemoryTimingDelegate(Tuple<int, string, string> tuple);
         delegate bool MemoryTimingEnabledDelegate(Tuple<int, string, string> tuple);
 
-        public static bool GetMemoryTiming(int deviceIndex, string algorithm, string parameter, out uint value)
+        public static void GetMemoryTimingFronNumericUpDown(int deviceIndex, string algorithm, string parameter, out uint value)
         {
             var tuple = new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_" + parameter);
-            var tupleEnabled = new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_" + parameter + "_enabled");
-            var enabled = false;
-            if (Instance.checkBoxDeviceParameterArray[tupleEnabled].InvokeRequired) {
-                enabled = (bool)Instance.textBoxDeviceParameterArray[tuple].Invoke(new MemoryTimingEnabledDelegate((deviceTuple) => {
+            if (Instance.numericUpDownDeviceParameterArray[tuple].InvokeRequired) {
+                value = (uint)Instance.numericUpDownDeviceParameterArray[tuple].Invoke(new MemoryTimingDelegate((deviceTuple) => {
+                    return (uint)Instance.numericUpDownDeviceParameterArray[tuple].Value;
+                }), new object[] { tuple });
+            } else {
+                value = (uint)Instance.numericUpDownDeviceParameterArray[tuple].Value;
+            }
+        }
+
+        public static void GetMemoryTimingFromTextBox(int deviceIndex, string algorithm, string parameter, out uint value)
+        {
+            var tuple = new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_" + parameter);
+            if (Instance.textBoxDeviceParameterArray[tuple].InvokeRequired) {
+                value = (uint)Instance.textBoxDeviceParameterArray[tuple].Invoke(new MemoryTimingDelegate((deviceTuple) => {
                     try {
-                        return Instance.checkBoxDeviceParameterArray[deviceTuple].Checked;
+                        return uint.Parse(Instance.textBoxDeviceParameterArray[deviceTuple].Text, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.CurrentInfo);
                     } catch (Exception) {
-                        return false;
+                        return 0;
                     }
-                }), new object[] { tupleEnabled });
+                }), new object[] { tuple });
             } else {
                 try {
-                    enabled = Instance.checkBoxDeviceParameterArray[tupleEnabled].Checked;
+                    value = uint.Parse(Instance.textBoxDeviceParameterArray[tuple].Text, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.CurrentInfo);
                 } catch (Exception) {
+                    value = 0;
                 }
             }
-            if ((new System.Text.RegularExpressions.Regex(@"^polaris10_(seq_misc[13489]|seq_pmg|phy_[012d]+)$")).Match(parameter).Success) {
-                if (Instance.textBoxDeviceParameterArray[tuple].InvokeRequired) {
-                    value = (uint)Instance.textBoxDeviceParameterArray[tuple].Invoke(new MemoryTimingDelegate((deviceTuple) => {
-                        try {
-                            return uint.Parse(Instance.textBoxDeviceParameterArray[deviceTuple].Text, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.CurrentInfo);
-                        } catch (Exception) {
-                            return 0;
-                        }
-                    }), new object[] { tuple });
-                } else {
-                    try {
-                        value = uint.Parse(Instance.textBoxDeviceParameterArray[tuple].Text, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.CurrentInfo);
-                    } catch (Exception) {
-                        value = 0;
-                    }
-                }
-            } else {
-                if (Instance.numericUpDownDeviceParameterArray[tuple].InvokeRequired) {
-                    value = (uint)Instance.numericUpDownDeviceParameterArray[tuple].Invoke(new MemoryTimingDelegate((deviceTuple) => {
-                        return (uint)Instance.numericUpDownDeviceParameterArray[tuple].Value;
-                    }), new object[] { tuple });
-                } else {
-                    value = (uint)Instance.numericUpDownDeviceParameterArray[tuple].Value;
-                }
-            }
-            return enabled;
         }
 
         private void comboBoxDefaultAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
@@ -6019,7 +6002,7 @@ namespace GatelessGateSharp
                         }
                     }
                 }
-                Controller.BenchmarkEntries.Shuffle();
+                //Controller.BenchmarkEntries.Shuffle();
                 Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => { return ((e1.Results.Count - e1.SuccessCount) == (e2.Results.Count - e2.SuccessCount)) ? (e2.SuccessCount - e1.SuccessCount) : ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)); }));
                 SaveBenchmarkState();
 
@@ -6033,19 +6016,7 @@ namespace GatelessGateSharp
                     device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
                 }
                 mAreSettingsDirty = false;
-
-                foreach (var device in Controller.OpenCLDevices) {
-                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
-                        device.FanControlEnabled = true;
-                        device.FanSpeed = 100;
-                    }
-                }
-                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
-                Logger("Cooling down before benchmark...");
-                Application.DoEvents();
-                UpdateControls();
-                UpdateBenchmarkRecords();
-                timerStartNextBenchmark.Enabled = true;
+                PrepareForNextBenchmark();
             }
         }
 
@@ -6240,7 +6211,7 @@ namespace GatelessGateSharp
 
             // Sort benchmark entries if necessary.
             if (!doNotRepeatAfterFailure) {
-                Controller.BenchmarkEntries.Shuffle();
+                //Controller.BenchmarkEntries.Shuffle();
                 Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => { return ((e1.Results.Count - e1.SuccessCount) == (e2.Results.Count - e2.SuccessCount)) ? (e2.SuccessCount - e1.SuccessCount) : ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)); }));
             }
             UpdateBenchmarkRecords();
@@ -6276,18 +6247,7 @@ namespace GatelessGateSharp
 
             if (!done) {
                 SaveBenchmarkState();
-                foreach (var device in Controller.OpenCLDevices) {
-                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
-                        device.FanControlEnabled = true;
-                        device.FanSpeed = 100;
-                    }
-                }
-                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
-                progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
-                Logger("Cooling down before benchmark...");
-                UpdateControls();
-                Application.DoEvents();
-                timerStartNextBenchmark.Enabled = true;
+                PrepareForNextBenchmark();
             } else {
                 Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
                 Controller.StopWatch.Reset();
@@ -6313,6 +6273,22 @@ namespace GatelessGateSharp
                     try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                 }
             }
+        }
+
+        private void PrepareForNextBenchmark()
+        {
+            foreach (var device in Controller.OpenCLDevices) {
+                if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                    device.FanControlEnabled = true;
+                    device.FanSpeed = 100;
+                }
+            }
+            Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
+            progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
+            Logger("Cooling down before benchmark...");
+            Application.DoEvents();
+            UpdateControls();
+            timerStartNextBenchmark.Enabled = true;
         }
 
         private void UpdateBenchmarkRecords()
