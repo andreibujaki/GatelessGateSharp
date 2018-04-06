@@ -40,20 +40,27 @@ using NetTools;
 
 
 
-namespace GatelessGateSharp {
-    public partial class MainForm : Form {
+namespace GatelessGateSharp
+{
+    public partial class MainForm : Form
+    {
 
         #region NativeMethods
 
-        class NativeMethods {
+        class NativeMethods
+        {
+            [DllImport("kernel32", SetLastError = true)]
+            public static extern bool FlushFileBuffers(IntPtr handle);
+
             [return: MarshalAs(UnmanagedType.Bool)]
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, EntryPoint = "GlobalMemoryStatusEx", SetLastError = true)]
-            public  static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
+            public static extern bool GlobalMemoryStatusEx([In, Out] MemoryStatusEx lpBuffer);
             [DllImport("kernel32.dll")]
             public static extern uint SetThreadExecutionState(uint esFlags);
 
             [StructLayout(LayoutKind.Sequential)]
-            internal class MemoryStatusEx {
+            internal class MemoryStatusEx
+            {
                 public uint dwLength;
                 public uint dwMemoryLoad;
                 public UInt64 ullTotalPhys;
@@ -63,7 +70,8 @@ namespace GatelessGateSharp {
                 public UInt64 ullTotalVirtual;
                 public UInt64 ullAvailVirtual;
                 public UInt64 ullAvailExtendedVirtual;
-                public MemoryStatusEx() {
+                public MemoryStatusEx()
+                {
                     this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatusEx));
                 }
             }
@@ -72,7 +80,8 @@ namespace GatelessGateSharp {
             public static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags, IntPtr hToken, out IntPtr ppszPath);
 
             [Flags]
-            public enum KnownFolderFlags : uint {
+            public enum KnownFolderFlags : uint
+            {
                 SimpleIDList = 0x00000100,
                 NotParentRelative = 0x00000200,
                 DefaultPath = 0x00000400,
@@ -95,15 +104,18 @@ namespace GatelessGateSharp {
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
         public static string appVersion = "1.3.0";
-        public static string appName = shortAppName + " " + appVersion + " devel";
+        public static string appName = shortAppName + " " + appVersion + " prealpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
-        private static string mAppStateFileName = "GatelessGateSharpState.txt";
-        private static int mLaunchInterval = 100;
-        public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|pascal|cryptonight|neoscrypt|lyra2rev2|lbry";
+        private static string mAppStateFileName = "GatelessGateSharp_State.txt";
+        private static string mBenchmarkEntriesFileName = "GatelessGateSharp_BenchmarkEntries.xml";
+        private static string mBenchmarkResultsFileName = "GatelessGateSharp_BenchmarkRecords.xml";
+        private static string mOptimizerEntriesFileName = "GatelessGateSharp_OptimizerEntries.xml";
+        private static string mOptimizerResultsFileName = "GatelessGateSharp_OptimizerRecords.xml";
+        private static int mLaunchInterval = 1000;
+        public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|cryptonight|neoscrypt|pascal|lbry|lyra2rev2";
         public static readonly string[] sAlgorithmList = sAlgorithmListRegexPattern.Split('|');
-
         private bool mAreSettingsDirty = false;
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
@@ -111,7 +123,11 @@ namespace GatelessGateSharp {
 
         // device ID, algorithm/type, pararmeter
         private Dictionary<Tuple<int, string, string>, CheckBox> checkBoxDeviceParameterArray = new Dictionary<Tuple<int, string, string>, CheckBox> { };
+        private Dictionary<Tuple<int, string, string>, Button> buttonDeviceParameterArray = new Dictionary<Tuple<int, string, string>, Button> { };
         private Dictionary<Tuple<int, string, string>, NumericUpDown> numericUpDownDeviceParameterArray = new Dictionary<Tuple<int, string, string>, NumericUpDown> { };
+        private Dictionary<Tuple<int, string, string>, TextBox> textBoxDeviceParameterArray = new Dictionary<Tuple<int, string, string>, TextBox> { };
+        private Dictionary<Tuple<int, string, string>, GroupBox> groupBoxDeviceParameterArray = new Dictionary<Tuple<int, string, string>, GroupBox> { };
+        private Dictionary<int, TabControl> tabControlAlgorithmsArray = new Dictionary<int, TabControl> { };
 
         private Button[] buttonDeviceResetToDefaultArray;
         private Button[] buttonDeviceResetAllArray;
@@ -132,8 +148,8 @@ namespace GatelessGateSharp {
         string mUserEthereumAddress = "";
         string mUserBitcoinAddress = "";
         string mUserFeathercoinAddress = "";
-        string mUserZcashAddress = ""; 
-        
+        string mUserZcashAddress = "";
+
         private bool mDevFeeMode = true;
         private DateTime mDevFeeModeStartTime = DateTime.Now; // dummy
 
@@ -144,7 +160,11 @@ namespace GatelessGateSharp {
 
         private static string sLoggerBuffer = "";
 
-        public static void Logger(string lines) {
+        public static void Logger(string lines)
+        {
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+
             lines = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff") + " [" + System.Threading.Thread.CurrentThread.ManagedThreadId + "] " + lines + "\r\n";
             Console.Write(lines);
             try { Instance.loggerMutex.WaitOne(5000); } catch (Exception) { }
@@ -166,7 +186,8 @@ namespace GatelessGateSharp {
         }
 
 
-        public static void UpdateLog() {
+        public static void UpdateLog()
+        {
             try { Instance.loggerMutex.WaitOne(5000); } catch (Exception) { }
             var loggerBuffer = sLoggerBuffer;
             sLoggerBuffer = "";
@@ -208,7 +229,8 @@ namespace GatelessGateSharp {
             } catch (Exception) { }
         }
 
-        private static bool CheckVirtualMemorySize() {
+        private static bool CheckVirtualMemorySize()
+        {
             var status = new NativeMethods.MemoryStatusEx();
 
             NativeMethods.GlobalMemoryStatusEx(status);
@@ -265,7 +287,8 @@ namespace GatelessGateSharp {
             return true;
         }
 
-        public MainForm() {
+        public MainForm()
+        {
             instance = this;
 
             InitializeComponent();
@@ -283,9 +306,31 @@ namespace GatelessGateSharp {
                 var type = match.Success ? match.Groups[1].Value : null;
                 var name = match.Success ? match.Groups[2].Value : null;
                 if (type == "parameter")
-                    checkBox.CheckedChanged += new System.EventHandler(this.MarkSettingsAsDirty);
+                    checkBox.CheckedChanged += new System.EventHandler(this.controlParameter_ValueChanged);
             }
-            
+
+            foreach (var control in Utilities.FindAllChildrenByType<Control>(this)) {
+                var tag = (string)control.Tag;
+                if (tag == null)
+                    continue;
+                var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                var match = regex.Match(tag);
+                var type = match.Success ? match.Groups[1].Value : null;
+                var name = match.Success ? match.Groups[2].Value : null;
+                if (type == "parameter" && control.GetType() == typeof(CheckBox)) {
+                    ((CheckBox)control).CheckedChanged += new System.EventHandler(this.controlParameter_ValueChanged);
+                } else if (type == "parameter" && control.GetType() == typeof(TextBox)) {
+                    ((TextBox)control).TextChanged += new System.EventHandler(this.controlParameter_ValueChanged);
+                } else if (type == "parameter" && control.GetType() == typeof(NumericUpDown)) {
+                    ((NumericUpDown)control).ValueChanged += new System.EventHandler(this.controlParameter_ValueChanged);
+                } else if (type == "parameter" && control.GetType() == typeof(ComboBox)) {
+                    ((ComboBox)control).SelectedIndexChanged += new System.EventHandler(this.controlParameter_ValueChanged);
+                }
+            }
+
+            comboBoxDefaultAlgorithm.SelectedIndex = 0;
+            comboBoxOptimizerAlgorithm.SelectedIndex = 0;
+
             comboBoxCustomPool0Algorithm.SelectedIndex = 0;
             comboBoxCustomPool1Algorithm.SelectedIndex = 0;
             comboBoxCustomPool2Algorithm.SelectedIndex = 0;
@@ -326,17 +371,20 @@ namespace GatelessGateSharp {
         }
 #endif
 
-        void MainForm_DragEnter(object sender, DragEventArgs e) {
+        void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
         }
 
-        void MainForm_DragDrop(object sender, DragEventArgs e) {
+        void MainForm_DragDrop(object sender, DragEventArgs e)
+        {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string file in files)
                 LoadSettingsFromDatabase(file);
         }
 
-        private void CreateNewDatabase(string filePath) {
+        private void CreateNewDatabase(string filePath)
+        {
             SQLiteConnection.CreateFile(filePath);
             using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                 conn.Open();
@@ -363,7 +411,7 @@ namespace GatelessGateSharp {
         static string LogFilePathBase {
             get { return AppDataPathBase + "\\Logs"; }
         }
-        
+
         static string SettingsBackupPathBase {
             get { return AppDataPathBase + "\\Backups"; }
         }
@@ -384,6 +432,22 @@ namespace GatelessGateSharp {
             get { return AppDataPathBase + "\\" + mAppStateFileName; }
         }
 
+        static string BenchmarkEntriesFilePath {
+            get { return AppDataPathBase + "\\" + mBenchmarkEntriesFileName; }
+        }
+
+        static string BenchmarkRecordsFilePath {
+            get { return AppDataPathBase + "\\" + mBenchmarkResultsFileName; }
+        }
+
+        static string OptimizerEntriesFilePath {
+            get { return AppDataPathBase + "\\" + mOptimizerEntriesFileName; }
+        }
+
+        static string OptimizerRecordsFilePath {
+            get { return AppDataPathBase + "\\" + mOptimizerResultsFileName; }
+        }
+
         static string OldDatabaseFilePath {
             get { return databaseFileName; }
         }
@@ -396,19 +460,22 @@ namespace GatelessGateSharp {
             get { return mAppStateFileName; }
         }
 
-        class CommandLineParameter {
+        class CommandLineParameter
+        {
             string mParameterName;
             string mParameterValue;
 
             public string Name { get { return mParameterName; } }
             public string Value { get { return mParameterValue; } }
 
-            public CommandLineParameter(string parameterName, string parameterValue = "true") {
+            public CommandLineParameter(string parameterName, string parameterValue = "true")
+            {
                 mParameterName = parameterName;
                 mParameterValue = parameterValue;
             }
 
-            public CommandLineParameter(string s) {
+            public CommandLineParameter(string s)
+            {
                 Regex re = new Regex(@"^--([a-zA-Z0-9_-]+)=(.*)$");
                 Match match;
                 if ((match = re.Match(s)).Success) {
@@ -431,7 +498,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void ParseCommandLineArguments(string[] arguments) {
+        private void ParseCommandLineArguments(string[] arguments)
+        {
             var list = new List<CommandLineParameter> { };
             foreach (var argument in arguments) {
                 try {
@@ -455,7 +523,7 @@ namespace GatelessGateSharp {
                         if (param.Name == name) {
                             if (name == "currency" && !comboBox.Items.Contains(param.Value))
                                 comboBox.Items.Add(param.Value);
-                            try { comboBox.SelectedItem = param.Value; } catch (Exception) { }
+                            try { comboBox.SelectedIndex = comboBox.FindStringExact(param.Value); } catch (Exception) { }
                         }
                     }
                 }
@@ -507,7 +575,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void LoadSettingsFromDatabase(string filePath = null) {
+        private void LoadSettingsFromDatabase(string filePath = null)
+        {
             if (filePath == null) {
                 filePath = (System.IO.File.Exists(OldDatabaseFilePath) ? OldDatabaseFilePath : DatabaseFilePath);
             } else {
@@ -523,7 +592,7 @@ namespace GatelessGateSharp {
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                     conn.Open();
-                    try { 
+                    try {
                         var sql = "select * from wallet_addresses";
                         using (var command = new SQLiteCommand(sql, conn)) {
                             using (var reader = command.ExecuteReader()) {
@@ -571,29 +640,30 @@ namespace GatelessGateSharp {
                                     if (propertyName == "database_version") {
                                         databaseVersion = int.Parse((string)reader["value"]);
                                     } else if (propertyName == "coin_to_mine") {
+                                        // This field is obsolete.
                                         var coinToMine = (string)reader["value"];
                                         if (coinToMine == "ethereum") {
-                                            radioButtonEthereum.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Ethash");
                                         } else if (coinToMine == "ethereum_pascal") {
-                                            radioButtonEthereumPascal.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Ethash/Pascal");
                                         } else if (coinToMine == "monero") {
-                                            radioButtonMonero.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("CryptoNight");
                                         } else if (coinToMine == "zcash") {
-                                            radioButtonZcash.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Equihash");
                                         } else if (coinToMine == "lbry") {
-                                            radioButtonLbry.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Lbry");
                                         } else if (coinToMine == "pascal") {
-                                            radioButtonPascal.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Pascal");
                                         } else if (coinToMine == "feathercoin") {
-                                            radioButtonFeathercoin.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("NeoScrypt");
                                         } else if (coinToMine == "monacoin") {
-                                            radioButtonMonacoin.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Lyra2REv2");
                                         } else {
-                                            radioButtonEthereum.Checked = true;
+                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Ethash/Pascal");
                                         }
                                     } else if ((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Success) {
                                         int index = int.Parse((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Groups[1].Captures[0].Value);
-                                        if (index < Controller.OpenCLDevices.Length)
+                                        if (0 <= index && index < Controller.OpenCLDevices.Length)
                                             dataGridViewDevices.Rows[index].Cells["enabled"].Value = (string)reader["value"] == "true";
                                     }
 
@@ -608,7 +678,7 @@ namespace GatelessGateSharp {
                                         if (type == "parameter" && name == propertyName) {
                                             if (name == "currency" && !comboBox.Items.Contains((string)reader["value"]))
                                                 comboBox.Items.Add((string)reader["value"]);
-                                            try { comboBox.SelectedItem = (string)reader["value"]; } catch (Exception) { }
+                                            try { comboBox.SelectedIndex = comboBox.FindStringExact((string)reader["value"]); } catch (Exception) { }
                                         }
                                     }
 
@@ -668,15 +738,29 @@ namespace GatelessGateSharp {
                                         deviceName != Controller.OpenCLDevices[deviceID].GetName())
                                         continue;
 
-                                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control)_([a-z_]+)$");
+                                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
                                     var match = regex.Match(name);
                                     var type = match.Success ? match.Groups[1].Value : null;
                                     var parameter = match.Success ? match.Groups[2].Value : null;
                                     var tuple = new Tuple<int, string, string>(deviceID, type, parameter);
-                                    if (parameter == "enabled" || parameter == "overclocking_enabled") {
-                                        checkBoxDeviceParameterArray[tuple].Checked = (value == "true");
-                                    } else if (parameter != null) {
-                                        numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse(value);
+                                    try {
+                                        if ((new Regex(@"enabled$")).Match(parameter).Success) {
+                                            checkBoxDeviceParameterArray[tuple].Checked = (value == "true");
+                                        } else if (parameter == "memory_timings_polaris10_seq_misc1"
+                                                   || parameter == "memory_timings_polaris10_seq_misc3"
+                                                   || parameter == "memory_timings_polaris10_seq_misc4"
+                                                   || parameter == "memory_timings_polaris10_seq_misc8"
+                                                   || parameter == "memory_timings_polaris10_seq_misc9"
+                                                   || parameter == "memory_timings_polaris10_seq_pmg"
+                                                   || parameter == "memory_timings_polaris10_phy_d0"
+                                                   || parameter == "memory_timings_polaris10_phy_d1"
+                                                   || parameter == "memory_timings_polaris10_phy_2") {
+                                            textBoxDeviceParameterArray[tuple].Text = value;
+                                        } else if (parameter != null) {
+                                            numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse(value);
+                                        }
+                                    } catch (Exception) {
+                                        Logger("Failed to load " + parameter + " = " + value + " as a device parameter.");
                                     }
                                 }
                             }
@@ -699,7 +783,14 @@ namespace GatelessGateSharp {
                         numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value = (decimal)85;
                         numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value = (decimal)50;
                     }
-                }   
+                }
+                if (databaseVersion < 4) {
+                    if (checkBoxCustomPool0Enable.Checked
+                        || checkBoxCustomPool1Enable.Checked
+                        || checkBoxCustomPool2Enable.Checked
+                        || checkBoxCustomPool3Enable.Checked)
+                        comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Custom Pools");
+                }
                 Logger("Loaded settings.");
                 mAreSettingsDirty = false;
             } catch (Exception ex) {
@@ -709,7 +800,8 @@ namespace GatelessGateSharp {
             MainForm.Instance.Enabled = true;
         }
 
-        private void SaveSettingsToDatabase(string filePath = null) {
+        private void SaveSettingsToDatabase(string filePath = null)
+        {
             bool createBackup = filePath == null;
             filePath = ((filePath == null) ? DatabaseFilePath : (new Regex("'")).Replace(filePath, ""));
             Application.DoEvents();
@@ -722,10 +814,12 @@ namespace GatelessGateSharp {
             try { System.IO.File.Delete(filePath); } catch (Exception) { }
             try { CreateNewDatabase(filePath); } catch (Exception) { }
 
+            System.Data.SQLite.SQLiteTransaction trans = null;
             try {
                 using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
                     conn.Open();
-                    
+                    trans = conn.BeginTransaction();
+
                     var sql = "insert into pools (name) values (@name)";
                     using (var command = new SQLiteCommand(sql, conn)) {
                         foreach (string poolName in listBoxPoolPriorities.Items) {
@@ -737,19 +831,7 @@ namespace GatelessGateSharp {
                     sql = "insert into properties (name, value) values (@name, @value)";
                     using (var command = new SQLiteCommand(sql, conn)) {
                         command.Parameters.AddWithValue("@name", "database_version");
-                        command.Parameters.AddWithValue("@value", "3"); // started with v1.2.8
-                        command.ExecuteNonQuery();
-                        command.Parameters.AddWithValue("@name", "coin_to_mine");
-                        command.Parameters.AddWithValue("@value",
-                                                        radioButtonEthereum.Checked ? "ethereum" :
-                                                        radioButtonEthereumPascal.Checked ? "ethereum_pascal" :
-                                                        radioButtonMonero.Checked ? "monero" :
-                                                        radioButtonZcash.Checked ? "zcash" :
-                                                        radioButtonLbry.Checked ? "lbry" :
-                                                        radioButtonPascal.Checked ? "pascal" :
-                                                        radioButtonFeathercoin.Checked ? "feathercoin" :
-                                                        radioButtonMonacoin.Checked ? "monacoin" :
-                                                                                        "most_profitable");
+                        command.Parameters.AddWithValue("@value", "4"); // started with v1.3.0
                         command.ExecuteNonQuery();
                         for (var i = 0; i < Controller.OpenCLDevices.Length; ++i) {
                             command.Parameters.AddWithValue("@name", "enable_gpu" + i);
@@ -838,7 +920,18 @@ namespace GatelessGateSharp {
                             command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceParameterArray[key].Checked ? "true" : "false");
                             command.ExecuteNonQuery();
                         }
+                        foreach (var key in textBoxDeviceParameterArray.Keys) {
+                            command.Parameters.AddWithValue("@device_id", key.Item1);
+                            command.Parameters.AddWithValue("@device_vendor", Controller.OpenCLDevices[key.Item1].GetVendor());
+                            command.Parameters.AddWithValue("@device_name", Controller.OpenCLDevices[key.Item1].GetName());
+
+                            command.Parameters.AddWithValue("@parameter_name", key.Item2 + "_" + key.Item3);
+                            command.Parameters.AddWithValue("@parameter_value", textBoxDeviceParameterArray[key].Text);
+                            command.ExecuteNonQuery();
+                        }
                     }
+
+                    trans.Commit();
                     conn.Close();
                 }
                 if (System.IO.File.Exists(OldDatabaseFilePath))
@@ -848,20 +941,26 @@ namespace GatelessGateSharp {
                     mAreSettingsDirty = false;
             } catch (Exception ex) {
                 Logger("Exception in UpdateDatabase(): " + ex.Message + ex.StackTrace);
+                if (trans != null)
+                    trans.Rollback();
             }
             MainForm.Instance.Enabled = true;
             if (createBackup && checkBoxAutomaticBackups.Checked)
                 CreateSettingsBackup();
         }
 
-        void CreateSettingsBackup(string name = null) {
+        void CreateSettingsBackup(string name = null)
+        {
             if (name == null)
                 name = System.DateTime.Now.ToString("yyyy-MM-dd--HHmm") + ".sqlite";
-            SaveSettingsToDatabase(SettingsBackupPathBase + "\\" + name);
+            try {
+                System.IO.File.Copy(DatabaseFilePath, SettingsBackupPathBase + "\\" + name);
+            } catch (Exception ex) { }
             UpdateSettingBackupList();
         }
 
-        void UpdateSettingBackupList() {
+        void UpdateSettingBackupList()
+        {
             listBoxSettingBackups.Items.Clear();
             var regex = new Regex(@"^.*\\(.*)--(..)(..)\.sqlite$");
             foreach (string file in System.IO.Directory.GetFiles(SettingsBackupPathBase))
@@ -869,8 +968,9 @@ namespace GatelessGateSharp {
                     listBoxSettingBackups.Items.Add(regex.Replace(file, "$1 $2:$3"));
         }
 
-        private void MainForm_Load(object sender, EventArgs e) {
-            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
 
             Logger(appName + " started.");
 
@@ -944,11 +1044,20 @@ namespace GatelessGateSharp {
             InitializeShareChart(cartesianChartShare1Hour, 60);
             InitializeShareChart(cartesianChartShare1Day, 24);
             InitializeShareChart(cartesianChartShare1Month, 31);
-            
+
+            for (int i = 0; i < Controller.OpenCLDevices.Length; ++i) {
+                var newRow = new DataGridViewRow();
+                dataGridViewBenchmarks.Rows.Add();
+                dataGridViewBenchmarks.Rows[i].Cells["dataGridViewTextBoxColumnBenchmarksDeviceIndex"].Value = i.ToString();
+                dataGridViewBenchmarks.Rows[i].Cells["dataGridViewTextBoxColumnBenchmarksDeviceVendor"].Value = Controller.OpenCLDevices[i].GetVendor();
+                dataGridViewBenchmarks.Rows[i].Cells["dataGridViewTextBoxColumnBenchmarksDeviceName"].Value = Controller.OpenCLDevices[i].GetName();
+            }
+
             Controller.AppState = Controller.ApplicationGlobalState.Idle;
             UpdateControls();
             mBackgroundTasksCancellationTokenSource = new CancellationTokenSource();
-            ThreadPool.QueueUserWorkItem(new WaitCallback(Controller.Task_HardwareManagement), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Controller.Task_FanControl), mBackgroundTasksCancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(Controller.Task_MemoryTimings), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateBitcoinRates), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdateAltcoinRates), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_UpdatePoolStats), mBackgroundTasksCancellationTokenSource.Token);
@@ -959,36 +1068,74 @@ namespace GatelessGateSharp {
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_APIListener), mBackgroundTasksCancellationTokenSource.Token);
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_KillInterferingProcesses), mBackgroundTasksCancellationTokenSource.Token);
             mAreSettingsDirty = false;
-            checkBoxEnablePhymem.Checked = false;
 
-            // Auto-start mining if necessary.
+            if (System.IO.File.Exists(BenchmarkEntriesFilePath)) {
+                try {
+                    using (var reader = new System.IO.StreamReader(BenchmarkEntriesFilePath))
+                        Controller.BenchmarkEntries = (List<Controller.BenchmarkEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Deserialize(reader);
+                } catch (Exception ex) { Logger(ex); }
+            }
+            if (System.IO.File.Exists(BenchmarkRecordsFilePath)) {
+                try {
+                    using (var reader = new System.IO.StreamReader(BenchmarkRecordsFilePath))
+                        Controller.BenchmarkRecords = (List<Controller.BenchmarkEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Deserialize(reader);
+                    UpdateBenchmarkRecords();
+                } catch (Exception ex) { Logger(ex); }
+            }
+
+            if (System.IO.File.Exists(OptimizerEntriesFilePath)) {
+                try {
+                    using (var reader = new System.IO.StreamReader(OptimizerEntriesFilePath))
+                        Controller.OptimizerEntries = (List<Controller.OptimizerEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Deserialize(reader);
+                } catch (Exception ex) { Logger(ex); }
+            }
+            if (System.IO.File.Exists(OptimizerRecordsFilePath)) {
+                try {
+                    using (var reader = new System.IO.StreamReader(OptimizerRecordsFilePath))
+                        Controller.OptimizerRecords = (List<Controller.OptimizerEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Deserialize(reader);
+                    UpdateOptimizerRecords();
+                } catch (Exception ex) { Logger(ex); }
+            }
+
+            if (Controller.BenchmarkEntries.Count > 0) {
+                // Resume benchmarking.
+                if (Controller.OptimizerEntries.Count > 0)
+                    Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
+                splashScreen.Dispose();
+                Application.DoEvents();
+                timerBenchmarks_Tick();
+            } else {
+                // Auto-start mining if necessary.
 #if COMMAND_LINE_VERSION
             var autoStart = true;
 #else
-            var autoStart = checkBoxAutoStart.Checked;
-            splashScreen.Dispose();
-            Application.DoEvents();
+                var autoStart = checkBoxAutoStart.Checked;
+                splashScreen.Dispose();
+                Application.DoEvents();
 #endif
-            try {
-                if (System.IO.File.ReadAllLines(AppStateFilePath)[0] == "Mining")
-                    autoStart = true;
-            } catch (Exception) { }
-            if (autoStart
-                && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
-                && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift)
-                && (checkBoxDisableAutoStartPrompt.Checked
-                    || MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
-                        "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
-                timerAutoStart.Enabled = true;
-            } else {
-                try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
-                buttonStart.Enabled = true;
+                try {
+                    if (System.IO.File.ReadAllLines(AppStateFilePath)[0] == "Mining")
+                        autoStart = true;
+                } catch (Exception) { }
+                if (autoStart
+                    && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
+                    && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift)
+                    && (checkBoxDisableAutoStartPrompt.Checked
+                        || MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
+                            "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
+                    timerAutoStart.Enabled = true;
+                } else {
+                    try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                    buttonStart.Enabled = true;
+                }
             }
         }
 
         #region Devices
 
-        private void InitializeDevices() {
+        private void InitializeDevices()
+        {
             try {
                 Controller.OpenCLDevices = OpenCLDevice.GetAllOpenCLDevices();
             } catch (Exception ex) {
@@ -1040,7 +1187,9 @@ namespace GatelessGateSharp {
                     device.GetVendor(),
                     device.GetName()
                 });
+                comboBoxOptimizerDevice.Items.Add(device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName());
             }
+            comboBoxOptimizerDevice.SelectedIndex = 0;
 
             tabPageDeviceArray = new TabPage[Controller.OpenCLDevices.Length];
             buttonDeviceResetToDefaultArray = new Button[Controller.OpenCLDevices.Length];
@@ -1050,36 +1199,77 @@ namespace GatelessGateSharp {
             for (var i = 0; i < Controller.OpenCLDevices.Length; ++i) {
                 DeviceSettingsUserControl.DeviceSettingsUserControl uc = new DeviceSettingsUserControl.DeviceSettingsUserControl();
 
-                uc.GetType().GetProperty("Tag").SetValue(uc, i);
+                uc.Tag = i;
                 TabPage tp = new TabPage();
                 tp.Controls.Add(uc);
                 this.tabControlDeviceSettings.TabPages.Add(tp);
+
+                foreach (var container in Utilities.FindAllChildrenByType<GroupBox>(uc)) {
+                    var containerTag = (string)container.Tag;
+                    if (containerTag == "fan_control"
+                        || containerTag == "overclocking"
+                        || containerTag == "memory_timings_polaris10") {
+                        foreach (var control in Utilities.FindAllChildrenByType<Control>(container)) {
+                            var tag = (string)control.Tag;
+                            if (tag != null && tag != string.Empty) {
+                                control.Tag = containerTag + "_" + tag;
+                            }
+                        }
+                    }
+                }
+                foreach (var container in Utilities.FindAllChildrenByType<TabPage>(uc)) {
+                    var containerTag = (string)container.Tag;
+                    if (sAlgorithmList.Contains(containerTag)) {
+                        foreach (var control in Utilities.FindAllChildrenByType<Control>(container)) {
+                            var tag = (string)control.Tag;
+                            if (tag != null && tag != string.Empty) {
+                                control.Tag = containerTag + "_" + tag;
+                            }
+                        }
+                    }
+                }
 
                 buttonDeviceResetToDefaultArray[i] = (Button)uc.Controls[0];
                 buttonDeviceResetAllArray[i] = (Button)uc.Controls[2];
                 buttonDeviceCopyToOthersArray[i] = (Button)uc.Controls[1];
                 uc.ButtonResetToDefaultClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetToDefaultClicked);
-                uc.ButtonResetAllClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetAllClicked);
+                uc.ButtonSaveToFileClicked += new EventHandler(DeviceSettingsUserControl_ButtonSaveToFileClicked);
+                uc.ButtonLoadFromFileClicked += new EventHandler(DeviceSettingsUserControl_ButtonLoadFromFileClicked);
                 uc.ButtonCopyToOthersClicked += new EventHandler(DeviceSettingsUserControl_ButtonCopyToOthersClicked);
                 uc.ValueChanged += new EventHandler(DeviceSettingsUserControl_ValueChanged);
 
                 tabPageDeviceArray[i] = tp;
-                    foreach (var control in Utilities.FindAllChildrenByType<Control>(uc)) {
-                        var tag = control.GetType().GetProperty("Tag").GetValue(control);
-                        if (tag == null)
-                            continue;
-                        var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control)_([a-z_]+)$");
-                        var match = regex.Match((string)tag);
-                        var type = match.Success ? match.Groups[1].Value : null;
-                        var parameter = match.Success ? match.Groups[2].Value : null;
-                        if (control.GetType() == typeof(CheckBox)) {
-                            checkBoxDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((CheckBox)control);
-                        } else if (parameter != null) {
-                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((NumericUpDown)control);
+                foreach (var control in Utilities.FindAllChildrenByType<Control>(uc)) {
+                    var tag = control.Tag;
+                    if (tag == null)
+                        continue;
+                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
+                    var match = regex.Match((string)tag);
+                    var type = match.Success ? match.Groups[1].Value : null;
+                    var parameter = match.Success ? match.Groups[2].Value : null;
+                    if (parameter == "algorithms") {
+                        tabControlAlgorithmsArray[i] = (TabControl)control;
+                    } else if (control.GetType() == typeof(GroupBox)) {
+                        groupBoxDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = (GroupBox)control;
+                    } else if (control.GetType() == typeof(CheckBox)) {
+                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((CheckBox)control);
+                    } else if (control.GetType() == typeof(Button)) {
+                        buttonDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((Button)control);
+                        ((Button)control).Click += new EventHandler(buttonDeviceParameter_Click);
+                    } else if (control.GetType() == typeof(NumericUpDown)) {
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((NumericUpDown)control);
+                        if (i == 0) {
+                            comboBoxBenchmarkingFirstParameter.Items.Add(type + "_" + parameter);
+                            comboBoxBenchmarkingSecondParameter.Items.Add(type + "_" + parameter);
                         }
+                    } else if (control.GetType() == typeof(TextBox)) {
+                        textBoxDeviceParameterArray[new Tuple<int, string, string>(i, type, parameter)] = ((TextBox)control);
                     }
+                }
             }
-
+            comboBoxBenchmarkingFirstParameter.SelectedIndex = 0;
+            comboBoxBenchmarkingSecondParameter.SelectedIndex = 0;
+            
             foreach (var device in Controller.OpenCLDevices)
                 ResetDeviceSettings(device);
 
@@ -1087,35 +1277,137 @@ namespace GatelessGateSharp {
             timerStatsUpdates.Enabled = true;
         }
 
-        void DeviceSettingsUserControl_ButtonResetToDefaultClicked(object sender, EventArgs e) {
-            int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
-            ResetDeviceSettings(Controller.OpenCLDevices[deviceIndex]);
+        void buttonDeviceParameter_Click(object sender, EventArgs e)
+        {
+            var tag = (string)((Button)sender).Tag;
+            if (tag == null)
+                return;
+            var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
+            var match = regex.Match((string)tag);
+            var type = match.Success ? match.Groups[1].Value : null;
+            var parameter = match.Success ? match.Groups[2].Value : null;
+
+            if (parameter == "overclocking_copy_across_algorithms") {
+                var deviceIndex = (int)((Control)sender).Parent.Parent.Parent.Parent.Tag;
+                foreach (var algorithm in sAlgorithmList) {
+                    foreach (var p in new List<string> { "overclocking_enabled" })
+                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, p)].Checked = checkBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, type, p)].Checked;
+                    foreach (var p in new List<string> {
+                        "overclocking_power_limit",
+                        "overclocking_core_clock",
+                        "overclocking_core_voltage",
+                        "overclocking_memory_clock",
+                        "overclocking_memory_voltage"
+                    })
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, p)].Value = numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, type, p)].Value;
+                }
+            } else if (parameter == "memory_timings_polaris10_copy_across_algorithms") {
+                var deviceIndex = (int)((Control)sender).Parent.Parent.Parent.Parent.Tag;
+                foreach (var algorithm in sAlgorithmList) {
+                    foreach (var p in new List<string> { "memory_timings_enabled" })
+                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, p)].Checked = checkBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, type, p)].Checked;
+
+                    foreach (var p in new List<string> {
+                        "memory_timings_polaris10_actrd",
+                        "memory_timings_polaris10_actwr",
+                        "memory_timings_polaris10_rasmactrd",
+                        "memory_timings_polaris10_rasmactwr",
+
+                        "memory_timings_polaris10_ras2ras",
+                        "memory_timings_polaris10_rp",
+                        "memory_timings_polaris10_wrplusrp",
+                        "memory_timings_polaris10_bus_turn",
+
+                        "memory_timings_polaris10_trcdw",
+                        "memory_timings_polaris10_trcdr",
+                        "memory_timings_polaris10_trrd",
+                        "memory_timings_polaris10_trc",
+
+                        "memory_timings_polaris10_tr2w",
+                        "memory_timings_polaris10_tccdl",
+                        "memory_timings_polaris10_tr2r",
+                        "memory_timings_polaris10_tw2r",
+                        "memory_timings_polaris10_tcl",
+
+                        "memory_timings_polaris10_trp_wra",
+                        "memory_timings_polaris10_trp_rda",
+                        "memory_timings_polaris10_trp",
+                        "memory_timings_polaris10_trfc",
+
+                        "memory_timings_polaris10_faw",
+                        "memory_timings_polaris10_tredc",
+                        "memory_timings_polaris10_twedc",
+                        "memory_timings_polaris10_t32aw",
+                    })
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, p)].Value = numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, type, p)].Value;
+
+                    foreach (var p in new List<string> {
+                        "memory_timings_polaris10_seq_pmg",
+                        "memory_timings_polaris10_phy_d0",
+                        "memory_timings_polaris10_phy_d1",
+                        "memory_timings_polaris10_phy_2",
+
+                        "memory_timings_polaris10_seq_misc1",
+                        "memory_timings_polaris10_seq_misc3",
+                        "memory_timings_polaris10_seq_misc4",
+                        "memory_timings_polaris10_seq_misc8",
+                        "memory_timings_polaris10_seq_misc9",
+                    })
+                        textBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, p)].Text = textBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, type, p)].Text;
+                }
+            }
+
+            mAreSettingsDirty = true;
         }
 
-        void DeviceSettingsUserControl_ButtonResetAllClicked(object sender, EventArgs e) {
-            foreach (var device in Controller.OpenCLDevices)
-                ResetDeviceSettings(device);
-        }
-
-        void DeviceSettingsUserControl_ButtonCopyToOthersClicked(object sender, EventArgs e) {
-            int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
-            CopyDeviceSettings(deviceIndex);
-        }
-
-        void DeviceSettingsUserControl_ValueChanged(object sender, EventArgs e) {
+        void controlParameter_ValueChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             UpdateControls();
         }
 
-        private void ResetDeviceSettings(Device device) {
+        void DeviceSettingsUserControl_ButtonResetToDefaultClicked(object sender, EventArgs e)
+        {
+            int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
+            ResetDeviceSettings(Controller.OpenCLDevices[deviceIndex]);
+        }
+
+        void DeviceSettingsUserControl_ButtonSaveToFileClicked(object sender, EventArgs e)
+        {
+            int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
+            SaveDeviceSettings(deviceIndex);
+        }
+
+        void DeviceSettingsUserControl_ButtonLoadFromFileClicked(object sender, EventArgs e)
+        {
+            int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
+            LoadDeviceSettings(deviceIndex);
+        }
+
+        void DeviceSettingsUserControl_ButtonCopyToOthersClicked(object sender, EventArgs e)
+        {
+            int deviceIndex = (int)(((DeviceSettingsUserControl.DeviceSettingsUserControl)sender).GetType().GetProperty("Tag").GetValue((DeviceSettingsUserControl.DeviceSettingsUserControl)sender));
+            CopyDeviceSettings(deviceIndex);
+        }
+
+        void DeviceSettingsUserControl_ValueChanged(object sender, EventArgs e)
+        {
+            mAreSettingsDirty = true;
+            UpdateControls();
+        }
+
+        private void ResetDeviceSettings(Device device)
+        {
             tabPageDeviceArray[device.DeviceIndex].Text = "#" + device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName();
 
             ResetDeviceFanControlSettings(device);
             ResetDeviceAlgorithmSettings(device);
             ResetDeviceOverclockingSettings(device);
+            ResetDeviceMemoryTimingSettings(device);
         }
 
-        private void ResetDeviceAlgorithmSettings(Device device) {
+        private void ResetDeviceAlgorithmSettings(Device device)
+        {
             mAreSettingsDirty = true;
             var openCLName = ((OpenCLDevice)device).GetComputeDevice().Name;
             var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
@@ -1132,7 +1424,7 @@ namespace GatelessGateSharp {
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
 
             // Lbry
-            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "threads")].Value = (decimal)1;
+            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "threads")].Value = (decimal)2;
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "intensity")].Value = (decimal)32;
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
@@ -1156,8 +1448,8 @@ namespace GatelessGateSharp {
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "raw_intensity")].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 8 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 8 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 8 * device.GetMaxComputeUnits() :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 8 * device.GetMaxComputeUnits() :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 283 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 283 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 4 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 4 * device.GetMaxComputeUnits() :
@@ -1180,7 +1472,7 @@ namespace GatelessGateSharp {
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 128 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 131 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? 64 :
@@ -1194,9 +1486,10 @@ namespace GatelessGateSharp {
                                                                                                           2 * device.GetMaxComputeUnits());
         }
 
-        private void ResetDeviceOverclockingSettings(Device device) {
+        private void ResetDeviceOverclockingSettings(Device device)
+        {
             foreach (var algorithm in sAlgorithmList) {
-                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableOverclockingForDefaultSettings.Checked;
+                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
 
                 numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
@@ -1216,13 +1509,13 @@ namespace GatelessGateSharp {
                 numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
                 int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
 
-                if (checkBoxEnableOverclockingForDefaultSettings.Checked) {
+                if (checkBoxEnableHardwareAccelerationForDefaultSettings.Checked) {
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
 
                     var newCoreVoltage
                          = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1030 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1030 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1120 :
@@ -1233,17 +1526,22 @@ namespace GatelessGateSharp {
                     if (newCoreVoltage > 0)
                         try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = (decimal)newCoreVoltage; } catch (Exception) { }
 
+                    var newMemoryVoltage
+                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1000 :
+                                                                                                 defaultMemoryVoltage);
+                    if (newMemoryVoltage > 0)
+                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = (decimal)newMemoryVoltage; } catch (Exception) { }
+
                     var newCoreClock
                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "neoscrypt" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "neoscrypt" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "ethash_pascal" ? 1250 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "ethash_pascal" ? 1250 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1250 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1250 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1300 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1300 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1030 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1303 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1303:
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? defaultCoreClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1000 :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreClock :
@@ -1253,12 +1551,10 @@ namespace GatelessGateSharp {
 
                     var newMemoryClock
                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && algorithm == "neoscrypt" ? 1650 : // defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && algorithm == "neoscrypt" ? 1650 : // defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && defaultMemoryClock >= 1750 ? 2000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && defaultMemoryClock >= 1750 ? 2000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && defaultMemoryClock >= 2000 ? 2200 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" && defaultMemoryClock >= 2000 ? 2200 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? defaultMemoryClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 500 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultMemoryClock :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? defaultMemoryClock :
@@ -1270,7 +1566,109 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void ResetDeviceFanControlSettings(Device device) {
+        private void ResetDeviceMemoryTimingSettings(Device device)
+        {
+            foreach (var algorithm in sAlgorithmList) {
+                bool ethash = (new Regex(@"^ethash")).Match(algorithm).Success;
+                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
+                if (device.GetVendor() == "AMD"
+                    && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
+                    && device.MemoryVendor == "Elpida") {
+
+                    //if (algorithm == "neoscrypt")
+                    //    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
+
+                    if (algorithm == "ethash") {
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 16;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 15;
+                    } else {
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 16;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 15;
+                    }
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = 30;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = 34;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value = 78;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value = 33;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value = 43;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value = 16;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value = 21;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value = 26;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value = 6;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value = 70;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value = 190;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value = 14;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value = 13;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = 113;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value = 28;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value = 2;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value = 5;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value = 16;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = 23;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = 4;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = 6;
+                    
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = "20140604";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")].Text = "AA4089EA";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc8")].Text = "C0040003";
+
+                } else if (device.GetVendor() == "AMD"
+                           && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
+                           /* && device.MemoryVendor == "Samsung" */) {
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 16;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 19;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = 36;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = 43;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value   = 140;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value        = 33;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value  = 41;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value  = 17;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value     = 16;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value     = 28;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value      = 5;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value       = 74;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value = 30;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value = 4;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value = 7;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value = 19;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = 24;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value   = 61;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value   = 77;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value       = 14;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value      = 219;
+
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value       = 0;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value     = 3;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value     = 25;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value     = 0;
+
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_pmg")].Text = "101CCC22";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_d0")].Text  = "00000000";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_d1")].Text  = "00000000";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_2")].Text   = "00000F0A";
+
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = "2014030B";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")].Text = "A00089FA";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc4")].Text = "E000CDD8";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc8")].Text = "00000003";
+                    textBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc9")].Text = "14000707";
+                }
+            }
+        }
+
+        private void ResetDeviceFanControlSettings(Device device)
+        {
             mAreSettingsDirty = true;
             checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked = true;
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value = (decimal)75;
@@ -1279,7 +1677,8 @@ namespace GatelessGateSharp {
             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value = (decimal)100;
         }
 
-        private void CopyDeviceSettings(int sourceDeviceIndex) {
+        private void CopyDeviceSettings(int sourceDeviceIndex)
+        {
             mAreSettingsDirty = true;
             foreach (var tuple in numericUpDownDeviceParameterArray.Keys) {
                 if (tuple.Item1 != sourceDeviceIndex)
@@ -1308,8 +1707,10 @@ namespace GatelessGateSharp {
 
         #endregion
 
-        private class CustomWebClient : System.Net.WebClient {
-            protected override System.Net.WebRequest GetWebRequest(Uri uri) {
+        private class CustomWebClient : System.Net.WebClient
+        {
+            protected override System.Net.WebRequest GetWebRequest(Uri uri)
+            {
                 Encoding = System.Text.Encoding.UTF8;
                 var request = base.GetWebRequest(uri);
                 request.Timeout = 60 * 1000;
@@ -1323,7 +1724,8 @@ namespace GatelessGateSharp {
         delegate bool NoArgReturningBoolDelegate();
         delegate int NoArgReturningIntDelegate();
 
-        static void Task_UpdateBitcoinRates(object cancellationToken) {
+        static void Task_UpdateBitcoinRates(object cancellationToken)
+        {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
@@ -1348,7 +1750,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        static void Task_UpdateAltcoinRates(object cancellationToken) {
+        static void Task_UpdateAltcoinRates(object cancellationToken)
+        {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
@@ -1379,7 +1782,8 @@ namespace GatelessGateSharp {
         static Dictionary<string, object> sDwarfPoolEthereumStats = null;
         static Dictionary<string, object> sDwarfPoolMoneroStats = null;
 
-        static void Task_UpdatePoolStats(object cancellationToken) {
+        static void Task_UpdatePoolStats(object cancellationToken)
+        {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
@@ -1450,7 +1854,54 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void UpdatePoolStats() {
+        public string GetPrettyAlgorithmName(string algorithmName)
+        {
+            return (algorithmName == "ethash_pascal") ? "Ethash/Pascal" :
+                   (algorithmName == "ethash") ? "Ethash" :
+                   (algorithmName == "pascal") ? "Pascal" :
+                   (algorithmName == "cryptonight") ? "CryptoNight" :
+                   (algorithmName == "neoscrypt") ? "NeoScrypt" :
+                   (algorithmName == "lbry") ? "Lbry" :
+                   (algorithmName == "lyra2rev2") ? "Lyra2REv2" :
+                                            null;
+        }
+
+        public string DefaultAlgorithm {
+            get {
+                var selected = (string)comboBoxDefaultAlgorithm.SelectedItem;
+                return (selected == "Ethash/Pascal") ? "ethash_pascal" :
+                       (selected == "Ethash") ? "ethash" :
+                       (selected == "Pascal") ? "pascal" :
+                       (selected == "CryptoNight") ? "cryptonight" :
+                       (selected == "NeoScrypt") ? "neoscrypt" :
+                       (selected == "Lbry") ? "lbry" :
+                       (selected == "Lyra2REv2") ? "lyra2rev2" :
+                                                       null;
+            }
+            set {
+                comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(GetPrettyAlgorithmName(value));
+            }
+        }
+
+        public string OptimizerAlgorithm {
+            get {
+                var selected = (string)comboBoxOptimizerAlgorithm.SelectedItem;
+                return (selected == "Ethash/Pascal") ? "ethash_pascal" :
+                       (selected == "Ethash") ? "ethash" :
+                       (selected == "Pascal") ? "pascal" :
+                       (selected == "CryptoNight") ? "cryptonight" :
+                       (selected == "NeoScrypt") ? "neoscrypt" :
+                       (selected == "Lbry") ? "lbry" :
+                       (selected == "Lyra2REv2") ? "lyra2rev2" :
+                                                       null;
+            }
+            set {
+                comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(GetPrettyAlgorithmName(value));
+            }
+        }
+
+        private void UpdatePoolStats()
+        {
             try {
                 double totalSpeed = 0;
                 foreach (var miner in Controller.Miners)
@@ -1469,21 +1920,21 @@ namespace GatelessGateSharp {
                 labelPriceWeek.Text = "-";
                 labelPriceMonth.Text = "-";
 
-                if (mCurrentPool == "NiceHash" && radioButtonEthereum.Checked && textBoxBitcoinAddress.Text != "") {
+                if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "ethash" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 20, totalSpeed, 1000000000.0);
-                } else if (mCurrentPool == "NiceHash" && radioButtonEthereumPascal.Checked && textBoxBitcoinAddress.Text != "") {
+                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "ethash_pascal" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 20, totalSpeed, 1000000000.0, 25, secondaryTotalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "NiceHash" && radioButtonMonero.Checked && textBoxBitcoinAddress.Text != "") {
+                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "cryptonight" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 22, totalSpeed, 1000000.0);
-                } else if (mCurrentPool == "NiceHash" && radioButtonLbry.Checked && textBoxBitcoinAddress.Text != "") {
+                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "lbry" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 23, totalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "NiceHash" && radioButtonPascal.Checked && textBoxBitcoinAddress.Text != "") {
+                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "pascal" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 58 - 33, totalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "NiceHash" && radioButtonFeathercoin.Checked && textBoxBitcoinAddress.Text != "") {
+                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "neoscrypt" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 41 - 33, totalSpeed, 1000000000.0);
-                } else if (mCurrentPool == "NiceHash" && radioButtonMonacoin.Checked && textBoxBitcoinAddress.Text != "") {
+                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "lyra2rev2" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 47 - 33, totalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "ethermine.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "" && sEthermineStats != null) {
+                } else if (mCurrentPool == "ethermine.org" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "" && sEthermineStats != null) {
                     var response = sEthermineStats;
                     var data = (JContainer)response["data"];
                     var balance = (double)data["unpaid"] * 1e-18;
@@ -1494,8 +1945,8 @@ namespace GatelessGateSharp {
                     if (Controller.AppState == Controller.ApplicationGlobalState.Mining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
                         UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
-                    } 
-                } else if (mCurrentPool == "ethpool.org" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "" && sEthpoolStats != null) {
+                    }
+                } else if (mCurrentPool == "ethpool.org" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "" && sEthpoolStats != null) {
                     var data = (JContainer)sEthpoolStats["data"];
                     double balance = 0;
                     try {
@@ -1508,8 +1959,8 @@ namespace GatelessGateSharp {
                     if (Controller.AppState == Controller.ApplicationGlobalState.Mining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
                         UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
-                    } 
-                } else if (mCurrentPool == "Nanopool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "") {
+                    }
+                } else if (mCurrentPool == "Nanopool" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "") {
                     var data = (JContainer)sNanopoolEthereumStats["data"];
                     double balance = 0;
                     try {
@@ -1521,7 +1972,7 @@ namespace GatelessGateSharp {
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
                         UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
                     }
-                } else if (mCurrentPool == "Nanopool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "") {
+                } else if (mCurrentPool == "Nanopool" && DefaultAlgorithm == "cryptonight" && textBoxMoneroAddress.Text != "") {
                     var data = (JContainer)sNanopoolMoneroStats["data"];
                     double balance = 0;
                     try {
@@ -1533,7 +1984,7 @@ namespace GatelessGateSharp {
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
                         UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
                     }
-                } else if (mCurrentPool == "DwarfPool" && radioButtonEthereum.Checked && textBoxEthereumAddress.Text != "") {
+                } else if (mCurrentPool == "DwarfPool" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "") {
                     double balance = 0;
                     try {
                         balance = double.Parse((string)sDwarfPoolEthereumStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
@@ -1544,7 +1995,7 @@ namespace GatelessGateSharp {
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
                         UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
                     }
-                } else if (mCurrentPool == "DwarfPool" && radioButtonMonero.Checked && textBoxMoneroAddress.Text != "") {
+                } else if (mCurrentPool == "DwarfPool" && DefaultAlgorithm == "cryptonight" && textBoxMoneroAddress.Text != "") {
                     double balance = 0;
                     try {
                         balance = double.Parse((string)sDwarfPoolMoneroStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
@@ -1555,13 +2006,14 @@ namespace GatelessGateSharp {
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
                         UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
                     }
-                } 
+                }
             } catch (Exception) {
                 Logger("Failed to update pool statistics.");
             }
         }
 
-        private void UpdateProfitabilityInfoForNiceHash(string currency, double BTCRate, int algo, double totalSpeed, double speedDivisor, int secondaryAlgo = -1, double secondaryTotalSpeed = 0, double secondarySpeedDivisor = 1) {
+        private void UpdateProfitabilityInfoForNiceHash(string currency, double BTCRate, int algo, double totalSpeed, double speedDivisor, int secondaryAlgo = -1, double secondaryTotalSpeed = 0, double secondarySpeedDivisor = 1)
+        {
             if (sNiceHashProviderStats == null)
                 return;
 
@@ -1589,13 +2041,15 @@ namespace GatelessGateSharp {
             }
         }
 
-        void UpdateLabelsForProfitability(string coin, double price, double rate, string currency) {
+        void UpdateLabelsForProfitability(string coin, double price, double rate, string currency)
+        {
             labelPriceDay.Text = string.Format("{0:N6}", price) + " " + coin + "/Day (" + string.Format("{0:N2}", price * rate) + " " + currency + "/Day)";
             labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " " + coin + "/Week (" + string.Format("{0:N2}", price * 7 * rate) + " " + currency + "/Week)";
             labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " " + coin + "/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * rate) + " " + currency + "/Month)";
         }
- 
-        private string ConvertHashRateToString(double totalSpeed) {
+
+        private string ConvertHashrateToString(double totalSpeed)
+        {
             if (totalSpeed < 1000)
                 return string.Format("{0:N1} h/s", totalSpeed);
             else if (totalSpeed < 10000)
@@ -1614,17 +2068,25 @@ namespace GatelessGateSharp {
                 return string.Format("{0:N0} Mh/s", totalSpeed / 1000000);
         }
 
-        private void UpdateStats() {
-            if (Controller.AppState == Controller.ApplicationGlobalState.Switching)
+        private void UpdateStats()
+        {
+            if (Controller.AppState == Controller.ApplicationGlobalState.Initializing || Controller.AppState == Controller.ApplicationGlobalState.Switching)
                 return;
             UpdateLocalStats();
             UpdatePoolStats();
         }
- 
-        private void UpdateLocalStats() {
+
+        private void UpdateLocalStats()
+        {
             try { DeviceManagementLibrariesMutex.WaitOne(5000); } catch (Exception) { }
             try {
-                Text = appName + " (" + (mLatestReleaseDiff == 0 ? "latest release" : mLatestReleaseDiff + " release(s) behind") + ")"; // Set the window title.
+                // Set the window title.
+                Text = appName + " ("
+                    + (mLatestReleaseDiff == 0 ? "latest release" :
+                       mLatestReleaseDiff == 1 ? ("1 release behind") :
+                       mLatestReleaseDiff < 10 ? (mLatestReleaseDiff + " releases behind") :
+                                                  (mLatestReleaseDiff + "+ releases behind"))
+                    + ")";
 
                 // Pool
                 mCurrentPool = (Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.PrimaryStratum != null) ? (Controller.PrimaryStratum.PoolName) :
@@ -1654,13 +2116,24 @@ namespace GatelessGateSharp {
                     labelCurrentSecondaryPool.Text = "";
                 }
 
-                var elapsedTimeInSeconds = (long)Controller.StopWatch.Elapsed.TotalSeconds;
-                if (elapsedTimeInSeconds == 0)
+                var benchmarking = Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running && Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning;
+                var optimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running;
+                var elapsedTimeInSeconds = benchmarking ? (long)Controller.BenchmarkStopwatch.Elapsed.TotalSeconds : (long)Controller.StopWatch.Elapsed.TotalSeconds;
+
+                if (benchmarking) {
+                    var remaining = (Controller.BenchmarkEntries.Count * (int)numericUpDownBenchmarkingRepeats.Value) * ((int)numericUpDownBenchmarkingWait.Value + (int)numericUpDownBenchmarkingLength.Value);
+                    labelBenchmarkingRemaining.Text = "About " + (remaining / 60) + " minutes";
+                } else {
+                    labelBenchmarkingRemaining.Text = "-";
+                }
+
+                if (elapsedTimeInSeconds == 0) {
                     labelElapsedTime.Text = "-";
-                else if (elapsedTimeInSeconds >= 24 * 60 * 60)
+                } else if (elapsedTimeInSeconds >= 24 * 60 * 60) {
                     labelElapsedTime.Text = string.Format("{3} Day{4} {2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24, elapsedTimeInSeconds / 60 / 60 / 24, elapsedTimeInSeconds / 60 / 60 / 24 == 1 ? "" : "s");
-                else
+                } else {
                     labelElapsedTime.Text = string.Format("{2:00}:{1:00}:{0:00}", elapsedTimeInSeconds % 60, elapsedTimeInSeconds / 60 % 60, elapsedTimeInSeconds / 60 / 60 % 24);
+                }
                 if (elapsedTimeInSeconds > 0 && Controller.AppState == Controller.ApplicationGlobalState.Idle)
                     labelElapsedTime.Text = labelElapsedTime.Text + " (Paused)";
 
@@ -1682,13 +2155,18 @@ namespace GatelessGateSharp {
                     }
                 }
                 labelCurrentSpeed.Text = "-";
+                labelBenchmarkingSpeed.Text = "-";
                 foreach (var algorithm in speeds.Keys) {
                     if (labelCurrentSpeed.Text == "-") {
-                        labelCurrentSpeed.Text = ConvertHashRateToString(speeds[algorithm]) + " (" + algorithm + ")";
+                        labelCurrentSpeed.Text = ConvertHashrateToString(speeds[algorithm]) + " (" + algorithm + ")";
                     } else {
-                        labelCurrentSpeed.Text += ", " + ConvertHashRateToString(speeds[algorithm]) + " (" + algorithm + ")";
+                        labelCurrentSpeed.Text += ", " + ConvertHashrateToString(speeds[algorithm]) + " (" + algorithm + ")";
                     }
                 }
+                if (benchmarking)
+                    labelBenchmarkingSpeed.Text = labelCurrentSpeed.Text;
+                if (optimization)
+                    labelOptimizationSpeed.Text = labelCurrentSpeed.Text;
 
                 UpdateCharts();
 
@@ -1704,12 +2182,15 @@ namespace GatelessGateSharp {
                             speedSecondary += miner.SpeedSecondaryAlgorithm;
 
                     dataGridViewDevices.Rows[deviceIndex].Cells["speed"].Value = (Controller.AppState != Controller.ApplicationGlobalState.Mining) ? "-" :
-                                                           speedSecondary > 0 ? ConvertHashRateToString(speedPrimary) + ", " + ConvertHashRateToString(speedSecondary) :
-                                                                                                         ConvertHashRateToString(speedPrimary);
+                                                           speedSecondary > 0 ? ConvertHashrateToString(speedPrimary) + ", " + ConvertHashrateToString(speedSecondary) :
+                                                                                                         ConvertHashrateToString(speedPrimary);
 
-                    if (device.AcceptedShares + device.RejectedShares == 0) {
+                    if (Controller.AppState != Controller.ApplicationGlobalState.Mining || Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = Color.Black;
-                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = Controller.AppState == Controller.ApplicationGlobalState.Mining ? "0" : "-";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = "-";
+                    } else if (device.AcceptedShares + device.RejectedShares == 0) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = Color.Black;
+                        dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = "0";
                     } else {
                         var acceptanceRate = (double)device.AcceptedShares / (device.AcceptedShares + device.RejectedShares);
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = device.AcceptedShares.ToString() + " (" + string.Format("{0:N1}", acceptanceRate * 100) + "%)";
@@ -1754,28 +2235,22 @@ namespace GatelessGateSharp {
                                                                    coreClock < device.DefaultCoreClock ? Color.Blue :
                                                                                   Color.Black;
                     }
-                    int coreVoltage = device.CoreVoltage;
-                    if (coreVoltage >= 0) {
-                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Value = coreVoltage.ToString() + " mV";
-                        dataGridViewDevices.Rows[deviceIndex].Cells["core_voltage"].Style.ForeColor =
-                                                                   device.DefaultCoreVoltage < 0 ? Color.Black :
-                                                                   coreVoltage > device.DefaultCoreVoltage ? Color.Red :
-                                                                   coreVoltage < device.DefaultCoreVoltage ? Color.Blue :
-                                                                                  Color.Black;
-                    }
                     int memoryClock = device.MemoryClock;
                     if (memoryClock >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Style.ForeColor =
-                                                                    device.DefaultMemoryClock < 0? Color.Black :
+                                                                    device.DefaultMemoryClock < 0 ? Color.Black :
                                                                    memoryClock > device.DefaultMemoryClock ? Color.Red :
                                                                    memoryClock < device.DefaultMemoryClock ? Color.Blue :
                                                                                   Color.Black;
                     }
+                    if (device.MemoryType != null && device.MemoryVendor != null) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_info"].Value = device.MemoryVendor + " " + device.MemoryType;
+                    }
                     long memoryUsed = 0;
                     foreach (var miner in Controller.Miners)
                         if (device.DeviceIndex == miner.DeviceIndex)
-                        memoryUsed += miner.MemoryUsage;
+                            memoryUsed += miner.MemoryUsage;
                     if (memoryUsed > 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Value = String.Format("{0:0.0}", memoryUsed / 1000000000.0) + "GB";
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Style.ForeColor = Color.Black;
@@ -1821,7 +2296,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public static bool IsAPIEnabled() {
+        public static bool IsAPIEnabled()
+        {
             if (Instance.checkBoxAPIEnabled.InvokeRequired) {
                 return (bool)Instance.checkBoxAPIEnabled.Invoke(new NoArgReturningBoolDelegate(() => {
                     return Instance.checkBoxAPIEnabled.Checked;
@@ -1831,7 +2307,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public static int GetAPIPort() {
+        public static int GetAPIPort()
+        {
             if (Instance.numericUpDownAPIPort.InvokeRequired) {
                 return (int)Instance.numericUpDownAPIPort.Invoke(new NoArgReturningIntDelegate(() => {
                     return decimal.ToInt32(Instance.numericUpDownAPIPort.Value);
@@ -1841,7 +2318,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public static IPAddressRange GetAdminIPAddressRange() {
+        public static IPAddressRange GetAdminIPAddressRange()
+        {
             try {
                 string text = null;
                 if (Instance.textBoxAdminIPRange.InvokeRequired) {
@@ -1858,7 +2336,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public static IPAddressRange GetAllowedIPAddressRange() {
+        public static IPAddressRange GetAllowedIPAddressRange()
+        {
             try {
                 string text = null;
                 if (Instance.textBoxAllowedIPRange.InvokeRequired) {
@@ -1875,7 +2354,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public static IPAddressRange GetDeniedIPAddressRange() {
+        public static IPAddressRange GetDeniedIPAddressRange()
+        {
             try {
                 string text = null;
                 if (Instance.textBoxDeniedIPRange.InvokeRequired) {
@@ -1892,7 +2372,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        enum APIMessageCodes {
+        enum APIMessageCodes
+        {
             MSG_INVGPU = 1,
             MSG_ALRENA = 2,
             MSG_ALRDIS = 3,
@@ -2008,16 +2489,23 @@ namespace GatelessGateSharp {
             MSG_GPURAWINT = 143
         }
 
-        public static async void Task_APIListener(object cancellationToken) {
+        public static async void Task_APIListener(object cancellationToken)
+        {
             TcpListener server = null;
 
             Logger("API Listener started.");
-            Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+            Thread.CurrentThread.Priority = ThreadPriority.Normal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 if (MainForm.IsAPIEnabled()) {
                     try {
                         int port = MainForm.GetAPIPort();
-                        System.Diagnostics.Process.Start("netsh", "advfirewall firewall add rule name=\"Open Port " + port + "\" dir=in action=allow protocol=TCP localport=" + port);
+                        var process = new System.Diagnostics.Process();
+                        var startInfo = new System.Diagnostics.ProcessStartInfo();
+                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                        startInfo.FileName = "netsh";
+                        startInfo.Arguments = "advfirewall firewall add rule name=\"Open Port " + port + "\" dir=in action=allow protocol=TCP localport=" + port;
+                        process.StartInfo = startInfo;
+                        process.Start();
                         Thread.Sleep(1000);
                         server = new TcpListener(IPAddress.Any, port);
                         server.Start();
@@ -2163,7 +2651,7 @@ namespace GatelessGateSharp {
                                         } else if (command == "devs") {
                                             object[] devices = new object[Controller.OpenCLDevices.Length];
                                             foreach (var device in Controller.OpenCLDevices) {
-                                                double speed = 0, averageSpeed =  0;
+                                                double speed = 0, averageSpeed = 0;
                                                 try {
                                                     foreach (var miner in Controller.Miners)
                                                         if (miner.DeviceIndex == device.DeviceIndex)
@@ -2219,7 +2707,7 @@ namespace GatelessGateSharp {
                                                             {"Msg", Controller.OpenCLDevices.Length + " GPU(s)" },
                                                             {"Description", appName } } } }, {
                                                         "DEVS", devices }, {
-                                                        "id", 1 } } );
+                                                        "id", 1 } });
                                         } else if (data == "{\"command\":\"pools\"}") {
                                             data = JsonConvert.SerializeObject(new Dictionary<string, object> { {
                                                         "STATUS", new object[] { new Dictionary<string, object> {
@@ -2376,7 +2864,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
             try {
                 timerDevFee.Enabled = false;
                 timerStatsUpdates.Enabled = false;
@@ -2384,9 +2873,14 @@ namespace GatelessGateSharp {
                 timerWatchdog.Enabled = false;
                 mBackgroundTasksCancellationTokenSource.Cancel();
 
-                if (Controller.AppState == Controller.ApplicationGlobalState.Mining)
-                    StopMiners(false);
+                if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                    StopBenchmarks();
+                } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining) {
+                    StopMining(false);
+                }
                 if (e.CloseReason == CloseReason.UserClosing) {
+                    try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                    try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
                     Program.KillMonitor = true;
                 }
@@ -2395,17 +2889,18 @@ namespace GatelessGateSharp {
                     SaveSettingsToDatabase();
                 //if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy)
                 //    ADL.ADL_Main_Control_Destroy();
-
+                if (PCIExpress.Available)
+                    PCIExpress.UnloadPhyMem();
                 foreach (var device in Controller.OpenCLDevices)
                     device.Dispose();
                 Controller.OpenCLDevices = null;
-                PCIExpress.UnloadPhyMem();
 
                 mBackgroundTasksCancellationTokenSource.Dispose();
             } catch (Exception ex) { Logger(ex); }
         }
 
-        private void timerDeviceStatusUpdates_Tick(object sender, EventArgs e) {
+        private void timerDeviceStatusUpdates_Tick(object sender, EventArgs e)
+        {
             try {
                 UpdateStats();
             } catch (Exception ex) {
@@ -2413,12 +2908,13 @@ namespace GatelessGateSharp {
             }
         }
 
-        void UpdateCharts() {
+        void UpdateCharts()
+        {
             try {
                 if (!mChartsInitialized) {
                     InitializeChart(cartesianChartTemperature, value => value + "℃", 100, ChartType.Device);
-                    InitializeChart(cartesianChartSpeedPrimaryAlgorithm, ConvertHashRateToString, double.NaN, ChartType.Device);
-                    InitializeChart(cartesianChartSpeedSecondaryAlgorithm, ConvertHashRateToString, double.NaN, ChartType.Device);
+                    InitializeChart(cartesianChartSpeedPrimaryAlgorithm, ConvertHashrateToString, double.NaN, ChartType.Device);
+                    InitializeChart(cartesianChartSpeedSecondaryAlgorithm, ConvertHashrateToString, double.NaN, ChartType.Device);
                     InitializeChart(cartesianChartFanSpeed, value => value + "%", 100, ChartType.Device);
                     InitializeChart(cartesianChartDeviceActivity, value => value + "%", 100, ChartType.Device);
                     InitializeChart(cartesianChartPower, value => (value < 0 ? "" : value + "W"), double.NaN, ChartType.Device);
@@ -2430,7 +2926,7 @@ namespace GatelessGateSharp {
                 UpdateChart(cartesianChartFanSpeed, deviceIndex => Controller.OpenCLDevices[deviceIndex].FanSpeed, ChartType.Device);
                 UpdateChart(cartesianChartDeviceActivity, deviceIndex => Controller.OpenCLDevices[deviceIndex].Activity, ChartType.Device);
                 UpdateChart(cartesianChartPower, deviceIndex => (Controller.OpenCLDevices[deviceIndex].Power < 0 ? 0 : Controller.OpenCLDevices[deviceIndex].Power), ChartType.Device);
-                UpdateChart(cartesianChartCPUUsage, dummy => ( mCPUUsage ), ChartType.Total);
+                UpdateChart(cartesianChartCPUUsage, dummy => (mCPUUsage), ChartType.Total);
 
                 UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
                     (int deviceIndex) => {
@@ -2449,7 +2945,8 @@ namespace GatelessGateSharp {
             } catch (Exception ex) { Logger(ex); }
         }
 
-        void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue, ChartType type) {
+        void InitializeChart(LiveCharts.WinForms.CartesianChart chart, System.Func<double, string> formatter, double maxValue, ChartType type)
+        {
             int numSerieses = (type == ChartType.Device) ? Controller.OpenCLDevices.Length :
                               (type == ChartType.Total) ? 1 :
                               (type == ChartType.Algorithm) ? sAlgorithmList.Length :
@@ -2492,7 +2989,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        void InitializeShareChart(LiveCharts.WinForms.CartesianChart chart, int size) {
+        void InitializeShareChart(LiveCharts.WinForms.CartesianChart chart, int size)
+        {
             chart.DisableAnimations = true;
             chart.AxisX.Clear();
             chart.AxisX.Add(new Axis {
@@ -2514,7 +3012,7 @@ namespace GatelessGateSharp {
             //
             chart.Series.Clear();
             for (int i = 0; i < 2; ++i) {
-                var values = new ChartValues<int> {};
+                var values = new ChartValues<int> { };
                 for (int j = 0; j < size; ++j)
                     values.Add(0);
                 chart.Series.Add(
@@ -2530,8 +3028,10 @@ namespace GatelessGateSharp {
 
         delegate void NoArgReturningVoidDelegate();
         delegate string NoArgReturningStringDelegate();
+        delegate uint NoArgReturningUIntDelegate();
 
-        void Task_UpdateShareCharts(object cancellationToken) {
+        void Task_UpdateShareCharts(object cancellationToken)
+        {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             int counter = 0;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
@@ -2577,7 +3077,7 @@ namespace GatelessGateSharp {
         }
 
         delegate void IntArgReturningVoidDelegate(int i);
-        
+
         public void ReportAcceptedShare()
         {
             AddShareToShareChart(cartesianChartShare1Minute, 0);
@@ -2594,7 +3094,8 @@ namespace GatelessGateSharp {
             AddShareToShareChart(cartesianChartShare1Month, 1);
         }
 
-        void AddShareToShareChart(LiveCharts.WinForms.CartesianChart chart, int index) {
+        void AddShareToShareChart(LiveCharts.WinForms.CartesianChart chart, int index)
+        {
             if (chart.InvokeRequired) {
                 chart.Invoke(new IntArgReturningVoidDelegate((i) => {
                     var count = ((LiveCharts.Wpf.StackedColumnSeries)(chart.Series[i])).Values.Count;
@@ -2608,7 +3109,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        void AddNewValueToShareChart(LiveCharts.WinForms.CartesianChart chart) {
+        void AddNewValueToShareChart(LiveCharts.WinForms.CartesianChart chart)
+        {
             chart.Series[0].Values.RemoveAt(0);
             chart.Series[1].Values.RemoveAt(0);
             chart.AxisX[0].Labels.RemoveAt(0);
@@ -2620,10 +3122,11 @@ namespace GatelessGateSharp {
 
         enum ChartType { Device, Total, Algorithm }
 
-        void UpdateChart(LiveCharts.WinForms.CartesianChart chart, System.Func<int, double> deviceIndexToValue, ChartType type, int chartIndex = 0) {
+        void UpdateChart(LiveCharts.WinForms.CartesianChart chart, System.Func<int, double> deviceIndexToValue, ChartType type, int chartIndex = 0)
+        {
             var now = System.DateTime.Now;
-            var numSerieses = (type == ChartType.Device   ) ? Controller.OpenCLDevices.Length :
-                              (type == ChartType.Total    ) ? 1 :
+            var numSerieses = (type == ChartType.Device) ? Controller.OpenCLDevices.Length :
+                              (type == ChartType.Total) ? 1 :
                               (type == ChartType.Algorithm) ? sAlgorithmList.Length :
                                                               Controller.OpenCLDevices.Length;
 
@@ -2633,9 +3136,9 @@ namespace GatelessGateSharp {
                     Value = deviceIndexToValue(i)
                 });
                 int valueIndex = chart.Series[i].Values.Count - 1;
-                valueIndex = chart.Series[i].Values.Count - 1 - 60;           if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Second != 0) chart.Series[i].Values.RemoveAt(valueIndex);
-                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60;      if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Minute != 0) chart.Series[i].Values.RemoveAt(valueIndex);
-                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60 - 24; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Hour   != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Second != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Minute != 0) chart.Series[i].Values.RemoveAt(valueIndex);
+                valueIndex = chart.Series[i].Values.Count - 1 - 60 - 60 - 24; if (valueIndex >= 0 && ((MeasureModel)chart.Series[i].Values[valueIndex]).DateTime.Hour != 0) chart.Series[i].Values.RemoveAt(valueIndex);
                 while (chart.Series[i].Values.Count > 60 + 60 + 24 + 365) // Keep data for one year.
                     chart.Series[i].Values.RemoveAt(0);
             }
@@ -2670,7 +3173,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public bool ValidateCustomPoolSettings(bool showMessageBox = true) {
+        public bool ValidateCustomPoolSettings(bool showMessageBox = true)
+        {
             var regex = new System.Text.RegularExpressions.Regex(@"^stratum\+tcp\:\/\/");
             textBoxCustomPool0Host.Text = regex.Replace(textBoxCustomPool0Host.Text.Trim(), "");
             textBoxCustomPool1Host.Text = regex.Replace(textBoxCustomPool1Host.Text.Trim(), "");
@@ -2681,10 +3185,72 @@ namespace GatelessGateSharp {
             textBoxCustomPool2SecondaryHost.Text = regex.Replace(textBoxCustomPool2SecondaryHost.Text.Trim(), "");
             textBoxCustomPool3SecondaryHost.Text = regex.Replace(textBoxCustomPool3SecondaryHost.Text.Trim(), "");
 
-            return true;
+            regex = new System.Text.RegularExpressions.Regex(@" +");
+            textBoxCustomPool0Host.Text = regex.Replace(textBoxCustomPool0Host.Text, string.Empty);
+            textBoxCustomPool0Login.Text = regex.Replace(textBoxCustomPool0Login.Text, string.Empty);
+            textBoxCustomPool0Password.Text = regex.Replace(textBoxCustomPool0Password.Text, string.Empty);
+            textBoxCustomPool0SecondaryHost.Text = regex.Replace(textBoxCustomPool0SecondaryHost.Text, string.Empty);
+            textBoxCustomPool0SecondaryLogin.Text = regex.Replace(textBoxCustomPool0SecondaryLogin.Text, string.Empty);
+            textBoxCustomPool0SecondaryPassword.Text = regex.Replace(textBoxCustomPool0SecondaryPassword.Text, string.Empty);
+
+            textBoxCustomPool1Host.Text = regex.Replace(textBoxCustomPool1Host.Text, string.Empty);
+            textBoxCustomPool1Login.Text = regex.Replace(textBoxCustomPool1Login.Text, string.Empty);
+            textBoxCustomPool1Password.Text = regex.Replace(textBoxCustomPool1Password.Text, string.Empty);
+            textBoxCustomPool1SecondaryHost.Text = regex.Replace(textBoxCustomPool1SecondaryHost.Text, string.Empty);
+            textBoxCustomPool1SecondaryLogin.Text = regex.Replace(textBoxCustomPool1SecondaryLogin.Text, string.Empty);
+            textBoxCustomPool1SecondaryPassword.Text = regex.Replace(textBoxCustomPool1SecondaryPassword.Text, string.Empty);
+
+            textBoxCustomPool2Host.Text = regex.Replace(textBoxCustomPool2Host.Text, string.Empty);
+            textBoxCustomPool2Login.Text = regex.Replace(textBoxCustomPool2Login.Text, string.Empty);
+            textBoxCustomPool2Password.Text = regex.Replace(textBoxCustomPool2Password.Text, string.Empty);
+            textBoxCustomPool2SecondaryHost.Text = regex.Replace(textBoxCustomPool2SecondaryHost.Text, string.Empty);
+            textBoxCustomPool2SecondaryLogin.Text = regex.Replace(textBoxCustomPool2SecondaryLogin.Text, string.Empty);
+            textBoxCustomPool2SecondaryPassword.Text = regex.Replace(textBoxCustomPool2SecondaryPassword.Text, string.Empty);
+
+            textBoxCustomPool3Host.Text = regex.Replace(textBoxCustomPool3Host.Text, string.Empty);
+            textBoxCustomPool3Login.Text = regex.Replace(textBoxCustomPool3Login.Text, string.Empty);
+            textBoxCustomPool3Password.Text = regex.Replace(textBoxCustomPool3Password.Text, string.Empty);
+            textBoxCustomPool3SecondaryHost.Text = regex.Replace(textBoxCustomPool3SecondaryHost.Text, string.Empty);
+            textBoxCustomPool3SecondaryLogin.Text = regex.Replace(textBoxCustomPool3SecondaryLogin.Text, string.Empty);
+            textBoxCustomPool3SecondaryPassword.Text = regex.Replace(textBoxCustomPool3SecondaryPassword.Text, string.Empty);
+
+            bool valid = (checkBoxCustomPool0Enable.Checked || checkBoxCustomPool1Enable.Checked || checkBoxCustomPool2Enable.Checked || checkBoxCustomPool3Enable.Checked);
+
+            valid = valid && !(checkBoxCustomPool0Enable.Checked && textBoxCustomPool0Host.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool0Enable.Checked && textBoxCustomPool0Login.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool0Enable.Checked && textBoxCustomPool0Password.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool0SecondaryHost.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool0SecondaryLogin.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool0SecondaryPassword.Text == string.Empty);
+
+            valid = valid && !(checkBoxCustomPool1Enable.Checked && textBoxCustomPool1Host.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool1Enable.Checked && textBoxCustomPool1Login.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool1Enable.Checked && textBoxCustomPool1Password.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool1SecondaryHost.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool1SecondaryLogin.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool1SecondaryPassword.Text == string.Empty);
+
+            valid = valid && !(checkBoxCustomPool2Enable.Checked && textBoxCustomPool2Host.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool2Enable.Checked && textBoxCustomPool2Login.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool2Enable.Checked && textBoxCustomPool2Password.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool2SecondaryHost.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool2SecondaryLogin.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool2SecondaryPassword.Text == string.Empty);
+
+            valid = valid && !(checkBoxCustomPool3Enable.Checked && textBoxCustomPool3Host.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool3Enable.Checked && textBoxCustomPool3Login.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool3Enable.Checked && textBoxCustomPool3Password.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool3SecondaryHost.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool3SecondaryLogin.Text == string.Empty);
+            valid = valid && !(checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 && textBoxCustomPool3SecondaryPassword.Text == string.Empty);
+
+            if (!valid)
+                MessageBox.Show("Custom pool settings are invalid.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return valid;
         }
 
-        public bool ValidateBitcoinAddress(bool showMessageBox = true) {
+        public bool ValidateBitcoinAddress(bool showMessageBox = true)
+        {
             var regex = new System.Text.RegularExpressions.Regex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$");
             var match = regex.Match(mUserBitcoinAddress);
             if (match.Success) {
@@ -2696,7 +3262,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public bool ValidateEthereumAddress(bool showMessageBox = true) {
+        public bool ValidateEthereumAddress(bool showMessageBox = true)
+        {
             var regex = new System.Text.RegularExpressions.Regex("^0x[a-fA-Z0-9]{40}$");
             var match = regex.Match(mUserEthereumAddress);
             if (match.Success) {
@@ -2708,7 +3275,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public bool ValidateMoneroAddress(bool showMessageBox = true) {
+        public bool ValidateMoneroAddress(bool showMessageBox = true)
+        {
             var regex = new System.Text.RegularExpressions.Regex(@"^(4[0-9AB][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{93}(\.?(([0-9a-fA-F]{16})|([0-9a-fA-F]{64})))?)|([0-9a-fA-F]{64})?$");
             var match = regex.Match(mUserMoneroAddress);
             if (match.Success) {
@@ -2720,7 +3288,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public bool ValidatePascalAddress() {
+        public bool ValidatePascalAddress()
+        {
             var regex = new System.Text.RegularExpressions.Regex(@"^[\-0-9a-zA-Z\.]+$");
             var match = regex.Match(mUserPascalAddress);
             if (match.Success) {
@@ -2731,7 +3300,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public bool ValidateLbryAddress() {
+        public bool ValidateLbryAddress()
+        {
             var regex = new System.Text.RegularExpressions.Regex(@"^[0-9a-zA-Z]+?$");
             var match = regex.Match(mUserLbryAddress);
             if (match.Success) {
@@ -2742,7 +3312,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public bool ValidateRigID() {
+        public bool ValidateRigID()
+        {
             textBoxRigID.Text = textBoxRigID.Text.Trim();
             var regex = new System.Text.RegularExpressions.Regex(@"^[a-zA-Z0-9]+$");
             var match = regex.Match(textBoxRigID.Text);
@@ -2754,12 +3325,14 @@ namespace GatelessGateSharp {
             }
         }
 
-        private struct StratumServerInfo : IComparable<StratumServerInfo> {
+        private struct StratumServerInfo : IComparable<StratumServerInfo>
+        {
             public string name;
             public long delay;
             public long time;
 
-            public StratumServerInfo(string aName, long aDelay) {
+            public StratumServerInfo(string aName, long aDelay)
+            {
                 name = aName;
                 delay = aDelay;
                 try {
@@ -2771,7 +3344,8 @@ namespace GatelessGateSharp {
                     time += delay;
             }
 
-            public int CompareTo(StratumServerInfo other) {
+            public int CompareTo(StratumServerInfo other)
+            {
                 if (time == other.time)
                     return 0;
                 else if (other.time < 0 && time >= 0)
@@ -2787,7 +3361,8 @@ namespace GatelessGateSharp {
 
         #region GetServers
 
-        List<StratumServerInfo> GetNiceHashLyra2REv2Servers() {
+        List<StratumServerInfo> GetNiceHashLyra2REv2Servers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("lyra2rev2.usa.nicehash.com", 0),
                 new StratumServerInfo("lyra2rev2.eu.nicehash.com", 0),
@@ -2800,7 +3375,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetNiceHashNeoScryptServers() {
+        List<StratumServerInfo> GetNiceHashNeoScryptServers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("neoscrypt.usa.nicehash.com", 0),
                 new StratumServerInfo("neoscrypt.eu.nicehash.com", 0),
@@ -2813,7 +3389,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetNiceHashLbryServers() {
+        List<StratumServerInfo> GetNiceHashLbryServers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("lbry.usa.nicehash.com", 0),
                 new StratumServerInfo("lbry.eu.nicehash.com", 0),
@@ -2826,7 +3403,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetNiceHashEthashServers() {
+        List<StratumServerInfo> GetNiceHashEthashServers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("daggerhashimoto.usa.nicehash.com", 0),
                 new StratumServerInfo("daggerhashimoto.eu.nicehash.com", 0),
@@ -2839,7 +3417,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetNanopoolEthashServers() {
+        List<StratumServerInfo> GetNanopoolEthashServers()
+        {
             var hosts = new List<StratumServerInfo> {
                                 new StratumServerInfo("eth-eu1.nanopool.org", 0),
                                 new StratumServerInfo("eth-eu2.nanopool.org", 0),
@@ -2851,7 +3430,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetNiceHashCryptoNightServers() {
+        List<StratumServerInfo> GetNiceHashCryptoNightServers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("cryptonight.usa.nicehash.com", 0),
                 new StratumServerInfo("cryptonight.eu.nicehash.com", 0),
@@ -2864,7 +3444,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetNiceHashPascalServers() {
+        List<StratumServerInfo> GetNiceHashPascalServers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("pascal.usa.nicehash.com", 0),
                 new StratumServerInfo("pascal.eu.nicehash.com", 0),
@@ -2877,7 +3458,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetDwarfPoolCryptoNightServers() {
+        List<StratumServerInfo> GetDwarfPoolCryptoNightServers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("xmr-eu.dwarfpool.com", 0),
                 new StratumServerInfo("xmr-usa.dwarfpool.com", 0)
@@ -2886,7 +3468,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetNanopoolCryptoNightServers() {
+        List<StratumServerInfo> GetNanopoolCryptoNightServers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("xmr-eu1.nanopool.org", 0),
                 new StratumServerInfo("xmr-eu2.nanopool.org", 0),
@@ -2898,7 +3481,8 @@ namespace GatelessGateSharp {
             return hosts;
         }
 
-        List<StratumServerInfo> GetNanopoolPascalServers() {
+        List<StratumServerInfo> GetNanopoolPascalServers()
+        {
             var hosts = new List<StratumServerInfo> {
                 new StratumServerInfo("pasc-eu1.nanopool.org", 0),
                 new StratumServerInfo("pasc-eu2.nanopool.org", 0),
@@ -2914,7 +3498,8 @@ namespace GatelessGateSharp {
 
         #endregion
 
-        public void LaunchOpenCLCryptoNightMiners(string pool) {
+        public void LaunchOpenCLCryptoNightMiners(string pool)
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             CryptoNightStratum stratum = null;
@@ -2976,7 +3561,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public void LaunchOpenCLLbryMiners(string pool) {
+        public void LaunchOpenCLLbryMiners(string pool)
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             LbryStratum stratum = null;
@@ -3005,7 +3591,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public void LaunchOpenCLNeoScryptMiners(string pool) {
+        public void LaunchOpenCLNeoScryptMiners(string pool)
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             NeoScryptStratum stratum = null;
@@ -3034,7 +3621,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public void LaunchOpenCLLyra2REv2Miners(string pool) {
+        public void LaunchOpenCLLyra2REv2Miners(string pool)
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             Lyra2REv2Stratum stratum = null;
@@ -3063,7 +3651,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public void LaunchOpenCLDualEthashPascalMiners(string pool) {
+        public void LaunchOpenCLDualEthashPascalMiners(string pool)
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             EthashStratum ethashStratum = null;
@@ -3125,7 +3714,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public void LaunchOpenCLPascalMiners(string pool) {
+        public void LaunchOpenCLPascalMiners(string pool)
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             PascalStratum stratum = null;
@@ -3164,7 +3754,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        public void LaunchOpenCLEthashMiners(string pool) {
+        public void LaunchOpenCLEthashMiners(string pool)
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             EthashStratum stratum = null;
@@ -3272,7 +3863,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode) {
+        void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3304,7 +3897,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLDualEthashLbryMinersWithStratum(EthashStratum stratum, LbryStratum stratum2) {
+        void LaunchOpenCLDualEthashLbryMinersWithStratum(EthashStratum stratum, LbryStratum stratum2)
+        {
+            EnableHardwareManagement(stratum, stratum2);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3339,7 +3934,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLDualEthashPascalMinersWithStratum(EthashStratum stratum, PascalStratum stratum2) {
+        void LaunchOpenCLDualEthashPascalMinersWithStratum(EthashStratum stratum, PascalStratum stratum2)
+        {
+            EnableHardwareManagement(stratum, stratum2);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3373,7 +3970,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLEthashMinersWithStratum(EthashStratum stratum) {
+        void LaunchOpenCLEthashMinersWithStratum(EthashStratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3405,7 +4004,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLLbryMinersWithStratum(LbryStratum stratum) {
+        void LaunchOpenCLLbryMinersWithStratum(LbryStratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3435,7 +4036,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLPascalMinersWithStratum(PascalStratum stratum) {
+        void LaunchOpenCLPascalMinersWithStratum(PascalStratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3465,7 +4068,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLNeoScryptMinersWithStratum(NeoScryptStratum stratum) {
+        void LaunchOpenCLNeoScryptMinersWithStratum(NeoScryptStratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3496,7 +4101,9 @@ namespace GatelessGateSharp {
             }
         }
 
-        void LaunchOpenCLLyra2REv2MinersWithStratum(Lyra2REv2Stratum stratum) {
+        void LaunchOpenCLLyra2REv2MinersWithStratum(Lyra2REv2Stratum stratum)
+        {
+            EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -3529,11 +4136,12 @@ namespace GatelessGateSharp {
 
         bool CustomPoolEnabled {
             get {
-                return checkBoxCustomPool0Enable.Checked || checkBoxCustomPool1Enable.Checked || checkBoxCustomPool2Enable.Checked || checkBoxCustomPool3Enable.Checked;
+                return (string)comboBoxDefaultAlgorithm.SelectedItem == "Custom Pools";
             }
         }
 
-        private void LaunchMinersForCustomPool(string algo, string host, int port, string login, string password, string algo2, string host2, int port2, string login2, string password2) {
+        private void LaunchMinersForCustomPool(string algo, string host, int port, string login, string password, string algo2, string host2, int port2, string login2, string password2)
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             if (algo == "Ethash" && algo2 == "Lbry") {
@@ -3590,7 +4198,47 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void LaunchMiners() {
+        private void EnableHardwareManagement(Stratum stratum, Stratum stratum2)
+        {
+            string algorithm = stratum.AlgorithmName;
+            if (stratum2 != null)
+                algorithm += "_" + stratum2.AlgorithmName;
+            foreach (var device in Controller.OpenCLDevices) {
+                if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
+                    continue;
+                var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked)
+                    device.PrepareMemoryTimingMods(algorithm);
+            }
+           foreach (var device in Controller.OpenCLDevices) {
+                if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
+                    continue;
+                var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked) {
+                    device.TargetPowerLimit = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
+                    device.TargetCoreClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
+                    device.TargetMemoryClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
+                    device.TargetCoreVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
+                    device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
+                    device.OverclockingEnabled = true;
+                }
+            }
+            foreach (var device in Controller.OpenCLDevices) {
+                if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
+                    continue;
+                var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
+                if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
+                    device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
+                    device.TargetMaxTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value);
+                    device.TargetMinFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value);
+                    device.TargetMaxFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value);
+                    device.FanControlEnabled = true;
+                }
+            }
+        }
+
+        private void LaunchMiners()
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             GC.Collect();
@@ -3601,61 +4249,34 @@ namespace GatelessGateSharp {
             } else {
                 LaunchMinersForDefaultPools();
             }
-
-            if (Controller.PrimaryStratum != null) {
-                string algorithm = Controller.PrimaryStratum.AlgorithmName;
-                if (Controller.SecondaryStratum != null)
-                    algorithm += "_" + Controller.SecondaryStratum.AlgorithmName;
-                foreach (var device in Controller.OpenCLDevices) {
-                    if (!(bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)
-                        continue;
-                    var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
-                    if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked) {
-                        device.SaveOverclockingSettings();
-                        device.TargetPowerLimit = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
-                        device.TargetCoreClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
-                        device.TargetMemoryClock = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
-                        device.TargetCoreVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
-                        device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
-                        device.OverclockingEnabled = true;
-                        device.UpdateOverclockingSettings();
-                    }
-                    if (checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
-                        device.TargetTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
-                        device.TargetMaxTemperature = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value);
-                        device.TargetMinFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value);
-                        device.TargetMaxFanSpeed = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value);
-                        device.FanControlEnabled = true;
-                        Controller.UpdateFanSpeeds();
-                    }
-                }
-            }
+            toolStripMainFormProgressBar.Style = ProgressBarStyle.Marquee;
         }
 
-        private void LaunchMinersForDefaultPools() {
+        private void LaunchMinersForDefaultPools()
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             foreach (string pool in listBoxPoolPriorities.Items) {
                 try {
-                    if (radioButtonEthereumPascal.Checked) {
+                    if (DefaultAlgorithm == "ethash_pascal") {
                         Logger("Launching Dual Ethash/Pascal for " + pool + "...");
                         LaunchOpenCLDualEthashPascalMiners(pool);
-                    } else if (radioButtonEthereum.Checked) {
+                    } else if (DefaultAlgorithm == "ethash") {
                         Logger("Launching Ethash miners for " + pool + "...");
                         LaunchOpenCLEthashMiners(pool);
-                    } else if (radioButtonMonero.Checked) {
+                    } else if (DefaultAlgorithm == "cryptonight") {
                         Logger("Launching CryptoNight miners for " + pool + "...");
                         LaunchOpenCLCryptoNightMiners(pool);
-                    } else if (radioButtonLbry.Checked) {
+                    } else if (DefaultAlgorithm == "lbry") {
                         Logger("Launching Lbry miners for " + pool + "...");
                         LaunchOpenCLLbryMiners(pool);
-                    } else if (radioButtonPascal.Checked) {
+                    } else if (DefaultAlgorithm == "pascal") {
                         Logger("Launching Pascal miners for " + pool + "...");
                         LaunchOpenCLPascalMiners(pool);
-                    } else if (radioButtonFeathercoin.Checked) {
+                    } else if (DefaultAlgorithm == "neoscrypt") {
                         Logger("Launching NeoScrypt miners for " + pool + "...");
                         LaunchOpenCLNeoScryptMiners(pool);
-                    } else if (radioButtonMonacoin.Checked) {
+                    } else if (DefaultAlgorithm == "lyra2rev2") {
                         Logger("Launching Lyra2REv2 miners for " + pool + "...");
                         LaunchOpenCLLyra2REv2Miners(pool);
                     }
@@ -3683,7 +4304,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void LaunchMinersForCustomPools() {
+        private void LaunchMinersForCustomPools()
+        {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             for (int customPoolIndex = 0; customPoolIndex < 4; customPoolIndex++) {
@@ -3760,11 +4382,13 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void StopMiners(bool saveStateToFile = true)
+        private void StopMining(bool saveStateToFile = true)
         {
             try {
                 Logger("Stopping miners...");
+
                 Controller.AppState = Controller.ApplicationGlobalState.Switching;
+
                 Controller.StopWatch.Stop();
                 timerWatchdog.Enabled = false;
                 if (mDevFeeMode)
@@ -3783,16 +4407,17 @@ namespace GatelessGateSharp {
                             break;
                         }
                 }
+
                 foreach (var device in Controller.OpenCLDevices) {
-                    if (device.OverclockingEnabled) {
+                    if (device.MemoryTimingModsEnabled) {
+                        device.MemoryTimingModsEnabled = false;
                         device.OverclockingEnabled = false;
-                        device.RestoreOverclockingSettings();
-                    }
-                    if (device.FanControlEnabled) {
                         device.FanControlEnabled = false;
+                        //device.ResetOverclockingSettings();
                         device.FanSpeed = -1;
                     }
                 }
+
                 if (Controller.PrimaryStratum != null)
                     Controller.PrimaryStratum.Stop();
                 if (Controller.SecondaryStratum != null)
@@ -3820,28 +4445,26 @@ namespace GatelessGateSharp {
                 Controller.AppState = Controller.ApplicationGlobalState.Idle;
                 if (saveStateToFile)
                     try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
-                UpdateStats();
-                UpdateControls();
+                toolStripMainFormProgressBar.Style = ProgressBarStyle.Continuous;
 
                 Logger("Stopped miners.");
             } catch (Exception ex) {
                 Logger(ex);
             }
+            UpdateControls();
         }
 
-        private void buttonStart_Click(object sender = null, EventArgs e = null) {
-            if (Controller.AppState == Controller.ApplicationGlobalState.Idle && !CheckSettingsBeforeMining())
-                return;
-
-            tabControlMainForm.Enabled = buttonStart.Enabled = false;
-
+        private void StartMining()
+        {
             if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
                 Controller.AppState = Controller.ApplicationGlobalState.Switching;
-                tabControlMainForm.SelectedIndex = 0;
+                UpdateControls();
+                Application.DoEvents();
+                Controller.StopWatch.Start();
+                if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                    tabControlMainForm.SelectedIndex = 0;
                 if (mAreSettingsDirty)
                     SaveSettingsToDatabase();
-                if (checkBoxEnablePhymem.Checked && !PCIExpress.Available && !PCIExpress.LoadPhyMem())
-                    MessageBox.Show(Utilities.GetAutoClosingForm(10), "Failed to load phymem.", appName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
                 Controller.PrimaryStratum = null;
                 Controller.SecondaryStratum = null;
@@ -3861,28 +4484,38 @@ namespace GatelessGateSharp {
                 }
 
                 if (unrecoverableException != null || Controller.PrimaryStratum == null || !Controller.Miners.Any()) {
-                    StopMiners();
-                    
-                    if (MessageBox.Show(
+                    StopMining();
+
+                    if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                        Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
+                        timerBenchmarks_Tick();
+                    } else if (MessageBox.Show(
                         Utilities.GetAutoClosingForm(20),
                         (unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner.") + "\nWould you like to stop mining now?",
                         appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes) {
-                            timerAutoStart.Enabled = true;
-                    } 
+                        timerAutoStart.Enabled = true;
+                    }
                 } else {
                     timerDevFee.Interval = Parameters.DevFeeInitialDelayInSeconds * 1000;
                     timerDevFee.Enabled = true;
-                    Controller.StopWatch.Start();
                     mDevFeeModeStartTime = DateTime.Now;
                     timerWatchdog.Enabled = true;
                     Controller.AppState = Controller.ApplicationGlobalState.Mining;
                 }
-            } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining) {
-                StopMiners();
             }
-
-            UpdateStats();
             UpdateControls();
+        }
+
+        private void buttonStart_Click(object sender = null, EventArgs e = null)
+        {
+
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
+                if (!CheckSettingsBeforeMining())
+                    return;
+                StartMining();
+            } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining) {
+                StopMining();
+            }
         }
 
         private bool CheckSettingsBeforeMining()
@@ -3924,34 +4557,60 @@ namespace GatelessGateSharp {
                 }
 
                 return true;
-            } catch (Exception ex) { Logger(ex); return false;  }
+            } catch (Exception ex) { Logger(ex); return false; }
         }
 
-        private void UpdateControls() {
+        private void UpdateControls()
+        {
             try {
-                tabControlMainForm.Enabled = buttonStart.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching);
+                var idle = (Controller.AppState == Controller.ApplicationGlobalState.Idle)
+                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
 
-                buttonBoostPerformance.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                buttonRestoreStockSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                tabControlMainForm.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown);
+                comboBoxDefaultAlgorithm.Enabled = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) 
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
+                                      && (Controller.AppState != Controller.ApplicationGlobalState.Switching);
+                buttonStart.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
+                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
+                buttonRunBenchmarks.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
+                                              && (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
+                                              && !(Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
+                buttonRunOptimizer.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
+                                              && ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running)
+                                                   || (Controller.AppState == Controller.ApplicationGlobalState.Idle 
+                                                       && Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning 
+                                                       && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning));
+
+                buttonBoostPerformance.Enabled = idle;
+                buttonRestoreStockSettings.Enabled = idle;
 
                 buttonStart.Text
-                    = Controller.StopWatch.Elapsed.TotalSeconds == 0                  ? "Start" :
+                    = Controller.StopWatch.Elapsed.TotalSeconds == 0 ? "Start" :
                       Controller.AppState == Controller.ApplicationGlobalState.Mining ? "Pause" :
                                                                                         "Resume";
-                buttonReleaseMemory.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                buttonRelaunch.Enabled = true;
+                buttonRunBenchmarks.Text
+                    = (Controller.AppState == Controller.ApplicationGlobalState.Mining
+                       && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) ? "Abort Benchmarking" :
+                                                                                                       "Benchmark";
+                buttonRunOptimizer.Text
+                    = (Controller.AppState == Controller.ApplicationGlobalState.Mining
+                       && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? "Stop Optimizer" :
+                                                                                                       "Optimize";
+                buttonReleaseMemory.Enabled = idle;
+                buttonRelaunch.Enabled = idle;
 
-                groupBoxCoinsToMine.Enabled = /*Controller.AppState == Controller.ApplicationGlobalState.Idle &&*/ !CustomPoolEnabled;
-                groupBoxPoolPriorities.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxPoolParameters.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxWalletAddresses.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle && !CustomPoolEnabled;
-                groupBoxAutomation.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                groupBoxHadrwareAcceleration.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                dataGridViewDevices.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                groupBoxCustmPool0.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                groupBoxCustmPool1.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                groupBoxCustmPool2.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                groupBoxCustmPool3.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                groupBoxPoolPriorities.Enabled = idle && !CustomPoolEnabled;
+                groupBoxPoolParameters.Enabled = idle && !CustomPoolEnabled;
+                groupBoxWalletAddresses.Enabled = idle && !CustomPoolEnabled;
+                groupBoxAutomation.Enabled = idle;
+                groupBoxHadrwareAcceleration.Enabled = idle;
+                dataGridViewDevices.Enabled = idle;
+                groupBoxCustmPool0.Enabled = idle;
+                groupBoxCustmPool1.Enabled = idle;
+                groupBoxCustmPool2.Enabled = idle;
+                groupBoxCustmPool3.Enabled = idle;
 
                 textBoxCustomPool0Host.Enabled = textBoxCustomPool0Login.Enabled = textBoxCustomPool0Password.Enabled = comboBoxCustomPool0Algorithm.Enabled = comboBoxCustomPool0SecondaryAlgorithm.Enabled = numericUpDownCustomPool0Port.Enabled = checkBoxCustomPool0Enable.Checked;
                 textBoxCustomPool1Host.Enabled = textBoxCustomPool1Login.Enabled = textBoxCustomPool1Password.Enabled = comboBoxCustomPool1Algorithm.Enabled = comboBoxCustomPool1SecondaryAlgorithm.Enabled = numericUpDownCustomPool1Port.Enabled = checkBoxCustomPool1Enable.Checked;
@@ -3968,20 +4627,20 @@ namespace GatelessGateSharp {
                 textBoxCustomPool2SecondaryHost.Enabled = textBoxCustomPool2SecondaryLogin.Enabled = textBoxCustomPool2SecondaryPassword.Enabled = numericUpDownCustomPool2SecondaryPort.Enabled = checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0;
                 textBoxCustomPool3SecondaryHost.Enabled = textBoxCustomPool3SecondaryLogin.Enabled = textBoxCustomPool3SecondaryPassword.Enabled = numericUpDownCustomPool3SecondaryPort.Enabled = checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0;
 
-                tabControlDeviceSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                buttonResetAllSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                buttonResetOverclockingSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                buttonResetFanControlSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
-                buttonResetAlgorithmSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                tabControlDeviceSettings.Enabled = idle;
+                buttonResetAllSettings.Enabled = idle;
+                buttonResetOverclockingSettings.Enabled = idle;
+                buttonResetFanControlSettings.Enabled = idle;
+                buttonResetAlgorithmSettings.Enabled = idle;
 
                 if (Controller.OpenCLDevices != null) {
                     foreach (var device in Controller.OpenCLDevices) {
                         var fanControlEnabled = checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked;
-                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle);
-                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && fanControlEnabled;
-                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && fanControlEnabled;
-                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && fanControlEnabled;
-                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Enabled = (Controller.AppState == Controller.ApplicationGlobalState.Idle) && fanControlEnabled;
+                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Enabled = idle;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Enabled = idle && fanControlEnabled;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Enabled = idle && fanControlEnabled;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Enabled = idle && fanControlEnabled;
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Enabled = idle && fanControlEnabled;
 
                         foreach (var algorithm in sAlgorithmList) {
                             var overclockingEnabled = checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked;
@@ -3991,15 +4650,23 @@ namespace GatelessGateSharp {
                             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Enabled = overclockingEnabled; // && ((OpenCLDevice)device).CoreVoltage >= 0;
                             numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Enabled = overclockingEnabled && ((OpenCLDevice)device).DefaultMemoryVoltage >= 0;
                         }
+
+                        foreach (var algorithm in sAlgorithmList) {
+                            checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Visible = (device.GetType() == typeof(AMDPolaris10));
+                            groupBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10")].Visible = (device.GetType() == typeof(AMDPolaris10));
+                            var memoryTimingEnabled = checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked;
+                            if (!memoryTimingEnabled)
+                                checkBoxEnablePhymem.Checked = true;
+                        }
                     }
                 }
 
                 numericUpDownAPIPort.Enabled = !checkBoxAPIEnabled.Checked;
                 groupBoxAPIIPRange.Enabled = !checkBoxAPIEnabled.Checked;
 
-                groupBoxOpenCLBinaries.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                groupBoxOpenCLBinaries.Enabled = idle;
 
-                groupBoxUserSettings.Enabled = Controller.AppState == Controller.ApplicationGlobalState.Idle;
+                groupBoxUserSettings.Enabled = idle;
                 buttonRestoreSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
                 buttonDeleteSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
                 buttonDeleteAllSettingsBackups.Enabled = listBoxSettingBackups.Items.Count > 0;
@@ -4016,40 +4683,59 @@ namespace GatelessGateSharp {
                 cartesianChartShare1Hour.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Hour");
                 cartesianChartShare1Day.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Day");
                 cartesianChartShare1Month.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Month");
+
+                checkBoxBenchmarkingDoNotRepeatAfterFailure.Enabled = checkBoxBenchmarkingUseAverageSpeeds.Enabled = idle;
+                groupBoxBenchmarkingAlgorithms.Enabled = idle;
+                groupBoxBenchmarkingFirstParameter.Enabled = idle;
+                groupBoxBenchmarkingSecondParameter.Enabled = idle && checkBoxBenchmarkingFirstParameterEnabled.Checked;
+                numericUpDownBenchmarkingRepeats.Enabled = idle;
+                numericUpDownBenchmarkingWait.Enabled = idle;
+                numericUpDownBenchmarkingLength.Enabled = idle;
+                comboBoxBenchmarkingFirstParameter.Enabled = numericUpDownBenchmarkingFirstParameterStart.Enabled = numericUpDownBenchmarkingFirstParameterEnd.Enabled = numericUpDownBenchmarkingFirstParameterStep.Enabled = checkBoxBenchmarkingFirstParameterEnabled.Checked;
+                comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterStart.Enabled = numericUpDownBenchmarkingSecondParameterEnd.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
+
+                checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = checkBoxOptimizationUseAverageSpeeds.Enabled = checkBoxOptimizationPrioritizeStability.Enabled = idle;
+                groupBoxOptimizationTargets.Enabled = idle;
+                numericUpDownOptimizationRepeats.Enabled = idle;
+                numericUpDownOptimizationWait.Enabled = idle;
+                numericUpDownOptimizationLength.Enabled = idle;
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
             }
         }
 
-        private void buttonPoolPrioritiesUp_Click(object sender, EventArgs e) {
+        private void buttonPoolPrioritiesUp_Click(object sender, EventArgs e)
+        {
             var selectedIndex = listBoxPoolPriorities.SelectedIndex;
             if (selectedIndex > 0) {
                 listBoxPoolPriorities.Items.Insert(selectedIndex - 1, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex + 1);
                 listBoxPoolPriorities.SelectedIndex = selectedIndex - 1;
-                UpdateStats();
             }
         }
 
-        private void buttonPoolPrioritiesDown_Click(object sender, EventArgs e) {
+        private void buttonPoolPrioritiesDown_Click(object sender, EventArgs e)
+        {
             var selectedIndex = listBoxPoolPriorities.SelectedIndex;
             if ((selectedIndex < listBoxPoolPriorities.Items.Count - 1) & (selectedIndex != -1)) {
                 listBoxPoolPriorities.Items.Insert(selectedIndex + 2, listBoxPoolPriorities.Items[selectedIndex]);
                 listBoxPoolPriorities.Items.RemoveAt(selectedIndex);
                 listBoxPoolPriorities.SelectedIndex = selectedIndex + 1;
-                UpdateStats();
             }
         }
 
-        private void buttonViewBalancesAtNiceHash_Click(object sender, EventArgs e) {
+        private void buttonViewBalancesAtNiceHash_Click(object sender, EventArgs e)
+        {
             if (ValidateBitcoinAddress())
                 System.Diagnostics.Process.Start("https://www.nicehash.com/miner/" + textBoxBitcoinAddress.Text);
         }
 
-        private void tabControlMainForm_SelectedIndexChanged(object sender, EventArgs e) {
+        private void tabControlMainForm_SelectedIndexChanged(object sender, EventArgs e)
+        {
         }
 
-        private void buttonEthereumBalance_Click(object sender, EventArgs e) {
+        private void buttonEthereumBalance_Click(object sender, EventArgs e)
+        {
             if (!ValidateEthereumAddress())
                 return;
             foreach (string poolName in listBoxPoolPriorities.Items)
@@ -4070,7 +4756,8 @@ namespace GatelessGateSharp {
 
         #region DEVFEE
 
-        private bool SwitchToStratumForDEVFEE() {
+        private bool SwitchToStratumForDEVFEE()
+        {
             string algo = Controller.Miners[0].AlgorithmName;
             Stratum newPrimaryStratum = null;
             Stratum newSecondaryStratum = null;
@@ -4160,7 +4847,7 @@ namespace GatelessGateSharp {
                             newSecondaryStratum = new PascalStratum(host.name, 15555, username, "x", host.name);
                             break;
                         } catch (Exception ex) { Logger(ex); }
-                
+
                 if (newSecondaryStratum == null) {
                     username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
                     hosts = GetNiceHashPascalServers();
@@ -4253,7 +4940,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void SwitchFromStratumForDEVFEE() {
+        private void SwitchFromStratumForDEVFEE()
+        {
             Controller.PrimaryStratumBackup.SilentMode = false;
             if (Controller.SecondaryStratumBackup != null) {
                 Controller.SecondaryStratumBackup.SilentMode = false;
@@ -4283,11 +4971,12 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void timerDevFee_Tick(object sender, EventArgs e) {
+        private void timerDevFee_Tick(object sender, EventArgs e)
+        {
             if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
                 timerDevFee.Enabled = false;
                 return;
-            } else if (Controller.AppState == Controller.ApplicationGlobalState.Switching) {
+            } else if (Controller.AppState == Controller.ApplicationGlobalState.Initializing || Controller.AppState == Controller.ApplicationGlobalState.Switching) {
                 timerDevFee.Interval = 1000;
                 return;
             }
@@ -4307,7 +4996,8 @@ namespace GatelessGateSharp {
             tabControlMainForm.Enabled = buttonStart.Enabled = true;
         }
 
-        void SetDevFeeMode(bool mode) {
+        void SetDevFeeMode(bool mode)
+        {
             mDevFeeMode = mode;
             timerDevFee.Stop();
             timerDevFee.Interval = ((mDevFeeMode) ? Parameters.DevFeeDurationInSeconds * 1000 : (int)((double)Parameters.DevFeeDurationInSeconds * ((double)(100 - Parameters.DevFeePercentage) / Parameters.DevFeePercentage) * 1000));
@@ -4318,37 +5008,8 @@ namespace GatelessGateSharp {
 
         #endregion
 
-        private void radioButtonMonero_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            timerFailOver.Enabled = true;
-        }
-
-        private void radioButtonEthereum_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            timerFailOver.Enabled = true;
-        }
-
-        private void radioButtonMostProfitable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            timerFailOver.Enabled = true;
-        }
-
-        private void radioButtonZcash_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            timerFailOver.Enabled = true;
-        }
-
-        private void radioButtonLbry_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            timerFailOver.Enabled = true;
-        }
-
-        private void radioButtonPascal_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            timerFailOver.Enabled = true;
-        }
-
-        private Exception GetUnrecoverableException() {
+        private Exception GetUnrecoverableException()
+        {
             Exception ex = null;
             if (Controller.PrimaryStratum != null && Controller.PrimaryStratum.UnrecoverableException != null) {
                 ex = Controller.PrimaryStratum.UnrecoverableException;
@@ -4367,7 +5028,8 @@ namespace GatelessGateSharp {
             return ex;
         }
 
-        private void timerWatchdog_Tick(object sender, EventArgs e) {
+        private void timerWatchdog_Tick(object sender, EventArgs e)
+        {
             if (Controller.AppState != Controller.ApplicationGlobalState.Mining)
                 return;
 
@@ -4376,14 +5038,18 @@ namespace GatelessGateSharp {
                 if (ex != null && ex.GetType() == typeof(StratumServerUnavailableException)) {
                     Controller.AppState = Controller.ApplicationGlobalState.Switching;
                     tabControlMainForm.Enabled = buttonStart.Enabled = false;
-                    StopMiners();
+                    StopMining();
                     timerAutoStart.Enabled = true;
                 } else if (ex != null) {
                     Controller.AppState = Controller.ApplicationGlobalState.Switching;
                     tabControlMainForm.Enabled = buttonStart.Enabled = false;
-                    StopMiners();
-                    if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes)
+                    StopMining();
+                    if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                        Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
+                        timerBenchmarks_Tick();
+                    } else if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes) { 
                         timerAutoStart.Enabled = true;
+                    }
                 } else {
                     foreach (var miner in Controller.Miners) {
                         if (!miner.Alive) {
@@ -4392,12 +5058,14 @@ namespace GatelessGateSharp {
                         }
                     }
                 }
+                UpdateControls();
             } catch (Exception ex) {
                 Logger("Exception in timerWatchdog_Tick(): " + ex.Message + ex.StackTrace);
             }
         }
 
-        private void buttonMoneroBalance_Click(object sender, EventArgs e) {
+        private void buttonMoneroBalance_Click(object sender, EventArgs e)
+        {
             if (!ValidateMoneroAddress())
                 return;
             foreach (string poolName in listBoxPoolPriorities.Items)
@@ -4413,17 +5081,17 @@ namespace GatelessGateSharp {
                 }
         }
 
-        private void timerUpdateLog_Tick(object sender, EventArgs e) {
+        private void timerUpdateLog_Tick(object sender, EventArgs e)
+        {
             try {
                 timerUpdateLog.Enabled = false;
                 UpdateLog();
                 timerUpdateLog.Enabled = true;
-            } catch (Exception ex) {
-                Logger("Exception in timerUpdateLog_Tick(): " + ex.Message + ex.StackTrace);
-            }
+            } catch (Exception ex) { Logger(ex); }
         }
 
-        private void checkBoxLaunchAtStartup_CheckedChanged(object sender, EventArgs e) {
+        private void checkBoxLaunchAtStartup_CheckedChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             try {
                 var process = new System.Diagnostics.Process();
@@ -4441,444 +5109,37 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void checkBoxGPU0Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU1Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU2Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU3Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU4Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU5Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU6Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStats();
-        }
-
-        private void checkBoxGPU7Enable_CheckedChanged(object sender, EventArgs e) {
-            UpdateStats();
-        }
-
-        private void labelGPU0ID_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0Vendor_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0Name_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0Speed_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0Shares_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0Activity_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0Temp_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0Fan_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0CoreClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU0MemoryClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1ID_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1Vendor_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1Name_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1Speed_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1Shares_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1Activity_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1Temp_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1Fan_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1CoreClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU1MemoryClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2ID_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2Vendor_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2Name_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2Speed_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2Shares_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2Activity_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2Temp_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2Fan_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2CoreClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU2MemoryClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3Vendor_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3ID_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3Name_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3Speed_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3Shares_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3Activity_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3Temp_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3Fan_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3CoreClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU3MemoryClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4ID_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4Vendor_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4Name_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4Speed_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4Shares_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4Activity_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4Temp_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4Fan_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4CoreClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU4MemoryClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5ID_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5Vendor_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5Name_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5Speed_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5Shares_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5Activity_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5Temp_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5Fan_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5CoreClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU5MemoryClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6ID_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6Vendor_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6Name_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6Speed_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6Shares_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6Activity_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6Temp_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6Fan_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6CoreClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU6MemoryClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7ID_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7Vendor_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7Name_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7Speed_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7Shares_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7Activity_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7Temp_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7Fan_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7CoreClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void labelGPU7MemoryClock_Click(object sender, EventArgs e) {
-
-        }
-
-        private void buttonClearLog_Click(object sender, EventArgs e) {
+        private void buttonClearLog_Click(object sender, EventArgs e)
+        {
             Utilities.FixFPU();
             richTextBoxLog.Clear();
         }
 
-        private void buttonOpenLog_Click(object sender, EventArgs e) {
+        private void buttonOpenLog_Click(object sender, EventArgs e)
+        {
             System.Diagnostics.Process.Start(LogFilePath);
         }
 
-        private void timerAutoStart_Tick(object sender, EventArgs e) {
+        private void timerAutoStart_Tick(object sender, EventArgs e)
+        {
             timerAutoStart.Enabled = false;
-            if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
-                buttonStart_Click();
-            }
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle)
+                StartMining();
         }
 
-        private void checkBoxCustomPool0Enable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void checkBoxCustomPool1Enable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void checkBoxCustomPool2Enable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void checkBoxCustomPool3Enable_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxCustomPool0Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxCustomPool0SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxCustomPool1Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxCustomPool1SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxCustomPool2Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxCustomPool2SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxCustomPool3Algorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxCustomPool3SecondaryAlgorithm_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void dataGridViewDevices_SelectionChanged(object sender, EventArgs e) {
+        private void dataGridViewDevices_SelectionChanged(object sender, EventArgs e)
+        {
             dataGridViewDevices.ClearSelection();
         }
 
-        private void dataGridViewDevices_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+        private void dataGridViewDevices_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
             if (0 <= e.RowIndex && e.RowIndex < dataGridViewDevices.RowCount)
                 dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value = !(bool)(dataGridViewDevices.Rows[e.RowIndex].Cells["enabled"].Value);
         }
 
-        private void buttonConfigureAutomaticLogin_Click(object sender, EventArgs e) {
+        private void buttonConfigureAutomaticLogin_Click(object sender, EventArgs e)
+        {
             var process = new System.Diagnostics.Process();
             var startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -4890,7 +5151,8 @@ namespace GatelessGateSharp {
             //process.WaitForExit();
         }
 
-        private void buttonDisableAuomaticRepair_Click(object sender, EventArgs e) {
+        private void buttonDisableAuomaticRepair_Click(object sender, EventArgs e)
+        {
             var process = new System.Diagnostics.Process();
             var startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -4904,14 +5166,16 @@ namespace GatelessGateSharp {
             MessageBox.Show("Automatic Repair has been disabled.", appName, MessageBoxButtons.OK);
         }
 
-        private void buttonDisableDriverInstallation_Click(object sender, EventArgs e) {
+        private void buttonDisableDriverInstallation_Click(object sender, EventArgs e)
+        {
             try {
                 Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata", "PreventDeviceMetadataFromNetwork", 1);
                 MessageBox.Show("Automatic driver installation has been disabled.", appName, MessageBoxButtons.OK);
             } catch (Exception) { }
         }
 
-        private void buttonDeviceInstallationSettings_Click(object sender, EventArgs e) {
+        private void buttonDeviceInstallationSettings_Click(object sender, EventArgs e)
+        {
             var process = new System.Diagnostics.Process();
             var startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -4923,15 +5187,18 @@ namespace GatelessGateSharp {
             //process.WaitForExit();
         }
 
-        private void buttonInstallRecommendedAMDDriver_Click(object sender, EventArgs e) {
+        private void buttonInstallRecommendedAMDDriver_Click(object sender, EventArgs e)
+        {
             System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx");
         }
 
-        private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e) {
+        private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e)
+        {
             System.Diagnostics.Process.Start("http://www.guru3d.com/files-get/display-driver-uninstaller-download,9.html");
         }
 
-        private void buttonUserAccountControlSettings_Click(object sender, EventArgs e) {
+        private void buttonUserAccountControlSettings_Click(object sender, EventArgs e)
+        {
             var process = new System.Diagnostics.Process();
             var startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -4943,14 +5210,16 @@ namespace GatelessGateSharp {
             //process.WaitForExit();
         }
 
-        private void buttonDisableUserAccountControl_Click(object sender, EventArgs e) {
+        private void buttonDisableUserAccountControl_Click(object sender, EventArgs e)
+        {
             try {
                 Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableLUA", 0);
                 MessageBox.Show("User Account Control has been disabled.", appName, MessageBoxButtons.OK);
             } catch (Exception) { }
         }
 
-        private void RunNGen() {
+        private void RunNGen()
+        {
             var process = new System.Diagnostics.Process();
             var startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -4997,7 +5266,7 @@ namespace GatelessGateSharp {
         {
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
-                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU" })
+                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU", "RadeonSettings" })
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
                             try { process.Kill(); } catch (Exception) { }
                 } catch (Exception) { }
@@ -5005,16 +5274,17 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void buttonResetAll_Click(object sender, EventArgs e) {
+        private void buttonResetAll_Click(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             foreach (var device in Controller.OpenCLDevices) {
                 ResetDeviceSettings(device);
                 device.FanSpeed = -1;
-                device.ResetOverclockingSettings();
             }
         }
 
-        private void buttonResetFanControlSettings_Click(object sender, EventArgs e) {
+        private void buttonResetFanControlSettings_Click(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             foreach (var device in Controller.OpenCLDevices) {
                 ResetDeviceFanControlSettings(device);
@@ -5022,13 +5292,15 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void buttonResetDeviceAlgorithmSettings_Click(object sender, EventArgs e) {
+        private void buttonResetDeviceAlgorithmSettings_Click(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             foreach (var device in Controller.OpenCLDevices)
                 ResetDeviceAlgorithmSettings(device);
         }
 
-        private void buttonResetDeviceOverclockingSettings_Click(object sender, EventArgs e) {
+        private void buttonResetDeviceOverclockingSettings_Click(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             foreach (var device in Controller.OpenCLDevices) {
                 ResetDeviceOverclockingSettings(device);
@@ -5038,7 +5310,8 @@ namespace GatelessGateSharp {
 
         int mCPUUsage = 0;
 
-        private void Task_UpdateCPUUsage(object cancellationToken) {
+        private void Task_UpdateCPUUsage(object cancellationToken)
+        {
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
                     Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
@@ -5068,7 +5341,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void Task_CollectGarbage(object cancellationToken) {
+        private void Task_CollectGarbage(object cancellationToken)
+        {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
@@ -5088,7 +5362,8 @@ namespace GatelessGateSharp {
         string mLatestReleaseFileName;
         string mLatestReleaseInstallerPath;
 
-        private void Task_UpdateLatestReleaseInfo(object cancellationToken) {
+        private void Task_UpdateLatestReleaseInfo(object cancellationToken)
+        {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
@@ -5134,7 +5409,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void InstallLatestVersion() {
+        private void InstallLatestVersion()
+        {
             try {
                 if (mLatestReleaseName == null) {
                     MessageBox.Show("There is no information available on the latest release.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -5162,41 +5438,49 @@ namespace GatelessGateSharp {
             } catch (Exception) { } // TODO
         }
 
-        void LatestReleaseDownloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
+        void LatestReleaseDownloader_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
             toolStripMainFormProgressBar.Value = e.ProgressPercentage;
         }
 
-        void LatestReleaseDownloader_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e) {
+        void LatestReleaseDownloader_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
             System.Diagnostics.Process.Start(mLatestReleaseInstallerPath, "/passive");
             Program.Exit(true);
         }
 
-        private void button6_Click(object sender, EventArgs e) {
+        private void button6_Click(object sender, EventArgs e)
+        {
             InstallLatestVersion();
         }
 
-        private void buttonInstallTeamViewer_Click(object sender, EventArgs e) {
+        private void buttonInstallTeamViewer_Click(object sender, EventArgs e)
+        {
             System.Diagnostics.Process.Start("https://download.teamviewer.com/download/TeamViewer_Setup.exe");
         }
 
-        private void comboBoxGraphType_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true; 
-            UpdateControls();
-        }
-
-        private void comboBoxGraphCoverage_SelectedIndexChanged(object sender, EventArgs e) {
+        private void comboBoxGraphType_SelectedIndexChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             UpdateControls();
         }
 
-        private void buttonSaveSettings_Click(object sender, EventArgs e) {
+        private void comboBoxGraphCoverage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mAreSettingsDirty = true;
+            UpdateControls();
+        }
+
+        private void buttonSaveSettings_Click(object sender, EventArgs e)
+        {
             try {
                 if (MessageBox.Show("Would you like to save settings?", appName, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                     SaveSettingsToDatabase();
             } catch (Exception) { }
         }
 
-        private void buttonSaveSettingsAs_Click(object sender, EventArgs e) {
+        private void buttonSaveSettingsAs_Click(object sender, EventArgs e)
+        {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
 
             saveFileDialog.Filter = "Gateless Gate Sharp settings files (*.sqlite)|*.sqlite|All files (*.*)|*.*";
@@ -5208,14 +5492,16 @@ namespace GatelessGateSharp {
                 SaveSettingsToDatabase(saveFileDialog.FileName);
         }
 
-        private void buttonLoadSettings_Click(object sender, EventArgs e) {
+        private void buttonLoadSettings_Click(object sender, EventArgs e)
+        {
             try {
                 if (MessageBox.Show("Would you like to load settings?", appName, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                     LoadSettingsFromDatabase();
             } catch (Exception) { }
         }
 
-        private void button11_Click(object sender, EventArgs e) {
+        private void button11_Click(object sender, EventArgs e)
+        {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             openFileDialog.Filter = "Gateless Gate Sharp settings files (*.sqlite)|*.sqlite|All files (*.*)|*.*";
@@ -5226,234 +5512,71 @@ namespace GatelessGateSharp {
                 LoadSettingsFromDatabase(openFileDialog.FileName);
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) {
+        private void listBoxPoolPriorities_SelectedIndexChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
         }
 
-        private void radioButton4_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void radioButton3_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void radioButtonEthereumPascal_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void radioButtonFeathercoin_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void radioButtonMonacoin_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void listBoxPoolPriorities_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxBitcoinAddress_TextChanged(object sender, EventArgs e) {
+        private void textBoxBitcoinAddress_TextChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             mUserBitcoinAddress = textBoxBitcoinAddress.Text.Trim();
         }
 
-        private void textBoxPascalAddress_TextChanged(object sender, EventArgs e) {
+        private void textBoxPascalAddress_TextChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             mUserPascalAddress = textBoxPascalAddress.Text.Trim();
         }
 
-        private void textBoxEthereumAddress_TextChanged(object sender, EventArgs e) {
+        private void textBoxEthereumAddress_TextChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             mUserEthereumAddress = textBoxEthereumAddress.Text.Trim();
         }
 
-        private void textBoxLbryAddress_TextChanged(object sender, EventArgs e) {
+        private void textBoxLbryAddress_TextChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             mUserLbryAddress = textBoxLbryAddress.Text.Trim();
         }
 
-        private void textBoxMoneroAddress_TextChanged(object sender, EventArgs e) {
+        private void textBoxMoneroAddress_TextChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             mUserMoneroAddress = textBoxMoneroAddress.Text.Trim();
         }
 
-        private void textBoxZcashAddress_TextChanged(object sender, EventArgs e) {
+        private void textBoxZcashAddress_TextChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
             mUserZcashAddress = textBoxZcashAddress.Text.Trim();
         }
 
-        private void textBoxRigID_TextChanged(object sender, EventArgs e) {
+        private void checkBoxEnablePhymem_CheckedChanged(object sender, EventArgs e)
+        {
             mAreSettingsDirty = true;
+            if (checkBoxEnablePhymem.Checked) {
+                PCIExpress.LoadPhyMem();
+                foreach (var device in Controller.OpenCLDevices)
+                    device.SaveDefaultMemoryTimings();
+            } else {
+                PCIExpress.UnloadPhyMem();
+                foreach (var device in Controller.OpenCLDevices) {
+                    foreach (var algorithm in sAlgorithmList)
+                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
+                }
+            }
         }
 
-        private void textBoxEmail_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool0Host_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool0SecondaryHost_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void numericUpDownCustomPool0Port_ValueChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void numericUpDownCustomPool0SecondaryPort_ValueChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool0Login_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool0SecondaryLogin_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool0Password_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool0SecondaryPassword_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool1Host_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool1SecondaryHost_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void numericUpDownCustomPool1Port_ValueChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void numericUpDownCustomPool1SecondaryPort_ValueChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool1Login_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool1SecondaryLogin_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool1Password_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool1SecondaryPassword_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool2Host_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool2SecondaryHost_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void numericUpDownCustomPool2Port_ValueChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void numericUpDownCustomPool2SecondaryPort_ValueChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool2Login_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool2SecondaryLogin_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool2Password_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool2SecondaryPassword_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool3Host_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool3SecondaryHost_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void numericUpDownCustomPool3Port_ValueChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void numericUpDownCustomPool3SecondaryPort_ValueChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-
-        }
-
-        private void textBoxCustomPool3Login_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool3SecondaryLogin_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool3Password_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void textBoxCustomPool3SecondaryPassword_TextChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void checkBoxEnablePhymem_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void checkBox2_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void checkBox3_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void groupBoxAutomation_Enter(object sender, EventArgs e) {
-        }
-
-        private void checkBoxAutoStart_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void checkBoxDisableAutoStartPrompt_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void checkBoxCreateSettingsBackupWhenSettingsAreSaved_CheckedChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void dataGridViewDevices_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+        private void dataGridViewDevices_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
             if (e.ColumnIndex == 0)
                 mAreSettingsDirty = true;
         }
 
-        private void buttonCreateSettingsBackup_Click(object sender, EventArgs e) {
+        private void buttonCreateSettingsBackup_Click(object sender, EventArgs e)
+        {
             try {
                 CreateSettingsBackup();
             } catch (Exception ex) {
@@ -5462,7 +5585,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void buttonRestoreSettings_Click(object sender, EventArgs e) {
+        private void buttonRestoreSettings_Click(object sender, EventArgs e)
+        {
             try {
                 if (listBoxSettingBackups.SelectedIndex >= 0 && MessageBox.Show(this, "Would you like to restore settings from backup?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
                     Regex re = new Regex(@"^(..........) (..):(..)$");
@@ -5475,7 +5599,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void buttonDeleteSettingsBackup_Click(object sender, EventArgs e) {
+        private void buttonDeleteSettingsBackup_Click(object sender, EventArgs e)
+        {
             try {
                 if (listBoxSettingBackups.SelectedIndex >= 0 && MessageBox.Show(this, "Would you like to delete backup?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
                     Regex re = new Regex(@"^(..........) (..):(..)$");
@@ -5489,7 +5614,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void button13_Click(object sender, EventArgs e) {
+        private void button13_Click(object sender, EventArgs e)
+        {
             try {
                 if (listBoxSettingBackups.Items.Count > 0 && MessageBox.Show(this, "Would you like to delete all backups?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
                     var regex = new Regex(@"^.*\\(.*)--(..)(..)\.sqlite$");
@@ -5504,7 +5630,8 @@ namespace GatelessGateSharp {
             }
         }
 
-        private void timerFailOver_Tick(object sender, EventArgs e) {
+        private void timerFailOver_Tick(object sender, EventArgs e)
+        {
             timerFailOver.Enabled = false;
             if (Controller.AppState == Controller.ApplicationGlobalState.Idle)
                 return;
@@ -5512,26 +5639,20 @@ namespace GatelessGateSharp {
             Controller.AppState = Controller.ApplicationGlobalState.Switching;
             tabControlMainForm.Enabled = buttonStart.Enabled = false;
             try {
-                StopMiners();
+                StopMining();
                 LaunchMiners();
             } catch (Exception) { }
             Controller.AppState = Controller.ApplicationGlobalState.Mining;
             tabControlMainForm.Enabled = buttonStart.Enabled = true;
         }
-
-        private void comboBoxCurrency_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void MarkSettingsAsDirty(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-        }
-
-        private void buttonOpenOpenCLBinaryFolder_Click(object sender, EventArgs e) {
+        
+        private void buttonOpenOpenCLBinaryFolder_Click(object sender, EventArgs e)
+        {
             System.Diagnostics.Process.Start(SavedOpenCLBinaryKernelPathBase);
         }
 
-        private void listBoxSettingBackups_SelectedIndexChanged(object sender, EventArgs e) {
+        private void listBoxSettingBackups_SelectedIndexChanged(object sender, EventArgs e)
+        {
             UpdateControls();
         }
 
@@ -5554,44 +5675,28 @@ namespace GatelessGateSharp {
                         return Instance.checkBoxReuseCompiledBinaries.Checked;
                     }));
                 } else {
-                    return Instance.checkBoxReuseCompiledBinaries.Checked; 
+                    return Instance.checkBoxReuseCompiledBinaries.Checked;
                 }
             }
         }
 
-        private void buttonRestart_Click(object sender, EventArgs e) {
+        private void buttonRestart_Click(object sender, EventArgs e)
+        {
             try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
             Program.Exit(false);
         }
 
-        private void buttonReleaseMemory_Click(object sender, EventArgs e) {
+        private void buttonReleaseMemory_Click(object sender, EventArgs e)
+        {
             foreach (var device in Controller.OpenCLDevices)
                 device.ReleaseAllComputeBuffers();
         }
 
-        private void comboBoxSecondGraphType_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void comboBoxSecondGraphCoverage_SelectedIndexChanged(object sender, EventArgs e) {
-            mAreSettingsDirty = true;
-            UpdateControls();
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
             System.Diagnostics.Process.Start("https://github.com/sgminer-dev/sgminer/blob/master/doc/API.md");
         }
 
-        private void textBoxAllowedIPRange_TextChanged(object sender, EventArgs e) {
-
-        }
-
-        private void checkBoxAPIEnabled_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateControls();
-        }
-        
         private void buttonOpenLogContainingFolder_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(LogFilePathBase);
@@ -5601,18 +5706,18 @@ namespace GatelessGateSharp {
         private void buttonBoostPerformance_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(
-                        "PLEASE DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
-                        + "This feature will adjust overclocking settings automatically for better performance. "
-                        + "Although its approach is fairly conservative, it is not without risk and should be used with caution. "
-                        + "You can always confirm the resuls on the \"Devices\" tab page before you start mining.\n\n"
+                        "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
+                        + "This feature will adjust overclocking/memory timing settings automatically for better performance. "
+                        + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
+                        + "You can always confirm the results on the \"Devices\" tab page before you start mining.\n\n"
                         + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
                         + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
-                        + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data " 
+                        + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
                         + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
                         + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
                         appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.OK) {
 
-                checkBoxEnableOverclockingForDefaultSettings.Checked = true;
+                checkBoxEnableHardwareAccelerationForDefaultSettings.Checked = true;
                 foreach (var device in Controller.OpenCLDevices)
                     ResetDeviceSettings(device);
             }
@@ -5620,10 +5725,1025 @@ namespace GatelessGateSharp {
 
         private void buttonRestoreStockSettings_Click(object sender, EventArgs e)
         {
-            checkBoxEnableOverclockingForDefaultSettings.Checked = false;
+            checkBoxEnableHardwareAccelerationForDefaultSettings.Checked = false;
             foreach (var device in Controller.OpenCLDevices)
                 ResetDeviceSettings(device);
         }
+
+        private void buttonPrintMemoryTimings_Click(object sender, EventArgs e)
+        {
+            foreach (var device in Controller.OpenCLDevices)
+                device.PrintMemoryTimings();
+        }
+
+        delegate uint MemoryTimingDelegate(Tuple<int, string, string> tuple);
+        delegate bool MemoryTimingEnabledDelegate(Tuple<int, string, string> tuple);
+
+        public static void GetMemoryTimingFromNumericUpDown(int deviceIndex, string algorithm, string parameter, out uint value)
+        {
+            var tuple = new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_" + parameter);
+            if (Instance.numericUpDownDeviceParameterArray[tuple].InvokeRequired) {
+                value = (uint)Instance.numericUpDownDeviceParameterArray[tuple].Invoke(new MemoryTimingDelegate((deviceTuple) => {
+                    return (uint)Instance.numericUpDownDeviceParameterArray[tuple].Value;
+                }), new object[] { tuple });
+            } else {
+                value = (uint)Instance.numericUpDownDeviceParameterArray[tuple].Value;
+            }
+        }
+
+        public static void GetMemoryTimingFromTextBox(int deviceIndex, string algorithm, string parameter, out uint value)
+        {
+            var tuple = new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_" + parameter);
+            if (Instance.textBoxDeviceParameterArray[tuple].InvokeRequired) {
+                value = (uint)Instance.textBoxDeviceParameterArray[tuple].Invoke(new MemoryTimingDelegate((deviceTuple) => {
+                    try {
+                        return uint.Parse(Instance.textBoxDeviceParameterArray[deviceTuple].Text, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.CurrentInfo);
+                    } catch (Exception) {
+                        return 0;
+                    }
+                }), new object[] { tuple });
+            } else {
+                try {
+                    value = uint.Parse(Instance.textBoxDeviceParameterArray[tuple].Text, System.Globalization.NumberStyles.HexNumber, System.Globalization.NumberFormatInfo.CurrentInfo);
+                } catch (Exception) {
+                    value = 0;
+                }
+            }
+        }
+
+        private void comboBoxDefaultAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mAreSettingsDirty = true;
+            if (Controller.AppState != Controller.ApplicationGlobalState.Initializing && Controller.AppState != Controller.ApplicationGlobalState.Idle)
+                timerFailOver.Enabled = true;
+            if (comboBoxDefaultAlgorithm.SelectedIndex < comboBoxDefaultAlgorithm.Items.Count - 1) {
+                foreach (var pair in tabControlAlgorithmsArray)
+                    pair.Value.SelectedIndex = comboBoxDefaultAlgorithm.SelectedIndex;
+            }
+        }
+
+        bool ConvertBenchmarkParameterToDeviceParameterTuple(int deviceID, string param, out Tuple<int, string, string> tuple)
+        {
+            try {
+                var regex = new System.Text.RegularExpressions.Regex(@"^(" + sAlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
+                var match = regex.Match(param);
+                var type = match.Success ? match.Groups[1].Value : null;
+                var parameter = match.Success ? match.Groups[2].Value : null;
+                tuple = new Tuple<int, string, string>(deviceID, type, parameter);
+                return match.Success;
+            } catch (Exception) {
+                tuple = null;
+                return false;
+            }
+        }
+
+        private void SetBenchmarkParameter(Controller.BenchmarkParameter param, bool restore = false)
+        {
+            if (param.Name == "default_algorithm") {
+                DefaultAlgorithm = (restore) ? param.OriginalValues[0] : param.Value;
+            } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                int deviceIndex = comboBoxOptimizerDevice.SelectedIndex;
+                Tuple<int, string, string> tuple;
+                if (ConvertBenchmarkParameterToDeviceParameterTuple(deviceIndex, param.Name, out tuple)) {
+                    try {
+                        numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value);
+                    } catch (Exception ex) { Logger(ex); }
+                }
+            } else {
+                foreach (var device in Controller.OpenCLDevices) {
+                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        for (int deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
+                            Tuple<int, string, string> tuple;
+                            if (ConvertBenchmarkParameterToDeviceParameterTuple(deviceIndex, param.Name, out tuple)) {
+                                try {
+                                    numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value);
+                                } catch (Exception ex) { Logger(ex); }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SaveBenchmarkState()
+        {
+            try {
+                using (var stream = System.IO.File.Open(BenchmarkEntriesFilePath, System.IO.FileMode.Create))
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) {
+                    (new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Serialize(sw, Controller.BenchmarkEntries);
+                    sw.Flush();
+#pragma warning disable 618, 612
+                    NativeMethods.FlushFileBuffers(stream.Handle);
+#pragma warning restore 618, 612
+                    sw.Close();
+                }
+                using (var stream = System.IO.File.Open(BenchmarkRecordsFilePath, System.IO.FileMode.Create))
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) {
+                    (new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Serialize(sw, Controller.BenchmarkRecords);
+                    sw.Flush();
+#pragma warning disable 618, 612
+                    NativeMethods.FlushFileBuffers(stream.Handle);
+#pragma warning restore 618, 612
+                    sw.Close();
+                }
+                Thread.Sleep(500);
+            } catch (Exception ex) { Logger(ex); }
+        }
+
+        private void SaveOptimizerState()
+        {
+            try {
+                using (var stream = System.IO.File.Open(OptimizerEntriesFilePath, System.IO.FileMode.Create))
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) {
+                    (new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Serialize(sw, Controller.OptimizerEntries);
+                    sw.Flush();
+#pragma warning disable 618, 612
+                    NativeMethods.FlushFileBuffers(stream.Handle);
+#pragma warning restore 618, 612
+                    sw.Close();
+                }
+                using (var stream = System.IO.File.Open(OptimizerRecordsFilePath, System.IO.FileMode.Create))
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) {
+                    (new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Serialize(sw, Controller.OptimizerRecords);
+                    sw.Flush();
+#pragma warning disable 618, 612
+                    NativeMethods.FlushFileBuffers(stream.Handle);
+#pragma warning restore 618, 612
+                    sw.Close();
+                }
+                Thread.Sleep(500);
+            } catch (Exception ex) { Logger(ex); }
+        }
+
+        private void StartBenchmarks()
+        {
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle
+                && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) {
+
+                int benchmarkEntryID = 0;
+                if (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
+                    tabControlMainForm.SelectedIndex = 4;
+
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    timerBenchmarks.Interval = ((int)numericUpDownOptimizationWait.Value * 1000) + ((int)numericUpDownOptimizationLength.Value * 1000);
+                    timerResetStopwatch.Interval = ((int)numericUpDownOptimizationWait.Value * 1000);
+                } else {
+                    timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000) + ((int)numericUpDownBenchmarkingLength.Value * 1000);
+                    timerResetStopwatch.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000);
+                }
+                timerBenchmarks.Enabled = false;
+                timerResetStopwatch.Enabled = false;
+
+                if (mAreSettingsDirty)
+                    SaveSettingsToDatabase();
+
+                Controller.BenchmarkEntries.Clear();
+                Controller.BenchmarkRecords.Clear();
+
+                List<string> algorithmList = new List<string> { };
+                var enabledDeviceCount = 0;
+                var deviceIndex = -1;
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    enabledDeviceCount = 1;
+                    deviceIndex = comboBoxOptimizerDevice.SelectedIndex;
+                    algorithmList.Add(OptimizerAlgorithm);
+                    Controller.OptimizerEntries[0].Algorithm = OptimizerAlgorithm;
+                    foreach (var device in Controller.OpenCLDevices)
+                        dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = (device.DeviceIndex == deviceIndex);
+                } else {
+                    foreach (var device in Controller.OpenCLDevices) {
+                        if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                            deviceIndex = device.DeviceIndex;
+                            ++enabledDeviceCount;
+                        }
+                    }
+                    if (checkBoxBenchmarkingEthashPascalEnabled.Checked) algorithmList.Add("ethash_pascal");
+                    if (checkBoxBenchmarkingEthashEnabled.Checked) algorithmList.Add("ethash");
+                    if (checkBoxBenchmarkingCryptoNightEnabled.Checked) algorithmList.Add("cryptonight");
+                    if (checkBoxBenchmarkingNeoScryptEnabled.Checked) algorithmList.Add("neoscrypt");
+                    if (checkBoxBenchmarkingPascalEnabled.Checked) algorithmList.Add("pascal");
+                    if (checkBoxBenchmarkingLbryEnabled.Checked) algorithmList.Add("lbry");
+                    if (checkBoxBenchmarkingLyra2REv2Enabled.Checked) algorithmList.Add("lyra2rev2");
+                }
+
+                // Set up automatic optimizations.
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    String paramType = algorithmList[0];
+                    var parameterName = Controller.OptimizerEntries[0].Parameter;
+
+                    // Set up the parameter.
+                    var numericUpDown = numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, paramType, parameterName)];
+                    int multiplier = !checkBoxOptimizationExtendRange.Checked ? 1 :
+                                        (int)numericUpDown.Value < 50 ? 2 :
+                                                                                3;
+                    var value = (int)numericUpDown.Value;
+                    var step = numericUpDown.Increment;
+                    var min = (value - step * multiplier >= numericUpDown.Minimum) ? value - step * multiplier : (int)numericUpDown.Minimum;
+                    var max = (value + step * multiplier <= numericUpDown.Maximum) ? value + step * multiplier : (int)numericUpDown.Maximum;
+                    if (parameterName == "threads") {
+                        min = 1;
+                        max = 2;
+                        step = 1;
+                    } else if (parameterName == "raw_intensity") {
+                        var computeDevice = Controller.OpenCLDevices[deviceIndex].GetComputeDevice();
+                        min = (value - computeDevice.MaxComputeUnits / 2 >= numericUpDown.Minimum) ? value - computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Minimum;
+                        max = (value + computeDevice.MaxComputeUnits / 2 <= numericUpDown.Maximum) ? value + computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Maximum;
+                    } else if (parameterName == "local_work_size" && OptimizerAlgorithm == "cryptonight") {
+                        min = 8;
+                        max = 16;
+                        step = 8;
+                    } else if (parameterName == "local_work_size") {
+                        var isNVIDIA = Controller.OpenCLDevices[deviceIndex].GetVendor() == "NVIDIA";
+                        step = isNVIDIA ? 32 : 64;
+                        min = step;
+                        max = isNVIDIA ? 512 : 256;
+                    }
+                    checkBoxBenchmarkingFirstParameterEnabled.Checked = true;
+                    if (checkBoxOptimizationPrioritizeStability.Checked) {
+                        if (parameterName == "overclocking_memory_clock" || parameterName == "overclocking_core_clock") {
+                            max = value;
+                        } else {
+                            min = value;
+                        }
+                    }
+                    numericUpDownBenchmarkingFirstParameterStart.Value = min;
+                    numericUpDownBenchmarkingFirstParameterEnd.Value = max;
+                    numericUpDownBenchmarkingFirstParameterStep.Value = step;
+                    comboBoxBenchmarkingFirstParameter.SelectedIndex = comboBoxBenchmarkingFirstParameter.FindStringExact(paramType + "_" + parameterName);
+
+                    checkBoxBenchmarkingSecondParameterEnabled.Checked = false;
+                }
+
+                // Set up benchmarks.
+                if (!checkBoxBenchmarkingFirstParameterEnabled.Checked) {
+                    foreach (var algorithm in algorithmList) {
+                        var param0 = new Controller.BenchmarkParameter("default_algorithm", algorithm, DefaultAlgorithm);
+                        var entry = new Controller.BenchmarkEntry();
+                        entry.ID = benchmarkEntryID++;
+                        entry.Parameters.Add(param0);
+                        entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
+                        Controller.BenchmarkEntries.Add(entry);
+                    }
+                } else if (!checkBoxBenchmarkingSecondParameterEnabled.Checked) {
+                    foreach (var algorithm in algorithmList) {
+                        var param0 = new Controller.BenchmarkParameter("default_algorithm", algorithm, DefaultAlgorithm);
+                        var param1OriginalValues = new List<string> { };
+                        for (int deviceID = 0; deviceID < Controller.OpenCLDevices.Length; ++deviceID) {
+                            Tuple<int, string, string> tuple1;
+                            ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, (string)comboBoxBenchmarkingFirstParameter.SelectedItem, out tuple1);
+                            param1OriginalValues.Add(numericUpDownDeviceParameterArray[tuple1].Value.ToString());
+                        }
+
+                        int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
+                                        ? (int)numericUpDownBenchmarkingFirstParameterStep.Value
+                                        : -(int)numericUpDownBenchmarkingFirstParameterStep.Value;
+                        for (int i = (int)numericUpDownBenchmarkingFirstParameterStart.Value;
+                            iStep >= 0 ? i <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value : i >= (int)numericUpDownBenchmarkingFirstParameterEnd.Value;
+                            i += iStep) {
+
+                            var param1 = new Controller.BenchmarkParameter((string)comboBoxBenchmarkingFirstParameter.SelectedItem, i.ToString(), param1OriginalValues);
+                            var entry = new Controller.BenchmarkEntry();
+                            entry.ID = benchmarkEntryID++;
+                            entry.Parameters.Add(param0);
+                            entry.Parameters.Add(param1);
+                            entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
+                            Controller.BenchmarkEntries.Add(entry);
+                        }
+                    }
+                } else {
+                    foreach (var algorithm in algorithmList) {
+                        var param0 = new Controller.BenchmarkParameter("default_algorithm", algorithm, DefaultAlgorithm);
+                        var param1OriginalValues = new List<string> { };
+                        var param2OriginalValues = new List<string> { };
+                        for (int deviceID = 0; deviceID < Controller.OpenCLDevices.Length; ++deviceID) {
+                            Tuple<int, string, string> tuple1, tuple2;
+                            ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, (string)comboBoxBenchmarkingFirstParameter.SelectedItem, out tuple1);
+                            ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, (string)comboBoxBenchmarkingSecondParameter.SelectedItem, out tuple2);
+                            param1OriginalValues.Add(numericUpDownDeviceParameterArray[tuple1].Value.ToString());
+                            param2OriginalValues.Add(numericUpDownDeviceParameterArray[tuple2].Value.ToString());
+                        }
+
+                        int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
+                                        ? (int)numericUpDownBenchmarkingFirstParameterStep.Value
+                                        : -(int)numericUpDownBenchmarkingFirstParameterStep.Value;
+                        for (int i = (int)numericUpDownBenchmarkingFirstParameterStart.Value;
+                            iStep >= 0 ? i <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value : i >= (int)numericUpDownBenchmarkingFirstParameterEnd.Value;
+                            i += iStep) {
+
+                            var param1 = new Controller.BenchmarkParameter((string)comboBoxBenchmarkingFirstParameter.SelectedItem, i.ToString(), param1OriginalValues);
+
+                            int jStep = (int)numericUpDownBenchmarkingSecondParameterStart.Value <= (int)numericUpDownBenchmarkingSecondParameterEnd.Value
+                                            ? (int)numericUpDownBenchmarkingSecondParameterStep.Value
+                                            : -(int)numericUpDownBenchmarkingSecondParameterStep.Value;
+                            for (int j = (int)numericUpDownBenchmarkingSecondParameterStart.Value;
+                                jStep >= 0 ? j <= (int)numericUpDownBenchmarkingSecondParameterEnd.Value : j >= (int)numericUpDownBenchmarkingSecondParameterEnd.Value;
+                                j += jStep) {
+
+                                var param2 = new Controller.BenchmarkParameter((string)comboBoxBenchmarkingSecondParameter.SelectedItem, j.ToString(), param2OriginalValues);
+                                var entry = new Controller.BenchmarkEntry();
+                                entry.ID = benchmarkEntryID++;
+                                entry.Parameters.Add(param0);
+                                entry.Parameters.Add(param1);
+                                entry.Parameters.Add(param2);
+                                entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
+                                Controller.BenchmarkEntries.Add(entry);
+                            }
+                        }
+                    }
+                }
+                //Controller.BenchmarkEntries.Shuffle();
+                Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => { return ((e1.Results.Count - e1.SuccessCount) == (e2.Results.Count - e2.SuccessCount)) ? (e2.SuccessCount - e1.SuccessCount) : ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)); }));
+                SaveBenchmarkState();
+
+                // Start the first benchmark.
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
+                    progressBarOptimizer.Maximum = Controller.OptimizerEntries.Count + Controller.OptimizerRecords.Count;
+                    if (checkBoxOptimizationRepeatUntilStopped.Checked) {
+                        progressBarOptimizer.Style = ProgressBarStyle.Marquee;
+                    } else {
+                        progressBarOptimizer.Style = ProgressBarStyle.Continuous;
+                    }
+                } else {
+                    progressBarBenchmarking.Value = 0;
+                }
+                dataGridViewBenchmarkingResults.Rows.Clear();
+                foreach (var param in Controller.BenchmarkEntries[0].Parameters)
+                    SetBenchmarkParameter(param);
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.ClearShares();
+                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
+                }
+                mAreSettingsDirty = false;
+                PrepareForNextBenchmark();
+            }
+        }
+
+        private void StopBenchmarks()
+        {
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                StopMining();
+                if (Controller.BenchmarkEntries.Count > 0) {
+                    foreach (var param in Controller.BenchmarkEntries[0].Parameters)
+                        SetBenchmarkParameter(param, true);
+                }
+                mAreSettingsDirty = false;
+                Controller.BenchmarkEntries.Clear();
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                timerBenchmarks.Enabled = false;
+                timerResetStopwatch.Enabled = false;
+                Controller.StopWatch.Reset();
+                progressBarBenchmarking.Value = 0;
+
+                UpdateControls();
+            }
+        }
+
+        private void buttonRunBenchmarks_Click(object sender = null, EventArgs e = null)
+        {
+            Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) {
+                StartBenchmarks();
+            } else {
+                StopBenchmarks();
+                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                LoadSettingsFromDatabase();
+            }
+        }
+
+        private void timerBenchmarks_Tick(object sender = null, EventArgs e = null)
+        {
+            if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running
+                && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
+                return;
+
+            bool parametersUpdated = false;
+
+            timerResetStopwatch.Enabled = false;
+            timerBenchmarks.Enabled = false;
+
+            // Handle previous failure if necessary.
+            var result = new Controller.BenchmarkResult();
+            result.Success = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running);
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Resuming) {
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) {
+                    tabControlMainForm.SelectedIndex = 4;
+                    timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000) + ((int)numericUpDownBenchmarkingLength.Value * 1000);
+                    timerResetStopwatch.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000);
+                } else {
+                    tabControlMainForm.SelectedIndex = 5;
+                    timerBenchmarks.Interval = ((int)numericUpDownOptimizationWait.Value * 1000) + ((int)numericUpDownOptimizationLength.Value * 1000);
+                    timerResetStopwatch.Interval = ((int)numericUpDownOptimizationWait.Value * 1000);
+                }
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
+            }
+
+            // Select the appropriate device(s).
+            bool optimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running;
+            var enabledDeviceCount = 0;
+            var deviceIndex = -1;
+            var devices = new List<Device>();
+            if (optimization) {
+                enabledDeviceCount = 1;
+                deviceIndex = comboBoxOptimizerDevice.SelectedIndex;
+                Controller.OptimizerEntries[0].Algorithm = OptimizerAlgorithm;
+                foreach (var device in Controller.OpenCLDevices)
+                    dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = (device.DeviceIndex == deviceIndex);
+                devices.Clear();
+                devices.Add(Controller.OpenCLDevices[deviceIndex]);
+            } else {
+                foreach (var device in Controller.OpenCLDevices) {
+                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        devices.Add(device);
+                        deviceIndex = device.DeviceIndex;
+                        ++enabledDeviceCount;
+                    }
+                }
+            }
+
+            // Update the result tables.
+            string defaultAlgorithm = null;
+            foreach (var param in Controller.BenchmarkEntries[0].Parameters) {
+                if (param.Name == "default_algorithm") {
+                    defaultAlgorithm = param.Value;
+                    break;
+                }
+            }
+            bool useAverageSpeeds = !optimization ? checkBoxBenchmarkingUseAverageSpeeds.Checked : checkBoxOptimizationUseAverageSpeeds.Checked;
+            result.SpeedPrimaryAlgorithm = result.SpeedSecondaryAlgorithm = 0;
+            if (useAverageSpeeds) {
+                if (!optimization) {
+                    foreach (var device in devices) {
+                        foreach (DataGridViewColumn column in dataGridViewBenchmarks.Columns) {
+                            if (column.HeaderText == GetPrettyAlgorithmName(defaultAlgorithm) && Controller.StopWatch.Elapsed.TotalSeconds > 0) {
+                                dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value
+                                    = (ConvertHashrateToString(device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString()
+                                    + (device.TotalHashesSecondaryAlgorithm <= 0 ? "" : ", " + (ConvertHashrateToString(device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString());
+                                break;
+                            }
+                        }
+                    }
+                }
+                foreach (var device in devices) {
+                    result.SpeedPrimaryAlgorithm += device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
+                    result.SpeedSecondaryAlgorithm += device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
+                }
+            } else {
+                if (!optimization) {
+                    foreach (var device in devices) {
+                        foreach (DataGridViewColumn column in dataGridViewBenchmarks.Columns) {
+                            if (column.HeaderText == GetPrettyAlgorithmName(defaultAlgorithm) && Controller.StopWatch.Elapsed.TotalSeconds > 0) {
+                                double speedPrimaryAlgorithm = 0;
+                                double speedSecondaryAlgorithm = 0;
+                                foreach (var miner in Controller.Miners) {
+                                    if (miner.DeviceIndex == device.DeviceIndex) {
+                                        speedPrimaryAlgorithm += miner.Speed;
+                                        speedSecondaryAlgorithm += miner.SpeedSecondaryAlgorithm;
+                                    }
+                                }
+                                dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value
+                                    = ConvertHashrateToString(speedPrimaryAlgorithm).ToString()
+                                    + (device.TotalHashesSecondaryAlgorithm <= 0 ? "" : ", " + (ConvertHashrateToString(speedSecondaryAlgorithm)).ToString());
+                                break;
+                            }
+                        }
+                    }
+                }
+                foreach (var miner in Controller.Miners) {
+                    result.SpeedPrimaryAlgorithm += miner.Speed;
+                    result.SpeedSecondaryAlgorithm += miner.SpeedSecondaryAlgorithm;
+                }
+            }
+            if (!optimization)
+                progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
+
+            // Restart if there is a sudden speed drop.
+            if (Controller.BenchmarkEntries[0].Results.Count > 0 && result.Success && Controller.BenchmarkEntries[0].SpeedPrimaryAlgorithm * 0.9 > result.SpeedPrimaryAlgorithm) {
+
+                var process = new System.Diagnostics.Process();
+                var startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+                startInfo.FileName = "shutdown";
+                startInfo.Arguments = "/r /t 0";
+                process.StartInfo = startInfo;
+                process.Start();
+
+                Program.Kill();
+            }
+            
+            // Update the current benchmark entry.
+            if (result.Success)
+                StopMining(); // Stop the previous benchmark.
+            Controller.BenchmarkEntries[0].Results.Add(result);
+            Controller.BenchmarkEntries[0].Remaining -= 1;
+            foreach (var param in Controller.BenchmarkEntries[0].Parameters)
+                SetBenchmarkParameter(param, true);
+            mAreSettingsDirty = false;
+            var doNotRepeatAfterFailure = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) 
+                                              ? checkBoxOptimizationDoNotRepeatAfterFailure.Checked
+                                              : checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked;
+            if (Controller.BenchmarkEntries[0].Remaining <= 0 || (doNotRepeatAfterFailure && !result.Success)) {
+                Controller.BenchmarkEntries[0].Remaining = 0;
+                Controller.BenchmarkRecords.Add(Controller.BenchmarkEntries[0]);
+                Controller.BenchmarkEntries.RemoveAt(0);
+            }
+            //if ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) && Controller.OptimizerEntries[0].StopAtFailure && !result.Success)
+            //    Controller.BenchmarkEntries.Clear();
+
+            // Check the current benchmark status.
+            // First, identify the best record.
+            Controller.BenchmarkEntry bestRecord = null;
+            bool dirty = false;
+            do {
+                // Calculate the average speed.
+                foreach (var record in Controller.BenchmarkEntries.Concat(Controller.BenchmarkRecords)) {
+                    record.SuccessCount = 0;
+                    record.SpeedPrimaryAlgorithm = 0;
+                    record.SpeedSecondaryAlgorithm = 0;
+                    foreach (var r in record.Results) {
+                        if (r.Success) {
+                            ++record.SuccessCount;
+                            record.SpeedPrimaryAlgorithm += r.SpeedPrimaryAlgorithm;
+                            record.SpeedSecondaryAlgorithm += r.SpeedSecondaryAlgorithm;
+                        }
+                    }
+                    if (record.SuccessCount > 0) {
+                        record.SpeedPrimaryAlgorithm /= record.SuccessCount;
+                        record.SpeedSecondaryAlgorithm /= record.SuccessCount;
+                    }
+                }
+                // Get rid of results with a slow speed.
+                dirty = false;
+                foreach (var record in Controller.BenchmarkEntries.Concat(Controller.BenchmarkRecords)) {
+                    foreach (var r in record.Results) {
+                        if (r.Success && r.SpeedPrimaryAlgorithm < record.SpeedPrimaryAlgorithm * 0.9) {
+                            r.Success = false;
+                            dirty = true;
+                        }
+                    }
+                }
+            } while (dirty);
+            for (int i = 0; i < Controller.BenchmarkRecords.Count; ++i) {
+                Controller.BenchmarkRecords[i].StabilityScore = Controller.BenchmarkRecords[i].SuccessCount;
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && checkBoxOptimizationExtendRange.Checked) {
+                    Controller.BenchmarkRecords[i].StabilityScore += (i > 0) ? Controller.BenchmarkRecords[i - 1].SuccessCount : Controller.BenchmarkRecords[i].SuccessCount;
+                    Controller.BenchmarkRecords[i].StabilityScore += (i < Controller.BenchmarkRecords.Count - 1) ? Controller.BenchmarkRecords[i + 1].SuccessCount : Controller.BenchmarkRecords[i].SuccessCount;
+                }
+            }
+            foreach (var record in Controller.BenchmarkEntries.Concat(Controller.BenchmarkRecords)) {
+                if (bestRecord == null
+                    || (record.SuccessCount > bestRecord.SuccessCount)
+                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore > bestRecord.StabilityScore)
+                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm)
+                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.Parameters.Count >= 2 && (record.Parameters[1].Name == "overclocking_core_voltage" || record.Parameters[1].Name == "overclocking_memory_voltage") && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm * 1.01)) {
+
+                    bestRecord = record;
+                }
+            }
+            for (int i = Controller.BenchmarkEntries.Count - 1; i >= 0; --i) {
+                var entry = Controller.BenchmarkEntries[i];
+                if (entry.Remaining + entry.SuccessCount < bestRecord.SuccessCount) {
+                    entry.Remaining = 0;
+                    Controller.BenchmarkRecords.Add(entry);
+                    Controller.BenchmarkEntries.RemoveAt(i);
+                }
+            }
+
+            // Sort benchmark entries.
+            Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => {
+                return (e1.Results.Count - e1.SuccessCount) != (e2.Results.Count - e2.SuccessCount) ? ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)) :
+                        (e2.SuccessCount != e1.SuccessCount)                                         ? (e2.SuccessCount - e1.SuccessCount) :
+                                                                                                        (e1.ID - e2.ID);
+            }));
+            UpdateBenchmarkRecords();
+
+            var done = (Controller.BenchmarkEntries.Count <= 0);
+            var updateParameters = (done && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running);
+
+            if (done && updateParameters) {
+                var entry = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? new Controller.OptimizerEntry(Controller.OptimizerEntries[0]) : new Controller.OptimizerEntry();
+                entry.ParameterWithValues = "";
+                if (bestRecord != null && bestRecord.SuccessCount > 0) {
+                    foreach (var param in bestRecord.Parameters) {
+                        SetBenchmarkParameter(param);
+                        parametersUpdated = parametersUpdated || (param.Value != param.OriginalValues[deviceIndex]);
+                    }
+                    mAreSettingsDirty = true;
+                    SaveSettingsToDatabase();
+                    entry.SuccessCount = bestRecord.SuccessCount;
+                    entry.ResultCount = bestRecord.Results.Count;
+                    entry.SpeedPrimaryAlgorithm = bestRecord.SpeedPrimaryAlgorithm;
+                    entry.SpeedSecondaryAlgorithm = bestRecord.SpeedSecondaryAlgorithm;
+                    entry.ParameterWithValues = entry.Parameter + ": " + bestRecord.Parameters[1].OriginalValues[deviceIndex] + "→" + bestRecord.Parameters[1].Value;
+                } else {
+                    entry.ParameterWithValues = entry.Parameter + ": -";
+                }
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    Controller.OptimizerRecords.Add(entry);
+                }
+            }
+
+            if (!done) {
+                SaveBenchmarkState();
+                PrepareForNextBenchmark();
+            } else {
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                Controller.StopWatch.Reset();
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.ClearShares();
+                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
+                }
+                tabControlMainForm.SelectedIndex = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? 5 : 4;
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) 
+                    progressBarBenchmarking.Value = 100;
+                LoadSettingsFromDatabase();
+
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.OptimizerEntries.Count <= 1) {
+                    Controller.OptimizerEntries.Clear();
+                    progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
+                    progressBarOptimizer.Maximum = Controller.OptimizerRecords.Count;
+                    progressBarOptimizer.Style = ProgressBarStyle.Continuous;
+                    UpdateOptimizerRecords();
+                    Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+                    try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    var entry = Controller.OptimizerEntries[0];
+                    Controller.OptimizerEntries.RemoveAt(0);
+                    if (checkBoxOptimizationRepeatUntilStopped.Checked) {
+                        Controller.OptimizerEntries.Add(entry);
+                    } else {
+                        progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
+                        progressBarOptimizer.Maximum = Controller.OptimizerEntries.Count + Controller.OptimizerRecords.Count;
+                    }
+                    UpdateOptimizerRecords();
+                    SaveOptimizerState();
+                    Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                    StartBenchmarks();
+                }
+            }
+            UpdateControls();
+        }
+
+        private void PrepareForNextBenchmark()
+        {
+            foreach (var device in Controller.OpenCLDevices) {
+                if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                    device.FanControlEnabled = true;
+                    device.FanSpeed = 100;
+                }
+            }
+            Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
+            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
+                progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
+            Logger("Cooling down before benchmark...");
+            UpdateBenchmarkRecords();
+            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running)
+                UpdateOptimizerRecords();
+            UpdateControls();
+            Application.DoEvents();
+            timerStartNextBenchmark.Enabled = true;
+        }
+
+        private void UpdateBenchmarkRecords()
+        {
+            var dataGridView = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running ? dataGridViewOptimizerBenchmarkingResults : dataGridViewBenchmarkingResults;
+            var dataGridViewName = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running ? "dataGridViewTextBoxOptimizerBenchmarkingResults" : "dataGridViewTextBoxBenchmarkingResults";
+
+            dataGridViewBenchmarkingResults.Rows.Clear();
+            dataGridViewOptimizerBenchmarkingResults.Rows.Clear();
+            foreach (var record in Controller.BenchmarkEntries.Concat(Controller.BenchmarkRecords).OrderBy(o => o.ID)) {
+                dataGridView.Rows.Add();
+                dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "Algorithm"].Value = GetPrettyAlgorithmName(record.Parameters[0].Value);
+                int successCount = 0;
+                double totalSpeedPrimary = 0;
+                double totalSpeedSecondary = 0;
+                foreach (var r in record.Results) {
+                    if (r.Success) {
+                        ++successCount;
+                        totalSpeedPrimary += r.SpeedPrimaryAlgorithm;
+                        totalSpeedSecondary += r.SpeedSecondaryAlgorithm;
+                    }
+                }
+                if (record.Results.Count > 0) {
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "SuccessRate"].Value = successCount + "/" + record.Results.Count + " (" + (successCount * 100 / record.Results.Count) + "%)";
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "SuccessRate"].Style.ForeColor = (successCount >= record.Results.Count) ? Color.Green : Color.Red;
+                }
+                if (successCount > 0) {
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "Speed"].Value = ConvertHashrateToString(totalSpeedPrimary / successCount);
+                    if (totalSpeedSecondary > 0)
+                        dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "Speed"].Value += ", " + ConvertHashrateToString(totalSpeedSecondary / successCount);
+                }
+                if (record.Parameters.Count >= 2) {
+                    var s = record.Parameters[1].Name;
+                    s = (new Regex(@"^(" + sAlgorithmListRegexPattern + @")_")).Replace(s, "");
+                    var regex = new Regex(@"^memory_timings_polaris10_");
+                    if (regex.Match(s).Success) {
+                        s = regex.Replace(s, "");
+                        s = s.ToUpper();
+                    }
+                    s = (new Regex(@"^overclocking_")).Replace(s, "");
+                    s = (new Regex(@"^intensity$")).Replace(s, "Intensity");
+                    s = (new Regex(@"^raw_intensity$")).Replace(s, "Raw Intensity");
+                    s = (new Regex(@"^local_work_size$")).Replace(s, "Local Work Size");
+                    s = (new Regex(@"^pascal_iterations$")).Replace(s, "Pascal Iterations");
+                    s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
+                    s = (new Regex(@"^memory_clock$")).Replace(s, "Memory Clock");
+                    s = (new Regex(@"^core_voltage$")).Replace(s, "Core Voltage");
+                    s = (new Regex(@"^memory_voltage$")).Replace(s, "Memory Voltage");
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "FirstParameter"].Value = s + ": " + record.Parameters[1].Value;
+                }
+                if (record.Parameters.Count >= 3) {
+                    var s = record.Parameters[2].Name;
+                    s = (new Regex(@"^(" + sAlgorithmListRegexPattern + @")_")).Replace(s, "");
+                    var regex = new Regex(@"^memory_timings_polaris10_");
+                    if (regex.Match(s).Success) {
+                        s = regex.Replace(s, "");
+                        s = s.ToUpper();
+                    }
+                    s = (new Regex(@"^overclocking_")).Replace(s, "");
+                    s = (new Regex(@"^intensity$")).Replace(s, "Intensity");
+                    s = (new Regex(@"^raw_intensity$")).Replace(s, "Raw Intensity");
+                    s = (new Regex(@"^local_work_size$")).Replace(s, "Local Work Size");
+                    s = (new Regex(@"^pascal_iterations$")).Replace(s, "Pascal Iterations");
+                    s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
+                    s = (new Regex(@"^memory_clock$")).Replace(s, "Memory Clock");
+                    s = (new Regex(@"^core_voltage$")).Replace(s, "Core Voltage");
+                    s = (new Regex(@"^memory_voltage$")).Replace(s, "Memory Voltage");
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "SecondParameter"].Value = s + ": " + record.Parameters[2].Value;
+                }
+            }
+        }
+
+        private void UpdateOptimizerRecords()
+        {
+            dataGridViewOptimizerRecords.Rows.Clear();
+            foreach (Controller.OptimizerEntry record in Controller.OptimizerRecords) {
+                dataGridViewOptimizerRecords.Rows.Add();
+                dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsAlgorithm"].Value = GetPrettyAlgorithmName(record.Algorithm);
+                if (record.ResultCount > 0) {
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Value = record.SuccessCount + "/" + record.ResultCount + " (" + (record.SuccessCount * 100 / record.ResultCount) + "%)";
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Style.ForeColor = (record.SuccessCount >= record.ResultCount) ? Color.Green : Color.Red;
+                } else {
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Value = "0 (0%)";
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Style.ForeColor =  Color.Red;
+                }
+                if (record.SuccessCount > 0) {
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeed"].Value = ConvertHashrateToString(record.SpeedPrimaryAlgorithm);
+                    if (record.SpeedSecondaryAlgorithm > 0)
+                        dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeed"].Value += ", " + ConvertHashrateToString(record.SpeedSecondaryAlgorithm);
+                }
+                var s = record.ParameterWithValues;
+                s = (new Regex(@"^(" + sAlgorithmListRegexPattern + @")_")).Replace(s, "");
+                var regex = new Regex(@"^memory_timings_polaris10_");
+                if (regex.Match(s).Success) {
+                    s = regex.Replace(s, "");
+                    s = s.ToUpper();
+                }
+                s = (new Regex(@"^overclocking_")).Replace(s, "");
+                s = (new Regex(@"^intensity$")).Replace(s, "Intensity");
+                s = (new Regex(@"^raw_intensity$")).Replace(s, "Raw Intensity");
+                s = (new Regex(@"^local_work_size$")).Replace(s, "Local Work Size");
+                s = (new Regex(@"^pascal_iterations$")).Replace(s, "Pascal Iterations");
+                s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
+                s = (new Regex(@"^memory_clock$")).Replace(s, "Memory Clock");
+                s = (new Regex(@"^core_voltage$")).Replace(s, "Core Voltage");
+                s = (new Regex(@"^memory_voltage$")).Replace(s, "Memory Voltage");
+                dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsParameter"].Value = s;
+            }
+        }
+
+        private void timerResetStopwatch_Tick(object sender, EventArgs e)
+        {
+            timerResetStopwatch.Enabled = false;
+
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                Controller.StopWatch.Reset();
+                Controller.StopWatch.Start();
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.ClearShares();
+                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
+                }
+            }
+        }
+
+        private void dataGridViewBenchmarks_SelectionChanged(object sender, EventArgs e)
+        {
+            dataGridViewBenchmarks.ClearSelection();
+        }
+
+        private void buttonSelectAllDevices_Click(object sender, EventArgs e)
+        {
+            foreach (var device in Controller.OpenCLDevices)
+                dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = true;
+        }
+
+        private void buttonDeselectAllDevices_Click(object sender, EventArgs e)
+        {
+            foreach (var device in Controller.OpenCLDevices)
+                dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = false;
+        }
+
+        private void buttonOptimizer_Click(object sender, EventArgs e)
+        {
+            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) {
+                tabControlMainForm.SelectedIndex = 5;
+                Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
+                Controller.OptimizerEntries.Clear();
+                Controller.OptimizerRecords.Clear();
+                UpdateOptimizerRecords();
+
+                if (checkBoxOptimizationAlgorithmicSettings.Checked) {
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("threads"));
+                    if (OptimizerAlgorithm != "ethash_pascal")
+                        Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("local_work_size"));
+                    if (OptimizerAlgorithm == "cryptonight" || OptimizerAlgorithm == "neoscrypt") {
+                        Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("raw_intensity"));
+                    } else {
+                        Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("intensity"));
+                    }
+                }
+
+                if (checkBoxOptimizationOverclockingMemory.Checked)
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_memory_clock"));
+
+                if (checkBoxOptimizationOverclockingCore.Checked)
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_core_clock"));
+
+                if (checkBoxOptimizationMemoryTimings.Checked) {
+                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tccdl"));
+                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trrd"));
+                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_faw"));
+                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_t32aw"));
+
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_actrd"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rasmactrd"));
+
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_actwr"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rasmactwr"));
+
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trc"));
+                }
+
+                if (checkBoxOptimizationMemoryTimingsExtended.Checked) {
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rp"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_bus_turn"));
+
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tr2w"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tw2r"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tr2r"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tcl"));
+
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tredc"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdr"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp_rda"));
+
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_twedc"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_wrplusrp"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdw"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp_wra"));
+                    
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_ras2ras"));
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trfc"));
+                }
+
+                if (checkBoxOptimizationUndervoltingCore.Checked)
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_core_voltage"));
+
+                SaveOptimizerState();
+                StartBenchmarks();
+            } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                StopBenchmarks();
+                Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+                Controller.OptimizerEntries.Clear();
+                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                progressBarOptimizer.Style = ProgressBarStyle.Continuous;
+                progressBarOptimizer.Value = 0;
+                LoadSettingsFromDatabase();
+                UpdateControls();
+            }
+        }
+
+        private void timerStartNextBenchmark_Tick(object sender, EventArgs e)
+        {
+            timerStartNextBenchmark.Enabled = false;
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.CoolingDown) {
+                foreach (var device in Controller.OpenCLDevices) {
+                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        device.FanControlEnabled = false;
+                        device.FanSpeed = -1;
+                    }
+                }
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
+                foreach (var param in Controller.BenchmarkEntries[0].Parameters)
+                    SetBenchmarkParameter(param);
+                mAreSettingsDirty = false;
+                Controller.BenchmarkStopwatch.Reset();
+                Controller.BenchmarkStopwatch.Start();
+                Controller.StopWatch.Reset();
+                Controller.StopWatch.Start();
+                timerResetStopwatch.Enabled = true;
+                timerBenchmarks.Enabled = true;
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.ClearShares();
+                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
+                }
+                StartMining();
+            }
+        }
+
+        private void dataGridViewBenchmarks_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridViewBenchmarkingResults_SelectionChanged(object sender, EventArgs e)
+        {
+            dataGridViewBenchmarkingResults.ClearSelection();
+        }
+
+        [System.SerializableAttribute()]
+        public class DeviceSettings
+        {
+            public List<ValueTuple<string, string, bool>> BooleanValues = new List<ValueTuple<string, string, bool>> { };
+            public List<ValueTuple<string, string, int>> NumericValues = new List<ValueTuple<string, string, int>> { };
+            public List<ValueTuple<string, string, string>> StringValues = new List<ValueTuple<string, string, string>> { };
+            public DeviceSettings() { }
+        }
+
+        public void SaveDeviceSettings(int deviceIndex)
+        {
+            try { 
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                Device device = Controller.OpenCLDevices[deviceIndex];
+
+                saveFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.FileName = device.GetVendor() + " " + device.GetName() + ".xml";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    DeviceSettings settings = new DeviceSettings();
+                    foreach (var originalKey in checkBoxDeviceParameterArray.Keys) {
+                        if (originalKey.Item1 == deviceIndex) {
+                            var tuple = new ValueTuple<string, string, bool>(originalKey.Item2, originalKey.Item3, checkBoxDeviceParameterArray[originalKey].Checked);
+                            settings.BooleanValues.Add(tuple);
+                        }
+                    }
+                    foreach (var originalKey in numericUpDownDeviceParameterArray.Keys) {
+                        if (originalKey.Item1 == deviceIndex) {
+                            var tuple = new ValueTuple<string, string, int>(originalKey.Item2, originalKey.Item3, (int)numericUpDownDeviceParameterArray[originalKey].Value);
+                            settings.NumericValues.Add(tuple);
+                        }
+                    }
+                    foreach (var originalKey in textBoxDeviceParameterArray.Keys) {
+                        if (originalKey.Item1 == deviceIndex) {
+                            var tuple = new ValueTuple<string, string, string>(originalKey.Item2, originalKey.Item3, textBoxDeviceParameterArray[originalKey].Text);
+                            settings.StringValues.Add(tuple);
+                        }
+                    }
+                    using (var stream = saveFileDialog.OpenFile())
+                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) {
+                        (new System.Xml.Serialization.XmlSerializer(typeof(DeviceSettings))).Serialize(sw, settings);
+                        sw.Flush();
+                        sw.Close();
+                    }
+                }
+            } catch (Exception ex) { Logger(ex); }
+        }
+
+        public void LoadDeviceSettings(int deviceIndex)
+        {
+            try {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                Device device = Controller.OpenCLDevices[deviceIndex];
+
+                openFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.FileName = device.GetVendor() + " " + device.GetName() + ".xml";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    using (var reader = openFileDialog.OpenFile()) {
+                        var settings = (DeviceSettings)(new System.Xml.Serialization.XmlSerializer(typeof(DeviceSettings))).Deserialize(reader);
+                        foreach (var tuple in settings.BooleanValues) {
+                            var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
+                            try { checkBoxDeviceParameterArray[key].Checked = tuple.Item3; } catch (Exception ex) { Logger(ex); }
+                        }
+                        foreach (var tuple in settings.NumericValues) {
+                            var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
+                            try { numericUpDownDeviceParameterArray[key].Value = tuple.Item3; } catch (Exception ex) { Logger(ex); }
+                        }
+                        foreach (var tuple in settings.StringValues) {
+                            var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
+                            try { textBoxDeviceParameterArray[key].Text = tuple.Item3; } catch (Exception ex) { Logger(ex); }
+                        }
+                    }
+                }
+                mAreSettingsDirty = true;
+            } catch (Exception ex) { Logger(ex); }
+        }
     }
 }
-

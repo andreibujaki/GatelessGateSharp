@@ -5,7 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GatelessGateSharp {
-    public class Parameters {
+    public class Parameters
+    {
+        public static readonly System.Diagnostics.ProcessPriorityClass ProcessPriority = System.Diagnostics.ProcessPriorityClass.High;
+        public static readonly System.Threading.ThreadPriority MainThreadPriority = System.Threading.ThreadPriority.AboveNormal;
+        public static readonly System.Threading.ThreadPriority MemoryTimingsTaskPriority = System.Threading.ThreadPriority.Highest;
+
+        public static readonly int MemoryTimingUpdateInterval = 1;
+
+        public static readonly int FanControlUpdateInterval = 5000;
+        
         public static readonly int WaitTimeForRestartingMinerThreadInMilliseconds = 0;
         public static readonly int TimeoutForFirstJobInMilliseconds = 60000;
         public static readonly int MaxLogFileSize = 1024 * 1024;

@@ -35,6 +35,7 @@ namespace GatelessGateSharp
         private long[] mEthashGlobalWorkOffsetArray = new long[1];
         private long[] mEthashGlobalWorkSizeArray = new long[1];
         private long[] mEthashLocalWorkSizeArray = new long[1];
+        private int    mEthashIntensity;
         
         public OpenCLEthashMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "ethash")
@@ -45,7 +46,7 @@ namespace GatelessGateSharp
         {
             Stratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = aEthashLocalWorkSize;
-            mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * OpenCLDevice.GetComputeDevice().MaxComputeUnits;
+            mEthashIntensity = aEthashIntensity;
 
             base.Start();
         }
@@ -138,15 +139,16 @@ namespace GatelessGateSharp
 
                                 System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                                 sw.Start();
+                                int divider = 8;
                                 mEthashGlobalWorkSizeArray[0] = ethashDAGSize / 64;
-                                mEthashGlobalWorkSizeArray[0] /= 8;
+                                mEthashGlobalWorkSizeArray[0] /= divider;
                                 if (mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0] > 0)
                                     mEthashGlobalWorkSizeArray[0] += mEthashLocalWorkSizeArray[0] - mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0];
 
                                 ComputeBuffer<byte> DAGCacheBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, cache.GetData().Length);
                                 fixed (byte* p = cache.GetData())
                                     Queue.Write<byte>(DAGCacheBuffer, true, 0, cache.GetData().Length, (IntPtr)p, null);
-                                ethashDAGBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, mEthashGlobalWorkSizeArray[0] * 8 * 64 /* ethashDAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
+                                ethashDAGBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadWrite, mEthashGlobalWorkSizeArray[0] * divider * 64 /* ethashDAGSize */); // With this, we can remove a conditional statement in the DAG kernel.
                                 MemoryUsage += DAGCacheBuffer.Size + ethashDAGBuffer.Size;
 
                                 DAGKernel.SetValueArgument<UInt32>(0, 0);
@@ -177,6 +179,9 @@ namespace GatelessGateSharp
                             {
                                 MarkAsAlive();
 
+                                mEthashGlobalWorkOffsetArray[0] = 0;
+                                mEthashGlobalWorkSizeArray[0] = mEthashIntensity * mEthashLocalWorkSizeArray[0] * OpenCLDevice.GetComputeDevice().MaxComputeUnits;
+
                                 // Get a new local extranonce if necessary.
                                 if ((ethashStartNonce & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8)) + (ulong)mEthashGlobalWorkSizeArray[0]) >= ((ulong)0x1 << (64 - (ethashExtranonceByteArray.Length * 8 + 8))))
                                     break;
@@ -194,7 +199,6 @@ namespace GatelessGateSharp
                                 sw.Start();
                                 ethashOutput[255] = 0; // ethashOutput[255] is used as an atomic counter.
                                 Queue.Write<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
-                                mEthashGlobalWorkOffsetArray[0] = 0;
                                 Queue.Execute(searchKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
                                 Queue.Read<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
                                 if (Stratum.GetJob() != null && Stratum.GetJob().ID.Equals(ethashJobID))

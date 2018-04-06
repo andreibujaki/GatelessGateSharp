@@ -7,10 +7,13 @@ using Cloo;
 
 
 
-namespace GatelessGateSharp {
-    class AMDDevice : OpenCLDevice {
+namespace GatelessGateSharp
+{
+    class AMDDevice : OpenCLDevice
+    {
         public AMDDevice(int aDeviceIndex, ComputeDevice aComputeDevice)
-            : base(aDeviceIndex, aComputeDevice) {
+            : base(aDeviceIndex, aComputeDevice)
+        {
         }
     }
 }

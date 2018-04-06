@@ -23,7 +23,7 @@ using Cloo;
 
 namespace GatelessGateSharp
 {
-    class Miner : IDisposable
+    public class Miner : IDisposable
     {
         private OpenCLDevice mDevice;
         private bool mStopped = false;
@@ -84,7 +84,7 @@ namespace GatelessGateSharp
             mMinerThread = new System.Threading.Thread(MinerThread);
             mMinerThread.IsBackground = true;
             mMinerThread.Start();
-            mMinerThread.Priority = System.Threading.ThreadPriority.AboveNormal;
+            mMinerThread.Priority = System.Threading.ThreadPriority.Normal;
         }
 
         unsafe protected virtual void MinerThread() { }

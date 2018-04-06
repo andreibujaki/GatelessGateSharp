@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatelessGateSharp", "GatelessGateSharp\GatelessGateSharp.csproj", "{5C6B25E1-991B-4A2A-B9D3-8F5E672384FD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5677641C-725E-4A22-A441-AC8FEFA214FD} = {5677641C-725E-4A22-A441-AC8FEFA214FD}
+		{1047DF1D-629E-4407-B969-57F2770D687B} = {1047DF1D-629E-4407-B969-57F2770D687B}
 		{92D51A33-7BF0-47FD-9ECE-D758FFE1691D} = {92D51A33-7BF0-47FD-9ECE-D758FFE1691D}
 		{0963014C-3F95-4F5A-B12A-03F6F5A1D8F0} = {0963014C-3F95-4F5A-B12A-03F6F5A1D8F0}
 		{6881A75E-D845-41DF-B544-1F2DFF67498D} = {6881A75E-D845-41DF-B544-1F2DFF67498D}
@@ -328,6 +329,7 @@ Global
 		{5677641C-725E-4A22-A441-AC8FEFA214FD}.Debug|x86.ActiveCfg = Win8 Debug|Win32
 		{5677641C-725E-4A22-A441-AC8FEFA214FD}.Debug|x86.Build.0 = Win8 Debug|Win32
 		{5677641C-725E-4A22-A441-AC8FEFA214FD}.Release|Any CPU.ActiveCfg = Win8.1 Release|x64
+		{5677641C-725E-4A22-A441-AC8FEFA214FD}.Release|Any CPU.Build.0 = Win8.1 Release|x64
 		{5677641C-725E-4A22-A441-AC8FEFA214FD}.Release|ARM.ActiveCfg = Win7 Release|Win32
 		{5677641C-725E-4A22-A441-AC8FEFA214FD}.Release|Mixed Platforms.ActiveCfg = Win8.1 Release|x64
 		{5677641C-725E-4A22-A441-AC8FEFA214FD}.Release|Mixed Platforms.Build.0 = Win8.1 Release|x64
@@ -1210,5 +1212,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {929432CD-9281-4629-A463-B40F9B2D7088}
 	EndGlobalSection
 EndGlobal

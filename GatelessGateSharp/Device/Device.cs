@@ -43,6 +43,17 @@ namespace GatelessGateSharp
         public int TargetTemperature { get; set; }
         public int TargetMaxTemperature { get; set; }
 
+        public virtual void SaveDefaultMemoryTimings() { }
+        public bool MemoryTimingModsEnabled { get; set; }
+        public virtual void UpdateMemoryTimings() { }
+        public virtual void PrintMemoryTimings() { }
+        public virtual void PrepareMemoryTimingMods(string algorithm) { }
+
+        public virtual string GetMemoryType() { return null; }
+        public virtual string GetMemoryVendor() { return null; }
+        public string MemoryType { get { return GetMemoryType(); } }
+        public string MemoryVendor { get { return GetMemoryVendor(); } }
+
         public Device(int aDeviceIndex)
         {
             mDeviceIndex = aDeviceIndex;
@@ -50,6 +61,7 @@ namespace GatelessGateSharp
             mRejectedShares = 0;
             OverclockingEnabled = false;
             FanControlEnabled = false;
+            MemoryTimingModsEnabled = false;
         }
 
         public void Dispose() {

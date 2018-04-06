@@ -19,11 +19,11 @@
 
 #include <Windows.h>
 
-extern "C" CRITICAL_SECTION phymem_mutex;
+extern "C" CRITICAL_SECTION phymemMutex;
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
-	InitializeCriticalSection(&phymem_mutex);;
+	InitializeCriticalSection(&phymemMutex);;
 
 	switch (ul_reason_for_call)
     {

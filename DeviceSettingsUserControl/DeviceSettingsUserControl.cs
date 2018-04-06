@@ -8,23 +8,44 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+
 namespace DeviceSettingsUserControl
 {
     public partial class DeviceSettingsUserControl: UserControl
     {
         public event EventHandler ButtonResetToDefaultClicked;
-        public event EventHandler ButtonResetAllClicked;
+        public event EventHandler ButtonSaveToFileClicked;
+        public event EventHandler ButtonLoadFromFileClicked;
         public event EventHandler ButtonCopyToOthersClicked;
         public event EventHandler ValueChanged;
 
-        public DeviceSettingsUserControl()
+         public DeviceSettingsUserControl()
         {
             InitializeComponent();
+            foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this))
+                checkBox.CheckedChanged += new System.EventHandler(control_ValueChanged);
+            foreach (var numericUpDown in Utilities.FindAllChildrenByType<NumericUpDown>(this))
+                numericUpDown.ValueChanged += new System.EventHandler(control_ValueChanged);
+            foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this))
+                textBox.TextChanged += new System.EventHandler(control_ValueChanged);
         }
 
-        private void checkBoxFanControlEnabled_CheckedChanged(object sender, EventArgs e) {
+        private void control_ValueChanged(object sender, EventArgs e)
+        {
             if (this.ValueChanged != null)
                 this.ValueChanged(this, new EventArgs());
+            if (sender.GetType() == typeof(CheckBox)) {
+                var checkBox = (CheckBox)sender;
+                var regex = new System.Text.RegularExpressions.Regex(@"^(.*)_memory_timings_enabled$");
+                if (checkBox.Tag != null && checkBox.Tag.GetType() == typeof(string) && regex.Match((string)checkBox.Tag).Success) {
+                    regex = new System.Text.RegularExpressions.Regex(@"memory_timings");
+                    foreach (var groupBox in Utilities.FindAllChildrenByType<GroupBox>(checkBox.Parent)) {
+                        if (groupBox.Tag != null && groupBox.Tag.GetType() == typeof(string) && regex.Match((string)groupBox.Tag).Success)
+                            groupBox.Enabled = checkBox.Checked;
+                    }
+                }
+            }
         }
 
         private void buttonResetToDefault_Click(object sender, EventArgs e) {
@@ -32,9 +53,9 @@ namespace DeviceSettingsUserControl
                 this.ButtonResetToDefaultClicked(this, new EventArgs());
        }
 
-        private void buttonResetAll_Click(object sender, EventArgs e) {
-            if (this.ButtonResetAllClicked != null)
-                this.ButtonResetAllClicked(this, new EventArgs());
+        private void buttonSaveToFile_Click(object sender, EventArgs e) {
+            if (this.ButtonSaveToFileClicked != null)
+                this.ButtonSaveToFileClicked(this, new EventArgs());
         }
 
         private void buttonCopyToOthers_Click(object sender, EventArgs e) {
@@ -42,324 +63,31 @@ namespace DeviceSettingsUserControl
                 this.ButtonCopyToOthersClicked(this, new EventArgs());
         }
 
-        private void checkBox7_CheckedChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
+        private void groupBox8_Enter(object sender, EventArgs e)
+        {
+
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
+        private void textBoxEthashPascalSEQ_MISC8_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
-        private void checkBox3_CheckedChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
+        private void buttonLoadFromFile_Click(object sender, EventArgs e)
+        {
+            if (this.ButtonLoadFromFileClicked != null)
+                this.ButtonLoadFromFileClicked(this, new EventArgs());
         }
+    }
 
-        private void checkBox4_CheckedChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void checkBox5_CheckedChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void checkBox6_CheckedChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown52_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown27_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown26_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown28_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashPascalThreads_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashPascalIntensity_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashPascalPascalIterations_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashPascalPowerLimit_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashPascalCoreClock_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashPascalMemoryClock_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown24_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashPascalMemoryVoltage_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashThreads_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashIntensity_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0EthashLocalWorkSize_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown3_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown5_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown2_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown4_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0CryptoNightThreads_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0CryptoNightRawIntensity_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0CryptoNightLocalWorkSize_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown8_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown10_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown7_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown9_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown6_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0LbryThreads_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0LbryIntensity_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0LbryLocalWorkSize_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown13_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown15_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown12_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown14_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown11_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0PascalThreads_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0PascalIntensity_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDownDevice0PascalLocalWorkSize_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown18_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown20_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown17_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown19_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown16_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown23_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown29_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown22_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown25_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown21_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown37_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown36_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown35_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown32_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown34_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown31_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown33_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
-        }
-
-        private void numericUpDown30_ValueChanged(object sender, EventArgs e) {
-            if (this.ValueChanged != null)
-                this.ValueChanged(this, new EventArgs());
+    public static class Utilities
+    {
+        public static IEnumerable<T> FindAllChildrenByType<T>(this Control control)
+        {
+            IEnumerable<Control> controls = control.Controls.Cast<Control>();
+            return controls
+                .OfType<T>()
+                .Concat<T>(controls.SelectMany<Control, T>(ctrl => FindAllChildrenByType<T>(ctrl)));
         }
     }
 }

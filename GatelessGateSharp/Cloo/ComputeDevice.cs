@@ -540,7 +540,12 @@ namespace Cloo
         public string OpenCLCVersionString { get { return GetStringInfo(ComputeDeviceInfo.OpenCLCVersion); } }
 
         /// <summary></summary>
-        public byte[] TopologyAMD { get { return GetByteArrayInfo(ComputeDeviceInfo.CL_DEVICE_TOPOLOGY_AMD); } }
+        byte[] mTopologyAMD;
+        public byte[] TopologyAMD {
+            get {
+                return (mTopologyAMD != null) ? mTopologyAMD : (mTopologyAMD = GetByteArrayInfo(ComputeDeviceInfo.CL_DEVICE_TOPOLOGY_AMD));
+            }
+        }
         /// <summary></summary>
         public byte[] BoardNameAMD { get { return GetByteArrayInfo(ComputeDeviceInfo.CL_DEVICE_BOARD_NAME_AMD); } }
         /// <summary></summary>

@@ -75,6 +75,7 @@ namespace GatelessGateSharp {
                 Random r = new Random();
                 var openCLName = OpenCLDevice.GetComputeDevice().Name;
                 var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
+                int moneroVariant = 0;
 
                 MarkAsAlive();
 
@@ -88,6 +89,7 @@ namespace GatelessGateSharp {
 
                 using (var searchKernel0 = program.CreateKernel("search"))
                 using (var searchKernel1 = program.CreateKernel("search1"))
+                using (var searchKernel1Variant1 = program.CreateKernel("search1_variant1"))
                 using (var searchKernel2 = program.CreateKernel("search2"))
                 using (var searchKernel3 = program.CreateKernel("search3"))
                 using (var inputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, 76))
@@ -107,10 +109,14 @@ namespace GatelessGateSharp {
                         searchKernel0.SetMemoryArgument(0, inputBuffer);
                         searchKernel0.SetMemoryArgument(1, scratchpadsBuffer);
                         searchKernel0.SetMemoryArgument(2, statesBuffer);
-
+                        
                         searchKernel1.SetMemoryArgument(0, scratchpadsBuffer);
                         searchKernel1.SetMemoryArgument(1, statesBuffer);
                         searchKernel1.SetMemoryArgument(2, terminateBuffer);
+
+                        searchKernel1Variant1.SetMemoryArgument(0, scratchpadsBuffer);
+                        searchKernel1Variant1.SetMemoryArgument(1, statesBuffer);
+                        searchKernel1Variant1.SetMemoryArgument(2, terminateBuffer);
 
                         searchKernel2.SetMemoryArgument(0, scratchpadsBuffer);
                         searchKernel2.SetMemoryArgument(1, statesBuffer);
@@ -135,6 +141,13 @@ namespace GatelessGateSharp {
                             MarkAsAlive();
 
                             Array.Copy(Utilities.StringToByteArray(job.Blob), input, 76);
+                            
+                            int newVariant = ((int)input[0] >= 7) ? ((int)input[0] - 6) : 0;
+                            if (moneroVariant != newVariant) {
+                                MainForm.Logger("Switching to Monero Variant " + newVariant);
+                                moneroVariant = newVariant;
+                            }
+
                             byte localExtranonce = (byte)work.LocalExtranonce;
                             byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
                             UInt32 startNonce;
@@ -143,6 +156,11 @@ namespace GatelessGateSharp {
                             } else {
                                 startNonce = ((UInt32)localExtranonce << (8 * 3)) | (UInt32)(r.Next(0, int.MaxValue) & (0x00ffffffu));
                             }
+                            searchKernel1Variant1.SetValueArgument<UInt32>(3,
+                                  ((UInt32)input[38] << (8 * 3))
+                                | ((UInt32)input[37] << (8 * 2))
+                                | ((UInt32)input[36] << (8 * 1)) 
+                                | ((UInt32)input[35] << (8 * 0)));
                             UInt32 target = ((UInt32)targetByteArray[0] << 0)
                                             | ((UInt32)targetByteArray[1] << 8)
                                             | ((UInt32)targetByteArray[2] << 16)
@@ -177,7 +195,7 @@ namespace GatelessGateSharp {
                                 Queue.Finish();
                                 if (Stopped)
                                     break;
-                                Queue.Execute(searchKernel1, globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
+                                Queue.Execute(((moneroVariant == 1) ? searchKernel1Variant1 : searchKernel1), globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
                                 Queue.Finish();
                                 if (Stopped)
                                     break;

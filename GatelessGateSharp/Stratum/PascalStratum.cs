@@ -103,7 +103,7 @@ namespace GatelessGateSharp
 
         protected override void ProcessLine(String line)
         {
-            //MainForm.Logger("line: " + line);
+            MainForm.Logger("line: " + line);
             Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
             if (response.ContainsKey("method") && response.ContainsKey("params"))
             {
@@ -152,7 +152,8 @@ namespace GatelessGateSharp
                 else if ((ID != "1" && ID != "2" && ID != "3") && result)
                 {
                     ReportAcceptedShare();
-                } else if ((ID != "1" && ID != "2" && ID != "3") && !result)
+                }
+                else if ((ID != "1" && ID != "2" && ID != "3") && !result)
                 {
                     ReportRejectedShare((String)(((JArray)response["error"])[1]));
                 }

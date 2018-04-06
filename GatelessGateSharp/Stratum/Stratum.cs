@@ -11,7 +11,7 @@ using System.IO;
 
 
 namespace GatelessGateSharp {
-    class Stratum {
+    public class Stratum {
         public class Job {
             private Mutex mMutex = new Mutex();
             static Random r = new Random();
@@ -188,9 +188,9 @@ namespace GatelessGateSharp {
             }
 
             if (shareID >= 0 && !MainForm.DevFeeMode) {
-                MainForm.Logger("Share #" + shareID + " rejected.");
+                MainForm.Logger("Share #" + shareID + " rejected" + (reason == null ? "." : ": " + reason));
             } else {
-                MainForm.Logger("Share rejected.");
+                MainForm.Logger("Share rejected" + (reason == null ? "." : ": " + reason));
             }
         }
 
@@ -232,7 +232,7 @@ namespace GatelessGateSharp {
         }
 
         private void StreamReaderThread() {
-            Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
+            Thread.CurrentThread.Priority = ThreadPriority.Normal;
             int errorCount = 0;
 
             UnrecoverableException = null; 
