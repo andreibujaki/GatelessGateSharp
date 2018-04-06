@@ -9,9 +9,9 @@ Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), t
 * [Gateless_Gate_Sharp_1.2.18_stable.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.2.18-stable/Gateless_Gate_Sharp_1.2.18_stable.7z)
 * [Gateless_Gate_Sharp_1.2.18_stable.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.2.18-stable/Gateless_Gate_Sharp_1.2.18_stable.zip)
 
-* [Gateless_Gate_Sharp_1.3.0_prealpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.0-prealpha/Gateless_Gate_Sharp_1.3.0_prealpha_Setup.msi) (Windows x64 Installer; highly recommended)
-* [Gateless_Gate_Sharp_1.3.0_prealpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.0-prealpha/Gateless_Gate_Sharp_1.3.0_prealpha.7z)
-* [Gateless_Gate_Sharp_1.3.0_prealpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.0-prealpha/Gateless_Gate_Sharp_1.3.0_prealpha.zip)
+* [Gateless_Gate_Sharp_1.3.1_prealpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.1-prealpha/Gateless_Gate_Sharp_1.3.1_prealpha_Setup.msi) (Windows x64 Installer; highly recommended)
+* [Gateless_Gate_Sharp_1.3.1_prealpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.1-prealpha/Gateless_Gate_Sharp_1.3.1_prealpha.7z)
+* [Gateless_Gate_Sharp_1.3.1_prealpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.1-prealpha/Gateless_Gate_Sharp_1.3.1_prealpha.zip)
 
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
