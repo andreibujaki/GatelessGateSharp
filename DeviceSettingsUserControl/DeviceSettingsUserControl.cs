@@ -15,7 +15,8 @@ namespace DeviceSettingsUserControl
     public partial class DeviceSettingsUserControl: UserControl
     {
         public event EventHandler ButtonResetToDefaultClicked;
-        public event EventHandler ButtonResetAllClicked;
+        public event EventHandler ButtonSaveToFileClicked;
+        public event EventHandler ButtonLoadFromFileClicked;
         public event EventHandler ButtonCopyToOthersClicked;
         public event EventHandler ValueChanged;
 
@@ -36,19 +37,7 @@ namespace DeviceSettingsUserControl
                 this.ValueChanged(this, new EventArgs());
             if (sender.GetType() == typeof(CheckBox)) {
                 var checkBox = (CheckBox)sender;
-                var regex = new System.Text.RegularExpressions.Regex(@"^(.*)_enabled$");
-                if (checkBox.Tag != null && checkBox.Tag.GetType() == typeof(string) && regex.Match((string)checkBox.Tag).Success) {
-                    var match = regex.Match((string)checkBox.Tag);
-                    var target = match.Groups[1].Value;
-                    foreach (var control in Utilities.FindAllChildrenByType<Control>(checkBox.Parent)) {
-                        if ((string)control.Tag == target) {
-                            checkBox.ForeColor = (checkBox.Checked ? System.Drawing.SystemColors.ControlText : System.Drawing.SystemColors.ControlDark);
-                            control.Enabled = checkBox.Checked;
-                            break;
-                        }
-                    }
-                }
-                regex = new System.Text.RegularExpressions.Regex(@"^(.*)_memory_timings_enabled$");
+                var regex = new System.Text.RegularExpressions.Regex(@"^(.*)_memory_timings_enabled$");
                 if (checkBox.Tag != null && checkBox.Tag.GetType() == typeof(string) && regex.Match((string)checkBox.Tag).Success) {
                     regex = new System.Text.RegularExpressions.Regex(@"memory_timings");
                     foreach (var groupBox in Utilities.FindAllChildrenByType<GroupBox>(checkBox.Parent)) {
@@ -64,9 +53,9 @@ namespace DeviceSettingsUserControl
                 this.ButtonResetToDefaultClicked(this, new EventArgs());
        }
 
-        private void buttonResetAll_Click(object sender, EventArgs e) {
-            if (this.ButtonResetAllClicked != null)
-                this.ButtonResetAllClicked(this, new EventArgs());
+        private void buttonSaveToFile_Click(object sender, EventArgs e) {
+            if (this.ButtonSaveToFileClicked != null)
+                this.ButtonSaveToFileClicked(this, new EventArgs());
         }
 
         private void buttonCopyToOthers_Click(object sender, EventArgs e) {
@@ -82,6 +71,12 @@ namespace DeviceSettingsUserControl
         private void textBoxEthashPascalSEQ_MISC8_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonLoadFromFile_Click(object sender, EventArgs e)
+        {
+            if (this.ButtonLoadFromFileClicked != null)
+                this.ButtonLoadFromFileClicked(this, new EventArgs());
         }
     }
 

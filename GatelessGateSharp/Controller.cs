@@ -47,10 +47,9 @@ namespace GatelessGateSharp {
         public class OptimizerEntry
         {
             public int ID;
-            public string FirstParameter = null;
-            public string SecondParameter = null;
-            public string FirstParameterWithValues = null;
-            public string SecondParameterWithValues = null;
+            public string Algorithm = null;
+            public string Parameter = null;
+            public string ParameterWithValues = null;
 
             public int SuccessCount;
             public int ResultCount;
@@ -58,8 +57,8 @@ namespace GatelessGateSharp {
             public double SpeedSecondaryAlgorithm;
 
             public OptimizerEntry() { }
-            public OptimizerEntry(OptimizerEntry aEntry) { FirstParameter = aEntry.FirstParameter; SecondParameter = aEntry.SecondParameter; }
-            public OptimizerEntry(string aFirstParameter, string aSecondParameter) { FirstParameter = aFirstParameter; SecondParameter = aSecondParameter; }
+            public OptimizerEntry(OptimizerEntry aEntry) { Algorithm = aEntry.Algorithm; Parameter = aEntry.Parameter;}
+            public OptimizerEntry(string aFirstParameter) { Parameter = aFirstParameter; }
         }
 
         [System.SerializableAttribute()]
@@ -73,7 +72,8 @@ namespace GatelessGateSharp {
             {
                 Name = aName;
                 Value = aValue;
-                OriginalValues.Add(aOriginalValue);
+                foreach (var device in Controller.OpenCLDevices)
+                    OriginalValues.Add(aOriginalValue);
             }
 
             public BenchmarkParameter(string aName, string aValue, List<string> aOriginalValues)

@@ -25,6 +25,25 @@ uint amd_bfe(uint src0, uint src1, uint src2)
 
 
 
+#define VARIANT1_1(p) \
+  do \
+  { \
+    uint table = 0x75310U; \
+    uint index = (((p).s2 >> 26) & 12) | (((p).s2 >> 23) & 2); \
+    (p).s2 ^= ((table >> index) & 0x30U) << 24; \
+  } while(0)
+
+#define VARIANT1_2(p) \
+    (p) ^= tweak1_2
+
+#define VARIANT1_INIT() \
+    uint2 tweak1_2; \
+    tweak1_2.s0 = tweak1; \
+    tweak1_2.s1 = get_global_id(0); \
+    tweak1_2 ^= as_uint2(states[24]);
+
+
+
 static const __constant ulong keccakf_rndc[24] =
 {
     0x0000000000000001, 0x0000000000008082, 0x800000000000808a,
@@ -421,8 +440,7 @@ __kernel void search1(__global uint4 *Scratchpad, __global ulong *states, __glob
     Scratchpad += ((get_global_id(0) - get_global_offset(0)));
     states += (25 * (get_global_id(0) - get_global_offset(0)));
 
-    for (int i = get_local_id(0); i < 256; i += WORKSIZE)
-    {
+    for (int i = get_local_id(0); i < 256; i += WORKSIZE) {
         const uint tmp = AES0_C[i];
         AES0[i] = tmp;
         AES1[i] = rotate(tmp, 8U);
@@ -440,10 +458,9 @@ __kernel void search1(__global uint4 *Scratchpad, __global ulong *states, __glob
     mem_fence(CLK_LOCAL_MEM_FENCE);
 
 #pragma unroll 8
-    for (int i = 0; i < 0x80000; ++i)
-    {
-		if (i % 0x1000 == 0 && atomic_add(terminate, 0))
-			return;
+    for (int i = 0; i < 0x80000; ++i) {
+        if (i % 0x1000 == 0 && atomic_add(terminate, 0))
+            return;
 
         ulong c[2];
 
@@ -465,6 +482,64 @@ __kernel void search1(__global uint4 *Scratchpad, __global ulong *states, __glob
 
         b_x = ((uint4 *)c)[0];
     }
+}
+
+__attribute__((reqd_work_group_size(WORKSIZE, 1, 1)))
+__kernel void search1_variant1(__global uint4 *Scratchpad, __global ulong *states, __global int *terminate, const uint tweak1)
+{ 
+	uint4 a, b; 
+	__local uint AES0[256], AES1[256], AES2[256], AES3[256]; 
+	
+	Scratchpad += ((get_global_id(0) - get_global_offset(0))); 
+	states += (25 * (get_global_id(0) - get_global_offset(0))); 
+	
+	VARIANT1_INIT(); 
+	
+	for(int i = get_local_id(0); i < 256; i += WORKSIZE) 
+	{ 
+		const uint tmp = AES0_C[i]; 
+		AES0[i] = tmp; 
+		AES1[i] = rotate(tmp, 8U); 
+		AES2[i] = rotate(tmp, 16U); 
+		AES3[i] = rotate(tmp, 24U); 
+	} 
+	
+	a.s01 = as_uint2(states[0] ^ states[4]); 
+	b.s01 = as_uint2(states[2] ^ states[6]); 
+	a.s23 = as_uint2(states[1] ^ states[5]); 
+	b.s23 = as_uint2(states[3] ^ states[7]); 
+	
+	uint4 b_x = b; 
+	
+	mem_fence(CLK_LOCAL_MEM_FENCE); 
+	
+#pragma unroll 8
+	for (int i = 0; i < 0x80000; ++i) 
+	{ 
+		uint4 c; 
+		
+		c = Scratchpad[IDX((as_ulong(a.s01) & 0x1FFFF0) >> 4)]; 
+		c = AES_Round(AES0, AES1, AES2, AES3, c, a); 
+		
+		b_x ^= c; 
+		VARIANT1_1(b_x); 
+		
+		Scratchpad[IDX((as_ulong(a.s01) & 0x1FFFF0) >> 4)] = b_x; 
+		
+		uint4 tmp; 
+		tmp = Scratchpad[IDX((as_ulong(c.s01) & 0x1FFFF0) >> 4)]; 
+		
+		a.s23 = as_uint2(as_ulong(a.s23) +        as_ulong(c.s01) * as_ulong(tmp.s01)); 
+		a.s01 = as_uint2(as_ulong(a.s01) + mul_hi(as_ulong(c.s01),  as_ulong(tmp.s01))); 
+		
+		VARIANT1_2(a.s23); 
+		Scratchpad[IDX((as_ulong(c.s01) & 0x1FFFF0) >> 4)] = a; 
+		VARIANT1_2(a.s23); 
+		
+		a ^= tmp; 
+		
+		b_x = c; 
+	} 
 }
 
 __attribute__((reqd_work_group_size(WORKSIZE, 8, 1)))
