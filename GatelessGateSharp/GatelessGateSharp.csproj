@@ -229,6 +229,7 @@
     <None Include="Kernels\blake256.cl" />
     <None Include="Kernels\bmw256.cl" />
     <None Include="Kernels\cryptonight.cl" />
+    <None Include="Kernels\cryptonight_heavy.cl" />
     <None Include="Kernels\cubehash.cl" />
     <None Include="Kernels\ethash.cl" />
     <None Include="Kernels\ethash_pascal.cl" />

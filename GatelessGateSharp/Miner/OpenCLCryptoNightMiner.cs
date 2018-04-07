@@ -45,9 +45,11 @@ namespace GatelessGateSharp {
         public bool NiceHashMode { get { return mNicehashMode; } }
         public void SaveNiceHashMode() { mSavedNicehashMode = mNicehashMode; }
         public void RestoreNiceHashMode() { mNicehashMode = mSavedNicehashMode; }
+        public string Variant;
 
-        public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice)
+        public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice, string aVariant = "cryptonight")
             : base(aGatelessGateDevice, "cryptonight") {
+            Variant = aVariant;
         }
 
         public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false) {
@@ -75,17 +77,17 @@ namespace GatelessGateSharp {
                 Random r = new Random();
                 var openCLName = OpenCLDevice.GetComputeDevice().Name;
                 var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
-                int moneroVariant = 0;
+                int moneroVersion = 0;
 
                 MarkAsAlive();
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
                 MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
-                program = BuildProgram("cryptonight", localWorkSizeA[0], "-O5" + (GCN1 ? " -legacy" : ""), "", "");
+                program = BuildProgram((Variant == "cryptonight_heavy" ? "cryptonight_heavy" : "cryptonight"), localWorkSizeA[0], "-O5" + (GCN1 ? " -legacy" : ""), "", "");
 
-                statesBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, 200 * globalWorkSizeA[0]);
-                scratchpadsBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, ((long)1 << 21) * globalWorkSizeA[0]);
+                statesBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, 25 * 8 * globalWorkSizeA[0]);
+                scratchpadsBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, (Variant == "cryptonight_heavy" ? ((long)1 << 22) : ((long)1 << 21)) * globalWorkSizeA[0]);
 
                 using (var searchKernel0 = program.CreateKernel("search"))
                 using (var searchKernel1 = program.CreateKernel("search1"))
@@ -141,11 +143,11 @@ namespace GatelessGateSharp {
                             MarkAsAlive();
 
                             Array.Copy(Utilities.StringToByteArray(job.Blob), input, 76);
-                            
-                            int newVariant = ((int)input[0] >= 7) ? ((int)input[0] - 6) : 0;
-                            if (moneroVariant != newVariant) {
-                                MainForm.Logger("Switching to Monero Variant " + newVariant);
-                                moneroVariant = newVariant;
+
+                            int newVersion = (int)input[0]; // ((int)input[0] >= 7) ? ((int)input[0] - 6) : 0;
+                            if (moneroVersion != newVersion) {
+                                MainForm.Logger("Switching to Monero Version " + newVersion);
+                                moneroVersion = newVersion;
                             }
 
                             byte localExtranonce = (byte)work.LocalExtranonce;
@@ -161,6 +163,10 @@ namespace GatelessGateSharp {
                                 | ((UInt32)input[37] << (8 * 2))
                                 | ((UInt32)input[36] << (8 * 1)) 
                                 | ((UInt32)input[35] << (8 * 0)));
+                            searchKernel0.SetValueArgument<Int32>(3, moneroVersion);
+                            searchKernel1.SetValueArgument<Int32>(3, moneroVersion);
+                            searchKernel2.SetValueArgument<Int32>(2, moneroVersion);
+
                             UInt32 target = ((UInt32)targetByteArray[0] << 0)
                                             | ((UInt32)targetByteArray[1] << 8)
                                             | ((UInt32)targetByteArray[2] << 16)
@@ -195,7 +201,7 @@ namespace GatelessGateSharp {
                                 Queue.Finish();
                                 if (Stopped)
                                     break;
-                                Queue.Execute(((moneroVariant == 1) ? searchKernel1Variant1 : searchKernel1), globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
+                                Queue.Execute(((moneroVersion == 7) ? searchKernel1Variant1 : searchKernel1), globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
                                 Queue.Finish();
                                 if (Stopped)
                                     break;

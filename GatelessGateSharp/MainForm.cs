@@ -103,7 +103,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.1";
+        public static string appVersion = "1.3.2";
         public static string appName = shortAppName + " " + appVersion + " prealpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
@@ -3577,7 +3577,7 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 Controller.PrimaryStratum = (Stratum)stratum;
-                LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
+                LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode, "cryptonight");
             }
         }
 
@@ -3883,7 +3883,7 @@ namespace GatelessGateSharp
             }
         }
 
-        void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode)
+        void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode, string variant)
         {
             EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
@@ -3900,13 +3900,14 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "threads")].Value; ++i) {
-                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex]);
+                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex], variant);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "raw_intensity")]
                                 .Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "local_work_size")]
-                                .Value)), niceHashMode);
+                                .Value)),
+                            niceHashMode);
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
                             Application.DoEvents();
@@ -4196,9 +4197,9 @@ namespace GatelessGateSharp
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 LaunchOpenCLEthashMinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
-            } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)") {
+            } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)" || algo == "CryptoNight-Heavy") {
                 var stratum = new CryptoNightStratum(host, port, login, password, host);
-                LaunchOpenCLCryptoNightMinersWithStratum(stratum, (algo == "CryptoNight (NiceHash)"));
+                LaunchOpenCLCryptoNightMinersWithStratum(stratum, (algo == "CryptoNight (NiceHash)"), (algo == "CryptoNight-Heavy") ? "cryptonight_heavy" : "cryptonight");
                 Controller.PrimaryStratum = stratum;
             } else if (algo == "Lbry") {
                 var stratum = new LbryStratum(host, port, login, password, host);
