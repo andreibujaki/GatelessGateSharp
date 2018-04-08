@@ -2400,6 +2400,7 @@
             "Ethash (NiceHash)",
             "CryptoNight",
             "CryptoNight (NiceHash)",
+            "CryptoNight-Heavy",
             "Lbry",
             "Pascal",
             "NeoScrypt",
@@ -2637,6 +2638,7 @@
             "Ethash (NiceHash)",
             "CryptoNight",
             "CryptoNight (NiceHash)",
+            "CryptoNight-Heavy",
             "Lbry",
             "Pascal",
             "NeoScrypt",
@@ -2874,6 +2876,7 @@
             "Ethash (NiceHash)",
             "CryptoNight",
             "CryptoNight (NiceHash)",
+            "CryptoNight-Heavy",
             "Lbry",
             "Pascal",
             "NeoScrypt",
@@ -3123,6 +3126,7 @@
             "Ethash (NiceHash)",
             "CryptoNight",
             "CryptoNight (NiceHash)",
+            "CryptoNight-Heavy",
             "Lbry",
             "Pascal",
             "NeoScrypt",
@@ -3869,15 +3873,6 @@
             this.comboBoxDefaultAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDefaultAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxDefaultAlgorithm.FormattingEnabled = true;
-            this.comboBoxDefaultAlgorithm.Items.AddRange(new object[] {
-            "Ethash/Pascal",
-            "Ethash",
-            "CryptoNight",
-            "NeoScrypt",
-            "Lbry",
-            "Pascal",
-            "Lyra2REv2",
-            "Custom Pools"});
             this.comboBoxDefaultAlgorithm.Location = new System.Drawing.Point(109, 19);
             this.comboBoxDefaultAlgorithm.Name = "comboBoxDefaultAlgorithm";
             this.comboBoxDefaultAlgorithm.Size = new System.Drawing.Size(211, 21);
@@ -4421,14 +4416,6 @@
             this.comboBoxOptimizerAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOptimizerAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxOptimizerAlgorithm.FormattingEnabled = true;
-            this.comboBoxOptimizerAlgorithm.Items.AddRange(new object[] {
-            "Ethash/Pascal",
-            "Ethash",
-            "CryptoNight",
-            "NeoScrypt",
-            "Lbry",
-            "Pascal",
-            "Lyra2REv2"});
             this.comboBoxOptimizerAlgorithm.Location = new System.Drawing.Point(65, 46);
             this.comboBoxOptimizerAlgorithm.Name = "comboBoxOptimizerAlgorithm";
             this.comboBoxOptimizerAlgorithm.Size = new System.Drawing.Size(224, 21);

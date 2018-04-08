@@ -103,7 +103,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.0";
+        public static string appVersion = "1.3.2";
         public static string appName = shortAppName + " " + appVersion + " prealpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
@@ -113,10 +113,25 @@ namespace GatelessGateSharp
         private static string mBenchmarkResultsFileName = "GatelessGateSharp_BenchmarkRecords.xml";
         private static string mOptimizerEntriesFileName = "GatelessGateSharp_OptimizerEntries.xml";
         private static string mOptimizerResultsFileName = "GatelessGateSharp_OptimizerRecords.xml";
-        private static int mLaunchInterval = 1000;
-        public static readonly string sAlgorithmListRegexPattern = @"ethash_pascal|ethash|cryptonight|neoscrypt|pascal|lbry|lyra2rev2";
-        public static readonly string[] sAlgorithmList = sAlgorithmListRegexPattern.Split('|');
+        private static int mLaunchInterval = 100;
         private bool mAreSettingsDirty = false;
+
+        public static readonly string sAlgorithmListRegexPattern         = @"ethash_pascal|ethash|cryptonight"                     + @"|neoscrypt|pascal|lbry|lyra2rev2";
+        public static readonly string sCompleteAlgorithmListRegexPattern = @"ethash_pascal|ethash|cryptonight" + @"|cryptonightv7" + @"|neoscrypt|pascal|lbry|lyra2rev2"; 
+        public static readonly string[] sAlgorithmList = sAlgorithmListRegexPattern.Split('|');
+        public static readonly string[] sCompleteAlgorithmList = sCompleteAlgorithmListRegexPattern.Split('|');
+        public string GetPrettyAlgorithmName(string algorithmName)
+        {
+            return (algorithmName == "ethash_pascal") ? "Ethash/Pascal" :
+                   (algorithmName == "ethash") ? "Ethash" :
+                   (algorithmName == "pascal") ? "Pascal" :
+                   (algorithmName == "cryptonight") ? "CryptoNight" :
+                   (algorithmName == "cryptonightv7") ? "CryptoNightV7" :
+                   (algorithmName == "neoscrypt") ? "NeoScrypt" :
+                   (algorithmName == "lbry") ? "Lbry" :
+                   (algorithmName == "lyra2rev2") ? "Lyra2REv2" :
+                                            null;
+        }
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
         private TabPage[] tabPageDeviceArray;
@@ -327,6 +342,13 @@ namespace GatelessGateSharp
                     ((ComboBox)control).SelectedIndexChanged += new System.EventHandler(this.controlParameter_ValueChanged);
                 }
             }
+
+            foreach (var algorithm in sCompleteAlgorithmList) {
+                var prettyName = GetPrettyAlgorithmName(algorithm);
+                comboBoxDefaultAlgorithm.Items.Add(prettyName);
+                comboBoxOptimizerAlgorithm.Items.Add(prettyName);
+            }
+            comboBoxDefaultAlgorithm.Items.Add("Custom Pools");
 
             comboBoxDefaultAlgorithm.SelectedIndex = 0;
             comboBoxOptimizerAlgorithm.SelectedIndex = 0;
@@ -1854,29 +1876,14 @@ namespace GatelessGateSharp
             }
         }
 
-        public string GetPrettyAlgorithmName(string algorithmName)
-        {
-            return (algorithmName == "ethash_pascal") ? "Ethash/Pascal" :
-                   (algorithmName == "ethash") ? "Ethash" :
-                   (algorithmName == "pascal") ? "Pascal" :
-                   (algorithmName == "cryptonight") ? "CryptoNight" :
-                   (algorithmName == "neoscrypt") ? "NeoScrypt" :
-                   (algorithmName == "lbry") ? "Lbry" :
-                   (algorithmName == "lyra2rev2") ? "Lyra2REv2" :
-                                            null;
-        }
-
         public string DefaultAlgorithm {
             get {
                 var selected = (string)comboBoxDefaultAlgorithm.SelectedItem;
-                return (selected == "Ethash/Pascal") ? "ethash_pascal" :
-                       (selected == "Ethash") ? "ethash" :
-                       (selected == "Pascal") ? "pascal" :
-                       (selected == "CryptoNight") ? "cryptonight" :
-                       (selected == "NeoScrypt") ? "neoscrypt" :
-                       (selected == "Lbry") ? "lbry" :
-                       (selected == "Lyra2REv2") ? "lyra2rev2" :
-                                                       null;
+                foreach (var algorithm in sCompleteAlgorithmList) {
+                    if (GetPrettyAlgorithmName(algorithm) == selected)
+                        return algorithm;
+                }
+                return null;
             }
             set {
                 comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(GetPrettyAlgorithmName(value));
@@ -1886,14 +1893,11 @@ namespace GatelessGateSharp
         public string OptimizerAlgorithm {
             get {
                 var selected = (string)comboBoxOptimizerAlgorithm.SelectedItem;
-                return (selected == "Ethash/Pascal") ? "ethash_pascal" :
-                       (selected == "Ethash") ? "ethash" :
-                       (selected == "Pascal") ? "pascal" :
-                       (selected == "CryptoNight") ? "cryptonight" :
-                       (selected == "NeoScrypt") ? "neoscrypt" :
-                       (selected == "Lbry") ? "lbry" :
-                       (selected == "Lyra2REv2") ? "lyra2rev2" :
-                                                       null;
+                foreach (var algorithm in sAlgorithmList) {
+                    if (GetPrettyAlgorithmName(algorithm) == selected)
+                        return algorithm;
+                }
+                return null;
             }
             set {
                 comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(GetPrettyAlgorithmName(value));
@@ -1934,6 +1938,8 @@ namespace GatelessGateSharp
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 41 - 33, totalSpeed, 1000000000.0);
                 } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "lyra2rev2" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 47 - 33, totalSpeed, 1000000000000.0);
+                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "cryptonightv7" && textBoxBitcoinAddress.Text != "") {
+                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 63 - 33, totalSpeed, 1000000.0);
                 } else if (mCurrentPool == "ethermine.org" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "" && sEthermineStats != null) {
                     var response = sEthermineStats;
                     var data = (JContainer)response["data"];
@@ -3444,6 +3450,20 @@ namespace GatelessGateSharp
             return hosts;
         }
 
+        List<StratumServerInfo> GetNiceHashCryptoNightV7Servers()
+        {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("cryptonightv7.usa.nicehash.com", 0),
+                new StratumServerInfo("cryptonightv7.eu.nicehash.com", 0),
+                new StratumServerInfo("cryptonightv7.hk.nicehash.com", 150),
+                new StratumServerInfo("cryptonightv7.jp.nicehash.com", 100),
+                new StratumServerInfo("cryptonightv7.in.nicehash.com", 200),
+                new StratumServerInfo("cryptonightv7.br.nicehash.com", 180)
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
         List<StratumServerInfo> GetNiceHashPascalServers()
         {
             var hosts = new List<StratumServerInfo> {
@@ -3498,7 +3518,7 @@ namespace GatelessGateSharp
 
         #endregion
 
-        public void LaunchOpenCLCryptoNightMiners(string pool)
+        public void LaunchOpenCLCryptoNightMiners(string pool, string algorithm)
         {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
@@ -3509,11 +3529,11 @@ namespace GatelessGateSharp
                 var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
                 if (!mDevFeeMode && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
-                var hosts = GetNiceHashCryptoNightServers();
+                var hosts = (algorithm == "cryptonightv7") ? GetNiceHashCryptoNightV7Servers() : GetNiceHashCryptoNightServers();
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            stratum = new CryptoNightStratum(host.name, 3355, username, "x", pool);
+                            stratum = new CryptoNightStratum(host.name, ((algorithm == "cryptonightv7") ? 3363 : 3355), username, "x", pool);
                             break;
                         } catch (Exception ex) { Logger(ex); }
                 niceHashMode = true;
@@ -3557,7 +3577,7 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 Controller.PrimaryStratum = (Stratum)stratum;
-                LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode);
+                LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode, "cryptonight");
             }
         }
 
@@ -3863,7 +3883,7 @@ namespace GatelessGateSharp
             }
         }
 
-        void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode)
+        void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode, string variant)
         {
             EnableHardwareManagement(stratum, null);
             if (mDevFeeMode)
@@ -3880,13 +3900,14 @@ namespace GatelessGateSharp
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     for (i = 0; i < numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "threads")].Value; ++i) {
-                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex]);
+                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex], variant);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "raw_intensity")]
                                 .Value)),
                             Convert.ToInt32(Math.Round(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "cryptonight", "local_work_size")]
-                                .Value)), niceHashMode);
+                                .Value)),
+                            niceHashMode);
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
                             Application.DoEvents();
@@ -4176,9 +4197,9 @@ namespace GatelessGateSharp
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 LaunchOpenCLEthashMinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
-            } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)") {
+            } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)" || algo == "CryptoNight-Heavy") {
                 var stratum = new CryptoNightStratum(host, port, login, password, host);
-                LaunchOpenCLCryptoNightMinersWithStratum(stratum, (algo == "CryptoNight (NiceHash)"));
+                LaunchOpenCLCryptoNightMinersWithStratum(stratum, (algo == "CryptoNight (NiceHash)"), (algo == "CryptoNight-Heavy") ? "cryptonight_heavy" : "cryptonight");
                 Controller.PrimaryStratum = stratum;
             } else if (algo == "Lbry") {
                 var stratum = new LbryStratum(host, port, login, password, host);
@@ -4264,9 +4285,9 @@ namespace GatelessGateSharp
                     } else if (DefaultAlgorithm == "ethash") {
                         Logger("Launching Ethash miners for " + pool + "...");
                         LaunchOpenCLEthashMiners(pool);
-                    } else if (DefaultAlgorithm == "cryptonight") {
+                    } else if (DefaultAlgorithm == "cryptonight" || DefaultAlgorithm == "cryptonightv7") {
                         Logger("Launching CryptoNight miners for " + pool + "...");
-                        LaunchOpenCLCryptoNightMiners(pool);
+                        LaunchOpenCLCryptoNightMiners(pool, DefaultAlgorithm);
                     } else if (DefaultAlgorithm == "lbry") {
                         Logger("Launching Lbry miners for " + pool + "...");
                         LaunchOpenCLLbryMiners(pool);
@@ -4655,7 +4676,7 @@ namespace GatelessGateSharp
                             checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Visible = (device.GetType() == typeof(AMDPolaris10));
                             groupBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10")].Visible = (device.GetType() == typeof(AMDPolaris10));
                             var memoryTimingEnabled = checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked;
-                            if (!memoryTimingEnabled)
+                            if (memoryTimingEnabled)
                                 checkBoxEnablePhymem.Checked = true;
                         }
                     }
@@ -4778,7 +4799,7 @@ namespace GatelessGateSharp
                                 break;
                             } catch (Exception ex) { Logger(ex); }
                 }
-            } else if (algo == "cryptonight") {
+            } else if (algo == "cryptonight" || algo == "cryptonightv7") {
                 var username = Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix;
                 var hosts = GetNanopoolCryptoNightServers();
                 foreach (var host in hosts)

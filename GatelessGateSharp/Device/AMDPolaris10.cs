@@ -2015,8 +2015,6 @@ namespace GatelessGateSharp {
         MC_SEQ_MISC_TIMING mDefaultMISCTimings;
         MC_SEQ_MISC_TIMING2 mDefaultMISC2Timings;
         MC_SEQ_PMG_TIMING mDefaultPMGTimings;
-        UInt32 mDefaultWR_CTL_D1Data;
-        UInt32 mDefaultWR_CTL_2Data;
 
         public AMDPolaris10(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex, aComputeDevice) {
