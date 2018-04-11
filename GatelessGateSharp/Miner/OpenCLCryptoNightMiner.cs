@@ -30,6 +30,9 @@ namespace GatelessGateSharp {
 
         private bool mNicehashMode = false;
         private bool mSavedNicehashMode = false;
+        private int mStridedIndex = 1;
+        private int mMemoryChunkSize = 1;
+        private int mStateSize = 25; // 32;
 
         long[] globalWorkSizeA = new long[] { 0, 8 };
         long[] globalWorkSizeB = new long[] { 0 };
@@ -48,15 +51,17 @@ namespace GatelessGateSharp {
         public string Variant;
 
         public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice, string aVariant = "cryptonight")
-            : base(aGatelessGateDevice, "cryptonight") {
+            : base(aGatelessGateDevice, aVariant) {
             Variant = aVariant;
         }
 
-        public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, bool aNicehashMode = false) {
+        public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, int aStridedIndex, int aMemoryChunkSize, bool aNicehashMode = false) {
             Stratum = aStratum;
             globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity * aLocalWorkSize;
             localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
             mNicehashMode = aNicehashMode;
+            mStridedIndex = aStridedIndex;
+            mMemoryChunkSize = aMemoryChunkSize;
 
             base.Start();
         }
@@ -84,10 +89,21 @@ namespace GatelessGateSharp {
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
                 MainForm.Logger("NiceHash mode is " + (NiceHashMode ? "on" : "off") + ".");
 
-                program = BuildProgram((Variant == "cryptonight_heavy" ? "cryptonight_heavy" : "cryptonight"), localWorkSizeA[0], "-O5" + (GCN1 ? " -legacy" : ""), "", "");
+                string commonOptions = " -DSTRIDED_INDEX=" + mStridedIndex + " -DMEMORY_CHUNK_SIZE=" + mMemoryChunkSize + " ";
+                program = BuildProgram(
+                    (Variant == "cryptonight_heavy" ? "cryptonight_heavy" : 
+                     Variant == "cryptonight_light" ? "cryptonight_light" : 
+                                                      "cryptonight"),
+                    localWorkSizeA[0],
+                    "-O5" + (GCN1 ? " -legacy " : "") + commonOptions,
+                    commonOptions,
+                    commonOptions);
 
-                statesBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, 25 * 8 * globalWorkSizeA[0]);
-                scratchpadsBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, (Variant == "cryptonight_heavy" ? ((long)1 << 22) : ((long)1 << 21)) * globalWorkSizeA[0]);
+                statesBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, mStateSize * 8 * globalWorkSizeA[0]);
+                scratchpadsBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, 
+                    (Variant == "cryptonight_heavy" ? ((long)1 << 22) :
+                     Variant == "cryptonight_light" ? ((long)1 << 20) :
+                                                      ((long)1 << 21)  ) * globalWorkSizeA[0]);
 
                 using (var searchKernel0 = program.CreateKernel("search"))
                 using (var searchKernel1 = program.CreateKernel("search1"))
@@ -201,7 +217,7 @@ namespace GatelessGateSharp {
                                 Queue.Finish();
                                 if (Stopped)
                                     break;
-                                Queue.Execute(((moneroVersion == 7) ? searchKernel1Variant1 : searchKernel1), globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
+                                Queue.Execute(((moneroVersion == 7 || Variant == "cryptonightv7") ? searchKernel1Variant1 : searchKernel1), globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
                                 Queue.Finish();
                                 if (Stopped)
                                     break;

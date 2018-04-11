@@ -2182,7 +2182,7 @@ namespace GatelessGateSharp {
         {
             int busNumber = GetComputeDevice().PciBusIdAMD;
 
-            if (!PCIExpress.Available || busNumber <= 0 || !this.MemoryTimingModsEnabled)
+            if (!PCIExpress.Available || busNumber <= 0 /*|| !this.MemoryTimingModsEnabled*/)
                 return;
 
             uint currentCASData = 0;

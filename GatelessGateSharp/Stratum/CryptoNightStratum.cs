@@ -106,7 +106,7 @@ namespace GatelessGateSharp
                 { "method", "login" },
                 { "params", new Dictionary<string, string> {
                     { "login", Username },
-                    { "pass", "x" },
+                    { "pass", Password },
                     { "agent", MainForm.normalizedShortAppName + "/" + MainForm.appVersion}}},
                 { "id", 1 }
             });

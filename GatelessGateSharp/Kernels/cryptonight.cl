@@ -25,7 +25,7 @@ uint amd_bfe(uint src0, uint src1, uint src2)
 
 
 
-#ifndef CRYPTONIGHT_HEAVY
+#if !defined(CRYPTONIGHT_HEAVY) && !defined(CRYPTONIGHT_LIGHT)
 #define MEMORY (2UL * 1024 * 1024)
 #define MASK 0x1FFFF0
 #define ITERATIONS 0x80000
@@ -350,9 +350,19 @@ void AESExpandKey256(uint *keybuf)
     }
 }
 
+#ifndef STRIDED_INDEX
 #define STRIDED_INDEX 1
-#define MEM_CHUNK 2
+#endif
+
+#ifndef MEMORY_CHUNK_SIZE
+#define MEMORY_CHUNK_SIZE 1
+#endif
+
+#define MEM_CHUNK (1 << MEMORY_CHUNK_SIZE)
+
+#ifndef STATE_SIZE
 #define STATE_SIZE 25
+#endif
 
 #if(STRIDED_INDEX==0)
 #   define IDX(x)	(x)

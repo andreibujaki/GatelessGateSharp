@@ -61,7 +61,7 @@ namespace GatelessGateSharp
             : base(aDevice, aAlgorithmName, aFirstAlgorithmName, aSecondAlgorithmName)
         {
             mDevice = aDevice;
-            mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.OutOfOrderExecution);
+            mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.None); // ComputeCommandQueueFlags.OutOfOrderExecution);
         }
 
         protected ComputeProgram BuildProgram(string programName, long localWorkSize, string optionsAMD, string optionsNVIDIA, string optionsOthers) {
@@ -91,8 +91,16 @@ namespace GatelessGateSharp
             }
             try {
                 program.Build(OpenCLDevice.DeviceList, buildOptions, null, IntPtr.Zero);
-                if (MainForm.ReuseCompiledBinariesChecked)
-                    System.IO.File.WriteAllBytes(savedBinaryFilePath, program.Binaries[0]);
+                if (MainForm.ReuseCompiledBinariesChecked) {
+                    try {
+                        string tempFileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".temp";
+                        System.IO.File.WriteAllBytes(tempFileName, program.Binaries[0]);
+                        System.IO.File.Copy(tempFileName, savedBinaryFilePath, true);
+                        System.IO.File.Delete(tempFileName);
+                    } catch (Exception ex) {
+                        MainForm.Logger(ex);
+                    }
+                }
             } catch (Exception) {
                 MainForm.Logger(program.GetBuildLog(ComputeDevice));
                 program.Dispose();
