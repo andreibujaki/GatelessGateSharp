@@ -156,72 +156,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash_pascal</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash_pascal</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash_pascal</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash_pascal</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash_pascal</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash_pascal</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash_pascal</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash_pascal</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash_pascal</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash_pascal</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash_pascal</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash_pascal</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash_pascal</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash_pascal</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash_pascal</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
@@ -231,27 +231,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
@@ -261,12 +261,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
@@ -276,7 +276,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
@@ -286,12 +286,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash_pascal</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
@@ -316,7 +316,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2025</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
@@ -326,12 +326,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1050</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1323</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
@@ -346,72 +346,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>ethash</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
@@ -421,27 +421,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
@@ -451,12 +451,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
@@ -466,7 +466,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>raw_intensity</Item2>
-      <Item3>283</Item3>
+      <Item3>256</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
@@ -481,7 +481,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
@@ -491,12 +491,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
@@ -511,72 +511,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>neoscrypt</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>neoscrypt</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>neoscrypt</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>neoscrypt</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>neoscrypt</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>neoscrypt</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>neoscrypt</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>neoscrypt</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>neoscrypt</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>neoscrypt</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>neoscrypt</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>neoscrypt</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>neoscrypt</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>neoscrypt</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>neoscrypt</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
@@ -586,27 +586,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
@@ -616,12 +616,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
@@ -646,7 +646,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
@@ -656,12 +656,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
@@ -676,72 +676,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>pascal</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>pascal</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>pascal</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>pascal</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>pascal</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>pascal</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>pascal</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>pascal</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>pascal</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>pascal</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>pascal</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>pascal</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>pascal</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>pascal</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>pascal</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
@@ -751,27 +751,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
@@ -781,12 +781,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
@@ -811,7 +811,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
@@ -821,12 +821,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
@@ -841,72 +841,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lbry</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lbry</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lbry</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lbry</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lbry</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lbry</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lbry</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lbry</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lbry</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lbry</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lbry</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lbry</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lbry</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lbry</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lbry</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
@@ -916,27 +916,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
@@ -946,12 +946,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
@@ -976,7 +976,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
@@ -986,12 +986,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
@@ -1006,72 +1006,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lyra2rev2</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lyra2rev2</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lyra2rev2</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lyra2rev2</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lyra2rev2</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lyra2rev2</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lyra2rev2</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>lyra2rev2</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lyra2rev2</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lyra2rev2</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lyra2rev2</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lyra2rev2</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lyra2rev2</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lyra2rev2</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lyra2rev2</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
@@ -1081,27 +1081,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
@@ -1111,12 +1111,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
@@ -1141,7 +1141,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
@@ -1151,12 +1151,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
@@ -1171,72 +1171,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16r</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16r</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16r</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16r</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16r</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16r</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16r</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16r</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16r</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16r</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16r</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16r</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16r</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16r</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16r</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
@@ -1246,27 +1246,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
@@ -1276,12 +1276,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
@@ -1306,7 +1306,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
@@ -1316,12 +1316,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
@@ -1336,72 +1336,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16s</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16s</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16s</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16s</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16s</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16s</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16s</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>x16s</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16s</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16s</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16s</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16s</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16s</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16s</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16s</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
@@ -1411,27 +1411,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
@@ -1441,12 +1441,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
@@ -1466,7 +1466,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>raw_intensity</Item2>
-      <Item3>131</Item3>
+      <Item3>112</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
@@ -1481,7 +1481,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
@@ -1491,12 +1491,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
@@ -1511,72 +1511,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
@@ -1586,27 +1586,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
@@ -1616,12 +1616,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
@@ -1641,7 +1641,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>raw_intensity</Item2>
-      <Item3>131</Item3>
+      <Item3>112</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
@@ -1656,7 +1656,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
@@ -1666,12 +1666,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
@@ -1686,72 +1686,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonightv7</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonightv7</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonightv7</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonightv7</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonightv7</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonightv7</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonightv7</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonightv7</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonightv7</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonightv7</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonightv7</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonightv7</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonightv7</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonightv7</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonightv7</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
@@ -1761,27 +1761,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
@@ -1791,12 +1791,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
@@ -1816,7 +1816,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>raw_intensity</Item2>
-      <Item3>71</Item3>
+      <Item3>58</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
@@ -1831,7 +1831,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
@@ -1841,12 +1841,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
@@ -1861,72 +1861,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_heavy</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_heavy</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_heavy</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_heavy</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_heavy</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_heavy</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_heavy</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_heavy</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_heavy</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_heavy</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_heavy</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_heavy</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_heavy</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_heavy</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_heavy</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
@@ -1936,27 +1936,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
@@ -1966,12 +1966,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
@@ -1991,7 +1991,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>raw_intensity</Item2>
-      <Item3>131</Item3>
+      <Item3>112</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
@@ -2006,7 +2006,7 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>overclocking_memory_clock</Item2>
-      <Item3>2015</Item3>
+      <Item3>1780</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
@@ -2016,12 +2016,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>overclocking_core_voltage</Item2>
-      <Item3>1060</Item3>
+      <Item3>1040</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>overclocking_core_clock</Item2>
-      <Item3>1308</Item3>
+      <Item3>1231</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
@@ -2036,72 +2036,72 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_faw</Item2>
-      <Item3>0</Item3>
+      <Item3>10</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_t32aw</Item2>
-      <Item3>0</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_light</Item1>
-      <Item2>memory_timings_polaris10_trp</Item2>
-      <Item3>14</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_light</Item1>
-      <Item2>memory_timings_polaris10_trfc</Item2>
-      <Item3>219</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_light</Item1>
-      <Item2>memory_timings_polaris10_trp_wra</Item2>
-      <Item3>61</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_light</Item1>
-      <Item2>memory_timings_polaris10_trp_rda</Item2>
-      <Item3>77</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_light</Item1>
-      <Item2>memory_timings_polaris10_tw2r</Item2>
-      <Item3>19</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_light</Item1>
-      <Item2>memory_timings_polaris10_tr2w</Item2>
-      <Item3>30</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_light</Item1>
-      <Item2>memory_timings_polaris10_tccdl</Item2>
-      <Item3>4</Item3>
-    </ValueTupleOfStringStringInt32>
-    <ValueTupleOfStringStringInt32>
-      <Item1>cryptonight_light</Item1>
-      <Item2>memory_timings_polaris10_tr2r</Item2>
       <Item3>7</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
+      <Item2>memory_timings_polaris10_trp</Item2>
+      <Item3>11</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_light</Item1>
+      <Item2>memory_timings_polaris10_trfc</Item2>
+      <Item3>97</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_light</Item1>
+      <Item2>memory_timings_polaris10_trp_wra</Item2>
+      <Item3>182</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_light</Item1>
+      <Item2>memory_timings_polaris10_trp_rda</Item2>
+      <Item3>13</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_light</Item1>
+      <Item2>memory_timings_polaris10_tw2r</Item2>
+      <Item3>15</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_light</Item1>
+      <Item2>memory_timings_polaris10_tr2w</Item2>
+      <Item3>26</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_light</Item1>
+      <Item2>memory_timings_polaris10_tccdl</Item2>
+      <Item3>2</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_light</Item1>
+      <Item2>memory_timings_polaris10_tr2r</Item2>
+      <Item3>6</Item3>
+    </ValueTupleOfStringStringInt32>
+    <ValueTupleOfStringStringInt32>
+      <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_tcl</Item2>
-      <Item3>24</Item3>
+      <Item3>23</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_trcdw</Item2>
-      <Item3>16</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_trcdr</Item2>
-      <Item3>28</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_trc</Item2>
-      <Item3>74</Item3>
+      <Item3>55</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
@@ -2111,27 +2111,27 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_wrplusrp</Item2>
-      <Item3>41</Item3>
+      <Item3>54</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_bus_turn</Item2>
-      <Item3>17</Item3>
+      <Item3>21</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_ras2ras</Item2>
-      <Item3>140</Item3>
+      <Item3>98</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_rp</Item2>
-      <Item3>33</Item3>
+      <Item3>44</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_rasmactrd</Item2>
-      <Item3>36</Item3>
+      <Item3>38</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
@@ -2141,12 +2141,12 @@
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_actrd</Item2>
-      <Item3>16</Item3>
+      <Item3>22</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_actwr</Item2>
-      <Item3>19</Item3>
+      <Item3>18</Item3>
     </ValueTupleOfStringStringInt32>
     <ValueTupleOfStringStringInt32>
       <Item1>fan_control</Item1>
@@ -2188,7 +2188,7 @@
     <ValueTupleOfStringStringString>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>ethash_pascal</Item1>
@@ -2198,12 +2198,12 @@
     <ValueTupleOfStringStringString>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>ethash_pascal</Item1>
@@ -2213,7 +2213,7 @@
     <ValueTupleOfStringStringString>
       <Item1>ethash_pascal</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>ethash</Item1>
@@ -2233,7 +2233,7 @@
     <ValueTupleOfStringStringString>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>ethash</Item1>
@@ -2243,12 +2243,12 @@
     <ValueTupleOfStringStringString>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>ethash</Item1>
@@ -2258,7 +2258,7 @@
     <ValueTupleOfStringStringString>
       <Item1>ethash</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>neoscrypt</Item1>
@@ -2278,7 +2278,7 @@
     <ValueTupleOfStringStringString>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>neoscrypt</Item1>
@@ -2288,12 +2288,12 @@
     <ValueTupleOfStringStringString>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>neoscrypt</Item1>
@@ -2303,7 +2303,7 @@
     <ValueTupleOfStringStringString>
       <Item1>neoscrypt</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>pascal</Item1>
@@ -2323,7 +2323,7 @@
     <ValueTupleOfStringStringString>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>pascal</Item1>
@@ -2333,12 +2333,12 @@
     <ValueTupleOfStringStringString>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>pascal</Item1>
@@ -2348,7 +2348,7 @@
     <ValueTupleOfStringStringString>
       <Item1>pascal</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>lbry</Item1>
@@ -2368,7 +2368,7 @@
     <ValueTupleOfStringStringString>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>lbry</Item1>
@@ -2378,12 +2378,12 @@
     <ValueTupleOfStringStringString>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>lbry</Item1>
@@ -2393,7 +2393,7 @@
     <ValueTupleOfStringStringString>
       <Item1>lbry</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>lyra2rev2</Item1>
@@ -2413,7 +2413,7 @@
     <ValueTupleOfStringStringString>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>lyra2rev2</Item1>
@@ -2423,12 +2423,12 @@
     <ValueTupleOfStringStringString>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>lyra2rev2</Item1>
@@ -2438,7 +2438,7 @@
     <ValueTupleOfStringStringString>
       <Item1>lyra2rev2</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>x16r</Item1>
@@ -2458,7 +2458,7 @@
     <ValueTupleOfStringStringString>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>x16r</Item1>
@@ -2468,12 +2468,12 @@
     <ValueTupleOfStringStringString>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>x16r</Item1>
@@ -2483,7 +2483,7 @@
     <ValueTupleOfStringStringString>
       <Item1>x16r</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>x16s</Item1>
@@ -2503,7 +2503,7 @@
     <ValueTupleOfStringStringString>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>x16s</Item1>
@@ -2513,12 +2513,12 @@
     <ValueTupleOfStringStringString>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>x16s</Item1>
@@ -2528,7 +2528,7 @@
     <ValueTupleOfStringStringString>
       <Item1>x16s</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight</Item1>
@@ -2548,7 +2548,7 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight</Item1>
@@ -2558,12 +2558,12 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight</Item1>
@@ -2573,7 +2573,7 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonightv7</Item1>
@@ -2593,7 +2593,7 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonightv7</Item1>
@@ -2603,12 +2603,12 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonightv7</Item1>
@@ -2618,7 +2618,7 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonightv7</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_heavy</Item1>
@@ -2638,7 +2638,7 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_heavy</Item1>
@@ -2648,12 +2648,12 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_heavy</Item1>
@@ -2663,7 +2663,7 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_heavy</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_light</Item1>
@@ -2683,7 +2683,7 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_seq_pmg</Item2>
-      <Item3>101CCC22</Item3>
+      <Item3>001CAA22</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_light</Item1>
@@ -2693,12 +2693,12 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_seq_misc1</Item2>
-      <Item3>2014030B</Item3>
+      <Item3>2014047C</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_seq_misc3</Item2>
-      <Item3>A00089FA</Item3>
+      <Item3>A98089CA</Item3>
     </ValueTupleOfStringStringString>
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_light</Item1>
@@ -2708,7 +2708,7 @@
     <ValueTupleOfStringStringString>
       <Item1>cryptonight_light</Item1>
       <Item2>memory_timings_polaris10_seq_misc8</Item2>
-      <Item3>00000003</Item3>
+      <Item3>C0040002</Item3>
     </ValueTupleOfStringStringString>
   </StringValues>
 </DeviceSettings>

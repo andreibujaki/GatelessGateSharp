@@ -346,6 +346,11 @@
             this.textBoxZcashAddress = new System.Windows.Forms.TextBox();
             this.buttonViewBalancesAtNiceHash = new System.Windows.Forms.Button();
             this.groupBoxPoolParameters = new System.Windows.Forms.GroupBox();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label46 = new System.Windows.Forms.Label();
+            this.textBoxMiningPoolHubUsername = new System.Windows.Forms.TextBox();
+            this.label45 = new System.Windows.Forms.Label();
             this.textBoxRigID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.labelEmail = new System.Windows.Forms.Label();
@@ -496,6 +501,8 @@
             this.tabPagePoolSettings.SuspendLayout();
             this.groupBoxWalletAddresses.SuspendLayout();
             this.groupBoxPoolParameters.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.groupBoxPoolPriorities.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -3444,7 +3451,7 @@
             this.groupBoxWalletAddresses.Controls.Add(this.textBoxZcashAddress);
             this.groupBoxWalletAddresses.Controls.Add(this.buttonViewBalancesAtNiceHash);
             this.groupBoxWalletAddresses.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxWalletAddresses.Location = new System.Drawing.Point(179, 7);
+            this.groupBoxWalletAddresses.Location = new System.Drawing.Point(263, 6);
             this.groupBoxWalletAddresses.Name = "groupBoxWalletAddresses";
             this.groupBoxWalletAddresses.Size = new System.Drawing.Size(708, 155);
             this.groupBoxWalletAddresses.TabIndex = 2;
@@ -3768,22 +3775,73 @@
             // 
             // groupBoxPoolParameters
             // 
+            this.groupBoxPoolParameters.Controls.Add(this.tabControl1);
             this.groupBoxPoolParameters.Controls.Add(this.textBoxRigID);
             this.groupBoxPoolParameters.Controls.Add(this.label1);
             this.groupBoxPoolParameters.Controls.Add(this.labelEmail);
             this.groupBoxPoolParameters.Controls.Add(this.textBoxEmail);
             this.groupBoxPoolParameters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxPoolParameters.Location = new System.Drawing.Point(178, 168);
+            this.groupBoxPoolParameters.Location = new System.Drawing.Point(262, 167);
             this.groupBoxPoolParameters.Name = "groupBoxPoolParameters";
-            this.groupBoxPoolParameters.Size = new System.Drawing.Size(414, 78);
+            this.groupBoxPoolParameters.Size = new System.Drawing.Size(709, 170);
             this.groupBoxPoolParameters.TabIndex = 3;
             this.groupBoxPoolParameters.TabStop = false;
             this.groupBoxPoolParameters.Text = "Pool Parameters";
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Location = new System.Drawing.Point(6, 19);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(688, 89);
+            this.tabControl1.TabIndex = 29;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.label46);
+            this.tabPage1.Controls.Add(this.textBoxMiningPoolHubUsername);
+            this.tabPage1.Controls.Add(this.label45);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(680, 63);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Mining Pool Hub";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label46.Location = new System.Drawing.Point(3, 9);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(58, 13);
+            this.label46.TabIndex = 29;
+            this.label46.Text = "Username:";
+            // 
+            // textBoxMiningPoolHubUsername
+            // 
+            this.textBoxMiningPoolHubUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxMiningPoolHubUsername.Location = new System.Drawing.Point(62, 6);
+            this.textBoxMiningPoolHubUsername.Name = "textBoxMiningPoolHubUsername";
+            this.textBoxMiningPoolHubUsername.Size = new System.Drawing.Size(285, 20);
+            this.textBoxMiningPoolHubUsername.TabIndex = 27;
+            this.textBoxMiningPoolHubUsername.Tag = "parameter:mining_pool_hub_username";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label45.Location = new System.Drawing.Point(3, 8);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(0, 13);
+            this.label45.TabIndex = 28;
+            // 
             // textBoxRigID
             // 
             this.textBoxRigID.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxRigID.Location = new System.Drawing.Point(116, 20);
+            this.textBoxRigID.Location = new System.Drawing.Point(101, 114);
             this.textBoxRigID.Name = "textBoxRigID";
             this.textBoxRigID.Size = new System.Drawing.Size(285, 20);
             this.textBoxRigID.TabIndex = 0;
@@ -3793,7 +3851,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 22);
+            this.label1.Location = new System.Drawing.Point(13, 116);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 13);
             this.label1.TabIndex = 26;
@@ -3803,7 +3861,7 @@
             // 
             this.labelEmail.AutoSize = true;
             this.labelEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelEmail.Location = new System.Drawing.Point(8, 48);
+            this.labelEmail.Location = new System.Drawing.Point(13, 142);
             this.labelEmail.Name = "labelEmail";
             this.labelEmail.Size = new System.Drawing.Size(81, 13);
             this.labelEmail.TabIndex = 28;
@@ -3812,7 +3870,7 @@
             // textBoxEmail
             // 
             this.textBoxEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxEmail.Location = new System.Drawing.Point(116, 46);
+            this.textBoxEmail.Location = new System.Drawing.Point(101, 140);
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(285, 20);
             this.textBoxEmail.TabIndex = 1;
@@ -3826,7 +3884,7 @@
             this.groupBoxPoolPriorities.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxPoolPriorities.Location = new System.Drawing.Point(6, 6);
             this.groupBoxPoolPriorities.Name = "groupBoxPoolPriorities";
-            this.groupBoxPoolPriorities.Size = new System.Drawing.Size(167, 240);
+            this.groupBoxPoolPriorities.Size = new System.Drawing.Size(250, 331);
             this.groupBoxPoolPriorities.TabIndex = 1;
             this.groupBoxPoolPriorities.TabStop = false;
             this.groupBoxPoolPriorities.Text = "Pool Priorities";
@@ -3834,7 +3892,7 @@
             // buttonPoolPrioritiesDown
             // 
             this.buttonPoolPrioritiesDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonPoolPrioritiesDown.Location = new System.Drawing.Point(109, 48);
+            this.buttonPoolPrioritiesDown.Location = new System.Drawing.Point(193, 48);
             this.buttonPoolPrioritiesDown.Name = "buttonPoolPrioritiesDown";
             this.buttonPoolPrioritiesDown.Size = new System.Drawing.Size(51, 23);
             this.buttonPoolPrioritiesDown.TabIndex = 2;
@@ -3845,7 +3903,7 @@
             // buttonPoolPrioritiesUp
             // 
             this.buttonPoolPrioritiesUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonPoolPrioritiesUp.Location = new System.Drawing.Point(109, 20);
+            this.buttonPoolPrioritiesUp.Location = new System.Drawing.Point(193, 20);
             this.buttonPoolPrioritiesUp.Name = "buttonPoolPrioritiesUp";
             this.buttonPoolPrioritiesUp.Size = new System.Drawing.Size(51, 23);
             this.buttonPoolPrioritiesUp.TabIndex = 1;
@@ -3864,17 +3922,19 @@
             "ethpool.org",
             "Nanopool",
             "DwarfPool",
+            "Mining Pool Hub",
             "mineXMR.com",
             "CryptoPool Party",
             "VIRTOPIA",
             "MiningPanda",
             "Hash4Life",
+            "Sumokoin Mining Pool",
             "Hash Vault",
             "FairPool",
             "Pigeoncoin"});
             this.listBoxPoolPriorities.Location = new System.Drawing.Point(6, 20);
             this.listBoxPoolPriorities.Name = "listBoxPoolPriorities";
-            this.listBoxPoolPriorities.Size = new System.Drawing.Size(97, 212);
+            this.listBoxPoolPriorities.Size = new System.Drawing.Size(181, 303);
             this.listBoxPoolPriorities.TabIndex = 0;
             this.listBoxPoolPriorities.SelectedIndexChanged += new System.EventHandler(this.listBoxPoolPriorities_SelectedIndexChanged);
             // 
@@ -4962,7 +5022,6 @@
             this.checkBoxOptimizationExtendRange.Tag = "parameter:optimization_extend_range";
             this.checkBoxOptimizationExtendRange.Text = "Extend range";
             this.checkBoxOptimizationExtendRange.UseVisualStyleBackColor = true;
-            this.checkBoxOptimizationExtendRange.Visible = false;
             // 
             // labelOptimizationSpeedCaption
             // 
@@ -5099,7 +5158,7 @@
             // 
             // timerStartNextBenchmark
             // 
-            this.timerStartNextBenchmark.Interval = 10;
+            this.timerStartNextBenchmark.Interval = 10000;
             this.timerStartNextBenchmark.Tick += new System.EventHandler(this.timerStartNextBenchmark_Tick);
             // 
             // MainForm
@@ -5189,6 +5248,9 @@
             this.groupBoxWalletAddresses.PerformLayout();
             this.groupBoxPoolParameters.ResumeLayout(false);
             this.groupBoxPoolParameters.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.groupBoxPoolPriorities.ResumeLayout(false);
             this.tabPageDashboard.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -5591,5 +5653,10 @@
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.TextBox textBoxSumokoinAddress;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingX16SEnabled;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.TextBox textBoxMiningPoolHubUsername;
+        private System.Windows.Forms.Label label45;
     }
 }

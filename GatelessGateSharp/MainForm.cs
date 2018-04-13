@@ -103,7 +103,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.2";
+        public static string appVersion = "1.3.3";
         public static string appName = shortAppName + " " + appVersion + " prealpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
@@ -409,13 +409,23 @@ namespace GatelessGateSharp
             }
 
             if (Controller.BenchmarkEntries.Count > 0) {
-                // Resume benchmarking.
-                if (Controller.OptimizerEntries.Count > 0)
-                    Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
-                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
                 splashScreen.Dispose();
                 Application.DoEvents();
-                timerBenchmarks_Tick();
+                if (!System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
+                    && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift)
+                    && (MessageBox.Show(Utilities.GetAutoClosingForm(), "The miner seems to have crashed during benchmarking/optimization.\nThis is normal, and it will automatically resume in 10 seconds.",
+                            "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
+                    // Resume benchmarking.
+                    if (Controller.OptimizerEntries.Count > 0)
+                        Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
+                    Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
+                    timerBenchmarks_Tick();
+                } else {
+                    Controller.OptimizerEntries.Clear();
+                    Controller.BenchmarkEntries.Clear();
+                    try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                    try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                }
             } else {
                 // Auto-start mining if necessary.
 #if COMMAND_LINE_VERSION
@@ -813,8 +823,12 @@ namespace GatelessGateSharp
                 // Load specific device settings for the device if there are any.
                 string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName();
                 string extension = ".xml";
-                string postfix0 = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)\\.*$")).Replace(device.PNPString, "$1"));
-                string postfix1 = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)&REV[^\\]*\\.*$")).Replace(device.PNPString, "$1"));
+                string postfix0 = "";
+                string postfix1 = "";
+                try {
+                    postfix0 = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)\\.*$")).Replace(device.PNPString, "$1"));
+                    postfix1 = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)&REV[^\\]*\\.*$")).Replace(device.PNPString, "$1"));
+                } catch (Exception ex) { Logger(ex); }
                 ///string postfix2 = String.Format(" ({0} {1})", device.MemoryType, device.MemoryVendor);
                 foreach (var postfix in new List<string> { postfix0, postfix1, "" }) {
                     string path = deviceSettingsFilePathBase + postfix + extension;
@@ -904,6 +918,7 @@ namespace GatelessGateSharp
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 131 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 128 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 128 :
@@ -3744,6 +3759,28 @@ namespace GatelessGateSharp
             return hosts;
         }
 
+        List<StratumServerInfo> GetMiningPoolHubEthereumServers()
+        {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("us-east.ethash-hub.miningpoolhub.com", 0),
+                new StratumServerInfo("europe.ethash-hub.miningpoolhub.com", 0),
+                new StratumServerInfo("asia.ethash-hub.miningpoolhub.com", 0),
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
+        List<StratumServerInfo> GetMiningPoolHubMoneroServers()
+        {
+            var hosts = new List<StratumServerInfo> {
+                new StratumServerInfo("us-east.cryptonight-hub.miningpoolhub.com", 0),
+                new StratumServerInfo("europe.cryptonight-hub.miningpoolhub.com", 0),
+                new StratumServerInfo("asia.cryptonight-hub.miningpoolhub.com", 0),
+            };
+            hosts.Sort();
+            return hosts;
+        }
+
         #endregion
 
         public void LaunchOpenCLCryptoNightMiners(string pool, string algorithm)
@@ -3803,6 +3840,10 @@ namespace GatelessGateSharp
                     username += "." + textBoxRigID.Text;
                 stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool);
 
+            } else if ((algorithm == "cryptonight_heavy") && pool == "Sumokoin Mining Pool" && (mDevFeeMode || textBoxSumokoinAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
+                stratum = new CryptoNightStratum("pool.sumokoin.com", 5555, username, "x", pool);
+
             } else if ((algorithm == "cryptonight_heavy") && pool == "Hash Vault" && (mDevFeeMode || textBoxSumokoinAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
                 var password = "";
@@ -3811,7 +3852,7 @@ namespace GatelessGateSharp
                 if (!mDevFeeMode && textBoxEmail.Text != "")
                     password += ":" + textBoxEmail.Text;
                 stratum = new CryptoNightStratum("pool.sumokoin.hashvault.pro", 5555, username, password, pool);
-                
+
             } else if ((algorithm == "cryptonight_light") && pool == "Hash Vault" && (mDevFeeMode || textBoxAEONAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeAEONAddress : textBoxAEONAddress.Text;
                 var password = "";
@@ -3826,6 +3867,23 @@ namespace GatelessGateSharp
                 if (!mDevFeeMode && textBoxRigID.Text != "")
                     username += "+" + textBoxRigID.Text;
                 stratum = new CryptoNightStratum("mine.sumo.fairpool.xyz", 5555, username, "x", pool);
+
+            } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "Mining Pool Hub" && textBoxMiningPoolHubUsername.Text.Length > 0) {
+                var username = textBoxMiningPoolHubUsername.Text;
+                if (textBoxRigID.Text != "") {
+                    username += "." + textBoxRigID.Text;
+                } else {
+                    username += "." + "GatelessGateSharp";
+                }
+                var hosts = GetMiningPoolHubMoneroServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new CryptoNightStratum(host.name, 20580, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger(ex);
+                        }
             }
 
             if (stratum != null) {
@@ -4153,6 +4211,22 @@ namespace GatelessGateSharp
                     if (host.time >= 0)
                         try {
                             stratum = new OpenEthereumPoolEthashStratum(host.name, 9999, username, "x", pool);
+                            break;
+                        } catch (Exception ex) {
+                            Logger(ex);
+                        }
+            } else if (pool == "Mining Pool Hub" && textBoxMiningPoolHubUsername.Text.Length > 0) {
+                var username = textBoxMiningPoolHubUsername.Text;
+                if (textBoxRigID.Text != "") {
+                    username += "." + textBoxRigID.Text;
+                } else {
+                    username += "." + "GatelessGateSharp";
+                }
+                var hosts = GetMiningPoolHubEthereumServers();
+                foreach (var host in hosts)
+                    if (host.time >= 0)
+                        try {
+                            stratum = new NiceHashEthashStratum(host.name, 20535, username, "x", pool);
                             break;
                         } catch (Exception ex) {
                             Logger(ex);
@@ -4949,7 +5023,7 @@ namespace GatelessGateSharp
                                                                                         "Resume";
                 buttonRunBenchmarks.Text
                     = (Controller.AppState == Controller.ApplicationGlobalState.Mining
-                       && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) ? "Abort Benchmarking" :
+                       && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.NotRunning) ? "Abort Benchmarking" :
                                                                                                        "Benchmark";
                 buttonRunOptimizer.Text
                     = (Controller.AppState == Controller.ApplicationGlobalState.Mining
@@ -5293,8 +5367,14 @@ namespace GatelessGateSharp
             } else if (algo == "cryptonight_heavy") {
                 var username = Parameters.DevFeeSumokoinAddress;
                 try {
-                    newPrimaryStratum = new CryptoNightStratum("pool.sumokoin.hashvault.pro", 5555, username, "DEVFEE:me@yurio.net", "Hash Vault");
+                    newPrimaryStratum = new CryptoNightStratum("pool.sumokoin.com", 5555, username, "x", "Sumokoin Mining Pool");
                 } catch (Exception ex) { Logger(ex); }
+
+                if (newPrimaryStratum == null) {
+                    try {
+                        newPrimaryStratum = new CryptoNightStratum("pool.sumokoin.hashvault.pro", 5555, username, "DEVFEE:me@yurio.net", "Hash Vault");
+                    } catch (Exception ex) { Logger(ex); }
+                }
 
                 if (newPrimaryStratum == null) {
                     try {
@@ -5669,7 +5749,7 @@ namespace GatelessGateSharp
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
                             try { process.Kill(); } catch (Exception) { }
                 } catch (Exception) { }
-                System.Threading.Thread.Sleep(60 * 1000);
+                System.Threading.Thread.Sleep(1 * 1000);
             }
         }
 
@@ -5773,7 +5853,7 @@ namespace GatelessGateSharp
                     int latestReleaseDiff = 0;
                     foreach (System.ServiceModel.Syndication.SyndicationItem item in formatter.Feed.Items) {
                         if (latestReleaseName == "") {
-                            latestReleaseUrl = @"https://github.com" + item.Links[0].Uri.ToString();
+                            latestReleaseUrl = item.Links[0].Uri.ToString();
                             latestReleaseName = item.Title.Text;
                         }
                         if (item.Title.Text == appName)
@@ -5800,7 +5880,7 @@ namespace GatelessGateSharp
                                 mLatestReleaseFileName = match.Groups[1].Value;
                             }
                         });
-                } catch (Exception) { } // TODO
+                } catch (Exception ex) { Logger(ex); }
                 System.Threading.Thread.Sleep(60 * 1000 * 10);
             }
         }
@@ -6103,7 +6183,7 @@ namespace GatelessGateSharp
         {
             if (MessageBox.Show(
                         "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
-                        + "This feature will adjust overclocking/memory timing settings automatically for better performance. "
+                        + "This feature will configure overclocking/memory timing settings with preset values for better performance. "
                         + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
                         + "You can always confirm the results on the \"Devices\" tab page before you start mining.\n\n"
                         + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
@@ -6224,7 +6304,13 @@ namespace GatelessGateSharp
                             if (ConvertBenchmarkParameterToDeviceParameterTuple(deviceIndex, param.Name, out tuple)) {
                                 try {
                                     numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value);
-                                } catch (Exception ex) { Logger(ex); }
+                                } catch (Exception ex) {
+                                    Logger("deviceIndex: " + deviceIndex);
+                                    Logger("param.Name: " + param.Name);
+                                    Logger("decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value): " + decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value));
+                                    Logger("numericUpDownDeviceParameterArray[tuple].Maximum: " + numericUpDownDeviceParameterArray[tuple].Maximum);
+                                    Logger(ex);
+                                }
                             }
                         }
                     }
@@ -6515,6 +6601,8 @@ namespace GatelessGateSharp
         {
             Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
             if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) {
+                if (!CheckSettingsBeforeMining())
+                    return;
                 StartBenchmarks();
             } else {
                 StopBenchmarks();
@@ -6696,6 +6784,7 @@ namespace GatelessGateSharp
                     }
                 }
             } while (dirty);
+            Controller.BenchmarkRecords.Sort(delegate (Controller.BenchmarkEntry e1, Controller.BenchmarkEntry e2) { return e1.ID.CompareTo(e2.ID); });
             for (int i = 0; i < Controller.BenchmarkRecords.Count; ++i) {
                 Controller.BenchmarkRecords[i].StabilityScore = Controller.BenchmarkRecords[i].SuccessCount;
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && checkBoxOptimizationExtendRange.Checked) {
@@ -6713,12 +6802,15 @@ namespace GatelessGateSharp
                     bestRecord = record;
                 }
             }
-            for (int i = Controller.BenchmarkEntries.Count - 1; i >= 0; --i) {
-                var entry = Controller.BenchmarkEntries[i];
-                if (entry.Remaining + entry.SuccessCount < bestRecord.SuccessCount) {
-                    entry.Remaining = 0;
-                    Controller.BenchmarkRecords.Add(entry);
-                    Controller.BenchmarkEntries.RemoveAt(i);
+
+            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                for (int i = Controller.BenchmarkEntries.Count - 1; i >= 0; --i) {
+                    var entry = Controller.BenchmarkEntries[i];
+                    if (entry.Remaining + entry.SuccessCount < bestRecord.SuccessCount) {
+                        entry.Remaining = 0;
+                        Controller.BenchmarkRecords.Add(entry);
+                        Controller.BenchmarkEntries.RemoveAt(i);
+                    }
                 }
             }
 
@@ -6808,11 +6900,11 @@ namespace GatelessGateSharp
             Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
             if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
                 progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
-            Logger("Cooling down before benchmark...");
             UpdateBenchmarkRecords();
             if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running)
                 UpdateOptimizerRecords();
             UpdateControls();
+            Logger("Cooling down before benchmark...");
             Application.DoEvents();
             timerStartNextBenchmark.Enabled = true;
         }
@@ -6958,7 +7050,18 @@ namespace GatelessGateSharp
 
         private void buttonOptimizer_Click(object sender, EventArgs e)
         {
-            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) {
+            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning
+                && MessageBox.Show(
+                      "THE COMPUTER WILL FREEZE AND YOU WILL NEED TO RESTART IT IF YOU CHOOSE TO OPTIMIZE OVERCLOCKING/MEMORY TIMING SETTINGS!!\n\n"
+                    + "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
+                    + "This feature will adjust algorithmic/overclocking/memory timing settings automatically for better performance. "
+                    + "Although extensive testing has been done, it is not without risk and should be used with utmost caution.\n\n"
+                    + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
+                    + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
+                    + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
+                    + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
+                    + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
+                    appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.OK) {
                 tabControlMainForm.SelectedIndex = 5;
                 Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
                 Controller.OptimizerEntries.Clear();
@@ -7011,9 +7114,9 @@ namespace GatelessGateSharp
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdr"));
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp_rda"));
 
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_twedc"));
+                    //controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_twedc"));
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_wrplusrp"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdw"));
+                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdw"));
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp_wra"));
                     
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_ras2ras"));

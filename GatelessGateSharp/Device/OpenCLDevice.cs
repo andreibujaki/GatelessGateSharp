@@ -360,6 +360,8 @@ namespace GatelessGateSharp
                             }
 
                             for (int i = 0; i < mDevices.Length; ++i) {
+                                if (mDevices[i].ADLAdapterIndex < 0)
+                                    continue;
                                 int available = 0, enabled = 0, ADLVersion = 0;
                                 mDevices[i].PNPString = OSAdapterInfoData.ADLAdapterInfo[mDevices[i].ADLAdapterIndex].PNPString;
                                 mDevices[i].ADLVersion = -1;

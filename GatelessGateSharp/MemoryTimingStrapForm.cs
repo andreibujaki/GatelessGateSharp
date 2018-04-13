@@ -28,5 +28,10 @@ namespace GatelessGateSharp
             this.DialogResult = DialogResult.Cancel;
             Close();
         }
+
+        private void buttonPasteFromClipboard_Click(object sender, EventArgs e)
+        {
+            textBoxMemoryTimingStrap.Text = Clipboard.GetText(TextDataFormat.UnicodeText);
+        }
     }
 }

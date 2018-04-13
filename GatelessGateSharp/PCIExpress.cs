@@ -43,7 +43,6 @@ namespace GatelessGateSharp {
             uint value11, uint mask11,
             uint value12, uint mask12,
             uint value13, uint mask13,
-            uint value14, uint mask14,
             uint default_value3);
         
         [StructLayout(LayoutKind.Sequential)]

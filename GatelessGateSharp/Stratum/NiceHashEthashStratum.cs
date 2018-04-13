@@ -83,16 +83,21 @@ namespace GatelessGateSharp
             }   
             else if (response.ContainsKey("id") && response.ContainsKey("result"))
             {
-                var ID = response["id"];
+                Int64 ID;
+                try {
+                    ID = (Int64)(response["id"]);
+                } catch (Exception) {
+                    ID = int.Parse((string)(response["id"]));
+                }
                 bool result = (bool)response["result"];
 
-                if (result)
+                if (ID > 3 && result)
                 {
                     ReportAcceptedShare();
-                }
-                else if (!result)
-                {
+                } else if (ID > 3 && !result) {
                     ReportRejectedShare((String)(((JArray)response["error"])[1]));
+                } else if (ID == 3 && !result) {
+                    throw new UnrecoverableException("Authorization failed.");
                 }
             }
             else
@@ -140,12 +145,6 @@ namespace GatelessGateSharp
                     Username,
                     Password
             }}}));
-            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
-            if (!(bool)response["result"])
-            {
-                try  { mMutex.ReleaseMutex(); } catch (Exception) { }
-                throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
-            }
 
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }

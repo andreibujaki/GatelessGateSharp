@@ -30,11 +30,13 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.textBoxMemoryTimingStrap = new System.Windows.Forms.TextBox();
+            this.buttonPasteFromClipboard = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(422, 38);
+            this.buttonOK.Location = new System.Drawing.Point(575, 70);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 0;
@@ -44,7 +46,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(341, 38);
+            this.buttonCancel.Location = new System.Drawing.Point(494, 70);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -56,14 +58,36 @@
             // 
             this.textBoxMemoryTimingStrap.Location = new System.Drawing.Point(12, 12);
             this.textBoxMemoryTimingStrap.Name = "textBoxMemoryTimingStrap";
-            this.textBoxMemoryTimingStrap.Size = new System.Drawing.Size(485, 20);
+            this.textBoxMemoryTimingStrap.Size = new System.Drawing.Size(505, 20);
             this.textBoxMemoryTimingStrap.TabIndex = 2;
+            // 
+            // buttonPasteFromClipboard
+            // 
+            this.buttonPasteFromClipboard.Location = new System.Drawing.Point(523, 11);
+            this.buttonPasteFromClipboard.Name = "buttonPasteFromClipboard";
+            this.buttonPasteFromClipboard.Size = new System.Drawing.Size(127, 23);
+            this.buttonPasteFromClipboard.TabIndex = 3;
+            this.buttonPasteFromClipboard.Text = "Paste from Clipboard";
+            this.buttonPasteFromClipboard.UseVisualStyleBackColor = true;
+            this.buttonPasteFromClipboard.Click += new System.EventHandler(this.buttonPasteFromClipboard_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 38);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(641, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Note: Due to the nature of on-the-fly memory timing mods, existing memory timing " +
+    "straps for BIOS\'es may not work without modifications.";
             // 
             // MemoryTimingStrapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 73);
+            this.ClientSize = new System.Drawing.Size(666, 105);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.buttonPasteFromClipboard);
             this.Controls.Add(this.textBoxMemoryTimingStrap);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -79,5 +103,7 @@
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
         public System.Windows.Forms.TextBox textBoxMemoryTimingStrap;
+        private System.Windows.Forms.Button buttonPasteFromClipboard;
+        private System.Windows.Forms.Label label1;
     }
 }
