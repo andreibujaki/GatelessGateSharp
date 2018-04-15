@@ -821,7 +821,7 @@ namespace GatelessGateSharp
                 ResetDeviceMemoryTimingSettings(device);
 
                 // Load specific device settings for the device if there are any.
-                string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName();
+                string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
                 string extension = ".xml";
                 string postfix0 = "";
                 string postfix1 = "";
@@ -7253,10 +7253,14 @@ namespace GatelessGateSharp
                 Device device = Controller.OpenCLDevices[deviceIndex];
                 OpenFileDialog openFileDialog = new OpenFileDialog();
 
+                string postfix = "";
+                if (device.PNPString != null)
+                    postfix = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)(&REV[^\\]*\\.*)?$")).Replace(device.PNPString, "$1"));
+
                 openFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
-                openFileDialog.FileName = (path != null) ? path : (device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0) + ".xml");
+                openFileDialog.FileName = (path != null) ? path : (device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0) + postfix + ".xml");
 
                 if (path != null || openFileDialog.ShowDialog() == DialogResult.OK) {
                     using (var reader = openFileDialog.OpenFile()) {
