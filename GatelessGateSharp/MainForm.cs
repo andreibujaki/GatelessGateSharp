@@ -104,7 +104,7 @@ namespace GatelessGateSharp
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
         public static string appVersion = "1.3.3";
-        public static string appName = shortAppName + " " + appVersion + " prealpha";
+        public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string logFileName = "GatelessGateSharp.log";
@@ -2489,14 +2489,14 @@ namespace GatelessGateSharp
                         if (device.DeviceIndex == miner.DeviceIndex)
                             memoryUsed += miner.MemoryUsage;
                     if (memoryUsed > 0) {
-                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Value = String.Format("{0:0.0}", memoryUsed / 1000000000.0) + "GB";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Value = String.Format("{0:0.0}", memoryUsed / 1024.0 / 1024.0 / 1024.0) + "GB";
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Style.ForeColor = Color.Black;
                     } else {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_used"].Value = "";
                     }
                     long memoryReserved = device.MemoryUsage;
                     if (memoryReserved > 0) {
-                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_reserved"].Value = String.Format("{0:0.0}", memoryReserved / 1000000000.0) + "GB";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["memory_reserved"].Value = String.Format("{0:0.0}", memoryReserved / 1024.0 / 1024.0 / 1024.0) + "GB";
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_reserved"].Style.ForeColor = Color.Black;
                     } else {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_reserved"].Value = "";
@@ -3114,6 +3114,11 @@ namespace GatelessGateSharp
                     StopBenchmarks();
                 } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining) {
                     StopMining(false);
+                }
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.MemoryTimingModsEnabled = false;
+                    device.OverclockingEnabled = false;
+                    device.ResetOverclockingSettings();
                 }
                 if (e.CloseReason == CloseReason.UserClosing) {
                     try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
@@ -4645,10 +4650,10 @@ namespace GatelessGateSharp
                 device.TargetMemoryVoltage = Decimal.ToInt32(numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
             }
 
-            if (overclockingEnabled)
-                device.UpdateOverclockingSettings();
-            if (overclockingEnabled)
-                device.UpdateMemoryTimings();
+            //if (overclockingEnabled)
+            //    device.UpdateOverclockingSettings();
+            //if (overclockingEnabled)
+            //    device.UpdateMemoryTimings();
             if (overclockingEnabled)
                 device.OverclockingEnabled = true;
             if (memoryTimingsEnabled)
@@ -4838,13 +4843,11 @@ namespace GatelessGateSharp
                 }
 
                 foreach (var device in Controller.OpenCLDevices) {
-                    if (device.MemoryTimingModsEnabled) {
-                        device.MemoryTimingModsEnabled = false;
-                        device.OverclockingEnabled = false;
-                        device.FanControlEnabled = false;
-                        //device.ResetOverclockingSettings();
-                        device.FanSpeed = -1;
-                    }
+                    //device.MemoryTimingModsEnabled = false;
+                    //device.OverclockingEnabled = false;
+                    //device.ResetOverclockingSettings();
+                    device.FanControlEnabled = false;
+                    device.FanSpeed = -1;
                 }
 
                 if (Controller.PrimaryStratum != null)
@@ -5007,6 +5010,8 @@ namespace GatelessGateSharp
                                       && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
                 buttonRunBenchmarks.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
                                               && (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
+                                              && (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
+                                              && (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
                                               && !(Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
                 buttonRunOptimizer.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
                                               && ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running)
@@ -5117,7 +5122,7 @@ namespace GatelessGateSharp
                 cartesianChartShare1Day.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Day");
                 cartesianChartShare1Month.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Month");
 
-                checkBoxBenchmarkingDoNotRepeatAfterFailure.Enabled = checkBoxBenchmarkingUseAverageSpeeds.Enabled = idle;
+                checkBoxBenchmarkingCoolGPUDown.Enabled = checkBoxBenchmarkingDoNotRepeatAfterFailure.Enabled = checkBoxBenchmarkingUseAverageSpeeds.Enabled = idle;
                 groupBoxBenchmarkingAlgorithms.Enabled = idle;
                 groupBoxBenchmarkingFirstParameter.Enabled = idle;
                 groupBoxBenchmarkingSecondParameter.Enabled = idle && checkBoxBenchmarkingFirstParameterEnabled.Checked;
@@ -5127,7 +5132,7 @@ namespace GatelessGateSharp
                 comboBoxBenchmarkingFirstParameter.Enabled = numericUpDownBenchmarkingFirstParameterStart.Enabled = numericUpDownBenchmarkingFirstParameterEnd.Enabled = numericUpDownBenchmarkingFirstParameterStep.Enabled = checkBoxBenchmarkingFirstParameterEnabled.Checked;
                 comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterStart.Enabled = numericUpDownBenchmarkingSecondParameterEnd.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
 
-                checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = checkBoxOptimizationUseAverageSpeeds.Enabled = checkBoxOptimizationPrioritizeStability.Enabled = idle;
+                checkBoxOptimizationCoolGPUDown.Enabled = checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = checkBoxOptimizationUseAverageSpeeds.Enabled = checkBoxOptimizationPrioritizeStability.Enabled = idle;
                 groupBoxOptimizationTargets.Enabled = idle;
                 numericUpDownOptimizationRepeats.Enabled = idle;
                 numericUpDownOptimizationWait.Enabled = idle;
@@ -6891,12 +6896,6 @@ namespace GatelessGateSharp
 
         private void PrepareForNextBenchmark()
         {
-            foreach (var device in Controller.OpenCLDevices) {
-                if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
-                    device.FanControlEnabled = true;
-                    device.FanSpeed = 100;
-                }
-            }
             Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
             if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
                 progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
@@ -6906,6 +6905,19 @@ namespace GatelessGateSharp
             UpdateControls();
             Logger("Cooling down before benchmark...");
             Application.DoEvents();
+
+            bool coolGPUDown = (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
+                                   ? checkBoxOptimizationCoolGPUDown.Checked
+                                   : checkBoxOptimizationCoolGPUDown.Checked;
+            if (coolGPUDown) {
+                foreach (var device in Controller.OpenCLDevices) {
+                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        device.FanControlEnabled = true;
+                        device.FanSpeed = 100;
+                    }
+                }
+            }
+            timerStartNextBenchmark.Interval = coolGPUDown ? 10000 : 1;
             timerStartNextBenchmark.Enabled = true;
         }
 
@@ -7052,8 +7064,7 @@ namespace GatelessGateSharp
         {
             if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning
                 && MessageBox.Show(
-                      "THE COMPUTER WILL FREEZE AND YOU WILL NEED TO RESTART IT IF YOU CHOOSE TO OPTIMIZE OVERCLOCKING/MEMORY TIMING SETTINGS!!\n\n"
-                    + "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
+                      "THE COMPUTER WILL FREEZE AND YOU WILL NEED TO RESTART IT MULTIPLE TIMES IF YOU CHOOSE TO OPTIMIZE OVERCLOCKING/MEMORY TIMING SETTINGS!!\n\n"
                     + "This feature will adjust algorithmic/overclocking/memory timing settings automatically for better performance. "
                     + "Although extensive testing has been done, it is not without risk and should be used with utmost caution.\n\n"
                     + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
@@ -7070,7 +7081,7 @@ namespace GatelessGateSharp
 
                 if (checkBoxOptimizationAlgorithmicSettings.Checked) {
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("threads"));
-                    if (OptimizerAlgorithm != "ethash_pascal")
+                    if (OptimizerAlgorithm != "ethash_pascal" || OptimizerAlgorithm != "x16r" || OptimizerAlgorithm != "x16s")
                         Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("local_work_size"));
                     if (OptimizerAlgorithm == "cryptonight" || OptimizerAlgorithm == "neoscrypt") {
                         Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("raw_intensity"));
@@ -7078,6 +7089,12 @@ namespace GatelessGateSharp
                         Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("intensity"));
                     }
                 }
+
+                if (checkBoxOptimizationUndervoltingCore.Checked)
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_core_voltage"));
+
+                if (checkBoxOptimizationUndervoltingMemory.Checked)
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_memory_voltage"));
 
                 if (checkBoxOptimizationOverclockingMemory.Checked)
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_memory_clock"));
@@ -7122,9 +7139,6 @@ namespace GatelessGateSharp
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_ras2ras"));
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trfc"));
                 }
-
-                if (checkBoxOptimizationUndervoltingCore.Checked)
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_core_voltage"));
 
                 SaveOptimizerState();
                 StartBenchmarks();
@@ -7201,7 +7215,7 @@ namespace GatelessGateSharp
                 saveFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
                 saveFileDialog.FilterIndex = 1;
                 saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.FileName = device.GetVendor() + " " + device.GetName() + postfix + ".xml";
+                saveFileDialog.FileName = device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0) + postfix + ".xml";
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     DeviceSettings settings = new DeviceSettings();
@@ -7242,7 +7256,7 @@ namespace GatelessGateSharp
                 openFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
-                openFileDialog.FileName = (path != null) ? path : (device.GetVendor() + " " + device.GetName() + ".xml");
+                openFileDialog.FileName = (path != null) ? path : (device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0) + ".xml");
 
                 if (path != null || openFileDialog.ShowDialog() == DialogResult.OK) {
                     using (var reader = openFileDialog.OpenFile()) {

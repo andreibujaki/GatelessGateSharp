@@ -162,6 +162,7 @@
             this.dataGridViewTextBoxBenchmarkingResultsSuccessRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxBenchmarkingResultsSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxBenchmarkingOtherParameters = new System.Windows.Forms.GroupBox();
+            this.checkBoxBenchmarkingCoolGPUDown = new System.Windows.Forms.CheckBox();
             this.checkBoxBenchmarkingUseAverageSpeeds = new System.Windows.Forms.CheckBox();
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure = new System.Windows.Forms.CheckBox();
             this.label34 = new System.Windows.Forms.Label();
@@ -417,6 +418,7 @@
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageOptimization = new System.Windows.Forms.TabPage();
             this.groupBoxOptimizationTargets = new System.Windows.Forms.GroupBox();
+            this.checkBoxOptimizationUndervoltingMemory = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationUndervoltingCore = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationOverclockingMemory = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationOverclockingCore = new System.Windows.Forms.CheckBox();
@@ -439,6 +441,7 @@
             this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkBoxOptimizationCoolGPUDown = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationPrioritizeStability = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationUseAverageSpeeds = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationRepeatUntilStopped = new System.Windows.Forms.CheckBox();
@@ -1501,6 +1504,7 @@
             // 
             // groupBoxBenchmarkingOtherParameters
             // 
+            this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.checkBoxBenchmarkingCoolGPUDown);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.checkBoxBenchmarkingUseAverageSpeeds);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.checkBoxBenchmarkingDoNotRepeatAfterFailure);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.label34);
@@ -1516,16 +1520,25 @@
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.label33);
             this.groupBoxBenchmarkingOtherParameters.Location = new System.Drawing.Point(6, 6);
             this.groupBoxBenchmarkingOtherParameters.Name = "groupBoxBenchmarkingOtherParameters";
-            this.groupBoxBenchmarkingOtherParameters.Size = new System.Drawing.Size(295, 142);
+            this.groupBoxBenchmarkingOtherParameters.Size = new System.Drawing.Size(295, 165);
             this.groupBoxBenchmarkingOtherParameters.TabIndex = 15;
             this.groupBoxBenchmarkingOtherParameters.TabStop = false;
             this.groupBoxBenchmarkingOtherParameters.Text = "Status";
             // 
+            // checkBoxBenchmarkingCoolGPUDown
+            // 
+            this.checkBoxBenchmarkingCoolGPUDown.AutoSize = true;
+            this.checkBoxBenchmarkingCoolGPUDown.Location = new System.Drawing.Point(158, 139);
+            this.checkBoxBenchmarkingCoolGPUDown.Name = "checkBoxBenchmarkingCoolGPUDown";
+            this.checkBoxBenchmarkingCoolGPUDown.Size = new System.Drawing.Size(102, 17);
+            this.checkBoxBenchmarkingCoolGPUDown.TabIndex = 156;
+            this.checkBoxBenchmarkingCoolGPUDown.Tag = "parameter:benchmarking_cool_gpu_down";
+            this.checkBoxBenchmarkingCoolGPUDown.Text = "Cool GPU down";
+            this.checkBoxBenchmarkingCoolGPUDown.UseVisualStyleBackColor = true;
+            // 
             // checkBoxBenchmarkingUseAverageSpeeds
             // 
             this.checkBoxBenchmarkingUseAverageSpeeds.AutoSize = true;
-            this.checkBoxBenchmarkingUseAverageSpeeds.Checked = true;
-            this.checkBoxBenchmarkingUseAverageSpeeds.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxBenchmarkingUseAverageSpeeds.Location = new System.Drawing.Point(158, 116);
             this.checkBoxBenchmarkingUseAverageSpeeds.Name = "checkBoxBenchmarkingUseAverageSpeeds";
             this.checkBoxBenchmarkingUseAverageSpeeds.Size = new System.Drawing.Size(124, 17);
@@ -1612,7 +1625,7 @@
             this.numericUpDownBenchmarkingLength.TabIndex = 13;
             this.numericUpDownBenchmarkingLength.Tag = "parameter:benchmarking_length";
             this.numericUpDownBenchmarkingLength.Value = new decimal(new int[] {
-            20,
+            10,
             0,
             0,
             0});
@@ -1644,7 +1657,7 @@
             this.numericUpDownBenchmarkingWait.TabIndex = 11;
             this.numericUpDownBenchmarkingWait.Tag = "parameter:benchmarking_wait";
             this.numericUpDownBenchmarkingWait.Value = new decimal(new int[] {
-            20,
+            30,
             0,
             0,
             0});
@@ -4666,6 +4679,7 @@
             // 
             // groupBoxOptimizationTargets
             // 
+            this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationUndervoltingMemory);
             this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationUndervoltingCore);
             this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationOverclockingMemory);
             this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationOverclockingCore);
@@ -4678,10 +4692,21 @@
             this.groupBoxOptimizationTargets.Controls.Add(this.comboBoxOptimizerAlgorithm);
             this.groupBoxOptimizationTargets.Location = new System.Drawing.Point(307, 6);
             this.groupBoxOptimizationTargets.Name = "groupBoxOptimizationTargets";
-            this.groupBoxOptimizationTargets.Size = new System.Drawing.Size(295, 162);
+            this.groupBoxOptimizationTargets.Size = new System.Drawing.Size(429, 162);
             this.groupBoxOptimizationTargets.TabIndex = 153;
             this.groupBoxOptimizationTargets.TabStop = false;
             this.groupBoxOptimizationTargets.Text = "Targets";
+            // 
+            // checkBoxOptimizationUndervoltingMemory
+            // 
+            this.checkBoxOptimizationUndervoltingMemory.AutoSize = true;
+            this.checkBoxOptimizationUndervoltingMemory.Location = new System.Drawing.Point(272, 115);
+            this.checkBoxOptimizationUndervoltingMemory.Name = "checkBoxOptimizationUndervoltingMemory";
+            this.checkBoxOptimizationUndervoltingMemory.Size = new System.Drawing.Size(131, 17);
+            this.checkBoxOptimizationUndervoltingMemory.TabIndex = 158;
+            this.checkBoxOptimizationUndervoltingMemory.Tag = "parameter:optimization_undervolting_memory";
+            this.checkBoxOptimizationUndervoltingMemory.Text = "Undervolting (memory)";
+            this.checkBoxOptimizationUndervoltingMemory.UseVisualStyleBackColor = true;
             // 
             // checkBoxOptimizationUndervoltingCore
             // 
@@ -4697,7 +4722,7 @@
             // checkBoxOptimizationOverclockingMemory
             // 
             this.checkBoxOptimizationOverclockingMemory.AutoSize = true;
-            this.checkBoxOptimizationOverclockingMemory.Location = new System.Drawing.Point(139, 92);
+            this.checkBoxOptimizationOverclockingMemory.Location = new System.Drawing.Point(272, 92);
             this.checkBoxOptimizationOverclockingMemory.Name = "checkBoxOptimizationOverclockingMemory";
             this.checkBoxOptimizationOverclockingMemory.Size = new System.Drawing.Size(134, 17);
             this.checkBoxOptimizationOverclockingMemory.TabIndex = 156;
@@ -4708,7 +4733,7 @@
             // checkBoxOptimizationOverclockingCore
             // 
             this.checkBoxOptimizationOverclockingCore.AutoSize = true;
-            this.checkBoxOptimizationOverclockingCore.Location = new System.Drawing.Point(6, 115);
+            this.checkBoxOptimizationOverclockingCore.Location = new System.Drawing.Point(139, 92);
             this.checkBoxOptimizationOverclockingCore.Name = "checkBoxOptimizationOverclockingCore";
             this.checkBoxOptimizationOverclockingCore.Size = new System.Drawing.Size(119, 17);
             this.checkBoxOptimizationOverclockingCore.TabIndex = 155;
@@ -4719,7 +4744,7 @@
             // checkBoxOptimizationMemoryTimingsExtended
             // 
             this.checkBoxOptimizationMemoryTimingsExtended.AutoSize = true;
-            this.checkBoxOptimizationMemoryTimingsExtended.Location = new System.Drawing.Point(139, 138);
+            this.checkBoxOptimizationMemoryTimingsExtended.Location = new System.Drawing.Point(272, 138);
             this.checkBoxOptimizationMemoryTimingsExtended.Name = "checkBoxOptimizationMemoryTimingsExtended";
             this.checkBoxOptimizationMemoryTimingsExtended.Size = new System.Drawing.Size(151, 17);
             this.checkBoxOptimizationMemoryTimingsExtended.TabIndex = 154;
@@ -4730,7 +4755,7 @@
             // checkBoxOptimizationMemoryTimings
             // 
             this.checkBoxOptimizationMemoryTimings.AutoSize = true;
-            this.checkBoxOptimizationMemoryTimings.Location = new System.Drawing.Point(6, 138);
+            this.checkBoxOptimizationMemoryTimings.Location = new System.Drawing.Point(139, 138);
             this.checkBoxOptimizationMemoryTimings.Name = "checkBoxOptimizationMemoryTimings";
             this.checkBoxOptimizationMemoryTimings.Size = new System.Drawing.Size(98, 17);
             this.checkBoxOptimizationMemoryTimings.TabIndex = 154;
@@ -4954,6 +4979,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.checkBoxOptimizationCoolGPUDown);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationPrioritizeStability);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationUseAverageSpeeds);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationRepeatUntilStopped);
@@ -4975,6 +5001,17 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Status";
             // 
+            // checkBoxOptimizationCoolGPUDown
+            // 
+            this.checkBoxOptimizationCoolGPUDown.AutoSize = true;
+            this.checkBoxOptimizationCoolGPUDown.Location = new System.Drawing.Point(158, 138);
+            this.checkBoxOptimizationCoolGPUDown.Name = "checkBoxOptimizationCoolGPUDown";
+            this.checkBoxOptimizationCoolGPUDown.Size = new System.Drawing.Size(102, 17);
+            this.checkBoxOptimizationCoolGPUDown.TabIndex = 155;
+            this.checkBoxOptimizationCoolGPUDown.Tag = "parameter:optimization_cool_gpu_down";
+            this.checkBoxOptimizationCoolGPUDown.Text = "Cool GPU down";
+            this.checkBoxOptimizationCoolGPUDown.UseVisualStyleBackColor = true;
+            // 
             // checkBoxOptimizationPrioritizeStability
             // 
             this.checkBoxOptimizationPrioritizeStability.AutoSize = true;
@@ -4989,8 +5026,6 @@
             // checkBoxOptimizationUseAverageSpeeds
             // 
             this.checkBoxOptimizationUseAverageSpeeds.AutoSize = true;
-            this.checkBoxOptimizationUseAverageSpeeds.Checked = true;
-            this.checkBoxOptimizationUseAverageSpeeds.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxOptimizationUseAverageSpeeds.Location = new System.Drawing.Point(158, 92);
             this.checkBoxOptimizationUseAverageSpeeds.Name = "checkBoxOptimizationUseAverageSpeeds";
             this.checkBoxOptimizationUseAverageSpeeds.Size = new System.Drawing.Size(124, 17);
@@ -5082,7 +5117,7 @@
             this.numericUpDownOptimizationLength.TabIndex = 13;
             this.numericUpDownOptimizationLength.Tag = "parameter:optimization_length";
             this.numericUpDownOptimizationLength.Value = new decimal(new int[] {
-            20,
+            10,
             0,
             0,
             0});
@@ -5114,7 +5149,7 @@
             this.numericUpDownOptimizationWait.TabIndex = 11;
             this.numericUpDownOptimizationWait.Tag = "parameter:optimization_wait";
             this.numericUpDownOptimizationWait.Value = new decimal(new int[] {
-            20,
+            30,
             0,
             0,
             0});
@@ -5658,5 +5693,8 @@
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.TextBox textBoxMiningPoolHubUsername;
         private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationUndervoltingMemory;
+        private System.Windows.Forms.CheckBox checkBoxBenchmarkingCoolGPUDown;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationCoolGPUDown;
     }
 }

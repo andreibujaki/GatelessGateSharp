@@ -45,25 +45,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_00B6B39F55CE42C89635456C433C1651"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0277950048F94D6DB289434B828FEDD3"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_02926CC3B56247C7BBCE41BCDD8B9420"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_058EDB893D8B41F08D2B8FC706293D48"
+        "MsmKey" = "8:_038787D0ED90432495B564AC351D7BC5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -75,19 +57,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_07AEEA8DCCCF4351A91062475A5D12C9"
+        "MsmKey" = "8:_08E733C1496141C3BE5F8BDCA08F5CE1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_083B783708954DAA937B1A5248169CEE"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_084920CA7C064F6F9FAF7D5525E322C4"
+        "MsmKey" = "8:_09076379AC7E481FA9AB37064EAF3C5C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -99,43 +75,97 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0F834DCB7764486184FBC8B04F98E5FF"
+        "MsmKey" = "8:_0E0CDA0BFC214817BD7A69C2D5FA91B8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_15508F8938DC460B8CAF7FF02CA5B34B"
+        "MsmKey" = "8:_0E469B79D8324AC1A5344CBBC396B8EB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_15AB2E79CBBF4122BC08EBF3CFDC876F"
+        "MsmKey" = "8:_0F83AEA01A1D47FCAAAF80AA49BCB335"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_1C3A574C912D47B4AE4C2399BBA550F7"
+        "MsmKey" = "8:_110DDF28AAAD457E9FFAB54AF64CE819"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_215815A70ADE4E058D41E7A81AF5F1D3"
+        "MsmKey" = "8:_15F3763F9B734517AF8EBBD8ED086680"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_235012DAA26648F19DBE69315DC5CF6A"
+        "MsmKey" = "8:_164A0C1BD2074C70BAEC39371082B448"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_27FCC2B185D046A199959226BA0D46FA"
+        "MsmKey" = "8:_182819B21E1B4BC7875E7A6A33CD3FE8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1973501F0F5A45FF8B435C432D46AD9A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1999E38ADD494C97A46A10C27CADF207"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1C366A4EA63345C6A42997AF252CB4D3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1C7982253CF44C28A09CF28733F1C14B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1D4FE67C3A7D41E799E5770CBE5F74F6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1E5438A931AD44B19443373443B9F1C8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_21D05EEA4F7E4C3F89C3201D38DC3B54"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_22B72B31E7DA43C3BB185D5903BF537D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2599AE59AD4441BDA7C6D7A25AB761A0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -153,31 +183,43 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2A8C2BD59C4047C58A237334FBA89F60"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2C31CFE466A042F4AFCB28D5D6F0545A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_2D74BAD2F08646B69FD676656B4284D8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2EFDCFE992334B37A5A7F1AB8E7CF44B"
+        "MsmKey" = "8:_30CD50E4FEF34CE1889F87ADAA4E1698"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_37EC3E46CD5B44A4BFA8E1AEA1C8B24F"
+        "MsmKey" = "8:_3236239A354344179B120E6CF6D17D66"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3339CE18344E4E71B1F69B134516FB20"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_33BA01CCF5784CA88581518D0CB20C7E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_353C6CFDBFC142E88B816BB6C5DCDACB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_35A088B54ABD4F5F82A018AB2FD5C513"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -207,7 +249,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3F61A2085D66493E97CEF844DE3381A2"
+        "MsmKey" = "8:_4053E093190F4181AD874B491B164BB1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -233,6 +275,12 @@
         {
         "MsmKey" = "8:_41D73E71863A5CF344DE0BC191304925"
         "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_448B998865EB479BA52917812C5597E0"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -243,7 +291,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4604B2FE54C34CF79470C6544498A2ED"
+        "MsmKey" = "8:_4686148E0E2A453492D22B03B92ADADD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -255,13 +303,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4CDC3487C0714132A6A22CF8612F9367"
+        "MsmKey" = "8:_4C12820B7BE746C58E98B60EA817484A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_4F31F3DF522F4EB69AB48A6ABEF14471"
+        "MsmKey" = "8:_4F046E0B6D86445FB1167C0C36F30408"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -273,49 +321,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_508D25C9D67C41EDBE1542E0E5782FF2"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_51291F2E392D46D59BAAB993EF18C2C2"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_51AFA8FC34A34590B153B8A59126FB6D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52821891F7E84C919811BF3B5DD6EB1C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_52FE1DC97FED4F4891B8F2BA7F6EBB60"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_531E33CD4D1F4A599BA0BA788657E1BD"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5336AF669B2D49F2805AF5A463C073D0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_55820F52469A404CA646DA5A1CD2AF1A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -327,7 +333,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5935767A74B24762BD5F11476C9D60E7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5BAC70687BFA4D518161F15527D94E90"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5D8A1D5BAAB145AE9C6F4FFC909929AB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_60E86890AF4B483F8F79DE791BCD96A1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -345,25 +369,37 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_63829FE5326046CB8A291FEE4A5B8B8D"
+        "MsmKey" = "8:_61F68ACBECB049CA8F7E373909D0742E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6853C55DADB444F5BD519B7CDF26B965"
+        "MsmKey" = "8:_629019DDB86744FBB13AA9B76BD04C29"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_68C322A757294125800A267C0C0599B6"
+        "MsmKey" = "8:_63E0D6F77A6F4553BD9691A84FEA9CD2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_69A47DBDDFAB44FFA74C87E967EDBB9A"
+        "MsmKey" = "8:_6496523120DE4070999E7BE57A614864"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6684DDFD37CC4A40BD3FED394DFE4553"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6A03223BA9D0437B95E68AADD1B339B5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -375,19 +411,13 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6A877C424B5C4EAFB39F1DFC39EF5A6D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6B04247229B6453088A4FD01BBA990A6"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6B0D0E0215514E6E8FB496D8943A23E1"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6CB63C1BA8C948A399ADDE2ABE7B9BAF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -405,25 +435,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_711BCB0C5EA64B6184F47E1C82BF3F88"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_722A0E0E10D2459381970AA3CA1FCCC7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7394FE541C994096B26C43600585C6CA"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7423ECEACED64A15AD0563801B452451"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_75A3B08DABAA4CF7A24D5A70039B2DEE"
+        "MsmKey" = "8:_758C35C25AF64683BFE7AE98B2837AFB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -435,19 +459,31 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_77040650D32B4703A2EEC24D65793770"
+        "MsmKey" = "8:_7831F2FC7159408983B0283F65C0C031"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_79C6B93753EA4DD3B125255A16F65DAE"
+        "MsmKey" = "8:_7C1A80B1C341476B8D697BA8B63F1733"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7A5EE357D5684D089168692B6135BF42"
+        "MsmKey" = "8:_7DC8B2A1F6F648B6879E13DE342F2C6B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7DD9835E238E4D51B9A571D3B3C28935"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7DF5B2E6D49148F6B80EC19192272AC2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -477,19 +513,13 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8297484807734FF88A4505F26B23AEEE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_82E48FC0B33446358B4628E076BA760E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8347B7AFBDEC42C1BD2AA7D14DF45B5E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8436EFF0030E43E693DC4476C041DB5B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -501,13 +531,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_85FA7F048CC844B3A47AE993BBABD24B"
+        "MsmKey" = "8:_85FAF46B31174E82AEC99D17E2600544"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_86A9B9558C904A37A9B53003EDCFA216"
+        "MsmKey" = "8:_86793861FFEA4E55B30E37AB1620E61B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -519,19 +549,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_87780FC2B3304A2EB10DA8FD99194DE3"
+        "MsmKey" = "8:_873C051DE7A849BDAAAE02D29C2625F5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_896BDF95AE3D4170BB17BF28E48A4EC2"
+        "MsmKey" = "8:_88E90193223744C38821C4FA9FC66200"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_89B97A04773247749C4E8FF11AB91230"
+        "MsmKey" = "8:_8AD986C2C7AF467AA4B0A54988E82EFD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -549,25 +579,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8CC949F098934896A7869ADC874A09ED"
+        "MsmKey" = "8:_8C96C4959AAF4C30943B798A1E32B30F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9029A02DD4E540308192DFCCD90122E5"
+        "MsmKey" = "8:_8F09708D86964AD696758874ABC7177E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9178FC0C9F034B2E8813BD1382FAB012"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_931C2FAD3ADC46F4859C7A218FED95C5"
+        "MsmKey" = "8:_8F9D87DB92C541BE812798A95FE5007F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -585,13 +609,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9849193E2408451E814662E6F1EC63DC"
+        "MsmKey" = "8:_949838C84F924A408A7FD7162B631EE3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9B6F17BA315146F583016A6AD1F702EE"
+        "MsmKey" = "8:_97513A8A3F7C48CE848C1C295C330319"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_97CAD7B1E80045408321982F5311AA43"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9849193E2408451E814662E6F1EC63DC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -603,31 +639,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9C9B2328BBA347699DFFF3EA67D03150"
+        "MsmKey" = "8:_9C215AB8E2894B8FBAF7086BB524B077"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9CD99D47DFC04B15804F897E3446D273"
+        "MsmKey" = "8:_9EFB704A8EC74AD1B4320B3AEFF25BCE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_A0671035CAB946B79AD4F41625B6467F"
+        "MsmKey" = "8:_9F84E04AA33A48C4B57AE548ACB88469"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_A766B91B2FFD4481A0C762C195D75EC7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A894C6B7559F4D0D93A772FD0C028619"
+        "MsmKey" = "8:_A819FFB4094448BAB12D9D3CB2F00DC4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -639,13 +669,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AABEE6B045334949B87AACA4EAB4DDE8"
+        "MsmKey" = "8:_ABA3DF68AAA9488CBD0CF52359598193"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_ABA3DF68AAA9488CBD0CF52359598193"
+        "MsmKey" = "8:_ABE61A9CD987453FB1FB347359496C17"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -669,7 +699,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AE982093D703480DB0B3F70643D763B7"
+        "MsmKey" = "8:_ADD281A75464432382ACE7EE438D8D9D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE1F92DE371F4B1595C37EEA14B32578"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -682,36 +718,6 @@
         "Entry"
         {
         "MsmKey" = "8:_B0485A83AC42465A8ECDAC159C31A36F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B07DDF0E146D4954904778F24561D7E9"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B1AB183567D94DA3A8146DEBA43F2546"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B3AE14F2EB6C4C58B0971C92BDD9AD27"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B48942F948174F6A8FCA4B09B02F5D4A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B5514F07DBE547C8BFE2B627CAEF9989"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -753,13 +759,31 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BA631EFF252E40F6A71CC3E80F3063E8"
+        "MsmKey" = "8:_BEC6FF4233C0431F9E2811C619AC0EEA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C11DBAAFD9984977B42ECF1D115D2B31"
+        "MsmKey" = "8:_BFD4F1D4335B436694C3A34FBC4F2257"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C17E38E5939D4F198A5FDB535CA283AD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C2193BF9F8974EAF8E92A4983BB7B18A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C35F0E82A64B4F23B2CB6335936935E7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -771,7 +795,37 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C60D2FB186334610A6DBA395378061C7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C6417E4773BB4844814D7F8BCF4B205A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C6593F89FB2C46EE9BA43C8CAFE7F8D3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C768C0621CED4827AF876D5DF41179AD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C91A74628F2C4DBBA146E7E600F75F0D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C9A2994AA3394AB984BFE60323447215"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -783,13 +837,31 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CD3268B19E454ECEA13F910574C3ACE3"
+        "MsmKey" = "8:_CB95345D8A9B4BCFA73EB329C0805509"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_CD954DB07DE2455B873926B7F02B9A7C"
+        "MsmKey" = "8:_CBF78902E5654A7FA52B9A5755777A04"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CE0B06C1FFFB4E79AD36E58506D94440"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CF8692E881134B53865C09AF3D34EC8C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D0804055200E469BA2A3720524BEC8AD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -801,7 +873,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D2C6EA7CA15C430AA1DBA8CD965C74E8"
+        "MsmKey" = "8:_D3AA939480904256B4F3B69A213BA44A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D40D43AB14D2456F8C6EDB71C35FE221"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D48C1BCF745D45B789D365066D709EF0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D57DE68CAB7C47F79254A6C044945123"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -825,6 +915,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D804755EBD00475C907315DF8E9A3BFE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D85DF7B572634F53AFEFDBAE23491216"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -843,7 +939,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_DA4403F274064A2AADA1AADAA15D8501"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_DAAC731E89844AADBD8C107C0D9F2EEE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DB5883952A9640ED8D4906F23D568AF1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -879,25 +987,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E1416B8936C8448C93B801906B3C8C31"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E1B7FCB65D4A42C58419E64670641B4F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E2E690FDD4584F26AA32AB03885FA07D"
+        "MsmKey" = "8:_E416D48602C64A4385A20B9CC4995996"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E414F96FA1B94535AB8444C646ACFD3B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E88BD3FF4DDE41B5AB4938C824F79389"
+        "MsmKey" = "8:_E60C32B70C3949818CD4A8677A5738A4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -909,7 +1017,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E8E2AC5B2422408583744C18BCCB0723"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E97C1C52A18A41129C7F6B096158D0A4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EA6BF75DE2A14C209E8CEE93878D842F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -921,37 +1041,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EFF38FE665754AD795A2AA7AB0F6D1AC"
+        "MsmKey" = "8:_F0CFB57EC4AE4A9ABEE30D6B7061414A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F0109607AB2C4B88AE2433926F54F616"
+        "MsmKey" = "8:_F1C4F5709A104482AD96A7EDFBB71B56"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F02A6976822647029C9569B47607943E"
+        "MsmKey" = "8:_F1F45E899067491990EF43EEB48C2A35"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_F0B0B708616B439198DD3EF4CC9EFAE0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F57352534FB34DD1AF200E9381F3786A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F66A8D7E5B1C4C23A1EB5884CB98FF76"
+        "MsmKey" = "8:_F1F7CA35C1EA4889A87C696329A80E36"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -969,19 +1077,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F93231B812ED4EB2B7BD09F14ACC4C2F"
+        "MsmKey" = "8:_F81D59910F6E481C931DDEFCBA1783DC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FA91483F93C34CF195715722EFB5897D"
+        "MsmKey" = "8:_F8D7D90D5C444BED9C661175FE10EA82"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FD3C013E6C49401C94050E1235E2FCF1"
+        "MsmKey" = "8:_FBA0421402BA476C94B267B51E119FE9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FBB3E28FBED94A5289EC789411CA1A45"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1215,9 +1329,14 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.3.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.3.3.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_005BA131E503E55D3259C325B392A218"
+                    {
+                    "Name" = "8:Cloo.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Cloo.DLL"
             "TargetName" = "8:"
@@ -1244,6 +1363,11 @@
             "AssemblyAsmDisplayName" = "8:LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_00AA238AA09A4A5FD7750A2A49F90FB1"
+                    {
+                    "Name" = "8:LiveCharts.Wpf.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:LiveCharts.Wpf.DLL"
             "TargetName" = "8:"
@@ -1263,70 +1387,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_00B6B39F55CE42C89635456C433C1651"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_038787D0ED90432495B564AC351D7BC5"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_neoscrypt_64.bin"
-            "TargetName" = "8:Carrizo_neoscrypt_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0277950048F94D6DB289434B828FEDD3"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_x16r_256.bin"
-            "TargetName" = "8:Stoney_x16r_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_02926CC3B56247C7BBCE41BCDD8B9420"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_x16r_256.bin"
-            "TargetName" = "8:Hawaii_x16r_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_058EDB893D8B41F08D2B8FC706293D48"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_neoscrypt_64.bin"
-            "TargetName" = "8:Hawaii_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_x16r_64.bin"
+            "TargetName" = "8:Tonga_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1363,10 +1427,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_07AEEA8DCCCF4351A91062475A5D12C9"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_08E733C1496141C3BE5F8BDCA08F5CE1"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_ethash_pascal_256.bin"
-            "TargetName" = "8:Carrizo_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_ethash_pascal_256.bin"
+            "TargetName" = "8:Stoney_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1383,32 +1447,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_083B783708954DAA937B1A5248169CEE"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_09076379AC7E481FA9AB37064EAF3C5C"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_x16r_256.bin"
-            "TargetName" = "8:Oland_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 480 8.0GB (VEN_1002&DEV_67DF&SUBSYS_94801682).xml"
+            "TargetName" = "8:AMD Radeon RX 480 8.0GB (VEN_1002&DEV_67DF&SUBSYS_94801682).xml"
             "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_084920CA7C064F6F9FAF7D5525E322C4"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_x16r_64.bin"
-            "TargetName" = "8:gfx900_x16r_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1443,10 +1487,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F834DCB7764486184FBC8B04F98E5FF"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E0CDA0BFC214817BD7A69C2D5FA91B8"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 580.xml"
-            "TargetName" = "8:AMD Radeon RX 580.xml"
+            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 470 4.0GB (VEN_1002&DEV_67DF&SUBSYS_0B311002).xml"
+            "TargetName" = "8:AMD Radeon RX 470 4.0GB (VEN_1002&DEV_67DF&SUBSYS_0B311002).xml"
             "Tag" = "8:"
             "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
             "Condition" = "8:"
@@ -1463,10 +1507,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_15508F8938DC460B8CAF7FF02CA5B34B"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E469B79D8324AC1A5344CBBC396B8EB"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_x16r_256.bin"
-            "TargetName" = "8:gfx900_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_neoscrypt_64.bin"
+            "TargetName" = "8:Fiji_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1483,10 +1527,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_15AB2E79CBBF4122BC08EBF3CFDC876F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F83AEA01A1D47FCAAAF80AA49BCB335"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_ethash_pascal_256.bin"
-            "TargetName" = "8:Spectre_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_x16r_256.bin"
+            "TargetName" = "8:Hawaii_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1503,10 +1547,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C3A574C912D47B4AE4C2399BBA550F7"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_110DDF28AAAD457E9FFAB54AF64CE819"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_x16r_64.bin"
-            "TargetName" = "8:Oland_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_x16r_128.bin"
+            "TargetName" = "8:Kalindi_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1523,10 +1567,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_215815A70ADE4E058D41E7A81AF5F1D3"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_15F3763F9B734517AF8EBBD8ED086680"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_x16r_64.bin"
-            "TargetName" = "8:Hainan_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_x16r_256.bin"
+            "TargetName" = "8:Pitcairn_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1543,10 +1587,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_235012DAA26648F19DBE69315DC5CF6A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_164A0C1BD2074C70BAEC39371082B448"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_neoscrypt_64.bin"
-            "TargetName" = "8:Stoney_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_x16r_256.bin"
+            "TargetName" = "8:Carrizo_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1563,10 +1607,190 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_27FCC2B185D046A199959226BA0D46FA"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_182819B21E1B4BC7875E7A6A33CD3FE8"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_x16r_64.bin"
-            "TargetName" = "8:Capeverde_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_x16r_256.bin"
+            "TargetName" = "8:Fiji_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1973501F0F5A45FF8B435C432D46AD9A"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_x16r_64.bin"
+            "TargetName" = "8:gfx900_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1999E38ADD494C97A46A10C27CADF207"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_ethash_pascal_256.bin"
+            "TargetName" = "8:Spooky_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C366A4EA63345C6A42997AF252CB4D3"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_x16r_64.bin"
+            "TargetName" = "8:Baffin_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C7982253CF44C28A09CF28733F1C14B"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_x16r_64.bin"
+            "TargetName" = "8:Hawaii_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1D4FE67C3A7D41E799E5770CBE5F74F6"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_ethash_pascal_256.bin"
+            "TargetName" = "8:Oland_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1E5438A931AD44B19443373443B9F1C8"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_ethash_pascal_256.bin"
+            "TargetName" = "8:Tonga_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_21D05EEA4F7E4C3F89C3201D38DC3B54"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_x16r_64.bin"
+            "TargetName" = "8:Bonaire_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_22B72B31E7DA43C3BB185D5903BF537D"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_neoscrypt_64.bin"
+            "TargetName" = "8:Baffin_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2599AE59AD4441BDA7C6D7A25AB761A0"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_neoscrypt_64.bin"
+            "TargetName" = "8:Tonga_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1590,6 +1814,11 @@
             "AssemblyAsmDisplayName" = "8:ManagedNvml, Version=8.0.14.1, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_2A178B97B26AE0AD8808019FC59D99C0"
+                    {
+                    "Name" = "8:ManagedNvml.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:ManagedNvml.DLL"
             "TargetName" = "8:"
@@ -1607,46 +1836,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2A8C2BD59C4047C58A237334FBA89F60"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_ethash_pascal_256.bin"
-            "TargetName" = "8:Hainan_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2C31CFE466A042F4AFCB28D5D6F0545A"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 480 (VEN_1002&DEV_67DF&SUBSYS_94801682).xml"
-            "TargetName" = "8:AMD Radeon RX 480 (VEN_1002&DEV_67DF&SUBSYS_94801682).xml"
-            "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2D74BAD2F08646B69FD676656B4284D8"
@@ -1669,10 +1858,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2EFDCFE992334B37A5A7F1AB8E7CF44B"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_30CD50E4FEF34CE1889F87ADAA4E1698"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_x16r_64.bin"
-            "TargetName" = "8:Pitcairn_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_x16r_64.bin"
+            "TargetName" = "8:Stoney_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1689,10 +1878,90 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_37EC3E46CD5B44A4BFA8E1AEA1C8B24F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3236239A354344179B120E6CF6D17D66"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_x16r_64.bin"
-            "TargetName" = "8:Hawaii_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_x16r_256.bin"
+            "TargetName" = "8:Iceland_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3339CE18344E4E71B1F69B134516FB20"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_x16r_256.bin"
+            "TargetName" = "8:Ellesmere_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_33BA01CCF5784CA88581518D0CB20C7E"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_neoscrypt_64.bin"
+            "TargetName" = "8:Bonaire_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_353C6CFDBFC142E88B816BB6C5DCDACB"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_x16r_128.bin"
+            "TargetName" = "8:Hawaii_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_35A088B54ABD4F5F82A018AB2FD5C513"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_x16r_128.bin"
+            "TargetName" = "8:Carrizo_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1716,6 +1985,11 @@
             "AssemblyAsmDisplayName" = "8:LiveCharts.WinForms, Version=0.9.7.1, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_381FCF22B4217A09400FE06D5EDFDEFC"
+                    {
+                    "Name" = "8:LiveCharts.WinForms.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:LiveCharts.WinForms.DLL"
             "TargetName" = "8:"
@@ -1759,7 +2033,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3F257B72128849FFBA6BAEFBFEC78450"
@@ -1786,10 +2060,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3F61A2085D66493E97CEF844DE3381A2"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4053E093190F4181AD874B491B164BB1"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_x16r_256.bin"
-            "TargetName" = "8:Carrizo_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_x16r_256.bin"
+            "TargetName" = "8:Hainan_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1813,6 +2087,11 @@
             "AssemblyAsmDisplayName" = "8:HtmlAgilityPack, Version=1.6.1.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_419AA3B6AC7F5D90CD6D83C38A63F4B3"
+                    {
+                    "Name" = "8:HtmlAgilityPack.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:HtmlAgilityPack.DLL"
             "TargetName" = "8:"
@@ -1839,6 +2118,11 @@
             "AssemblyAsmDisplayName" = "8:HashLib, Version=2.1.0.1, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_41D73E71863A5CF344DE0BC191304925"
+                    {
+                    "Name" = "8:HashLib.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:HashLib.DLL"
             "TargetName" = "8:"
@@ -1856,6 +2140,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_448B998865EB479BA52917812C5597E0"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_neoscrypt_64.bin"
+            "TargetName" = "8:gfx900_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_45AC855C4C9747D287426A095F8BCD9E"
@@ -1878,10 +2182,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4604B2FE54C34CF79470C6544498A2ED"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4686148E0E2A453492D22B03B92ADADD"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_x16r_64.bin"
-            "TargetName" = "8:Baffin_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_x16r_128.bin"
+            "TargetName" = "8:Tonga_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1918,10 +2222,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4CDC3487C0714132A6A22CF8612F9367"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4C12820B7BE746C58E98B60EA817484A"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_neoscrypt_64.bin"
-            "TargetName" = "8:Tonga_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_x16r_64.bin"
+            "TargetName" = "8:Ellesmere_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1938,10 +2242,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4F31F3DF522F4EB69AB48A6ABEF14471"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4F046E0B6D86445FB1167C0C36F30408"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_neoscrypt_64.bin"
-            "TargetName" = "8:Ellesmere_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_ethash_pascal_256.bin"
+            "TargetName" = "8:Hainan_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -1978,152 +2282,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_508D25C9D67C41EDBE1542E0E5782FF2"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_ethash_pascal_256.bin"
-            "TargetName" = "8:Oland_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_51291F2E392D46D59BAAB993EF18C2C2"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\wolf-skein.cl"
             "TargetName" = "8:wolf-skein.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_51AFA8FC34A34590B153B8A59126FB6D"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_x16r_64.bin"
-            "TargetName" = "8:Bonaire_x16r_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_52821891F7E84C919811BF3B5DD6EB1C"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_ethash_pascal_256.bin"
-            "TargetName" = "8:Tonga_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_52FE1DC97FED4F4891B8F2BA7F6EBB60"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_neoscrypt_64.bin"
-            "TargetName" = "8:Spectre_neoscrypt_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_531E33CD4D1F4A599BA0BA788657E1BD"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_ethash_pascal_256.bin"
-            "TargetName" = "8:Pitcairn_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5336AF669B2D49F2805AF5A463C073D0"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_ethash_pascal_256.bin"
-            "TargetName" = "8:Baffin_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55820F52469A404CA646DA5A1CD2AF1A"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_neoscrypt_64.bin"
-            "TargetName" = "8:Hainan_neoscrypt_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2169,12 +2333,72 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5935767A74B24762BD5F11476C9D60E7"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_x16r_64.bin"
+            "TargetName" = "8:Iceland_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5BAC70687BFA4D518161F15527D94E90"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\phymem.sys"
             "TargetName" = "8:phymem.sys"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5D8A1D5BAAB145AE9C6F4FFC909929AB"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_neoscrypt_64.bin"
+            "TargetName" = "8:Carrizo_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60E86890AF4B483F8F79DE791BCD96A1"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_ethash_pascal_256.bin"
+            "TargetName" = "8:Iceland_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2196,6 +2420,11 @@
             "AssemblyAsmDisplayName" = "8:IPAddressRange, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_60FC415984CF56865FEBC5BA562AA3BC"
+                    {
+                    "Name" = "8:IPAddressRange.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:IPAddressRange.DLL"
             "TargetName" = "8:"
@@ -2215,10 +2444,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_63829FE5326046CB8A291FEE4A5B8B8D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_61F68ACBECB049CA8F7E373909D0742E"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_x16r_64.bin"
-            "TargetName" = "8:Stoney_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_neoscrypt_64.bin"
+            "TargetName" = "8:Oland_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2235,10 +2464,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6853C55DADB444F5BD519B7CDF26B965"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_629019DDB86744FBB13AA9B76BD04C29"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_x16r_256.bin"
-            "TargetName" = "8:Pitcairn_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_ethash_pascal_256.bin"
+            "TargetName" = "8:Pitcairn_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2255,10 +2484,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_68C322A757294125800A267C0C0599B6"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_63E0D6F77A6F4553BD9691A84FEA9CD2"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_neoscrypt_64.bin"
-            "TargetName" = "8:Bonaire_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_x16r_256.bin"
+            "TargetName" = "8:gfx900_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2275,10 +2504,50 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_69A47DBDDFAB44FFA74C87E967EDBB9A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6496523120DE4070999E7BE57A614864"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_ethash_pascal_256.bin"
-            "TargetName" = "8:Stoney_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_x16r_128.bin"
+            "TargetName" = "8:Fiji_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6684DDFD37CC4A40BD3FED394DFE4553"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_x16r_128.bin"
+            "TargetName" = "8:Ellesmere_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6A03223BA9D0437B95E68AADD1B339B5"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_x16r_256.bin"
+            "TargetName" = "8:Baffin_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2315,52 +2584,32 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6A877C424B5C4EAFB39F1DFC39EF5A6D"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_ethash_pascal_256.bin"
+            "TargetName" = "8:Tahiti_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B04247229B6453088A4FD01BBA990A6"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\cryptonight_heavy.cl"
             "TargetName" = "8:cryptonight_heavy.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B0D0E0215514E6E8FB496D8943A23E1"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_neoscrypt_64.bin"
-            "TargetName" = "8:Fiji_neoscrypt_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6CB63C1BA8C948A399ADDE2ABE7B9BAF"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_x16r_256.bin"
-            "TargetName" = "8:Capeverde_x16r_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2415,6 +2664,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_711BCB0C5EA64B6184F47E1C82BF3F88"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_x16r_128.bin"
+            "TargetName" = "8:gfx900_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_722A0E0E10D2459381970AA3CA1FCCC7"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ripemd160.cl"
@@ -2435,50 +2704,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7394FE541C994096B26C43600585C6CA"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_758C35C25AF64683BFE7AE98B2837AFB"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_ethash_pascal_256.bin"
-            "TargetName" = "8:Bonaire_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7423ECEACED64A15AD0563801B452451"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_ethash_pascal_256.bin"
-            "TargetName" = "8:Spooky_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_75A3B08DABAA4CF7A24D5A70039B2DEE"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_neoscrypt_64.bin"
-            "TargetName" = "8:gfx900_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_neoscrypt_64.bin"
+            "TargetName" = "8:Kalindi_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2515,10 +2744,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_77040650D32B4703A2EEC24D65793770"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7831F2FC7159408983B0283F65C0C031"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_x16r_256.bin"
-            "TargetName" = "8:Hainan_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_neoscrypt_64.bin"
+            "TargetName" = "8:Spooky_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2535,10 +2764,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_79C6B93753EA4DD3B125255A16F65DAE"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7C1A80B1C341476B8D697BA8B63F1733"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_x16r_256.bin"
-            "TargetName" = "8:Kalindi_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_neoscrypt_64.bin"
+            "TargetName" = "8:Stoney_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2555,12 +2784,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7A5EE357D5684D089168692B6135BF42"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7DC8B2A1F6F648B6879E13DE342F2C6B"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 470.xml"
-            "TargetName" = "8:AMD Radeon RX 470.xml"
+            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 580 8.0GB.xml"
+            "TargetName" = "8:AMD Radeon RX 580 8.0GB.xml"
             "Tag" = "8:"
             "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7DD9835E238E4D51B9A571D3B3C28935"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_x16r_64.bin"
+            "TargetName" = "8:Tahiti_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7DF5B2E6D49148F6B80EC19192272AC2"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_neoscrypt_64.bin"
+            "TargetName" = "8:Tahiti_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2655,52 +2924,32 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8297484807734FF88A4505F26B23AEEE"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_x16r_128.bin"
+            "TargetName" = "8:Spooky_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_82E48FC0B33446358B4628E076BA760E"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\Lyra2v2.cl"
             "TargetName" = "8:Lyra2v2.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8347B7AFBDEC42C1BD2AA7D14DF45B5E"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_x16r_256.bin"
-            "TargetName" = "8:Fiji_x16r_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8436EFF0030E43E693DC4476C041DB5B"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_x16r_256.bin"
-            "TargetName" = "8:Iceland_x16r_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2735,10 +2984,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_85FA7F048CC844B3A47AE993BBABD24B"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_85FAF46B31174E82AEC99D17E2600544"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_x16r_64.bin"
-            "TargetName" = "8:Tahiti_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_x16r_128.bin"
+            "TargetName" = "8:Tahiti_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2755,10 +3004,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_86A9B9558C904A37A9B53003EDCFA216"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_86793861FFEA4E55B30E37AB1620E61B"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_x16r_256.bin"
-            "TargetName" = "8:Spooky_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_ethash_pascal_256.bin"
+            "TargetName" = "8:Mullins_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2795,10 +3044,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_87780FC2B3304A2EB10DA8FD99194DE3"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_873C051DE7A849BDAAAE02D29C2625F5"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_x16r_64.bin"
-            "TargetName" = "8:Iceland_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_ethash_pascal_256.bin"
+            "TargetName" = "8:Baffin_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2815,10 +3064,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_896BDF95AE3D4170BB17BF28E48A4EC2"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_88E90193223744C38821C4FA9FC66200"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_x16r_64.bin"
-            "TargetName" = "8:Carrizo_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_x16r_256.bin"
+            "TargetName" = "8:Stoney_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2835,10 +3084,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_89B97A04773247749C4E8FF11AB91230"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8AD986C2C7AF467AA4B0A54988E82EFD"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_x16r_256.bin"
-            "TargetName" = "8:Bonaire_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_x16r_128.bin"
+            "TargetName" = "8:Capeverde_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2895,10 +3144,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8CC949F098934896A7869ADC874A09ED"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8C96C4959AAF4C30943B798A1E32B30F"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_ethash_pascal_256.bin"
-            "TargetName" = "8:Ellesmere_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_x16r_256.bin"
+            "TargetName" = "8:Oland_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2915,10 +3164,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9029A02DD4E540308192DFCCD90122E5"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8F09708D86964AD696758874ABC7177E"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_ethash_pascal_256.bin"
-            "TargetName" = "8:Mullins_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_ethash_pascal_256.bin"
+            "TargetName" = "8:gfx900_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2935,30 +3184,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9178FC0C9F034B2E8813BD1382FAB012"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8F9D87DB92C541BE812798A95FE5007F"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_x16r_64.bin"
-            "TargetName" = "8:Kalindi_x16r_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_931C2FAD3ADC46F4859C7A218FED95C5"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_x16r_256.bin"
-            "TargetName" = "8:Spectre_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_ethash_pascal_256.bin"
+            "TargetName" = "8:Hawaii_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -2999,14 +3228,79 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.3.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.3.3.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_94470E592BF34FCEBF3FC318A54CC736"
+                    {
+                    "Name" = "8:GatelessGateSharp.exe"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharp.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_949838C84F924A408A7FD7162B631EE3"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_neoscrypt_64.bin"
+            "TargetName" = "8:Mullins_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_97513A8A3F7C48CE848C1C295C330319"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_x16r_256.bin"
+            "TargetName" = "8:Capeverde_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_97CAD7B1E80045408321982F5311AA43"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_ethash_pascal_256.bin"
+            "TargetName" = "8:Ellesmere_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3041,26 +3335,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B6F17BA315146F583016A6AD1F702EE"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_neoscrypt_64.bin"
-            "TargetName" = "8:Kalindi_neoscrypt_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9BEC596563044616B18C0BB9EAE82869"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\x64\\SQLite.Interop.dll"
@@ -3081,10 +3355,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C9B2328BBA347699DFFF3EA67D03150"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C215AB8E2894B8FBAF7086BB524B077"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_x16r_64.bin"
-            "TargetName" = "8:Spectre_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_x16r_64.bin"
+            "TargetName" = "8:Spooky_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3101,10 +3375,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9CD99D47DFC04B15804F897E3446D273"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9EFB704A8EC74AD1B4320B3AEFF25BCE"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_neoscrypt_64.bin"
-            "TargetName" = "8:Capeverde_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_x16r_64.bin"
+            "TargetName" = "8:Kalindi_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3121,10 +3395,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A0671035CAB946B79AD4F41625B6467F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9F84E04AA33A48C4B57AE548ACB88469"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_x16r_256.bin"
-            "TargetName" = "8:Mullins_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_x16r_128.bin"
+            "TargetName" = "8:Mullins_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3141,30 +3415,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A766B91B2FFD4481A0C762C195D75EC7"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A819FFB4094448BAB12D9D3CB2F00DC4"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_neoscrypt_64.bin"
-            "TargetName" = "8:Oland_neoscrypt_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A894C6B7559F4D0D93A772FD0C028619"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_neoscrypt_64.bin"
-            "TargetName" = "8:Iceland_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_x16r_64.bin"
+            "TargetName" = "8:Mullins_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3201,12 +3455,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AABEE6B045334949B87AACA4EAB4DDE8"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABA3DF68AAA9488CBD0CF52359598193"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 570.xml"
-            "TargetName" = "8:AMD Radeon RX 570.xml"
+            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\bmw.cl"
+            "TargetName" = "8:bmw.cl"
             "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
+            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3221,12 +3475,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABA3DF68AAA9488CBD0CF52359598193"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABE61A9CD987453FB1FB347359496C17"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\bmw.cl"
-            "TargetName" = "8:bmw.cl"
+            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 480 8.0GB.xml"
+            "TargetName" = "8:AMD Radeon RX 480 8.0GB.xml"
             "Tag" = "8:"
-            "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3265,9 +3519,14 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.3.0.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:DeviceSettingsUserControl, Version=1.3.3.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
+                    "_ADA849628BC355DC41F4B2D4F6ACE3E5"
+                    {
+                    "Name" = "8:DeviceSettingsUserControl.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:DeviceSettingsUserControl.DLL"
             "TargetName" = "8:"
@@ -3287,10 +3546,30 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AE982093D703480DB0B3F70643D763B7"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ADD281A75464432382ACE7EE438D8D9D"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_neoscrypt_64.bin"
-            "TargetName" = "8:Pitcairn_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_ethash_pascal_256.bin"
+            "TargetName" = "8:Carrizo_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AE1F92DE371F4B1595C37EEA14B32578"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_x16r_128.bin"
+            "TargetName" = "8:Bonaire_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3347,106 +3626,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B07DDF0E146D4954904778F24561D7E9"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_x16_64r.bin"
-            "TargetName" = "8:Tonga_x16_64r.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B1AB183567D94DA3A8146DEBA43F2546"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_x16r_256.bin"
-            "TargetName" = "8:Tonga_x16r_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B3AE14F2EB6C4C58B0971C92BDD9AD27"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_x16r_256.bin"
-            "TargetName" = "8:Baffin_x16r_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B48942F948174F6A8FCA4B09B02F5D4A"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_ethash_pascal_256.bin"
-            "TargetName" = "8:Fiji_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B5514F07DBE547C8BFE2B627CAEF9989"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_ethash_pascal_256.bin"
-            "TargetName" = "8:Iceland_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B77813835C6349E38247751862EA3C30"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\pascal.cl"
@@ -3474,6 +3653,11 @@
             "AssemblyAsmDisplayName" = "8:LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_B86CF387C2C12D251394FBBCB17C4241"
+                    {
+                    "Name" = "8:LiveCharts.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:LiveCharts.DLL"
             "TargetName" = "8:"
@@ -3513,10 +3697,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BA631EFF252E40F6A71CC3E80F3063E8"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BEC6FF4233C0431F9E2811C619AC0EEA"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_neoscrypt_64.bin"
-            "TargetName" = "8:Mullins_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_x16r_256.bin"
+            "TargetName" = "8:Spooky_x16r_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3533,10 +3717,70 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C11DBAAFD9984977B42ECF1D115D2B31"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BFD4F1D4335B436694C3A34FBC4F2257"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_ethash_pascal_256.bin"
-            "TargetName" = "8:Kalindi_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_x16r_64.bin"
+            "TargetName" = "8:Fiji_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C17E38E5939D4F198A5FDB535CA283AD"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_ethash_pascal_256.bin"
+            "TargetName" = "8:Spectre_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C2193BF9F8974EAF8E92A4983BB7B18A"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_x16r_256.bin"
+            "TargetName" = "8:Mullins_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C35F0E82A64B4F23B2CB6335936935E7"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_neoscrypt_64.bin"
+            "TargetName" = "8:Capeverde_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3573,12 +3817,112 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C60D2FB186334610A6DBA395378061C7"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Stoney_x16r_128.bin"
+            "TargetName" = "8:Stoney_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C6417E4773BB4844814D7F8BCF4B205A"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_neoscrypt_64.bin"
+            "TargetName" = "8:Ellesmere_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C6593F89FB2C46EE9BA43C8CAFE7F8D3"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_neoscrypt_64.bin"
+            "TargetName" = "8:Hainan_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C768C0621CED4827AF876D5DF41179AD"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_x16r_256.bin"
+            "TargetName" = "8:Spectre_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C91A74628F2C4DBBA146E7E600F75F0D"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\hamsi_helper.cl"
             "TargetName" = "8:hamsi_helper.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C9A2994AA3394AB984BFE60323447215"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_ethash_pascal_256.bin"
+            "TargetName" = "8:Fiji_ethash_pascal_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3613,10 +3957,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CD3268B19E454ECEA13F910574C3ACE3"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB95345D8A9B4BCFA73EB329C0805509"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_ethash_pascal_256.bin"
-            "TargetName" = "8:Capeverde_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_ethash_pascal_256.bin"
+            "TargetName" = "8:Kalindi_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3633,12 +3977,72 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CD954DB07DE2455B873926B7F02B9A7C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CBF78902E5654A7FA52B9A5755777A04"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_x16r_256.bin"
-            "TargetName" = "8:Tahiti_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_ethash_pascal_256.bin"
+            "TargetName" = "8:Bonaire_ethash_pascal_256.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CE0B06C1FFFB4E79AD36E58506D94440"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_x16r_128.bin"
+            "TargetName" = "8:Spectre_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CF8692E881134B53865C09AF3D34EC8C"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Kalindi_x16r_256.bin"
+            "TargetName" = "8:Kalindi_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D0804055200E469BA2A3720524BEC8AD"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 570 4.0GB.xml"
+            "TargetName" = "8:AMD Radeon RX 570 4.0GB.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3673,12 +4077,72 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D2C6EA7CA15C430AA1DBA8CD965C74E8"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D3AA939480904256B4F3B69A213BA44A"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 480.xml"
-            "TargetName" = "8:AMD Radeon RX 480.xml"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_ethash_pascal_256.bin"
+            "TargetName" = "8:Capeverde_ethash_pascal_256.bin"
             "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D40D43AB14D2456F8C6EDB71C35FE221"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_x16r_64.bin"
+            "TargetName" = "8:Pitcairn_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D48C1BCF745D45B789D365066D709EF0"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Capeverde_x16r_64.bin"
+            "TargetName" = "8:Capeverde_x16r_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D57DE68CAB7C47F79254A6C044945123"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_x16r_128.bin"
+            "TargetName" = "8:Hainan_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3700,6 +4164,11 @@
             "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_D5E0043C4E894C579440EACD8A99AF6D"
+                    {
+                    "Name" = "8:Newtonsoft.Json.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Newtonsoft.Json.DLL"
             "TargetName" = "8:"
@@ -3725,6 +4194,26 @@
             "TargetName" = "8:System.Data.SQLite.DLL.config"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D804755EBD00475C907315DF8E9A3BFE"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_x16r_256.bin"
+            "TargetName" = "8:Tonga_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3766,6 +4255,11 @@
             "AssemblyAsmDisplayName" = "8:System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_DA26F0A023D7F9002E8409A3798624AE"
+                    {
+                    "Name" = "8:System.Data.SQLite.DLL"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:System.Data.SQLite.DLL"
             "TargetName" = "8:"
@@ -3785,12 +4279,52 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DA4403F274064A2AADA1AADAA15D8501"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_x16r_128.bin"
+            "TargetName" = "8:Oland_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DAAC731E89844AADBD8C107C0D9F2EEE"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\Lyra2REv2.cl"
             "TargetName" = "8:Lyra2REv2.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DB5883952A9640ED8D4906F23D568AF1"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_x16r_128.bin"
+            "TargetName" = "8:Baffin_x16r_128.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3829,7 +4363,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpLauncher, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpLauncher, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_DC0D118C4EAC4B149C2356AACC426DCC"
@@ -3916,6 +4450,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E1416B8936C8448C93B801906B3C8C31"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Bonaire_x16r_256.bin"
+            "TargetName" = "8:Bonaire_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E1B7FCB65D4A42C58419E64670641B4F"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\ethash.cl"
@@ -3936,10 +4490,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E2E690FDD4584F26AA32AB03885FA07D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E416D48602C64A4385A20B9CC4995996"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_neoscrypt_64.bin"
-            "TargetName" = "8:Spooky_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_neoscrypt_64.bin"
+            "TargetName" = "8:Iceland_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -3956,30 +4510,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E414F96FA1B94535AB8444C646ACFD3B"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E60C32B70C3949818CD4A8677A5738A4"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_ethash_pascal_256.bin"
-            "TargetName" = "8:Tahiti_ethash_pascal_256.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E88BD3FF4DDE41B5AB4938C824F79389"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_ethash_pascal_256.bin"
-            "TargetName" = "8:Hawaii_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Iceland_x16r_128.bin"
+            "TargetName" = "8:Iceland_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -4016,12 +4550,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E8E2AC5B2422408583744C18BCCB0723"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_neoscrypt_64.bin"
+            "TargetName" = "8:Pitcairn_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E97C1C52A18A41129C7F6B096158D0A4"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\OpenCL.dll"
             "TargetName" = "8:OpenCL.dll"
             "Tag" = "8:"
             "Folder" = "8:_CB5D3B04C5B440C99FB5370FBD42C74B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA6BF75DE2A14C209E8CEE93878D842F"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hawaii_neoscrypt_64.bin"
+            "TargetName" = "8:Hawaii_neoscrypt_64.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4056,10 +4630,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EFF38FE665754AD795A2AA7AB0F6D1AC"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F0CFB57EC4AE4A9ABEE30D6B7061414A"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_x16r_64.bin"
-            "TargetName" = "8:Mullins_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Oland_x16r_64.bin"
+            "TargetName" = "8:Oland_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -4076,10 +4650,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F0109607AB2C4B88AE2433926F54F616"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F1C4F5709A104482AD96A7EDFBB71B56"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Fiji_x16r_64.bin"
-            "TargetName" = "8:Fiji_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_x16r_64.bin"
+            "TargetName" = "8:Spectre_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -4096,50 +4670,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F02A6976822647029C9569B47607943E"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F1F45E899067491990EF43EEB48C2A35"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_x16r_64.bin"
-            "TargetName" = "8:Ellesmere_x16r_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F0B0B708616B439198DD3EF4CC9EFAE0"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_neoscrypt_64.bin"
-            "TargetName" = "8:Tahiti_neoscrypt_64.bin"
-            "Tag" = "8:"
-            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F57352534FB34DD1AF200E9381F3786A"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 470 (VEN_1002&DEV_67DF&SUBSYS_0B311002).xml"
-            "TargetName" = "8:AMD Radeon RX 470 (VEN_1002&DEV_67DF&SUBSYS_0B311002).xml"
+            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 470 4.0GB.xml"
+            "TargetName" = "8:AMD Radeon RX 470 4.0GB.xml"
             "Tag" = "8:"
             "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
             "Condition" = "8:"
@@ -4156,10 +4690,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F66A8D7E5B1C4C23A1EB5884CB98FF76"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F1F7CA35C1EA4889A87C696329A80E36"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_x16r_256.bin"
-            "TargetName" = "8:Ellesmere_x16r_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Carrizo_x16r_64.bin"
+            "TargetName" = "8:Carrizo_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -4216,10 +4750,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F93231B812ED4EB2B7BD09F14ACC4C2F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F81D59910F6E481C931DDEFCBA1783DC"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spooky_x16r_64.bin"
-            "TargetName" = "8:Spooky_x16r_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Spectre_neoscrypt_64.bin"
+            "TargetName" = "8:Spectre_neoscrypt_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -4236,10 +4770,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FA91483F93C34CF195715722EFB5897D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F8D7D90D5C444BED9C661175FE10EA82"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Baffin_neoscrypt_64.bin"
-            "TargetName" = "8:Baffin_neoscrypt_64.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Hainan_x16r_64.bin"
+            "TargetName" = "8:Hainan_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
@@ -4256,10 +4790,30 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FD3C013E6C49401C94050E1235E2FCF1"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FBA0421402BA476C94B267B51E119FE9"
             {
-            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\gfx900_ethash_pascal_256.bin"
-            "TargetName" = "8:gfx900_ethash_pascal_256.bin"
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tahiti_x16r_256.bin"
+            "TargetName" = "8:Tahiti_x16r_256.bin"
+            "Tag" = "8:"
+            "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FBB3E28FBED94A5289EC789411CA1A45"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Pitcairn_x16r_128.bin"
+            "TargetName" = "8:Pitcairn_x16r_128.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
             "Condition" = "8:"
