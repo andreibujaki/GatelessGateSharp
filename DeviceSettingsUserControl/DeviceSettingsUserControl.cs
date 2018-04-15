@@ -78,6 +78,15 @@ namespace DeviceSettingsUserControl
             if (this.ButtonLoadFromFileClicked != null)
                 this.ButtonLoadFromFileClicked(this, new EventArgs());
         }
+
+        private void buttonPolaris10ApplyStrap_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void groupBox24_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public static class Utilities

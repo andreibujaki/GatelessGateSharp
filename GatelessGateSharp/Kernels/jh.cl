@@ -33,10 +33,12 @@
 #define SPH_JH_64   1
 #define SPH_LITTLE_ENDIAN 1
 
+#ifndef SPH_C32 // for X16R
 #define SPH_C32(x)	x
 #define SPH_C64(x)	x
 typedef uint sph_u32;
 typedef ulong sph_u64;
+#endif 
 
 /*
  * The internal bitslice representation may use either big-endian or

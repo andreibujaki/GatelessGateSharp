@@ -42,6 +42,9 @@ namespace GatelessGateSharp
         public int TargetMinFanSpeed { get; set; }
         public int TargetTemperature { get; set; }
         public int TargetMaxTemperature { get; set; }
+        
+        public int PCIDeviceID = 0;
+        public string PNPString;
 
         public virtual void SaveDefaultMemoryTimings() { }
         public bool MemoryTimingModsEnabled { get; set; }

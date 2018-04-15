@@ -170,6 +170,13 @@
     <Compile Include="Device\Device.cs" />
     <Compile Include="Device\AMDPolaris10.cs" />
     <Compile Include="LiveCharts\ConstantChanges.cs" />
+    <Compile Include="MemoryTimingStrapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MemoryTimingStrapForm.designer.cs">
+      <DependentUpon>MemoryTimingStrapForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Miner\OpenCLX16RMiner.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="PCIExpress.cs" />
     <Compile Include="SplashScreen.cs">
@@ -188,6 +195,7 @@
     <Compile Include="Miner\OpenCLCryptoNightMiner.cs" />
     <Compile Include="Stratum\EthashStratum.cs" />
     <Compile Include="Stratum\CryptoNightStratum.cs" />
+    <Compile Include="Stratum\X16RStratum.cs" />
     <Compile Include="Stratum\Lyra2REv2Stratum.cs" />
     <Compile Include="Stratum\NeoScryptStratum.cs" />
     <Compile Include="Stratum\PascalStratum.cs" />
@@ -209,6 +217,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stratum\NiceHashEthashStratum.cs" />
     <Compile Include="Stratum\Stratum.cs" />
+    <EmbeddedResource Include="MemoryTimingStrapForm.resx">
+      <DependentUpon>MemoryTimingStrapForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SplashScreen.resx">
       <DependentUpon>SplashScreen.cs</DependentUpon>
     </EmbeddedResource>
@@ -226,28 +237,47 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="Kernels\aes_helper.cl" />
+    <None Include="Kernels\blake.cl" />
     <None Include="Kernels\blake256.cl" />
+    <None Include="Kernels\bmw.cl" />
     <None Include="Kernels\bmw256.cl" />
     <None Include="Kernels\cryptonight.cl" />
+    <None Include="Kernels\cryptonight_light.cl" />
     <None Include="Kernels\cryptonight_heavy.cl" />
     <None Include="Kernels\cubehash.cl" />
+    <None Include="Kernels\echo.cl" />
     <None Include="Kernels\ethash.cl" />
     <None Include="Kernels\ethash_pascal.cl" />
     <None Include="Kernels\ethash_lbry.cl" />
+    <None Include="Kernels\ethash_pascal_256.cl" />
+    <None Include="Kernels\fugue.cl" />
+    <None Include="Kernels\groestl.cl" />
     <None Include="Kernels\groestl256.cl" />
+    <None Include="Kernels\hamsi.cl" />
+    <None Include="Kernels\hamsi_helper.cl" />
     <None Include="Kernels\jh.cl" />
+    <None Include="Kernels\keccak.cl" />
     <None Include="Kernels\keccak1600.cl" />
     <None Include="Kernels\lbry.cl" />
+    <None Include="Kernels\luffa.cl" />
     <None Include="Kernels\Lyra2REv2.cl" />
     <None Include="Kernels\Lyra2v2.cl" />
     <None Include="Kernels\neoscrypt.cl" />
+    <None Include="Kernels\neoscrypt_64.cl" />
     <None Include="Kernels\pascal.cl" />
     <None Include="Kernels\ripemd160.cl" />
     <None Include="Kernels\sha256.cl" />
+    <None Include="Kernels\shabal.cl" />
+    <None Include="Kernels\shavite.cl" />
+    <None Include="Kernels\simd.cl" />
+    <None Include="Kernels\skein.cl" />
     <None Include="Kernels\skein256.cl" />
+    <None Include="Kernels\whirlpool.cl" />
     <None Include="Kernels\wolf-aes.cl" />
     <None Include="Kernels\wolf-sha512.cl" />
     <None Include="Kernels\wolf-skein.cl" />
+    <None Include="Kernels\x16r.cl" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -320,6 +350,7 @@ copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSha
 copy $(SolutionDir)GatelessGateSharpLauncher\bin\$(Configuration)\GatelessGateSharpLauncher.exe $(TargetDir)
 "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:16777216
 xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
+xcopy /i /s /y $(ProjectDir)DeviceSettings $(TargetDir)DeviceSettings
 xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
 rem copy $(SolutionDir)GatelessGateSharp\bin\ReleaseCL\GatelessGateSharpCL.exe $(SolutionDir)GatelessGateSharp\bin\Release\GatelessGateSharpCL.exe 
 </PostBuildEvent>

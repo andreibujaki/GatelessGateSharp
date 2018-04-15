@@ -122,16 +122,18 @@ namespace GatelessGateSharp {
 
             Thread.CurrentThread.Priority = Parameters.MemoryTimingsTaskPriority;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
-                try {
-                    // memory timings
-                    foreach (var device in Controller.OpenCLDevices) {
+                int interval = Parameters.OverclockingSettingsUpdateInterval;
+                foreach (var device in Controller.OpenCLDevices) {
+                    try {
                         if (device.OverclockingEnabled)
                             device.UpdateOverclockingSettings();
-                        if (device.MemoryTimingModsEnabled)
+                        if (device.MemoryTimingModsEnabled) {
+                            interval = Parameters.MemoryTimingUpdateInterval;
                             device.UpdateMemoryTimings();
-                        System.Threading.Thread.Sleep(Parameters.MemoryTimingUpdateInterval);
-                    }
-                } catch (Exception) { }
+                        }
+                    } catch (Exception ex) { }
+                }
+                System.Threading.Thread.Sleep(interval);
             }
         }
 

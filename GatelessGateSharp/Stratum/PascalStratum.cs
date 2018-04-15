@@ -103,7 +103,7 @@ namespace GatelessGateSharp
 
         protected override void ProcessLine(String line)
         {
-            MainForm.Logger("line: " + line);
+            //MainForm.Logger("line: " + line);
             Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(line);
             if (response.ContainsKey("method") && response.ContainsKey("params"))
             {

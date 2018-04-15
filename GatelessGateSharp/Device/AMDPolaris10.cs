@@ -1955,6 +1955,38 @@ namespace GatelessGateSharp {
             }
         }
 
+        public class MC_ARB_BURST_TIME
+        {
+
+            public static readonly UInt32 STATE0_MASK   = 0x1f;
+            public static readonly Int32  STATE0__SHIFT = 0x0;
+            public static readonly UInt32 STATE1_MASK = 0x3e0;
+            public static readonly Int32 STATE1__SHIFT = 0x5;
+            public static readonly UInt32 TRRDS0_MASK = 0x7c00;
+            public static readonly Int32 TRRDS0__SHIFT = 0xa;
+            public static readonly UInt32 TRRDS1_MASK = 0xf8000;
+            public static readonly Int32 TRRDS1__SHIFT = 0xf;
+            public static readonly UInt32 TRRDL0_MASK = 0x1f00000;
+            public static readonly Int32 TRRDL0__SHIFT = 0x14;
+            public static readonly UInt32 TRRDL1_MASK = 0x3e000000;
+            public static readonly Int32 TRRDL1__SHIFT = 0x19;
+
+            public UInt32 Data { get; set; }
+            public UInt32 Mask { get; set; }
+            public UInt32 STATE0 { get { return (Data & STATE0_MASK) >> STATE0__SHIFT; } set { Data = (Data & ~STATE0_MASK) | ((value << STATE0__SHIFT) & STATE0_MASK); Mask = Mask | STATE0_MASK; } }
+            public UInt32 STATE1 { get { return (Data & STATE1_MASK) >> STATE1__SHIFT; } set { Data = (Data & ~STATE1_MASK) | ((value << STATE1__SHIFT) & STATE1_MASK); Mask = Mask | STATE1_MASK; } }
+            public UInt32 TRRDS0 { get { return (Data & TRRDS0_MASK) >> TRRDS0__SHIFT; } set { Data = (Data & ~TRRDS0_MASK) | ((value << TRRDS0__SHIFT) & TRRDS0_MASK); Mask = Mask | TRRDS0_MASK; } }
+            public UInt32 TRRDS1 { get { return (Data & TRRDS1_MASK) >> TRRDS1__SHIFT; } set { Data = (Data & ~TRRDS1_MASK) | ((value << TRRDS1__SHIFT) & TRRDS1_MASK); Mask = Mask | TRRDS1_MASK; } }
+            public UInt32 TRRDL0 { get { return (Data & TRRDL0_MASK) >> TRRDL0__SHIFT; } set { Data = (Data & ~TRRDL0_MASK) | ((value << TRRDL0__SHIFT) & TRRDL0_MASK); Mask = Mask | TRRDL0_MASK; } }
+            public UInt32 TRRDL1 { get { return (Data & TRRDL1_MASK) >> TRRDL1__SHIFT; } set { Data = (Data & ~TRRDL1_MASK) | ((value << TRRDL1__SHIFT) & TRRDL1_MASK); Mask = Mask | TRRDL1_MASK; } }
+
+            public MC_ARB_BURST_TIME(uint aData = 0x0)
+            {
+                Data = aData;
+                Mask = 0x0;
+            }
+        }
+
         public class MC_SEQ_MISC0
         {
             public static readonly UInt32 MT_MASK	 = 0xf0000000u;
@@ -2175,14 +2207,14 @@ namespace GatelessGateSharp {
             MainForm.GetMemoryTimingFromTextBox(DeviceIndex, algorithm, "polaris10_seq_misc8", out misc8);
             MainForm.GetMemoryTimingFromTextBox(DeviceIndex, algorithm, "polaris10_seq_misc9", out misc9);
 
-            MemoryTimingModsEnabled = true;
+            //MemoryTimingModsEnabled = true;
         }
 
         public override void UpdateMemoryTimings()
         {
             int busNumber = GetComputeDevice().PciBusIdAMD;
 
-            if (!PCIExpress.Available || busNumber <= 0 || !this.MemoryTimingModsEnabled)
+            if (!PCIExpress.Available || busNumber <= 0 /*|| !this.MemoryTimingModsEnabled*/)
                 return;
 
             uint currentCASData = 0;
@@ -2223,6 +2255,7 @@ namespace GatelessGateSharp {
             uint MISCData = 0;
             uint MISC2Data = 0;
             uint PMGData = 0;
+            uint burstTimeData = 0;
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out ARBData);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out ARB2Data);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out CASData);
@@ -2230,6 +2263,7 @@ namespace GatelessGateSharp {
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out MISCData);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out MISC2Data);
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out PMGData);
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_BURST_TIME, out burstTimeData);
             MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING(ARBData);
             MC_ARB_DRAM_TIMING2 ARB2Timings = new MC_ARB_DRAM_TIMING2(ARB2Data);
             MC_SEQ_CAS_TIMING CASTimings = new MC_SEQ_CAS_TIMING(CASData);
@@ -2237,6 +2271,7 @@ namespace GatelessGateSharp {
             MC_SEQ_MISC_TIMING MISCTimings = new MC_SEQ_MISC_TIMING(MISCData);
             MC_SEQ_MISC_TIMING2 MISC2Timings = new MC_SEQ_MISC_TIMING2(MISC2Data);
             MC_SEQ_PMG_TIMING PMGTimings = new MC_SEQ_PMG_TIMING(PMGData);
+            MC_ARB_BURST_TIME burstTime = new MC_ARB_BURST_TIME(burstTimeData);
             //if (CASTimings.TCL == 24)
             //    return;
             MainForm.Logger("=============");
@@ -2270,6 +2305,13 @@ namespace GatelessGateSharp {
             MainForm.Logger("RP:       " + ARB2Timings.RP);
             MainForm.Logger("WRPLUSRP: " + ARB2Timings.WRPLUSRP);
             MainForm.Logger("BUS_TURN: " + ARB2Timings.BUS_TURN);
+            MainForm.Logger("-------------");
+            MainForm.Logger("STATE0:   " + burstTime.STATE0);
+            MainForm.Logger("STATE1:   " + burstTime.STATE1);
+            MainForm.Logger("TRRDS0:   " + burstTime.TRRDS0);
+            MainForm.Logger("TRRDS1:   " + burstTime.TRRDS1);
+            MainForm.Logger("TRRDL0:   " + burstTime.TRRDL0);
+            MainForm.Logger("TRRDL1:   " + burstTime.TRRDL1);
             MainForm.Logger("-------------");
             MainForm.Logger("TRCDW:    " + RASTimings.TRCDW);
             MainForm.Logger("TRCDWA:   " + RASTimings.TRCDWA);

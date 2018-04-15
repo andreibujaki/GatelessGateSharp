@@ -360,7 +360,10 @@ namespace GatelessGateSharp
                             }
 
                             for (int i = 0; i < mDevices.Length; ++i) {
+                                if (mDevices[i].ADLAdapterIndex < 0)
+                                    continue;
                                 int available = 0, enabled = 0, ADLVersion = 0;
+                                mDevices[i].PNPString = OSAdapterInfoData.ADLAdapterInfo[mDevices[i].ADLAdapterIndex].PNPString;
                                 mDevices[i].ADLVersion = -1;
                                 if (ADL.ADL2_Overdrive_Caps != null && ADL.ADL2_Overdrive_Caps(ADL2Context, mDevices[i].ADLAdapterIndex, ref available, ref enabled, ref ADLVersion) == ADL.ADL_SUCCESS
                                     && available != 0
@@ -848,8 +851,8 @@ namespace GatelessGateSharp
         {
             if (ADLAdapterIndex < 0)
                 return;
-            if (!OverclockingEnabled)
-                return;
+            //if (!OverclockingEnabled)
+            //    return;
 
             PowerLimit = TargetPowerLimit;
 

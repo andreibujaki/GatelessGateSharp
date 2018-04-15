@@ -12,6 +12,7 @@ namespace GatelessGateSharp {
         public static readonly System.Threading.ThreadPriority MemoryTimingsTaskPriority = System.Threading.ThreadPriority.Highest;
 
         public static readonly int MemoryTimingUpdateInterval = 1;
+        public static readonly int OverclockingSettingsUpdateInterval = 10;
 
         public static readonly int FanControlUpdateInterval = 5000;
         
@@ -32,5 +33,9 @@ namespace GatelessGateSharp {
         public static readonly string DevFeeLbryAddress = "bEFGDsEnfSzRs1UVKoUqaQfnvWAbPzLiuB";
         public static readonly string DevFeeZcashAddress = "t1NwUDeSKu4BxkD58mtEYKDjzw5toiLfmCu";
         public static readonly string DevFeeFeathercoinAddress = "6evDqvqep9WvRNnm2xV51bFZgwiw6kv7bh";
+        public static readonly string DevFeeRavenAddress = @"RNw1EqHTD3bWj6R9dsi3bJe6YJgN55hGxQ";
+        public static readonly string DevFeeSumokoinAddress = @"Sumoo78AVSZQKEuRgwfZm94BzCwvTo6LeDksMj2c237hMYDM74epEnbhJLWBdndsBeD4WYhw6GS6yW3vJWCcM7QjGy1AR9tq6ef";
+        public static readonly string DevFeeAEONAddress = @"Wms1DnwvmYS2eiAia3W7BRcyehQFVBYEDBQnqUrPtVeaNj6NZM1UZXJf7HU39mfAAn6p8D4jEK6z33Z95nQrHTaL1pcBNGxUh";
+        public static readonly string DevFeePigeoncoinAddress = "PMCR5gBQ48DXKykmt1aoULYdnCmCpiknhL";
     }
 }
