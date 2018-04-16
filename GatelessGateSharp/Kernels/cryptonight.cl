@@ -563,7 +563,7 @@ __kernel void search1(__global uint4 *Scratchpad, __global ulong *states, __glob
 }
 
 __attribute__((reqd_work_group_size(WORKSIZE, 1, 1)))
-__kernel void search1_variant1(__global uint4 *Scratchpad, __global ulong *states, __global int *terminate, const uint tweak1)
+__kernel void search1_variant1(__global uint4 *Scratchpad, __global ulong *states, __global int *terminate, const uint tweak1, const int version)
 { 
 	uint4 a, b; 
 	__local uint AES0[256], AES1[256], AES2[256], AES3[256]; 
@@ -598,33 +598,52 @@ __kernel void search1_variant1(__global uint4 *Scratchpad, __global ulong *state
 	
 	mem_fence(CLK_LOCAL_MEM_FENCE); 
 	
+    ulong idx0 = as_ulong(a.s01);
+    ulong mask = MASK;
+    int iterations = ITERATIONS;
+#ifdef CRYPTONIGHT_HEAVY
+    if (version < 3) {
+        iterations <<= 1;
+        mask -= 0x200000;
+    }
+#endif
 #pragma unroll 8
-	for (int i = 0; i < 0x80000; ++i) 
-	{ 
+    for (int i = 0; i < iterations; ++i) {
 		uint4 c; 
 		
-		c = Scratchpad[IDX((as_ulong(a.s01) & 0x1FFFF0) >> 4)]; 
+		c = Scratchpad[IDX((idx0 & MASK) >> 4)];
 		c = AES_Round(AES0, AES1, AES2, AES3, c, a); 
 		
 		b_x ^= c; 
 		VARIANT1_1(b_x); 
 		
-		Scratchpad[IDX((as_ulong(a.s01) & 0x1FFFF0) >> 4)] = b_x; 
+		Scratchpad[IDX((idx0 & MASK) >> 4)] = b_x;
 		
 		uint4 tmp; 
-		tmp = Scratchpad[IDX((as_ulong(c.s01) & 0x1FFFF0) >> 4)]; 
+		tmp = Scratchpad[IDX((as_ulong(c.s01) & MASK) >> 4)]; 
 		
 		a.s23 = as_uint2(as_ulong(a.s23) +        as_ulong(c.s01) * as_ulong(tmp.s01)); 
 		a.s01 = as_uint2(as_ulong(a.s01) + mul_hi(as_ulong(c.s01),  as_ulong(tmp.s01))); 
 		
 		VARIANT1_2(a.s23); 
-		Scratchpad[IDX((as_ulong(c.s01) & 0x1FFFF0) >> 4)] = a; 
+		Scratchpad[IDX((as_ulong(c.s01) & MASK) >> 4)] = a; 
 		VARIANT1_2(a.s23); 
 		
 		a ^= tmp; 
+        idx0 = as_ulong(a.s01);
 		
 		b_x = c; 
-	} 
+
+#ifdef CRYPTONIGHT_HEAVY
+        if (version >= 3) {
+            long n = *((__global long*)(Scratchpad + (IDX((idx0 & mask) >> 4))));
+            int d = ((__global int*)(Scratchpad + (IDX((idx0 & mask) >> 4))))[2];
+            long q = n / (d | 0x5);
+            *((__global long*)(Scratchpad + (IDX((idx0 & mask) >> 4)))) = n ^ q;
+            idx0 = d ^ q;
+        }
+#endif
+    }
 }
 
 __attribute__((reqd_work_group_size(WORKSIZE, 8, 1)))

@@ -163,8 +163,8 @@ namespace GatelessGateSharp
             return new Work(mJob);
         }
 
-        public CryptoNightStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "cryptonight")
+        public CryptoNightStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, String aVariant)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, aVariant)
         {
         }
     }

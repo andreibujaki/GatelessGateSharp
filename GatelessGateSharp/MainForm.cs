@@ -103,7 +103,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.3";
+        public static string appVersion = "1.3.4";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
@@ -3803,7 +3803,7 @@ namespace GatelessGateSharp
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            stratum = new CryptoNightStratum(host.name, ((algorithm == "cryptonightv7") ? 3363 : 3355), username, "x", pool);
+                            stratum = new CryptoNightStratum(host.name, ((algorithm == "cryptonightv7") ? 3363 : 3355), username, "x", pool, algorithm);
                             break;
                         } catch (Exception ex) { Logger(ex); }
                 niceHashMode = true;
@@ -3817,7 +3817,7 @@ namespace GatelessGateSharp
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            stratum = new CryptoNightStratum(host.name, 8005, username, password, pool);
+                            stratum = new CryptoNightStratum(host.name, 8005, username, password, pool, algorithm);
                             break;
                         } catch (Exception ex) {
                             Logger(ex);
@@ -3833,7 +3833,7 @@ namespace GatelessGateSharp
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            stratum = new CryptoNightStratum(host.name, 14444, username, "x", pool);
+                            stratum = new CryptoNightStratum(host.name, 14444, username, "x", pool, algorithm);
                             break;
                         } catch (Exception ex) {
                             Logger(ex);
@@ -3843,11 +3843,11 @@ namespace GatelessGateSharp
                 var username = mDevFeeMode ? Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix : textBoxMoneroAddress.Text;
                 if (!mDevFeeMode && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
-                stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool);
+                stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool, algorithm);
 
             } else if ((algorithm == "cryptonight_heavy") && pool == "Sumokoin Mining Pool" && (mDevFeeMode || textBoxSumokoinAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
-                stratum = new CryptoNightStratum("pool.sumokoin.com", 5555, username, "x", pool);
+                stratum = new CryptoNightStratum("pool.sumokoin.com", 5555, username, "x", pool, algorithm);
 
             } else if ((algorithm == "cryptonight_heavy") && pool == "Hash Vault" && (mDevFeeMode || textBoxSumokoinAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
@@ -3856,7 +3856,7 @@ namespace GatelessGateSharp
                     password += textBoxRigID.Text;
                 if (!mDevFeeMode && textBoxEmail.Text != "")
                     password += ":" + textBoxEmail.Text;
-                stratum = new CryptoNightStratum("pool.sumokoin.hashvault.pro", 5555, username, password, pool);
+                stratum = new CryptoNightStratum("pool.sumokoin.hashvault.pro", 5555, username, password, pool, algorithm);
 
             } else if ((algorithm == "cryptonight_light") && pool == "Hash Vault" && (mDevFeeMode || textBoxAEONAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeAEONAddress : textBoxAEONAddress.Text;
@@ -3865,13 +3865,18 @@ namespace GatelessGateSharp
                     password += textBoxRigID.Text;
                 if (!mDevFeeMode && textBoxEmail.Text != "")
                     password += ":" + textBoxEmail.Text;
-                stratum = new CryptoNightStratum("pool.aeon.hashvault.pro", 5555, username, password, pool);
+                stratum = new CryptoNightStratum("pool.aeon.hashvault.pro", 5555, username, password, pool, algorithm);
+
+            } else if ((algorithm == "cryptonight_light") && pool == "AEON Mining Pool" && (mDevFeeMode || textBoxAEONAddress.Text.Length > 0)) {
+                var username = mDevFeeMode ? Parameters.DevFeeAEONAddress : textBoxAEONAddress.Text;
+                var password = "x";
+                stratum = new CryptoNightStratum("mine.aeon-pool.com", 5555, username, password, pool, algorithm);
 
             } else if ((algorithm == "cryptonight_heavy") && pool == "FairPool" && (mDevFeeMode || textBoxSumokoinAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
                 if (!mDevFeeMode && textBoxRigID.Text != "")
                     username += "+" + textBoxRigID.Text;
-                stratum = new CryptoNightStratum("mine.sumo.fairpool.xyz", 5555, username, "x", pool);
+                stratum = new CryptoNightStratum("mine.sumo.fairpool.xyz", 5555, username, "x", pool, algorithm);
 
             } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "Mining Pool Hub" && textBoxMiningPoolHubUsername.Text.Length > 0) {
                 var username = textBoxMiningPoolHubUsername.Text;
@@ -3884,7 +3889,7 @@ namespace GatelessGateSharp
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            stratum = new CryptoNightStratum(host.name, 20580, username, "x", pool);
+                            stratum = new CryptoNightStratum(host.name, 20580, username, "x", pool, algorithm);
                             break;
                         } catch (Exception ex) {
                             Logger(ex);
@@ -4564,70 +4569,68 @@ namespace GatelessGateSharp
             }
         }
 
-        private void LaunchMinersForCustomPool(string algo, string host, int port, string login, string password, string algo2, string host2, int port2, string login2, string password2)
+        private void LaunchMinersForCustomPool(string prettyAlgoName, string host, int port, string login, string password, string algo2, string host2, int port2, string login2, string password2)
         {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            if (algo == "Ethash" && algo2 == "Lbry") {
+            if (prettyAlgoName == "Ethash" && algo2 == "Lbry") {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashLbryMinersWithStratum(stratum, stratum2);
                 Controller.PrimaryStratum = stratum;
                 Controller.SecondaryStratum = stratum2;
-            } else if (algo == "Ethash" && algo2 == "Pascal") {
+            } else if (prettyAlgoName == "Ethash" && algo2 == "Pascal") {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new PascalStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashPascalMinersWithStratum(stratum, stratum2);
                 Controller.PrimaryStratum = stratum;
                 Controller.SecondaryStratum = stratum2;
-            } else if (algo == "Ethash") {
+            } else if (prettyAlgoName == "Ethash") {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 LaunchOpenCLEthashMinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
-            } else if (algo == "Ethash (NiceHash)" && algo2 == "Lbry") {
+            } else if (prettyAlgoName == "Ethash (NiceHash)" && algo2 == "Lbry") {
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashLbryMinersWithStratum(stratum, stratum2);
                 Controller.PrimaryStratum = stratum;
                 Controller.SecondaryStratum = stratum2;
-            } else if (algo == "Ethash (NiceHash)" && algo2 == "Pascal") {
+            } else if (prettyAlgoName == "Ethash (NiceHash)" && algo2 == "Pascal") {
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 var stratum2 = new PascalStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashPascalMinersWithStratum(stratum, stratum2);
                 Controller.PrimaryStratum = stratum;
                 Controller.SecondaryStratum = stratum2;
-            } else if (algo == "Ethash (NiceHash)") {
+            } else if (prettyAlgoName == "Ethash (NiceHash)") {
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 LaunchOpenCLEthashMinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
-            } else if (algo == "CryptoNight" || algo == "CryptoNight (NiceHash)" || algo == "CryptoNightV7" || algo == "CryptoNight-Heavy" || algo == "CryptoNight-Light") {
-                var stratum = new CryptoNightStratum(host, port, login, password, host);
-                LaunchOpenCLCryptoNightMinersWithStratum(
-                    stratum, 
-                    (algo == "CryptoNight (NiceHash)"),
-                    (algo == "CryptoNightV7")     ? "cryptonightv7" :
-                    (algo == "CryptoNight-Heavy") ? "cryptonight_heavy" :
-                    (algo == "CryptoNight-Light") ? "cryptonight_light" :
-                                                    "cryptonight");
+            } else if (prettyAlgoName == "CryptoNight" || prettyAlgoName == "CryptoNight (NiceHash)" || prettyAlgoName == "CryptoNightV7" || prettyAlgoName == "CryptoNight-Heavy" || prettyAlgoName == "CryptoNight-Light") {
+                var algo = (prettyAlgoName == "CryptoNightV7"    ) ? "cryptonightv7" :
+                           (prettyAlgoName == "CryptoNight-Heavy") ? "cryptonight_heavy" :
+                           (prettyAlgoName == "CryptoNight-Light") ? "cryptonight_light" :
+                                                                     "cryptonight";
+                var stratum = new CryptoNightStratum(host, port, login, password, host, algo);
+                LaunchOpenCLCryptoNightMinersWithStratum(stratum, (prettyAlgoName == "CryptoNight (NiceHash)"), algo);
                 Controller.PrimaryStratum = stratum;
-            } else if (algo == "Lbry") {
+            } else if (prettyAlgoName == "Lbry") {
                 var stratum = new LbryStratum(host, port, login, password, host);
                 LaunchOpenCLLbryMinersWithStratum(stratum);
-            } else if (algo == "Pascal") {
+            } else if (prettyAlgoName == "Pascal") {
                 var stratum = new PascalStratum(host, port, login, password, host);
                 LaunchOpenCLPascalMinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
-            } else if (algo == "NeoScrypt") {
+            } else if (prettyAlgoName == "NeoScrypt") {
                 var stratum = new NeoScryptStratum(host, port, login, password, host);
                 LaunchOpenCLNeoScryptMinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
-            } else if (algo == "Lyra2REv2") {
+            } else if (prettyAlgoName == "Lyra2REv2") {
                 var stratum = new Lyra2REv2Stratum(host, port, login, password, host);
                 LaunchOpenCLLyra2REv2MinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
-            } else if (algo == "X16R" || algo == "X16S") {
+            } else if (prettyAlgoName == "X16R" || prettyAlgoName == "X16S") {
                 var stratum = new X16RStratum(host, port, login, password, host);
-                LaunchOpenCLX16RMinersWithStratum(stratum, (algo == "X16S") ? "x16s" : "x16r");
+                LaunchOpenCLX16RMinersWithStratum(stratum, (prettyAlgoName == "X16S") ? "x16s" : "x16r");
                 Controller.PrimaryStratum = stratum;
             }
         }
@@ -5222,7 +5225,7 @@ namespace GatelessGateSharp
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            newPrimaryStratum = new CryptoNightStratum(host.name, 14444, username, "x", host.name);
+                            newPrimaryStratum = new CryptoNightStratum(host.name, 14444, username, "x", host.name, algo);
                             break;
                         } catch (Exception ex) { Logger(ex); }
 
@@ -5232,7 +5235,7 @@ namespace GatelessGateSharp
                     foreach (var host in hosts)
                         if (host.time >= 0)
                             try {
-                                newPrimaryStratum = new CryptoNightStratum(host.name, 3355, username, "x", host.name);
+                                newPrimaryStratum = new CryptoNightStratum(host.name, 3355, username, "x", host.name, algo);
                                 break;
                             } catch (Exception ex) { Logger(ex); }
                 }
@@ -5372,27 +5375,32 @@ namespace GatelessGateSharp
             } else if (algo == "cryptonight_heavy") {
                 var username = Parameters.DevFeeSumokoinAddress;
                 try {
-                    newPrimaryStratum = new CryptoNightStratum("pool.sumokoin.com", 5555, username, "x", "Sumokoin Mining Pool");
+                    newPrimaryStratum = new CryptoNightStratum("pool.sumokoin.com", 5555, username, "x", "Sumokoin Mining Pool", algo);
                 } catch (Exception ex) { Logger(ex); }
 
                 if (newPrimaryStratum == null) {
                     try {
-                        newPrimaryStratum = new CryptoNightStratum("pool.sumokoin.hashvault.pro", 5555, username, "DEVFEE:me@yurio.net", "Hash Vault");
+                        newPrimaryStratum = new CryptoNightStratum("pool.sumokoin.hashvault.pro", 5555, username, "DEVFEE:me@yurio.net", "Hash Vault", algo);
                     } catch (Exception ex) { Logger(ex); }
                 }
 
                 if (newPrimaryStratum == null) {
                     try {
-                        newPrimaryStratum = new CryptoNightStratum("mine.sumo.fairpool.xyz", 5555, username + "+DEVFEE", "x", "FairPool");
+                        newPrimaryStratum = new CryptoNightStratum("mine.sumo.fairpool.xyz", 5555, username + "+DEVFEE", "x", "FairPool", algo);
                     } catch (Exception ex) { Logger(ex); }
                 }
 
             } else if (algo == "cryptonight_light") {
                 var username = Parameters.DevFeeAEONAddress;
                 try {
-                    newPrimaryStratum = new CryptoNightStratum("pool.aeon.hashvault.pro", 5555, username, "DEVFEE:me@yurio.net", "Hash Vault");
+                        newPrimaryStratum = new CryptoNightStratum("pool.aeon.hashvault.pro", 5555, username, "DEVFEE:me@yurio.net", "Hash Vault", algo);
                 } catch (Exception ex) { Logger(ex); }
 
+                if (newPrimaryStratum == null) {
+                    try {
+                        newPrimaryStratum = new CryptoNightStratum("mine.aeon-pool.com", 5555, username, "x", "AEON Mining Pool", algo);
+                    } catch (Exception ex) { Logger(ex); }
+                }
             } else {
                 throw new System.InvalidOperationException(algo);
             }
@@ -5406,7 +5414,7 @@ namespace GatelessGateSharp
                     if (newSecondaryStratum != null)
                         miner.SetSecondaryStratum(newSecondaryStratum);
                     if (miner.GetType() == typeof(OpenCLCryptoNightMiner))
-                        ((OpenCLCryptoNightMiner)miner).SaveNiceHashMode();
+                        ((OpenCLCryptoNightMiner)miner).SaveState();
                 }
                 Controller.PrimaryStratumBackup = Controller.PrimaryStratum;
                 Controller.PrimaryStratum = newPrimaryStratum;
@@ -5451,7 +5459,7 @@ namespace GatelessGateSharp
                 if (Controller.SecondaryStratum != null && miner.SecondaryAlgorithmName == Controller.SecondaryStratum.AlgorithmName)
                     miner.SetSecondaryStratum(Controller.SecondaryStratum);
                 if (miner.GetType() == typeof(OpenCLCryptoNightMiner))
-                    ((OpenCLCryptoNightMiner)miner).RestoreNiceHashMode();
+                    ((OpenCLCryptoNightMiner)miner).RestoreState();
             }
         }
 

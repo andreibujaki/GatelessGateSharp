@@ -12,7 +12,7 @@ namespace GatelessGateSharp {
         public static readonly System.Threading.ThreadPriority MemoryTimingsTaskPriority = System.Threading.ThreadPriority.Highest;
 
         public static readonly int MemoryTimingUpdateInterval = 1;
-        public static readonly int OverclockingSettingsUpdateInterval = 10;
+        public static readonly int OverclockingSettingsUpdateInterval = 100;
 
         public static readonly int FanControlUpdateInterval = 5000;
         

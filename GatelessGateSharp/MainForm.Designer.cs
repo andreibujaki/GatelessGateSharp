@@ -3944,7 +3944,8 @@
             "Sumokoin Mining Pool",
             "Hash Vault",
             "FairPool",
-            "Pigeoncoin"});
+            "Pigeoncoin",
+            "AEON Mining Pool"});
             this.listBoxPoolPriorities.Location = new System.Drawing.Point(6, 20);
             this.listBoxPoolPriorities.Name = "listBoxPoolPriorities";
             this.listBoxPoolPriorities.Size = new System.Drawing.Size(181, 303);

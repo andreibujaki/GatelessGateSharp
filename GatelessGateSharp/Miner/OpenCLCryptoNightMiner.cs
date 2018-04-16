@@ -30,6 +30,8 @@ namespace GatelessGateSharp {
 
         private bool mNicehashMode = false;
         private bool mSavedNicehashMode = false;
+        private int mMoneroVersion = 0;
+        private int mSavedMoneroVersion = 0;
         private int mStridedIndex = 1;
         private int mMemoryChunkSize = 1;
         private int mStateSize = 25; // 32;
@@ -45,12 +47,19 @@ namespace GatelessGateSharp {
         UInt32[] output = new UInt32[outputSize];
         byte[] input = new byte[76];
 
+
         public bool NiceHashMode { get { return mNicehashMode; } }
-        public void SaveNiceHashMode() { mSavedNicehashMode = mNicehashMode; }
-        public void RestoreNiceHashMode() { mNicehashMode = mSavedNicehashMode; }
+        public void SaveState() {
+            mSavedNicehashMode = mNicehashMode;
+            mSavedMoneroVersion = mMoneroVersion;
+        }
+        public void RestoreState() {
+            mNicehashMode = mSavedNicehashMode;
+            mMoneroVersion = mSavedMoneroVersion;
+        }
         public string Variant;
 
-        public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice, string aVariant = "cryptonight")
+        public OpenCLCryptoNightMiner(OpenCLDevice aGatelessGateDevice, string aVariant)
             : base(aGatelessGateDevice, aVariant) {
             Variant = aVariant;
         }
@@ -82,7 +91,6 @@ namespace GatelessGateSharp {
                 Random r = new Random();
                 var openCLName = OpenCLDevice.GetComputeDevice().Name;
                 var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
-                int moneroVersion = 0;
 
                 MarkAsAlive();
 
@@ -160,12 +168,6 @@ namespace GatelessGateSharp {
 
                             Array.Copy(Utilities.StringToByteArray(job.Blob), input, 76);
 
-                            int newVersion = (int)input[0]; // ((int)input[0] >= 7) ? ((int)input[0] - 6) : 0;
-                            if (moneroVersion != newVersion) {
-                                MainForm.Logger("Switching to Monero Version " + newVersion);
-                                moneroVersion = newVersion;
-                            }
-
                             byte localExtranonce = (byte)work.LocalExtranonce;
                             byte[] targetByteArray = Utilities.StringToByteArray(job.Target);
                             UInt32 startNonce;
@@ -179,9 +181,6 @@ namespace GatelessGateSharp {
                                 | ((UInt32)input[37] << (8 * 2))
                                 | ((UInt32)input[36] << (8 * 1)) 
                                 | ((UInt32)input[35] << (8 * 0)));
-                            searchKernel0.SetValueArgument<Int32>(3, moneroVersion);
-                            searchKernel1.SetValueArgument<Int32>(3, moneroVersion);
-                            searchKernel2.SetValueArgument<Int32>(2, moneroVersion);
 
                             UInt32 target = ((UInt32)targetByteArray[0] << 0)
                                             | ((UInt32)targetByteArray[1] << 8)
@@ -195,6 +194,15 @@ namespace GatelessGateSharp {
 
                             while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(job)) {
                                 MarkAsAlive();
+
+                                int newVersion = (int)input[0]; // ((int)input[0] >= 7) ? ((int)input[0] - 6) : 0;
+                                if (mMoneroVersion != newVersion)
+                                    MainForm.Logger("Switching to Monero Version " + newVersion);
+                                mMoneroVersion = newVersion;
+                                searchKernel0.SetValueArgument<Int32>(3, mMoneroVersion);
+                                searchKernel1.SetValueArgument<Int32>(3, mMoneroVersion);
+                                searchKernel1Variant1.SetValueArgument<Int32>(4, mMoneroVersion);
+                                searchKernel2.SetValueArgument<Int32>(2, mMoneroVersion);
 
                                 globalWorkOffsetA[0] = globalWorkOffsetB[0] = startNonce;
 
@@ -217,7 +225,7 @@ namespace GatelessGateSharp {
                                 Queue.Finish();
                                 if (Stopped)
                                     break;
-                                Queue.Execute(((moneroVersion == 7 || Variant == "cryptonightv7") ? searchKernel1Variant1 : searchKernel1), globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
+                                Queue.Execute(((mMoneroVersion == 7 || Variant == "cryptonightv7") ? searchKernel1Variant1 : searchKernel1), globalWorkOffsetB, globalWorkSizeB, localWorkSizeB, null);
                                 Queue.Finish();
                                 if (Stopped)
                                     break;
