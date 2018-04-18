@@ -91,7 +91,6 @@ namespace GatelessGateSharp
 
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
 
-#if !COMMAND_LINE_VERSION
             // Launch monitor
             foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharpMonitor"))
                 try { process.Kill(); } catch (Exception) { }
@@ -110,17 +109,14 @@ namespace GatelessGateSharp
                 monitor.Start();
             }
             catch (Exception) { }
-#endif
             
             KillMonitor = true;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
             
-#if !COMMAND_LINE_VERSION
             if (KillMonitor)
                 try { monitor.Kill(); } catch (Exception) { }
-#endif
 
             try { sMutex.ReleaseMutex(); } catch (Exception) { }
 

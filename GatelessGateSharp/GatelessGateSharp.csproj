@@ -339,7 +339,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
+    <PostBuildEvent>showdown makehtml  -i $(SolutionDir)README.md -o README.html
+xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)
 copy $(SolutionDir)SQLite\System.Data.SQLite.dll $(TargetDir)
@@ -352,7 +353,6 @@ copy $(SolutionDir)GatelessGateSharpLauncher\bin\$(Configuration)\GatelessGateSh
 xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
 xcopy /i /s /y $(ProjectDir)DeviceSettings $(TargetDir)DeviceSettings
 xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
-rem copy $(SolutionDir)GatelessGateSharp\bin\ReleaseCL\GatelessGateSharpCL.exe $(SolutionDir)GatelessGateSharp\bin\Release\GatelessGateSharpCL.exe 
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

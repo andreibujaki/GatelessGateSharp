@@ -238,22 +238,6 @@ namespace GatelessGateSharp
             Charting.For<MeasureModel>(mapper);
         }
 
-#if COMMAND_LINE_VERSION
-        protected override void OnLoad(EventArgs e) {
-            Visible = false;
-            ShowInTaskbar = false;
-            Opacity = 0;
-
-            base.OnLoad(e);
-        }
-
-        protected override void OnVisibleChanged(EventArgs e)
-        {
-            base.OnVisibleChanged(e);
-            this.Visible = false;
-        }
-#endif
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
@@ -267,13 +251,11 @@ namespace GatelessGateSharp
 
             NativeMethods.SetThreadExecutionState(NativeMethods.ES_CONTINUOUS | NativeMethods.ES_SYSTEM_REQUIRED | NativeMethods.ES_AWAYMODE_REQUIRED);
 
-#if !COMMAND_LINE_VERSION
             CheckVirtualMemorySize();
 
             SplashScreen splashScreen = new SplashScreen();
             splashScreen.Show();
             Application.DoEvents();
-#endif
 
             try {
                 InitializeDevices();
@@ -431,13 +413,9 @@ namespace GatelessGateSharp
                 }
             } else {
                 // Auto-start mining if necessary.
-#if COMMAND_LINE_VERSION
-            var autoStart = true;
-#else
                 var autoStart = checkBoxAutoStart.Checked;
                 splashScreen.Dispose();
                 Application.DoEvents();
-#endif
                 try {
                     if (System.IO.File.ReadAllLines(AppStateFilePath)[0] == "Mining")
                         autoStart = true;
@@ -456,11 +434,11 @@ namespace GatelessGateSharp
             }
         }
 
-        #endregion
+#endregion
 
 
 
-        #region Devices
+#region Devices
 
         private void InitializeDevices()
         {
@@ -558,6 +536,7 @@ namespace GatelessGateSharp
                 buttonDeviceResetToDefaultArray[i] = (Button)uc.Controls[0];
                 buttonDeviceResetAllArray[i] = (Button)uc.Controls[2];
                 buttonDeviceCopyToOthersArray[i] = (Button)uc.Controls[1];
+
                 uc.ButtonResetToDefaultClicked += new EventHandler(DeviceSettingsUserControl_ButtonResetToDefaultClicked);
                 uc.ButtonSaveToFileClicked += new EventHandler(DeviceSettingsUserControl_ButtonSaveToFileClicked);
                 uc.ButtonLoadFromFileClicked += new EventHandler(DeviceSettingsUserControl_ButtonLoadFromFileClicked);
@@ -1227,7 +1206,7 @@ namespace GatelessGateSharp
             }
         }
 
-        #endregion
+#endregion
 
 
 
@@ -1491,8 +1470,14 @@ namespace GatelessGateSharp
 
         private void ParseCommandLineArguments(string[] arguments)
         {
+            bool first = true;
+
             var list = new List<CommandLineParameter> { };
             foreach (var argument in arguments) {
+                if (first) {
+                    first = false;
+                    continue;
+                }
                 try {
                     list.Add(new CommandLineParameter(argument));
                 } catch (Exception ex) {
@@ -1757,6 +1742,7 @@ namespace GatelessGateSharp
                             }
                         }
                     } catch (Exception ex) {
+                        Logger("Here!");
                         Logger(ex);
                     }
 
@@ -2348,7 +2334,7 @@ namespace GatelessGateSharp
                 var elapsedTimeInSeconds = benchmarking ? (long)Controller.BenchmarkStopwatch.Elapsed.TotalSeconds : (long)Controller.StopWatch.Elapsed.TotalSeconds;
 
                 if (benchmarking) {
-                    var remaining = (Controller.BenchmarkEntries.Count * (int)numericUpDownBenchmarkingRepeats.Value) * ((int)numericUpDownBenchmarkingWait.Value + (int)numericUpDownBenchmarkingLength.Value);
+                    var remaining = Controller.BenchmarkEntries.Count * (int)numericUpDownBenchmarkingRepeats.Value * (int)numericUpDownBenchmarkingLength.Value;
                     labelBenchmarkingRemaining.Text = "About " + (remaining / 60) + " minutes";
                 } else {
                     labelBenchmarkingRemaining.Text = "-";
@@ -3603,7 +3589,7 @@ namespace GatelessGateSharp
             }
         };
 
-        #region GetServers
+#region GetServers
 
         List<StratumServerInfo> GetNiceHashLyra2REv2Servers()
         {
@@ -3776,7 +3762,7 @@ namespace GatelessGateSharp
             return hosts;
         }
 
-        #endregion
+#endregion
 
         public void LaunchOpenCLCryptoNightMiners(string pool, string algorithm)
         {
@@ -5130,7 +5116,6 @@ namespace GatelessGateSharp
                 groupBoxBenchmarkingFirstParameter.Enabled = idle;
                 groupBoxBenchmarkingSecondParameter.Enabled = idle && checkBoxBenchmarkingFirstParameterEnabled.Checked;
                 numericUpDownBenchmarkingRepeats.Enabled = idle;
-                numericUpDownBenchmarkingWait.Enabled = idle;
                 numericUpDownBenchmarkingLength.Enabled = idle;
                 comboBoxBenchmarkingFirstParameter.Enabled = numericUpDownBenchmarkingFirstParameterStart.Enabled = numericUpDownBenchmarkingFirstParameterEnd.Enabled = numericUpDownBenchmarkingFirstParameterStep.Enabled = checkBoxBenchmarkingFirstParameterEnabled.Checked;
                 comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterStart.Enabled = numericUpDownBenchmarkingSecondParameterEnd.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
@@ -5138,7 +5123,6 @@ namespace GatelessGateSharp
                 checkBoxOptimizationCoolGPUDown.Enabled = checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = checkBoxOptimizationUseAverageSpeeds.Enabled = checkBoxOptimizationPrioritizeStability.Enabled = idle;
                 groupBoxOptimizationTargets.Enabled = idle;
                 numericUpDownOptimizationRepeats.Enabled = idle;
-                numericUpDownOptimizationWait.Enabled = idle;
                 numericUpDownOptimizationLength.Enabled = idle;
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
@@ -5195,7 +5179,7 @@ namespace GatelessGateSharp
                 }
         }
 
-        #region DEVFEE
+#region DEVFEE
 
         private bool SwitchToStratumForDEVFEE()
         {
@@ -5498,7 +5482,7 @@ namespace GatelessGateSharp
                 mDevFeeModeStartTime = DateTime.Now;
         }
 
-        #endregion
+#endregion
 
         private Exception GetUnrecoverableException()
         {
@@ -6401,11 +6385,11 @@ namespace GatelessGateSharp
                     tabControlMainForm.SelectedIndex = 4;
 
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
-                    timerBenchmarks.Interval = ((int)numericUpDownOptimizationWait.Value * 1000) + ((int)numericUpDownOptimizationLength.Value * 1000);
-                    timerResetStopwatch.Interval = ((int)numericUpDownOptimizationWait.Value * 1000);
+                    timerBenchmarks.Interval = ((int)numericUpDownOptimizationLength.Value * 1000);
+                    timerResetStopwatch.Interval = 100;
                 } else {
-                    timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000) + ((int)numericUpDownBenchmarkingLength.Value * 1000);
-                    timerResetStopwatch.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000);
+                    timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingLength.Value * 1000);
+                    timerResetStopwatch.Interval = 100;
                 }
                 timerBenchmarks.Enabled = false;
                 timerResetStopwatch.Enabled = false;
@@ -6422,6 +6406,7 @@ namespace GatelessGateSharp
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
                     enabledDeviceCount = 1;
                     deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
+                    labelOptimizationDevice.Text = "#" + deviceIndex + " " + Controller.OpenCLDevices[deviceIndex].GetVendor() + " " + Controller.OpenCLDevices[deviceIndex].GetName();
                     algorithmList.Add(Controller.OptimizerEntries[0].Algorithm);
                     foreach (var device in Controller.OpenCLDevices)
                         dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = (device.DeviceIndex == deviceIndex);
@@ -6650,12 +6635,12 @@ namespace GatelessGateSharp
             if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Resuming) {
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) {
                     tabControlMainForm.SelectedIndex = 4;
-                    timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000) + ((int)numericUpDownBenchmarkingLength.Value * 1000);
-                    timerResetStopwatch.Interval = ((int)numericUpDownBenchmarkingWait.Value * 1000);
+                    timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingLength.Value * 1000);
+                    timerResetStopwatch.Interval = 100;
                 } else {
                     tabControlMainForm.SelectedIndex = 5;
-                    timerBenchmarks.Interval = ((int)numericUpDownOptimizationWait.Value * 1000) + ((int)numericUpDownOptimizationLength.Value * 1000);
-                    timerResetStopwatch.Interval = ((int)numericUpDownOptimizationWait.Value * 1000);
+                    timerBenchmarks.Interval = ((int)numericUpDownOptimizationLength.Value * 1000);
+                    timerResetStopwatch.Interval = 100;
                 }
                 Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
             }
@@ -6739,6 +6724,7 @@ namespace GatelessGateSharp
                 progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
 
             // Restart if there is a sudden speed drop.
+            /*
             if (Controller.BenchmarkEntries[0].Results.Count > 0 && result.Success && Controller.BenchmarkEntries[0].SpeedPrimaryAlgorithm * 0.9 > result.SpeedPrimaryAlgorithm) {
 
                 var process = new System.Diagnostics.Process();
@@ -6752,6 +6738,7 @@ namespace GatelessGateSharp
 
                 Program.Kill();
             }
+            */
             
             // Update the current benchmark entry.
             if (result.Success)
@@ -6933,7 +6920,7 @@ namespace GatelessGateSharp
                     }
                 }
             }
-            timerStartNextBenchmark.Interval = coolGPUDown ? 10000 : 1;
+            timerStartNextBenchmark.Interval = coolGPUDown ? 10000 : 100;
             timerStartNextBenchmark.Enabled = true;
         }
 
@@ -7051,15 +7038,22 @@ namespace GatelessGateSharp
 
         private void timerResetStopwatch_Tick(object sender, EventArgs e)
         {
-            timerResetStopwatch.Enabled = false;
-
             if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                timerResetStopwatch.Enabled = false;
+                timerBenchmarks.Enabled = false;
                 Controller.StopWatch.Reset();
                 Controller.StopWatch.Start();
                 foreach (var device in Controller.OpenCLDevices) {
                     device.ClearShares();
                     device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
                 }
+                foreach (var miner in Controller.Miners) {
+                    if (miner.Speed <= 0) {
+                        timerResetStopwatch.Enabled = true;
+                        return;
+                    }
+                }
+                timerBenchmarks.Enabled = true;
             }
         }
 
@@ -7123,7 +7117,8 @@ namespace GatelessGateSharp
 
                 foreach (var algorithm in optimizedAlgorithmList) {
                     if (checkBoxOptimizationAlgorithmicSettings.Checked) {
-                        AddOptimizerEntries(deviceIndexList, algorithm, "threads");
+                        if (algorithm != "ethash_pascal" && algorithm != "ethash")
+                            AddOptimizerEntries(deviceIndexList, algorithm, "threads");
                         if (algorithm != "ethash_pascal" && algorithm != "x16r" && algorithm != "x16s")
                             AddOptimizerEntries(deviceIndexList, algorithm, "local_work_size");
                         if (algorithm == "cryptonight" || algorithm == "cryptonightv7" || algorithm == "cryptonight_heavy" || algorithm == "cryptonight_light" || algorithm == "neoscrypt") {
@@ -7232,17 +7227,18 @@ namespace GatelessGateSharp
                 foreach (var param in Controller.BenchmarkEntries[0].Parameters)
                     SetBenchmarkParameter(param);
                 mAreSettingsDirty = false;
+                StartMining();
                 Controller.BenchmarkStopwatch.Reset();
                 Controller.BenchmarkStopwatch.Start();
                 Controller.StopWatch.Reset();
                 Controller.StopWatch.Start();
-                timerResetStopwatch.Enabled = true;
-                timerBenchmarks.Enabled = true;
                 foreach (var device in Controller.OpenCLDevices) {
                     device.ClearShares();
                     device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
                 }
-                StartMining();
+                //Application.DoEvents();
+                timerResetStopwatch.Enabled = true;
+                //timerBenchmarks.Enabled = true;
             }
         }
 

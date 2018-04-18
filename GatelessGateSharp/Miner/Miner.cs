@@ -84,7 +84,7 @@ namespace GatelessGateSharp
             mMinerThread = new System.Threading.Thread(MinerThread);
             mMinerThread.IsBackground = true;
             mMinerThread.Start();
-            mMinerThread.Priority = System.Threading.ThreadPriority.Normal;
+            mMinerThread.Priority = Parameters.MinerThreadPriority;
         }
 
         unsafe protected virtual void MinerThread() { }

@@ -70,6 +70,7 @@ namespace GatelessGateSharp
             string savedBinaryFilePath = (MainForm.SavedOpenCLBinaryKernelPathBase + @"\") + ComputeDevice.Name + "_" + programName + "_" + localWorkSize + ".bin";
             string sourceFilePath = @"Kernels\" + programName + ".cl";
             String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? optionsAMD : OpenCLDevice.GetVendor() == "NVIDIA" ? optionsNVIDIA : optionsOthers) + " -IKernels -DWORKSIZE=" + localWorkSize;
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             try {
                 if (!MainForm.UseDefaultOpenCLBinariesChecked)
                     throw new Exception();
@@ -102,10 +103,13 @@ namespace GatelessGateSharp
                     }
                 }
             } catch (Exception) {
+                Thread.CurrentThread.Priority = Parameters.MinerThreadPriority;
                 MainForm.Logger(program.GetBuildLog(ComputeDevice));
                 program.Dispose();
                 throw;
             }
+            Thread.CurrentThread.Priority = Parameters.MinerThreadPriority;
+
             MainForm.Logger("Built " + programName + " program for Device #" + DeviceIndex + ".");
             MainForm.Logger("Build options: " + buildOptions);
 
