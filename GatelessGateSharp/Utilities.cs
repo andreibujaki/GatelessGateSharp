@@ -494,7 +494,7 @@ namespace GatelessGateSharp
 
         public static Form GetAutoClosingForm(int wait = 10)
         {
-            var w = new Form() { Size = new System.Drawing.Size(0, 0) };
+            var w = new Form() { Size = new System.Drawing.Size(0, 0), TopMost = true };
             Task.Delay(TimeSpan.FromSeconds(wait)).ContinueWith((t) => w.Close(), TaskScheduler.FromCurrentSynchronizationContext());
             w.BringToFront();
             return w;

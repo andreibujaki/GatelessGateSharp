@@ -25,8 +25,6 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
-using ATI.ADL;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using LiveCharts;
@@ -996,80 +994,84 @@ namespace GatelessGateSharp
         private void ResetDeviceOverclockingSettings(Device device)
         {
             foreach (var algorithm in AlgorithmList) {
-                checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
+                try {
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
 
-                numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
-                int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock; if (maxCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Maximum = maxCoreClock;
-                int minCoreClock = ((OpenCLDevice)device).MinCoreClock; if (minCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Minimum = minCoreClock;
-                int coreClockStep = ((OpenCLDevice)device).CoreClockStep; if (coreClockStep > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Increment = coreClockStep;
-                int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock; if (defaultCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = defaultCoreClock;
+                    int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock; if (maxCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Maximum = maxCoreClock;
+                    int minCoreClock = ((OpenCLDevice)device).MinCoreClock; if (minCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Minimum = minCoreClock;
+                    int coreClockStep = ((OpenCLDevice)device).CoreClockStep; if (coreClockStep > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Increment = coreClockStep;
+                    int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock; if (defaultCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = defaultCoreClock;
 
-                int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock; if (maxMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Maximum = maxMemoryClock;
-                int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock; if (minMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Minimum = minMemoryClock;
-                int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep; if (memoryClockStep > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Increment = memoryClockStep;
-                int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock; if (defaultMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = defaultMemoryClock;
+                    int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock; if (maxMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Maximum = maxMemoryClock;
+                    int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock; if (minMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Minimum = minMemoryClock;
+                    int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep; if (memoryClockStep > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Increment = memoryClockStep;
+                    int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock; if (defaultMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = defaultMemoryClock;
 
-                numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Maximum = 2000;
-                int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage; if (defaultCoreVoltage > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = defaultCoreVoltage;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Minimum = 0;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Maximum = 2000;
+                    int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage; if (defaultCoreVoltage > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = defaultCoreVoltage;
 
-                numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
-                int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Minimum = 0;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
+                    int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
 
-                if (checkBoxEnableHardwareAccelerationForDefaultSettings.Checked) {
-                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
+                    if (checkBoxEnableHardwareAccelerationForDefaultSettings.Checked) {
+                        numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
 
-                    var newCoreVoltage
-                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1120 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreVoltage :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1100 :
-                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreVoltage :
-                                                                                                          defaultCoreVoltage);
-                    if (newCoreVoltage > 0)
-                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = (decimal)newCoreVoltage; } catch (Exception) { }
+                        var newCoreVoltage
+                             = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1120 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreVoltage :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1100 :
+                                device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreVoltage :
+                                                                                                              defaultCoreVoltage);
+                        if (newCoreVoltage > 0)
+                            try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = (decimal)newCoreVoltage; } catch (Exception) { }
 
-                    var newMemoryVoltage
-                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1000 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1000 :
-                                                                                                 defaultMemoryVoltage);
-                    if (newMemoryVoltage > 0)
-                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = (decimal)newMemoryVoltage; } catch (Exception) { }
+                        var newMemoryVoltage
+                             = (device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1000 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1000 :
+                                                                                                     defaultMemoryVoltage);
+                        if (newMemoryVoltage > 0)
+                            try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = (decimal)newMemoryVoltage; } catch (Exception) { }
 
-                    var newCoreClock
-                        = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1303 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1303 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1000 :
-                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreClock :
-                                                                                                            defaultCoreClock);
-                    if (newCoreClock > 0)
-                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = (decimal)newCoreClock; } catch (Exception) { }
+                        var newCoreClock
+                            = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultCoreClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultCoreClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1303 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1303 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? defaultCoreClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1000 :
+                                device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreClock :
+                                                                                                                defaultCoreClock);
+                        if (newCoreClock > 0)
+                            try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = (decimal)newCoreClock; } catch (Exception) { }
 
-                    var newMemoryClock
-                        = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 500 :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultMemoryClock :
-                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? defaultMemoryClock :
-                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultMemoryClock :
-                                                                                                            defaultMemoryClock);
-                    if (newMemoryClock > 0)
-                        try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = (decimal)newMemoryClock; } catch (Exception) { }
-                }
+                        var newMemoryClock
+                            = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultMemoryClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultMemoryClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultMemoryClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? defaultMemoryClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? defaultMemoryClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 500 :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultMemoryClock :
+                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? defaultMemoryClock :
+                                device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultMemoryClock :
+                                                                                                                defaultMemoryClock);
+                        if (newMemoryClock > 0)
+                            try { numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = (decimal)newMemoryClock; } catch (Exception) { }
+                    }
+                } catch (Exception ex) { Logger(ex); }
             }
         }
 
@@ -1352,7 +1354,6 @@ namespace GatelessGateSharp
             }
             return true;
         }
-
 
         void MainForm_DragEnter(object sender, DragEventArgs e)
         {
@@ -5681,7 +5682,12 @@ namespace GatelessGateSharp
 
         private void buttonInstallRecommendedAMDDriver_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-17.12.2-Release-Notes.aspx");
+            DownloadRecommendedAMDDriver();
+        }
+
+        public static void DownloadRecommendedAMDDriver()
+        {
+            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.2-Release-Notes.aspx");
         }
 
         private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e)
@@ -6317,6 +6323,11 @@ namespace GatelessGateSharp
                             if (ConvertBenchmarkParameterToDeviceParameterTuple(deviceIndex, param.Name, out tuple)) {
                                 try {
                                     numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value);
+                                    if ((new Regex(@"^overclocking_")).Match(tuple.Item3).Success) {
+                                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "ovrclocking_enabled")].Checked = true;
+                                    } else if ((new Regex(@"^memory_timings_")).Match(tuple.Item3).Success) {
+                                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "memory_timings_enabled")].Checked = true;
+                                    }
                                 } catch (Exception ex) {
                                     Logger("deviceIndex: " + deviceIndex);
                                     Logger("param.Name: " + param.Name);
@@ -7025,14 +7036,14 @@ namespace GatelessGateSharp
                     s = s.ToUpper();
                 }
                 s = (new Regex(@"^overclocking_")).Replace(s, "");
-                s = (new Regex(@"^intensity$")).Replace(s, "Intensity");
-                s = (new Regex(@"^raw_intensity$")).Replace(s, "Raw Intensity");
-                s = (new Regex(@"^local_work_size$")).Replace(s, "Local Work Size");
-                s = (new Regex(@"^pascal_iterations$")).Replace(s, "Pascal Iterations");
+                s = (new Regex(@"^intensity")).Replace(s, "Intensity");
+                s = (new Regex(@"^raw_intensity")).Replace(s, "Raw Intensity");
+                s = (new Regex(@"^local_work_size")).Replace(s, "Local Work Size");
+                s = (new Regex(@"^pascal_iterations")).Replace(s, "Pascal Iterations");
                 s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
-                s = (new Regex(@"^memory_clock$")).Replace(s, "Memory Clock");
-                s = (new Regex(@"^core_voltage$")).Replace(s, "Core Voltage");
-                s = (new Regex(@"^memory_voltage$")).Replace(s, "Memory Voltage");
+                s = (new Regex(@"^memory_clock")).Replace(s, "Memory Clock");
+                s = (new Regex(@"^core_voltage")).Replace(s, "Core Voltage");
+                s = (new Regex(@"^memory_voltage")).Replace(s, "Memory Voltage");
                 dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsParameter"].Value = s;
             }
         }

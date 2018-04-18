@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using Cloo;
 using ATI.ADL;
 using System.Runtime.InteropServices;
@@ -217,7 +215,7 @@ namespace GatelessGateSharp
             return devices;
         }
 
-        static IntPtr ADL2Context = IntPtr.Zero;
+        public static IntPtr ADL2Context = IntPtr.Zero;
 
         public static bool InitializeADL(OpenCLDevice[] mDevices)
         {
@@ -234,6 +232,14 @@ namespace GatelessGateSharp
                 MainForm.Logger("Successfully initialized AMD Display Library.");
                 ADL.ADL_Adapter_NumberOfAdapters_Get(ref NumberOfAdapters);
                 MainForm.Logger("Number of ADL Adapters: " + NumberOfAdapters.ToString());
+
+                if (!CheckAMDDriverVersion()
+                    && (MessageBox.Show(Utilities.GetAutoClosingForm(10),
+                        "The installed AMD driver is not compatible with this software.\nWould you like to download the recommended driver?",
+                        "Gateless Gate Sharp", MessageBoxButtons.YesNo) == DialogResult.Yes)) {
+                    MainForm.DownloadRecommendedAMDDriver();
+                    Program.Kill();
+                }
 
                 if (0 < NumberOfAdapters) {
                     ADLAdapterInfoArray OSAdapterInfoData;
@@ -403,6 +409,46 @@ namespace GatelessGateSharp
                 MainForm.Logger("Failed to initialize AMD Display Library.");
                 return false;
             }
+        }
+
+        private static bool CheckAMDDriverVersion()
+        {
+            try {
+                bool debug = false;
+
+                // Don't do anything if no AMD drivers are present in the system.
+                if (OpenCLDevice.ADL2Context == IntPtr.Zero) {
+                    if (debug) MainForm.Logger("OpenCLDevice.ADL2Context == IntPtr.Zero");
+                    return true;
+                }
+                if (ADL.ADL2_Graphics_Versions_Get == null) {
+                    if (debug) MainForm.Logger("ADL.ADL2_Graphics_Versions_Get == null");
+                    return true;
+                }
+
+                ADLVersionsInfo info = new ADLVersionsInfo();
+                var infoBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(info));
+                Marshal.StructureToPtr(info, infoBuffer, false);
+                var ret = ADL.ADL2_Graphics_Versions_Get(OpenCLDevice.ADL2Context, infoBuffer);
+                if (ret == ADL.ADL_SUCCESS || ret == ADL.ADL_OK_WARNING) {
+                    info = (ADLVersionsInfo)Marshal.PtrToStructure(infoBuffer, info.GetType());
+                    // 18.2.6 -> "17.50.17.04-180206a-324065E-RadeonSoftwareAdrenalin"
+                    MainForm.Logger("AMD Driver Version: " + info.DriverVer);
+                    var match = (new Regex(@"^([0-9.]+)-([0-9][0-9])([0-9][0-9])([0-9][0-9])([a-z])?-([0-9A-F]+)-([a-zA-Z]+)$").Match(info.DriverVer));
+                    if (match.Success) {
+                        int driverVersionYear = int.Parse(match.Groups[2].Value);
+                        int driverVersionMonth = int.Parse(match.Groups[3].Value);
+                        int driverVersionDay = int.Parse(match.Groups[4].Value);
+                        if (debug) MainForm.Logger("Driver Version Year:  " + driverVersionYear);
+                        if (debug) MainForm.Logger("Driver Version Month: " + driverVersionMonth);
+                        if (debug) MainForm.Logger("Driver Version Day:   " + driverVersionDay);
+                        return driverVersionYear >= 18; // 2018
+                    }
+                }
+            } catch (Exception ex) {
+                MainForm.Logger(ex);
+            }
+            return false;
         }
 
         public int Temperature {

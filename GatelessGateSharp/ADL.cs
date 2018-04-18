@@ -139,16 +139,18 @@ namespace ATI.ADL
     internal delegate int ADL2_Overdrive6_VoltageControl_Set(IntPtr context, int iAdapterIndex, int iValue);
 
     internal delegate int ADL2_OverdriveN_Capabilities_Get(IntPtr context, int iAdapterIndex, IntPtr lpODCapabilities);
-    internal delegate int 	ADL2_OverdriveN_SystemClocks_Get (IntPtr context, int iAdapterIndex, IntPtr pODPerformanceLevels);
-    internal delegate int 	ADL2_OverdriveN_SystemClocks_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
-    internal delegate int 	ADL2_OverdriveN_MemoryClocks_Get (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
-    internal delegate int 	ADL2_OverdriveN_MemoryClocks_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
-    internal delegate int 	ADL2_OverdriveN_FanControl_Get (IntPtr context, int iAdapterIndex, IntPtr lpODFanSpeed);
-    internal delegate int 	ADL2_OverdriveN_FanControl_Set (IntPtr context, int iAdapterIndex, IntPtr lpODFanControl);
-    internal delegate int 	ADL2_OverdriveN_PowerLimit_Get (IntPtr context, int iAdapterIndex, IntPtr lpODPowerLimit);
-    internal delegate int 	ADL2_OverdriveN_PowerLimit_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPowerLimit);
-    internal delegate int 	ADL2_OverdriveN_Temperature_Get (IntPtr context, int iAdapterIndex, int iTemperatureType, ref int iTemperature);
-    internal delegate int 	ADL2_OverdriveN_PerformanceStatus_Get (IntPtr context, int iAdapterIndex, IntPtr pODPerformanceStatus);
+    internal delegate int ADL2_OverdriveN_SystemClocks_Get (IntPtr context, int iAdapterIndex, IntPtr pODPerformanceLevels);
+    internal delegate int ADL2_OverdriveN_SystemClocks_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+    internal delegate int ADL2_OverdriveN_MemoryClocks_Get (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+    internal delegate int ADL2_OverdriveN_MemoryClocks_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPerformanceLevels);
+    internal delegate int ADL2_OverdriveN_FanControl_Get (IntPtr context, int iAdapterIndex, IntPtr lpODFanSpeed);
+    internal delegate int ADL2_OverdriveN_FanControl_Set (IntPtr context, int iAdapterIndex, IntPtr lpODFanControl);
+    internal delegate int ADL2_OverdriveN_PowerLimit_Get (IntPtr context, int iAdapterIndex, IntPtr lpODPowerLimit);
+    internal delegate int ADL2_OverdriveN_PowerLimit_Set (IntPtr context, int iAdapterIndex, IntPtr lpODPowerLimit);
+    internal delegate int ADL2_OverdriveN_Temperature_Get (IntPtr context, int iAdapterIndex, int iTemperatureType, ref int iTemperature);
+    internal delegate int ADL2_OverdriveN_PerformanceStatus_Get (IntPtr context, int iAdapterIndex, IntPtr pODPerformanceStatus);
+
+    internal delegate int ADL2_Graphics_Versions_Get(IntPtr context, IntPtr lpVersionsInfo);
 
     #endregion Export Delegates
 
@@ -403,11 +405,28 @@ namespace ATI.ADL
 
     /// <summary> ADLODPerformanceLevel Structure</summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLODPerformanceLevel {
+    internal struct ADLODPerformanceLevel
+    {
         /// <summary> </summary>
         internal int iEngineClock;
         internal int iMemoryClock;
         internal int iVddc;
+    }
+
+    /// <summary> ADLODPerformanceLevel Structure</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLVersionsInfo
+    {
+        /// <summary> </summary>
+        /// <summary> Driver Release (Packaging) Version (e.g. 8.71-100128n-094835E-ATI). </summary>
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = (int)ADL.ADL_MAX_PATH)]
+        internal string DriverVer;
+        /// <summary> Catalyst Version(e.g. "10.1"). </summary>
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = (int)ADL.ADL_MAX_PATH)]
+        internal string CatalystVersion;
+        /// <summary> Web link to an XML file with information about the latest AMD drivers and locations (e.g. "http://www.amd.com/us/driverxml" ). </summary>
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = (int)ADL.ADL_MAX_PATH)]
+        internal string CatalystWebLink;
     }
 
     #endregion Export Struct
@@ -438,6 +457,7 @@ namespace ATI.ADL
         /// <summary> Maximum number of ADLMOdes for the adapter </summary>
         internal const int ADL_MAX_NUM_DISPLAYMODES = 1024;
 
+        internal const int ADL_OK_WARNING = 1;
         internal const int ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5 = 2;
         internal const int ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN = 8;
 
@@ -578,7 +598,9 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL2_OverdriveN_PerformanceStatus_Get(IntPtr context, int iAdapterIndex, IntPtr pODPerformanceStatus);
-            
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_Graphics_Versions_Get(IntPtr context, IntPtr lpVersionsInfo);
             #endregion DLLImport
         }
         #endregion Class ADLImport
@@ -1310,6 +1332,25 @@ namespace ATI.ADL
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL2_OverdriveN_SystemClocks_Set_Check = false;
         #endregion ADL2_OverdriveN_SystemClocks_Set
+
+        #region ADL2_Graphics_Versions_Get
+        /// <summary> ADL2_Graphics_Versions_Get Delegates</summary>
+        internal static ADL2_Graphics_Versions_Get ADL2_Graphics_Versions_Get {
+            get {
+                if (!ADL2_Graphics_Versions_Get_Check && null == ADL2_Graphics_Versions_Get_) {
+                    ADL2_Graphics_Versions_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_Graphics_Versions_Get")) {
+                        ADL2_Graphics_Versions_Get_ = ADLImport.ADL2_Graphics_Versions_Get;
+                    }
+                }
+                return ADL2_Graphics_Versions_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_Graphics_Versions_Get ADL2_Graphics_Versions_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_Graphics_Versions_Get_Check = false;
+        #endregion ADL2_Graphics_Versions_Get
 
         #endregion Export Functions
     }
