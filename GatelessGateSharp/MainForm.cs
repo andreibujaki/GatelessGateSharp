@@ -101,7 +101,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.4";
+        public static string appVersion = "1.3.5";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
@@ -162,7 +162,6 @@ namespace GatelessGateSharp
         string mUserLbryAddress = "";
         string mUserEthereumAddress = "";
         string mUserBitcoinAddress = "";
-        string mUserFeathercoinAddress = "";
         string mUserZcashAddress = "";
         string mUserRavenAddress = "";
 
@@ -195,6 +194,14 @@ namespace GatelessGateSharp
 
             InitializeComponent();
 
+            mUserMoneroAddress = textBoxMoneroAddress.Text;
+            mUserPascalAddress = textBoxPascalAddress.Text;
+            mUserLbryAddress = textBoxLbryAddress.Text;
+            mUserEthereumAddress = textBoxEthereumAddress.Text;
+            mUserBitcoinAddress = textBoxBitcoinAddress.Text;
+            mUserZcashAddress = textBoxZcashAddress.Text;
+            mUserRavenAddress = textBoxRavenAddress.Text;
+
             this.AllowDrop = true;
             this.DragEnter += new DragEventHandler(MainForm_DragEnter);
             this.DragDrop += new DragEventHandler(MainForm_DragDrop);
@@ -202,12 +209,10 @@ namespace GatelessGateSharp
             foreach (var algorithm in AlgorithmList) {
                 var prettyName = GetPrettyAlgorithmName(algorithm);
                 comboBoxDefaultAlgorithm.Items.Add(prettyName);
-                comboBoxOptimizerAlgorithm.Items.Add(prettyName);
             }
             comboBoxDefaultAlgorithm.Items.Add("Custom Pools");
 
             comboBoxDefaultAlgorithm.SelectedIndex = 0;
-            comboBoxOptimizerAlgorithm.SelectedIndex = 0;
 
             comboBoxCustomPool0Algorithm.SelectedIndex = 0;
             comboBoxCustomPool1Algorithm.SelectedIndex = 0;
@@ -510,9 +515,7 @@ namespace GatelessGateSharp
                     device.GetVendor(),
                     device.GetName()
                 });
-                comboBoxOptimizerDevice.Items.Add(device.DeviceIndex + ": " + device.GetVendor() + " " + device.GetName());
             }
-            comboBoxOptimizerDevice.SelectedIndex = 0;
 
             tabPageDeviceArray = new TabPage[Controller.OpenCLDevices.Length];
             buttonDeviceResetToDefaultArray = new Button[Controller.OpenCLDevices.Length];
@@ -2119,20 +2122,6 @@ namespace GatelessGateSharp
                 } else {
                     comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(GetPrettyAlgorithmName(value));
                 }
-            }
-        }
-
-        public string OptimizerAlgorithm {
-            get {
-                var selected = (string)comboBoxOptimizerAlgorithm.SelectedItem;
-                foreach (var algorithm in AlgorithmList) {
-                    if (GetPrettyAlgorithmName(algorithm) == selected)
-                        return algorithm;
-                }
-                return null;
-            }
-            set {
-                comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(GetPrettyAlgorithmName(value));
             }
         }
 
@@ -5023,6 +5012,16 @@ namespace GatelessGateSharp
                                                        && Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning 
                                                        && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning));
 
+                textBoxMoneroAddress.ForeColor = (textBoxMoneroAddress.Text == string.Empty || textBoxMoneroAddress.Text == Parameters.DevFeeMoneroAddress) ? Color.Red : Color.Black;
+                textBoxEthereumAddress.ForeColor = (textBoxEthereumAddress.Text == string.Empty || textBoxEthereumAddress.Text == Parameters.DevFeeEthereumAddress) ? Color.Red : Color.Black;
+                textBoxLbryAddress.ForeColor = (textBoxLbryAddress.Text == string.Empty || textBoxLbryAddress.Text == Parameters.DevFeeLbryAddress) ? Color.Red : Color.Black;
+                textBoxPascalAddress.ForeColor = (textBoxPascalAddress.Text == string.Empty || textBoxPascalAddress.Text == Parameters.DevFeePascalAddress) ? Color.Red : Color.Black;
+                textBoxRavenAddress.ForeColor = (textBoxRavenAddress.Text == string.Empty || textBoxRavenAddress.Text == Parameters.DevFeeRavenAddress) ? Color.Red : Color.Black;
+                textBoxPigeoncoinAddress.ForeColor = (textBoxPigeoncoinAddress.Text == string.Empty || textBoxPigeoncoinAddress.Text == Parameters.DevFeePigeoncoinAddress) ? Color.Red : Color.Black;
+                textBoxAEONAddress.ForeColor = (textBoxAEONAddress.Text == string.Empty || textBoxAEONAddress.Text == Parameters.DevFeeAEONAddress) ? Color.Red : Color.Black;
+                textBoxSumokoinAddress.ForeColor = (textBoxSumokoinAddress.Text == string.Empty || textBoxSumokoinAddress.Text == Parameters.DevFeeSumokoinAddress) ? Color.Red : Color.Black;
+                textBoxBitcoinAddress.ForeColor = (textBoxBitcoinAddress.Text == string.Empty || textBoxBitcoinAddress.Text == Parameters.DevFeeBitcoinAddress) ? Color.Red : Color.Black;
+
                 buttonBoostPerformance.Enabled = idle;
                 buttonRestoreStockSettings.Enabled = idle;
 
@@ -5764,7 +5763,7 @@ namespace GatelessGateSharp
         {
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
-                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU", "RadeonSettings" })
+                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU", "RadeonSettings", "AfterBurner" })
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
                             try { process.Kill(); } catch (Exception) { }
                 } catch (Exception) { }
@@ -6308,7 +6307,7 @@ namespace GatelessGateSharp
                     checkBoxCustomPool3Enable.Checked = (string)comboBoxCustomPool3Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
                 }
             } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
-                int deviceIndex = comboBoxOptimizerDevice.SelectedIndex;
+                int deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
                 Tuple<int, string, string> tuple;
                 if (ConvertBenchmarkParameterToDeviceParameterTuple(deviceIndex, param.Name, out tuple)) {
                     try {
@@ -6422,9 +6421,8 @@ namespace GatelessGateSharp
                 var deviceIndex = -1;
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
                     enabledDeviceCount = 1;
-                    deviceIndex = comboBoxOptimizerDevice.SelectedIndex;
-                    algorithmList.Add(OptimizerAlgorithm);
-                    Controller.OptimizerEntries[0].Algorithm = OptimizerAlgorithm;
+                    deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
+                    algorithmList.Add(Controller.OptimizerEntries[0].Algorithm);
                     foreach (var device in Controller.OpenCLDevices)
                         dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = (device.DeviceIndex == deviceIndex);
                 } else {
@@ -6470,7 +6468,7 @@ namespace GatelessGateSharp
                         var computeDevice = Controller.OpenCLDevices[deviceIndex].GetComputeDevice();
                         min = (value - computeDevice.MaxComputeUnits / 2 >= numericUpDown.Minimum) ? value - computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Minimum;
                         max = (value + computeDevice.MaxComputeUnits / 2 <= numericUpDown.Maximum) ? value + computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Maximum;
-                    } else if (parameterName == "local_work_size" && OptimizerAlgorithm == "cryptonight") {
+                    } else if (parameterName == "local_work_size" && paramType == "cryptonight") {
                         min = 8;
                         max = 16;
                         step = 8;
@@ -6669,8 +6667,7 @@ namespace GatelessGateSharp
             var devices = new List<Device>();
             if (optimization) {
                 enabledDeviceCount = 1;
-                deviceIndex = comboBoxOptimizerDevice.SelectedIndex;
-                Controller.OptimizerEntries[0].Algorithm = OptimizerAlgorithm;
+                deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
                 foreach (var device in Controller.OpenCLDevices)
                     dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = (device.DeviceIndex == deviceIndex);
                 devices.Clear();
@@ -6978,6 +6975,7 @@ namespace GatelessGateSharp
                         s = s.ToUpper();
                     }
                     s = (new Regex(@"^overclocking_")).Replace(s, "");
+                    s = (new Regex(@"^threads$")).Replace(s, "Threads");
                     s = (new Regex(@"^intensity$")).Replace(s, "Intensity");
                     s = (new Regex(@"^raw_intensity$")).Replace(s, "Raw Intensity");
                     s = (new Regex(@"^local_work_size$")).Replace(s, "Local Work Size");
@@ -6997,6 +6995,7 @@ namespace GatelessGateSharp
                         s = s.ToUpper();
                     }
                     s = (new Regex(@"^overclocking_")).Replace(s, "");
+                    s = (new Regex(@"^threads$")).Replace(s, "Threads");
                     s = (new Regex(@"^intensity$")).Replace(s, "Intensity");
                     s = (new Regex(@"^raw_intensity$")).Replace(s, "Raw Intensity");
                     s = (new Regex(@"^local_work_size$")).Replace(s, "Local Work Size");
@@ -7015,6 +7014,7 @@ namespace GatelessGateSharp
             dataGridViewOptimizerRecords.Rows.Clear();
             foreach (Controller.OptimizerEntry record in Controller.OptimizerRecords) {
                 dataGridViewOptimizerRecords.Rows.Add();
+                dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex"].Value = record.DeviceIndex;
                 dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsAlgorithm"].Value = GetPrettyAlgorithmName(record.Algorithm);
                 if (record.ResultCount > 0) {
                     dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Value = record.SuccessCount + "/" + record.ResultCount + " (" + (record.SuccessCount * 100 / record.ResultCount) + "%)";
@@ -7036,6 +7036,7 @@ namespace GatelessGateSharp
                     s = s.ToUpper();
                 }
                 s = (new Regex(@"^overclocking_")).Replace(s, "");
+                s = (new Regex(@"^threads")).Replace(s, "Threads");
                 s = (new Regex(@"^intensity")).Replace(s, "Intensity");
                 s = (new Regex(@"^raw_intensity")).Replace(s, "Raw Intensity");
                 s = (new Regex(@"^local_work_size")).Replace(s, "Local Work Size");
@@ -7098,69 +7099,93 @@ namespace GatelessGateSharp
                 Controller.OptimizerRecords.Clear();
                 UpdateOptimizerRecords();
 
-                if (checkBoxOptimizationAlgorithmicSettings.Checked) {
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("threads"));
-                    if (OptimizerAlgorithm != "ethash_pascal" || OptimizerAlgorithm != "x16r" || OptimizerAlgorithm != "x16s")
-                        Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("local_work_size"));
-                    if (OptimizerAlgorithm == "cryptonight" || OptimizerAlgorithm == "neoscrypt") {
-                        Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("raw_intensity"));
-                    } else {
-                        Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("intensity"));
+                List<int> deviceIndexList = new List<int> { };
+                foreach (var device in Controller.OpenCLDevices) {
+                    if (!(bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                        continue;
                     }
+                    deviceIndexList.Add(device.DeviceIndex);
                 }
 
-                if (checkBoxOptimizationUndervoltingCore.Checked)
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_core_voltage"));
+                List<string> optimizedAlgorithmList = new List<string> { };
+                if (checkBoxOptimizationEthashPascalEnabled.Checked) optimizedAlgorithmList.Add("ethash_pascal");
+                if (checkBoxOptimizationEthashEnabled.Checked) optimizedAlgorithmList.Add("ethash");
+                if (checkBoxOptimizationNeoScryptEnabled.Checked) optimizedAlgorithmList.Add("neoscrypt");
+                if (checkBoxOptimizationPascalEnabled.Checked) optimizedAlgorithmList.Add("pascal");
+                if (checkBoxOptimizationLbryEnabled.Checked) optimizedAlgorithmList.Add("lbry");
+                if (checkBoxOptimizationLyra2REv2Enabled.Checked) optimizedAlgorithmList.Add("lyra2rev2");
+                if (checkBoxOptimizationX16REnabled.Checked) optimizedAlgorithmList.Add("x16r");
+                if (checkBoxOptimizationX16SEnabled.Checked) optimizedAlgorithmList.Add("x16s");
+                if (checkBoxOptimizationCryptoNightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight");
+                if (checkBoxOptimizationCryptoNightV7Enabled.Checked) optimizedAlgorithmList.Add("cryptonightv7");
+                if (checkBoxOptimizationCryptoNightHeavyEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_heavy");
+                if (checkBoxOptimizationCryptoNightLightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_light");
 
-                if (checkBoxOptimizationUndervoltingMemory.Checked)
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_memory_voltage"));
+                foreach (var algorithm in optimizedAlgorithmList) {
+                    if (checkBoxOptimizationAlgorithmicSettings.Checked) {
+                        AddOptimizerEntries(deviceIndexList, algorithm, "threads");
+                        if (algorithm != "ethash_pascal" && algorithm != "x16r" && algorithm != "x16s")
+                            AddOptimizerEntries(deviceIndexList, algorithm, "local_work_size");
+                        if (algorithm == "cryptonight" || algorithm == "cryptonightv7" || algorithm == "cryptonight_heavy" || algorithm == "cryptonight_light" || algorithm == "neoscrypt") {
+                            AddOptimizerEntries(deviceIndexList, algorithm, "raw_intensity");
+                        } else {
+                            AddOptimizerEntries(deviceIndexList, algorithm, "intensity");
+                        }
+                    }
 
-                if (checkBoxOptimizationOverclockingMemory.Checked)
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_memory_clock"));
+                    if (checkBoxOptimizationUndervoltingCore.Checked)
+                        AddOptimizerEntries(deviceIndexList, algorithm, "overclocking_core_voltage");
 
-                if (checkBoxOptimizationOverclockingCore.Checked)
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("overclocking_core_clock"));
+                    if (checkBoxOptimizationUndervoltingMemory.Checked)
+                        AddOptimizerEntries(deviceIndexList, algorithm, "overclocking_memory_voltage");
 
-                if (checkBoxOptimizationMemoryTimings.Checked) {
-                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tccdl"));
-                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trrd"));
-                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_faw"));
-                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_t32aw"));
+                    if (checkBoxOptimizationOverclockingMemory.Checked)
+                        AddOptimizerEntries(deviceIndexList, algorithm, "overclocking_memory_clock");
 
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_actrd"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rasmactrd"));
+                    if (checkBoxOptimizationOverclockingCore.Checked)
+                        AddOptimizerEntries(deviceIndexList, algorithm, "overclocking_core_clock");
 
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_actwr"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rasmactwr"));
+                    if (checkBoxOptimizationMemoryTimings.Checked) {
+                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
+                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
+                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_faw");
+                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_t32aw");
 
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trc"));
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_actrd");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactrd");
+
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_actwr");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactwr");
+
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trc");
+                    }
+
+                    if (checkBoxOptimizationMemoryTimingsExtended.Checked) {
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trp");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_rp");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_bus_turn");
+
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tr2w");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tw2r");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tr2r");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tcl");
+
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tredc");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trcdr");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trp_rda");
+
+                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_twedc");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_wrplusrp");
+                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trcdw");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trp_wra");
+
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_ras2ras");
+                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trfc");
+                    }
+
+                    SaveOptimizerState();
+                    StartBenchmarks();
                 }
-
-                if (checkBoxOptimizationMemoryTimingsExtended.Checked) {
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_rp"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_bus_turn"));
-
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tr2w"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tw2r"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tr2r"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tcl"));
-
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_tredc"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdr"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp_rda"));
-
-                    //controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_twedc"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_wrplusrp"));
-                    //Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trcdw"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trp_wra"));
-                    
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_ras2ras"));
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry("memory_timings_polaris10_trfc"));
-                }
-
-                SaveOptimizerState();
-                StartBenchmarks();
             } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
                 StopBenchmarks();
                 Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
@@ -7171,6 +7196,25 @@ namespace GatelessGateSharp
                 progressBarOptimizer.Value = 0;
                 LoadSettingsFromDatabase();
                 UpdateControls();
+            }
+        }
+
+        private void AddOptimizerEntries(List<int> deviceIndexList, string algorithm, string parameter)
+        {
+            foreach (var deviceIndex in deviceIndexList) {
+                var regex = new Regex(@"^overclocking_");
+                if (regex.Match(parameter).Success) {
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "overclocking_enabled")].Checked = true;
+                    mAreSettingsDirty = true;
+                }
+                regex = new Regex(@"^memory_timings_polaris10_");
+                if (regex.Match(parameter).Success && Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDPolaris10)) {
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "overclocking_enabled")].Checked = true;
+                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_enabled")].Checked = true;
+                    mAreSettingsDirty = true;
+                }
+                if (!regex.Match(parameter).Success || Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDPolaris10))
+                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry(deviceIndex, algorithm, parameter));
             }
         }
 
@@ -7327,6 +7371,11 @@ namespace GatelessGateSharp
                     return;
                 }
             }
+        }
+
+        private void checkBox11_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

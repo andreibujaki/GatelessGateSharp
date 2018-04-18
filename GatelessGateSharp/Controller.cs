@@ -47,6 +47,7 @@ namespace GatelessGateSharp {
         public class OptimizerEntry
         {
             public int ID;
+            public int DeviceIndex;
             public string Algorithm = null;
             public string Parameter = null;
             public string ParameterWithValues = null;
@@ -57,8 +58,8 @@ namespace GatelessGateSharp {
             public double SpeedSecondaryAlgorithm;
 
             public OptimizerEntry() { }
-            public OptimizerEntry(OptimizerEntry aEntry) { Algorithm = aEntry.Algorithm; Parameter = aEntry.Parameter;}
-            public OptimizerEntry(string aFirstParameter) { Parameter = aFirstParameter; }
+            public OptimizerEntry(OptimizerEntry aEntry) { DeviceIndex = aEntry.DeviceIndex; Algorithm = aEntry.Algorithm; Parameter = aEntry.Parameter;}
+            public OptimizerEntry(int aDeviceIndex, string aAlgorithm, string aFirstParameter) { DeviceIndex = aDeviceIndex; Algorithm = aAlgorithm; Parameter = aFirstParameter; }
         }
 
         [System.SerializableAttribute()]

@@ -417,6 +417,19 @@
             this.memory_reserved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageOptimization = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.checkBoxOptimizationX16SEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationCryptoNightLightEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationCryptoNightV7Enabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationX16REnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationCryptoNightHeavyEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationLbryEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationLyra2REv2Enabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationPascalEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationNeoScryptEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationCryptoNightEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationEthashEnabled = new System.Windows.Forms.CheckBox();
+            this.checkBoxOptimizationEthashPascalEnabled = new System.Windows.Forms.CheckBox();
             this.groupBoxOptimizationTargets = new System.Windows.Forms.GroupBox();
             this.checkBoxOptimizationUndervoltingMemory = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationUndervoltingCore = new System.Windows.Forms.CheckBox();
@@ -425,10 +438,6 @@
             this.checkBoxOptimizationMemoryTimingsExtended = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationMemoryTimings = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationAlgorithmicSettings = new System.Windows.Forms.CheckBox();
-            this.label37 = new System.Windows.Forms.Label();
-            this.comboBoxOptimizerDevice = new System.Windows.Forms.ComboBox();
-            this.label36 = new System.Windows.Forms.Label();
-            this.comboBoxOptimizerAlgorithm = new System.Windows.Forms.ComboBox();
             this.dataGridViewOptimizerBenchmarkingResults = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -436,10 +445,6 @@
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewOptimizerRecords = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.checkBoxOptimizationCoolGPUDown = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationPrioritizeStability = new System.Windows.Forms.CheckBox();
@@ -457,6 +462,11 @@
             this.numericUpDownOptimizationRepeats = new System.Windows.Forms.NumericUpDown();
             this.label42 = new System.Windows.Forms.Label();
             this.timerStartNextBenchmark = new System.Windows.Forms.Timer(this.components);
+            this.dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStripMainForm.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -517,6 +527,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).BeginInit();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageOptimization.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.groupBoxOptimizationTargets.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerBenchmarkingResults)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerRecords)).BeginInit();
@@ -1967,7 +1978,7 @@
             this.checkBoxBenchmarkingCryptoNightLightEnabled.AutoSize = true;
             this.checkBoxBenchmarkingCryptoNightLightEnabled.Checked = true;
             this.checkBoxBenchmarkingCryptoNightLightEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingCryptoNightLightEnabled.Location = new System.Drawing.Point(314, 44);
+            this.checkBoxBenchmarkingCryptoNightLightEnabled.Location = new System.Drawing.Point(314, 45);
             this.checkBoxBenchmarkingCryptoNightLightEnabled.Name = "checkBoxBenchmarkingCryptoNightLightEnabled";
             this.checkBoxBenchmarkingCryptoNightLightEnabled.Size = new System.Drawing.Size(107, 17);
             this.checkBoxBenchmarkingCryptoNightLightEnabled.TabIndex = 10;
@@ -3500,6 +3511,7 @@
             this.textBoxPigeoncoinAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxPigeoncoinAddress.TabIndex = 33;
             this.textBoxPigeoncoinAddress.Tag = "parameter:pigeoncoin_address";
+            this.textBoxPigeoncoinAddress.Text = "PMCR5gBQ48DXKykmt1aoULYdnCmCpiknhL";
             // 
             // buttonAEONBalance
             // 
@@ -3530,6 +3542,8 @@
             this.textBoxAEONAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxAEONAddress.TabIndex = 30;
             this.textBoxAEONAddress.Tag = "parameter:aeon_address";
+            this.textBoxAEONAddress.Text = "Wms1DnwvmYS2eiAia3W7BRcyehQFVBYEDBQnqUrPtVeaNj6NZM1UZXJf7HU39mfAAn6p8D4jEK6z33Z95" +
+    "nQrHTaL1pcBNGxUh";
             // 
             // buttonSumokoinBalance
             // 
@@ -3560,6 +3574,8 @@
             this.textBoxSumokoinAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxSumokoinAddress.TabIndex = 27;
             this.textBoxSumokoinAddress.Tag = "parameter:sumokoin_address";
+            this.textBoxSumokoinAddress.Text = "Sumoo78AVSZQKEuRgwfZm94BzCwvTo6LeDksMj2c237hMYDM74epEnbhJLWBdndsBeD4WYhw6GS6yW3vJ" +
+    "WCcM7QjGy1AR9tq6ef";
             // 
             // buttonRavenBalance
             // 
@@ -3591,6 +3607,7 @@
             this.textBoxRavenAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxRavenAddress.TabIndex = 24;
             this.textBoxRavenAddress.Tag = "parameter:raven_address";
+            this.textBoxRavenAddress.Text = "RNw1EqHTD3bWj6R9dsi3bJe6YJgN55hGxQ";
             this.textBoxRavenAddress.TextChanged += new System.EventHandler(this.textBoxRavenAddress_TextChanged);
             // 
             // label28
@@ -3622,6 +3639,7 @@
             this.textBoxLbryAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxLbryAddress.TabIndex = 10;
             this.textBoxLbryAddress.Tag = "parameter:lbry_address";
+            this.textBoxLbryAddress.Text = "bEFGDsEnfSzRs1UVKoUqaQfnvWAbPzLiuB";
             this.textBoxLbryAddress.TextChanged += new System.EventHandler(this.textBoxLbryAddress_TextChanged);
             // 
             // textBoxPascalAddress
@@ -3633,6 +3651,7 @@
             this.textBoxPascalAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxPascalAddress.TabIndex = 8;
             this.textBoxPascalAddress.Tag = "parameter:pascal_address";
+            this.textBoxPascalAddress.Text = "86646-64.b7db0252955d6b0f";
             this.textBoxPascalAddress.TextChanged += new System.EventHandler(this.textBoxPascalAddress_TextChanged);
             // 
             // label27
@@ -3664,6 +3683,7 @@
             this.textBoxBitcoinAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxBitcoinAddress.TabIndex = 0;
             this.textBoxBitcoinAddress.Tag = "parameter:bitcoin_address";
+            this.textBoxBitcoinAddress.Text = "1k1WhysGsp7kNRy4atzzr6MaDrBiXw7wm";
             this.textBoxBitcoinAddress.TextChanged += new System.EventHandler(this.textBoxBitcoinAddress_TextChanged);
             // 
             // button5
@@ -3706,6 +3726,7 @@
             this.textBoxEthereumAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxEthereumAddress.TabIndex = 2;
             this.textBoxEthereumAddress.Tag = "parameter:ethereum_address";
+            this.textBoxEthereumAddress.Text = "0x91fa32e00b0f365d629fb625182a83fed61f0642";
             this.textBoxEthereumAddress.TextChanged += new System.EventHandler(this.textBoxEthereumAddress_TextChanged);
             // 
             // label15
@@ -3727,6 +3748,8 @@
             this.textBoxMoneroAddress.Size = new System.Drawing.Size(179, 20);
             this.textBoxMoneroAddress.TabIndex = 4;
             this.textBoxMoneroAddress.Tag = "parameter:monero_address";
+            this.textBoxMoneroAddress.Text = "463tWEBn5XZJSxLU6uLQnQ2iY9xuNcDbjLSjkn3XAXHCbLrTTErJrBWYgHJQyrCwkNgYvyV3z8zctJLPC" +
+    "Zy24jvb3NiTcTJ.3c33141709b14b9bba1f1d49b39c69f8fb88a4cd571e4e80b3c0682375964a0f";
             this.textBoxMoneroAddress.TextChanged += new System.EventHandler(this.textBoxMoneroAddress_TextChanged);
             // 
             // buttonMoneroBalance
@@ -4666,6 +4689,7 @@
             // 
             // tabPageOptimization
             // 
+            this.tabPageOptimization.Controls.Add(this.groupBox6);
             this.tabPageOptimization.Controls.Add(this.groupBoxOptimizationTargets);
             this.tabPageOptimization.Controls.Add(this.dataGridViewOptimizerBenchmarkingResults);
             this.tabPageOptimization.Controls.Add(this.dataGridViewOptimizerRecords);
@@ -4678,6 +4702,184 @@
             this.tabPageOptimization.Text = "Optimization";
             this.tabPageOptimization.UseVisualStyleBackColor = true;
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationX16SEnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationCryptoNightLightEnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationCryptoNightV7Enabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationX16REnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationCryptoNightHeavyEnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationLbryEnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationLyra2REv2Enabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationPascalEnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationNeoScryptEnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationCryptoNightEnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationEthashEnabled);
+            this.groupBox6.Controls.Add(this.checkBoxOptimizationEthashPascalEnabled);
+            this.groupBox6.Location = new System.Drawing.Point(307, 6);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(664, 70);
+            this.groupBox6.TabIndex = 154;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Algorithms";
+            // 
+            // checkBoxOptimizationX16SEnabled
+            // 
+            this.checkBoxOptimizationX16SEnabled.AutoSize = true;
+            this.checkBoxOptimizationX16SEnabled.Checked = true;
+            this.checkBoxOptimizationX16SEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationX16SEnabled.Location = new System.Drawing.Point(510, 22);
+            this.checkBoxOptimizationX16SEnabled.Name = "checkBoxOptimizationX16SEnabled";
+            this.checkBoxOptimizationX16SEnabled.Size = new System.Drawing.Size(52, 17);
+            this.checkBoxOptimizationX16SEnabled.TabIndex = 11;
+            this.checkBoxOptimizationX16SEnabled.Tag = "parameter:optimization_x16s_enabled";
+            this.checkBoxOptimizationX16SEnabled.Text = "X16S";
+            this.checkBoxOptimizationX16SEnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationCryptoNightLightEnabled
+            // 
+            this.checkBoxOptimizationCryptoNightLightEnabled.AutoSize = true;
+            this.checkBoxOptimizationCryptoNightLightEnabled.Checked = true;
+            this.checkBoxOptimizationCryptoNightLightEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationCryptoNightLightEnabled.Location = new System.Drawing.Point(314, 45);
+            this.checkBoxOptimizationCryptoNightLightEnabled.Name = "checkBoxOptimizationCryptoNightLightEnabled";
+            this.checkBoxOptimizationCryptoNightLightEnabled.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxOptimizationCryptoNightLightEnabled.TabIndex = 10;
+            this.checkBoxOptimizationCryptoNightLightEnabled.Tag = "parameter:optimization_cryptonight_light_enabled";
+            this.checkBoxOptimizationCryptoNightLightEnabled.Text = "CryptoNight-Light";
+            this.checkBoxOptimizationCryptoNightLightEnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationCryptoNightV7Enabled
+            // 
+            this.checkBoxOptimizationCryptoNightV7Enabled.AutoSize = true;
+            this.checkBoxOptimizationCryptoNightV7Enabled.Checked = true;
+            this.checkBoxOptimizationCryptoNightV7Enabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationCryptoNightV7Enabled.Location = new System.Drawing.Point(93, 45);
+            this.checkBoxOptimizationCryptoNightV7Enabled.Name = "checkBoxOptimizationCryptoNightV7Enabled";
+            this.checkBoxOptimizationCryptoNightV7Enabled.Size = new System.Drawing.Size(94, 17);
+            this.checkBoxOptimizationCryptoNightV7Enabled.TabIndex = 9;
+            this.checkBoxOptimizationCryptoNightV7Enabled.Tag = "parameter:optimization_cryptonightv7_enabled";
+            this.checkBoxOptimizationCryptoNightV7Enabled.Text = "CryptoNightV7";
+            this.checkBoxOptimizationCryptoNightV7Enabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationX16REnabled
+            // 
+            this.checkBoxOptimizationX16REnabled.AutoSize = true;
+            this.checkBoxOptimizationX16REnabled.Checked = true;
+            this.checkBoxOptimizationX16REnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationX16REnabled.Location = new System.Drawing.Point(451, 22);
+            this.checkBoxOptimizationX16REnabled.Name = "checkBoxOptimizationX16REnabled";
+            this.checkBoxOptimizationX16REnabled.Size = new System.Drawing.Size(53, 17);
+            this.checkBoxOptimizationX16REnabled.TabIndex = 8;
+            this.checkBoxOptimizationX16REnabled.Tag = "parameter:optimization_x16r_enabled";
+            this.checkBoxOptimizationX16REnabled.Text = "X16R";
+            this.checkBoxOptimizationX16REnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationCryptoNightHeavyEnabled
+            // 
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.AutoSize = true;
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.Checked = true;
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.Location = new System.Drawing.Point(193, 45);
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.Name = "checkBoxOptimizationCryptoNightHeavyEnabled";
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.Size = new System.Drawing.Size(115, 17);
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.TabIndex = 7;
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.Tag = "parameter:optimization_cryptonight_heavy_enabled";
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.Text = "CryptoNight-Heavy";
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationLbryEnabled
+            // 
+            this.checkBoxOptimizationLbryEnabled.AutoSize = true;
+            this.checkBoxOptimizationLbryEnabled.Checked = true;
+            this.checkBoxOptimizationLbryEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationLbryEnabled.Location = new System.Drawing.Point(314, 22);
+            this.checkBoxOptimizationLbryEnabled.Name = "checkBoxOptimizationLbryEnabled";
+            this.checkBoxOptimizationLbryEnabled.Size = new System.Drawing.Size(46, 17);
+            this.checkBoxOptimizationLbryEnabled.TabIndex = 6;
+            this.checkBoxOptimizationLbryEnabled.Tag = "parameter:optimization_lbry_enabled";
+            this.checkBoxOptimizationLbryEnabled.Text = "Lbry";
+            this.checkBoxOptimizationLbryEnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationLyra2REv2Enabled
+            // 
+            this.checkBoxOptimizationLyra2REv2Enabled.AutoSize = true;
+            this.checkBoxOptimizationLyra2REv2Enabled.Checked = true;
+            this.checkBoxOptimizationLyra2REv2Enabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationLyra2REv2Enabled.Location = new System.Drawing.Point(366, 22);
+            this.checkBoxOptimizationLyra2REv2Enabled.Name = "checkBoxOptimizationLyra2REv2Enabled";
+            this.checkBoxOptimizationLyra2REv2Enabled.Size = new System.Drawing.Size(79, 17);
+            this.checkBoxOptimizationLyra2REv2Enabled.TabIndex = 5;
+            this.checkBoxOptimizationLyra2REv2Enabled.Tag = "parameter:optimization_lyra2rev2_enabled";
+            this.checkBoxOptimizationLyra2REv2Enabled.Text = "Lyra2REv2";
+            this.checkBoxOptimizationLyra2REv2Enabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationPascalEnabled
+            // 
+            this.checkBoxOptimizationPascalEnabled.AutoSize = true;
+            this.checkBoxOptimizationPascalEnabled.Checked = true;
+            this.checkBoxOptimizationPascalEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationPascalEnabled.Location = new System.Drawing.Point(250, 22);
+            this.checkBoxOptimizationPascalEnabled.Name = "checkBoxOptimizationPascalEnabled";
+            this.checkBoxOptimizationPascalEnabled.Size = new System.Drawing.Size(58, 17);
+            this.checkBoxOptimizationPascalEnabled.TabIndex = 4;
+            this.checkBoxOptimizationPascalEnabled.Tag = "parameter:optimization_pascal_enabled";
+            this.checkBoxOptimizationPascalEnabled.Text = "Pascal";
+            this.checkBoxOptimizationPascalEnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationNeoScryptEnabled
+            // 
+            this.checkBoxOptimizationNeoScryptEnabled.AutoSize = true;
+            this.checkBoxOptimizationNeoScryptEnabled.Checked = true;
+            this.checkBoxOptimizationNeoScryptEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationNeoScryptEnabled.Location = new System.Drawing.Point(173, 22);
+            this.checkBoxOptimizationNeoScryptEnabled.Name = "checkBoxOptimizationNeoScryptEnabled";
+            this.checkBoxOptimizationNeoScryptEnabled.Size = new System.Drawing.Size(76, 17);
+            this.checkBoxOptimizationNeoScryptEnabled.TabIndex = 3;
+            this.checkBoxOptimizationNeoScryptEnabled.Tag = "parameter:optimization_neoscrypt_enabled";
+            this.checkBoxOptimizationNeoScryptEnabled.Text = "NeoScrypt";
+            this.checkBoxOptimizationNeoScryptEnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationCryptoNightEnabled
+            // 
+            this.checkBoxOptimizationCryptoNightEnabled.AutoSize = true;
+            this.checkBoxOptimizationCryptoNightEnabled.Checked = true;
+            this.checkBoxOptimizationCryptoNightEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationCryptoNightEnabled.Location = new System.Drawing.Point(6, 45);
+            this.checkBoxOptimizationCryptoNightEnabled.Name = "checkBoxOptimizationCryptoNightEnabled";
+            this.checkBoxOptimizationCryptoNightEnabled.Size = new System.Drawing.Size(81, 17);
+            this.checkBoxOptimizationCryptoNightEnabled.TabIndex = 2;
+            this.checkBoxOptimizationCryptoNightEnabled.Tag = "parameter:optimization_cryptonight_enabled";
+            this.checkBoxOptimizationCryptoNightEnabled.Text = "CryptoNight";
+            this.checkBoxOptimizationCryptoNightEnabled.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOptimizationEthashEnabled
+            // 
+            this.checkBoxOptimizationEthashEnabled.AutoSize = true;
+            this.checkBoxOptimizationEthashEnabled.Checked = true;
+            this.checkBoxOptimizationEthashEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationEthashEnabled.Location = new System.Drawing.Point(108, 22);
+            this.checkBoxOptimizationEthashEnabled.Name = "checkBoxOptimizationEthashEnabled";
+            this.checkBoxOptimizationEthashEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxOptimizationEthashEnabled.TabIndex = 1;
+            this.checkBoxOptimizationEthashEnabled.Tag = "parameter:optimization_ethash_enabled";
+            this.checkBoxOptimizationEthashEnabled.Text = "Ethash";
+            this.checkBoxOptimizationEthashEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxOptimizationEthashEnabled.CheckedChanged += new System.EventHandler(this.checkBox11_CheckedChanged);
+            // 
+            // checkBoxOptimizationEthashPascalEnabled
+            // 
+            this.checkBoxOptimizationEthashPascalEnabled.AutoSize = true;
+            this.checkBoxOptimizationEthashPascalEnabled.Checked = true;
+            this.checkBoxOptimizationEthashPascalEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOptimizationEthashPascalEnabled.Location = new System.Drawing.Point(6, 22);
+            this.checkBoxOptimizationEthashPascalEnabled.Name = "checkBoxOptimizationEthashPascalEnabled";
+            this.checkBoxOptimizationEthashPascalEnabled.Size = new System.Drawing.Size(96, 17);
+            this.checkBoxOptimizationEthashPascalEnabled.TabIndex = 0;
+            this.checkBoxOptimizationEthashPascalEnabled.Tag = "parameter:optimization_ethash_pascal_enabled";
+            this.checkBoxOptimizationEthashPascalEnabled.Text = "Ethash/Pascal";
+            this.checkBoxOptimizationEthashPascalEnabled.UseVisualStyleBackColor = true;
+            // 
             // groupBoxOptimizationTargets
             // 
             this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationUndervoltingMemory);
@@ -4687,13 +4889,9 @@
             this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationMemoryTimingsExtended);
             this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationMemoryTimings);
             this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationAlgorithmicSettings);
-            this.groupBoxOptimizationTargets.Controls.Add(this.label37);
-            this.groupBoxOptimizationTargets.Controls.Add(this.comboBoxOptimizerDevice);
-            this.groupBoxOptimizationTargets.Controls.Add(this.label36);
-            this.groupBoxOptimizationTargets.Controls.Add(this.comboBoxOptimizerAlgorithm);
-            this.groupBoxOptimizationTargets.Location = new System.Drawing.Point(307, 6);
+            this.groupBoxOptimizationTargets.Location = new System.Drawing.Point(307, 82);
             this.groupBoxOptimizationTargets.Name = "groupBoxOptimizationTargets";
-            this.groupBoxOptimizationTargets.Size = new System.Drawing.Size(429, 162);
+            this.groupBoxOptimizationTargets.Size = new System.Drawing.Size(559, 72);
             this.groupBoxOptimizationTargets.TabIndex = 153;
             this.groupBoxOptimizationTargets.TabStop = false;
             this.groupBoxOptimizationTargets.Text = "Targets";
@@ -4701,7 +4899,7 @@
             // checkBoxOptimizationUndervoltingMemory
             // 
             this.checkBoxOptimizationUndervoltingMemory.AutoSize = true;
-            this.checkBoxOptimizationUndervoltingMemory.Location = new System.Drawing.Point(272, 115);
+            this.checkBoxOptimizationUndervoltingMemory.Location = new System.Drawing.Point(264, 45);
             this.checkBoxOptimizationUndervoltingMemory.Name = "checkBoxOptimizationUndervoltingMemory";
             this.checkBoxOptimizationUndervoltingMemory.Size = new System.Drawing.Size(131, 17);
             this.checkBoxOptimizationUndervoltingMemory.TabIndex = 158;
@@ -4712,7 +4910,7 @@
             // checkBoxOptimizationUndervoltingCore
             // 
             this.checkBoxOptimizationUndervoltingCore.AutoSize = true;
-            this.checkBoxOptimizationUndervoltingCore.Location = new System.Drawing.Point(139, 115);
+            this.checkBoxOptimizationUndervoltingCore.Location = new System.Drawing.Point(264, 22);
             this.checkBoxOptimizationUndervoltingCore.Name = "checkBoxOptimizationUndervoltingCore";
             this.checkBoxOptimizationUndervoltingCore.Size = new System.Drawing.Size(116, 17);
             this.checkBoxOptimizationUndervoltingCore.TabIndex = 157;
@@ -4723,7 +4921,7 @@
             // checkBoxOptimizationOverclockingMemory
             // 
             this.checkBoxOptimizationOverclockingMemory.AutoSize = true;
-            this.checkBoxOptimizationOverclockingMemory.Location = new System.Drawing.Point(272, 92);
+            this.checkBoxOptimizationOverclockingMemory.Location = new System.Drawing.Point(129, 45);
             this.checkBoxOptimizationOverclockingMemory.Name = "checkBoxOptimizationOverclockingMemory";
             this.checkBoxOptimizationOverclockingMemory.Size = new System.Drawing.Size(134, 17);
             this.checkBoxOptimizationOverclockingMemory.TabIndex = 156;
@@ -4734,7 +4932,7 @@
             // checkBoxOptimizationOverclockingCore
             // 
             this.checkBoxOptimizationOverclockingCore.AutoSize = true;
-            this.checkBoxOptimizationOverclockingCore.Location = new System.Drawing.Point(139, 92);
+            this.checkBoxOptimizationOverclockingCore.Location = new System.Drawing.Point(128, 22);
             this.checkBoxOptimizationOverclockingCore.Name = "checkBoxOptimizationOverclockingCore";
             this.checkBoxOptimizationOverclockingCore.Size = new System.Drawing.Size(119, 17);
             this.checkBoxOptimizationOverclockingCore.TabIndex = 155;
@@ -4745,7 +4943,7 @@
             // checkBoxOptimizationMemoryTimingsExtended
             // 
             this.checkBoxOptimizationMemoryTimingsExtended.AutoSize = true;
-            this.checkBoxOptimizationMemoryTimingsExtended.Location = new System.Drawing.Point(272, 138);
+            this.checkBoxOptimizationMemoryTimingsExtended.Location = new System.Drawing.Point(401, 45);
             this.checkBoxOptimizationMemoryTimingsExtended.Name = "checkBoxOptimizationMemoryTimingsExtended";
             this.checkBoxOptimizationMemoryTimingsExtended.Size = new System.Drawing.Size(151, 17);
             this.checkBoxOptimizationMemoryTimingsExtended.TabIndex = 154;
@@ -4756,12 +4954,12 @@
             // checkBoxOptimizationMemoryTimings
             // 
             this.checkBoxOptimizationMemoryTimings.AutoSize = true;
-            this.checkBoxOptimizationMemoryTimings.Location = new System.Drawing.Point(139, 138);
+            this.checkBoxOptimizationMemoryTimings.Location = new System.Drawing.Point(401, 22);
             this.checkBoxOptimizationMemoryTimings.Name = "checkBoxOptimizationMemoryTimings";
-            this.checkBoxOptimizationMemoryTimings.Size = new System.Drawing.Size(98, 17);
+            this.checkBoxOptimizationMemoryTimings.Size = new System.Drawing.Size(132, 17);
             this.checkBoxOptimizationMemoryTimings.TabIndex = 154;
             this.checkBoxOptimizationMemoryTimings.Tag = "parameter:optimization_memory_timings";
-            this.checkBoxOptimizationMemoryTimings.Text = "Memory timings";
+            this.checkBoxOptimizationMemoryTimings.Text = "Memory timings (basic)";
             this.checkBoxOptimizationMemoryTimings.UseVisualStyleBackColor = true;
             // 
             // checkBoxOptimizationAlgorithmicSettings
@@ -4769,55 +4967,13 @@
             this.checkBoxOptimizationAlgorithmicSettings.AutoSize = true;
             this.checkBoxOptimizationAlgorithmicSettings.Checked = true;
             this.checkBoxOptimizationAlgorithmicSettings.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationAlgorithmicSettings.Location = new System.Drawing.Point(6, 92);
+            this.checkBoxOptimizationAlgorithmicSettings.Location = new System.Drawing.Point(6, 22);
             this.checkBoxOptimizationAlgorithmicSettings.Name = "checkBoxOptimizationAlgorithmicSettings";
             this.checkBoxOptimizationAlgorithmicSettings.Size = new System.Drawing.Size(116, 17);
             this.checkBoxOptimizationAlgorithmicSettings.TabIndex = 153;
             this.checkBoxOptimizationAlgorithmicSettings.Tag = "parameter:optimization_algorithmic_settings";
             this.checkBoxOptimizationAlgorithmicSettings.Text = "Algorithmic settings";
             this.checkBoxOptimizationAlgorithmicSettings.UseVisualStyleBackColor = true;
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label37.Location = new System.Drawing.Point(6, 22);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(44, 13);
-            this.label37.TabIndex = 153;
-            this.label37.Text = "Device:";
-            // 
-            // comboBoxOptimizerDevice
-            // 
-            this.comboBoxOptimizerDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxOptimizerDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBoxOptimizerDevice.FormattingEnabled = true;
-            this.comboBoxOptimizerDevice.Location = new System.Drawing.Point(65, 19);
-            this.comboBoxOptimizerDevice.Name = "comboBoxOptimizerDevice";
-            this.comboBoxOptimizerDevice.Size = new System.Drawing.Size(224, 21);
-            this.comboBoxOptimizerDevice.TabIndex = 152;
-            this.comboBoxOptimizerDevice.Tag = "parameter:optimizer_device";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label36.Location = new System.Drawing.Point(6, 49);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(53, 13);
-            this.label36.TabIndex = 151;
-            this.label36.Text = "Algorithm:";
-            // 
-            // comboBoxOptimizerAlgorithm
-            // 
-            this.comboBoxOptimizerAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxOptimizerAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBoxOptimizerAlgorithm.FormattingEnabled = true;
-            this.comboBoxOptimizerAlgorithm.Location = new System.Drawing.Point(65, 46);
-            this.comboBoxOptimizerAlgorithm.Name = "comboBoxOptimizerAlgorithm";
-            this.comboBoxOptimizerAlgorithm.Size = new System.Drawing.Size(224, 21);
-            this.comboBoxOptimizerAlgorithm.TabIndex = 150;
-            this.comboBoxOptimizerAlgorithm.Tag = "parameter:optimizer_algorithm";
             // 
             // dataGridViewOptimizerBenchmarkingResults
             // 
@@ -4923,6 +5079,7 @@
             this.dataGridViewOptimizerRecords.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.dataGridViewOptimizerRecords.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewOptimizerRecords.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex,
             this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm,
             this.dataGridViewTextBoxColumnOptimizerRecordsParameter,
             this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount,
@@ -4937,46 +5094,6 @@
             this.dataGridViewOptimizerRecords.RowsDefaultCellStyle = dataGridViewCellStyle45;
             this.dataGridViewOptimizerRecords.Size = new System.Drawing.Size(965, 201);
             this.dataGridViewOptimizerRecords.TabIndex = 19;
-            // 
-            // dataGridViewTextBoxColumnOptimizerRecordsAlgorithm
-            // 
-            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm.HeaderText = "Algorithm";
-            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm.Name = "dataGridViewTextBoxColumnOptimizerRecordsAlgorithm";
-            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm.ReadOnly = true;
-            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm.Width = 140;
-            // 
-            // dataGridViewTextBoxColumnOptimizerRecordsParameter
-            // 
-            dataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.DefaultCellStyle = dataGridViewCellStyle42;
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.HeaderText = "Parameter";
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.Name = "dataGridViewTextBoxColumnOptimizerRecordsParameter";
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.ReadOnly = true;
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.Width = 200;
-            // 
-            // dataGridViewTextBoxColumnOptimizerRecordsSuccessCount
-            // 
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.DefaultCellStyle = dataGridViewCellStyle43;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.HeaderText = "Success Rate";
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.Name = "dataGridViewTextBoxColumnOptimizerRecordsSuccessCount";
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.ReadOnly = true;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumnOptimizerRecordsSpeed
-            // 
-            dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.DefaultCellStyle = dataGridViewCellStyle44;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.HeaderText = "Speed(s)";
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Name = "dataGridViewTextBoxColumnOptimizerRecordsSpeed";
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.ReadOnly = true;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Width = 200;
             // 
             // groupBox5
             // 
@@ -5197,6 +5314,53 @@
             this.timerStartNextBenchmark.Interval = 10000;
             this.timerStartNextBenchmark.Tick += new System.EventHandler(this.timerStartNextBenchmark_Tick);
             // 
+            // dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex
+            // 
+            this.dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex.HeaderText = "#";
+            this.dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex.Name = "dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex";
+            this.dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex.ReadOnly = true;
+            this.dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex.Width = 20;
+            // 
+            // dataGridViewTextBoxColumnOptimizerRecordsAlgorithm
+            // 
+            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm.HeaderText = "Algorithm";
+            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm.Name = "dataGridViewTextBoxColumnOptimizerRecordsAlgorithm";
+            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm.ReadOnly = true;
+            this.dataGridViewTextBoxColumnOptimizerRecordsAlgorithm.Width = 140;
+            // 
+            // dataGridViewTextBoxColumnOptimizerRecordsParameter
+            // 
+            dataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.DefaultCellStyle = dataGridViewCellStyle42;
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.HeaderText = "Parameter";
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.Name = "dataGridViewTextBoxColumnOptimizerRecordsParameter";
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.ReadOnly = true;
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.Width = 200;
+            // 
+            // dataGridViewTextBoxColumnOptimizerRecordsSuccessCount
+            // 
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.DefaultCellStyle = dataGridViewCellStyle43;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.HeaderText = "Success Rate";
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.Name = "dataGridViewTextBoxColumnOptimizerRecordsSuccessCount";
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.ReadOnly = true;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumnOptimizerRecordsSpeed
+            // 
+            dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.DefaultCellStyle = dataGridViewCellStyle44;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.HeaderText = "Speed(s)";
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Name = "dataGridViewTextBoxColumnOptimizerRecordsSpeed";
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.ReadOnly = true;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Width = 200;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -5300,6 +5464,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).EndInit();
             this.tabControlMainForm.ResumeLayout(false);
             this.tabPageOptimization.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.groupBoxOptimizationTargets.ResumeLayout(false);
             this.groupBoxOptimizationTargets.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerBenchmarkingResults)).EndInit();
@@ -5634,10 +5800,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxBenchmarkingResultsSuccessRate;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxBenchmarkingResultsSpeed;
         private System.Windows.Forms.GroupBox groupBoxOptimizationTargets;
-        private System.Windows.Forms.Label label36;
-        private System.Windows.Forms.ComboBox comboBoxOptimizerAlgorithm;
-        private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.ComboBox comboBoxOptimizerDevice;
         private System.Windows.Forms.CheckBox checkBoxOptimizationUndervoltingCore;
         private System.Windows.Forms.CheckBox checkBoxOptimizationOverclockingMemory;
         private System.Windows.Forms.CheckBox checkBoxOptimizationOverclockingCore;
@@ -5653,10 +5815,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsAlgorithm;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsParameter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSuccessCount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSpeed;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingX16REnabled;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingCryptoNightHeavyEnabled;
         private System.Windows.Forms.Button buttonRavenBalance;
@@ -5697,5 +5855,23 @@
         private System.Windows.Forms.CheckBox checkBoxOptimizationUndervoltingMemory;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingCoolGPUDown;
         private System.Windows.Forms.CheckBox checkBoxOptimizationCoolGPUDown;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationX16SEnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationCryptoNightLightEnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationCryptoNightV7Enabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationX16REnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationCryptoNightHeavyEnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationLbryEnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationLyra2REv2Enabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationPascalEnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationNeoScryptEnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationCryptoNightEnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationEthashEnabled;
+        private System.Windows.Forms.CheckBox checkBoxOptimizationEthashPascalEnabled;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsAlgorithm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsParameter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSuccessCount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSpeed;
     }
 }
