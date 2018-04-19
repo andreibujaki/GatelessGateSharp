@@ -8,7 +8,7 @@ Gateless Gate Sharp is an user-friendly yet extremely powerful open-source multi
 
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
-All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button. Please refer to [the online manual](https://github.com/zawawawa/GatelessGateSharp/blob/v1.3/Documentation/TOC.md) for details.
+All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button. Please refer to **[the online manual](https://github.com/zawawawa/GatelessGateSharp/blob/v1.3/Documentation/TOC.md)** for details.
 
 ![Screen Shot](https://i.imgur.com/XiVc70d.png)
 
