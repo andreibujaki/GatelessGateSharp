@@ -1,7 +1,6 @@
 # Gateless Gate Sharp
 
-Gateless Gate Sharp is the first open-source OpenCL dual ETH/XMR/PASC/LBC/FTC miner for Windows operating systems. It focuses on performance, stability, and ease of use.
-Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), this miner aims at stability with a much simpler design and the managed .NET Framework.
+Gateless Gate Sharp is an user-friendly yet extremely powerful open-source multi-algorithm miner for Windows operating systems. It focuses on performance, stability, and ease of use, featuring a one-of-a-kind ability to modify memory timings on the fly and a powerful built-in optimizer. Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), this miner aims at stability with a much simpler design and the managed .NET Framework.
 
 * [Gateless_Gate_Sharp_1.3.5_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.5-alpha/Gateless_Gate_Sharp_1.3.5_alpha_Setup.msi) (Windows x64 Installer; highly recommended)
 * [Gateless_Gate_Sharp_1.3.5_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.5-alpha/Gateless_Gate_Sharp_1.3.5_alpha.7z)
@@ -9,7 +8,34 @@ Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), t
 
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
-Currently, the miner supports Ethash/Pascal dual-mining, Ethash/daggerhashimoto, CryptoNight, CryptoNight-Light, CryptoNight-Heavy, CryptoNightV7, X16R, X16S, Pascal, Lbry, NeoScrypt, LyraREv2, and the following major anonymous pools by default: NiceHash, ethermine.org, ethpool.org, DwarfPool, Nanopool, Mining Pool Hub, zpool, and mineXMR.com. Support for custom pools has also been added. All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
+Currently, the miner supports the following algorithms:
+
+* Ethash/Pascal dual-mining
+* CryptoNight
+* CryptoNight-Light
+* CryptoNight-Heavy
+* CryptoNightV7
+* X16R
+* X16S
+* Pascal
+* Lbry
+* NeoScrypt
+* LyraREv2
+
+The following major pools are natively supported as default pools:
+
+* NiceHash
+* ethermine.org
+* ethpool.org
+* DwarfPool
+* Nanopool
+* Mining Pool Hub
+* zpool
+* mineXMR.com
+
+In addition to the default pools, support for custom pools is also available. 
+
+All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button. Please refer to [the online manual](https://github.com/zawawawa/GatelessGateSharp/Documentation/TOC.md) for details.
 
 ![Screen Shot](https://i.imgur.com/XiVc70d.png)
 
