@@ -5121,6 +5121,7 @@ namespace GatelessGateSharp
                 comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterStart.Enabled = numericUpDownBenchmarkingSecondParameterEnd.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
 
                 checkBoxOptimizationCoolGPUDown.Enabled = checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = checkBoxOptimizationUseAverageSpeeds.Enabled = checkBoxOptimizationPrioritizeStability.Enabled = idle;
+                groupBoxOptimizationAlgorithms.Enabled = idle;
                 groupBoxOptimizationTargets.Enabled = idle;
                 numericUpDownOptimizationRepeats.Enabled = idle;
                 numericUpDownOptimizationLength.Enabled = idle;
