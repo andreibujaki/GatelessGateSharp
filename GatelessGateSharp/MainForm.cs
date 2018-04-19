@@ -214,6 +214,8 @@ namespace GatelessGateSharp
 
             comboBoxDefaultAlgorithm.SelectedIndex = 0;
 
+            comboBoxOptimizationApproach.SelectedIndex = 0;
+
             comboBoxCustomPool0Algorithm.SelectedIndex = 0;
             comboBoxCustomPool1Algorithm.SelectedIndex = 0;
             comboBoxCustomPool2Algorithm.SelectedIndex = 0;
@@ -228,8 +230,8 @@ namespace GatelessGateSharp
 
             comboBoxGraphType.SelectedIndex = 0;
             comboBoxGraphCoverage.SelectedIndex = 0;
-            comboBoxSecondGraphType.SelectedIndex = 0;
-            comboBoxSecondGraphCoverage.SelectedIndex = 0;
+            comboBoxGraphType.SelectedIndex = 0;
+            comboBoxGraphCoverage.SelectedIndex = 0;
 
             // LiveCharts
             var mapper = Mappers.Xy<MeasureModel>()
@@ -981,13 +983,17 @@ namespace GatelessGateSharp
 
                     numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
-                    int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock; if (maxCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Maximum = maxCoreClock;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Minimum = 0;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Maximum = 4000;
                     int minCoreClock = ((OpenCLDevice)device).MinCoreClock; if (minCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Minimum = minCoreClock;
+                    int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock; if (maxCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Maximum = maxCoreClock;
                     int coreClockStep = ((OpenCLDevice)device).CoreClockStep; if (coreClockStep > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Increment = coreClockStep;
                     int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock; if (defaultCoreClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = defaultCoreClock;
 
-                    int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock; if (maxMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Maximum = maxMemoryClock;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Minimum = 0;
+                    numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Maximum = 4000;
                     int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock; if (minMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Minimum = minMemoryClock;
+                    int maxMemoryClock = ((OpenCLDevice)device).MaxMemoryClock; if (maxMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Maximum = maxMemoryClock;
                     int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep; if (memoryClockStep > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Increment = memoryClockStep;
                     int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock; if (defaultMemoryClock > 0) numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = defaultMemoryClock;
 
@@ -3361,7 +3367,7 @@ namespace GatelessGateSharp
                     chart.Series[i].Values.RemoveAt(0);
             }
             //
-            string coverage = (chartIndex == 0) ? (string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] : (string)comboBoxSecondGraphCoverage.Items[comboBoxSecondGraphCoverage.SelectedIndex];
+            string coverage = (chartIndex == 0) ? (string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex] : (string)comboBoxGraphCoverage.Items[comboBoxGraphCoverage.SelectedIndex];
             chart.AxisX[0].MaxValue = now.Ticks + TimeSpan.FromSeconds(0).Ticks;
             if (coverage == "1 Minute") {
                 chart.AxisX[0].MinValue = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
@@ -5026,9 +5032,7 @@ namespace GatelessGateSharp
                 buttonReleaseMemory.Enabled = idle;
                 buttonRelaunch.Enabled = idle;
 
-                groupBoxPoolPriorities.Enabled = idle && !CustomPoolEnabled;
-                groupBoxPoolParameters.Enabled = idle && !CustomPoolEnabled;
-                groupBoxWalletAddresses.Enabled = idle && !CustomPoolEnabled;
+                tabControlDefaultPools.Enabled = idle && !CustomPoolEnabled;
                 groupBoxAutomation.Enabled = idle;
                 groupBoxHadrwareAcceleration.Enabled = idle;
                 dataGridViewDevices.Enabled = idle;
@@ -5104,25 +5108,25 @@ namespace GatelessGateSharp
                 cartesianChartDeviceActivity.Visible = ((string)comboBoxGraphType.SelectedItem == "Activity");
                 cartesianChartCPUUsage.Visible = ((string)comboBoxGraphType.SelectedItem == "CPU Usage");
 
-                cartesianChartSpeedPrimaryAlgorithm.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Speed (Primary Algorithm)");
-                cartesianChartSpeedSecondaryAlgorithm.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Speed (Secondary Algorithm)");
-                cartesianChartShare1Minute.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Minute");
-                cartesianChartShare1Hour.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Hour");
-                cartesianChartShare1Day.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Day");
-                cartesianChartShare1Month.Visible = ((string)comboBoxSecondGraphType.SelectedItem == "Share") && ((string)comboBoxSecondGraphCoverage.SelectedItem == "1 Month");
+                cartesianChartSpeedPrimaryAlgorithm.Visible = ((string)comboBoxGraphType.SelectedItem == "Speed (Primary Algorithm)");
+                cartesianChartSpeedSecondaryAlgorithm.Visible = ((string)comboBoxGraphType.SelectedItem == "Speed (Secondary Algorithm)");
+                cartesianChartShare1Minute.Visible = ((string)comboBoxGraphType.SelectedItem == "Share") && ((string)comboBoxGraphCoverage.SelectedItem == "1 Minute");
+                cartesianChartShare1Hour.Visible = ((string)comboBoxGraphType.SelectedItem == "Share") && ((string)comboBoxGraphCoverage.SelectedItem == "1 Hour");
+                cartesianChartShare1Day.Visible = ((string)comboBoxGraphType.SelectedItem == "Share") && ((string)comboBoxGraphCoverage.SelectedItem == "1 Day");
+                cartesianChartShare1Month.Visible = ((string)comboBoxGraphType.SelectedItem == "Share") && ((string)comboBoxGraphCoverage.SelectedItem == "1 Month");
 
                 checkBoxBenchmarkingCoolGPUDown.Enabled = checkBoxBenchmarkingDoNotRepeatAfterFailure.Enabled = checkBoxBenchmarkingUseAverageSpeeds.Enabled = idle;
-                groupBoxBenchmarkingAlgorithms.Enabled = idle;
-                groupBoxBenchmarkingFirstParameter.Enabled = idle;
-                groupBoxBenchmarkingSecondParameter.Enabled = idle && checkBoxBenchmarkingFirstParameterEnabled.Checked;
+                tabPageBenchmarkingAlgorithms.Enabled = idle;
+                tabPageBenchmarkingFirstParameter.Enabled = idle;
+                tabPageBenchmarkingSecondParameter.Enabled = idle && checkBoxBenchmarkingFirstParameterEnabled.Checked;
                 numericUpDownBenchmarkingRepeats.Enabled = idle;
                 numericUpDownBenchmarkingLength.Enabled = idle;
                 comboBoxBenchmarkingFirstParameter.Enabled = numericUpDownBenchmarkingFirstParameterStart.Enabled = numericUpDownBenchmarkingFirstParameterEnd.Enabled = numericUpDownBenchmarkingFirstParameterStep.Enabled = checkBoxBenchmarkingFirstParameterEnabled.Checked;
                 comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterStart.Enabled = numericUpDownBenchmarkingSecondParameterEnd.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
 
-                checkBoxOptimizationCoolGPUDown.Enabled = checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = checkBoxOptimizationUseAverageSpeeds.Enabled = checkBoxOptimizationPrioritizeStability.Enabled = idle;
-                groupBoxOptimizationAlgorithms.Enabled = idle;
-                groupBoxOptimizationTargets.Enabled = idle;
+                checkBoxOptimizationCoolGPUDown.Enabled = checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = checkBoxOptimizationUseAverageSpeeds.Enabled = comboBoxOptimizationApproach.Enabled = idle;
+                tabPageOptimizationTargets.Enabled = idle;
+                tabPageOptimizationTargets.Enabled = idle;
                 numericUpDownOptimizationRepeats.Enabled = idle;
                 numericUpDownOptimizationLength.Enabled = idle;
             } catch (Exception ex) {
@@ -6302,26 +6306,24 @@ namespace GatelessGateSharp
             } else {
                 foreach (var device in Controller.OpenCLDevices) {
                     if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
-                        for (int deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                            Tuple<int, string, string> tuple;
-                            if (ConvertBenchmarkParameterToDeviceParameterTuple(deviceIndex, param.Name, out tuple)) {
-                                try {
-                                    numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value);
-                                    if ((new Regex(@"^overclocking_")).Match(tuple.Item3).Success) {
-                                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "ovrclocking_enabled")].Checked = true;
-                                    } else if ((new Regex(@"^memory_timings_")).Match(tuple.Item3).Success) {
-                                        checkBoxDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "memory_timings_enabled")].Checked = true;
-                                    }
-                                } catch (Exception ex) {
-                                    Logger("deviceIndex: " + deviceIndex);
-                                    Logger("param.Name: " + param.Name);
-                                    Logger("decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value): " + decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value));
-                                    Logger("numericUpDownDeviceParameterArray[tuple].Maximum: " + numericUpDownDeviceParameterArray[tuple].Maximum);
-                                    Logger(ex);
+                        Tuple<int, string, string> tuple;
+                        if (ConvertBenchmarkParameterToDeviceParameterTuple(device.DeviceIndex, param.Name, out tuple)) {
+                            try {
+                                numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[device.DeviceIndex] : param.Value);
+                                if ((new Regex(@"^overclocking_")).Match(tuple.Item3).Success) {
+                                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "overclocking_enabled")].Checked = true;
+                                } else if ((new Regex(@"^memory_timings_")).Match(tuple.Item3).Success) {
+                                    checkBoxDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "memory_timings_enabled")].Checked = true;
                                 }
+                            } catch (Exception ex) {
+                                Logger("device.DeviceIndex: " + device.DeviceIndex);
+                                Logger("param.Name: " + param.Name);
+                                Logger("decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value): " + decimal.Parse((restore) ? param.OriginalValues[device.DeviceIndex] : param.Value));
+                                Logger("numericUpDownDeviceParameterArray[tuple].Maximum: " + numericUpDownDeviceParameterArray[tuple].Maximum);
+                                Logger(ex);
                             }
                         }
-                    }
+                }
                 }
             }
         }
@@ -6465,7 +6467,13 @@ namespace GatelessGateSharp
                         max = isNVIDIA ? 512 : 256;
                     }
                     checkBoxBenchmarkingFirstParameterEnabled.Checked = true;
-                    if (checkBoxOptimizationPrioritizeStability.Checked) {
+                    if ((string)comboBoxOptimizationApproach.SelectedItem == "Aggressive") {
+                        if (parameterName == "overclocking_memory_clock" || parameterName == "overclocking_core_clock") {
+                            min = value;
+                        } else {
+                            max = value;
+                        }
+                    } else if ((string)comboBoxOptimizationApproach.SelectedItem == "Stabilize") {
                         if (parameterName == "overclocking_memory_clock" || parameterName == "overclocking_core_clock") {
                             max = value;
                         } else {
@@ -6801,12 +6809,16 @@ namespace GatelessGateSharp
                     Controller.BenchmarkRecords[i].StabilityScore += (i < Controller.BenchmarkRecords.Count - 1) ? Controller.BenchmarkRecords[i + 1].SuccessCount : Controller.BenchmarkRecords[i].SuccessCount;
                 }
             }
+            bool aggressiveOptimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && ((string)comboBoxOptimizationApproach.SelectedItem == "Aggressive";
             foreach (var record in Controller.BenchmarkRecords.Concat(Controller.BenchmarkEntries).OrderBy(o => o.ID)) {
+                bool aggressiveOptimizationForVoltage = aggressiveOptimization && (record.Parameters[1].Name == "overclocking_core_voltage" || record.Parameters[1].Name == "overclocking_memory_voltage");
+                bool aggressiveOptimizationForClock = aggressiveOptimization && (record.Parameters[1].Name == "overclocking_core_clock" || record.Parameters[1].Name == "overclocking_memory_clock");
                 if (bestRecord == null
                     || (record.SuccessCount > bestRecord.SuccessCount)
                     || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore > bestRecord.StabilityScore)
-                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm)
-                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.Parameters.Count >= 2 && (record.Parameters[1].Name == "overclocking_core_voltage" || record.Parameters[1].Name == "overclocking_memory_voltage") && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm * 1.01)) {
+                    || (aggressiveOptimizationForVoltage && record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && int.Parse(record.Parameters[1].Value) < int.Parse(bestRecord.Parameters[1].Value))
+                    || (aggressiveOptimizationForClock   && record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && int.Parse(record.Parameters[1].Value) > int.Parse(bestRecord.Parameters[1].Value))
+                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm)) { 
 
                     bestRecord = record;
                 }

@@ -30,25 +30,25 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -174,16 +174,6 @@
             this.label31 = new System.Windows.Forms.Label();
             this.numericUpDownBenchmarkingRepeats = new System.Windows.Forms.NumericUpDown();
             this.label33 = new System.Windows.Forms.Label();
-            this.groupBoxBenchmarkingSecondParameter = new System.Windows.Forms.GroupBox();
-            this.numericUpDownBenchmarkingSecondParameterStep = new System.Windows.Forms.NumericUpDown();
-            this.label26 = new System.Windows.Forms.Label();
-            this.numericUpDownBenchmarkingSecondParameterEnd = new System.Windows.Forms.NumericUpDown();
-            this.label29 = new System.Windows.Forms.Label();
-            this.numericUpDownBenchmarkingSecondParameterStart = new System.Windows.Forms.NumericUpDown();
-            this.label30 = new System.Windows.Forms.Label();
-            this.checkBoxBenchmarkingSecondParameterEnabled = new System.Windows.Forms.CheckBox();
-            this.comboBoxBenchmarkingSecondParameter = new System.Windows.Forms.ComboBox();
-            this.groupBoxBenchmarkingFirstParameter = new System.Windows.Forms.GroupBox();
             this.numericUpDownBenchmarkingFirstParameterStep = new System.Windows.Forms.NumericUpDown();
             this.label25 = new System.Windows.Forms.Label();
             this.numericUpDownBenchmarkingFirstParameterEnd = new System.Windows.Forms.NumericUpDown();
@@ -192,7 +182,6 @@
             this.label23 = new System.Windows.Forms.Label();
             this.checkBoxBenchmarkingFirstParameterEnabled = new System.Windows.Forms.CheckBox();
             this.comboBoxBenchmarkingFirstParameter = new System.Windows.Forms.ComboBox();
-            this.groupBoxBenchmarkingAlgorithms = new System.Windows.Forms.GroupBox();
             this.checkBoxBenchmarkingX16SEnabled = new System.Windows.Forms.CheckBox();
             this.checkBoxBenchmarkingCryptoNightLightEnabled = new System.Windows.Forms.CheckBox();
             this.checkBoxBenchmarkingCryptoNightV7Enabled = new System.Windows.Forms.CheckBox();
@@ -313,55 +302,59 @@
             this.textBoxCustomPool0Login = new System.Windows.Forms.TextBox();
             this.label148 = new System.Windows.Forms.Label();
             this.tabPagePoolSettings = new System.Windows.Forms.TabPage();
-            this.groupBoxWalletAddresses = new System.Windows.Forms.GroupBox();
+            this.tabControlDefaultPools = new System.Windows.Forms.TabControl();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
-            this.label44 = new System.Windows.Forms.Label();
-            this.textBoxPigeoncoinAddress = new System.Windows.Forms.TextBox();
-            this.buttonAEONBalance = new System.Windows.Forms.Button();
-            this.label43 = new System.Windows.Forms.Label();
-            this.textBoxAEONAddress = new System.Windows.Forms.TextBox();
-            this.buttonSumokoinBalance = new System.Windows.Forms.Button();
-            this.label39 = new System.Windows.Forms.Label();
-            this.textBoxSumokoinAddress = new System.Windows.Forms.TextBox();
-            this.buttonRavenBalance = new System.Windows.Forms.Button();
-            this.label38 = new System.Windows.Forms.Label();
-            this.textBoxRavenAddress = new System.Windows.Forms.TextBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.buttonLbryBalance = new System.Windows.Forms.Button();
-            this.textBoxLbryAddress = new System.Windows.Forms.TextBox();
-            this.textBoxPascalAddress = new System.Windows.Forms.TextBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.buttonViewPascalBalance = new System.Windows.Forms.Button();
-            this.textBoxBitcoinAddress = new System.Windows.Forms.TextBox();
-            this.button5 = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBoxEthereumAddress = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.textBoxMoneroAddress = new System.Windows.Forms.TextBox();
-            this.buttonMoneroBalance = new System.Windows.Forms.Button();
-            this.label16 = new System.Windows.Forms.Label();
-            this.buttonEthereumBalance = new System.Windows.Forms.Button();
-            this.textBoxZcashAddress = new System.Windows.Forms.TextBox();
+            this.label44 = new System.Windows.Forms.Label();
             this.buttonViewBalancesAtNiceHash = new System.Windows.Forms.Button();
-            this.groupBoxPoolParameters = new System.Windows.Forms.GroupBox();
+            this.textBoxPigeoncoinAddress = new System.Windows.Forms.TextBox();
+            this.buttonEthereumBalance = new System.Windows.Forms.Button();
+            this.buttonAEONBalance = new System.Windows.Forms.Button();
+            this.buttonMoneroBalance = new System.Windows.Forms.Button();
+            this.label43 = new System.Windows.Forms.Label();
+            this.textBoxMoneroAddress = new System.Windows.Forms.TextBox();
+            this.textBoxAEONAddress = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.buttonSumokoinBalance = new System.Windows.Forms.Button();
+            this.textBoxEthereumAddress = new System.Windows.Forms.TextBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBoxSumokoinAddress = new System.Windows.Forms.TextBox();
+            this.textBoxBitcoinAddress = new System.Windows.Forms.TextBox();
+            this.buttonRavenBalance = new System.Windows.Forms.Button();
+            this.buttonViewPascalBalance = new System.Windows.Forms.Button();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.textBoxRavenAddress = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.textBoxPascalAddress = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBoxZcashAddress = new System.Windows.Forms.TextBox();
+            this.textBoxLbryAddress = new System.Windows.Forms.TextBox();
+            this.buttonLbryBalance = new System.Windows.Forms.Button();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.buttonPoolPrioritiesDown = new System.Windows.Forms.Button();
+            this.buttonPoolPrioritiesUp = new System.Windows.Forms.Button();
+            this.listBoxPoolPriorities = new System.Windows.Forms.ListBox();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.textBoxRigID = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label46 = new System.Windows.Forms.Label();
             this.textBoxMiningPoolHubUsername = new System.Windows.Forms.TextBox();
             this.label45 = new System.Windows.Forms.Label();
-            this.textBoxRigID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.labelEmail = new System.Windows.Forms.Label();
             this.textBoxEmail = new System.Windows.Forms.TextBox();
-            this.groupBoxPoolPriorities = new System.Windows.Forms.GroupBox();
-            this.buttonPoolPrioritiesDown = new System.Windows.Forms.Button();
-            this.buttonPoolPrioritiesUp = new System.Windows.Forms.Button();
-            this.listBoxPoolPriorities = new System.Windows.Forms.ListBox();
+            this.labelEmail = new System.Windows.Forms.Label();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
-            this.buttonDeselectAllDevices = new System.Windows.Forms.Button();
-            this.buttonSelectAllDevices = new System.Windows.Forms.Button();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.cartesianChartSpeedPrimaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartSpeedSecondaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Minute = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Hour = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Day = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChartShare1Month = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartCPUUsage = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartPower = new LiveCharts.WinForms.CartesianChart();
             this.cartesianChartTemperature = new LiveCharts.WinForms.CartesianChart();
@@ -369,33 +362,29 @@
             this.cartesianChartFanSpeed = new LiveCharts.WinForms.CartesianChart();
             this.comboBoxGraphType = new System.Windows.Forms.ComboBox();
             this.comboBoxGraphCoverage = new System.Windows.Forms.ComboBox();
-            this.cartesianChartShare1Month = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartShare1Day = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartShare1Hour = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartShare1Minute = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartSpeedSecondaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
-            this.cartesianChartSpeedPrimaryAlgorithm = new LiveCharts.WinForms.CartesianChart();
-            this.comboBoxSecondGraphType = new System.Windows.Forms.ComboBox();
-            this.comboBoxSecondGraphCoverage = new System.Windows.Forms.ComboBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.labelCurrentPool = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.checkBoxUseCustomPools = new System.Windows.Forms.CheckBox();
             this.comboBoxDefaultAlgorithm = new System.Windows.Forms.ComboBox();
             this.buttonRestoreStockSettings = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
             this.buttonBoostPerformance = new System.Windows.Forms.Button();
-            this.labelElapsedTime = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.labelCurrentSpeed = new System.Windows.Forms.Label();
-            this.labelCurrentSecondaryPool = new System.Windows.Forms.Label();
-            this.label70 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.labelCurrentSpeed = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.labelElapsedTime = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
+            this.labelCurrentPool = new System.Windows.Forms.Label();
             this.labelBalance = new System.Windows.Forms.Label();
+            this.label70 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.labelPriceDay = new System.Windows.Forms.Label();
+            this.labelCurrentSecondaryPool = new System.Windows.Forms.Label();
             this.labelPriceWeek = new System.Windows.Forms.Label();
             this.labelPriceMonth = new System.Windows.Forms.Label();
+            this.buttonDeselectAllDevices = new System.Windows.Forms.Button();
+            this.buttonSelectAllDevices = new System.Windows.Forms.Button();
             this.dataGridViewDevices = new System.Windows.Forms.DataGridView();
             this.enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -415,7 +404,6 @@
             this.memory_reserved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageOptimization = new System.Windows.Forms.TabPage();
-            this.groupBoxOptimizationAlgorithms = new System.Windows.Forms.GroupBox();
             this.checkBoxOptimizationX16SEnabled = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationCryptoNightLightEnabled = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationCryptoNightV7Enabled = new System.Windows.Forms.CheckBox();
@@ -428,7 +416,6 @@
             this.checkBoxOptimizationCryptoNightEnabled = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationEthashEnabled = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationEthashPascalEnabled = new System.Windows.Forms.CheckBox();
-            this.groupBoxOptimizationTargets = new System.Windows.Forms.GroupBox();
             this.checkBoxOptimizationUndervoltingMemory = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationUndervoltingCore = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationOverclockingMemory = new System.Windows.Forms.CheckBox();
@@ -452,7 +439,6 @@
             this.labelOptimizationDeviceCaption = new System.Windows.Forms.Label();
             this.labelOptimizationDevice = new System.Windows.Forms.Label();
             this.checkBoxOptimizationCoolGPUDown = new System.Windows.Forms.CheckBox();
-            this.checkBoxOptimizationPrioritizeStability = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationUseAverageSpeeds = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationRepeatUntilStopped = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationExtendRange = new System.Windows.Forms.CheckBox();
@@ -465,6 +451,29 @@
             this.numericUpDownOptimizationRepeats = new System.Windows.Forms.NumericUpDown();
             this.label42 = new System.Windows.Forms.Label();
             this.timerStartNextBenchmark = new System.Windows.Forms.Timer(this.components);
+            this.tabPageBenchmarkingAlgorithms = new System.Windows.Forms.TabControl();
+            this.tabPageBenchmarkingFirstParameter = new System.Windows.Forms.TabPage();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.tabPageBenchmarkingSecondParameter = new System.Windows.Forms.TabPage();
+            this.numericUpDownBenchmarkingSecondParameterStep = new System.Windows.Forms.NumericUpDown();
+            this.label26 = new System.Windows.Forms.Label();
+            this.numericUpDownBenchmarkingSecondParameterEnd = new System.Windows.Forms.NumericUpDown();
+            this.label29 = new System.Windows.Forms.Label();
+            this.numericUpDownBenchmarkingSecondParameterStart = new System.Windows.Forms.NumericUpDown();
+            this.label30 = new System.Windows.Forms.Label();
+            this.checkBoxBenchmarkingSecondParameterEnabled = new System.Windows.Forms.CheckBox();
+            this.comboBoxBenchmarkingSecondParameter = new System.Windows.Forms.ComboBox();
+            this.tabControl4 = new System.Windows.Forms.TabControl();
+            this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.label32 = new System.Windows.Forms.Label();
+            this.comboBoxOptimizationApproach = new System.Windows.Forms.ComboBox();
+            this.tabControl5 = new System.Windows.Forms.TabControl();
+            this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.tabPageOptimizationTargets = new System.Windows.Forms.TabControl();
+            this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.tabPage15 = new System.Windows.Forms.TabPage();
             this.statusStripMainForm.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -483,15 +492,9 @@
             this.groupBoxBenchmarkingOtherParameters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingRepeats)).BeginInit();
-            this.groupBoxBenchmarkingSecondParameter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStep)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterEnd)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStart)).BeginInit();
-            this.groupBoxBenchmarkingFirstParameter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterStep)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterEnd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterStart)).BeginInit();
-            this.groupBoxBenchmarkingAlgorithms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBenchmarks)).BeginInit();
             this.tabPageDeviceSettings.SuspendLayout();
             this.groupBoxHadrwareAcceleration.SuspendLayout();
@@ -509,28 +512,40 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool0SecondaryPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool0Port)).BeginInit();
             this.tabPagePoolSettings.SuspendLayout();
-            this.groupBoxWalletAddresses.SuspendLayout();
-            this.groupBoxPoolParameters.SuspendLayout();
+            this.tabControlDefaultPools.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.groupBoxPoolPriorities.SuspendLayout();
             this.tabPageDashboard.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).BeginInit();
             this.tabControlMainForm.SuspendLayout();
             this.tabPageOptimization.SuspendLayout();
-            this.groupBoxOptimizationAlgorithms.SuspendLayout();
-            this.groupBoxOptimizationTargets.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerBenchmarkingResults)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerRecords)).BeginInit();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationRepeats)).BeginInit();
+            this.tabPageBenchmarkingAlgorithms.SuspendLayout();
+            this.tabPageBenchmarkingFirstParameter.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.tabPageBenchmarkingSecondParameter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStep)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterEnd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStart)).BeginInit();
+            this.tabControl4.SuspendLayout();
+            this.tabPage10.SuspendLayout();
+            this.tabPage11.SuspendLayout();
+            this.tabControl5.SuspendLayout();
+            this.tabPage12.SuspendLayout();
+            this.tabPage13.SuspendLayout();
+            this.tabPageOptimizationTargets.SuspendLayout();
+            this.tabPage14.SuspendLayout();
+            this.tabPage15.SuspendLayout();
             this.SuspendLayout();
             // 
             // timerStatsUpdates
@@ -561,11 +576,11 @@
             // buttonRelaunch
             // 
             this.buttonRelaunch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRelaunch.Location = new System.Drawing.Point(747, 625);
+            this.buttonRelaunch.Location = new System.Drawing.Point(400, 365);
             this.buttonRelaunch.Name = "buttonRelaunch";
-            this.buttonRelaunch.Size = new System.Drawing.Size(121, 23);
+            this.buttonRelaunch.Size = new System.Drawing.Size(101, 23);
             this.buttonRelaunch.TabIndex = 2;
-            this.buttonRelaunch.Text = "Relaunch and Start";
+            this.buttonRelaunch.Text = "Relaunch";
             this.buttonRelaunch.UseVisualStyleBackColor = true;
             this.buttonRelaunch.Click += new System.EventHandler(this.buttonRestart_Click);
             // 
@@ -573,9 +588,9 @@
             // 
             this.buttonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonStart.Enabled = false;
-            this.buttonStart.Location = new System.Drawing.Point(874, 625);
+            this.buttonStart.Location = new System.Drawing.Point(507, 365);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(121, 23);
+            this.buttonStart.Size = new System.Drawing.Size(101, 23);
             this.buttonStart.TabIndex = 3;
             this.buttonStart.Text = "Start";
             this.buttonStart.UseVisualStyleBackColor = true;
@@ -586,9 +601,9 @@
             this.statusStripMainForm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMainFormProgressBar,
             this.toolStripStatusLabel1});
-            this.statusStripMainForm.Location = new System.Drawing.Point(0, 658);
+            this.statusStripMainForm.Location = new System.Drawing.Point(0, 398);
             this.statusStripMainForm.Name = "statusStripMainForm";
-            this.statusStripMainForm.Size = new System.Drawing.Size(1008, 23);
+            this.statusStripMainForm.Size = new System.Drawing.Size(624, 23);
             this.statusStripMainForm.TabIndex = 5;
             // 
             // toolStripMainFormProgressBar
@@ -613,9 +628,9 @@
             // buttonReleaseMemory
             // 
             this.buttonReleaseMemory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonReleaseMemory.Location = new System.Drawing.Point(620, 625);
+            this.buttonReleaseMemory.Location = new System.Drawing.Point(293, 365);
             this.buttonReleaseMemory.Name = "buttonReleaseMemory";
-            this.buttonReleaseMemory.Size = new System.Drawing.Size(121, 23);
+            this.buttonReleaseMemory.Size = new System.Drawing.Size(101, 23);
             this.buttonReleaseMemory.TabIndex = 1;
             this.buttonReleaseMemory.Text = "Release Memory";
             this.buttonReleaseMemory.UseVisualStyleBackColor = true;
@@ -624,9 +639,9 @@
             // buttonRunBenchmarks
             // 
             this.buttonRunBenchmarks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRunBenchmarks.Location = new System.Drawing.Point(486, 625);
+            this.buttonRunBenchmarks.Location = new System.Drawing.Point(177, 365);
             this.buttonRunBenchmarks.Name = "buttonRunBenchmarks";
-            this.buttonRunBenchmarks.Size = new System.Drawing.Size(121, 23);
+            this.buttonRunBenchmarks.Size = new System.Drawing.Size(101, 23);
             this.buttonRunBenchmarks.TabIndex = 6;
             this.buttonRunBenchmarks.Text = "Benchmark";
             this.buttonRunBenchmarks.UseVisualStyleBackColor = true;
@@ -645,9 +660,9 @@
             // buttonRunOptimizer
             // 
             this.buttonRunOptimizer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRunOptimizer.Location = new System.Drawing.Point(359, 625);
+            this.buttonRunOptimizer.Location = new System.Drawing.Point(70, 365);
             this.buttonRunOptimizer.Name = "buttonRunOptimizer";
-            this.buttonRunOptimizer.Size = new System.Drawing.Size(121, 23);
+            this.buttonRunOptimizer.Size = new System.Drawing.Size(101, 23);
             this.buttonRunOptimizer.TabIndex = 7;
             this.buttonRunOptimizer.Text = "Optimize";
             this.buttonRunOptimizer.UseVisualStyleBackColor = true;
@@ -658,7 +673,7 @@
             this.tabPageAbout.Controls.Add(this.richTextBoxAbout);
             this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
             this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Size = new System.Drawing.Size(977, 585);
+            this.tabPageAbout.Size = new System.Drawing.Size(593, 325);
             this.tabPageAbout.TabIndex = 5;
             this.tabPageAbout.Text = "About";
             this.tabPageAbout.UseVisualStyleBackColor = true;
@@ -686,7 +701,7 @@
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
             this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(977, 585);
+            this.tabPageLog.Size = new System.Drawing.Size(593, 325);
             this.tabPageLog.TabIndex = 1;
             this.tabPageLog.Text = "Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -765,7 +780,7 @@
             this.tabPageMiscSettings.Controls.Add(this.groupBoxAutomation);
             this.tabPageMiscSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageMiscSettings.Name = "tabPageMiscSettings";
-            this.tabPageMiscSettings.Size = new System.Drawing.Size(977, 585);
+            this.tabPageMiscSettings.Size = new System.Drawing.Size(593, 325);
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
@@ -1408,16 +1423,13 @@
             // 
             // tabPageBenchmarks
             // 
-            this.tabPageBenchmarks.Controls.Add(this.dataGridViewBenchmarkingResults);
+            this.tabPageBenchmarks.Controls.Add(this.tabControl4);
+            this.tabPageBenchmarks.Controls.Add(this.tabPageBenchmarkingAlgorithms);
             this.tabPageBenchmarks.Controls.Add(this.groupBoxBenchmarkingOtherParameters);
-            this.tabPageBenchmarks.Controls.Add(this.groupBoxBenchmarkingSecondParameter);
-            this.tabPageBenchmarks.Controls.Add(this.groupBoxBenchmarkingFirstParameter);
-            this.tabPageBenchmarks.Controls.Add(this.groupBoxBenchmarkingAlgorithms);
-            this.tabPageBenchmarks.Controls.Add(this.dataGridViewBenchmarks);
             this.tabPageBenchmarks.Location = new System.Drawing.Point(4, 22);
             this.tabPageBenchmarks.Name = "tabPageBenchmarks";
             this.tabPageBenchmarks.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBenchmarks.Size = new System.Drawing.Size(977, 585);
+            this.tabPageBenchmarks.Size = new System.Drawing.Size(593, 325);
             this.tabPageBenchmarks.TabIndex = 8;
             this.tabPageBenchmarks.Text = "Benchmarking";
             this.tabPageBenchmarks.UseVisualStyleBackColor = true;
@@ -1428,9 +1440,9 @@
             this.dataGridViewBenchmarkingResults.AllowUserToDeleteRows = false;
             this.dataGridViewBenchmarkingResults.AllowUserToResizeColumns = false;
             this.dataGridViewBenchmarkingResults.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridViewBenchmarkingResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle14.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridViewBenchmarkingResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle14;
             this.dataGridViewBenchmarkingResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -1445,14 +1457,14 @@
             this.dataGridViewTextBoxBenchmarkingResultsSuccessRate,
             this.dataGridViewTextBoxBenchmarkingResultsSpeed});
             this.dataGridViewBenchmarkingResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridViewBenchmarkingResults.Location = new System.Drawing.Point(6, 393);
+            this.dataGridViewBenchmarkingResults.Location = new System.Drawing.Point(6, 6);
             this.dataGridViewBenchmarkingResults.MultiSelect = false;
             this.dataGridViewBenchmarkingResults.Name = "dataGridViewBenchmarkingResults";
             this.dataGridViewBenchmarkingResults.ReadOnly = true;
             this.dataGridViewBenchmarkingResults.RowHeadersVisible = false;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.dataGridViewBenchmarkingResults.RowsDefaultCellStyle = dataGridViewCellStyle6;
-            this.dataGridViewBenchmarkingResults.Size = new System.Drawing.Size(965, 186);
+            dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewBenchmarkingResults.RowsDefaultCellStyle = dataGridViewCellStyle19;
+            this.dataGridViewBenchmarkingResults.Size = new System.Drawing.Size(567, 88);
             this.dataGridViewBenchmarkingResults.TabIndex = 16;
             this.dataGridViewBenchmarkingResults.SelectionChanged += new System.EventHandler(this.dataGridViewBenchmarkingResults_SelectionChanged);
             // 
@@ -1467,8 +1479,8 @@
             // 
             // dataGridViewTextBoxBenchmarkingResultsFirstParameter
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dataGridViewTextBoxBenchmarkingResultsFirstParameter.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dataGridViewTextBoxBenchmarkingResultsFirstParameter.DefaultCellStyle = dataGridViewCellStyle15;
             this.dataGridViewTextBoxBenchmarkingResultsFirstParameter.HeaderText = "First Parameter";
             this.dataGridViewTextBoxBenchmarkingResultsFirstParameter.Name = "dataGridViewTextBoxBenchmarkingResultsFirstParameter";
             this.dataGridViewTextBoxBenchmarkingResultsFirstParameter.ReadOnly = true;
@@ -1478,8 +1490,8 @@
             // 
             // dataGridViewTextBoxBenchmarkingResultsSecondParameter
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dataGridViewTextBoxBenchmarkingResultsSecondParameter.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dataGridViewTextBoxBenchmarkingResultsSecondParameter.DefaultCellStyle = dataGridViewCellStyle16;
             this.dataGridViewTextBoxBenchmarkingResultsSecondParameter.HeaderText = "Second Parameter";
             this.dataGridViewTextBoxBenchmarkingResultsSecondParameter.Name = "dataGridViewTextBoxBenchmarkingResultsSecondParameter";
             this.dataGridViewTextBoxBenchmarkingResultsSecondParameter.ReadOnly = true;
@@ -1490,8 +1502,8 @@
             // dataGridViewTextBoxBenchmarkingResultsSuccessRate
             // 
             this.dataGridViewTextBoxBenchmarkingResultsSuccessRate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxBenchmarkingResultsSuccessRate.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxBenchmarkingResultsSuccessRate.DefaultCellStyle = dataGridViewCellStyle17;
             this.dataGridViewTextBoxBenchmarkingResultsSuccessRate.HeaderText = "Success Rate";
             this.dataGridViewTextBoxBenchmarkingResultsSuccessRate.Name = "dataGridViewTextBoxBenchmarkingResultsSuccessRate";
             this.dataGridViewTextBoxBenchmarkingResultsSuccessRate.ReadOnly = true;
@@ -1500,8 +1512,8 @@
             // 
             // dataGridViewTextBoxBenchmarkingResultsSpeed
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxBenchmarkingResultsSpeed.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxBenchmarkingResultsSpeed.DefaultCellStyle = dataGridViewCellStyle18;
             this.dataGridViewTextBoxBenchmarkingResultsSpeed.HeaderText = "Speed(s)";
             this.dataGridViewTextBoxBenchmarkingResultsSpeed.Name = "dataGridViewTextBoxBenchmarkingResultsSpeed";
             this.dataGridViewTextBoxBenchmarkingResultsSpeed.ReadOnly = true;
@@ -1525,7 +1537,7 @@
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.label33);
             this.groupBoxBenchmarkingOtherParameters.Location = new System.Drawing.Point(6, 6);
             this.groupBoxBenchmarkingOtherParameters.Name = "groupBoxBenchmarkingOtherParameters";
-            this.groupBoxBenchmarkingOtherParameters.Size = new System.Drawing.Size(295, 168);
+            this.groupBoxBenchmarkingOtherParameters.Size = new System.Drawing.Size(266, 184);
             this.groupBoxBenchmarkingOtherParameters.TabIndex = 15;
             this.groupBoxBenchmarkingOtherParameters.TabStop = false;
             this.groupBoxBenchmarkingOtherParameters.Text = "Status";
@@ -1552,7 +1564,7 @@
             // checkBoxBenchmarkingCoolGPUDown
             // 
             this.checkBoxBenchmarkingCoolGPUDown.AutoSize = true;
-            this.checkBoxBenchmarkingCoolGPUDown.Location = new System.Drawing.Point(160, 135);
+            this.checkBoxBenchmarkingCoolGPUDown.Location = new System.Drawing.Point(8, 158);
             this.checkBoxBenchmarkingCoolGPUDown.Name = "checkBoxBenchmarkingCoolGPUDown";
             this.checkBoxBenchmarkingCoolGPUDown.Size = new System.Drawing.Size(102, 17);
             this.checkBoxBenchmarkingCoolGPUDown.TabIndex = 156;
@@ -1563,7 +1575,7 @@
             // checkBoxBenchmarkingUseAverageSpeeds
             // 
             this.checkBoxBenchmarkingUseAverageSpeeds.AutoSize = true;
-            this.checkBoxBenchmarkingUseAverageSpeeds.Location = new System.Drawing.Point(160, 112);
+            this.checkBoxBenchmarkingUseAverageSpeeds.Location = new System.Drawing.Point(8, 112);
             this.checkBoxBenchmarkingUseAverageSpeeds.Name = "checkBoxBenchmarkingUseAverageSpeeds";
             this.checkBoxBenchmarkingUseAverageSpeeds.Size = new System.Drawing.Size(124, 17);
             this.checkBoxBenchmarkingUseAverageSpeeds.TabIndex = 155;
@@ -1576,19 +1588,19 @@
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.AutoSize = true;
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked = true;
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Location = new System.Drawing.Point(8, 112);
+            this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Location = new System.Drawing.Point(8, 135);
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Name = "checkBoxBenchmarkingDoNotRepeatAfterFailure";
-            this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Size = new System.Drawing.Size(146, 17);
+            this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Size = new System.Drawing.Size(102, 17);
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.TabIndex = 150;
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Tag = "parameter:benchmarking_do_not_repeat_after_failure";
-            this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Text = "Do not repeat after failure";
+            this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Text = "Skip after failure";
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.UseVisualStyleBackColor = true;
             // 
             // progressBarBenchmarking
             // 
             this.progressBarBenchmarking.Location = new System.Drawing.Point(6, 19);
             this.progressBarBenchmarking.Name = "progressBarBenchmarking";
-            this.progressBarBenchmarking.Size = new System.Drawing.Size(282, 20);
+            this.progressBarBenchmarking.Size = new System.Drawing.Size(251, 20);
             this.progressBarBenchmarking.Step = 1;
             this.progressBarBenchmarking.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBarBenchmarking.TabIndex = 146;
@@ -1671,140 +1683,9 @@
             this.label33.TabIndex = 8;
             this.label33.Text = "Repeats:";
             // 
-            // groupBoxBenchmarkingSecondParameter
-            // 
-            this.groupBoxBenchmarkingSecondParameter.Controls.Add(this.numericUpDownBenchmarkingSecondParameterStep);
-            this.groupBoxBenchmarkingSecondParameter.Controls.Add(this.label26);
-            this.groupBoxBenchmarkingSecondParameter.Controls.Add(this.numericUpDownBenchmarkingSecondParameterEnd);
-            this.groupBoxBenchmarkingSecondParameter.Controls.Add(this.label29);
-            this.groupBoxBenchmarkingSecondParameter.Controls.Add(this.numericUpDownBenchmarkingSecondParameterStart);
-            this.groupBoxBenchmarkingSecondParameter.Controls.Add(this.label30);
-            this.groupBoxBenchmarkingSecondParameter.Controls.Add(this.checkBoxBenchmarkingSecondParameterEnabled);
-            this.groupBoxBenchmarkingSecondParameter.Controls.Add(this.comboBoxBenchmarkingSecondParameter);
-            this.groupBoxBenchmarkingSecondParameter.Location = new System.Drawing.Point(307, 136);
-            this.groupBoxBenchmarkingSecondParameter.Name = "groupBoxBenchmarkingSecondParameter";
-            this.groupBoxBenchmarkingSecondParameter.Size = new System.Drawing.Size(664, 54);
-            this.groupBoxBenchmarkingSecondParameter.TabIndex = 14;
-            this.groupBoxBenchmarkingSecondParameter.TabStop = false;
-            this.groupBoxBenchmarkingSecondParameter.Text = "Second Parameter";
-            // 
-            // numericUpDownBenchmarkingSecondParameterStep
-            // 
-            this.numericUpDownBenchmarkingSecondParameterStep.Location = new System.Drawing.Point(614, 20);
-            this.numericUpDownBenchmarkingSecondParameterStep.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.numericUpDownBenchmarkingSecondParameterStep.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownBenchmarkingSecondParameterStep.Name = "numericUpDownBenchmarkingSecondParameterStep";
-            this.numericUpDownBenchmarkingSecondParameterStep.Size = new System.Drawing.Size(42, 20);
-            this.numericUpDownBenchmarkingSecondParameterStep.TabIndex = 13;
-            this.numericUpDownBenchmarkingSecondParameterStep.Tag = "parameter:benchmarking_second_parameter_step";
-            this.numericUpDownBenchmarkingSecondParameterStep.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(578, 22);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(32, 13);
-            this.label26.TabIndex = 12;
-            this.label26.Text = "Step:";
-            // 
-            // numericUpDownBenchmarkingSecondParameterEnd
-            // 
-            this.numericUpDownBenchmarkingSecondParameterEnd.Location = new System.Drawing.Point(513, 20);
-            this.numericUpDownBenchmarkingSecondParameterEnd.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.numericUpDownBenchmarkingSecondParameterEnd.Name = "numericUpDownBenchmarkingSecondParameterEnd";
-            this.numericUpDownBenchmarkingSecondParameterEnd.Size = new System.Drawing.Size(53, 20);
-            this.numericUpDownBenchmarkingSecondParameterEnd.TabIndex = 11;
-            this.numericUpDownBenchmarkingSecondParameterEnd.Tag = "parameter:benchmarking_second_parameter_end";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(483, 22);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(29, 13);
-            this.label29.TabIndex = 10;
-            this.label29.Text = "End:";
-            // 
-            // numericUpDownBenchmarkingSecondParameterStart
-            // 
-            this.numericUpDownBenchmarkingSecondParameterStart.Location = new System.Drawing.Point(420, 20);
-            this.numericUpDownBenchmarkingSecondParameterStart.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.numericUpDownBenchmarkingSecondParameterStart.Name = "numericUpDownBenchmarkingSecondParameterStart";
-            this.numericUpDownBenchmarkingSecondParameterStart.Size = new System.Drawing.Size(53, 20);
-            this.numericUpDownBenchmarkingSecondParameterStart.TabIndex = 9;
-            this.numericUpDownBenchmarkingSecondParameterStart.Tag = "parameter:benchmarking_second_parameter_start";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(385, 22);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(32, 13);
-            this.label30.TabIndex = 8;
-            this.label30.Text = "Start:";
-            // 
-            // checkBoxBenchmarkingSecondParameterEnabled
-            // 
-            this.checkBoxBenchmarkingSecondParameterEnabled.AutoSize = true;
-            this.checkBoxBenchmarkingSecondParameterEnabled.Location = new System.Drawing.Point(8, 21);
-            this.checkBoxBenchmarkingSecondParameterEnabled.Name = "checkBoxBenchmarkingSecondParameterEnabled";
-            this.checkBoxBenchmarkingSecondParameterEnabled.Size = new System.Drawing.Size(59, 17);
-            this.checkBoxBenchmarkingSecondParameterEnabled.TabIndex = 7;
-            this.checkBoxBenchmarkingSecondParameterEnabled.Tag = "parameter:benchmarking_second_parameter_enabled";
-            this.checkBoxBenchmarkingSecondParameterEnabled.Text = "Enable";
-            this.checkBoxBenchmarkingSecondParameterEnabled.UseVisualStyleBackColor = true;
-            // 
-            // comboBoxBenchmarkingSecondParameter
-            // 
-            this.comboBoxBenchmarkingSecondParameter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxBenchmarkingSecondParameter.FormattingEnabled = true;
-            this.comboBoxBenchmarkingSecondParameter.Location = new System.Drawing.Point(73, 19);
-            this.comboBoxBenchmarkingSecondParameter.Name = "comboBoxBenchmarkingSecondParameter";
-            this.comboBoxBenchmarkingSecondParameter.Size = new System.Drawing.Size(303, 21);
-            this.comboBoxBenchmarkingSecondParameter.TabIndex = 0;
-            this.comboBoxBenchmarkingSecondParameter.Tag = "parameter:benchmarking_second_parameter_parameter";
-            // 
-            // groupBoxBenchmarkingFirstParameter
-            // 
-            this.groupBoxBenchmarkingFirstParameter.Controls.Add(this.numericUpDownBenchmarkingFirstParameterStep);
-            this.groupBoxBenchmarkingFirstParameter.Controls.Add(this.label25);
-            this.groupBoxBenchmarkingFirstParameter.Controls.Add(this.numericUpDownBenchmarkingFirstParameterEnd);
-            this.groupBoxBenchmarkingFirstParameter.Controls.Add(this.label24);
-            this.groupBoxBenchmarkingFirstParameter.Controls.Add(this.numericUpDownBenchmarkingFirstParameterStart);
-            this.groupBoxBenchmarkingFirstParameter.Controls.Add(this.label23);
-            this.groupBoxBenchmarkingFirstParameter.Controls.Add(this.checkBoxBenchmarkingFirstParameterEnabled);
-            this.groupBoxBenchmarkingFirstParameter.Controls.Add(this.comboBoxBenchmarkingFirstParameter);
-            this.groupBoxBenchmarkingFirstParameter.Location = new System.Drawing.Point(307, 82);
-            this.groupBoxBenchmarkingFirstParameter.Name = "groupBoxBenchmarkingFirstParameter";
-            this.groupBoxBenchmarkingFirstParameter.Size = new System.Drawing.Size(664, 54);
-            this.groupBoxBenchmarkingFirstParameter.TabIndex = 7;
-            this.groupBoxBenchmarkingFirstParameter.TabStop = false;
-            this.groupBoxBenchmarkingFirstParameter.Text = "First Parameter";
-            // 
             // numericUpDownBenchmarkingFirstParameterStep
             // 
-            this.numericUpDownBenchmarkingFirstParameterStep.Location = new System.Drawing.Point(613, 21);
+            this.numericUpDownBenchmarkingFirstParameterStep.Location = new System.Drawing.Point(223, 55);
             this.numericUpDownBenchmarkingFirstParameterStep.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1816,7 +1697,7 @@
             0,
             0});
             this.numericUpDownBenchmarkingFirstParameterStep.Name = "numericUpDownBenchmarkingFirstParameterStep";
-            this.numericUpDownBenchmarkingFirstParameterStep.Size = new System.Drawing.Size(43, 20);
+            this.numericUpDownBenchmarkingFirstParameterStep.Size = new System.Drawing.Size(42, 20);
             this.numericUpDownBenchmarkingFirstParameterStep.TabIndex = 13;
             this.numericUpDownBenchmarkingFirstParameterStep.Tag = "parameter:benchmarking_first_parameter_step";
             this.numericUpDownBenchmarkingFirstParameterStep.Value = new decimal(new int[] {
@@ -1828,7 +1709,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(577, 23);
+            this.label25.Location = new System.Drawing.Point(187, 57);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(32, 13);
             this.label25.TabIndex = 12;
@@ -1836,7 +1717,7 @@
             // 
             // numericUpDownBenchmarkingFirstParameterEnd
             // 
-            this.numericUpDownBenchmarkingFirstParameterEnd.Location = new System.Drawing.Point(513, 20);
+            this.numericUpDownBenchmarkingFirstParameterEnd.Location = new System.Drawing.Point(126, 55);
             this.numericUpDownBenchmarkingFirstParameterEnd.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1850,7 +1731,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(483, 22);
+            this.label24.Location = new System.Drawing.Point(96, 57);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(29, 13);
             this.label24.TabIndex = 10;
@@ -1859,7 +1740,7 @@
             // 
             // numericUpDownBenchmarkingFirstParameterStart
             // 
-            this.numericUpDownBenchmarkingFirstParameterStart.Location = new System.Drawing.Point(420, 20);
+            this.numericUpDownBenchmarkingFirstParameterStart.Location = new System.Drawing.Point(37, 55);
             this.numericUpDownBenchmarkingFirstParameterStart.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1873,7 +1754,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(385, 22);
+            this.label23.Location = new System.Drawing.Point(2, 57);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(32, 13);
             this.label23.TabIndex = 8;
@@ -1882,7 +1763,7 @@
             // checkBoxBenchmarkingFirstParameterEnabled
             // 
             this.checkBoxBenchmarkingFirstParameterEnabled.AutoSize = true;
-            this.checkBoxBenchmarkingFirstParameterEnabled.Location = new System.Drawing.Point(8, 21);
+            this.checkBoxBenchmarkingFirstParameterEnabled.Location = new System.Drawing.Point(3, 6);
             this.checkBoxBenchmarkingFirstParameterEnabled.Name = "checkBoxBenchmarkingFirstParameterEnabled";
             this.checkBoxBenchmarkingFirstParameterEnabled.Size = new System.Drawing.Size(59, 17);
             this.checkBoxBenchmarkingFirstParameterEnabled.TabIndex = 7;
@@ -1894,39 +1775,18 @@
             // 
             this.comboBoxBenchmarkingFirstParameter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxBenchmarkingFirstParameter.FormattingEnabled = true;
-            this.comboBoxBenchmarkingFirstParameter.Location = new System.Drawing.Point(73, 19);
+            this.comboBoxBenchmarkingFirstParameter.Location = new System.Drawing.Point(3, 28);
             this.comboBoxBenchmarkingFirstParameter.Name = "comboBoxBenchmarkingFirstParameter";
-            this.comboBoxBenchmarkingFirstParameter.Size = new System.Drawing.Size(302, 21);
+            this.comboBoxBenchmarkingFirstParameter.Size = new System.Drawing.Size(292, 21);
             this.comboBoxBenchmarkingFirstParameter.TabIndex = 0;
             this.comboBoxBenchmarkingFirstParameter.Tag = "parameter:benchmarking_first_parameter_parameter";
-            // 
-            // groupBoxBenchmarkingAlgorithms
-            // 
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingX16SEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingCryptoNightLightEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingCryptoNightV7Enabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingX16REnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingCryptoNightHeavyEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingLbryEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingLyra2REv2Enabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingPascalEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingNeoScryptEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingCryptoNightEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingEthashEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingEthashPascalEnabled);
-            this.groupBoxBenchmarkingAlgorithms.Location = new System.Drawing.Point(307, 6);
-            this.groupBoxBenchmarkingAlgorithms.Name = "groupBoxBenchmarkingAlgorithms";
-            this.groupBoxBenchmarkingAlgorithms.Size = new System.Drawing.Size(664, 70);
-            this.groupBoxBenchmarkingAlgorithms.TabIndex = 6;
-            this.groupBoxBenchmarkingAlgorithms.TabStop = false;
-            this.groupBoxBenchmarkingAlgorithms.Text = "Algorithms";
             // 
             // checkBoxBenchmarkingX16SEnabled
             // 
             this.checkBoxBenchmarkingX16SEnabled.AutoSize = true;
             this.checkBoxBenchmarkingX16SEnabled.Checked = true;
             this.checkBoxBenchmarkingX16SEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingX16SEnabled.Location = new System.Drawing.Point(510, 22);
+            this.checkBoxBenchmarkingX16SEnabled.Location = new System.Drawing.Point(108, 121);
             this.checkBoxBenchmarkingX16SEnabled.Name = "checkBoxBenchmarkingX16SEnabled";
             this.checkBoxBenchmarkingX16SEnabled.Size = new System.Drawing.Size(52, 17);
             this.checkBoxBenchmarkingX16SEnabled.TabIndex = 11;
@@ -1939,7 +1799,7 @@
             this.checkBoxBenchmarkingCryptoNightLightEnabled.AutoSize = true;
             this.checkBoxBenchmarkingCryptoNightLightEnabled.Checked = true;
             this.checkBoxBenchmarkingCryptoNightLightEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingCryptoNightLightEnabled.Location = new System.Drawing.Point(314, 45);
+            this.checkBoxBenchmarkingCryptoNightLightEnabled.Location = new System.Drawing.Point(188, 75);
             this.checkBoxBenchmarkingCryptoNightLightEnabled.Name = "checkBoxBenchmarkingCryptoNightLightEnabled";
             this.checkBoxBenchmarkingCryptoNightLightEnabled.Size = new System.Drawing.Size(107, 17);
             this.checkBoxBenchmarkingCryptoNightLightEnabled.TabIndex = 10;
@@ -1952,7 +1812,7 @@
             this.checkBoxBenchmarkingCryptoNightV7Enabled.AutoSize = true;
             this.checkBoxBenchmarkingCryptoNightV7Enabled.Checked = true;
             this.checkBoxBenchmarkingCryptoNightV7Enabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingCryptoNightV7Enabled.Location = new System.Drawing.Point(93, 45);
+            this.checkBoxBenchmarkingCryptoNightV7Enabled.Location = new System.Drawing.Point(188, 29);
             this.checkBoxBenchmarkingCryptoNightV7Enabled.Name = "checkBoxBenchmarkingCryptoNightV7Enabled";
             this.checkBoxBenchmarkingCryptoNightV7Enabled.Size = new System.Drawing.Size(94, 17);
             this.checkBoxBenchmarkingCryptoNightV7Enabled.TabIndex = 9;
@@ -1965,7 +1825,7 @@
             this.checkBoxBenchmarkingX16REnabled.AutoSize = true;
             this.checkBoxBenchmarkingX16REnabled.Checked = true;
             this.checkBoxBenchmarkingX16REnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingX16REnabled.Location = new System.Drawing.Point(451, 22);
+            this.checkBoxBenchmarkingX16REnabled.Location = new System.Drawing.Point(108, 98);
             this.checkBoxBenchmarkingX16REnabled.Name = "checkBoxBenchmarkingX16REnabled";
             this.checkBoxBenchmarkingX16REnabled.Size = new System.Drawing.Size(53, 17);
             this.checkBoxBenchmarkingX16REnabled.TabIndex = 8;
@@ -1978,7 +1838,7 @@
             this.checkBoxBenchmarkingCryptoNightHeavyEnabled.AutoSize = true;
             this.checkBoxBenchmarkingCryptoNightHeavyEnabled.Checked = true;
             this.checkBoxBenchmarkingCryptoNightHeavyEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingCryptoNightHeavyEnabled.Location = new System.Drawing.Point(193, 45);
+            this.checkBoxBenchmarkingCryptoNightHeavyEnabled.Location = new System.Drawing.Point(188, 52);
             this.checkBoxBenchmarkingCryptoNightHeavyEnabled.Name = "checkBoxBenchmarkingCryptoNightHeavyEnabled";
             this.checkBoxBenchmarkingCryptoNightHeavyEnabled.Size = new System.Drawing.Size(115, 17);
             this.checkBoxBenchmarkingCryptoNightHeavyEnabled.TabIndex = 7;
@@ -1991,7 +1851,7 @@
             this.checkBoxBenchmarkingLbryEnabled.AutoSize = true;
             this.checkBoxBenchmarkingLbryEnabled.Checked = true;
             this.checkBoxBenchmarkingLbryEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingLbryEnabled.Location = new System.Drawing.Point(314, 22);
+            this.checkBoxBenchmarkingLbryEnabled.Location = new System.Drawing.Point(108, 52);
             this.checkBoxBenchmarkingLbryEnabled.Name = "checkBoxBenchmarkingLbryEnabled";
             this.checkBoxBenchmarkingLbryEnabled.Size = new System.Drawing.Size(46, 17);
             this.checkBoxBenchmarkingLbryEnabled.TabIndex = 6;
@@ -2004,7 +1864,7 @@
             this.checkBoxBenchmarkingLyra2REv2Enabled.AutoSize = true;
             this.checkBoxBenchmarkingLyra2REv2Enabled.Checked = true;
             this.checkBoxBenchmarkingLyra2REv2Enabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingLyra2REv2Enabled.Location = new System.Drawing.Point(366, 22);
+            this.checkBoxBenchmarkingLyra2REv2Enabled.Location = new System.Drawing.Point(108, 75);
             this.checkBoxBenchmarkingLyra2REv2Enabled.Name = "checkBoxBenchmarkingLyra2REv2Enabled";
             this.checkBoxBenchmarkingLyra2REv2Enabled.Size = new System.Drawing.Size(79, 17);
             this.checkBoxBenchmarkingLyra2REv2Enabled.TabIndex = 5;
@@ -2017,7 +1877,7 @@
             this.checkBoxBenchmarkingPascalEnabled.AutoSize = true;
             this.checkBoxBenchmarkingPascalEnabled.Checked = true;
             this.checkBoxBenchmarkingPascalEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingPascalEnabled.Location = new System.Drawing.Point(250, 22);
+            this.checkBoxBenchmarkingPascalEnabled.Location = new System.Drawing.Point(108, 29);
             this.checkBoxBenchmarkingPascalEnabled.Name = "checkBoxBenchmarkingPascalEnabled";
             this.checkBoxBenchmarkingPascalEnabled.Size = new System.Drawing.Size(58, 17);
             this.checkBoxBenchmarkingPascalEnabled.TabIndex = 4;
@@ -2030,7 +1890,7 @@
             this.checkBoxBenchmarkingNeoScryptEnabled.AutoSize = true;
             this.checkBoxBenchmarkingNeoScryptEnabled.Checked = true;
             this.checkBoxBenchmarkingNeoScryptEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingNeoScryptEnabled.Location = new System.Drawing.Point(173, 22);
+            this.checkBoxBenchmarkingNeoScryptEnabled.Location = new System.Drawing.Point(108, 6);
             this.checkBoxBenchmarkingNeoScryptEnabled.Name = "checkBoxBenchmarkingNeoScryptEnabled";
             this.checkBoxBenchmarkingNeoScryptEnabled.Size = new System.Drawing.Size(76, 17);
             this.checkBoxBenchmarkingNeoScryptEnabled.TabIndex = 3;
@@ -2043,7 +1903,7 @@
             this.checkBoxBenchmarkingCryptoNightEnabled.AutoSize = true;
             this.checkBoxBenchmarkingCryptoNightEnabled.Checked = true;
             this.checkBoxBenchmarkingCryptoNightEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingCryptoNightEnabled.Location = new System.Drawing.Point(6, 45);
+            this.checkBoxBenchmarkingCryptoNightEnabled.Location = new System.Drawing.Point(188, 6);
             this.checkBoxBenchmarkingCryptoNightEnabled.Name = "checkBoxBenchmarkingCryptoNightEnabled";
             this.checkBoxBenchmarkingCryptoNightEnabled.Size = new System.Drawing.Size(81, 17);
             this.checkBoxBenchmarkingCryptoNightEnabled.TabIndex = 2;
@@ -2056,7 +1916,7 @@
             this.checkBoxBenchmarkingEthashEnabled.AutoSize = true;
             this.checkBoxBenchmarkingEthashEnabled.Checked = true;
             this.checkBoxBenchmarkingEthashEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingEthashEnabled.Location = new System.Drawing.Point(108, 22);
+            this.checkBoxBenchmarkingEthashEnabled.Location = new System.Drawing.Point(6, 29);
             this.checkBoxBenchmarkingEthashEnabled.Name = "checkBoxBenchmarkingEthashEnabled";
             this.checkBoxBenchmarkingEthashEnabled.Size = new System.Drawing.Size(59, 17);
             this.checkBoxBenchmarkingEthashEnabled.TabIndex = 1;
@@ -2069,7 +1929,7 @@
             this.checkBoxBenchmarkingEthashPascalEnabled.AutoSize = true;
             this.checkBoxBenchmarkingEthashPascalEnabled.Checked = true;
             this.checkBoxBenchmarkingEthashPascalEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingEthashPascalEnabled.Location = new System.Drawing.Point(6, 22);
+            this.checkBoxBenchmarkingEthashPascalEnabled.Location = new System.Drawing.Point(6, 6);
             this.checkBoxBenchmarkingEthashPascalEnabled.Name = "checkBoxBenchmarkingEthashPascalEnabled";
             this.checkBoxBenchmarkingEthashPascalEnabled.Size = new System.Drawing.Size(96, 17);
             this.checkBoxBenchmarkingEthashPascalEnabled.TabIndex = 0;
@@ -2083,9 +1943,9 @@
             this.dataGridViewBenchmarks.AllowUserToDeleteRows = false;
             this.dataGridViewBenchmarks.AllowUserToResizeColumns = false;
             this.dataGridViewBenchmarks.AllowUserToResizeRows = false;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridViewBenchmarks.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridViewBenchmarks.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewBenchmarks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewBenchmarks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
@@ -2110,14 +1970,14 @@
             this.Column1,
             this.Column4});
             this.dataGridViewBenchmarks.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridViewBenchmarks.Location = new System.Drawing.Point(6, 196);
+            this.dataGridViewBenchmarks.Location = new System.Drawing.Point(3, 6);
             this.dataGridViewBenchmarks.MultiSelect = false;
             this.dataGridViewBenchmarks.Name = "dataGridViewBenchmarks";
             this.dataGridViewBenchmarks.ReadOnly = true;
             this.dataGridViewBenchmarks.RowHeadersVisible = false;
-            dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.dataGridViewBenchmarks.RowsDefaultCellStyle = dataGridViewCellStyle19;
-            this.dataGridViewBenchmarks.Size = new System.Drawing.Size(965, 191);
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewBenchmarks.RowsDefaultCellStyle = dataGridViewCellStyle13;
+            this.dataGridViewBenchmarks.Size = new System.Drawing.Size(680, 193);
             this.dataGridViewBenchmarks.TabIndex = 5;
             this.dataGridViewBenchmarks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBenchmarks_CellContentClick);
             this.dataGridViewBenchmarks.SelectionChanged += new System.EventHandler(this.dataGridViewBenchmarks_SelectionChanged);
@@ -2153,8 +2013,8 @@
             // 
             // dataGridViewTextBoxColumn4
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn4.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewTextBoxColumn4.FillWeight = 150F;
             this.dataGridViewTextBoxColumn4.HeaderText = "Ethash/Pascal";
             this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
@@ -2165,8 +2025,8 @@
             // 
             // dataGridViewTextBoxColumn5
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewTextBoxColumn5.FillWeight = 75F;
             this.dataGridViewTextBoxColumn5.HeaderText = "Ethash";
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
@@ -2177,8 +2037,8 @@
             // 
             // dataGridViewTextBoxColumn10
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumn10.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn10.DefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewTextBoxColumn10.FillWeight = 75F;
             this.dataGridViewTextBoxColumn10.HeaderText = "NeoScrypt";
             this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
@@ -2189,8 +2049,8 @@
             // 
             // dataGridViewTextBoxColumn11
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumn11.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn11.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewTextBoxColumn11.FillWeight = 75F;
             this.dataGridViewTextBoxColumn11.HeaderText = "Pascal";
             this.dataGridViewTextBoxColumn11.Name = "dataGridViewTextBoxColumn11";
@@ -2201,8 +2061,8 @@
             // 
             // dataGridViewTextBoxColumn12
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumn12.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn12.DefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridViewTextBoxColumn12.FillWeight = 75F;
             this.dataGridViewTextBoxColumn12.HeaderText = "Lbry";
             this.dataGridViewTextBoxColumn12.Name = "dataGridViewTextBoxColumn12";
@@ -2214,8 +2074,8 @@
             // dataGridViewTextBoxColumn13
             // 
             this.dataGridViewTextBoxColumn13.DataPropertyName = "lyra2rev2";
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumn13.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn13.DefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridViewTextBoxColumn13.FillWeight = 75F;
             this.dataGridViewTextBoxColumn13.HeaderText = "Lyra2REv2";
             this.dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
@@ -2227,8 +2087,8 @@
             // Column2
             // 
             this.Column2.DataPropertyName = "x16r";
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle8;
             this.Column2.FillWeight = 75F;
             this.Column2.HeaderText = "X16R";
             this.Column2.Name = "Column2";
@@ -2239,8 +2099,8 @@
             // 
             // Column5
             // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column5.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column5.DefaultCellStyle = dataGridViewCellStyle9;
             this.Column5.HeaderText = "X16S";
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
@@ -2252,8 +2112,8 @@
             // 
             this.dataGridViewTextBoxColumn9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.dataGridViewTextBoxColumn9.DataPropertyName = "cryptonight";
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumn9.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn9.DefaultCellStyle = dataGridViewCellStyle10;
             this.dataGridViewTextBoxColumn9.FillWeight = 75F;
             this.dataGridViewTextBoxColumn9.HeaderText = "CryptoNight";
             this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
@@ -2264,8 +2124,8 @@
             // 
             // Column3
             // 
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Column3.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Column3.DefaultCellStyle = dataGridViewCellStyle11;
             this.Column3.HeaderText = "CryptoNightV7";
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
@@ -2275,8 +2135,8 @@
             // Column1
             // 
             this.Column1.DataPropertyName = "cryptonight_heavy";
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle12;
             this.Column1.FillWeight = 75F;
             this.Column1.HeaderText = "CryptoNight-Heavy";
             this.Column1.Name = "Column1";
@@ -2301,7 +2161,7 @@
             this.tabPageDeviceSettings.Controls.Add(this.tabControlDeviceSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
-            this.tabPageDeviceSettings.Size = new System.Drawing.Size(977, 585);
+            this.tabPageDeviceSettings.Size = new System.Drawing.Size(593, 325);
             this.tabPageDeviceSettings.TabIndex = 3;
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
@@ -2411,13 +2271,14 @@
             // 
             // tabPageCustomPoolSettings
             // 
+            this.tabPageCustomPoolSettings.AutoScroll = true;
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool1);
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool2);
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool3);
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool0);
             this.tabPageCustomPoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustomPoolSettings.Name = "tabPageCustomPoolSettings";
-            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(977, 585);
+            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(593, 325);
             this.tabPageCustomPoolSettings.TabIndex = 6;
             this.tabPageCustomPoolSettings.Text = "Custom Pools";
             this.tabPageCustomPoolSettings.UseVisualStyleBackColor = true;
@@ -2444,9 +2305,9 @@
             this.groupBoxCustmPool1.Controls.Add(this.textBoxCustomPool1Login);
             this.groupBoxCustmPool1.Controls.Add(this.label154);
             this.groupBoxCustmPool1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxCustmPool1.Location = new System.Drawing.Point(3, 81);
+            this.groupBoxCustmPool1.Location = new System.Drawing.Point(3, 108);
             this.groupBoxCustmPool1.Name = "groupBoxCustmPool1";
-            this.groupBoxCustmPool1.Size = new System.Drawing.Size(812, 72);
+            this.groupBoxCustmPool1.Size = new System.Drawing.Size(570, 99);
             this.groupBoxCustmPool1.TabIndex = 1;
             this.groupBoxCustmPool1.TabStop = false;
             this.groupBoxCustmPool1.Text = "Custom Pool 1";
@@ -2459,7 +2320,7 @@
             this.comboBoxCustomPool1SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
             "Pascal"});
-            this.comboBoxCustomPool1SecondaryAlgorithm.Location = new System.Drawing.Point(71, 43);
+            this.comboBoxCustomPool1SecondaryAlgorithm.Location = new System.Drawing.Point(217, 16);
             this.comboBoxCustomPool1SecondaryAlgorithm.Name = "comboBoxCustomPool1SecondaryAlgorithm";
             this.comboBoxCustomPool1SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool1SecondaryAlgorithm.TabIndex = 6;
@@ -2469,7 +2330,7 @@
             // 
             this.label165.AutoSize = true;
             this.label165.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label165.Location = new System.Drawing.Point(375, 46);
+            this.label165.Location = new System.Drawing.Point(164, 73);
             this.label165.Name = "label165";
             this.label165.Size = new System.Drawing.Size(29, 13);
             this.label165.TabIndex = 53;
@@ -2478,7 +2339,7 @@
             // numericUpDownCustomPool1SecondaryPort
             // 
             this.numericUpDownCustomPool1SecondaryPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCustomPool1SecondaryPort.Location = new System.Drawing.Point(410, 42);
+            this.numericUpDownCustomPool1SecondaryPort.Location = new System.Drawing.Point(199, 69);
             this.numericUpDownCustomPool1SecondaryPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2492,7 +2353,7 @@
             // textBoxCustomPool1SecondaryHost
             // 
             this.textBoxCustomPool1SecondaryHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool1SecondaryHost.Location = new System.Drawing.Point(254, 43);
+            this.textBoxCustomPool1SecondaryHost.Location = new System.Drawing.Point(43, 70);
             this.textBoxCustomPool1SecondaryHost.Name = "textBoxCustomPool1SecondaryHost";
             this.textBoxCustomPool1SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool1SecondaryHost.TabIndex = 7;
@@ -2501,9 +2362,9 @@
             // textBoxCustomPool1SecondaryPassword
             // 
             this.textBoxCustomPool1SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool1SecondaryPassword.Location = new System.Drawing.Point(692, 42);
+            this.textBoxCustomPool1SecondaryPassword.Location = new System.Drawing.Point(481, 69);
             this.textBoxCustomPool1SecondaryPassword.Name = "textBoxCustomPool1SecondaryPassword";
-            this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(114, 20);
+            this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(83, 20);
             this.textBoxCustomPool1SecondaryPassword.TabIndex = 10;
             this.textBoxCustomPool1SecondaryPassword.Tag = "parameter:custom_pool1_secondary_password";
             // 
@@ -2511,7 +2372,7 @@
             // 
             this.label166.AutoSize = true;
             this.label166.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label166.Location = new System.Drawing.Point(216, 46);
+            this.label166.Location = new System.Drawing.Point(5, 73);
             this.label166.Name = "label166";
             this.label166.Size = new System.Drawing.Size(32, 13);
             this.label166.TabIndex = 47;
@@ -2521,7 +2382,7 @@
             // 
             this.label167.AutoSize = true;
             this.label167.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label167.Location = new System.Drawing.Point(630, 45);
+            this.label167.Location = new System.Drawing.Point(419, 72);
             this.label167.Name = "label167";
             this.label167.Size = new System.Drawing.Size(56, 13);
             this.label167.TabIndex = 51;
@@ -2530,7 +2391,7 @@
             // textBoxCustomPool1SecondaryLogin
             // 
             this.textBoxCustomPool1SecondaryLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool1SecondaryLogin.Location = new System.Drawing.Point(510, 41);
+            this.textBoxCustomPool1SecondaryLogin.Location = new System.Drawing.Point(299, 68);
             this.textBoxCustomPool1SecondaryLogin.Name = "textBoxCustomPool1SecondaryLogin";
             this.textBoxCustomPool1SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1SecondaryLogin.TabIndex = 9;
@@ -2540,7 +2401,7 @@
             // 
             this.label168.AutoSize = true;
             this.label168.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label168.Location = new System.Drawing.Point(468, 46);
+            this.label168.Location = new System.Drawing.Point(257, 73);
             this.label168.Name = "label168";
             this.label168.Size = new System.Drawing.Size(36, 13);
             this.label168.TabIndex = 49;
@@ -2575,7 +2436,7 @@
             // 
             this.checkBoxCustomPool1Enable.AutoSize = true;
             this.checkBoxCustomPool1Enable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxCustomPool1Enable.Location = new System.Drawing.Point(6, 31);
+            this.checkBoxCustomPool1Enable.Location = new System.Drawing.Point(6, 18);
             this.checkBoxCustomPool1Enable.Name = "checkBoxCustomPool1Enable";
             this.checkBoxCustomPool1Enable.Size = new System.Drawing.Size(59, 17);
             this.checkBoxCustomPool1Enable.TabIndex = 0;
@@ -2587,7 +2448,7 @@
             // 
             this.label151.AutoSize = true;
             this.label151.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label151.Location = new System.Drawing.Point(375, 19);
+            this.label151.Location = new System.Drawing.Point(164, 46);
             this.label151.Name = "label151";
             this.label151.Size = new System.Drawing.Size(29, 13);
             this.label151.TabIndex = 42;
@@ -2596,7 +2457,7 @@
             // numericUpDownCustomPool1Port
             // 
             this.numericUpDownCustomPool1Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCustomPool1Port.Location = new System.Drawing.Point(410, 15);
+            this.numericUpDownCustomPool1Port.Location = new System.Drawing.Point(199, 42);
             this.numericUpDownCustomPool1Port.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2610,7 +2471,7 @@
             // textBoxCustomPool1Host
             // 
             this.textBoxCustomPool1Host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool1Host.Location = new System.Drawing.Point(254, 16);
+            this.textBoxCustomPool1Host.Location = new System.Drawing.Point(43, 43);
             this.textBoxCustomPool1Host.Name = "textBoxCustomPool1Host";
             this.textBoxCustomPool1Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool1Host.TabIndex = 2;
@@ -2619,9 +2480,9 @@
             // textBoxCustomPool1Password
             // 
             this.textBoxCustomPool1Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool1Password.Location = new System.Drawing.Point(692, 15);
+            this.textBoxCustomPool1Password.Location = new System.Drawing.Point(481, 42);
             this.textBoxCustomPool1Password.Name = "textBoxCustomPool1Password";
-            this.textBoxCustomPool1Password.Size = new System.Drawing.Size(114, 20);
+            this.textBoxCustomPool1Password.Size = new System.Drawing.Size(83, 20);
             this.textBoxCustomPool1Password.TabIndex = 5;
             this.textBoxCustomPool1Password.Tag = "parameter:custom_pool1_password";
             // 
@@ -2629,7 +2490,7 @@
             // 
             this.label152.AutoSize = true;
             this.label152.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label152.Location = new System.Drawing.Point(216, 19);
+            this.label152.Location = new System.Drawing.Point(5, 46);
             this.label152.Name = "label152";
             this.label152.Size = new System.Drawing.Size(32, 13);
             this.label152.TabIndex = 34;
@@ -2639,7 +2500,7 @@
             // 
             this.label153.AutoSize = true;
             this.label153.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label153.Location = new System.Drawing.Point(630, 17);
+            this.label153.Location = new System.Drawing.Point(419, 44);
             this.label153.Name = "label153";
             this.label153.Size = new System.Drawing.Size(56, 13);
             this.label153.TabIndex = 40;
@@ -2648,7 +2509,7 @@
             // textBoxCustomPool1Login
             // 
             this.textBoxCustomPool1Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool1Login.Location = new System.Drawing.Point(510, 14);
+            this.textBoxCustomPool1Login.Location = new System.Drawing.Point(299, 41);
             this.textBoxCustomPool1Login.Name = "textBoxCustomPool1Login";
             this.textBoxCustomPool1Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool1Login.TabIndex = 4;
@@ -2658,7 +2519,7 @@
             // 
             this.label154.AutoSize = true;
             this.label154.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label154.Location = new System.Drawing.Point(468, 19);
+            this.label154.Location = new System.Drawing.Point(257, 46);
             this.label154.Name = "label154";
             this.label154.Size = new System.Drawing.Size(36, 13);
             this.label154.TabIndex = 38;
@@ -2686,9 +2547,9 @@
             this.groupBoxCustmPool2.Controls.Add(this.textBoxCustomPool2Login);
             this.groupBoxCustmPool2.Controls.Add(this.label159);
             this.groupBoxCustmPool2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxCustmPool2.Location = new System.Drawing.Point(3, 159);
+            this.groupBoxCustmPool2.Location = new System.Drawing.Point(3, 213);
             this.groupBoxCustmPool2.Name = "groupBoxCustmPool2";
-            this.groupBoxCustmPool2.Size = new System.Drawing.Size(812, 72);
+            this.groupBoxCustmPool2.Size = new System.Drawing.Size(570, 99);
             this.groupBoxCustmPool2.TabIndex = 2;
             this.groupBoxCustmPool2.TabStop = false;
             this.groupBoxCustmPool2.Text = "Custom Pool 2";
@@ -2701,7 +2562,7 @@
             this.comboBoxCustomPool2SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
             "Pascal"});
-            this.comboBoxCustomPool2SecondaryAlgorithm.Location = new System.Drawing.Point(71, 43);
+            this.comboBoxCustomPool2SecondaryAlgorithm.Location = new System.Drawing.Point(217, 16);
             this.comboBoxCustomPool2SecondaryAlgorithm.Name = "comboBoxCustomPool2SecondaryAlgorithm";
             this.comboBoxCustomPool2SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool2SecondaryAlgorithm.TabIndex = 6;
@@ -2711,7 +2572,7 @@
             // 
             this.label169.AutoSize = true;
             this.label169.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label169.Location = new System.Drawing.Point(375, 47);
+            this.label169.Location = new System.Drawing.Point(164, 74);
             this.label169.Name = "label169";
             this.label169.Size = new System.Drawing.Size(29, 13);
             this.label169.TabIndex = 53;
@@ -2720,7 +2581,7 @@
             // numericUpDownCustomPool2SecondaryPort
             // 
             this.numericUpDownCustomPool2SecondaryPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCustomPool2SecondaryPort.Location = new System.Drawing.Point(410, 43);
+            this.numericUpDownCustomPool2SecondaryPort.Location = new System.Drawing.Point(199, 70);
             this.numericUpDownCustomPool2SecondaryPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2734,7 +2595,7 @@
             // textBoxCustomPool2SecondaryHost
             // 
             this.textBoxCustomPool2SecondaryHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool2SecondaryHost.Location = new System.Drawing.Point(254, 43);
+            this.textBoxCustomPool2SecondaryHost.Location = new System.Drawing.Point(43, 70);
             this.textBoxCustomPool2SecondaryHost.Name = "textBoxCustomPool2SecondaryHost";
             this.textBoxCustomPool2SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool2SecondaryHost.TabIndex = 7;
@@ -2743,9 +2604,9 @@
             // textBoxCustomPool2SecondaryPassword
             // 
             this.textBoxCustomPool2SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool2SecondaryPassword.Location = new System.Drawing.Point(692, 43);
+            this.textBoxCustomPool2SecondaryPassword.Location = new System.Drawing.Point(481, 70);
             this.textBoxCustomPool2SecondaryPassword.Name = "textBoxCustomPool2SecondaryPassword";
-            this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(114, 20);
+            this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(83, 20);
             this.textBoxCustomPool2SecondaryPassword.TabIndex = 10;
             this.textBoxCustomPool2SecondaryPassword.Tag = "parameter:custom_pool2_secondary_password";
             // 
@@ -2753,7 +2614,7 @@
             // 
             this.label170.AutoSize = true;
             this.label170.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label170.Location = new System.Drawing.Point(216, 47);
+            this.label170.Location = new System.Drawing.Point(5, 74);
             this.label170.Name = "label170";
             this.label170.Size = new System.Drawing.Size(32, 13);
             this.label170.TabIndex = 47;
@@ -2763,7 +2624,7 @@
             // 
             this.label171.AutoSize = true;
             this.label171.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label171.Location = new System.Drawing.Point(630, 47);
+            this.label171.Location = new System.Drawing.Point(419, 74);
             this.label171.Name = "label171";
             this.label171.Size = new System.Drawing.Size(56, 13);
             this.label171.TabIndex = 51;
@@ -2772,7 +2633,7 @@
             // textBoxCustomPool2SecondaryLogin
             // 
             this.textBoxCustomPool2SecondaryLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool2SecondaryLogin.Location = new System.Drawing.Point(510, 43);
+            this.textBoxCustomPool2SecondaryLogin.Location = new System.Drawing.Point(299, 70);
             this.textBoxCustomPool2SecondaryLogin.Name = "textBoxCustomPool2SecondaryLogin";
             this.textBoxCustomPool2SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2SecondaryLogin.TabIndex = 9;
@@ -2782,7 +2643,7 @@
             // 
             this.label172.AutoSize = true;
             this.label172.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label172.Location = new System.Drawing.Point(468, 47);
+            this.label172.Location = new System.Drawing.Point(257, 74);
             this.label172.Name = "label172";
             this.label172.Size = new System.Drawing.Size(36, 13);
             this.label172.TabIndex = 49;
@@ -2817,7 +2678,7 @@
             // 
             this.checkBoxCustomPool2Enable.AutoSize = true;
             this.checkBoxCustomPool2Enable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxCustomPool2Enable.Location = new System.Drawing.Point(6, 31);
+            this.checkBoxCustomPool2Enable.Location = new System.Drawing.Point(6, 18);
             this.checkBoxCustomPool2Enable.Name = "checkBoxCustomPool2Enable";
             this.checkBoxCustomPool2Enable.Size = new System.Drawing.Size(59, 17);
             this.checkBoxCustomPool2Enable.TabIndex = 0;
@@ -2829,7 +2690,7 @@
             // 
             this.label156.AutoSize = true;
             this.label156.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label156.Location = new System.Drawing.Point(375, 21);
+            this.label156.Location = new System.Drawing.Point(164, 48);
             this.label156.Name = "label156";
             this.label156.Size = new System.Drawing.Size(29, 13);
             this.label156.TabIndex = 42;
@@ -2838,7 +2699,7 @@
             // numericUpDownCustomPool2Port
             // 
             this.numericUpDownCustomPool2Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCustomPool2Port.Location = new System.Drawing.Point(410, 16);
+            this.numericUpDownCustomPool2Port.Location = new System.Drawing.Point(199, 43);
             this.numericUpDownCustomPool2Port.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2852,7 +2713,7 @@
             // textBoxCustomPool2Host
             // 
             this.textBoxCustomPool2Host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool2Host.Location = new System.Drawing.Point(254, 16);
+            this.textBoxCustomPool2Host.Location = new System.Drawing.Point(43, 43);
             this.textBoxCustomPool2Host.Name = "textBoxCustomPool2Host";
             this.textBoxCustomPool2Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool2Host.TabIndex = 2;
@@ -2861,9 +2722,9 @@
             // textBoxCustomPool2Password
             // 
             this.textBoxCustomPool2Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool2Password.Location = new System.Drawing.Point(692, 16);
+            this.textBoxCustomPool2Password.Location = new System.Drawing.Point(481, 43);
             this.textBoxCustomPool2Password.Name = "textBoxCustomPool2Password";
-            this.textBoxCustomPool2Password.Size = new System.Drawing.Size(114, 20);
+            this.textBoxCustomPool2Password.Size = new System.Drawing.Size(83, 20);
             this.textBoxCustomPool2Password.TabIndex = 5;
             this.textBoxCustomPool2Password.Tag = "parameter:custom_pool2_password";
             // 
@@ -2871,7 +2732,7 @@
             // 
             this.label157.AutoSize = true;
             this.label157.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label157.Location = new System.Drawing.Point(216, 21);
+            this.label157.Location = new System.Drawing.Point(5, 48);
             this.label157.Name = "label157";
             this.label157.Size = new System.Drawing.Size(32, 13);
             this.label157.TabIndex = 34;
@@ -2881,7 +2742,7 @@
             // 
             this.label158.AutoSize = true;
             this.label158.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label158.Location = new System.Drawing.Point(630, 19);
+            this.label158.Location = new System.Drawing.Point(419, 46);
             this.label158.Name = "label158";
             this.label158.Size = new System.Drawing.Size(56, 13);
             this.label158.TabIndex = 40;
@@ -2890,7 +2751,7 @@
             // textBoxCustomPool2Login
             // 
             this.textBoxCustomPool2Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool2Login.Location = new System.Drawing.Point(510, 16);
+            this.textBoxCustomPool2Login.Location = new System.Drawing.Point(299, 43);
             this.textBoxCustomPool2Login.Name = "textBoxCustomPool2Login";
             this.textBoxCustomPool2Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool2Login.TabIndex = 4;
@@ -2900,7 +2761,7 @@
             // 
             this.label159.AutoSize = true;
             this.label159.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label159.Location = new System.Drawing.Point(468, 19);
+            this.label159.Location = new System.Drawing.Point(257, 46);
             this.label159.Name = "label159";
             this.label159.Size = new System.Drawing.Size(36, 13);
             this.label159.TabIndex = 38;
@@ -2928,9 +2789,9 @@
             this.groupBoxCustmPool3.Controls.Add(this.textBoxCustomPool3Login);
             this.groupBoxCustmPool3.Controls.Add(this.label164);
             this.groupBoxCustmPool3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxCustmPool3.Location = new System.Drawing.Point(3, 237);
+            this.groupBoxCustmPool3.Location = new System.Drawing.Point(3, 318);
             this.groupBoxCustmPool3.Name = "groupBoxCustmPool3";
-            this.groupBoxCustmPool3.Size = new System.Drawing.Size(812, 72);
+            this.groupBoxCustmPool3.Size = new System.Drawing.Size(570, 99);
             this.groupBoxCustmPool3.TabIndex = 3;
             this.groupBoxCustmPool3.TabStop = false;
             this.groupBoxCustmPool3.Text = "Custom Pool 3";
@@ -2943,7 +2804,7 @@
             this.comboBoxCustomPool3SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
             "Pascal"});
-            this.comboBoxCustomPool3SecondaryAlgorithm.Location = new System.Drawing.Point(71, 46);
+            this.comboBoxCustomPool3SecondaryAlgorithm.Location = new System.Drawing.Point(217, 15);
             this.comboBoxCustomPool3SecondaryAlgorithm.Name = "comboBoxCustomPool3SecondaryAlgorithm";
             this.comboBoxCustomPool3SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool3SecondaryAlgorithm.TabIndex = 6;
@@ -2953,7 +2814,7 @@
             // 
             this.label173.AutoSize = true;
             this.label173.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label173.Location = new System.Drawing.Point(375, 48);
+            this.label173.Location = new System.Drawing.Point(164, 76);
             this.label173.Name = "label173";
             this.label173.Size = new System.Drawing.Size(29, 13);
             this.label173.TabIndex = 53;
@@ -2962,7 +2823,7 @@
             // numericUpDownCustomPool3SecondaryPort
             // 
             this.numericUpDownCustomPool3SecondaryPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCustomPool3SecondaryPort.Location = new System.Drawing.Point(410, 45);
+            this.numericUpDownCustomPool3SecondaryPort.Location = new System.Drawing.Point(199, 73);
             this.numericUpDownCustomPool3SecondaryPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2976,7 +2837,7 @@
             // textBoxCustomPool3SecondaryHost
             // 
             this.textBoxCustomPool3SecondaryHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool3SecondaryHost.Location = new System.Drawing.Point(254, 45);
+            this.textBoxCustomPool3SecondaryHost.Location = new System.Drawing.Point(43, 73);
             this.textBoxCustomPool3SecondaryHost.Name = "textBoxCustomPool3SecondaryHost";
             this.textBoxCustomPool3SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool3SecondaryHost.TabIndex = 7;
@@ -2985,9 +2846,9 @@
             // textBoxCustomPool3SecondaryPassword
             // 
             this.textBoxCustomPool3SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool3SecondaryPassword.Location = new System.Drawing.Point(692, 46);
+            this.textBoxCustomPool3SecondaryPassword.Location = new System.Drawing.Point(481, 72);
             this.textBoxCustomPool3SecondaryPassword.Name = "textBoxCustomPool3SecondaryPassword";
-            this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(114, 20);
+            this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(83, 20);
             this.textBoxCustomPool3SecondaryPassword.TabIndex = 10;
             this.textBoxCustomPool3SecondaryPassword.Tag = "parameter:custom_pool3_secondary_password";
             // 
@@ -2995,7 +2856,7 @@
             // 
             this.label174.AutoSize = true;
             this.label174.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label174.Location = new System.Drawing.Point(216, 48);
+            this.label174.Location = new System.Drawing.Point(5, 76);
             this.label174.Name = "label174";
             this.label174.Size = new System.Drawing.Size(32, 13);
             this.label174.TabIndex = 47;
@@ -3005,7 +2866,7 @@
             // 
             this.label175.AutoSize = true;
             this.label175.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label175.Location = new System.Drawing.Point(630, 49);
+            this.label175.Location = new System.Drawing.Point(419, 77);
             this.label175.Name = "label175";
             this.label175.Size = new System.Drawing.Size(56, 13);
             this.label175.TabIndex = 51;
@@ -3014,7 +2875,7 @@
             // textBoxCustomPool3SecondaryLogin
             // 
             this.textBoxCustomPool3SecondaryLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool3SecondaryLogin.Location = new System.Drawing.Point(510, 45);
+            this.textBoxCustomPool3SecondaryLogin.Location = new System.Drawing.Point(299, 73);
             this.textBoxCustomPool3SecondaryLogin.Name = "textBoxCustomPool3SecondaryLogin";
             this.textBoxCustomPool3SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3SecondaryLogin.TabIndex = 9;
@@ -3024,7 +2885,7 @@
             // 
             this.label176.AutoSize = true;
             this.label176.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label176.Location = new System.Drawing.Point(468, 48);
+            this.label176.Location = new System.Drawing.Point(257, 76);
             this.label176.Name = "label176";
             this.label176.Size = new System.Drawing.Size(36, 13);
             this.label176.TabIndex = 49;
@@ -3059,7 +2920,7 @@
             // 
             this.checkBoxCustomPool3Enable.AutoSize = true;
             this.checkBoxCustomPool3Enable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxCustomPool3Enable.Location = new System.Drawing.Point(6, 31);
+            this.checkBoxCustomPool3Enable.Location = new System.Drawing.Point(6, 17);
             this.checkBoxCustomPool3Enable.Name = "checkBoxCustomPool3Enable";
             this.checkBoxCustomPool3Enable.Size = new System.Drawing.Size(59, 17);
             this.checkBoxCustomPool3Enable.TabIndex = 0;
@@ -3071,7 +2932,7 @@
             // 
             this.label161.AutoSize = true;
             this.label161.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label161.Location = new System.Drawing.Point(375, 17);
+            this.label161.Location = new System.Drawing.Point(164, 45);
             this.label161.Name = "label161";
             this.label161.Size = new System.Drawing.Size(29, 13);
             this.label161.TabIndex = 42;
@@ -3080,7 +2941,7 @@
             // numericUpDownCustomPool3Port
             // 
             this.numericUpDownCustomPool3Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCustomPool3Port.Location = new System.Drawing.Point(410, 14);
+            this.numericUpDownCustomPool3Port.Location = new System.Drawing.Point(199, 42);
             this.numericUpDownCustomPool3Port.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -3094,7 +2955,7 @@
             // textBoxCustomPool3Host
             // 
             this.textBoxCustomPool3Host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool3Host.Location = new System.Drawing.Point(254, 14);
+            this.textBoxCustomPool3Host.Location = new System.Drawing.Point(43, 42);
             this.textBoxCustomPool3Host.Name = "textBoxCustomPool3Host";
             this.textBoxCustomPool3Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool3Host.TabIndex = 2;
@@ -3103,9 +2964,9 @@
             // textBoxCustomPool3Password
             // 
             this.textBoxCustomPool3Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool3Password.Location = new System.Drawing.Point(692, 15);
+            this.textBoxCustomPool3Password.Location = new System.Drawing.Point(481, 42);
             this.textBoxCustomPool3Password.Name = "textBoxCustomPool3Password";
-            this.textBoxCustomPool3Password.Size = new System.Drawing.Size(114, 20);
+            this.textBoxCustomPool3Password.Size = new System.Drawing.Size(83, 20);
             this.textBoxCustomPool3Password.TabIndex = 5;
             this.textBoxCustomPool3Password.Tag = "parameter:custom_pool3_password";
             // 
@@ -3113,7 +2974,7 @@
             // 
             this.label162.AutoSize = true;
             this.label162.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label162.Location = new System.Drawing.Point(216, 17);
+            this.label162.Location = new System.Drawing.Point(5, 45);
             this.label162.Name = "label162";
             this.label162.Size = new System.Drawing.Size(32, 13);
             this.label162.TabIndex = 34;
@@ -3123,7 +2984,7 @@
             // 
             this.label163.AutoSize = true;
             this.label163.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label163.Location = new System.Drawing.Point(630, 19);
+            this.label163.Location = new System.Drawing.Point(419, 47);
             this.label163.Name = "label163";
             this.label163.Size = new System.Drawing.Size(56, 13);
             this.label163.TabIndex = 40;
@@ -3132,7 +2993,7 @@
             // textBoxCustomPool3Login
             // 
             this.textBoxCustomPool3Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool3Login.Location = new System.Drawing.Point(510, 14);
+            this.textBoxCustomPool3Login.Location = new System.Drawing.Point(299, 42);
             this.textBoxCustomPool3Login.Name = "textBoxCustomPool3Login";
             this.textBoxCustomPool3Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool3Login.TabIndex = 4;
@@ -3142,7 +3003,7 @@
             // 
             this.label164.AutoSize = true;
             this.label164.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label164.Location = new System.Drawing.Point(468, 17);
+            this.label164.Location = new System.Drawing.Point(257, 45);
             this.label164.Name = "label164";
             this.label164.Size = new System.Drawing.Size(36, 13);
             this.label164.TabIndex = 38;
@@ -3172,7 +3033,7 @@
             this.groupBoxCustmPool0.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool0.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCustmPool0.Name = "groupBoxCustmPool0";
-            this.groupBoxCustmPool0.Size = new System.Drawing.Size(812, 72);
+            this.groupBoxCustmPool0.Size = new System.Drawing.Size(570, 99);
             this.groupBoxCustmPool0.TabIndex = 0;
             this.groupBoxCustmPool0.TabStop = false;
             this.groupBoxCustmPool0.Text = "Custom Pool 0";
@@ -3181,7 +3042,7 @@
             // 
             this.label149.AutoSize = true;
             this.label149.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label149.Location = new System.Drawing.Point(375, 47);
+            this.label149.Location = new System.Drawing.Point(164, 73);
             this.label149.Name = "label149";
             this.label149.Size = new System.Drawing.Size(29, 13);
             this.label149.TabIndex = 54;
@@ -3190,7 +3051,7 @@
             // numericUpDownCustomPool0SecondaryPort
             // 
             this.numericUpDownCustomPool0SecondaryPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCustomPool0SecondaryPort.Location = new System.Drawing.Point(410, 43);
+            this.numericUpDownCustomPool0SecondaryPort.Location = new System.Drawing.Point(199, 69);
             this.numericUpDownCustomPool0SecondaryPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -3204,7 +3065,7 @@
             // textBoxCustomPool0SecondaryHost
             // 
             this.textBoxCustomPool0SecondaryHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool0SecondaryHost.Location = new System.Drawing.Point(254, 43);
+            this.textBoxCustomPool0SecondaryHost.Location = new System.Drawing.Point(43, 69);
             this.textBoxCustomPool0SecondaryHost.Name = "textBoxCustomPool0SecondaryHost";
             this.textBoxCustomPool0SecondaryHost.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool0SecondaryHost.TabIndex = 7;
@@ -3213,9 +3074,9 @@
             // textBoxCustomPool0SecondaryPassword
             // 
             this.textBoxCustomPool0SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool0SecondaryPassword.Location = new System.Drawing.Point(692, 43);
+            this.textBoxCustomPool0SecondaryPassword.Location = new System.Drawing.Point(481, 69);
             this.textBoxCustomPool0SecondaryPassword.Name = "textBoxCustomPool0SecondaryPassword";
-            this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(114, 20);
+            this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(83, 20);
             this.textBoxCustomPool0SecondaryPassword.TabIndex = 10;
             this.textBoxCustomPool0SecondaryPassword.Tag = "parameter:custom_pool0_secondary_password";
             // 
@@ -3223,7 +3084,7 @@
             // 
             this.label150.AutoSize = true;
             this.label150.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label150.Location = new System.Drawing.Point(216, 47);
+            this.label150.Location = new System.Drawing.Point(5, 73);
             this.label150.Name = "label150";
             this.label150.Size = new System.Drawing.Size(32, 13);
             this.label150.TabIndex = 48;
@@ -3233,7 +3094,7 @@
             // 
             this.label155.AutoSize = true;
             this.label155.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label155.Location = new System.Drawing.Point(630, 47);
+            this.label155.Location = new System.Drawing.Point(419, 73);
             this.label155.Name = "label155";
             this.label155.Size = new System.Drawing.Size(56, 13);
             this.label155.TabIndex = 52;
@@ -3242,7 +3103,7 @@
             // textBoxCustomPool0SecondaryLogin
             // 
             this.textBoxCustomPool0SecondaryLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool0SecondaryLogin.Location = new System.Drawing.Point(510, 42);
+            this.textBoxCustomPool0SecondaryLogin.Location = new System.Drawing.Point(299, 68);
             this.textBoxCustomPool0SecondaryLogin.Name = "textBoxCustomPool0SecondaryLogin";
             this.textBoxCustomPool0SecondaryLogin.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0SecondaryLogin.TabIndex = 9;
@@ -3252,7 +3113,7 @@
             // 
             this.label160.AutoSize = true;
             this.label160.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label160.Location = new System.Drawing.Point(468, 45);
+            this.label160.Location = new System.Drawing.Point(257, 71);
             this.label160.Name = "label160";
             this.label160.Size = new System.Drawing.Size(36, 13);
             this.label160.TabIndex = 50;
@@ -3266,7 +3127,7 @@
             this.comboBoxCustomPool0SecondaryAlgorithm.Items.AddRange(new object[] {
             "",
             "Pascal"});
-            this.comboBoxCustomPool0SecondaryAlgorithm.Location = new System.Drawing.Point(71, 43);
+            this.comboBoxCustomPool0SecondaryAlgorithm.Location = new System.Drawing.Point(217, 16);
             this.comboBoxCustomPool0SecondaryAlgorithm.Name = "comboBoxCustomPool0SecondaryAlgorithm";
             this.comboBoxCustomPool0SecondaryAlgorithm.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCustomPool0SecondaryAlgorithm.TabIndex = 6;
@@ -3276,7 +3137,7 @@
             // 
             this.checkBoxCustomPool0Enable.AutoSize = true;
             this.checkBoxCustomPool0Enable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxCustomPool0Enable.Location = new System.Drawing.Point(6, 31);
+            this.checkBoxCustomPool0Enable.Location = new System.Drawing.Point(6, 18);
             this.checkBoxCustomPool0Enable.Name = "checkBoxCustomPool0Enable";
             this.checkBoxCustomPool0Enable.Size = new System.Drawing.Size(59, 17);
             this.checkBoxCustomPool0Enable.TabIndex = 0;
@@ -3313,7 +3174,7 @@
             // 
             this.label147.AutoSize = true;
             this.label147.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label147.Location = new System.Drawing.Point(375, 21);
+            this.label147.Location = new System.Drawing.Point(164, 47);
             this.label147.Name = "label147";
             this.label147.Size = new System.Drawing.Size(29, 13);
             this.label147.TabIndex = 42;
@@ -3322,7 +3183,7 @@
             // numericUpDownCustomPool0Port
             // 
             this.numericUpDownCustomPool0Port.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCustomPool0Port.Location = new System.Drawing.Point(410, 17);
+            this.numericUpDownCustomPool0Port.Location = new System.Drawing.Point(199, 43);
             this.numericUpDownCustomPool0Port.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -3336,7 +3197,7 @@
             // textBoxCustomPool0Host
             // 
             this.textBoxCustomPool0Host.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool0Host.Location = new System.Drawing.Point(254, 17);
+            this.textBoxCustomPool0Host.Location = new System.Drawing.Point(43, 43);
             this.textBoxCustomPool0Host.Name = "textBoxCustomPool0Host";
             this.textBoxCustomPool0Host.Size = new System.Drawing.Size(115, 20);
             this.textBoxCustomPool0Host.TabIndex = 2;
@@ -3345,9 +3206,9 @@
             // textBoxCustomPool0Password
             // 
             this.textBoxCustomPool0Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool0Password.Location = new System.Drawing.Point(692, 17);
+            this.textBoxCustomPool0Password.Location = new System.Drawing.Point(481, 43);
             this.textBoxCustomPool0Password.Name = "textBoxCustomPool0Password";
-            this.textBoxCustomPool0Password.Size = new System.Drawing.Size(114, 20);
+            this.textBoxCustomPool0Password.Size = new System.Drawing.Size(83, 20);
             this.textBoxCustomPool0Password.TabIndex = 5;
             this.textBoxCustomPool0Password.Tag = "parameter:custom_pool0_password";
             // 
@@ -3355,7 +3216,7 @@
             // 
             this.label145.AutoSize = true;
             this.label145.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label145.Location = new System.Drawing.Point(216, 21);
+            this.label145.Location = new System.Drawing.Point(5, 47);
             this.label145.Name = "label145";
             this.label145.Size = new System.Drawing.Size(32, 13);
             this.label145.TabIndex = 34;
@@ -3365,7 +3226,7 @@
             // 
             this.label146.AutoSize = true;
             this.label146.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label146.Location = new System.Drawing.Point(630, 21);
+            this.label146.Location = new System.Drawing.Point(419, 47);
             this.label146.Name = "label146";
             this.label146.Size = new System.Drawing.Size(56, 13);
             this.label146.TabIndex = 40;
@@ -3374,7 +3235,7 @@
             // textBoxCustomPool0Login
             // 
             this.textBoxCustomPool0Login.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustomPool0Login.Location = new System.Drawing.Point(510, 16);
+            this.textBoxCustomPool0Login.Location = new System.Drawing.Point(299, 45);
             this.textBoxCustomPool0Login.Name = "textBoxCustomPool0Login";
             this.textBoxCustomPool0Login.Size = new System.Drawing.Size(114, 20);
             this.textBoxCustomPool0Login.TabIndex = 4;
@@ -3384,7 +3245,7 @@
             // 
             this.label148.AutoSize = true;
             this.label148.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label148.Location = new System.Drawing.Point(468, 19);
+            this.label148.Location = new System.Drawing.Point(257, 45);
             this.label148.Name = "label148";
             this.label148.Size = new System.Drawing.Size(36, 13);
             this.label148.TabIndex = 38;
@@ -3392,81 +3253,111 @@
             // 
             // tabPagePoolSettings
             // 
-            this.tabPagePoolSettings.Controls.Add(this.groupBoxWalletAddresses);
-            this.tabPagePoolSettings.Controls.Add(this.groupBoxPoolParameters);
-            this.tabPagePoolSettings.Controls.Add(this.groupBoxPoolPriorities);
+            this.tabPagePoolSettings.Controls.Add(this.tabControlDefaultPools);
             this.tabPagePoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPagePoolSettings.Name = "tabPagePoolSettings";
             this.tabPagePoolSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePoolSettings.Size = new System.Drawing.Size(977, 585);
+            this.tabPagePoolSettings.Size = new System.Drawing.Size(593, 325);
             this.tabPagePoolSettings.TabIndex = 0;
             this.tabPagePoolSettings.Text = "Default Pools";
             this.tabPagePoolSettings.UseVisualStyleBackColor = true;
             // 
-            // groupBoxWalletAddresses
+            // tabControlDefaultPools
             // 
-            this.groupBoxWalletAddresses.Controls.Add(this.button3);
-            this.groupBoxWalletAddresses.Controls.Add(this.label44);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxPigeoncoinAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.buttonAEONBalance);
-            this.groupBoxWalletAddresses.Controls.Add(this.label43);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxAEONAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.buttonSumokoinBalance);
-            this.groupBoxWalletAddresses.Controls.Add(this.label39);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxSumokoinAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.buttonRavenBalance);
-            this.groupBoxWalletAddresses.Controls.Add(this.label38);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxRavenAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.label28);
-            this.groupBoxWalletAddresses.Controls.Add(this.buttonLbryBalance);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxLbryAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxPascalAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.label27);
-            this.groupBoxWalletAddresses.Controls.Add(this.buttonViewPascalBalance);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxBitcoinAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.button5);
-            this.groupBoxWalletAddresses.Controls.Add(this.label13);
-            this.groupBoxWalletAddresses.Controls.Add(this.label14);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxEthereumAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.label15);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxMoneroAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.buttonMoneroBalance);
-            this.groupBoxWalletAddresses.Controls.Add(this.label16);
-            this.groupBoxWalletAddresses.Controls.Add(this.buttonEthereumBalance);
-            this.groupBoxWalletAddresses.Controls.Add(this.textBoxZcashAddress);
-            this.groupBoxWalletAddresses.Controls.Add(this.buttonViewBalancesAtNiceHash);
-            this.groupBoxWalletAddresses.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxWalletAddresses.Location = new System.Drawing.Point(263, 6);
-            this.groupBoxWalletAddresses.Name = "groupBoxWalletAddresses";
-            this.groupBoxWalletAddresses.Size = new System.Drawing.Size(708, 155);
-            this.groupBoxWalletAddresses.TabIndex = 2;
-            this.groupBoxWalletAddresses.TabStop = false;
-            this.groupBoxWalletAddresses.Text = "Wallet Addresses";
+            this.tabControlDefaultPools.Controls.Add(this.tabPage4);
+            this.tabControlDefaultPools.Controls.Add(this.tabPage5);
+            this.tabControlDefaultPools.Controls.Add(this.tabPage6);
+            this.tabControlDefaultPools.Location = new System.Drawing.Point(6, 6);
+            this.tabControlDefaultPools.Name = "tabControlDefaultPools";
+            this.tabControlDefaultPools.SelectedIndex = 0;
+            this.tabControlDefaultPools.Size = new System.Drawing.Size(584, 313);
+            this.tabControlDefaultPools.TabIndex = 4;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.button3);
+            this.tabPage4.Controls.Add(this.label13);
+            this.tabPage4.Controls.Add(this.label44);
+            this.tabPage4.Controls.Add(this.buttonViewBalancesAtNiceHash);
+            this.tabPage4.Controls.Add(this.textBoxPigeoncoinAddress);
+            this.tabPage4.Controls.Add(this.buttonEthereumBalance);
+            this.tabPage4.Controls.Add(this.buttonAEONBalance);
+            this.tabPage4.Controls.Add(this.buttonMoneroBalance);
+            this.tabPage4.Controls.Add(this.label43);
+            this.tabPage4.Controls.Add(this.textBoxMoneroAddress);
+            this.tabPage4.Controls.Add(this.textBoxAEONAddress);
+            this.tabPage4.Controls.Add(this.label15);
+            this.tabPage4.Controls.Add(this.buttonSumokoinBalance);
+            this.tabPage4.Controls.Add(this.textBoxEthereumAddress);
+            this.tabPage4.Controls.Add(this.label39);
+            this.tabPage4.Controls.Add(this.label14);
+            this.tabPage4.Controls.Add(this.textBoxSumokoinAddress);
+            this.tabPage4.Controls.Add(this.textBoxBitcoinAddress);
+            this.tabPage4.Controls.Add(this.buttonRavenBalance);
+            this.tabPage4.Controls.Add(this.buttonViewPascalBalance);
+            this.tabPage4.Controls.Add(this.label38);
+            this.tabPage4.Controls.Add(this.label27);
+            this.tabPage4.Controls.Add(this.textBoxRavenAddress);
+            this.tabPage4.Controls.Add(this.button5);
+            this.tabPage4.Controls.Add(this.textBoxPascalAddress);
+            this.tabPage4.Controls.Add(this.label16);
+            this.tabPage4.Controls.Add(this.label28);
+            this.tabPage4.Controls.Add(this.textBoxZcashAddress);
+            this.tabPage4.Controls.Add(this.textBoxLbryAddress);
+            this.tabPage4.Controls.Add(this.buttonLbryBalance);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(576, 287);
+            this.tabPage4.TabIndex = 0;
+            this.tabPage4.Text = "Wallet Addresses";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button3.Location = new System.Drawing.Point(637, 100);
+            this.button3.Location = new System.Drawing.Point(298, 224);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(62, 20);
             this.button3.TabIndex = 34;
             this.button3.Text = "Balance";
             this.button3.UseVisualStyleBackColor = true;
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label13.Location = new System.Drawing.Point(6, 11);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(72, 13);
+            this.label13.TabIndex = 6;
+            this.label13.Text = "Bitcoin (BTC):";
+            // 
             // label44
             // 
             this.label44.AutoSize = true;
             this.label44.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label44.Location = new System.Drawing.Point(353, 103);
+            this.label44.Location = new System.Drawing.Point(6, 227);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(95, 13);
             this.label44.TabIndex = 35;
             this.label44.Text = "Pigeoncoin (PGN):";
             // 
+            // buttonViewBalancesAtNiceHash
+            // 
+            this.buttonViewBalancesAtNiceHash.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonViewBalancesAtNiceHash.Location = new System.Drawing.Point(298, 9);
+            this.buttonViewBalancesAtNiceHash.Name = "buttonViewBalancesAtNiceHash";
+            this.buttonViewBalancesAtNiceHash.Size = new System.Drawing.Size(62, 20);
+            this.buttonViewBalancesAtNiceHash.TabIndex = 1;
+            this.buttonViewBalancesAtNiceHash.Text = "Balance";
+            this.buttonViewBalancesAtNiceHash.UseVisualStyleBackColor = true;
+            this.buttonViewBalancesAtNiceHash.Click += new System.EventHandler(this.buttonViewBalancesAtNiceHash_Click);
+            // 
             // textBoxPigeoncoinAddress
             // 
             this.textBoxPigeoncoinAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxPigeoncoinAddress.Location = new System.Drawing.Point(452, 100);
+            this.textBoxPigeoncoinAddress.Location = new System.Drawing.Point(113, 224);
             this.textBoxPigeoncoinAddress.MaxLength = 512;
             this.textBoxPigeoncoinAddress.Name = "textBoxPigeoncoinAddress";
             this.textBoxPigeoncoinAddress.Size = new System.Drawing.Size(179, 20);
@@ -3474,236 +3365,52 @@
             this.textBoxPigeoncoinAddress.Tag = "parameter:pigeoncoin_address";
             this.textBoxPigeoncoinAddress.Text = "PMCR5gBQ48DXKykmt1aoULYdnCmCpiknhL";
             // 
+            // buttonEthereumBalance
+            // 
+            this.buttonEthereumBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonEthereumBalance.Location = new System.Drawing.Point(298, 35);
+            this.buttonEthereumBalance.Name = "buttonEthereumBalance";
+            this.buttonEthereumBalance.Size = new System.Drawing.Size(62, 20);
+            this.buttonEthereumBalance.TabIndex = 3;
+            this.buttonEthereumBalance.Text = "Balance";
+            this.buttonEthereumBalance.UseVisualStyleBackColor = true;
+            this.buttonEthereumBalance.Click += new System.EventHandler(this.buttonEthereumBalance_Click);
+            // 
             // buttonAEONBalance
             // 
             this.buttonAEONBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonAEONBalance.Location = new System.Drawing.Point(637, 73);
+            this.buttonAEONBalance.Location = new System.Drawing.Point(298, 197);
             this.buttonAEONBalance.Name = "buttonAEONBalance";
             this.buttonAEONBalance.Size = new System.Drawing.Size(62, 20);
             this.buttonAEONBalance.TabIndex = 31;
             this.buttonAEONBalance.Text = "Balance";
             this.buttonAEONBalance.UseVisualStyleBackColor = true;
             // 
+            // buttonMoneroBalance
+            // 
+            this.buttonMoneroBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonMoneroBalance.Location = new System.Drawing.Point(298, 62);
+            this.buttonMoneroBalance.Name = "buttonMoneroBalance";
+            this.buttonMoneroBalance.Size = new System.Drawing.Size(62, 20);
+            this.buttonMoneroBalance.TabIndex = 5;
+            this.buttonMoneroBalance.Text = "Balance";
+            this.buttonMoneroBalance.UseVisualStyleBackColor = true;
+            this.buttonMoneroBalance.Click += new System.EventHandler(this.buttonMoneroBalance_Click);
+            // 
             // label43
             // 
             this.label43.AutoSize = true;
             this.label43.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label43.Location = new System.Drawing.Point(353, 76);
+            this.label43.Location = new System.Drawing.Point(6, 200);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(40, 13);
             this.label43.TabIndex = 32;
             this.label43.Text = "AEON:";
             // 
-            // textBoxAEONAddress
-            // 
-            this.textBoxAEONAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxAEONAddress.Location = new System.Drawing.Point(452, 73);
-            this.textBoxAEONAddress.MaxLength = 512;
-            this.textBoxAEONAddress.Name = "textBoxAEONAddress";
-            this.textBoxAEONAddress.Size = new System.Drawing.Size(179, 20);
-            this.textBoxAEONAddress.TabIndex = 30;
-            this.textBoxAEONAddress.Tag = "parameter:aeon_address";
-            this.textBoxAEONAddress.Text = "Wms1DnwvmYS2eiAia3W7BRcyehQFVBYEDBQnqUrPtVeaNj6NZM1UZXJf7HU39mfAAn6p8D4jEK6z33Z95" +
-    "nQrHTaL1pcBNGxUh";
-            // 
-            // buttonSumokoinBalance
-            // 
-            this.buttonSumokoinBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonSumokoinBalance.Location = new System.Drawing.Point(637, 46);
-            this.buttonSumokoinBalance.Name = "buttonSumokoinBalance";
-            this.buttonSumokoinBalance.Size = new System.Drawing.Size(62, 20);
-            this.buttonSumokoinBalance.TabIndex = 28;
-            this.buttonSumokoinBalance.Text = "Balance";
-            this.buttonSumokoinBalance.UseVisualStyleBackColor = true;
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label39.Location = new System.Drawing.Point(353, 49);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(98, 13);
-            this.label39.TabIndex = 29;
-            this.label39.Text = "Sumokoin (SUMO):";
-            // 
-            // textBoxSumokoinAddress
-            // 
-            this.textBoxSumokoinAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxSumokoinAddress.Location = new System.Drawing.Point(452, 46);
-            this.textBoxSumokoinAddress.MaxLength = 512;
-            this.textBoxSumokoinAddress.Name = "textBoxSumokoinAddress";
-            this.textBoxSumokoinAddress.Size = new System.Drawing.Size(179, 20);
-            this.textBoxSumokoinAddress.TabIndex = 27;
-            this.textBoxSumokoinAddress.Tag = "parameter:sumokoin_address";
-            this.textBoxSumokoinAddress.Text = "Sumoo78AVSZQKEuRgwfZm94BzCwvTo6LeDksMj2c237hMYDM74epEnbhJLWBdndsBeD4WYhw6GS6yW3vJ" +
-    "WCcM7QjGy1AR9tq6ef";
-            // 
-            // buttonRavenBalance
-            // 
-            this.buttonRavenBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonRavenBalance.Location = new System.Drawing.Point(637, 19);
-            this.buttonRavenBalance.Name = "buttonRavenBalance";
-            this.buttonRavenBalance.Size = new System.Drawing.Size(62, 20);
-            this.buttonRavenBalance.TabIndex = 25;
-            this.buttonRavenBalance.Text = "Balance";
-            this.buttonRavenBalance.UseVisualStyleBackColor = true;
-            this.buttonRavenBalance.Click += new System.EventHandler(this.buttonRavenBalance_Click);
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label38.Location = new System.Drawing.Point(353, 23);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(74, 13);
-            this.label38.TabIndex = 26;
-            this.label38.Text = "Raven (RVN):";
-            // 
-            // textBoxRavenAddress
-            // 
-            this.textBoxRavenAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxRavenAddress.Location = new System.Drawing.Point(452, 19);
-            this.textBoxRavenAddress.MaxLength = 512;
-            this.textBoxRavenAddress.Name = "textBoxRavenAddress";
-            this.textBoxRavenAddress.Size = new System.Drawing.Size(179, 20);
-            this.textBoxRavenAddress.TabIndex = 24;
-            this.textBoxRavenAddress.Tag = "parameter:raven_address";
-            this.textBoxRavenAddress.Text = "RNw1EqHTD3bWj6R9dsi3bJe6YJgN55hGxQ";
-            this.textBoxRavenAddress.TextChanged += new System.EventHandler(this.textBoxRavenAddress_TextChanged);
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label28.Location = new System.Drawing.Point(9, 130);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(56, 13);
-            this.label28.TabIndex = 23;
-            this.label28.Text = "Lbry (LBC)";
-            // 
-            // buttonLbryBalance
-            // 
-            this.buttonLbryBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonLbryBalance.Location = new System.Drawing.Point(285, 126);
-            this.buttonLbryBalance.Name = "buttonLbryBalance";
-            this.buttonLbryBalance.Size = new System.Drawing.Size(62, 20);
-            this.buttonLbryBalance.TabIndex = 11;
-            this.buttonLbryBalance.Text = "Balance";
-            this.buttonLbryBalance.UseVisualStyleBackColor = true;
-            // 
-            // textBoxLbryAddress
-            // 
-            this.textBoxLbryAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxLbryAddress.Location = new System.Drawing.Point(100, 126);
-            this.textBoxLbryAddress.MaxLength = 512;
-            this.textBoxLbryAddress.Name = "textBoxLbryAddress";
-            this.textBoxLbryAddress.Size = new System.Drawing.Size(179, 20);
-            this.textBoxLbryAddress.TabIndex = 10;
-            this.textBoxLbryAddress.Tag = "parameter:lbry_address";
-            this.textBoxLbryAddress.Text = "bEFGDsEnfSzRs1UVKoUqaQfnvWAbPzLiuB";
-            this.textBoxLbryAddress.TextChanged += new System.EventHandler(this.textBoxLbryAddress_TextChanged);
-            // 
-            // textBoxPascalAddress
-            // 
-            this.textBoxPascalAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxPascalAddress.Location = new System.Drawing.Point(100, 98);
-            this.textBoxPascalAddress.MaxLength = 512;
-            this.textBoxPascalAddress.Name = "textBoxPascalAddress";
-            this.textBoxPascalAddress.Size = new System.Drawing.Size(179, 20);
-            this.textBoxPascalAddress.TabIndex = 8;
-            this.textBoxPascalAddress.Tag = "parameter:pascal_address";
-            this.textBoxPascalAddress.Text = "86646-64.b7db0252955d6b0f";
-            this.textBoxPascalAddress.TextChanged += new System.EventHandler(this.textBoxPascalAddress_TextChanged);
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label27.Location = new System.Drawing.Point(9, 100);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(79, 13);
-            this.label27.TabIndex = 18;
-            this.label27.Text = "Pascal (PASC):";
-            // 
-            // buttonViewPascalBalance
-            // 
-            this.buttonViewPascalBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonViewPascalBalance.Location = new System.Drawing.Point(285, 98);
-            this.buttonViewPascalBalance.Name = "buttonViewPascalBalance";
-            this.buttonViewPascalBalance.Size = new System.Drawing.Size(62, 20);
-            this.buttonViewPascalBalance.TabIndex = 9;
-            this.buttonViewPascalBalance.Text = "Balance";
-            this.buttonViewPascalBalance.UseVisualStyleBackColor = true;
-            // 
-            // textBoxBitcoinAddress
-            // 
-            this.textBoxBitcoinAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxBitcoinAddress.Location = new System.Drawing.Point(100, 19);
-            this.textBoxBitcoinAddress.MaxLength = 512;
-            this.textBoxBitcoinAddress.Name = "textBoxBitcoinAddress";
-            this.textBoxBitcoinAddress.Size = new System.Drawing.Size(179, 20);
-            this.textBoxBitcoinAddress.TabIndex = 0;
-            this.textBoxBitcoinAddress.Tag = "parameter:bitcoin_address";
-            this.textBoxBitcoinAddress.Text = "1k1WhysGsp7kNRy4atzzr6MaDrBiXw7wm";
-            this.textBoxBitcoinAddress.TextChanged += new System.EventHandler(this.textBoxBitcoinAddress_TextChanged);
-            // 
-            // button5
-            // 
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button5.Location = new System.Drawing.Point(637, 126);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(62, 20);
-            this.button5.TabIndex = 7;
-            this.button5.Text = "Balance";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Visible = false;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label13.Location = new System.Drawing.Point(9, 21);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(72, 13);
-            this.label13.TabIndex = 6;
-            this.label13.Text = "Bitcoin (BTC):";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label14.Location = new System.Drawing.Point(9, 47);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(86, 13);
-            this.label14.TabIndex = 8;
-            this.label14.Text = "Ethereum (ETH):";
-            // 
-            // textBoxEthereumAddress
-            // 
-            this.textBoxEthereumAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxEthereumAddress.Location = new System.Drawing.Point(100, 45);
-            this.textBoxEthereumAddress.MaxLength = 512;
-            this.textBoxEthereumAddress.Name = "textBoxEthereumAddress";
-            this.textBoxEthereumAddress.Size = new System.Drawing.Size(179, 20);
-            this.textBoxEthereumAddress.TabIndex = 2;
-            this.textBoxEthereumAddress.Tag = "parameter:ethereum_address";
-            this.textBoxEthereumAddress.Text = "0x91fa32e00b0f365d629fb625182a83fed61f0642";
-            this.textBoxEthereumAddress.TextChanged += new System.EventHandler(this.textBoxEthereumAddress_TextChanged);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label15.Location = new System.Drawing.Point(9, 73);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(79, 13);
-            this.label15.TabIndex = 10;
-            this.label15.Text = "Monero (XMR):";
-            // 
             // textBoxMoneroAddress
             // 
             this.textBoxMoneroAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxMoneroAddress.Location = new System.Drawing.Point(100, 71);
+            this.textBoxMoneroAddress.Location = new System.Drawing.Point(113, 61);
             this.textBoxMoneroAddress.MaxLength = 512;
             this.textBoxMoneroAddress.Name = "textBoxMoneroAddress";
             this.textBoxMoneroAddress.Size = new System.Drawing.Size(179, 20);
@@ -3713,44 +3420,196 @@
     "Zy24jvb3NiTcTJ.3c33141709b14b9bba1f1d49b39c69f8fb88a4cd571e4e80b3c0682375964a0f";
             this.textBoxMoneroAddress.TextChanged += new System.EventHandler(this.textBoxMoneroAddress_TextChanged);
             // 
-            // buttonMoneroBalance
+            // textBoxAEONAddress
             // 
-            this.buttonMoneroBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonMoneroBalance.Location = new System.Drawing.Point(285, 72);
-            this.buttonMoneroBalance.Name = "buttonMoneroBalance";
-            this.buttonMoneroBalance.Size = new System.Drawing.Size(62, 20);
-            this.buttonMoneroBalance.TabIndex = 5;
-            this.buttonMoneroBalance.Text = "Balance";
-            this.buttonMoneroBalance.UseVisualStyleBackColor = true;
-            this.buttonMoneroBalance.Click += new System.EventHandler(this.buttonMoneroBalance_Click);
+            this.textBoxAEONAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBoxAEONAddress.Location = new System.Drawing.Point(113, 197);
+            this.textBoxAEONAddress.MaxLength = 512;
+            this.textBoxAEONAddress.Name = "textBoxAEONAddress";
+            this.textBoxAEONAddress.Size = new System.Drawing.Size(179, 20);
+            this.textBoxAEONAddress.TabIndex = 30;
+            this.textBoxAEONAddress.Tag = "parameter:aeon_address";
+            this.textBoxAEONAddress.Text = "Wms1DnwvmYS2eiAia3W7BRcyehQFVBYEDBQnqUrPtVeaNj6NZM1UZXJf7HU39mfAAn6p8D4jEK6z33Z95" +
+    "nQrHTaL1pcBNGxUh";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label15.Location = new System.Drawing.Point(6, 63);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(79, 13);
+            this.label15.TabIndex = 10;
+            this.label15.Text = "Monero (XMR):";
+            // 
+            // buttonSumokoinBalance
+            // 
+            this.buttonSumokoinBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonSumokoinBalance.Location = new System.Drawing.Point(298, 170);
+            this.buttonSumokoinBalance.Name = "buttonSumokoinBalance";
+            this.buttonSumokoinBalance.Size = new System.Drawing.Size(62, 20);
+            this.buttonSumokoinBalance.TabIndex = 28;
+            this.buttonSumokoinBalance.Text = "Balance";
+            this.buttonSumokoinBalance.UseVisualStyleBackColor = true;
+            // 
+            // textBoxEthereumAddress
+            // 
+            this.textBoxEthereumAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBoxEthereumAddress.Location = new System.Drawing.Point(113, 35);
+            this.textBoxEthereumAddress.MaxLength = 512;
+            this.textBoxEthereumAddress.Name = "textBoxEthereumAddress";
+            this.textBoxEthereumAddress.Size = new System.Drawing.Size(179, 20);
+            this.textBoxEthereumAddress.TabIndex = 2;
+            this.textBoxEthereumAddress.Tag = "parameter:ethereum_address";
+            this.textBoxEthereumAddress.Text = "0x91fa32e00b0f365d629fb625182a83fed61f0642";
+            this.textBoxEthereumAddress.TextChanged += new System.EventHandler(this.textBoxEthereumAddress_TextChanged);
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label39.Location = new System.Drawing.Point(6, 173);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(98, 13);
+            this.label39.TabIndex = 29;
+            this.label39.Text = "Sumokoin (SUMO):";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label14.Location = new System.Drawing.Point(6, 37);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(86, 13);
+            this.label14.TabIndex = 8;
+            this.label14.Text = "Ethereum (ETH):";
+            // 
+            // textBoxSumokoinAddress
+            // 
+            this.textBoxSumokoinAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBoxSumokoinAddress.Location = new System.Drawing.Point(113, 170);
+            this.textBoxSumokoinAddress.MaxLength = 512;
+            this.textBoxSumokoinAddress.Name = "textBoxSumokoinAddress";
+            this.textBoxSumokoinAddress.Size = new System.Drawing.Size(179, 20);
+            this.textBoxSumokoinAddress.TabIndex = 27;
+            this.textBoxSumokoinAddress.Tag = "parameter:sumokoin_address";
+            this.textBoxSumokoinAddress.Text = "Sumoo78AVSZQKEuRgwfZm94BzCwvTo6LeDksMj2c237hMYDM74epEnbhJLWBdndsBeD4WYhw6GS6yW3vJ" +
+    "WCcM7QjGy1AR9tq6ef";
+            // 
+            // textBoxBitcoinAddress
+            // 
+            this.textBoxBitcoinAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBoxBitcoinAddress.Location = new System.Drawing.Point(113, 9);
+            this.textBoxBitcoinAddress.MaxLength = 512;
+            this.textBoxBitcoinAddress.Name = "textBoxBitcoinAddress";
+            this.textBoxBitcoinAddress.Size = new System.Drawing.Size(179, 20);
+            this.textBoxBitcoinAddress.TabIndex = 0;
+            this.textBoxBitcoinAddress.Tag = "parameter:bitcoin_address";
+            this.textBoxBitcoinAddress.Text = "1k1WhysGsp7kNRy4atzzr6MaDrBiXw7wm";
+            this.textBoxBitcoinAddress.TextChanged += new System.EventHandler(this.textBoxBitcoinAddress_TextChanged);
+            // 
+            // buttonRavenBalance
+            // 
+            this.buttonRavenBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonRavenBalance.Location = new System.Drawing.Point(298, 143);
+            this.buttonRavenBalance.Name = "buttonRavenBalance";
+            this.buttonRavenBalance.Size = new System.Drawing.Size(62, 20);
+            this.buttonRavenBalance.TabIndex = 25;
+            this.buttonRavenBalance.Text = "Balance";
+            this.buttonRavenBalance.UseVisualStyleBackColor = true;
+            this.buttonRavenBalance.Click += new System.EventHandler(this.buttonRavenBalance_Click);
+            // 
+            // buttonViewPascalBalance
+            // 
+            this.buttonViewPascalBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonViewPascalBalance.Location = new System.Drawing.Point(298, 88);
+            this.buttonViewPascalBalance.Name = "buttonViewPascalBalance";
+            this.buttonViewPascalBalance.Size = new System.Drawing.Size(62, 20);
+            this.buttonViewPascalBalance.TabIndex = 9;
+            this.buttonViewPascalBalance.Text = "Balance";
+            this.buttonViewPascalBalance.UseVisualStyleBackColor = true;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label38.Location = new System.Drawing.Point(6, 147);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(74, 13);
+            this.label38.TabIndex = 26;
+            this.label38.Text = "Raven (RVN):";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label27.Location = new System.Drawing.Point(6, 90);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(79, 13);
+            this.label27.TabIndex = 18;
+            this.label27.Text = "Pascal (PASC):";
+            // 
+            // textBoxRavenAddress
+            // 
+            this.textBoxRavenAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBoxRavenAddress.Location = new System.Drawing.Point(113, 143);
+            this.textBoxRavenAddress.MaxLength = 512;
+            this.textBoxRavenAddress.Name = "textBoxRavenAddress";
+            this.textBoxRavenAddress.Size = new System.Drawing.Size(179, 20);
+            this.textBoxRavenAddress.TabIndex = 24;
+            this.textBoxRavenAddress.Tag = "parameter:raven_address";
+            this.textBoxRavenAddress.Text = "RNw1EqHTD3bWj6R9dsi3bJe6YJgN55hGxQ";
+            this.textBoxRavenAddress.TextChanged += new System.EventHandler(this.textBoxRavenAddress_TextChanged);
+            // 
+            // button5
+            // 
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.button5.Location = new System.Drawing.Point(298, 250);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(62, 20);
+            this.button5.TabIndex = 7;
+            this.button5.Text = "Balance";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Visible = false;
+            // 
+            // textBoxPascalAddress
+            // 
+            this.textBoxPascalAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBoxPascalAddress.Location = new System.Drawing.Point(113, 88);
+            this.textBoxPascalAddress.MaxLength = 512;
+            this.textBoxPascalAddress.Name = "textBoxPascalAddress";
+            this.textBoxPascalAddress.Size = new System.Drawing.Size(179, 20);
+            this.textBoxPascalAddress.TabIndex = 8;
+            this.textBoxPascalAddress.Tag = "parameter:pascal_address";
+            this.textBoxPascalAddress.Text = "86646-64.b7db0252955d6b0f";
+            this.textBoxPascalAddress.TextChanged += new System.EventHandler(this.textBoxPascalAddress_TextChanged);
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label16.Location = new System.Drawing.Point(353, 129);
+            this.label16.Location = new System.Drawing.Point(6, 253);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(70, 13);
             this.label16.TabIndex = 12;
             this.label16.Text = "Zcash (ZEC):";
             this.label16.Visible = false;
             // 
-            // buttonEthereumBalance
+            // label28
             // 
-            this.buttonEthereumBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonEthereumBalance.Location = new System.Drawing.Point(285, 45);
-            this.buttonEthereumBalance.Name = "buttonEthereumBalance";
-            this.buttonEthereumBalance.Size = new System.Drawing.Size(62, 20);
-            this.buttonEthereumBalance.TabIndex = 3;
-            this.buttonEthereumBalance.Text = "Balance";
-            this.buttonEthereumBalance.UseVisualStyleBackColor = true;
-            this.buttonEthereumBalance.Click += new System.EventHandler(this.buttonEthereumBalance_Click);
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label28.Location = new System.Drawing.Point(6, 120);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(56, 13);
+            this.label28.TabIndex = 23;
+            this.label28.Text = "Lbry (LBC)";
             // 
             // textBoxZcashAddress
             // 
             this.textBoxZcashAddress.Enabled = false;
             this.textBoxZcashAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxZcashAddress.Location = new System.Drawing.Point(452, 126);
+            this.textBoxZcashAddress.Location = new System.Drawing.Point(113, 250);
             this.textBoxZcashAddress.MaxLength = 512;
             this.textBoxZcashAddress.Name = "textBoxZcashAddress";
             this.textBoxZcashAddress.Size = new System.Drawing.Size(179, 20);
@@ -3759,137 +3618,45 @@
             this.textBoxZcashAddress.Visible = false;
             this.textBoxZcashAddress.TextChanged += new System.EventHandler(this.textBoxZcashAddress_TextChanged);
             // 
-            // buttonViewBalancesAtNiceHash
+            // textBoxLbryAddress
             // 
-            this.buttonViewBalancesAtNiceHash.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonViewBalancesAtNiceHash.Location = new System.Drawing.Point(285, 19);
-            this.buttonViewBalancesAtNiceHash.Name = "buttonViewBalancesAtNiceHash";
-            this.buttonViewBalancesAtNiceHash.Size = new System.Drawing.Size(62, 20);
-            this.buttonViewBalancesAtNiceHash.TabIndex = 1;
-            this.buttonViewBalancesAtNiceHash.Text = "Balance";
-            this.buttonViewBalancesAtNiceHash.UseVisualStyleBackColor = true;
-            this.buttonViewBalancesAtNiceHash.Click += new System.EventHandler(this.buttonViewBalancesAtNiceHash_Click);
+            this.textBoxLbryAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.textBoxLbryAddress.Location = new System.Drawing.Point(113, 116);
+            this.textBoxLbryAddress.MaxLength = 512;
+            this.textBoxLbryAddress.Name = "textBoxLbryAddress";
+            this.textBoxLbryAddress.Size = new System.Drawing.Size(179, 20);
+            this.textBoxLbryAddress.TabIndex = 10;
+            this.textBoxLbryAddress.Tag = "parameter:lbry_address";
+            this.textBoxLbryAddress.Text = "bEFGDsEnfSzRs1UVKoUqaQfnvWAbPzLiuB";
+            this.textBoxLbryAddress.TextChanged += new System.EventHandler(this.textBoxLbryAddress_TextChanged);
             // 
-            // groupBoxPoolParameters
+            // buttonLbryBalance
             // 
-            this.groupBoxPoolParameters.Controls.Add(this.tabControl1);
-            this.groupBoxPoolParameters.Controls.Add(this.textBoxRigID);
-            this.groupBoxPoolParameters.Controls.Add(this.label1);
-            this.groupBoxPoolParameters.Controls.Add(this.labelEmail);
-            this.groupBoxPoolParameters.Controls.Add(this.textBoxEmail);
-            this.groupBoxPoolParameters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxPoolParameters.Location = new System.Drawing.Point(262, 167);
-            this.groupBoxPoolParameters.Name = "groupBoxPoolParameters";
-            this.groupBoxPoolParameters.Size = new System.Drawing.Size(709, 170);
-            this.groupBoxPoolParameters.TabIndex = 3;
-            this.groupBoxPoolParameters.TabStop = false;
-            this.groupBoxPoolParameters.Text = "Pool Parameters";
+            this.buttonLbryBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.buttonLbryBalance.Location = new System.Drawing.Point(298, 116);
+            this.buttonLbryBalance.Name = "buttonLbryBalance";
+            this.buttonLbryBalance.Size = new System.Drawing.Size(62, 20);
+            this.buttonLbryBalance.TabIndex = 11;
+            this.buttonLbryBalance.Text = "Balance";
+            this.buttonLbryBalance.UseVisualStyleBackColor = true;
             // 
-            // tabControl1
+            // tabPage5
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Location = new System.Drawing.Point(6, 19);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(688, 89);
-            this.tabControl1.TabIndex = 29;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.label46);
-            this.tabPage1.Controls.Add(this.textBoxMiningPoolHubUsername);
-            this.tabPage1.Controls.Add(this.label45);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(680, 63);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Mining Pool Hub";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label46.Location = new System.Drawing.Point(3, 9);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(58, 13);
-            this.label46.TabIndex = 29;
-            this.label46.Text = "Username:";
-            // 
-            // textBoxMiningPoolHubUsername
-            // 
-            this.textBoxMiningPoolHubUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxMiningPoolHubUsername.Location = new System.Drawing.Point(62, 6);
-            this.textBoxMiningPoolHubUsername.Name = "textBoxMiningPoolHubUsername";
-            this.textBoxMiningPoolHubUsername.Size = new System.Drawing.Size(285, 20);
-            this.textBoxMiningPoolHubUsername.TabIndex = 27;
-            this.textBoxMiningPoolHubUsername.Tag = "parameter:mining_pool_hub_username";
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label45.Location = new System.Drawing.Point(3, 8);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(0, 13);
-            this.label45.TabIndex = 28;
-            // 
-            // textBoxRigID
-            // 
-            this.textBoxRigID.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxRigID.Location = new System.Drawing.Point(101, 114);
-            this.textBoxRigID.Name = "textBoxRigID";
-            this.textBoxRigID.Size = new System.Drawing.Size(285, 20);
-            this.textBoxRigID.TabIndex = 0;
-            this.textBoxRigID.Tag = "parameter:pool_rig_id";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(13, 116);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 13);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "Rig ID (optional):";
-            // 
-            // labelEmail
-            // 
-            this.labelEmail.AutoSize = true;
-            this.labelEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelEmail.Location = new System.Drawing.Point(13, 142);
-            this.labelEmail.Name = "labelEmail";
-            this.labelEmail.Size = new System.Drawing.Size(81, 13);
-            this.labelEmail.TabIndex = 28;
-            this.labelEmail.Text = "Email (optional):";
-            // 
-            // textBoxEmail
-            // 
-            this.textBoxEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxEmail.Location = new System.Drawing.Point(101, 140);
-            this.textBoxEmail.Name = "textBoxEmail";
-            this.textBoxEmail.Size = new System.Drawing.Size(285, 20);
-            this.textBoxEmail.TabIndex = 1;
-            this.textBoxEmail.Tag = "parameter:pool_email";
-            // 
-            // groupBoxPoolPriorities
-            // 
-            this.groupBoxPoolPriorities.Controls.Add(this.buttonPoolPrioritiesDown);
-            this.groupBoxPoolPriorities.Controls.Add(this.buttonPoolPrioritiesUp);
-            this.groupBoxPoolPriorities.Controls.Add(this.listBoxPoolPriorities);
-            this.groupBoxPoolPriorities.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxPoolPriorities.Location = new System.Drawing.Point(6, 6);
-            this.groupBoxPoolPriorities.Name = "groupBoxPoolPriorities";
-            this.groupBoxPoolPriorities.Size = new System.Drawing.Size(250, 331);
-            this.groupBoxPoolPriorities.TabIndex = 1;
-            this.groupBoxPoolPriorities.TabStop = false;
-            this.groupBoxPoolPriorities.Text = "Pool Priorities";
+            this.tabPage5.Controls.Add(this.buttonPoolPrioritiesDown);
+            this.tabPage5.Controls.Add(this.buttonPoolPrioritiesUp);
+            this.tabPage5.Controls.Add(this.listBoxPoolPriorities);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(576, 287);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "Pool Priorities";
+            this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // buttonPoolPrioritiesDown
             // 
             this.buttonPoolPrioritiesDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonPoolPrioritiesDown.Location = new System.Drawing.Point(193, 48);
+            this.buttonPoolPrioritiesDown.Location = new System.Drawing.Point(190, 34);
             this.buttonPoolPrioritiesDown.Name = "buttonPoolPrioritiesDown";
             this.buttonPoolPrioritiesDown.Size = new System.Drawing.Size(51, 23);
             this.buttonPoolPrioritiesDown.TabIndex = 2;
@@ -3900,7 +3667,7 @@
             // buttonPoolPrioritiesUp
             // 
             this.buttonPoolPrioritiesUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonPoolPrioritiesUp.Location = new System.Drawing.Point(193, 20);
+            this.buttonPoolPrioritiesUp.Location = new System.Drawing.Point(190, 6);
             this.buttonPoolPrioritiesUp.Name = "buttonPoolPrioritiesUp";
             this.buttonPoolPrioritiesUp.Size = new System.Drawing.Size(51, 23);
             this.buttonPoolPrioritiesUp.TabIndex = 1;
@@ -3930,81 +3697,213 @@
             "FairPool",
             "Pigeoncoin",
             "AEON Mining Pool"});
-            this.listBoxPoolPriorities.Location = new System.Drawing.Point(6, 20);
+            this.listBoxPoolPriorities.Location = new System.Drawing.Point(6, 6);
             this.listBoxPoolPriorities.Name = "listBoxPoolPriorities";
-            this.listBoxPoolPriorities.Size = new System.Drawing.Size(181, 303);
+            this.listBoxPoolPriorities.Size = new System.Drawing.Size(181, 277);
             this.listBoxPoolPriorities.TabIndex = 0;
             this.listBoxPoolPriorities.SelectedIndexChanged += new System.EventHandler(this.listBoxPoolPriorities_SelectedIndexChanged);
             // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.textBoxRigID);
+            this.tabPage6.Controls.Add(this.tabControl1);
+            this.tabPage6.Controls.Add(this.label1);
+            this.tabPage6.Controls.Add(this.textBoxEmail);
+            this.tabPage6.Controls.Add(this.labelEmail);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(576, 287);
+            this.tabPage6.TabIndex = 2;
+            this.tabPage6.Text = "Pool Parameters";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // textBoxRigID
+            // 
+            this.textBoxRigID.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxRigID.Location = new System.Drawing.Point(115, 103);
+            this.textBoxRigID.Name = "textBoxRigID";
+            this.textBoxRigID.Size = new System.Drawing.Size(281, 20);
+            this.textBoxRigID.TabIndex = 0;
+            this.textBoxRigID.Tag = "parameter:pool_rig_id";
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Location = new System.Drawing.Point(6, 6);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(394, 89);
+            this.tabControl1.TabIndex = 29;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.label46);
+            this.tabPage1.Controls.Add(this.textBoxMiningPoolHubUsername);
+            this.tabPage1.Controls.Add(this.label45);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(386, 63);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Mining Pool Hub";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label46.Location = new System.Drawing.Point(3, 9);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(58, 13);
+            this.label46.TabIndex = 29;
+            this.label46.Text = "Username:";
+            // 
+            // textBoxMiningPoolHubUsername
+            // 
+            this.textBoxMiningPoolHubUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxMiningPoolHubUsername.Location = new System.Drawing.Point(62, 6);
+            this.textBoxMiningPoolHubUsername.Name = "textBoxMiningPoolHubUsername";
+            this.textBoxMiningPoolHubUsername.Size = new System.Drawing.Size(318, 20);
+            this.textBoxMiningPoolHubUsername.TabIndex = 27;
+            this.textBoxMiningPoolHubUsername.Tag = "parameter:mining_pool_hub_username";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label45.Location = new System.Drawing.Point(3, 8);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(0, 13);
+            this.label45.TabIndex = 28;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(7, 105);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(105, 13);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "Worker ID (optional):";
+            // 
+            // textBoxEmail
+            // 
+            this.textBoxEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxEmail.Location = new System.Drawing.Point(115, 129);
+            this.textBoxEmail.Name = "textBoxEmail";
+            this.textBoxEmail.Size = new System.Drawing.Size(281, 20);
+            this.textBoxEmail.TabIndex = 1;
+            this.textBoxEmail.Tag = "parameter:pool_email";
+            // 
+            // labelEmail
+            // 
+            this.labelEmail.AutoSize = true;
+            this.labelEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelEmail.Location = new System.Drawing.Point(7, 131);
+            this.labelEmail.Name = "labelEmail";
+            this.labelEmail.Size = new System.Drawing.Size(81, 13);
+            this.labelEmail.TabIndex = 28;
+            this.labelEmail.Text = "Email (optional):";
+            // 
             // tabPageDashboard
             // 
+            this.tabPageDashboard.Controls.Add(this.cartesianChartSpeedPrimaryAlgorithm);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartSpeedSecondaryAlgorithm);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartShare1Minute);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartShare1Hour);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartShare1Day);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartShare1Month);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartCPUUsage);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartPower);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartTemperature);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartDeviceActivity);
+            this.tabPageDashboard.Controls.Add(this.cartesianChartFanSpeed);
+            this.tabPageDashboard.Controls.Add(this.comboBoxGraphType);
+            this.tabPageDashboard.Controls.Add(this.comboBoxGraphCoverage);
+            this.tabPageDashboard.Controls.Add(this.tabControl2);
             this.tabPageDashboard.Controls.Add(this.buttonDeselectAllDevices);
             this.tabPageDashboard.Controls.Add(this.buttonSelectAllDevices);
-            this.tabPageDashboard.Controls.Add(this.splitContainer1);
-            this.tabPageDashboard.Controls.Add(this.groupBox3);
-            this.tabPageDashboard.Controls.Add(this.groupBox4);
             this.tabPageDashboard.Controls.Add(this.dataGridViewDevices);
             this.tabPageDashboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
-            this.tabPageDashboard.Size = new System.Drawing.Size(977, 585);
+            this.tabPageDashboard.Size = new System.Drawing.Size(593, 325);
             this.tabPageDashboard.TabIndex = 2;
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
             // 
-            // buttonDeselectAllDevices
+            // cartesianChartSpeedPrimaryAlgorithm
             // 
-            this.buttonDeselectAllDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonDeselectAllDevices.Location = new System.Drawing.Point(101, 559);
-            this.buttonDeselectAllDevices.Name = "buttonDeselectAllDevices";
-            this.buttonDeselectAllDevices.Size = new System.Drawing.Size(84, 23);
-            this.buttonDeselectAllDevices.TabIndex = 5;
-            this.buttonDeselectAllDevices.Text = "Deselect All";
-            this.buttonDeselectAllDevices.UseVisualStyleBackColor = true;
-            this.buttonDeselectAllDevices.Click += new System.EventHandler(this.buttonDeselectAllDevices_Click);
-            // 
-            // buttonSelectAllDevices
-            // 
-            this.buttonSelectAllDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonSelectAllDevices.Location = new System.Drawing.Point(11, 559);
-            this.buttonSelectAllDevices.Name = "buttonSelectAllDevices";
-            this.buttonSelectAllDevices.Size = new System.Drawing.Size(84, 23);
-            this.buttonSelectAllDevices.TabIndex = 4;
-            this.buttonSelectAllDevices.Text = "Select All";
-            this.buttonSelectAllDevices.UseVisualStyleBackColor = true;
-            this.buttonSelectAllDevices.Click += new System.EventHandler(this.buttonSelectAllDevices_Click);
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cartesianChartSpeedPrimaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.splitContainer1.Location = new System.Drawing.Point(343, 8);
-            this.splitContainer1.Name = "splitContainer1";
+            this.cartesianChartSpeedPrimaryAlgorithm.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartSpeedPrimaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.cartesianChartSpeedPrimaryAlgorithm.Location = new System.Drawing.Point(345, 35);
+            this.cartesianChartSpeedPrimaryAlgorithm.Name = "cartesianChartSpeedPrimaryAlgorithm";
+            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartSpeedPrimaryAlgorithm.TabIndex = 161;
+            this.cartesianChartSpeedPrimaryAlgorithm.Text = "cartesianChart1";
             // 
-            // splitContainer1.Panel1
+            // cartesianChartSpeedSecondaryAlgorithm
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartCPUUsage);
-            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartPower);
-            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartTemperature);
-            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartDeviceActivity);
-            this.splitContainer1.Panel1.Controls.Add(this.cartesianChartFanSpeed);
-            this.splitContainer1.Panel1.Controls.Add(this.comboBoxGraphType);
-            this.splitContainer1.Panel1.Controls.Add(this.comboBoxGraphCoverage);
+            this.cartesianChartSpeedSecondaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartSpeedSecondaryAlgorithm.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartSpeedSecondaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(345, 35);
+            this.cartesianChartSpeedSecondaryAlgorithm.Name = "cartesianChartSpeedSecondaryAlgorithm";
+            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartSpeedSecondaryAlgorithm.TabIndex = 163;
+            this.cartesianChartSpeedSecondaryAlgorithm.Text = "cartesianChart1";
             // 
-            // splitContainer1.Panel2
+            // cartesianChartShare1Minute
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartShare1Month);
-            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartShare1Day);
-            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartShare1Hour);
-            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartShare1Minute);
-            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartSpeedSecondaryAlgorithm);
-            this.splitContainer1.Panel2.Controls.Add(this.cartesianChartSpeedPrimaryAlgorithm);
-            this.splitContainer1.Panel2.Controls.Add(this.comboBoxSecondGraphType);
-            this.splitContainer1.Panel2.Controls.Add(this.comboBoxSecondGraphCoverage);
-            this.splitContainer1.Size = new System.Drawing.Size(622, 276);
-            this.splitContainer1.SplitterDistance = 309;
-            this.splitContainer1.TabIndex = 2;
+            this.cartesianChartShare1Minute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Minute.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Minute.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.cartesianChartShare1Minute.Location = new System.Drawing.Point(345, 35);
+            this.cartesianChartShare1Minute.Name = "cartesianChartShare1Minute";
+            this.cartesianChartShare1Minute.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartShare1Minute.TabIndex = 165;
+            this.cartesianChartShare1Minute.Text = "cartesianChart1";
+            // 
+            // cartesianChartShare1Hour
+            // 
+            this.cartesianChartShare1Hour.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Hour.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Hour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.cartesianChartShare1Hour.Location = new System.Drawing.Point(345, 35);
+            this.cartesianChartShare1Hour.Name = "cartesianChartShare1Hour";
+            this.cartesianChartShare1Hour.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartShare1Hour.TabIndex = 168;
+            this.cartesianChartShare1Hour.Text = "cartesianChart2";
+            // 
+            // cartesianChartShare1Day
+            // 
+            this.cartesianChartShare1Day.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Day.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Day.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.cartesianChartShare1Day.Location = new System.Drawing.Point(345, 35);
+            this.cartesianChartShare1Day.Name = "cartesianChartShare1Day";
+            this.cartesianChartShare1Day.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartShare1Day.TabIndex = 169;
+            this.cartesianChartShare1Day.Text = "cartesianChart3";
+            // 
+            // cartesianChartShare1Month
+            // 
+            this.cartesianChartShare1Month.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cartesianChartShare1Month.BackColor = System.Drawing.Color.Black;
+            this.cartesianChartShare1Month.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.cartesianChartShare1Month.Location = new System.Drawing.Point(345, 35);
+            this.cartesianChartShare1Month.Name = "cartesianChartShare1Month";
+            this.cartesianChartShare1Month.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartShare1Month.TabIndex = 170;
+            this.cartesianChartShare1Month.Text = "cartesianChart4";
             // 
             // cartesianChartCPUUsage
             // 
@@ -4012,10 +3911,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartCPUUsage.BackColor = System.Drawing.Color.Black;
             this.cartesianChartCPUUsage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartCPUUsage.Location = new System.Drawing.Point(0, 27);
+            this.cartesianChartCPUUsage.Location = new System.Drawing.Point(345, 35);
             this.cartesianChartCPUUsage.Name = "cartesianChartCPUUsage";
-            this.cartesianChartCPUUsage.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartCPUUsage.TabIndex = 154;
+            this.cartesianChartCPUUsage.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartCPUUsage.TabIndex = 166;
             this.cartesianChartCPUUsage.Text = "cartesianChart1";
             // 
             // cartesianChartPower
@@ -4024,10 +3923,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartPower.BackColor = System.Drawing.Color.Black;
             this.cartesianChartPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartPower.Location = new System.Drawing.Point(0, 27);
+            this.cartesianChartPower.Location = new System.Drawing.Point(345, 35);
             this.cartesianChartPower.Name = "cartesianChartPower";
-            this.cartesianChartPower.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartPower.TabIndex = 154;
+            this.cartesianChartPower.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartPower.TabIndex = 167;
             this.cartesianChartPower.Visible = false;
             // 
             // cartesianChartTemperature
@@ -4036,10 +3935,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartTemperature.BackColor = System.Drawing.Color.Black;
             this.cartesianChartTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartTemperature.Location = new System.Drawing.Point(0, 27);
+            this.cartesianChartTemperature.Location = new System.Drawing.Point(345, 35);
             this.cartesianChartTemperature.Name = "cartesianChartTemperature";
-            this.cartesianChartTemperature.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartTemperature.TabIndex = 145;
+            this.cartesianChartTemperature.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartTemperature.TabIndex = 160;
             this.cartesianChartTemperature.Text = "cartesianChart1";
             // 
             // cartesianChartDeviceActivity
@@ -4048,10 +3947,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartDeviceActivity.BackColor = System.Drawing.Color.Black;
             this.cartesianChartDeviceActivity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartDeviceActivity.Location = new System.Drawing.Point(0, 27);
+            this.cartesianChartDeviceActivity.Location = new System.Drawing.Point(345, 35);
             this.cartesianChartDeviceActivity.Name = "cartesianChartDeviceActivity";
-            this.cartesianChartDeviceActivity.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartDeviceActivity.TabIndex = 153;
+            this.cartesianChartDeviceActivity.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartDeviceActivity.TabIndex = 164;
             // 
             // cartesianChartFanSpeed
             // 
@@ -4059,10 +3958,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartFanSpeed.BackColor = System.Drawing.Color.Black;
             this.cartesianChartFanSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartFanSpeed.Location = new System.Drawing.Point(0, 27);
+            this.cartesianChartFanSpeed.Location = new System.Drawing.Point(345, 35);
             this.cartesianChartFanSpeed.Name = "cartesianChartFanSpeed";
-            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartFanSpeed.TabIndex = 152;
+            this.cartesianChartFanSpeed.Size = new System.Drawing.Size(234, 129);
+            this.cartesianChartFanSpeed.TabIndex = 162;
             this.cartesianChartFanSpeed.Text = "cartesianChart1";
             // 
             // comboBoxGraphType
@@ -4076,13 +3975,15 @@
             "Temperature",
             "Fan Speed",
             "Activity",
-            "CPU Usage"});
-            this.comboBoxGraphType.Location = new System.Drawing.Point(0, 3);
+            "CPU Usage",
+            "Speed (Primary Algorithm)",
+            "Speed (Secondary Algorithm)",
+            "Share"});
+            this.comboBoxGraphType.Location = new System.Drawing.Point(344, 8);
             this.comboBoxGraphType.Name = "comboBoxGraphType";
-            this.comboBoxGraphType.Size = new System.Drawing.Size(223, 21);
-            this.comboBoxGraphType.TabIndex = 0;
+            this.comboBoxGraphType.Size = new System.Drawing.Size(151, 21);
+            this.comboBoxGraphType.TabIndex = 158;
             this.comboBoxGraphType.Tag = "parameter:graph_type";
-            this.comboBoxGraphType.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphType_SelectedIndexChanged);
             // 
             // comboBoxGraphCoverage
             // 
@@ -4095,286 +3996,193 @@
             "1 Hour",
             "1 Day",
             "1 Month"});
-            this.comboBoxGraphCoverage.Location = new System.Drawing.Point(231, 3);
+            this.comboBoxGraphCoverage.Location = new System.Drawing.Point(501, 8);
             this.comboBoxGraphCoverage.Name = "comboBoxGraphCoverage";
             this.comboBoxGraphCoverage.Size = new System.Drawing.Size(78, 21);
-            this.comboBoxGraphCoverage.TabIndex = 1;
+            this.comboBoxGraphCoverage.TabIndex = 159;
             this.comboBoxGraphCoverage.Tag = "parameter:graph_coverage";
-            this.comboBoxGraphCoverage.SelectedIndexChanged += new System.EventHandler(this.comboBoxGraphCoverage_SelectedIndexChanged);
             // 
-            // cartesianChartShare1Month
+            // tabControl2
             // 
-            this.cartesianChartShare1Month.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartShare1Month.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartShare1Month.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartShare1Month.Location = new System.Drawing.Point(0, 27);
-            this.cartesianChartShare1Month.Name = "cartesianChartShare1Month";
-            this.cartesianChartShare1Month.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartShare1Month.TabIndex = 157;
-            this.cartesianChartShare1Month.Text = "cartesianChart4";
+            this.tabControl2.Controls.Add(this.tabPage2);
+            this.tabControl2.Controls.Add(this.tabPage3);
+            this.tabControl2.Location = new System.Drawing.Point(11, 8);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(326, 156);
+            this.tabControl2.TabIndex = 6;
             // 
-            // cartesianChartShare1Day
+            // tabPage2
             // 
-            this.cartesianChartShare1Day.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartShare1Day.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartShare1Day.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartShare1Day.Location = new System.Drawing.Point(0, 27);
-            this.cartesianChartShare1Day.Name = "cartesianChartShare1Day";
-            this.cartesianChartShare1Day.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartShare1Day.TabIndex = 156;
-            this.cartesianChartShare1Day.Text = "cartesianChart3";
+            this.tabPage2.Controls.Add(this.checkBoxUseCustomPools);
+            this.tabPage2.Controls.Add(this.comboBoxDefaultAlgorithm);
+            this.tabPage2.Controls.Add(this.buttonRestoreStockSettings);
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.buttonBoostPerformance);
+            this.tabPage2.Controls.Add(this.label4);
+            this.tabPage2.Controls.Add(this.labelCurrentSpeed);
+            this.tabPage2.Controls.Add(this.label3);
+            this.tabPage2.Controls.Add(this.labelElapsedTime);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(318, 130);
+            this.tabPage2.TabIndex = 0;
+            this.tabPage2.Text = "Compute";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // cartesianChartShare1Hour
+            // checkBoxUseCustomPools
             // 
-            this.cartesianChartShare1Hour.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartShare1Hour.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartShare1Hour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartShare1Hour.Location = new System.Drawing.Point(0, 27);
-            this.cartesianChartShare1Hour.Name = "cartesianChartShare1Hour";
-            this.cartesianChartShare1Hour.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartShare1Hour.TabIndex = 155;
-            this.cartesianChartShare1Hour.Text = "cartesianChart2";
-            // 
-            // cartesianChartShare1Minute
-            // 
-            this.cartesianChartShare1Minute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartShare1Minute.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartShare1Minute.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartShare1Minute.Location = new System.Drawing.Point(0, 27);
-            this.cartesianChartShare1Minute.Name = "cartesianChartShare1Minute";
-            this.cartesianChartShare1Minute.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartShare1Minute.TabIndex = 154;
-            this.cartesianChartShare1Minute.Text = "cartesianChart1";
-            // 
-            // cartesianChartSpeedSecondaryAlgorithm
-            // 
-            this.cartesianChartSpeedSecondaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartSpeedSecondaryAlgorithm.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartSpeedSecondaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(0, 27);
-            this.cartesianChartSpeedSecondaryAlgorithm.Name = "cartesianChartSpeedSecondaryAlgorithm";
-            this.cartesianChartSpeedSecondaryAlgorithm.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartSpeedSecondaryAlgorithm.TabIndex = 153;
-            this.cartesianChartSpeedSecondaryAlgorithm.Text = "cartesianChart1";
-            // 
-            // cartesianChartSpeedPrimaryAlgorithm
-            // 
-            this.cartesianChartSpeedPrimaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cartesianChartSpeedPrimaryAlgorithm.BackColor = System.Drawing.Color.Black;
-            this.cartesianChartSpeedPrimaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cartesianChartSpeedPrimaryAlgorithm.Location = new System.Drawing.Point(0, 27);
-            this.cartesianChartSpeedPrimaryAlgorithm.Name = "cartesianChartSpeedPrimaryAlgorithm";
-            this.cartesianChartSpeedPrimaryAlgorithm.Size = new System.Drawing.Size(309, 249);
-            this.cartesianChartSpeedPrimaryAlgorithm.TabIndex = 151;
-            this.cartesianChartSpeedPrimaryAlgorithm.Text = "cartesianChart1";
-            // 
-            // comboBoxSecondGraphType
-            // 
-            this.comboBoxSecondGraphType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxSecondGraphType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSecondGraphType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.comboBoxSecondGraphType.FormattingEnabled = true;
-            this.comboBoxSecondGraphType.Items.AddRange(new object[] {
-            "Speed (Primary Algorithm)",
-            "Speed (Secondary Algorithm)",
-            "Share"});
-            this.comboBoxSecondGraphType.Location = new System.Drawing.Point(0, 3);
-            this.comboBoxSecondGraphType.Name = "comboBoxSecondGraphType";
-            this.comboBoxSecondGraphType.Size = new System.Drawing.Size(223, 21);
-            this.comboBoxSecondGraphType.TabIndex = 0;
-            this.comboBoxSecondGraphType.Tag = "parameter:second_graph_type";
-            // 
-            // comboBoxSecondGraphCoverage
-            // 
-            this.comboBoxSecondGraphCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxSecondGraphCoverage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSecondGraphCoverage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.comboBoxSecondGraphCoverage.FormattingEnabled = true;
-            this.comboBoxSecondGraphCoverage.Items.AddRange(new object[] {
-            "1 Minute",
-            "1 Hour",
-            "1 Day",
-            "1 Month"});
-            this.comboBoxSecondGraphCoverage.Location = new System.Drawing.Point(231, 3);
-            this.comboBoxSecondGraphCoverage.Name = "comboBoxSecondGraphCoverage";
-            this.comboBoxSecondGraphCoverage.Size = new System.Drawing.Size(78, 21);
-            this.comboBoxSecondGraphCoverage.TabIndex = 1;
-            this.comboBoxSecondGraphCoverage.Tag = "parameter:second_graph_coverage";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.labelCurrentPool);
-            this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Controls.Add(this.comboBoxDefaultAlgorithm);
-            this.groupBox3.Controls.Add(this.buttonRestoreStockSettings);
-            this.groupBox3.Controls.Add(this.buttonBoostPerformance);
-            this.groupBox3.Controls.Add(this.labelElapsedTime);
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.labelCurrentSpeed);
-            this.groupBox3.Controls.Add(this.labelCurrentSecondaryPool);
-            this.groupBox3.Controls.Add(this.label70);
-            this.groupBox3.Controls.Add(this.label4);
-            this.groupBox3.Location = new System.Drawing.Point(11, 8);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(326, 166);
-            this.groupBox3.TabIndex = 0;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Compute";
-            // 
-            // labelCurrentPool
-            // 
-            this.labelCurrentPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentPool.Location = new System.Drawing.Point(106, 92);
-            this.labelCurrentPool.Name = "labelCurrentPool";
-            this.labelCurrentPool.Size = new System.Drawing.Size(369, 18);
-            this.labelCurrentPool.TabIndex = 23;
-            this.labelCurrentPool.Text = "-";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label7.Location = new System.Drawing.Point(5, 22);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(90, 13);
-            this.label7.TabIndex = 150;
-            this.label7.Text = "Default Algorithm:";
+            this.checkBoxUseCustomPools.AutoSize = true;
+            this.checkBoxUseCustomPools.Location = new System.Drawing.Point(111, 34);
+            this.checkBoxUseCustomPools.Name = "checkBoxUseCustomPools";
+            this.checkBoxUseCustomPools.Size = new System.Drawing.Size(110, 17);
+            this.checkBoxUseCustomPools.TabIndex = 151;
+            this.checkBoxUseCustomPools.Text = "Use custom pools";
+            this.checkBoxUseCustomPools.UseVisualStyleBackColor = true;
             // 
             // comboBoxDefaultAlgorithm
             // 
             this.comboBoxDefaultAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDefaultAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxDefaultAlgorithm.FormattingEnabled = true;
-            this.comboBoxDefaultAlgorithm.Location = new System.Drawing.Point(109, 19);
+            this.comboBoxDefaultAlgorithm.Location = new System.Drawing.Point(111, 6);
             this.comboBoxDefaultAlgorithm.Name = "comboBoxDefaultAlgorithm";
-            this.comboBoxDefaultAlgorithm.Size = new System.Drawing.Size(211, 21);
+            this.comboBoxDefaultAlgorithm.Size = new System.Drawing.Size(201, 21);
             this.comboBoxDefaultAlgorithm.TabIndex = 149;
             this.comboBoxDefaultAlgorithm.Tag = "parameter:default_algorithm";
             this.comboBoxDefaultAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxDefaultAlgorithm_SelectedIndexChanged);
             // 
             // buttonRestoreStockSettings
             // 
-            this.buttonRestoreStockSettings.Location = new System.Drawing.Point(167, 135);
+            this.buttonRestoreStockSettings.Location = new System.Drawing.Point(162, 101);
             this.buttonRestoreStockSettings.Name = "buttonRestoreStockSettings";
-            this.buttonRestoreStockSettings.Size = new System.Drawing.Size(153, 23);
+            this.buttonRestoreStockSettings.Size = new System.Drawing.Size(150, 23);
             this.buttonRestoreStockSettings.TabIndex = 1;
             this.buttonRestoreStockSettings.Text = "Restore Stock Settings";
             this.buttonRestoreStockSettings.UseVisualStyleBackColor = true;
             this.buttonRestoreStockSettings.Click += new System.EventHandler(this.buttonRestoreStockSettings_Click);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label7.Location = new System.Drawing.Point(7, 9);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(90, 13);
+            this.label7.TabIndex = 150;
+            this.label7.Text = "Default Algorithm:";
+            // 
             // buttonBoostPerformance
             // 
-            this.buttonBoostPerformance.Location = new System.Drawing.Point(6, 135);
+            this.buttonBoostPerformance.Location = new System.Drawing.Point(6, 101);
             this.buttonBoostPerformance.Name = "buttonBoostPerformance";
-            this.buttonBoostPerformance.Size = new System.Drawing.Size(155, 23);
+            this.buttonBoostPerformance.Size = new System.Drawing.Size(150, 23);
             this.buttonBoostPerformance.TabIndex = 0;
             this.buttonBoostPerformance.Text = "Boost Performance";
             this.buttonBoostPerformance.UseVisualStyleBackColor = true;
             this.buttonBoostPerformance.Click += new System.EventHandler(this.buttonBoostPerformance_Click);
             // 
-            // labelElapsedTime
-            // 
-            this.labelElapsedTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelElapsedTime.Location = new System.Drawing.Point(106, 47);
-            this.labelElapsedTime.Name = "labelElapsedTime";
-            this.labelElapsedTime.Size = new System.Drawing.Size(265, 22);
-            this.labelElapsedTime.TabIndex = 143;
-            this.labelElapsedTime.Text = "-";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label3.Location = new System.Drawing.Point(5, 69);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(52, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Speed(s):";
-            // 
-            // labelCurrentSpeed
-            // 
-            this.labelCurrentSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentSpeed.Location = new System.Drawing.Point(106, 69);
-            this.labelCurrentSpeed.Name = "labelCurrentSpeed";
-            this.labelCurrentSpeed.Size = new System.Drawing.Size(227, 17);
-            this.labelCurrentSpeed.TabIndex = 8;
-            this.labelCurrentSpeed.Text = "-";
-            // 
-            // labelCurrentSecondaryPool
-            // 
-            this.labelCurrentSecondaryPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelCurrentSecondaryPool.Location = new System.Drawing.Point(106, 110);
-            this.labelCurrentSecondaryPool.Name = "labelCurrentSecondaryPool";
-            this.labelCurrentSecondaryPool.Size = new System.Drawing.Size(369, 20);
-            this.labelCurrentSecondaryPool.TabIndex = 148;
-            this.labelCurrentSecondaryPool.Text = "-";
-            // 
-            // label70
-            // 
-            this.label70.AutoSize = true;
-            this.label70.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label70.Location = new System.Drawing.Point(5, 92);
-            this.label70.Name = "label70";
-            this.label70.Size = new System.Drawing.Size(79, 13);
-            this.label70.TabIndex = 22;
-            this.label70.Text = "Current Pool(s):";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label4.Location = new System.Drawing.Point(5, 47);
+            this.label4.Location = new System.Drawing.Point(7, 59);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(74, 13);
             this.label4.TabIndex = 142;
             this.label4.Text = "Elapsed Time:";
             // 
-            // groupBox4
+            // labelCurrentSpeed
             // 
-            this.groupBox4.Controls.Add(this.label5);
-            this.groupBox4.Controls.Add(this.labelBalance);
-            this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.labelPriceDay);
-            this.groupBox4.Controls.Add(this.labelPriceWeek);
-            this.groupBox4.Controls.Add(this.labelPriceMonth);
-            this.groupBox4.Location = new System.Drawing.Point(11, 180);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(326, 104);
-            this.groupBox4.TabIndex = 1;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Profitability";
+            this.labelCurrentSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.labelCurrentSpeed.Location = new System.Drawing.Point(108, 81);
+            this.labelCurrentSpeed.Name = "labelCurrentSpeed";
+            this.labelCurrentSpeed.Size = new System.Drawing.Size(227, 17);
+            this.labelCurrentSpeed.TabIndex = 8;
+            this.labelCurrentSpeed.Text = "-";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label3.Location = new System.Drawing.Point(7, 81);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Speed(s):";
+            // 
+            // labelElapsedTime
+            // 
+            this.labelElapsedTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.labelElapsedTime.Location = new System.Drawing.Point(108, 59);
+            this.labelElapsedTime.Name = "labelElapsedTime";
+            this.labelElapsedTime.Size = new System.Drawing.Size(265, 22);
+            this.labelElapsedTime.TabIndex = 143;
+            this.labelElapsedTime.Text = "-";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.label5);
+            this.tabPage3.Controls.Add(this.labelCurrentPool);
+            this.tabPage3.Controls.Add(this.labelBalance);
+            this.tabPage3.Controls.Add(this.label70);
+            this.tabPage3.Controls.Add(this.label10);
+            this.tabPage3.Controls.Add(this.labelPriceDay);
+            this.tabPage3.Controls.Add(this.labelCurrentSecondaryPool);
+            this.tabPage3.Controls.Add(this.labelPriceWeek);
+            this.tabPage3.Controls.Add(this.labelPriceMonth);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(318, 130);
+            this.tabPage3.TabIndex = 1;
+            this.tabPage3.Text = "Pool(s)";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label5.Location = new System.Drawing.Point(8, 24);
+            this.label5.Location = new System.Drawing.Point(6, 51);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(88, 13);
             this.label5.TabIndex = 9;
             this.label5.Text = "Estimated Profits:";
             // 
+            // labelCurrentPool
+            // 
+            this.labelCurrentPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.labelCurrentPool.Location = new System.Drawing.Point(94, 9);
+            this.labelCurrentPool.Name = "labelCurrentPool";
+            this.labelCurrentPool.Size = new System.Drawing.Size(369, 18);
+            this.labelCurrentPool.TabIndex = 23;
+            this.labelCurrentPool.Text = "-";
+            // 
             // labelBalance
             // 
             this.labelBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelBalance.Location = new System.Drawing.Point(96, 78);
+            this.labelBalance.Location = new System.Drawing.Point(94, 105);
             this.labelBalance.Name = "labelBalance";
             this.labelBalance.Size = new System.Drawing.Size(158, 13);
             this.labelBalance.TabIndex = 10;
             this.labelBalance.Text = "-";
             // 
+            // label70
+            // 
+            this.label70.AutoSize = true;
+            this.label70.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label70.Location = new System.Drawing.Point(6, 9);
+            this.label70.Name = "label70";
+            this.label70.Size = new System.Drawing.Size(79, 13);
+            this.label70.TabIndex = 22;
+            this.label70.Text = "Current Pool(s):";
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label10.Location = new System.Drawing.Point(8, 78);
+            this.label10.Location = new System.Drawing.Point(6, 105);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(49, 13);
             this.label10.TabIndex = 14;
@@ -4383,16 +4191,25 @@
             // labelPriceDay
             // 
             this.labelPriceDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelPriceDay.Location = new System.Drawing.Point(96, 24);
+            this.labelPriceDay.Location = new System.Drawing.Point(94, 51);
             this.labelPriceDay.Name = "labelPriceDay";
             this.labelPriceDay.Size = new System.Drawing.Size(232, 17);
             this.labelPriceDay.TabIndex = 16;
             this.labelPriceDay.Text = "-";
             // 
+            // labelCurrentSecondaryPool
+            // 
+            this.labelCurrentSecondaryPool.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.labelCurrentSecondaryPool.Location = new System.Drawing.Point(94, 27);
+            this.labelCurrentSecondaryPool.Name = "labelCurrentSecondaryPool";
+            this.labelCurrentSecondaryPool.Size = new System.Drawing.Size(369, 20);
+            this.labelCurrentSecondaryPool.TabIndex = 148;
+            this.labelCurrentSecondaryPool.Text = "-";
+            // 
             // labelPriceWeek
             // 
             this.labelPriceWeek.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelPriceWeek.Location = new System.Drawing.Point(96, 41);
+            this.labelPriceWeek.Location = new System.Drawing.Point(94, 68);
             this.labelPriceWeek.Name = "labelPriceWeek";
             this.labelPriceWeek.Size = new System.Drawing.Size(232, 17);
             this.labelPriceWeek.TabIndex = 17;
@@ -4401,11 +4218,33 @@
             // labelPriceMonth
             // 
             this.labelPriceMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.labelPriceMonth.Location = new System.Drawing.Point(96, 58);
+            this.labelPriceMonth.Location = new System.Drawing.Point(94, 85);
             this.labelPriceMonth.Name = "labelPriceMonth";
             this.labelPriceMonth.Size = new System.Drawing.Size(232, 17);
             this.labelPriceMonth.TabIndex = 141;
             this.labelPriceMonth.Text = "-";
+            // 
+            // buttonDeselectAllDevices
+            // 
+            this.buttonDeselectAllDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonDeselectAllDevices.Location = new System.Drawing.Point(101, 299);
+            this.buttonDeselectAllDevices.Name = "buttonDeselectAllDevices";
+            this.buttonDeselectAllDevices.Size = new System.Drawing.Size(84, 23);
+            this.buttonDeselectAllDevices.TabIndex = 5;
+            this.buttonDeselectAllDevices.Text = "Deselect All";
+            this.buttonDeselectAllDevices.UseVisualStyleBackColor = true;
+            this.buttonDeselectAllDevices.Click += new System.EventHandler(this.buttonDeselectAllDevices_Click);
+            // 
+            // buttonSelectAllDevices
+            // 
+            this.buttonSelectAllDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonSelectAllDevices.Location = new System.Drawing.Point(11, 299);
+            this.buttonSelectAllDevices.Name = "buttonSelectAllDevices";
+            this.buttonSelectAllDevices.Size = new System.Drawing.Size(84, 23);
+            this.buttonSelectAllDevices.TabIndex = 4;
+            this.buttonSelectAllDevices.Text = "Select All";
+            this.buttonSelectAllDevices.UseVisualStyleBackColor = true;
+            this.buttonSelectAllDevices.Click += new System.EventHandler(this.buttonSelectAllDevices_Click);
             // 
             // dataGridViewDevices
             // 
@@ -4419,7 +4258,6 @@
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridViewDevices.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewDevices.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridViewDevices.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewDevices.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
@@ -4442,13 +4280,13 @@
             this.memory_info,
             this.memory_used,
             this.memory_reserved});
-            this.dataGridViewDevices.Location = new System.Drawing.Point(11, 290);
+            this.dataGridViewDevices.Location = new System.Drawing.Point(11, 170);
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
             dataGridViewCellStyle34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.dataGridViewDevices.RowsDefaultCellStyle = dataGridViewCellStyle34;
-            this.dataGridViewDevices.Size = new System.Drawing.Size(954, 263);
+            this.dataGridViewDevices.Size = new System.Drawing.Size(568, 123);
             this.dataGridViewDevices.TabIndex = 3;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
             this.dataGridViewDevices.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellValueChanged);
@@ -4467,6 +4305,7 @@
             this.enabled.ReadOnly = true;
             this.enabled.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.enabled.TrueValue = "";
+            this.enabled.Width = 20;
             // 
             // id
             // 
@@ -4476,6 +4315,7 @@
             this.id.ReadOnly = true;
             this.id.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.id.Width = 20;
             // 
             // vendor
             // 
@@ -4484,6 +4324,7 @@
             this.vendor.Name = "vendor";
             this.vendor.ReadOnly = true;
             this.vendor.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.vendor.Width = 56;
             // 
             // name
             // 
@@ -4493,6 +4334,7 @@
             this.name.ReadOnly = true;
             this.name.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.name.Width = 133;
             // 
             // speed
             // 
@@ -4504,6 +4346,7 @@
             this.speed.ReadOnly = true;
             this.speed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.speed.Width = 120;
             // 
             // shares
             // 
@@ -4515,6 +4358,7 @@
             this.shares.ReadOnly = true;
             this.shares.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.shares.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.shares.Width = 80;
             // 
             // activity
             // 
@@ -4528,7 +4372,7 @@
             this.activity.ReadOnly = true;
             this.activity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.activity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.activity.Width = 45;
+            this.activity.Width = 40;
             // 
             // temperature
             // 
@@ -4540,6 +4384,7 @@
             this.temperature.ReadOnly = true;
             this.temperature.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.temperature.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.temperature.Width = 40;
             // 
             // fan
             // 
@@ -4551,6 +4396,7 @@
             this.fan.ReadOnly = true;
             this.fan.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.fan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.fan.Width = 40;
             // 
             // power
             // 
@@ -4562,6 +4408,7 @@
             this.power.ReadOnly = true;
             this.power.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.power.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.power.Width = 40;
             // 
             // power_limit
             // 
@@ -4573,6 +4420,7 @@
             this.power_limit.ReadOnly = true;
             this.power_limit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.power_limit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.power_limit.Width = 40;
             // 
             // core_clock
             // 
@@ -4584,6 +4432,7 @@
             this.core_clock.ReadOnly = true;
             this.core_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.core_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.core_clock.Width = 60;
             // 
             // memory_clock
             // 
@@ -4595,6 +4444,7 @@
             this.memory_clock.ReadOnly = true;
             this.memory_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.memory_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.memory_clock.Width = 60;
             // 
             // memory_info
             // 
@@ -4606,6 +4456,7 @@
             this.memory_info.ReadOnly = true;
             this.memory_info.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.memory_info.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.memory_info.Width = 93;
             // 
             // memory_used
             // 
@@ -4615,6 +4466,7 @@
             this.memory_used.HeaderText = "(Used)";
             this.memory_used.Name = "memory_used";
             this.memory_used.ReadOnly = true;
+            this.memory_used.Width = 53;
             // 
             // memory_reserved
             // 
@@ -4625,6 +4477,7 @@
             this.memory_reserved.Name = "memory_reserved";
             this.memory_reserved.ReadOnly = true;
             this.memory_reserved.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.memory_reserved.Width = 53;
             // 
             // tabControlMainForm
             // 
@@ -4644,52 +4497,29 @@
             this.tabControlMainForm.Location = new System.Drawing.Point(11, 8);
             this.tabControlMainForm.Name = "tabControlMainForm";
             this.tabControlMainForm.SelectedIndex = 0;
-            this.tabControlMainForm.Size = new System.Drawing.Size(985, 611);
+            this.tabControlMainForm.Size = new System.Drawing.Size(601, 351);
             this.tabControlMainForm.TabIndex = 0;
             this.tabControlMainForm.SelectedIndexChanged += new System.EventHandler(this.tabControlMainForm_SelectedIndexChanged);
             // 
             // tabPageOptimization
             // 
-            this.tabPageOptimization.Controls.Add(this.groupBoxOptimizationAlgorithms);
-            this.tabPageOptimization.Controls.Add(this.groupBoxOptimizationTargets);
-            this.tabPageOptimization.Controls.Add(this.dataGridViewOptimizerBenchmarkingResults);
-            this.tabPageOptimization.Controls.Add(this.dataGridViewOptimizerRecords);
+            this.tabPageOptimization.Controls.Add(this.tabPageOptimizationTargets);
+            this.tabPageOptimization.Controls.Add(this.tabControl5);
             this.tabPageOptimization.Controls.Add(this.groupBox5);
             this.tabPageOptimization.Location = new System.Drawing.Point(4, 22);
             this.tabPageOptimization.Name = "tabPageOptimization";
             this.tabPageOptimization.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageOptimization.Size = new System.Drawing.Size(977, 585);
+            this.tabPageOptimization.Size = new System.Drawing.Size(593, 325);
             this.tabPageOptimization.TabIndex = 9;
             this.tabPageOptimization.Text = "Optimization";
             this.tabPageOptimization.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxOptimizationAlgorithms
-            // 
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationX16SEnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationCryptoNightLightEnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationCryptoNightV7Enabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationX16REnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationCryptoNightHeavyEnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationLbryEnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationLyra2REv2Enabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationPascalEnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationNeoScryptEnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationCryptoNightEnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationEthashEnabled);
-            this.groupBoxOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationEthashPascalEnabled);
-            this.groupBoxOptimizationAlgorithms.Location = new System.Drawing.Point(307, 6);
-            this.groupBoxOptimizationAlgorithms.Name = "groupBoxOptimizationAlgorithms";
-            this.groupBoxOptimizationAlgorithms.Size = new System.Drawing.Size(664, 70);
-            this.groupBoxOptimizationAlgorithms.TabIndex = 154;
-            this.groupBoxOptimizationAlgorithms.TabStop = false;
-            this.groupBoxOptimizationAlgorithms.Text = "Algorithms";
             // 
             // checkBoxOptimizationX16SEnabled
             // 
             this.checkBoxOptimizationX16SEnabled.AutoSize = true;
             this.checkBoxOptimizationX16SEnabled.Checked = true;
             this.checkBoxOptimizationX16SEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationX16SEnabled.Location = new System.Drawing.Point(510, 22);
+            this.checkBoxOptimizationX16SEnabled.Location = new System.Drawing.Point(108, 121);
             this.checkBoxOptimizationX16SEnabled.Name = "checkBoxOptimizationX16SEnabled";
             this.checkBoxOptimizationX16SEnabled.Size = new System.Drawing.Size(52, 17);
             this.checkBoxOptimizationX16SEnabled.TabIndex = 11;
@@ -4702,7 +4532,7 @@
             this.checkBoxOptimizationCryptoNightLightEnabled.AutoSize = true;
             this.checkBoxOptimizationCryptoNightLightEnabled.Checked = true;
             this.checkBoxOptimizationCryptoNightLightEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationCryptoNightLightEnabled.Location = new System.Drawing.Point(314, 45);
+            this.checkBoxOptimizationCryptoNightLightEnabled.Location = new System.Drawing.Point(188, 75);
             this.checkBoxOptimizationCryptoNightLightEnabled.Name = "checkBoxOptimizationCryptoNightLightEnabled";
             this.checkBoxOptimizationCryptoNightLightEnabled.Size = new System.Drawing.Size(107, 17);
             this.checkBoxOptimizationCryptoNightLightEnabled.TabIndex = 10;
@@ -4715,7 +4545,7 @@
             this.checkBoxOptimizationCryptoNightV7Enabled.AutoSize = true;
             this.checkBoxOptimizationCryptoNightV7Enabled.Checked = true;
             this.checkBoxOptimizationCryptoNightV7Enabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationCryptoNightV7Enabled.Location = new System.Drawing.Point(93, 45);
+            this.checkBoxOptimizationCryptoNightV7Enabled.Location = new System.Drawing.Point(188, 29);
             this.checkBoxOptimizationCryptoNightV7Enabled.Name = "checkBoxOptimizationCryptoNightV7Enabled";
             this.checkBoxOptimizationCryptoNightV7Enabled.Size = new System.Drawing.Size(94, 17);
             this.checkBoxOptimizationCryptoNightV7Enabled.TabIndex = 9;
@@ -4728,7 +4558,7 @@
             this.checkBoxOptimizationX16REnabled.AutoSize = true;
             this.checkBoxOptimizationX16REnabled.Checked = true;
             this.checkBoxOptimizationX16REnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationX16REnabled.Location = new System.Drawing.Point(451, 22);
+            this.checkBoxOptimizationX16REnabled.Location = new System.Drawing.Point(108, 98);
             this.checkBoxOptimizationX16REnabled.Name = "checkBoxOptimizationX16REnabled";
             this.checkBoxOptimizationX16REnabled.Size = new System.Drawing.Size(53, 17);
             this.checkBoxOptimizationX16REnabled.TabIndex = 8;
@@ -4741,7 +4571,7 @@
             this.checkBoxOptimizationCryptoNightHeavyEnabled.AutoSize = true;
             this.checkBoxOptimizationCryptoNightHeavyEnabled.Checked = true;
             this.checkBoxOptimizationCryptoNightHeavyEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationCryptoNightHeavyEnabled.Location = new System.Drawing.Point(193, 45);
+            this.checkBoxOptimizationCryptoNightHeavyEnabled.Location = new System.Drawing.Point(188, 52);
             this.checkBoxOptimizationCryptoNightHeavyEnabled.Name = "checkBoxOptimizationCryptoNightHeavyEnabled";
             this.checkBoxOptimizationCryptoNightHeavyEnabled.Size = new System.Drawing.Size(115, 17);
             this.checkBoxOptimizationCryptoNightHeavyEnabled.TabIndex = 7;
@@ -4754,7 +4584,7 @@
             this.checkBoxOptimizationLbryEnabled.AutoSize = true;
             this.checkBoxOptimizationLbryEnabled.Checked = true;
             this.checkBoxOptimizationLbryEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationLbryEnabled.Location = new System.Drawing.Point(314, 22);
+            this.checkBoxOptimizationLbryEnabled.Location = new System.Drawing.Point(108, 52);
             this.checkBoxOptimizationLbryEnabled.Name = "checkBoxOptimizationLbryEnabled";
             this.checkBoxOptimizationLbryEnabled.Size = new System.Drawing.Size(46, 17);
             this.checkBoxOptimizationLbryEnabled.TabIndex = 6;
@@ -4767,7 +4597,7 @@
             this.checkBoxOptimizationLyra2REv2Enabled.AutoSize = true;
             this.checkBoxOptimizationLyra2REv2Enabled.Checked = true;
             this.checkBoxOptimizationLyra2REv2Enabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationLyra2REv2Enabled.Location = new System.Drawing.Point(366, 22);
+            this.checkBoxOptimizationLyra2REv2Enabled.Location = new System.Drawing.Point(108, 75);
             this.checkBoxOptimizationLyra2REv2Enabled.Name = "checkBoxOptimizationLyra2REv2Enabled";
             this.checkBoxOptimizationLyra2REv2Enabled.Size = new System.Drawing.Size(79, 17);
             this.checkBoxOptimizationLyra2REv2Enabled.TabIndex = 5;
@@ -4780,7 +4610,7 @@
             this.checkBoxOptimizationPascalEnabled.AutoSize = true;
             this.checkBoxOptimizationPascalEnabled.Checked = true;
             this.checkBoxOptimizationPascalEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationPascalEnabled.Location = new System.Drawing.Point(250, 22);
+            this.checkBoxOptimizationPascalEnabled.Location = new System.Drawing.Point(108, 29);
             this.checkBoxOptimizationPascalEnabled.Name = "checkBoxOptimizationPascalEnabled";
             this.checkBoxOptimizationPascalEnabled.Size = new System.Drawing.Size(58, 17);
             this.checkBoxOptimizationPascalEnabled.TabIndex = 4;
@@ -4793,7 +4623,7 @@
             this.checkBoxOptimizationNeoScryptEnabled.AutoSize = true;
             this.checkBoxOptimizationNeoScryptEnabled.Checked = true;
             this.checkBoxOptimizationNeoScryptEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationNeoScryptEnabled.Location = new System.Drawing.Point(173, 22);
+            this.checkBoxOptimizationNeoScryptEnabled.Location = new System.Drawing.Point(108, 6);
             this.checkBoxOptimizationNeoScryptEnabled.Name = "checkBoxOptimizationNeoScryptEnabled";
             this.checkBoxOptimizationNeoScryptEnabled.Size = new System.Drawing.Size(76, 17);
             this.checkBoxOptimizationNeoScryptEnabled.TabIndex = 3;
@@ -4806,7 +4636,7 @@
             this.checkBoxOptimizationCryptoNightEnabled.AutoSize = true;
             this.checkBoxOptimizationCryptoNightEnabled.Checked = true;
             this.checkBoxOptimizationCryptoNightEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationCryptoNightEnabled.Location = new System.Drawing.Point(6, 45);
+            this.checkBoxOptimizationCryptoNightEnabled.Location = new System.Drawing.Point(188, 6);
             this.checkBoxOptimizationCryptoNightEnabled.Name = "checkBoxOptimizationCryptoNightEnabled";
             this.checkBoxOptimizationCryptoNightEnabled.Size = new System.Drawing.Size(81, 17);
             this.checkBoxOptimizationCryptoNightEnabled.TabIndex = 2;
@@ -4819,7 +4649,7 @@
             this.checkBoxOptimizationEthashEnabled.AutoSize = true;
             this.checkBoxOptimizationEthashEnabled.Checked = true;
             this.checkBoxOptimizationEthashEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationEthashEnabled.Location = new System.Drawing.Point(108, 22);
+            this.checkBoxOptimizationEthashEnabled.Location = new System.Drawing.Point(6, 29);
             this.checkBoxOptimizationEthashEnabled.Name = "checkBoxOptimizationEthashEnabled";
             this.checkBoxOptimizationEthashEnabled.Size = new System.Drawing.Size(59, 17);
             this.checkBoxOptimizationEthashEnabled.TabIndex = 1;
@@ -4833,7 +4663,7 @@
             this.checkBoxOptimizationEthashPascalEnabled.AutoSize = true;
             this.checkBoxOptimizationEthashPascalEnabled.Checked = true;
             this.checkBoxOptimizationEthashPascalEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationEthashPascalEnabled.Location = new System.Drawing.Point(6, 22);
+            this.checkBoxOptimizationEthashPascalEnabled.Location = new System.Drawing.Point(6, 6);
             this.checkBoxOptimizationEthashPascalEnabled.Name = "checkBoxOptimizationEthashPascalEnabled";
             this.checkBoxOptimizationEthashPascalEnabled.Size = new System.Drawing.Size(96, 17);
             this.checkBoxOptimizationEthashPascalEnabled.TabIndex = 0;
@@ -4841,26 +4671,10 @@
             this.checkBoxOptimizationEthashPascalEnabled.Text = "Ethash/Pascal";
             this.checkBoxOptimizationEthashPascalEnabled.UseVisualStyleBackColor = true;
             // 
-            // groupBoxOptimizationTargets
-            // 
-            this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationUndervoltingMemory);
-            this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationUndervoltingCore);
-            this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationOverclockingMemory);
-            this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationOverclockingCore);
-            this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationMemoryTimingsExtended);
-            this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationMemoryTimings);
-            this.groupBoxOptimizationTargets.Controls.Add(this.checkBoxOptimizationAlgorithmicSettings);
-            this.groupBoxOptimizationTargets.Location = new System.Drawing.Point(307, 82);
-            this.groupBoxOptimizationTargets.Name = "groupBoxOptimizationTargets";
-            this.groupBoxOptimizationTargets.Size = new System.Drawing.Size(559, 72);
-            this.groupBoxOptimizationTargets.TabIndex = 153;
-            this.groupBoxOptimizationTargets.TabStop = false;
-            this.groupBoxOptimizationTargets.Text = "Targets";
-            // 
             // checkBoxOptimizationUndervoltingMemory
             // 
             this.checkBoxOptimizationUndervoltingMemory.AutoSize = true;
-            this.checkBoxOptimizationUndervoltingMemory.Location = new System.Drawing.Point(264, 45);
+            this.checkBoxOptimizationUndervoltingMemory.Location = new System.Drawing.Point(144, 52);
             this.checkBoxOptimizationUndervoltingMemory.Name = "checkBoxOptimizationUndervoltingMemory";
             this.checkBoxOptimizationUndervoltingMemory.Size = new System.Drawing.Size(131, 17);
             this.checkBoxOptimizationUndervoltingMemory.TabIndex = 158;
@@ -4871,7 +4685,7 @@
             // checkBoxOptimizationUndervoltingCore
             // 
             this.checkBoxOptimizationUndervoltingCore.AutoSize = true;
-            this.checkBoxOptimizationUndervoltingCore.Location = new System.Drawing.Point(264, 22);
+            this.checkBoxOptimizationUndervoltingCore.Location = new System.Drawing.Point(6, 52);
             this.checkBoxOptimizationUndervoltingCore.Name = "checkBoxOptimizationUndervoltingCore";
             this.checkBoxOptimizationUndervoltingCore.Size = new System.Drawing.Size(116, 17);
             this.checkBoxOptimizationUndervoltingCore.TabIndex = 157;
@@ -4882,7 +4696,7 @@
             // checkBoxOptimizationOverclockingMemory
             // 
             this.checkBoxOptimizationOverclockingMemory.AutoSize = true;
-            this.checkBoxOptimizationOverclockingMemory.Location = new System.Drawing.Point(128, 45);
+            this.checkBoxOptimizationOverclockingMemory.Location = new System.Drawing.Point(144, 29);
             this.checkBoxOptimizationOverclockingMemory.Name = "checkBoxOptimizationOverclockingMemory";
             this.checkBoxOptimizationOverclockingMemory.Size = new System.Drawing.Size(134, 17);
             this.checkBoxOptimizationOverclockingMemory.TabIndex = 156;
@@ -4893,7 +4707,7 @@
             // checkBoxOptimizationOverclockingCore
             // 
             this.checkBoxOptimizationOverclockingCore.AutoSize = true;
-            this.checkBoxOptimizationOverclockingCore.Location = new System.Drawing.Point(128, 22);
+            this.checkBoxOptimizationOverclockingCore.Location = new System.Drawing.Point(6, 29);
             this.checkBoxOptimizationOverclockingCore.Name = "checkBoxOptimizationOverclockingCore";
             this.checkBoxOptimizationOverclockingCore.Size = new System.Drawing.Size(119, 17);
             this.checkBoxOptimizationOverclockingCore.TabIndex = 155;
@@ -4904,7 +4718,7 @@
             // checkBoxOptimizationMemoryTimingsExtended
             // 
             this.checkBoxOptimizationMemoryTimingsExtended.AutoSize = true;
-            this.checkBoxOptimizationMemoryTimingsExtended.Location = new System.Drawing.Point(401, 45);
+            this.checkBoxOptimizationMemoryTimingsExtended.Location = new System.Drawing.Point(144, 75);
             this.checkBoxOptimizationMemoryTimingsExtended.Name = "checkBoxOptimizationMemoryTimingsExtended";
             this.checkBoxOptimizationMemoryTimingsExtended.Size = new System.Drawing.Size(151, 17);
             this.checkBoxOptimizationMemoryTimingsExtended.TabIndex = 154;
@@ -4915,7 +4729,7 @@
             // checkBoxOptimizationMemoryTimings
             // 
             this.checkBoxOptimizationMemoryTimings.AutoSize = true;
-            this.checkBoxOptimizationMemoryTimings.Location = new System.Drawing.Point(401, 22);
+            this.checkBoxOptimizationMemoryTimings.Location = new System.Drawing.Point(6, 75);
             this.checkBoxOptimizationMemoryTimings.Name = "checkBoxOptimizationMemoryTimings";
             this.checkBoxOptimizationMemoryTimings.Size = new System.Drawing.Size(132, 17);
             this.checkBoxOptimizationMemoryTimings.TabIndex = 154;
@@ -4928,7 +4742,7 @@
             this.checkBoxOptimizationAlgorithmicSettings.AutoSize = true;
             this.checkBoxOptimizationAlgorithmicSettings.Checked = true;
             this.checkBoxOptimizationAlgorithmicSettings.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationAlgorithmicSettings.Location = new System.Drawing.Point(6, 22);
+            this.checkBoxOptimizationAlgorithmicSettings.Location = new System.Drawing.Point(6, 6);
             this.checkBoxOptimizationAlgorithmicSettings.Name = "checkBoxOptimizationAlgorithmicSettings";
             this.checkBoxOptimizationAlgorithmicSettings.Size = new System.Drawing.Size(116, 17);
             this.checkBoxOptimizationAlgorithmicSettings.TabIndex = 153;
@@ -4959,14 +4773,14 @@
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate,
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed});
             this.dataGridViewOptimizerBenchmarkingResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridViewOptimizerBenchmarkingResults.Location = new System.Drawing.Point(6, 197);
+            this.dataGridViewOptimizerBenchmarkingResults.Location = new System.Drawing.Point(6, 6);
             this.dataGridViewOptimizerBenchmarkingResults.MultiSelect = false;
             this.dataGridViewOptimizerBenchmarkingResults.Name = "dataGridViewOptimizerBenchmarkingResults";
             this.dataGridViewOptimizerBenchmarkingResults.ReadOnly = true;
             this.dataGridViewOptimizerBenchmarkingResults.RowHeadersVisible = false;
             dataGridViewCellStyle40.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.dataGridViewOptimizerBenchmarkingResults.RowsDefaultCellStyle = dataGridViewCellStyle40;
-            this.dataGridViewOptimizerBenchmarkingResults.Size = new System.Drawing.Size(965, 181);
+            this.dataGridViewOptimizerBenchmarkingResults.Size = new System.Drawing.Size(567, 80);
             this.dataGridViewOptimizerBenchmarkingResults.TabIndex = 20;
             // 
             // dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm
@@ -5046,14 +4860,14 @@
             this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount,
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed});
             this.dataGridViewOptimizerRecords.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridViewOptimizerRecords.Location = new System.Drawing.Point(6, 384);
+            this.dataGridViewOptimizerRecords.Location = new System.Drawing.Point(6, 6);
             this.dataGridViewOptimizerRecords.MultiSelect = false;
             this.dataGridViewOptimizerRecords.Name = "dataGridViewOptimizerRecords";
             this.dataGridViewOptimizerRecords.ReadOnly = true;
             this.dataGridViewOptimizerRecords.RowHeadersVisible = false;
             dataGridViewCellStyle45.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.dataGridViewOptimizerRecords.RowsDefaultCellStyle = dataGridViewCellStyle45;
-            this.dataGridViewOptimizerRecords.Size = new System.Drawing.Size(965, 196);
+            this.dataGridViewOptimizerRecords.Size = new System.Drawing.Size(671, 131);
             this.dataGridViewOptimizerRecords.TabIndex = 19;
             // 
             // dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex
@@ -5105,16 +4919,17 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.comboBoxOptimizationApproach);
+            this.groupBox5.Controls.Add(this.label32);
             this.groupBox5.Controls.Add(this.labelOptimizationDeviceCaption);
             this.groupBox5.Controls.Add(this.labelOptimizationDevice);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationCoolGPUDown);
-            this.groupBox5.Controls.Add(this.checkBoxOptimizationPrioritizeStability);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationUseAverageSpeeds);
-            this.groupBox5.Controls.Add(this.checkBoxOptimizationRepeatUntilStopped);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationExtendRange);
+            this.groupBox5.Controls.Add(this.checkBoxOptimizationRepeatUntilStopped);
             this.groupBox5.Controls.Add(this.labelOptimizationSpeedCaption);
-            this.groupBox5.Controls.Add(this.labelOptimizationSpeed);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationDoNotRepeatAfterFailure);
+            this.groupBox5.Controls.Add(this.labelOptimizationSpeed);
             this.groupBox5.Controls.Add(this.progressBarOptimizer);
             this.groupBox5.Controls.Add(this.numericUpDownOptimizationLength);
             this.groupBox5.Controls.Add(this.label40);
@@ -5122,7 +4937,7 @@
             this.groupBox5.Controls.Add(this.label42);
             this.groupBox5.Location = new System.Drawing.Point(6, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(295, 185);
+            this.groupBox5.Size = new System.Drawing.Size(266, 189);
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Status";
@@ -5149,7 +4964,7 @@
             // checkBoxOptimizationCoolGPUDown
             // 
             this.checkBoxOptimizationCoolGPUDown.AutoSize = true;
-            this.checkBoxOptimizationCoolGPUDown.Location = new System.Drawing.Point(160, 135);
+            this.checkBoxOptimizationCoolGPUDown.Location = new System.Drawing.Point(8, 158);
             this.checkBoxOptimizationCoolGPUDown.Name = "checkBoxOptimizationCoolGPUDown";
             this.checkBoxOptimizationCoolGPUDown.Size = new System.Drawing.Size(102, 17);
             this.checkBoxOptimizationCoolGPUDown.TabIndex = 155;
@@ -5157,21 +4972,10 @@
             this.checkBoxOptimizationCoolGPUDown.Text = "Cool GPU down";
             this.checkBoxOptimizationCoolGPUDown.UseVisualStyleBackColor = true;
             // 
-            // checkBoxOptimizationPrioritizeStability
-            // 
-            this.checkBoxOptimizationPrioritizeStability.AutoSize = true;
-            this.checkBoxOptimizationPrioritizeStability.Location = new System.Drawing.Point(8, 158);
-            this.checkBoxOptimizationPrioritizeStability.Name = "checkBoxOptimizationPrioritizeStability";
-            this.checkBoxOptimizationPrioritizeStability.Size = new System.Drawing.Size(102, 17);
-            this.checkBoxOptimizationPrioritizeStability.TabIndex = 154;
-            this.checkBoxOptimizationPrioritizeStability.Tag = "parameter:optimization_prioritize_stability";
-            this.checkBoxOptimizationPrioritizeStability.Text = "Prioritize stability";
-            this.checkBoxOptimizationPrioritizeStability.UseVisualStyleBackColor = true;
-            // 
             // checkBoxOptimizationUseAverageSpeeds
             // 
             this.checkBoxOptimizationUseAverageSpeeds.AutoSize = true;
-            this.checkBoxOptimizationUseAverageSpeeds.Location = new System.Drawing.Point(160, 112);
+            this.checkBoxOptimizationUseAverageSpeeds.Location = new System.Drawing.Point(8, 112);
             this.checkBoxOptimizationUseAverageSpeeds.Name = "checkBoxOptimizationUseAverageSpeeds";
             this.checkBoxOptimizationUseAverageSpeeds.Size = new System.Drawing.Size(124, 17);
             this.checkBoxOptimizationUseAverageSpeeds.TabIndex = 154;
@@ -5182,7 +4986,7 @@
             // checkBoxOptimizationRepeatUntilStopped
             // 
             this.checkBoxOptimizationRepeatUntilStopped.AutoSize = true;
-            this.checkBoxOptimizationRepeatUntilStopped.Location = new System.Drawing.Point(8, 135);
+            this.checkBoxOptimizationRepeatUntilStopped.Location = new System.Drawing.Point(136, 135);
             this.checkBoxOptimizationRepeatUntilStopped.Name = "checkBoxOptimizationRepeatUntilStopped";
             this.checkBoxOptimizationRepeatUntilStopped.Size = new System.Drawing.Size(113, 17);
             this.checkBoxOptimizationRepeatUntilStopped.TabIndex = 153;
@@ -5195,7 +4999,7 @@
             this.checkBoxOptimizationExtendRange.AutoSize = true;
             this.checkBoxOptimizationExtendRange.Checked = true;
             this.checkBoxOptimizationExtendRange.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationExtendRange.Location = new System.Drawing.Point(160, 158);
+            this.checkBoxOptimizationExtendRange.Location = new System.Drawing.Point(136, 112);
             this.checkBoxOptimizationExtendRange.Name = "checkBoxOptimizationExtendRange";
             this.checkBoxOptimizationExtendRange.Size = new System.Drawing.Size(89, 17);
             this.checkBoxOptimizationExtendRange.TabIndex = 152;
@@ -5227,19 +5031,19 @@
             this.checkBoxOptimizationDoNotRepeatAfterFailure.AutoSize = true;
             this.checkBoxOptimizationDoNotRepeatAfterFailure.Checked = true;
             this.checkBoxOptimizationDoNotRepeatAfterFailure.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationDoNotRepeatAfterFailure.Location = new System.Drawing.Point(8, 112);
+            this.checkBoxOptimizationDoNotRepeatAfterFailure.Location = new System.Drawing.Point(8, 135);
             this.checkBoxOptimizationDoNotRepeatAfterFailure.Name = "checkBoxOptimizationDoNotRepeatAfterFailure";
-            this.checkBoxOptimizationDoNotRepeatAfterFailure.Size = new System.Drawing.Size(146, 17);
+            this.checkBoxOptimizationDoNotRepeatAfterFailure.Size = new System.Drawing.Size(102, 17);
             this.checkBoxOptimizationDoNotRepeatAfterFailure.TabIndex = 150;
             this.checkBoxOptimizationDoNotRepeatAfterFailure.Tag = "parameter:optimization_do_not_repeat_after_failure";
-            this.checkBoxOptimizationDoNotRepeatAfterFailure.Text = "Do not repeat after failure";
+            this.checkBoxOptimizationDoNotRepeatAfterFailure.Text = "Skip after failure";
             this.checkBoxOptimizationDoNotRepeatAfterFailure.UseVisualStyleBackColor = true;
             // 
             // progressBarOptimizer
             // 
             this.progressBarOptimizer.Location = new System.Drawing.Point(6, 19);
             this.progressBarOptimizer.Name = "progressBarOptimizer";
-            this.progressBarOptimizer.Size = new System.Drawing.Size(282, 20);
+            this.progressBarOptimizer.Size = new System.Drawing.Size(251, 20);
             this.progressBarOptimizer.Step = 1;
             this.progressBarOptimizer.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBarOptimizer.TabIndex = 146;
@@ -5308,23 +5112,328 @@
             this.timerStartNextBenchmark.Interval = 10000;
             this.timerStartNextBenchmark.Tick += new System.EventHandler(this.timerStartNextBenchmark_Tick);
             // 
+            // tabPageBenchmarkingAlgorithms
+            // 
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.tabPage8);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.tabPageBenchmarkingFirstParameter);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.tabPageBenchmarkingSecondParameter);
+            this.tabPageBenchmarkingAlgorithms.Location = new System.Drawing.Point(278, 6);
+            this.tabPageBenchmarkingAlgorithms.Name = "tabPageBenchmarkingAlgorithms";
+            this.tabPageBenchmarkingAlgorithms.SelectedIndex = 0;
+            this.tabPageBenchmarkingAlgorithms.Size = new System.Drawing.Size(309, 184);
+            this.tabPageBenchmarkingAlgorithms.TabIndex = 17;
+            // 
+            // tabPageBenchmarkingFirstParameter
+            // 
+            this.tabPageBenchmarkingFirstParameter.Controls.Add(this.numericUpDownBenchmarkingFirstParameterStep);
+            this.tabPageBenchmarkingFirstParameter.Controls.Add(this.comboBoxBenchmarkingFirstParameter);
+            this.tabPageBenchmarkingFirstParameter.Controls.Add(this.label25);
+            this.tabPageBenchmarkingFirstParameter.Controls.Add(this.numericUpDownBenchmarkingFirstParameterStart);
+            this.tabPageBenchmarkingFirstParameter.Controls.Add(this.label24);
+            this.tabPageBenchmarkingFirstParameter.Controls.Add(this.checkBoxBenchmarkingFirstParameterEnabled);
+            this.tabPageBenchmarkingFirstParameter.Controls.Add(this.numericUpDownBenchmarkingFirstParameterEnd);
+            this.tabPageBenchmarkingFirstParameter.Controls.Add(this.label23);
+            this.tabPageBenchmarkingFirstParameter.Location = new System.Drawing.Point(4, 22);
+            this.tabPageBenchmarkingFirstParameter.Name = "tabPageBenchmarkingFirstParameter";
+            this.tabPageBenchmarkingFirstParameter.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBenchmarkingFirstParameter.Size = new System.Drawing.Size(301, 158);
+            this.tabPageBenchmarkingFirstParameter.TabIndex = 0;
+            this.tabPageBenchmarkingFirstParameter.Text = "First Parameter";
+            this.tabPageBenchmarkingFirstParameter.UseVisualStyleBackColor = true;
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingCryptoNightLightEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingX16SEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingCryptoNightHeavyEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingCryptoNightV7Enabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingEthashPascalEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingEthashEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingCryptoNightEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingNeoScryptEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingX16REnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingPascalEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingLbryEnabled);
+            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingLyra2REv2Enabled);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(301, 158);
+            this.tabPage8.TabIndex = 1;
+            this.tabPage8.Text = "Algorithms";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // tabPageBenchmarkingSecondParameter
+            // 
+            this.tabPageBenchmarkingSecondParameter.Controls.Add(this.numericUpDownBenchmarkingSecondParameterStep);
+            this.tabPageBenchmarkingSecondParameter.Controls.Add(this.label26);
+            this.tabPageBenchmarkingSecondParameter.Controls.Add(this.numericUpDownBenchmarkingSecondParameterEnd);
+            this.tabPageBenchmarkingSecondParameter.Controls.Add(this.label29);
+            this.tabPageBenchmarkingSecondParameter.Controls.Add(this.numericUpDownBenchmarkingSecondParameterStart);
+            this.tabPageBenchmarkingSecondParameter.Controls.Add(this.label30);
+            this.tabPageBenchmarkingSecondParameter.Controls.Add(this.checkBoxBenchmarkingSecondParameterEnabled);
+            this.tabPageBenchmarkingSecondParameter.Controls.Add(this.comboBoxBenchmarkingSecondParameter);
+            this.tabPageBenchmarkingSecondParameter.Location = new System.Drawing.Point(4, 22);
+            this.tabPageBenchmarkingSecondParameter.Name = "tabPageBenchmarkingSecondParameter";
+            this.tabPageBenchmarkingSecondParameter.Size = new System.Drawing.Size(301, 158);
+            this.tabPageBenchmarkingSecondParameter.TabIndex = 2;
+            this.tabPageBenchmarkingSecondParameter.Text = "Second Parameter";
+            this.tabPageBenchmarkingSecondParameter.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDownBenchmarkingSecondParameterStep
+            // 
+            this.numericUpDownBenchmarkingSecondParameterStep.Location = new System.Drawing.Point(223, 55);
+            this.numericUpDownBenchmarkingSecondParameterStep.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numericUpDownBenchmarkingSecondParameterStep.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownBenchmarkingSecondParameterStep.Name = "numericUpDownBenchmarkingSecondParameterStep";
+            this.numericUpDownBenchmarkingSecondParameterStep.Size = new System.Drawing.Size(42, 20);
+            this.numericUpDownBenchmarkingSecondParameterStep.TabIndex = 21;
+            this.numericUpDownBenchmarkingSecondParameterStep.Tag = "parameter:benchmarking_second_parameter_step";
+            this.numericUpDownBenchmarkingSecondParameterStep.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(187, 57);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(32, 13);
+            this.label26.TabIndex = 20;
+            this.label26.Text = "Step:";
+            // 
+            // numericUpDownBenchmarkingSecondParameterEnd
+            // 
+            this.numericUpDownBenchmarkingSecondParameterEnd.Location = new System.Drawing.Point(126, 55);
+            this.numericUpDownBenchmarkingSecondParameterEnd.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numericUpDownBenchmarkingSecondParameterEnd.Name = "numericUpDownBenchmarkingSecondParameterEnd";
+            this.numericUpDownBenchmarkingSecondParameterEnd.Size = new System.Drawing.Size(53, 20);
+            this.numericUpDownBenchmarkingSecondParameterEnd.TabIndex = 19;
+            this.numericUpDownBenchmarkingSecondParameterEnd.Tag = "parameter:benchmarking_second_parameter_end";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(96, 57);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(29, 13);
+            this.label29.TabIndex = 18;
+            this.label29.Text = "End:";
+            // 
+            // numericUpDownBenchmarkingSecondParameterStart
+            // 
+            this.numericUpDownBenchmarkingSecondParameterStart.Location = new System.Drawing.Point(37, 55);
+            this.numericUpDownBenchmarkingSecondParameterStart.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.numericUpDownBenchmarkingSecondParameterStart.Name = "numericUpDownBenchmarkingSecondParameterStart";
+            this.numericUpDownBenchmarkingSecondParameterStart.Size = new System.Drawing.Size(53, 20);
+            this.numericUpDownBenchmarkingSecondParameterStart.TabIndex = 17;
+            this.numericUpDownBenchmarkingSecondParameterStart.Tag = "parameter:benchmarking_second_parameter_start";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(2, 57);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(32, 13);
+            this.label30.TabIndex = 16;
+            this.label30.Text = "Start:";
+            // 
+            // checkBoxBenchmarkingSecondParameterEnabled
+            // 
+            this.checkBoxBenchmarkingSecondParameterEnabled.AutoSize = true;
+            this.checkBoxBenchmarkingSecondParameterEnabled.Location = new System.Drawing.Point(3, 6);
+            this.checkBoxBenchmarkingSecondParameterEnabled.Name = "checkBoxBenchmarkingSecondParameterEnabled";
+            this.checkBoxBenchmarkingSecondParameterEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxBenchmarkingSecondParameterEnabled.TabIndex = 15;
+            this.checkBoxBenchmarkingSecondParameterEnabled.Tag = "parameter:benchmarking_second_parameter_enabled";
+            this.checkBoxBenchmarkingSecondParameterEnabled.Text = "Enable";
+            this.checkBoxBenchmarkingSecondParameterEnabled.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxBenchmarkingSecondParameter
+            // 
+            this.comboBoxBenchmarkingSecondParameter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxBenchmarkingSecondParameter.FormattingEnabled = true;
+            this.comboBoxBenchmarkingSecondParameter.Location = new System.Drawing.Point(3, 28);
+            this.comboBoxBenchmarkingSecondParameter.Name = "comboBoxBenchmarkingSecondParameter";
+            this.comboBoxBenchmarkingSecondParameter.Size = new System.Drawing.Size(295, 21);
+            this.comboBoxBenchmarkingSecondParameter.TabIndex = 14;
+            this.comboBoxBenchmarkingSecondParameter.Tag = "parameter:benchmarking_second_parameter_parameter";
+            // 
+            // tabControl4
+            // 
+            this.tabControl4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl4.Controls.Add(this.tabPage10);
+            this.tabControl4.Controls.Add(this.tabPage11);
+            this.tabControl4.Location = new System.Drawing.Point(6, 196);
+            this.tabControl4.Name = "tabControl4";
+            this.tabControl4.SelectedIndex = 0;
+            this.tabControl4.Size = new System.Drawing.Size(587, 126);
+            this.tabControl4.TabIndex = 18;
+            // 
+            // tabPage10
+            // 
+            this.tabPage10.Controls.Add(this.dataGridViewBenchmarks);
+            this.tabPage10.Location = new System.Drawing.Point(4, 22);
+            this.tabPage10.Name = "tabPage10";
+            this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage10.Size = new System.Drawing.Size(689, 171);
+            this.tabPage10.TabIndex = 0;
+            this.tabPage10.Text = "Current Status";
+            this.tabPage10.UseVisualStyleBackColor = true;
+            // 
+            // tabPage11
+            // 
+            this.tabPage11.Controls.Add(this.dataGridViewBenchmarkingResults);
+            this.tabPage11.Location = new System.Drawing.Point(4, 22);
+            this.tabPage11.Name = "tabPage11";
+            this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage11.Size = new System.Drawing.Size(579, 100);
+            this.tabPage11.TabIndex = 1;
+            this.tabPage11.Text = "Records";
+            this.tabPage11.UseVisualStyleBackColor = true;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(133, 161);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(56, 13);
+            this.label32.TabIndex = 158;
+            this.label32.Text = "Approach:";
+            // 
+            // comboBoxOptimizationApproach
+            // 
+            this.comboBoxOptimizationApproach.FormattingEnabled = true;
+            this.comboBoxOptimizationApproach.Items.AddRange(new object[] {
+            "Neutral",
+            "Stabilize",
+            "Aggressive"});
+            this.comboBoxOptimizationApproach.Location = new System.Drawing.Point(190, 158);
+            this.comboBoxOptimizationApproach.Name = "comboBoxOptimizationApproach";
+            this.comboBoxOptimizationApproach.Size = new System.Drawing.Size(67, 21);
+            this.comboBoxOptimizationApproach.TabIndex = 159;
+            // 
+            // tabControl5
+            // 
+            this.tabControl5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl5.Controls.Add(this.tabPage12);
+            this.tabControl5.Controls.Add(this.tabPage13);
+            this.tabControl5.Location = new System.Drawing.Point(6, 201);
+            this.tabControl5.Name = "tabControl5";
+            this.tabControl5.SelectedIndex = 0;
+            this.tabControl5.Size = new System.Drawing.Size(587, 118);
+            this.tabControl5.TabIndex = 155;
+            // 
+            // tabPage12
+            // 
+            this.tabPage12.Controls.Add(this.dataGridViewOptimizerBenchmarkingResults);
+            this.tabPage12.Location = new System.Drawing.Point(4, 22);
+            this.tabPage12.Name = "tabPage12";
+            this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage12.Size = new System.Drawing.Size(579, 92);
+            this.tabPage12.TabIndex = 0;
+            this.tabPage12.Text = "Current Parameter(s)";
+            this.tabPage12.UseVisualStyleBackColor = true;
+            // 
+            // tabPage13
+            // 
+            this.tabPage13.Controls.Add(this.dataGridViewOptimizerRecords);
+            this.tabPage13.Location = new System.Drawing.Point(4, 22);
+            this.tabPage13.Name = "tabPage13";
+            this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage13.Size = new System.Drawing.Size(683, 143);
+            this.tabPage13.TabIndex = 1;
+            this.tabPage13.Text = "Records";
+            this.tabPage13.UseVisualStyleBackColor = true;
+            // 
+            // tabPageOptimizationTargets
+            // 
+            this.tabPageOptimizationTargets.Controls.Add(this.tabPage14);
+            this.tabPageOptimizationTargets.Controls.Add(this.tabPage15);
+            this.tabPageOptimizationTargets.Location = new System.Drawing.Point(278, 6);
+            this.tabPageOptimizationTargets.Name = "tabPageOptimizationTargets";
+            this.tabPageOptimizationTargets.SelectedIndex = 0;
+            this.tabPageOptimizationTargets.Size = new System.Drawing.Size(309, 189);
+            this.tabPageOptimizationTargets.TabIndex = 156;
+            // 
+            // tabPage14
+            // 
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationX16SEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationEthashPascalEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationCryptoNightLightEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationEthashEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationCryptoNightV7Enabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationCryptoNightEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationX16REnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationNeoScryptEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationCryptoNightHeavyEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationPascalEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationLbryEnabled);
+            this.tabPage14.Controls.Add(this.checkBoxOptimizationLyra2REv2Enabled);
+            this.tabPage14.Location = new System.Drawing.Point(4, 22);
+            this.tabPage14.Name = "tabPage14";
+            this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage14.Size = new System.Drawing.Size(301, 163);
+            this.tabPage14.TabIndex = 0;
+            this.tabPage14.Text = "Algorithms";
+            this.tabPage14.UseVisualStyleBackColor = true;
+            // 
+            // tabPage15
+            // 
+            this.tabPage15.Controls.Add(this.checkBoxOptimizationUndervoltingMemory);
+            this.tabPage15.Controls.Add(this.checkBoxOptimizationAlgorithmicSettings);
+            this.tabPage15.Controls.Add(this.checkBoxOptimizationUndervoltingCore);
+            this.tabPage15.Controls.Add(this.checkBoxOptimizationMemoryTimings);
+            this.tabPage15.Controls.Add(this.checkBoxOptimizationOverclockingMemory);
+            this.tabPage15.Controls.Add(this.checkBoxOptimizationMemoryTimingsExtended);
+            this.tabPage15.Controls.Add(this.checkBoxOptimizationOverclockingCore);
+            this.tabPage15.Location = new System.Drawing.Point(4, 22);
+            this.tabPage15.Name = "tabPage15";
+            this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage15.Size = new System.Drawing.Size(301, 163);
+            this.tabPage15.TabIndex = 1;
+            this.tabPage15.Text = "Targets";
+            this.tabPage15.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1008, 681);
+            this.ClientSize = new System.Drawing.Size(624, 421);
             this.Controls.Add(this.buttonRunBenchmarks);
-            this.Controls.Add(this.buttonRelaunch);
             this.Controls.Add(this.buttonRunOptimizer);
             this.Controls.Add(this.statusStripMainForm);
             this.Controls.Add(this.buttonReleaseMemory);
-            this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.tabControlMainForm);
+            this.Controls.Add(this.buttonRelaunch);
+            this.Controls.Add(this.buttonStart);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1024, 720);
+            this.MinimumSize = new System.Drawing.Size(640, 460);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Gateless Gate Sharp";
@@ -5356,18 +5465,9 @@
             this.groupBoxBenchmarkingOtherParameters.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingRepeats)).EndInit();
-            this.groupBoxBenchmarkingSecondParameter.ResumeLayout(false);
-            this.groupBoxBenchmarkingSecondParameter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStep)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterEnd)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStart)).EndInit();
-            this.groupBoxBenchmarkingFirstParameter.ResumeLayout(false);
-            this.groupBoxBenchmarkingFirstParameter.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterStep)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterEnd)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterStart)).EndInit();
-            this.groupBoxBenchmarkingAlgorithms.ResumeLayout(false);
-            this.groupBoxBenchmarkingAlgorithms.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBenchmarks)).EndInit();
             this.tabPageDeviceSettings.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.ResumeLayout(false);
@@ -5390,36 +5490,51 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool0SecondaryPort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool0Port)).EndInit();
             this.tabPagePoolSettings.ResumeLayout(false);
-            this.groupBoxWalletAddresses.ResumeLayout(false);
-            this.groupBoxWalletAddresses.PerformLayout();
-            this.groupBoxPoolParameters.ResumeLayout(false);
-            this.groupBoxPoolParameters.PerformLayout();
+            this.tabControlDefaultPools.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.groupBoxPoolPriorities.ResumeLayout(false);
             this.tabPageDashboard.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDevices)).EndInit();
             this.tabControlMainForm.ResumeLayout(false);
             this.tabPageOptimization.ResumeLayout(false);
-            this.groupBoxOptimizationAlgorithms.ResumeLayout(false);
-            this.groupBoxOptimizationAlgorithms.PerformLayout();
-            this.groupBoxOptimizationTargets.ResumeLayout(false);
-            this.groupBoxOptimizationTargets.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerBenchmarkingResults)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerRecords)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationRepeats)).EndInit();
+            this.tabPageBenchmarkingAlgorithms.ResumeLayout(false);
+            this.tabPageBenchmarkingFirstParameter.ResumeLayout(false);
+            this.tabPageBenchmarkingFirstParameter.PerformLayout();
+            this.tabPage8.ResumeLayout(false);
+            this.tabPage8.PerformLayout();
+            this.tabPageBenchmarkingSecondParameter.ResumeLayout(false);
+            this.tabPageBenchmarkingSecondParameter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStep)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterEnd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStart)).EndInit();
+            this.tabControl4.ResumeLayout(false);
+            this.tabPage10.ResumeLayout(false);
+            this.tabPage11.ResumeLayout(false);
+            this.tabControl5.ResumeLayout(false);
+            this.tabPage12.ResumeLayout(false);
+            this.tabPage13.ResumeLayout(false);
+            this.tabPageOptimizationTargets.ResumeLayout(false);
+            this.tabPage14.ResumeLayout(false);
+            this.tabPage14.PerformLayout();
+            this.tabPage15.ResumeLayout(false);
+            this.tabPage15.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5516,16 +5631,6 @@
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingRepeats;
         private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.GroupBox groupBoxBenchmarkingSecondParameter;
-        private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingSecondParameterStep;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingSecondParameterEnd;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingSecondParameterStart;
-        private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.CheckBox checkBoxBenchmarkingSecondParameterEnabled;
-        private System.Windows.Forms.ComboBox comboBoxBenchmarkingSecondParameter;
-        private System.Windows.Forms.GroupBox groupBoxBenchmarkingFirstParameter;
         private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingFirstParameterStep;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingFirstParameterEnd;
@@ -5534,7 +5639,6 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingFirstParameterEnabled;
         private System.Windows.Forms.ComboBox comboBoxBenchmarkingFirstParameter;
-        private System.Windows.Forms.GroupBox groupBoxBenchmarkingAlgorithms;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingLbryEnabled;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingLyra2REv2Enabled;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingPascalEnabled;
@@ -5635,7 +5739,6 @@
         private System.Windows.Forms.TextBox textBoxCustomPool0Login;
         private System.Windows.Forms.Label label148;
         private System.Windows.Forms.TabPage tabPagePoolSettings;
-        private System.Windows.Forms.GroupBox groupBoxWalletAddresses;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button buttonLbryBalance;
         private System.Windows.Forms.TextBox textBoxLbryAddress;
@@ -5654,35 +5757,16 @@
         private System.Windows.Forms.Button buttonEthereumBalance;
         private System.Windows.Forms.TextBox textBoxZcashAddress;
         private System.Windows.Forms.Button buttonViewBalancesAtNiceHash;
-        private System.Windows.Forms.GroupBox groupBoxPoolParameters;
         private System.Windows.Forms.TextBox textBoxRigID;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelEmail;
         private System.Windows.Forms.TextBox textBoxEmail;
-        private System.Windows.Forms.GroupBox groupBoxPoolPriorities;
         private System.Windows.Forms.Button buttonPoolPrioritiesDown;
         private System.Windows.Forms.Button buttonPoolPrioritiesUp;
         private System.Windows.Forms.ListBox listBoxPoolPriorities;
         private System.Windows.Forms.TabPage tabPageDashboard;
         private System.Windows.Forms.Button buttonDeselectAllDevices;
         private System.Windows.Forms.Button buttonSelectAllDevices;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private LiveCharts.WinForms.CartesianChart cartesianChartCPUUsage;
-        private LiveCharts.WinForms.CartesianChart cartesianChartPower;
-        private LiveCharts.WinForms.CartesianChart cartesianChartTemperature;
-        private LiveCharts.WinForms.CartesianChart cartesianChartDeviceActivity;
-        private LiveCharts.WinForms.CartesianChart cartesianChartFanSpeed;
-        private System.Windows.Forms.ComboBox comboBoxGraphType;
-        private System.Windows.Forms.ComboBox comboBoxGraphCoverage;
-        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Month;
-        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Day;
-        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Hour;
-        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Minute;
-        private LiveCharts.WinForms.CartesianChart cartesianChartSpeedSecondaryAlgorithm;
-        private LiveCharts.WinForms.CartesianChart cartesianChartSpeedPrimaryAlgorithm;
-        private System.Windows.Forms.ComboBox comboBoxSecondGraphType;
-        private System.Windows.Forms.ComboBox comboBoxSecondGraphCoverage;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label labelCurrentPool;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBoxDefaultAlgorithm;
@@ -5694,7 +5778,6 @@
         private System.Windows.Forms.Label labelCurrentSecondaryPool;
         private System.Windows.Forms.Label label70;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label labelBalance;
         private System.Windows.Forms.Label label10;
@@ -5702,22 +5785,6 @@
         private System.Windows.Forms.Label labelPriceWeek;
         private System.Windows.Forms.Label labelPriceMonth;
         private System.Windows.Forms.DataGridView dataGridViewDevices;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn speed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn shares;
-        private System.Windows.Forms.DataGridViewTextBoxColumn activity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn temperature;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fan;
-        private System.Windows.Forms.DataGridViewTextBoxColumn power;
-        private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
-        private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_info;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
         private System.Windows.Forms.TabControl tabControlMainForm;
         private System.Windows.Forms.Timer timerStartNextBenchmark;
         private System.Windows.Forms.TabPage tabPageOptimization;
@@ -5738,7 +5805,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxBenchmarkingResultsSecondParameter;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxBenchmarkingResultsSuccessRate;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxBenchmarkingResultsSpeed;
-        private System.Windows.Forms.GroupBox groupBoxOptimizationTargets;
         private System.Windows.Forms.CheckBox checkBoxOptimizationUndervoltingCore;
         private System.Windows.Forms.CheckBox checkBoxOptimizationOverclockingMemory;
         private System.Windows.Forms.CheckBox checkBoxOptimizationOverclockingCore;
@@ -5748,7 +5814,6 @@
         private System.Windows.Forms.CheckBox checkBoxOptimizationUseAverageSpeeds;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingUseAverageSpeeds;
         private System.Windows.Forms.CheckBox checkBoxOptimizationMemoryTimingsExtended;
-        private System.Windows.Forms.CheckBox checkBoxOptimizationPrioritizeStability;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter;
@@ -5794,7 +5859,6 @@
         private System.Windows.Forms.CheckBox checkBoxOptimizationUndervoltingMemory;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingCoolGPUDown;
         private System.Windows.Forms.CheckBox checkBoxOptimizationCoolGPUDown;
-        private System.Windows.Forms.GroupBox groupBoxOptimizationAlgorithms;
         private System.Windows.Forms.CheckBox checkBoxOptimizationX16SEnabled;
         private System.Windows.Forms.CheckBox checkBoxOptimizationCryptoNightLightEnabled;
         private System.Windows.Forms.CheckBox checkBoxOptimizationCryptoNightV7Enabled;
@@ -5816,5 +5880,65 @@
         private System.Windows.Forms.Label labelOptimizationDevice;
         private System.Windows.Forms.Label labelBenchmarkingSpeed;
         private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private LiveCharts.WinForms.CartesianChart cartesianChartSpeedPrimaryAlgorithm;
+        private LiveCharts.WinForms.CartesianChart cartesianChartSpeedSecondaryAlgorithm;
+        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Minute;
+        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Hour;
+        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Day;
+        private LiveCharts.WinForms.CartesianChart cartesianChartShare1Month;
+        private LiveCharts.WinForms.CartesianChart cartesianChartCPUUsage;
+        private LiveCharts.WinForms.CartesianChart cartesianChartPower;
+        private LiveCharts.WinForms.CartesianChart cartesianChartTemperature;
+        private LiveCharts.WinForms.CartesianChart cartesianChartDeviceActivity;
+        private LiveCharts.WinForms.CartesianChart cartesianChartFanSpeed;
+        private System.Windows.Forms.ComboBox comboBoxGraphType;
+        private System.Windows.Forms.ComboBox comboBoxGraphCoverage;
+        private System.Windows.Forms.CheckBox checkBoxUseCustomPools;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn speed;
+        private System.Windows.Forms.DataGridViewTextBoxColumn shares;
+        private System.Windows.Forms.DataGridViewTextBoxColumn activity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn temperature;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn power;
+        private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_info;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
+        private System.Windows.Forms.TabControl tabControlDefaultPools;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TabControl tabControl4;
+        private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.TabPage tabPage11;
+        private System.Windows.Forms.TabControl tabPageBenchmarkingAlgorithms;
+        private System.Windows.Forms.TabPage tabPage8;
+        private System.Windows.Forms.TabPage tabPageBenchmarkingFirstParameter;
+        private System.Windows.Forms.TabPage tabPageBenchmarkingSecondParameter;
+        private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingSecondParameterStep;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingSecondParameterEnd;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingSecondParameterStart;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.CheckBox checkBoxBenchmarkingSecondParameterEnabled;
+        private System.Windows.Forms.ComboBox comboBoxBenchmarkingSecondParameter;
+        private System.Windows.Forms.TabControl tabControl5;
+        private System.Windows.Forms.TabPage tabPage12;
+        private System.Windows.Forms.TabPage tabPage13;
+        private System.Windows.Forms.ComboBox comboBoxOptimizationApproach;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.TabControl tabPageOptimizationTargets;
+        private System.Windows.Forms.TabPage tabPage14;
+        private System.Windows.Forms.TabPage tabPage15;
     }
 }
