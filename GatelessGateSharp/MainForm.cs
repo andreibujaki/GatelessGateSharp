@@ -6473,7 +6473,7 @@ namespace GatelessGateSharp
                         } else {
                             max = value;
                         }
-                    } else if ((string)comboBoxOptimizationApproach.SelectedItem == "Stabilize") {
+                    } else if ((string)comboBoxOptimizationApproach.SelectedItem == "Stabilizing") {
                         if (parameterName == "overclocking_memory_clock" || parameterName == "overclocking_core_clock") {
                             max = value;
                         } else {
@@ -6809,7 +6809,7 @@ namespace GatelessGateSharp
                     Controller.BenchmarkRecords[i].StabilityScore += (i < Controller.BenchmarkRecords.Count - 1) ? Controller.BenchmarkRecords[i + 1].SuccessCount : Controller.BenchmarkRecords[i].SuccessCount;
                 }
             }
-            bool aggressiveOptimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && ((string)comboBoxOptimizationApproach.SelectedItem == "Aggressive";
+            bool aggressiveOptimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && ((string)comboBoxOptimizationApproach.SelectedItem == "Aggressive");
             foreach (var record in Controller.BenchmarkRecords.Concat(Controller.BenchmarkEntries).OrderBy(o => o.ID)) {
                 bool aggressiveOptimizationForVoltage = aggressiveOptimization && (record.Parameters[1].Name == "overclocking_core_voltage" || record.Parameters[1].Name == "overclocking_memory_voltage");
                 bool aggressiveOptimizationForClock = aggressiveOptimization && (record.Parameters[1].Name == "overclocking_core_clock" || record.Parameters[1].Name == "overclocking_memory_clock");
