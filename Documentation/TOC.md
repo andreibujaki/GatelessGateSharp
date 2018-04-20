@@ -10,7 +10,7 @@ Otherwise,you can pick any topics of your interest from the following list.
 
 ## Table of Contents
 
-* Installation
+* [Installation](Installation.md)
 * Mining with Default Pools
 * Mining with Custom Pools
 * Device Settings (Algorithmic)
