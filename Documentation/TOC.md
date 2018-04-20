@@ -6,7 +6,7 @@ reading the following guide first:
 
 * Absolute Biginner's Guide for Cryptomining with Gateless Gate Sharp
 
-Otherwise,you can pick any topics of your interest from the following list.
+Otherwise, you can pick any topics of your interest from the following list.
 
 ## Table of Contents
 
