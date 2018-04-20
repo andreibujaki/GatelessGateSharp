@@ -105,6 +105,7 @@ namespace GatelessGateSharp
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
+        private static string JSONConfigFileName = "GatelessGateSharp.json";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharp_State.txt";
         private static string mBenchmarkEntriesFileName = "GatelessGateSharp_BenchmarkEntries.xml";
@@ -210,7 +211,6 @@ namespace GatelessGateSharp
                 var prettyName = GetPrettyAlgorithmName(algorithm);
                 comboBoxDefaultAlgorithm.Items.Add(prettyName);
             }
-            comboBoxDefaultAlgorithm.Items.Add("Custom Pools");
 
             comboBoxDefaultAlgorithm.SelectedIndex = 0;
 
@@ -300,8 +300,8 @@ namespace GatelessGateSharp
             ResetDeviceSettings();
 
             try {
-                if (System.IO.File.Exists(DatabaseFilePath))
-                    LoadSettingsFromDatabase();
+                if (System.IO.File.Exists(DatabaseFilePath) || System.IO.File.Exists(JSONConfigFilePath))
+                    LoadSettingsFromJSONConfigFile();
             } catch (Exception ex) {
                 Logger("Exception in LoadDatabase(): " + ex.Message + ex.StackTrace);
             }
@@ -1352,7 +1352,7 @@ namespace GatelessGateSharp
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string file in files)
-                LoadSettingsFromDatabase(file);
+                LoadSettingsFromJSONConfigFile(file);
         }
 
         private void CreateNewDatabase(string filePath)
@@ -1398,6 +1398,10 @@ namespace GatelessGateSharp
 
         static string DatabaseFilePath {
             get { return AppDataPathBase + "\\" + databaseFileName; }
+        }
+
+        static string JSONConfigFilePath {
+            get { return AppDataPathBase + "\\" +JSONConfigFileName; }
         }
 
         static string LogFilePath {
@@ -1771,7 +1775,7 @@ namespace GatelessGateSharp
                         || checkBoxCustomPool1Enable.Checked
                         || checkBoxCustomPool2Enable.Checked
                         || checkBoxCustomPool3Enable.Checked)
-                        comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Custom Pools");
+                        checkBoxUseCustomPools.Checked = true;
                 }
                 Logger("Loaded settings.");
                 mAreSettingsDirty = false;
@@ -1782,10 +1786,226 @@ namespace GatelessGateSharp
             MainForm.Instance.Enabled = true;
         }
 
-        private void SaveSettingsToDatabase(string filePath = null)
+        private void LoadSettingsFromJSONConfigFile(string filePath = null)
+        {
+            if (filePath == null && System.IO.File.Exists(DatabaseFilePath)) {
+                LoadSettingsFromDatabase();
+                SaveSettingsToJSONConfigFile();
+                System.IO.File.Delete(DatabaseFilePath);
+                return;
+            } else if (filePath == null) {
+                filePath = JSONConfigFilePath;
+            } else {
+                filePath = (new Regex("'")).Replace(filePath, "");
+            }
+            Application.DoEvents();
+            Logger("Loading settings from " + filePath + "...");
+            UpdateLog();
+            Application.DoEvents();
+            MainForm.Instance.Enabled = false;
+
+            int databaseVersion = 0;
+            try {
+                var root = JsonConvert.DeserializeObject<Dictionary<string, object>>(string.Join("\n", System.IO.File.ReadAllLines(filePath)));
+
+                Newtonsoft.Json.Linq.JArray pools = (Newtonsoft.Json.Linq.JArray)(root["pools"]);
+                var oldItems = new List<string>();
+                foreach (string poolName in listBoxPoolPriorities.Items)
+                    oldItems.Add(poolName);
+                listBoxPoolPriorities.Items.Clear();
+                foreach (var poolName in pools)
+                    listBoxPoolPriorities.Items.Add((string)poolName);
+                foreach (var poolName in oldItems)
+                    if (!listBoxPoolPriorities.Items.Contains(poolName))
+                        listBoxPoolPriorities.Items.Add(poolName);
+
+                Dictionary<string, ComboBox> comboBoxParameterArray = new Dictionary<string, ComboBox> { };
+                foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
+                    var tag = (string)comboBox.Tag;
+                    if (tag == null)
+                        continue;
+                    var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                    var match = regex.Match(tag);
+                    var type = match.Success ? match.Groups[1].Value : null;
+                    var name = match.Success ? match.Groups[2].Value : null;
+                    if (type == "parameter")
+                        comboBoxParameterArray.Add(name, comboBox);
+                }
+
+                Dictionary<string, TextBox> textBoxParameterArray = new Dictionary<string, TextBox> { };
+                foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
+                    var tag = (string)textBox.Tag;
+                    if (tag == null)
+                        continue;
+                    var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                    var match = regex.Match(tag);
+                    var type = match.Success ? match.Groups[1].Value : null;
+                    var name = match.Success ? match.Groups[2].Value : null;
+                    if (type == "parameter")
+                        textBoxParameterArray.Add(name, textBox);
+                }
+
+                Dictionary<string, CheckBox> checkBoxParameterArray = new Dictionary<string, CheckBox> { };
+                foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
+                    var tag = (string)checkBox.Tag;
+                    if (tag == null)
+                        continue;
+                    var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                    var match = regex.Match(tag);
+                    var type = match.Success ? match.Groups[1].Value : null;
+                    var name = match.Success ? match.Groups[2].Value : null;
+                    if (type == "parameter")
+                        checkBoxParameterArray.Add(name, checkBox);
+                }
+
+                Dictionary<string, NumericUpDown> numericUpDownParameterArray = new Dictionary<string, NumericUpDown> { };
+                foreach (var numericUpDown in Utilities.FindAllChildrenByType<NumericUpDown>(this)) {
+                    var tag = (string)(numericUpDown.GetType().GetProperty("Tag").GetValue(numericUpDown));
+                    if (tag == null)
+                        continue;
+                    var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                    var match = regex.Match(tag);
+                    var type = match.Success ? match.Groups[1].Value : null;
+                    var name = match.Success ? match.Groups[2].Value : null;
+                    if (type == "parameter")
+                        numericUpDownParameterArray.Add(name, numericUpDown);
+                }
+
+                JObject parameters = (JObject)(root["parameters"]);
+                foreach (var parameter in parameters) {
+                    var parameterName = parameter.Key;
+                    if (parameter.Key == "database_version") {
+                        databaseVersion = (int)parameter.Value;
+                    } else if ((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(parameter.Key).Success) {
+                        int index = int.Parse((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(parameter.Key).Groups[1].Captures[0].Value);
+                        if (0 <= index && index < Controller.OpenCLDevices.Length)
+                            dataGridViewDevices.Rows[index].Cells["enabled"].Value = (bool)parameter.Value;
+                    } else if (comboBoxParameterArray.Keys.Contains(parameter.Key)) {
+                        var comboBox = comboBoxParameterArray[parameter.Key];
+                        if (parameter.Key == "currency" && !comboBox.Items.Contains((string)parameter.Value))
+                            comboBox.Items.Add((string)parameter.Value);
+                        try { comboBox.SelectedIndex = comboBox.FindStringExact((string)parameter.Value); } catch (Exception) { }
+                    } else if (textBoxParameterArray.Keys.Contains(parameter.Key)) {
+                        var textBox = textBoxParameterArray[parameter.Key];
+                        textBox.Text = (string)parameter.Value;
+                    } else if (checkBoxParameterArray.Keys.Contains(parameter.Key)) {
+                        var checkBox = checkBoxParameterArray[parameter.Key];
+                        checkBox.Checked = (bool)parameter.Value;
+                    } else if (numericUpDownParameterArray.Keys.Contains(parameter.Key)) {
+                        var numericUpDown = numericUpDownParameterArray[parameter.Key];
+                        numericUpDown.Value = (decimal)(double)parameter.Value;
+                    }
+                }
+
+                JArray devices = (JArray)(root["devices"]);
+                foreach (JObject deviceSettings in devices) {
+                    int deviceIndex = (int)deviceSettings["device_id"];
+                    if (deviceIndex >= Controller.OpenCLDevices.Length)
+                        continue;
+                    var device = Controller.OpenCLDevices[deviceIndex];
+                    if ((string)deviceSettings["device_vendor"] != device.GetVendor() || (string)deviceSettings["device_name"] != device.GetName())
+                        continue;
+
+                    foreach (var deviceParameter in deviceSettings) {
+                        var name = deviceParameter.Key;
+
+                        var regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
+                        var match = regex.Match(name);
+                        var type = match.Success ? match.Groups[1].Value : null;
+                        var parameter = match.Success ? match.Groups[2].Value : null;
+                        var tuple = new Tuple<int, string, string>(deviceIndex, type, parameter);
+
+                        if (checkBoxDeviceParameterArray.Keys.Contains(tuple)) {
+                            checkBoxDeviceParameterArray[tuple].Checked = (bool)deviceParameter.Value;
+                        } else if (textBoxDeviceParameterArray.Keys.Contains(tuple)) {
+                            textBoxDeviceParameterArray[tuple].Text = (string)deviceParameter.Value;
+                        } else if (numericUpDownDeviceParameterArray.Keys.Contains(tuple)) {
+                            numericUpDownDeviceParameterArray[tuple].Value = (decimal)(double)deviceParameter.Value;
+                        }
+                    }
+                }
+                    /*
+                        try {
+                            var sql = "select * from device_parameters";
+                            using (var command = new SQLiteCommand(sql, conn)) {
+                                using (var reader = command.ExecuteReader()) {
+                                    while (reader.Read()) {
+                                        var deviceID = (int)reader["device_id"];
+                                        var deviceVendor = (string)reader["device_vendor"];
+                                        var deviceName = (string)reader["device_name"];
+                                        var name = (string)reader["parameter_name"];
+                                        var value = (string)reader["parameter_value"];
+                                        if (deviceID >= Controller.OpenCLDevices.Length || deviceVendor != Controller.OpenCLDevices[deviceID].GetVendor() ||
+                                            deviceName != Controller.OpenCLDevices[deviceID].GetName())
+                                            continue;
+
+                                        var regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
+                                        var match = regex.Match(name);
+                                        var type = match.Success ? match.Groups[1].Value : null;
+                                        var parameter = match.Success ? match.Groups[2].Value : null;
+                                        var tuple = new Tuple<int, string, string>(deviceID, type, parameter);
+                                        try {
+                                            if ((new Regex(@"enabled$")).Match(parameter).Success) {
+                                                checkBoxDeviceParameterArray[tuple].Checked = (value == "true");
+                                            } else if (parameter == "memory_timings_polaris10_seq_misc1"
+                                                       || parameter == "memory_timings_polaris10_seq_misc3"
+                                                       || parameter == "memory_timings_polaris10_seq_misc4"
+                                                       || parameter == "memory_timings_polaris10_seq_misc8"
+                                                       || parameter == "memory_timings_polaris10_seq_misc9"
+                                                       || parameter == "memory_timings_polaris10_seq_pmg"
+                                                       || parameter == "memory_timings_polaris10_phy_d0"
+                                                       || parameter == "memory_timings_polaris10_phy_d1"
+                                                       || parameter == "memory_timings_polaris10_phy_2") {
+                                                textBoxDeviceParameterArray[tuple].Text = value;
+                                            } else if (parameter != null) {
+                                                numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse(value);
+                                            }
+                                        } catch (Exception) {
+                                            Logger("Failed to load " + parameter + " = " + value + " as a device parameter.");
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (Exception ex) {
+                            Logger("Here!");
+                            Logger(ex);
+                        }
+
+                        conn.Close();
+                    }
+                    if (databaseVersion == 0) {
+                        // Values of intensity were reinterpreted at v1.1.14.
+                        ResetDeviceSettings();
+                        checkBoxDisableAutoStartPrompt.Checked = true;
+                    }
+                    if (databaseVersion < 2) {
+                        foreach (var device in Controller.OpenCLDevices) {
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value = (decimal)75;
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value = (decimal)85;
+                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value = (decimal)50;
+                        }
+                    }
+                    if (databaseVersion < 4) {
+                        if (checkBoxCustomPool0Enable.Checked
+                            || checkBoxCustomPool1Enable.Checked
+                            || checkBoxCustomPool2Enable.Checked
+                            || checkBoxCustomPool3Enable.Checked)
+                            checkBoxUseCustomPools.Checked = true;
+                    }
+                    */
+                Logger("Loaded settings.");
+                mAreSettingsDirty = false;
+            } catch (Exception ex) {
+                Logger(ex);
+            }
+
+            MainForm.Instance.Enabled = true;
+        }
+
+        private void SaveSettingsToJSONConfigFile(string filePath = null)
         {
             bool createBackup = filePath == null;
-            filePath = ((filePath == null) ? DatabaseFilePath : (new Regex("'")).Replace(filePath, ""));
+            filePath = ((filePath == null) ? JSONConfigFilePath : (new Regex("'")).Replace(filePath, ""));
             Application.DoEvents();
             Logger("Saving settings to " + filePath + "...");
             UpdateLog();
@@ -1794,137 +2014,100 @@ namespace GatelessGateSharp
 
             // Delete the old database in case it is corrupt.
             try { System.IO.File.Delete(filePath); } catch (Exception) { }
-            try { CreateNewDatabase(filePath); } catch (Exception) { }
-
-            System.Data.SQLite.SQLiteTransaction trans = null;
             try {
-                using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
-                    conn.Open();
-                    trans = conn.BeginTransaction();
+                using (var stream = System.IO.File.Open(filePath, System.IO.FileMode.Create))
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream))
+                using (JsonWriter writer = new JsonTextWriter(sw)) {
+                    Dictionary<string, object> root = new Dictionary<string, object> { };
 
-                    var sql = "insert into pools (name) values (@name)";
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        foreach (string poolName in listBoxPoolPriorities.Items) {
-                            command.Parameters.AddWithValue("@name", poolName);
-                            command.ExecuteNonQuery();
-                        }
+                    List<string> pools = new List<string> { };
+                    foreach (string poolName in listBoxPoolPriorities.Items)
+                        pools.Add(poolName);
+                    root.Add("pools", pools);
+
+                    Dictionary<string, object> parameters = new Dictionary<string, object> { };
+                    parameters.Add("database_version", 5); // v1.3.6
+                    for (var i = 0; i < Controller.OpenCLDevices.Length; ++i)
+                        parameters.Add("enable_gpu" + i, (bool)(dataGridViewDevices.Rows[i].Cells["enabled"].Value));
+                    foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
+                        var tag = (string)(comboBox.GetType().GetProperty("Tag").GetValue(comboBox));
+                        if (tag == null)
+                            continue;
+                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                        var match = regex.Match(tag);
+                        var type = match.Success ? match.Groups[1].Value : null;
+                        var name = match.Success ? match.Groups[2].Value : null;
+                        if (type == "parameter")
+                            parameters.Add(name, (string)comboBox.SelectedItem);
                     }
-
-                    sql = "insert into properties (name, value) values (@name, @value)";
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        command.Parameters.AddWithValue("@name", "database_version");
-                        command.Parameters.AddWithValue("@value", "4"); // started with v1.3.0
-                        command.ExecuteNonQuery();
-                        for (var i = 0; i < Controller.OpenCLDevices.Length; ++i) {
-                            command.Parameters.AddWithValue("@name", "enable_gpu" + i);
-                            command.Parameters.AddWithValue("@value", (bool)(dataGridViewDevices.Rows[i].Cells["enabled"].Value) ? "true" : "false");
-                            command.ExecuteNonQuery();
-                        }
-
-                        foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
-                            var tag = (string)(comboBox.GetType().GetProperty("Tag").GetValue(comboBox));
-                            if (tag == null)
-                                continue;
-                            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
-                            var match = regex.Match(tag);
-                            var type = match.Success ? match.Groups[1].Value : null;
-                            var name = match.Success ? match.Groups[2].Value : null;
-                            if (type == "parameter") {
-                                command.Parameters.AddWithValue("@name", name);
-                                command.Parameters.AddWithValue("@value", (string)comboBox.SelectedItem);
-                                command.ExecuteNonQuery();
-                            }
-                        }
-
-                        foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
-                            var tag = (string)(textBox.GetType().GetProperty("Tag").GetValue(textBox));
-                            if (tag == null)
-                                continue;
-                            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
-                            var match = regex.Match(tag);
-                            var type = match.Success ? match.Groups[1].Value : null;
-                            var name = match.Success ? match.Groups[2].Value : null;
-                            if (type == "parameter") {
-                                command.Parameters.AddWithValue("@name", name);
-                                command.Parameters.AddWithValue("@value", textBox.Text);
-                                command.ExecuteNonQuery();
-                            }
-                        }
-
-                        foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
-                            var tag = (string)(checkBox.GetType().GetProperty("Tag").GetValue(checkBox));
-                            if (tag == null)
-                                continue;
-                            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
-                            var match = regex.Match(tag);
-                            var type = match.Success ? match.Groups[1].Value : null;
-                            var name = match.Success ? match.Groups[2].Value : null;
-                            if (type == "parameter") {
-                                command.Parameters.AddWithValue("@name", name);
-                                command.Parameters.AddWithValue("@value", checkBox.Checked ? "true" : "false");
-                                command.ExecuteNonQuery();
-                            }
-                        }
-
-                        foreach (var numericUpDown in Utilities.FindAllChildrenByType<NumericUpDown>(this)) {
-                            var tag = (string)(numericUpDown.GetType().GetProperty("Tag").GetValue(numericUpDown));
-                            if (tag == null)
-                                continue;
-                            var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
-                            var match = regex.Match(tag);
-                            var type = match.Success ? match.Groups[1].Value : null;
-                            var name = match.Success ? match.Groups[2].Value : null;
-                            if (type == "parameter") {
-                                command.Parameters.AddWithValue("@name", name);
-                                command.Parameters.AddWithValue("@value", numericUpDown.Value.ToString());
-                                command.ExecuteNonQuery();
-                            }
-                        }
+                    foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
+                        var tag = (string)(textBox.GetType().GetProperty("Tag").GetValue(textBox));
+                        if (tag == null)
+                            continue;
+                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                        var match = regex.Match(tag);
+                        var type = match.Success ? match.Groups[1].Value : null;
+                        var name = match.Success ? match.Groups[2].Value : null;
+                        if (type == "parameter")
+                            parameters.Add(name, textBox.Text);
                     }
-
-                    sql = "insert into device_parameters (device_id, device_vendor, device_name, parameter_name, parameter_value) values (@device_id, @device_vendor, @device_name, @parameter_name, @parameter_value)";
-                    using (var command = new SQLiteCommand(sql, conn)) {
-                        foreach (var key in numericUpDownDeviceParameterArray.Keys) {
-                            command.Parameters.AddWithValue("@device_id", key.Item1);
-                            command.Parameters.AddWithValue("@device_vendor", Controller.OpenCLDevices[key.Item1].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", Controller.OpenCLDevices[key.Item1].GetName());
-
-                            command.Parameters.AddWithValue("@parameter_name", key.Item2 + "_" + key.Item3);
-                            command.Parameters.AddWithValue("@parameter_value", numericUpDownDeviceParameterArray[key].Value.ToString());
-                            command.ExecuteNonQuery();
-                        }
-                        foreach (var key in checkBoxDeviceParameterArray.Keys) {
-                            command.Parameters.AddWithValue("@device_id", key.Item1);
-                            command.Parameters.AddWithValue("@device_vendor", Controller.OpenCLDevices[key.Item1].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", Controller.OpenCLDevices[key.Item1].GetName());
-
-                            command.Parameters.AddWithValue("@parameter_name", key.Item2 + "_" + key.Item3);
-                            command.Parameters.AddWithValue("@parameter_value", checkBoxDeviceParameterArray[key].Checked ? "true" : "false");
-                            command.ExecuteNonQuery();
-                        }
-                        foreach (var key in textBoxDeviceParameterArray.Keys) {
-                            command.Parameters.AddWithValue("@device_id", key.Item1);
-                            command.Parameters.AddWithValue("@device_vendor", Controller.OpenCLDevices[key.Item1].GetVendor());
-                            command.Parameters.AddWithValue("@device_name", Controller.OpenCLDevices[key.Item1].GetName());
-
-                            command.Parameters.AddWithValue("@parameter_name", key.Item2 + "_" + key.Item3);
-                            command.Parameters.AddWithValue("@parameter_value", textBoxDeviceParameterArray[key].Text);
-                            command.ExecuteNonQuery();
-                        }
+                    foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
+                        var tag = (string)(checkBox.GetType().GetProperty("Tag").GetValue(checkBox));
+                        if (tag == null)
+                            continue;
+                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                        var match = regex.Match(tag);
+                        var type = match.Success ? match.Groups[1].Value : null;
+                        var name = match.Success ? match.Groups[2].Value : null;
+                        if (type == "parameter")
+                            parameters.Add(name, checkBox.Checked);
                     }
+                    foreach (var numericUpDown in Utilities.FindAllChildrenByType<NumericUpDown>(this)) {
+                        var tag = (string)(numericUpDown.GetType().GetProperty("Tag").GetValue(numericUpDown));
+                        if (tag == null)
+                            continue;
+                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
+                        var match = regex.Match(tag);
+                        var type = match.Success ? match.Groups[1].Value : null;
+                        var name = match.Success ? match.Groups[2].Value : null;
+                        if (type == "parameter")
+                            parameters.Add(name, (int)numericUpDown.Value);
+                    }
+                    root.Add("parameters", parameters);
 
-                    trans.Commit();
-                    conn.Close();
+                    List<object> devices = new List<object> { };
+                    for (int deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
+                        Dictionary<string, object> deviceParameters = new Dictionary<string, object> {
+                            { "device_id", deviceIndex },
+                            { "device_vendor", Controller.OpenCLDevices[deviceIndex].GetVendor() },
+                            { "device_name", Controller.OpenCLDevices[deviceIndex].GetName() },
+                            { "device_pnp_string", Controller.OpenCLDevices[deviceIndex].PNPString }
+                        };
+                        foreach (var key in numericUpDownDeviceParameterArray.Keys)
+                            if (key.Item1 == deviceIndex)
+                                deviceParameters.Add(key.Item2 + "_" + key.Item3, (int)numericUpDownDeviceParameterArray[key].Value);
+                        foreach (var key in checkBoxDeviceParameterArray.Keys)
+                            if (key.Item1 == deviceIndex)
+                                deviceParameters.Add(key.Item2 + "_" + key.Item3, checkBoxDeviceParameterArray[key].Checked);
+                        foreach (var key in textBoxDeviceParameterArray.Keys)
+                            if (key.Item1 == deviceIndex)
+                                deviceParameters.Add(key.Item2 + "_" + key.Item3, textBoxDeviceParameterArray[key].Text);
+                        devices.Add(deviceParameters);
+                    }
+                    root.Add("devices", devices);
+
+                    sw.WriteLine(JsonConvert.SerializeObject(root, Formatting.Indented));
+                    sw.Flush();
+#pragma warning disable 618, 612
+                    NativeMethods.FlushFileBuffers(stream.Handle);
+#pragma warning restore 618, 612
+                    sw.Close();
                 }
-                if (System.IO.File.Exists(OldDatabaseFilePath))
-                    System.IO.File.Delete(OldDatabaseFilePath);
-                Logger("Saved settings.");
-                if (filePath == DatabaseFilePath)
+                Logger("Saved settings to JSON configuration file.");
+                if (filePath == JSONConfigFilePath)
                     mAreSettingsDirty = false;
             } catch (Exception ex) {
                 Logger("Exception in UpdateDatabase(): " + ex.Message + ex.StackTrace);
-                if (trans != null)
-                    trans.Rollback();
             }
             MainForm.Instance.Enabled = true;
             if (createBackup && checkBoxAutomaticBackups.Checked)
@@ -1934,7 +2117,7 @@ namespace GatelessGateSharp
         void CreateSettingsBackup(string name = null)
         {
             if (name == null)
-                name = System.DateTime.Now.ToString("yyyy-MM-dd--HHmm") + ".sqlite";
+                name = System.DateTime.Now.ToString("yyyy-MM-dd--HHmm") + ".json";
             try {
                 System.IO.File.Copy(DatabaseFilePath, SettingsBackupPathBase + "\\" + name);
             } catch (Exception ex) { }
@@ -1944,7 +2127,7 @@ namespace GatelessGateSharp
         void UpdateSettingBackupList()
         {
             listBoxSettingBackups.Items.Clear();
-            var regex = new Regex(@"^.*\\(.*)--(..)(..)\.sqlite$");
+            var regex = new Regex(@"^.*\\(.*)--(..)(..)\.json");
             foreach (string file in System.IO.Directory.GetFiles(SettingsBackupPathBase))
                 if (regex.Match(file).Success)
                     listBoxSettingBackups.Items.Add(regex.Replace(file, "$1 $2:$3"));
@@ -2100,8 +2283,6 @@ namespace GatelessGateSharp
         public string DefaultAlgorithm {
             get {
                 var selected = (string)comboBoxDefaultAlgorithm.SelectedItem;
-                if (selected == "Custom Pools")
-                    return selected;
                 foreach (var algorithm in AlgorithmList) {
                     if (GetPrettyAlgorithmName(algorithm) == selected)
                         return algorithm;
@@ -2109,11 +2290,7 @@ namespace GatelessGateSharp
                 return null;
             }
             set {
-                if (value == "Custom Pools") {
-                    comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(value);
-                } else {
-                    comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(GetPrettyAlgorithmName(value));
-                }
+                comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact(GetPrettyAlgorithmName(value));
             }
         }
 
@@ -3110,7 +3287,7 @@ namespace GatelessGateSharp
                 }
 
                 if (mAreSettingsDirty)
-                    SaveSettingsToDatabase();
+                    SaveSettingsToJSONConfigFile();
                 //if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy)
                 //    ADL.ADL_Main_Control_Destroy();
                 if (PCIExpress.Available)
@@ -4547,7 +4724,7 @@ namespace GatelessGateSharp
 
         bool CustomPoolEnabled {
             get {
-                return (string)comboBoxDefaultAlgorithm.SelectedItem == "Custom Pools";
+                return checkBoxUseCustomPools.Checked;
             }
         }
 
@@ -4881,7 +5058,7 @@ namespace GatelessGateSharp
                 if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
                     tabControlMainForm.SelectedIndex = 0;
                 if (mAreSettingsDirty)
-                    SaveSettingsToDatabase();
+                    SaveSettingsToJSONConfigFile();
 
                 Controller.PrimaryStratum = null;
                 Controller.SecondaryStratum = null;
@@ -4987,9 +5164,11 @@ namespace GatelessGateSharp
                                       && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
 
                 tabControlMainForm.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown);
-                comboBoxDefaultAlgorithm.Enabled = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) 
+                comboBoxDefaultAlgorithm.Enabled = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
                                       && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
-                                      && (Controller.AppState != Controller.ApplicationGlobalState.Switching);
+                                      && (Controller.AppState != Controller.ApplicationGlobalState.Switching)
+                                      && !checkBoxUseCustomPools.Checked;
+                checkBoxUseCustomPools.Enabled = idle;
                 buttonStart.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
                                       && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
                                       && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
@@ -5958,7 +6137,7 @@ namespace GatelessGateSharp
         {
             try {
                 if (MessageBox.Show("Would you like to save settings?", appName, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-                    SaveSettingsToDatabase();
+                    SaveSettingsToJSONConfigFile();
             } catch (Exception) { }
         }
 
@@ -5972,14 +6151,14 @@ namespace GatelessGateSharp
             saveFileDialog.FileName = "GatelessGateSharp.sqlite";
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                SaveSettingsToDatabase(saveFileDialog.FileName);
+                SaveSettingsToJSONConfigFile(saveFileDialog.FileName);
         }
 
         private void buttonLoadSettings_Click(object sender, EventArgs e)
         {
             try {
                 if (MessageBox.Show("Would you like to load settings?", appName, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-                    LoadSettingsFromDatabase();
+                    LoadSettingsFromJSONConfigFile();
             } catch (Exception) { }
         }
 
@@ -5992,7 +6171,7 @@ namespace GatelessGateSharp
             openFileDialog.RestoreDirectory = true;
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
-                LoadSettingsFromDatabase(openFileDialog.FileName);
+                LoadSettingsFromJSONConfigFile(openFileDialog.FileName);
         }
 
         private void listBoxPoolPriorities_SelectedIndexChanged(object sender, EventArgs e)
@@ -6074,7 +6253,7 @@ namespace GatelessGateSharp
                 if (listBoxSettingBackups.SelectedIndex >= 0 && MessageBox.Show(this, "Would you like to restore settings from backup?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
                     Regex re = new Regex(@"^(..........) (..):(..)$");
                     string path = SettingsBackupPathBase + "\\" + re.Replace((string)listBoxSettingBackups.Items[listBoxSettingBackups.SelectedIndex], "$1--$2$3.sqlite");
-                    LoadSettingsFromDatabase(path);
+                    LoadSettingsFromJSONConfigFile(path);
                 }
             } catch (Exception ex) {
                 Logger(ex);
@@ -6283,18 +6462,16 @@ namespace GatelessGateSharp
         private void SetBenchmarkParameter(Controller.BenchmarkParameter param, bool restore = false)
         {
             if (param.Name == "default_algorithm") {
-                DefaultAlgorithm =
-                    (restore) ? param.OriginalValues[0] :
-                    //(param.Value == "cryptonight_heavy") ? "Custom Pools" :
-                    //(param.Value == "cryptonight_light") ? "Custom Pools" :
-                    //(param.Value == "x16s") ? "Custom Pools" :
-                                                          param.Value;
-                if (DefaultAlgorithm == "Custom Pools") {
+                DefaultAlgorithm = (restore) ? param.OriginalValues[0] : param.Value;
+                checkBoxUseCustomPools.Checked = false;
+                /*
+                if (checkBoxUseCustomPools.Checked) {
                     checkBoxCustomPool0Enable.Checked = (string)comboBoxCustomPool0Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
                     checkBoxCustomPool1Enable.Checked = (string)comboBoxCustomPool1Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
                     checkBoxCustomPool2Enable.Checked = (string)comboBoxCustomPool2Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
                     checkBoxCustomPool3Enable.Checked = (string)comboBoxCustomPool3Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
                 }
+                */
             } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
                 int deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
                 Tuple<int, string, string> tuple;
@@ -6398,7 +6575,7 @@ namespace GatelessGateSharp
                 timerResetStopwatch.Enabled = false;
 
                 if (mAreSettingsDirty)
-                    SaveSettingsToDatabase();
+                    SaveSettingsToJSONConfigFile();
 
                 Controller.BenchmarkEntries.Clear();
                 Controller.BenchmarkRecords.Clear();
@@ -6623,7 +6800,7 @@ namespace GatelessGateSharp
             } else {
                 StopBenchmarks();
                 try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
-                LoadSettingsFromDatabase();
+                LoadSettingsFromJSONConfigFile();
             }
         }
 
@@ -6855,7 +7032,7 @@ namespace GatelessGateSharp
                         parametersUpdated = parametersUpdated || (param.Value != param.OriginalValues[deviceIndex]);
                     }
                     mAreSettingsDirty = true;
-                    SaveSettingsToDatabase();
+                    SaveSettingsToJSONConfigFile();
                     entry.SuccessCount = bestRecord.SuccessCount;
                     entry.ResultCount = bestRecord.Results.Count;
                     entry.SpeedPrimaryAlgorithm = bestRecord.SpeedPrimaryAlgorithm;
@@ -6882,7 +7059,7 @@ namespace GatelessGateSharp
                 tabControlMainForm.SelectedIndex = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? 5 : 4;
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) 
                     progressBarBenchmarking.Value = 100;
-                LoadSettingsFromDatabase();
+                LoadSettingsFromJSONConfigFile();
 
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.OptimizerEntries.Count <= 1) {
                     Controller.OptimizerEntries.Clear();
@@ -7202,7 +7379,7 @@ namespace GatelessGateSharp
                 try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                 progressBarOptimizer.Style = ProgressBarStyle.Continuous;
                 progressBarOptimizer.Value = 0;
-                LoadSettingsFromDatabase();
+                LoadSettingsFromJSONConfigFile();
                 UpdateControls();
             }
         }
