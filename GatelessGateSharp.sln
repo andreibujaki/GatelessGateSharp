@@ -681,7 +681,6 @@ Global
 		{65A01864-0F66-41A9-AEE7-A3BE9AFE74AB}.Release|ARM.ActiveCfg = Release
 		{65A01864-0F66-41A9-AEE7-A3BE9AFE74AB}.Release|ARM.Build.0 = Release
 		{65A01864-0F66-41A9-AEE7-A3BE9AFE74AB}.Release|Mixed Platforms.ActiveCfg = Release
-		{65A01864-0F66-41A9-AEE7-A3BE9AFE74AB}.Release|Mixed Platforms.Build.0 = Release
 		{65A01864-0F66-41A9-AEE7-A3BE9AFE74AB}.Release|Win32.ActiveCfg = Release
 		{65A01864-0F66-41A9-AEE7-A3BE9AFE74AB}.Release|Win32.Build.0 = Release
 		{65A01864-0F66-41A9-AEE7-A3BE9AFE74AB}.Release|x64.ActiveCfg = Release

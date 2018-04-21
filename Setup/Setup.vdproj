@@ -39,12 +39,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_09076379AC7E481FA9AB37064EAF3C5C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_0943C3634AFE44968D51441FD1073EEB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,12 +46,6 @@
         "Entry"
         {
         "MsmKey" = "8:_0B350682E01E4BC1B427E9C7FF0778EE"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0E0CDA0BFC214817BD7A69C2D5FA91B8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -363,12 +351,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7DC8B2A1F6F648B6879E13DE342F2C6B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7E44D7C2305045D2814E225CE1C74EAC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -513,12 +495,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_ABE61A9CD987453FB1FB347359496C17"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_AC2025F001F74A4D91260F082FA0B1E5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -622,12 +598,6 @@
         "Entry"
         {
         "MsmKey" = "8:_CE0096C2DFC246699C4677860FA099D5"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D0804055200E469BA2A3720524BEC8AD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -783,12 +753,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F1F45E899067491990EF43EEB48C2A35"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F6A2FA18F955449E83C7F83DB16E2C23"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -803,12 +767,6 @@
         {
         "MsmKey" = "8:_F99E912AB3D0498494A445519D0BDF55"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DC0D118C4EAC4B149C2356AACC426DCC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -881,12 +839,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_005BA131E503E55D3259C325B392A218"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3F257B72128849FFBA6BAEFBFEC78450"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -1139,26 +1091,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_09076379AC7E481FA9AB37064EAF3C5C"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 480 8.0GB (VEN_1002&DEV_67DF&SUBSYS_94801682).xml"
-            "TargetName" = "8:AMD Radeon RX 480 8.0GB (VEN_1002&DEV_67DF&SUBSYS_94801682).xml"
-            "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0943C3634AFE44968D51441FD1073EEB"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Ellesmere_neoscrypt_64.bin"
@@ -1185,26 +1117,6 @@
             "TargetName" = "8:ethash_pascal.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E0CDA0BFC214817BD7A69C2D5FA91B8"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 470 4.0GB (VEN_1002&DEV_67DF&SUBSYS_0B311002).xml"
-            "TargetName" = "8:AMD Radeon RX 470 4.0GB (VEN_1002&DEV_67DF&SUBSYS_0B311002).xml"
-            "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1588,11 +1500,6 @@
             "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_3F257B72128849FFBA6BAEFBFEC78450"
-                    {
-                    "Name" = "8:GatelessGateSharpMonitor.exe"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharpMonitor.exe"
             "TargetName" = "8:"
@@ -1667,7 +1574,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HashLib, Version=2.1.0.1, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:HashLib, Version=2.1.0.1, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_41D73E71863A5CF344DE0BC191304925"
@@ -2285,26 +2192,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7DC8B2A1F6F648B6879E13DE342F2C6B"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 580 8.0GB.xml"
-            "TargetName" = "8:AMD Radeon RX 580 8.0GB.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7E44D7C2305045D2814E225CE1C74EAC"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\blake256.cl"
@@ -2796,26 +2683,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABE61A9CD987453FB1FB347359496C17"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 480 8.0GB.xml"
-            "TargetName" = "8:AMD Radeon RX 480 8.0GB.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AC2025F001F74A4D91260F082FA0B1E5"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\Kernels\\blake.cl"
@@ -3158,26 +3025,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D0804055200E469BA2A3720524BEC8AD"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 570 4.0GB.xml"
-            "TargetName" = "8:AMD Radeon RX 570 4.0GB.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D0CAF5C465A44ECC9AC416F85C00C120"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Mullins_x16r_64.bin"
@@ -3447,11 +3294,6 @@
             "AssemblyAsmDisplayName" = "8:GatelessGateSharpLauncher, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_DC0D118C4EAC4B149C2356AACC426DCC"
-                    {
-                    "Name" = "8:GatelessGateSharpLauncher.exe"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\GatelessGateSharpLauncher.exe"
             "TargetName" = "8:"
@@ -3697,26 +3539,6 @@
             "TargetName" = "8:neoscrypt.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F1F45E899067491990EF43EEB48C2A35"
-            {
-            "SourcePath" = "8:..\\GatelessGateSharp\\DeviceSettings\\AMD Radeon RX 470 4.0GB.xml"
-            "TargetName" = "8:AMD Radeon RX 470 4.0GB.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_DA7E7E72CFBE4A8AA6B349481231B15C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"

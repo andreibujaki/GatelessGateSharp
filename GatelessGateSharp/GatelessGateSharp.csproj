@@ -98,6 +98,9 @@
   <PropertyGroup>
     <ApplicationIcon>Gateless Gate Sharp.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.6.1.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.6.1\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -339,7 +342,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>showdown makehtml  -i $(SolutionDir)README.md -o README.html
+    <PostBuildEvent>xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
+xcopy "$(ProjectDir)DeviceSettings" "$(TargetDir)DeviceSettings"  /i /s /y
+xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
 xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)
@@ -350,9 +355,7 @@ copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpLauncher\bin\$(Configuration)\GatelessGateSharpLauncher.exe $(TargetDir)
 "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:16777216
-xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
-xcopy /i /s /y $(ProjectDir)DeviceSettings $(TargetDir)DeviceSettings
-xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
+showdown makehtml  -i $(SolutionDir)README.md -o README.html
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
