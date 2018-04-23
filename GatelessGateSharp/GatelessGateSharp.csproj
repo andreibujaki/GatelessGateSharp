@@ -296,10 +296,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DeviceSettingsUserControl\DeviceSettingsUserControl.csproj">
-      <Project>{6881a75e-d845-41df-b544-1f2dff67498d}</Project>
-      <Name>DeviceSettingsUserControl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HashLib\HashLib.csproj">
       <Project>{31880fb6-5b86-42b8-ab92-864045b5d7a2}</Project>
       <Name>HashLib</Name>

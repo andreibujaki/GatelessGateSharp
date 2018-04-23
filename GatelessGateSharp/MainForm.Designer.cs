@@ -50,8 +50,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -64,17 +64,18 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle42 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle46 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
             this.timerStatsUpdates = new System.Windows.Forms.Timer(this.components);
             this.timerDevFee = new System.Windows.Forms.Timer(this.components);
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
@@ -101,8 +102,47 @@
             this.buttonOpenLog = new System.Windows.Forms.Button();
             this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.tabPageMiscSettings = new System.Windows.Forms.TabPage();
+            this.tabControlMisc = new System.Windows.Forms.TabControl();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.buttonDisableDriverInstallation = new System.Windows.Forms.Button();
+            this.buttonDisableUserAccountControl = new System.Windows.Forms.Button();
+            this.buttonDisableAuomaticRepair = new System.Windows.Forms.Button();
+            this.buttonDisableUserAccountControlSettings = new System.Windows.Forms.Button();
+            this.buttonInstallRecommendedAMDDriver = new System.Windows.Forms.Button();
+            this.buttonDownloadDisplayDriverUninstaller = new System.Windows.Forms.Button();
+            this.buttonConfigureAutomaticLogin = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.button11 = new System.Windows.Forms.Button();
+            this.buttonSaveSettings = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.groupBoxSettingsBackups = new System.Windows.Forms.GroupBox();
+            this.checkBoxAutomaticBackups = new System.Windows.Forms.CheckBox();
+            this.buttonDeleteAllSettingsBackups = new System.Windows.Forms.Button();
+            this.buttonDeleteSettingsBackup = new System.Windows.Forms.Button();
+            this.buttonRestoreSettingsBackup = new System.Windows.Forms.Button();
+            this.buttonCreateSettingsBackup = new System.Windows.Forms.Button();
+            this.listBoxSettingBackups = new System.Windows.Forms.ListBox();
+            this.tabPage16 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkBoxAutoStart = new System.Windows.Forms.CheckBox();
+            this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
+            this.checkBoxLaunchAtStartup = new System.Windows.Forms.CheckBox();
+            this.tabPage17 = new System.Windows.Forms.TabPage();
+            this.buttonOpenOpenCLBinaryFolder = new System.Windows.Forms.Button();
+            this.checkBoxUseDefaultOpenCLBinaries = new System.Windows.Forms.CheckBox();
+            this.checkBoxReuseCompiledBinaries = new System.Windows.Forms.CheckBox();
+            this.tabPage18 = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
+            this.comboBoxCurrency = new System.Windows.Forms.ComboBox();
+            this.tabPage19 = new System.Windows.Forms.TabPage();
+            this.label34 = new System.Windows.Forms.Label();
             this.checkBoxAPIEnabled = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.numericUpDownAPIPort = new System.Windows.Forms.NumericUpDown();
             this.groupBoxAPIIPRange = new System.Windows.Forms.GroupBox();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -117,37 +157,6 @@
             this.textBoxAllowedIPRange = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.numericUpDownAPIPort = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
-            this.comboBoxCurrency = new System.Windows.Forms.ComboBox();
-            this.buttonOpenOpenCLBinaryFolder = new System.Windows.Forms.Button();
-            this.checkBoxReuseCompiledBinaries = new System.Windows.Forms.CheckBox();
-            this.checkBoxUseDefaultOpenCLBinaries = new System.Windows.Forms.CheckBox();
-            this.button11 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.groupBoxSettingsBackups = new System.Windows.Forms.GroupBox();
-            this.checkBoxAutomaticBackups = new System.Windows.Forms.CheckBox();
-            this.buttonDeleteAllSettingsBackups = new System.Windows.Forms.Button();
-            this.buttonDeleteSettingsBackup = new System.Windows.Forms.Button();
-            this.buttonRestoreSettingsBackup = new System.Windows.Forms.Button();
-            this.buttonCreateSettingsBackup = new System.Windows.Forms.Button();
-            this.listBoxSettingBackups = new System.Windows.Forms.ListBox();
-            this.button9 = new System.Windows.Forms.Button();
-            this.buttonSaveSettings = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.buttonDisableUserAccountControl = new System.Windows.Forms.Button();
-            this.buttonDisableUserAccountControlSettings = new System.Windows.Forms.Button();
-            this.buttonDownloadDisplayDriverUninstaller = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.buttonConfigureAutomaticLogin = new System.Windows.Forms.Button();
-            this.buttonInstallRecommendedAMDDriver = new System.Windows.Forms.Button();
-            this.buttonDisableAuomaticRepair = new System.Windows.Forms.Button();
-            this.buttonDisableDriverInstallation = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.checkBoxDisableAutoStartPrompt = new System.Windows.Forms.CheckBox();
-            this.checkBoxAutoStart = new System.Windows.Forms.CheckBox();
-            this.checkBoxLaunchAtStartup = new System.Windows.Forms.CheckBox();
             this.tabPageBenchmarks = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl4 = new System.Windows.Forms.TabControl();
@@ -221,15 +230,64 @@
             this.numericUpDownBenchmarkingRepeats = new System.Windows.Forms.NumericUpDown();
             this.label33 = new System.Windows.Forms.Label();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
-            this.buttonResetOverclockingSettings = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.dataGridViewMemoryTimings = new System.Windows.Forms.DataGridView();
+            this.ColumnMemoryTimingsParameters = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnMemoryTimingsValues = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.comboBoxDeviceSettingsAlgorithm = new System.Windows.Forms.ComboBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label55 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label54 = new System.Windows.Forms.Label();
+            this.numericUpDownDevice0EthashPascalIntensity = new System.Windows.Forms.NumericUpDown();
+            this.label381 = new System.Windows.Forms.Label();
+            this.numericUpDown281 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownDevice0EthashPascalThreads = new System.Windows.Forms.NumericUpDown();
+            this.label380 = new System.Windows.Forms.Label();
+            this.numericUpDown280 = new System.Windows.Forms.NumericUpDown();
+            this.label194 = new System.Windows.Forms.Label();
+            this.numericUpDownDevice0EthashLocalWorkSize = new System.Windows.Forms.NumericUpDown();
+            this.label142 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.numericUpDownDevice0EthashPascalPascalIterations = new System.Windows.Forms.NumericUpDown();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label49 = new System.Windows.Forms.Label();
+            this.numericDeviceParameterOverclockingEnabled = new System.Windows.Forms.CheckBox();
+            this.label53 = new System.Windows.Forms.Label();
+            this.numericDeviceParameterOverclockingMemoryVoltage = new System.Windows.Forms.NumericUpDown();
+            this.numericDeviceParameterOverclockingCoreClock = new System.Windows.Forms.NumericUpDown();
+            this.label52 = new System.Windows.Forms.Label();
+            this.numericDeviceParameterOverclockingMemoryClock = new System.Windows.Forms.NumericUpDown();
+            this.numericDeviceParameterOverclockingCoreVoltage = new System.Windows.Forms.NumericUpDown();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.numericDeviceParameterOverclockingPowerLimit = new System.Windows.Forms.NumericUpDown();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed = new System.Windows.Forms.NumericUpDown();
+            this.label37 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.numericUpDownDeviceParameterFanControlTargetTemperature = new System.Windows.Forms.NumericUpDown();
+            this.label188 = new System.Windows.Forms.Label();
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature = new System.Windows.Forms.NumericUpDown();
+            this.label47 = new System.Windows.Forms.Label();
+            this.checkBoxDeviceParameterFanControlEnabled = new System.Windows.Forms.CheckBox();
+            this.buttonLoadFromFile = new System.Windows.Forms.Button();
+            this.buttonSaveToFile = new System.Windows.Forms.Button();
+            this.buttonCopyToOthers = new System.Windows.Forms.Button();
+            this.buttonResetToDefault = new System.Windows.Forms.Button();
+            this.comboBoxDeviceSettingsDevice = new System.Windows.Forms.ComboBox();
             this.buttonResetAllSettings = new System.Windows.Forms.Button();
-            this.buttonResetAlgorithmSettings = new System.Windows.Forms.Button();
-            this.buttonResetFanControlSettings = new System.Windows.Forms.Button();
             this.groupBoxHadrwareAcceleration = new System.Windows.Forms.GroupBox();
             this.checkBoxEnableHardwareAccelerationForDefaultSettings = new System.Windows.Forms.CheckBox();
             this.label144 = new System.Windows.Forms.Label();
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
-            this.tabControlDeviceSettings = new System.Windows.Forms.TabControl();
             this.tabPageCustomPoolSettings = new System.Windows.Forms.TabPage();
             this.groupBoxCustmPool1 = new System.Windows.Forms.GroupBox();
             this.comboBoxCustomPool1SecondaryAlgorithm = new System.Windows.Forms.ComboBox();
@@ -470,21 +528,20 @@
             this.numericUpDownOptimizationRepeats = new System.Windows.Forms.NumericUpDown();
             this.label42 = new System.Windows.Forms.Label();
             this.timerStartNextBenchmark = new System.Windows.Forms.Timer(this.components);
-            this.tabControlMisc = new System.Windows.Forms.TabControl();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.tabPage9 = new System.Windows.Forms.TabPage();
-            this.tabPage16 = new System.Windows.Forms.TabPage();
-            this.tabPage17 = new System.Windows.Forms.TabPage();
-            this.tabPage18 = new System.Windows.Forms.TabPage();
-            this.tabPage19 = new System.Windows.Forms.TabPage();
-            this.label34 = new System.Windows.Forms.Label();
             this.statusStripMainForm.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
             this.tabPageLog.SuspendLayout();
             this.tabPageMiscSettings.SuspendLayout();
-            this.groupBoxAPIIPRange.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).BeginInit();
+            this.tabControlMisc.SuspendLayout();
+            this.tabPage7.SuspendLayout();
+            this.tabPage9.SuspendLayout();
             this.groupBoxSettingsBackups.SuspendLayout();
+            this.tabPage16.SuspendLayout();
+            this.tabPage17.SuspendLayout();
+            this.tabPage18.SuspendLayout();
+            this.tabPage19.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).BeginInit();
+            this.groupBoxAPIIPRange.SuspendLayout();
             this.tabPageBenchmarks.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControl4.SuspendLayout();
@@ -506,6 +563,30 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingRepeats)).BeginInit();
             this.tabPageDeviceSettings.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMemoryTimings)).BeginInit();
+            this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalIntensity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown281)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalThreads)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown280)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashLocalWorkSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalPascalIterations)).BeginInit();
+            this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingMemoryVoltage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingCoreClock)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingMemoryClock)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingCoreVoltage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingPowerLimit)).BeginInit();
+            this.groupBox13.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlMaximumFanSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlMinimumFanSpeed)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlTargetTemperature)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlMaximumTemperature)).BeginInit();
             this.groupBoxHadrwareAcceleration.SuspendLayout();
             this.tabPageCustomPoolSettings.SuspendLayout();
             this.groupBoxCustmPool1.SuspendLayout();
@@ -546,13 +627,6 @@
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationRepeats)).BeginInit();
-            this.tabControlMisc.SuspendLayout();
-            this.tabPage7.SuspendLayout();
-            this.tabPage9.SuspendLayout();
-            this.tabPage16.SuspendLayout();
-            this.tabPage17.SuspendLayout();
-            this.tabPage18.SuspendLayout();
-            this.tabPage19.SuspendLayout();
             this.SuspendLayout();
             // 
             // timerStatsUpdates
@@ -680,7 +754,7 @@
             this.tabPageAbout.Controls.Add(this.richTextBoxAbout);
             this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
             this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Size = new System.Drawing.Size(616, 396);
+            this.tabPageAbout.Size = new System.Drawing.Size(616, 335);
             this.tabPageAbout.TabIndex = 5;
             this.tabPageAbout.Text = "About";
             this.tabPageAbout.UseVisualStyleBackColor = true;
@@ -694,7 +768,7 @@
             this.richTextBoxAbout.Location = new System.Drawing.Point(8, 3);
             this.richTextBoxAbout.Name = "richTextBoxAbout";
             this.richTextBoxAbout.ReadOnly = true;
-            this.richTextBoxAbout.Size = new System.Drawing.Size(600, 390);
+            this.richTextBoxAbout.Size = new System.Drawing.Size(600, 329);
             this.richTextBoxAbout.TabIndex = 0;
             this.richTextBoxAbout.Text = resources.GetString("richTextBoxAbout.Text");
             // 
@@ -708,7 +782,7 @@
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
             this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(616, 396);
+            this.tabPageLog.Size = new System.Drawing.Size(616, 335);
             this.tabPageLog.TabIndex = 1;
             this.tabPageLog.Text = "Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -773,7 +847,7 @@
             this.richTextBoxLog.Location = new System.Drawing.Point(6, 7);
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(458, 383);
+            this.richTextBoxLog.Size = new System.Drawing.Size(458, 322);
             this.richTextBoxLog.TabIndex = 0;
             this.richTextBoxLog.Text = "";
             // 
@@ -786,6 +860,473 @@
             this.tabPageMiscSettings.TabIndex = 4;
             this.tabPageMiscSettings.Text = "Misc.";
             this.tabPageMiscSettings.UseVisualStyleBackColor = true;
+            // 
+            // tabControlMisc
+            // 
+            this.tabControlMisc.Controls.Add(this.tabPage7);
+            this.tabControlMisc.Controls.Add(this.tabPage9);
+            this.tabControlMisc.Controls.Add(this.tabPage16);
+            this.tabControlMisc.Controls.Add(this.tabPage17);
+            this.tabControlMisc.Controls.Add(this.tabPage18);
+            this.tabControlMisc.Controls.Add(this.tabPage19);
+            this.tabControlMisc.Location = new System.Drawing.Point(8, 3);
+            this.tabControlMisc.Name = "tabControlMisc";
+            this.tabControlMisc.SelectedIndex = 0;
+            this.tabControlMisc.Size = new System.Drawing.Size(600, 329);
+            this.tabControlMisc.TabIndex = 6;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.button7);
+            this.tabPage7.Controls.Add(this.button6);
+            this.tabPage7.Controls.Add(this.buttonDisableDriverInstallation);
+            this.tabPage7.Controls.Add(this.buttonDisableUserAccountControl);
+            this.tabPage7.Controls.Add(this.buttonDisableAuomaticRepair);
+            this.tabPage7.Controls.Add(this.buttonDisableUserAccountControlSettings);
+            this.tabPage7.Controls.Add(this.buttonInstallRecommendedAMDDriver);
+            this.tabPage7.Controls.Add(this.buttonDownloadDisplayDriverUninstaller);
+            this.tabPage7.Controls.Add(this.buttonConfigureAutomaticLogin);
+            this.tabPage7.Controls.Add(this.button1);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(592, 303);
+            this.tabPage7.TabIndex = 0;
+            this.tabPage7.Text = "System Configurations";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button7.Location = new System.Drawing.Point(6, 209);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(216, 23);
+            this.button7.TabIndex = 9;
+            this.button7.Text = "8. Download TeamViewer";
+            this.button7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.buttonInstallTeamViewer_Click);
+            // 
+            // button6
+            // 
+            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button6.Location = new System.Drawing.Point(6, 6);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(216, 23);
+            this.button6.TabIndex = 0;
+            this.button6.Text = "1. Install Latest Version";
+            this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // buttonDisableDriverInstallation
+            // 
+            this.buttonDisableDriverInstallation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDisableDriverInstallation.Location = new System.Drawing.Point(6, 35);
+            this.buttonDisableDriverInstallation.Name = "buttonDisableDriverInstallation";
+            this.buttonDisableDriverInstallation.Size = new System.Drawing.Size(216, 23);
+            this.buttonDisableDriverInstallation.TabIndex = 1;
+            this.buttonDisableDriverInstallation.Text = "2. Disable Driver Installation";
+            this.buttonDisableDriverInstallation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonDisableDriverInstallation.UseVisualStyleBackColor = true;
+            this.buttonDisableDriverInstallation.Click += new System.EventHandler(this.buttonDisableDriverInstallation_Click);
+            // 
+            // buttonDisableUserAccountControl
+            // 
+            this.buttonDisableUserAccountControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDisableUserAccountControl.Location = new System.Drawing.Point(6, 122);
+            this.buttonDisableUserAccountControl.Name = "buttonDisableUserAccountControl";
+            this.buttonDisableUserAccountControl.Size = new System.Drawing.Size(216, 23);
+            this.buttonDisableUserAccountControl.TabIndex = 5;
+            this.buttonDisableUserAccountControl.Text = "5. Disable User Account Control";
+            this.buttonDisableUserAccountControl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonDisableUserAccountControl.UseVisualStyleBackColor = true;
+            this.buttonDisableUserAccountControl.Click += new System.EventHandler(this.buttonDisableUserAccountControl_Click);
+            // 
+            // buttonDisableAuomaticRepair
+            // 
+            this.buttonDisableAuomaticRepair.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDisableAuomaticRepair.Location = new System.Drawing.Point(6, 180);
+            this.buttonDisableAuomaticRepair.Name = "buttonDisableAuomaticRepair";
+            this.buttonDisableAuomaticRepair.Size = new System.Drawing.Size(216, 23);
+            this.buttonDisableAuomaticRepair.TabIndex = 8;
+            this.buttonDisableAuomaticRepair.Text = "7. Disable Automatic Repair";
+            this.buttonDisableAuomaticRepair.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonDisableAuomaticRepair.UseVisualStyleBackColor = true;
+            this.buttonDisableAuomaticRepair.Click += new System.EventHandler(this.buttonDisableAuomaticRepair_Click);
+            // 
+            // buttonDisableUserAccountControlSettings
+            // 
+            this.buttonDisableUserAccountControlSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDisableUserAccountControlSettings.Location = new System.Drawing.Point(228, 122);
+            this.buttonDisableUserAccountControlSettings.Name = "buttonDisableUserAccountControlSettings";
+            this.buttonDisableUserAccountControlSettings.Size = new System.Drawing.Size(57, 23);
+            this.buttonDisableUserAccountControlSettings.TabIndex = 6;
+            this.buttonDisableUserAccountControlSettings.Text = "Restore";
+            this.buttonDisableUserAccountControlSettings.UseVisualStyleBackColor = true;
+            this.buttonDisableUserAccountControlSettings.Click += new System.EventHandler(this.buttonUserAccountControlSettings_Click);
+            // 
+            // buttonInstallRecommendedAMDDriver
+            // 
+            this.buttonInstallRecommendedAMDDriver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonInstallRecommendedAMDDriver.Location = new System.Drawing.Point(6, 93);
+            this.buttonInstallRecommendedAMDDriver.Name = "buttonInstallRecommendedAMDDriver";
+            this.buttonInstallRecommendedAMDDriver.Size = new System.Drawing.Size(216, 23);
+            this.buttonInstallRecommendedAMDDriver.TabIndex = 4;
+            this.buttonInstallRecommendedAMDDriver.Text = "4. Download Recommended AMD Driver";
+            this.buttonInstallRecommendedAMDDriver.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonInstallRecommendedAMDDriver.UseVisualStyleBackColor = true;
+            this.buttonInstallRecommendedAMDDriver.Click += new System.EventHandler(this.buttonInstallRecommendedAMDDriver_Click);
+            // 
+            // buttonDownloadDisplayDriverUninstaller
+            // 
+            this.buttonDownloadDisplayDriverUninstaller.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDownloadDisplayDriverUninstaller.Location = new System.Drawing.Point(6, 64);
+            this.buttonDownloadDisplayDriverUninstaller.Name = "buttonDownloadDisplayDriverUninstaller";
+            this.buttonDownloadDisplayDriverUninstaller.Size = new System.Drawing.Size(216, 23);
+            this.buttonDownloadDisplayDriverUninstaller.TabIndex = 3;
+            this.buttonDownloadDisplayDriverUninstaller.Text = "3. Download Display Driver Uninstaller";
+            this.buttonDownloadDisplayDriverUninstaller.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonDownloadDisplayDriverUninstaller.UseVisualStyleBackColor = true;
+            this.buttonDownloadDisplayDriverUninstaller.Click += new System.EventHandler(this.buttonDownloadDisplayDriverUninstaller_Click);
+            // 
+            // buttonConfigureAutomaticLogin
+            // 
+            this.buttonConfigureAutomaticLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonConfigureAutomaticLogin.Location = new System.Drawing.Point(6, 151);
+            this.buttonConfigureAutomaticLogin.Name = "buttonConfigureAutomaticLogin";
+            this.buttonConfigureAutomaticLogin.Size = new System.Drawing.Size(216, 23);
+            this.buttonConfigureAutomaticLogin.TabIndex = 7;
+            this.buttonConfigureAutomaticLogin.Text = "6. Configure Automatic Login";
+            this.buttonConfigureAutomaticLogin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonConfigureAutomaticLogin.UseVisualStyleBackColor = true;
+            this.buttonConfigureAutomaticLogin.Click += new System.EventHandler(this.buttonConfigureAutomaticLogin_Click);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(228, 35);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(57, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "Restore";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.buttonDeviceInstallationSettings_Click);
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.button11);
+            this.tabPage9.Controls.Add(this.buttonSaveSettings);
+            this.tabPage9.Controls.Add(this.button8);
+            this.tabPage9.Controls.Add(this.button9);
+            this.tabPage9.Controls.Add(this.groupBoxSettingsBackups);
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage9.Size = new System.Drawing.Size(592, 303);
+            this.tabPage9.TabIndex = 1;
+            this.tabPage9.Text = "User Settings";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // button11
+            // 
+            this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button11.Location = new System.Drawing.Point(138, 35);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(126, 23);
+            this.button11.TabIndex = 3;
+            this.button11.Text = "Load From...";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // buttonSaveSettings
+            // 
+            this.buttonSaveSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSaveSettings.Location = new System.Drawing.Point(6, 6);
+            this.buttonSaveSettings.Name = "buttonSaveSettings";
+            this.buttonSaveSettings.Size = new System.Drawing.Size(126, 23);
+            this.buttonSaveSettings.TabIndex = 0;
+            this.buttonSaveSettings.Text = "Save";
+            this.buttonSaveSettings.UseVisualStyleBackColor = true;
+            this.buttonSaveSettings.Click += new System.EventHandler(this.buttonSaveSettings_Click);
+            // 
+            // button8
+            // 
+            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.Location = new System.Drawing.Point(138, 6);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(126, 23);
+            this.button8.TabIndex = 1;
+            this.button8.Text = "Save As...";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.buttonSaveSettingsAs_Click);
+            // 
+            // button9
+            // 
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.Location = new System.Drawing.Point(6, 35);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(126, 23);
+            this.button9.TabIndex = 2;
+            this.button9.Text = "Load";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.buttonLoadSettings_Click);
+            // 
+            // groupBoxSettingsBackups
+            // 
+            this.groupBoxSettingsBackups.Controls.Add(this.checkBoxAutomaticBackups);
+            this.groupBoxSettingsBackups.Controls.Add(this.buttonDeleteAllSettingsBackups);
+            this.groupBoxSettingsBackups.Controls.Add(this.buttonDeleteSettingsBackup);
+            this.groupBoxSettingsBackups.Controls.Add(this.buttonRestoreSettingsBackup);
+            this.groupBoxSettingsBackups.Controls.Add(this.buttonCreateSettingsBackup);
+            this.groupBoxSettingsBackups.Controls.Add(this.listBoxSettingBackups);
+            this.groupBoxSettingsBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.groupBoxSettingsBackups.Location = new System.Drawing.Point(6, 67);
+            this.groupBoxSettingsBackups.Name = "groupBoxSettingsBackups";
+            this.groupBoxSettingsBackups.Size = new System.Drawing.Size(258, 160);
+            this.groupBoxSettingsBackups.TabIndex = 2;
+            this.groupBoxSettingsBackups.TabStop = false;
+            this.groupBoxSettingsBackups.Text = "Backups";
+            // 
+            // checkBoxAutomaticBackups
+            // 
+            this.checkBoxAutomaticBackups.AutoSize = true;
+            this.checkBoxAutomaticBackups.Checked = true;
+            this.checkBoxAutomaticBackups.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAutomaticBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxAutomaticBackups.Location = new System.Drawing.Point(6, 134);
+            this.checkBoxAutomaticBackups.Name = "checkBoxAutomaticBackups";
+            this.checkBoxAutomaticBackups.Size = new System.Drawing.Size(235, 17);
+            this.checkBoxAutomaticBackups.TabIndex = 0;
+            this.checkBoxAutomaticBackups.Tag = "parameter:automatic_backups";
+            this.checkBoxAutomaticBackups.Text = "Create backup whenever settings are saved";
+            this.checkBoxAutomaticBackups.UseVisualStyleBackColor = true;
+            // 
+            // buttonDeleteAllSettingsBackups
+            // 
+            this.buttonDeleteAllSettingsBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDeleteAllSettingsBackups.Location = new System.Drawing.Point(185, 105);
+            this.buttonDeleteAllSettingsBackups.Name = "buttonDeleteAllSettingsBackups";
+            this.buttonDeleteAllSettingsBackups.Size = new System.Drawing.Size(67, 23);
+            this.buttonDeleteAllSettingsBackups.TabIndex = 5;
+            this.buttonDeleteAllSettingsBackups.Text = "Delete All";
+            this.buttonDeleteAllSettingsBackups.UseVisualStyleBackColor = true;
+            this.buttonDeleteAllSettingsBackups.Click += new System.EventHandler(this.button13_Click);
+            // 
+            // buttonDeleteSettingsBackup
+            // 
+            this.buttonDeleteSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDeleteSettingsBackup.Location = new System.Drawing.Point(185, 76);
+            this.buttonDeleteSettingsBackup.Name = "buttonDeleteSettingsBackup";
+            this.buttonDeleteSettingsBackup.Size = new System.Drawing.Size(67, 23);
+            this.buttonDeleteSettingsBackup.TabIndex = 4;
+            this.buttonDeleteSettingsBackup.Text = "Delete";
+            this.buttonDeleteSettingsBackup.UseVisualStyleBackColor = true;
+            this.buttonDeleteSettingsBackup.Click += new System.EventHandler(this.buttonDeleteSettingsBackup_Click);
+            // 
+            // buttonRestoreSettingsBackup
+            // 
+            this.buttonRestoreSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRestoreSettingsBackup.Location = new System.Drawing.Point(185, 47);
+            this.buttonRestoreSettingsBackup.Name = "buttonRestoreSettingsBackup";
+            this.buttonRestoreSettingsBackup.Size = new System.Drawing.Size(67, 23);
+            this.buttonRestoreSettingsBackup.TabIndex = 3;
+            this.buttonRestoreSettingsBackup.Text = "Restore";
+            this.buttonRestoreSettingsBackup.UseVisualStyleBackColor = true;
+            this.buttonRestoreSettingsBackup.Click += new System.EventHandler(this.buttonRestoreSettings_Click);
+            // 
+            // buttonCreateSettingsBackup
+            // 
+            this.buttonCreateSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCreateSettingsBackup.Location = new System.Drawing.Point(185, 18);
+            this.buttonCreateSettingsBackup.Name = "buttonCreateSettingsBackup";
+            this.buttonCreateSettingsBackup.Size = new System.Drawing.Size(67, 23);
+            this.buttonCreateSettingsBackup.TabIndex = 1;
+            this.buttonCreateSettingsBackup.Text = "Create";
+            this.buttonCreateSettingsBackup.UseVisualStyleBackColor = true;
+            this.buttonCreateSettingsBackup.Click += new System.EventHandler(this.buttonCreateSettingsBackup_Click);
+            // 
+            // listBoxSettingBackups
+            // 
+            this.listBoxSettingBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listBoxSettingBackups.FormattingEnabled = true;
+            this.listBoxSettingBackups.Location = new System.Drawing.Point(6, 20);
+            this.listBoxSettingBackups.Name = "listBoxSettingBackups";
+            this.listBoxSettingBackups.Size = new System.Drawing.Size(173, 108);
+            this.listBoxSettingBackups.TabIndex = 0;
+            this.listBoxSettingBackups.SelectedIndexChanged += new System.EventHandler(this.listBoxSettingBackups_SelectedIndexChanged);
+            // 
+            // tabPage16
+            // 
+            this.tabPage16.Controls.Add(this.label2);
+            this.tabPage16.Controls.Add(this.checkBoxAutoStart);
+            this.tabPage16.Controls.Add(this.checkBoxDisableAutoStartPrompt);
+            this.tabPage16.Controls.Add(this.checkBoxLaunchAtStartup);
+            this.tabPage16.Location = new System.Drawing.Point(4, 22);
+            this.tabPage16.Name = "tabPage16";
+            this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage16.Size = new System.Drawing.Size(592, 303);
+            this.tabPage16.TabIndex = 2;
+            this.tabPage16.Text = "Automation";
+            this.tabPage16.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(21, 26);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(157, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "(Hold Shift to disable auto-start.)";
+            // 
+            // checkBoxAutoStart
+            // 
+            this.checkBoxAutoStart.AutoSize = true;
+            this.checkBoxAutoStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxAutoStart.Location = new System.Drawing.Point(6, 6);
+            this.checkBoxAutoStart.Name = "checkBoxAutoStart";
+            this.checkBoxAutoStart.Size = new System.Drawing.Size(104, 17);
+            this.checkBoxAutoStart.TabIndex = 0;
+            this.checkBoxAutoStart.Tag = "parameter:auto_start";
+            this.checkBoxAutoStart.Text = "Auto-start mining";
+            this.checkBoxAutoStart.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDisableAutoStartPrompt
+            // 
+            this.checkBoxDisableAutoStartPrompt.AutoSize = true;
+            this.checkBoxDisableAutoStartPrompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(4, 68);
+            this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
+            this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
+            this.checkBoxDisableAutoStartPrompt.TabIndex = 2;
+            this.checkBoxDisableAutoStartPrompt.Tag = "parameter:disable_auto_start_prompt";
+            this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
+            this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLaunchAtStartup
+            // 
+            this.checkBoxLaunchAtStartup.AutoSize = true;
+            this.checkBoxLaunchAtStartup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxLaunchAtStartup.Location = new System.Drawing.Point(4, 45);
+            this.checkBoxLaunchAtStartup.Name = "checkBoxLaunchAtStartup";
+            this.checkBoxLaunchAtStartup.Size = new System.Drawing.Size(163, 17);
+            this.checkBoxLaunchAtStartup.TabIndex = 1;
+            this.checkBoxLaunchAtStartup.Tag = "parameter:launch_at_startup";
+            this.checkBoxLaunchAtStartup.Text = "Launch application at startup";
+            this.checkBoxLaunchAtStartup.UseVisualStyleBackColor = true;
+            this.checkBoxLaunchAtStartup.CheckedChanged += new System.EventHandler(this.checkBoxLaunchAtStartup_CheckedChanged);
+            // 
+            // tabPage17
+            // 
+            this.tabPage17.Controls.Add(this.buttonOpenOpenCLBinaryFolder);
+            this.tabPage17.Controls.Add(this.checkBoxUseDefaultOpenCLBinaries);
+            this.tabPage17.Controls.Add(this.checkBoxReuseCompiledBinaries);
+            this.tabPage17.Location = new System.Drawing.Point(4, 22);
+            this.tabPage17.Name = "tabPage17";
+            this.tabPage17.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage17.Size = new System.Drawing.Size(592, 303);
+            this.tabPage17.TabIndex = 3;
+            this.tabPage17.Text = "OpenCL Binaries";
+            this.tabPage17.UseVisualStyleBackColor = true;
+            // 
+            // buttonOpenOpenCLBinaryFolder
+            // 
+            this.buttonOpenOpenCLBinaryFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonOpenOpenCLBinaryFolder.Location = new System.Drawing.Point(6, 52);
+            this.buttonOpenOpenCLBinaryFolder.Name = "buttonOpenOpenCLBinaryFolder";
+            this.buttonOpenOpenCLBinaryFolder.Size = new System.Drawing.Size(180, 23);
+            this.buttonOpenOpenCLBinaryFolder.TabIndex = 2;
+            this.buttonOpenOpenCLBinaryFolder.Text = "Open Containing Folder";
+            this.buttonOpenOpenCLBinaryFolder.UseVisualStyleBackColor = true;
+            this.buttonOpenOpenCLBinaryFolder.Click += new System.EventHandler(this.buttonOpenOpenCLBinaryFolder_Click);
+            // 
+            // checkBoxUseDefaultOpenCLBinaries
+            // 
+            this.checkBoxUseDefaultOpenCLBinaries.AutoSize = true;
+            this.checkBoxUseDefaultOpenCLBinaries.Checked = true;
+            this.checkBoxUseDefaultOpenCLBinaries.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseDefaultOpenCLBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxUseDefaultOpenCLBinaries.Location = new System.Drawing.Point(6, 6);
+            this.checkBoxUseDefaultOpenCLBinaries.Name = "checkBoxUseDefaultOpenCLBinaries";
+            this.checkBoxUseDefaultOpenCLBinaries.Size = new System.Drawing.Size(119, 17);
+            this.checkBoxUseDefaultOpenCLBinaries.TabIndex = 0;
+            this.checkBoxUseDefaultOpenCLBinaries.Tag = "parameter:use_default_binaries";
+            this.checkBoxUseDefaultOpenCLBinaries.Text = "Use default binaries";
+            this.checkBoxUseDefaultOpenCLBinaries.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxReuseCompiledBinaries
+            // 
+            this.checkBoxReuseCompiledBinaries.AutoSize = true;
+            this.checkBoxReuseCompiledBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxReuseCompiledBinaries.Location = new System.Drawing.Point(6, 29);
+            this.checkBoxReuseCompiledBinaries.Name = "checkBoxReuseCompiledBinaries";
+            this.checkBoxReuseCompiledBinaries.Size = new System.Drawing.Size(141, 17);
+            this.checkBoxReuseCompiledBinaries.TabIndex = 1;
+            this.checkBoxReuseCompiledBinaries.Tag = "parameter:reuse_compiled_binaries";
+            this.checkBoxReuseCompiledBinaries.Text = "Reuse compiled binaries";
+            this.checkBoxReuseCompiledBinaries.UseVisualStyleBackColor = true;
+            // 
+            // tabPage18
+            // 
+            this.tabPage18.Controls.Add(this.label12);
+            this.tabPage18.Controls.Add(this.comboBoxCurrency);
+            this.tabPage18.Location = new System.Drawing.Point(4, 22);
+            this.tabPage18.Name = "tabPage18";
+            this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage18.Size = new System.Drawing.Size(592, 303);
+            this.tabPage18.TabIndex = 4;
+            this.tabPage18.Text = "Profitability";
+            this.tabPage18.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label12.Location = new System.Drawing.Point(6, 9);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(52, 13);
+            this.label12.TabIndex = 151;
+            this.label12.Text = "Currency:";
+            // 
+            // comboBoxCurrency
+            // 
+            this.comboBoxCurrency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCurrency.FormattingEnabled = true;
+            this.comboBoxCurrency.Items.AddRange(new object[] {
+            "USD",
+            "JPY"});
+            this.comboBoxCurrency.Location = new System.Drawing.Point(64, 6);
+            this.comboBoxCurrency.Name = "comboBoxCurrency";
+            this.comboBoxCurrency.Size = new System.Drawing.Size(57, 21);
+            this.comboBoxCurrency.TabIndex = 1;
+            this.comboBoxCurrency.Tag = "parameter:currency";
+            // 
+            // tabPage19
+            // 
+            this.tabPage19.Controls.Add(this.label34);
+            this.tabPage19.Controls.Add(this.checkBoxAPIEnabled);
+            this.tabPage19.Controls.Add(this.label6);
+            this.tabPage19.Controls.Add(this.numericUpDownAPIPort);
+            this.tabPage19.Controls.Add(this.groupBoxAPIIPRange);
+            this.tabPage19.Controls.Add(this.linkLabel1);
+            this.tabPage19.Location = new System.Drawing.Point(4, 22);
+            this.tabPage19.Name = "tabPage19";
+            this.tabPage19.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage19.Size = new System.Drawing.Size(592, 303);
+            this.tabPage19.TabIndex = 5;
+            this.tabPage19.Text = "API";
+            this.tabPage19.UseVisualStyleBackColor = true;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(7, 231);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(581, 13);
+            this.label34.TabIndex = 4;
+            this.label34.Text = "Note: The current implementation of the API is incomplete and can be used only to" +
+    " monitor the miner with Awesome Miner.";
             // 
             // checkBoxAPIEnabled
             // 
@@ -809,6 +1350,26 @@
             this.label6.Size = new System.Drawing.Size(29, 13);
             this.label6.TabIndex = 2;
             this.label6.Text = "Port:";
+            // 
+            // numericUpDownAPIPort
+            // 
+            this.numericUpDownAPIPort.Enabled = false;
+            this.numericUpDownAPIPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownAPIPort.Location = new System.Drawing.Point(42, 30);
+            this.numericUpDownAPIPort.Maximum = new decimal(new int[] {
+            65536,
+            0,
+            0,
+            0});
+            this.numericUpDownAPIPort.Name = "numericUpDownAPIPort";
+            this.numericUpDownAPIPort.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDownAPIPort.TabIndex = 2;
+            this.numericUpDownAPIPort.Tag = "parameter:api_port";
+            this.numericUpDownAPIPort.Value = new decimal(new int[] {
+            4028,
+            0,
+            0,
+            0});
             // 
             // groupBoxAPIIPRange
             // 
@@ -961,379 +1522,6 @@
             this.linkLabel1.TabIndex = 1;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "API Documentation";
-            // 
-            // numericUpDownAPIPort
-            // 
-            this.numericUpDownAPIPort.Enabled = false;
-            this.numericUpDownAPIPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownAPIPort.Location = new System.Drawing.Point(42, 30);
-            this.numericUpDownAPIPort.Maximum = new decimal(new int[] {
-            65536,
-            0,
-            0,
-            0});
-            this.numericUpDownAPIPort.Name = "numericUpDownAPIPort";
-            this.numericUpDownAPIPort.Size = new System.Drawing.Size(59, 20);
-            this.numericUpDownAPIPort.TabIndex = 2;
-            this.numericUpDownAPIPort.Tag = "parameter:api_port";
-            this.numericUpDownAPIPort.Value = new decimal(new int[] {
-            4028,
-            0,
-            0,
-            0});
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label12.Location = new System.Drawing.Point(6, 9);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(52, 13);
-            this.label12.TabIndex = 151;
-            this.label12.Text = "Currency:";
-            // 
-            // comboBoxCurrency
-            // 
-            this.comboBoxCurrency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCurrency.FormattingEnabled = true;
-            this.comboBoxCurrency.Items.AddRange(new object[] {
-            "USD",
-            "JPY"});
-            this.comboBoxCurrency.Location = new System.Drawing.Point(64, 6);
-            this.comboBoxCurrency.Name = "comboBoxCurrency";
-            this.comboBoxCurrency.Size = new System.Drawing.Size(57, 21);
-            this.comboBoxCurrency.TabIndex = 1;
-            this.comboBoxCurrency.Tag = "parameter:currency";
-            // 
-            // buttonOpenOpenCLBinaryFolder
-            // 
-            this.buttonOpenOpenCLBinaryFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOpenOpenCLBinaryFolder.Location = new System.Drawing.Point(6, 52);
-            this.buttonOpenOpenCLBinaryFolder.Name = "buttonOpenOpenCLBinaryFolder";
-            this.buttonOpenOpenCLBinaryFolder.Size = new System.Drawing.Size(180, 23);
-            this.buttonOpenOpenCLBinaryFolder.TabIndex = 2;
-            this.buttonOpenOpenCLBinaryFolder.Text = "Open Containing Folder";
-            this.buttonOpenOpenCLBinaryFolder.UseVisualStyleBackColor = true;
-            this.buttonOpenOpenCLBinaryFolder.Click += new System.EventHandler(this.buttonOpenOpenCLBinaryFolder_Click);
-            // 
-            // checkBoxReuseCompiledBinaries
-            // 
-            this.checkBoxReuseCompiledBinaries.AutoSize = true;
-            this.checkBoxReuseCompiledBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxReuseCompiledBinaries.Location = new System.Drawing.Point(6, 29);
-            this.checkBoxReuseCompiledBinaries.Name = "checkBoxReuseCompiledBinaries";
-            this.checkBoxReuseCompiledBinaries.Size = new System.Drawing.Size(141, 17);
-            this.checkBoxReuseCompiledBinaries.TabIndex = 1;
-            this.checkBoxReuseCompiledBinaries.Tag = "parameter:reuse_compiled_binaries";
-            this.checkBoxReuseCompiledBinaries.Text = "Reuse compiled binaries";
-            this.checkBoxReuseCompiledBinaries.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxUseDefaultOpenCLBinaries
-            // 
-            this.checkBoxUseDefaultOpenCLBinaries.AutoSize = true;
-            this.checkBoxUseDefaultOpenCLBinaries.Checked = true;
-            this.checkBoxUseDefaultOpenCLBinaries.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxUseDefaultOpenCLBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxUseDefaultOpenCLBinaries.Location = new System.Drawing.Point(6, 6);
-            this.checkBoxUseDefaultOpenCLBinaries.Name = "checkBoxUseDefaultOpenCLBinaries";
-            this.checkBoxUseDefaultOpenCLBinaries.Size = new System.Drawing.Size(119, 17);
-            this.checkBoxUseDefaultOpenCLBinaries.TabIndex = 0;
-            this.checkBoxUseDefaultOpenCLBinaries.Tag = "parameter:use_default_binaries";
-            this.checkBoxUseDefaultOpenCLBinaries.Text = "Use default binaries";
-            this.checkBoxUseDefaultOpenCLBinaries.UseVisualStyleBackColor = true;
-            // 
-            // button11
-            // 
-            this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button11.Location = new System.Drawing.Point(138, 35);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(126, 23);
-            this.button11.TabIndex = 3;
-            this.button11.Text = "Load From...";
-            this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
-            // 
-            // button8
-            // 
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(138, 6);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(126, 23);
-            this.button8.TabIndex = 1;
-            this.button8.Text = "Save As...";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.buttonSaveSettingsAs_Click);
-            // 
-            // groupBoxSettingsBackups
-            // 
-            this.groupBoxSettingsBackups.Controls.Add(this.checkBoxAutomaticBackups);
-            this.groupBoxSettingsBackups.Controls.Add(this.buttonDeleteAllSettingsBackups);
-            this.groupBoxSettingsBackups.Controls.Add(this.buttonDeleteSettingsBackup);
-            this.groupBoxSettingsBackups.Controls.Add(this.buttonRestoreSettingsBackup);
-            this.groupBoxSettingsBackups.Controls.Add(this.buttonCreateSettingsBackup);
-            this.groupBoxSettingsBackups.Controls.Add(this.listBoxSettingBackups);
-            this.groupBoxSettingsBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.groupBoxSettingsBackups.Location = new System.Drawing.Point(6, 67);
-            this.groupBoxSettingsBackups.Name = "groupBoxSettingsBackups";
-            this.groupBoxSettingsBackups.Size = new System.Drawing.Size(258, 160);
-            this.groupBoxSettingsBackups.TabIndex = 2;
-            this.groupBoxSettingsBackups.TabStop = false;
-            this.groupBoxSettingsBackups.Text = "Backups";
-            // 
-            // checkBoxAutomaticBackups
-            // 
-            this.checkBoxAutomaticBackups.AutoSize = true;
-            this.checkBoxAutomaticBackups.Checked = true;
-            this.checkBoxAutomaticBackups.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutomaticBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxAutomaticBackups.Location = new System.Drawing.Point(6, 134);
-            this.checkBoxAutomaticBackups.Name = "checkBoxAutomaticBackups";
-            this.checkBoxAutomaticBackups.Size = new System.Drawing.Size(235, 17);
-            this.checkBoxAutomaticBackups.TabIndex = 0;
-            this.checkBoxAutomaticBackups.Tag = "parameter:automatic_backups";
-            this.checkBoxAutomaticBackups.Text = "Create backup whenever settings are saved";
-            this.checkBoxAutomaticBackups.UseVisualStyleBackColor = true;
-            // 
-            // buttonDeleteAllSettingsBackups
-            // 
-            this.buttonDeleteAllSettingsBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDeleteAllSettingsBackups.Location = new System.Drawing.Point(185, 105);
-            this.buttonDeleteAllSettingsBackups.Name = "buttonDeleteAllSettingsBackups";
-            this.buttonDeleteAllSettingsBackups.Size = new System.Drawing.Size(67, 23);
-            this.buttonDeleteAllSettingsBackups.TabIndex = 5;
-            this.buttonDeleteAllSettingsBackups.Text = "Delete All";
-            this.buttonDeleteAllSettingsBackups.UseVisualStyleBackColor = true;
-            this.buttonDeleteAllSettingsBackups.Click += new System.EventHandler(this.button13_Click);
-            // 
-            // buttonDeleteSettingsBackup
-            // 
-            this.buttonDeleteSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDeleteSettingsBackup.Location = new System.Drawing.Point(185, 76);
-            this.buttonDeleteSettingsBackup.Name = "buttonDeleteSettingsBackup";
-            this.buttonDeleteSettingsBackup.Size = new System.Drawing.Size(67, 23);
-            this.buttonDeleteSettingsBackup.TabIndex = 4;
-            this.buttonDeleteSettingsBackup.Text = "Delete";
-            this.buttonDeleteSettingsBackup.UseVisualStyleBackColor = true;
-            this.buttonDeleteSettingsBackup.Click += new System.EventHandler(this.buttonDeleteSettingsBackup_Click);
-            // 
-            // buttonRestoreSettingsBackup
-            // 
-            this.buttonRestoreSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRestoreSettingsBackup.Location = new System.Drawing.Point(185, 47);
-            this.buttonRestoreSettingsBackup.Name = "buttonRestoreSettingsBackup";
-            this.buttonRestoreSettingsBackup.Size = new System.Drawing.Size(67, 23);
-            this.buttonRestoreSettingsBackup.TabIndex = 3;
-            this.buttonRestoreSettingsBackup.Text = "Restore";
-            this.buttonRestoreSettingsBackup.UseVisualStyleBackColor = true;
-            this.buttonRestoreSettingsBackup.Click += new System.EventHandler(this.buttonRestoreSettings_Click);
-            // 
-            // buttonCreateSettingsBackup
-            // 
-            this.buttonCreateSettingsBackup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateSettingsBackup.Location = new System.Drawing.Point(185, 18);
-            this.buttonCreateSettingsBackup.Name = "buttonCreateSettingsBackup";
-            this.buttonCreateSettingsBackup.Size = new System.Drawing.Size(67, 23);
-            this.buttonCreateSettingsBackup.TabIndex = 1;
-            this.buttonCreateSettingsBackup.Text = "Create";
-            this.buttonCreateSettingsBackup.UseVisualStyleBackColor = true;
-            this.buttonCreateSettingsBackup.Click += new System.EventHandler(this.buttonCreateSettingsBackup_Click);
-            // 
-            // listBoxSettingBackups
-            // 
-            this.listBoxSettingBackups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxSettingBackups.FormattingEnabled = true;
-            this.listBoxSettingBackups.Location = new System.Drawing.Point(6, 20);
-            this.listBoxSettingBackups.Name = "listBoxSettingBackups";
-            this.listBoxSettingBackups.Size = new System.Drawing.Size(173, 108);
-            this.listBoxSettingBackups.TabIndex = 0;
-            this.listBoxSettingBackups.SelectedIndexChanged += new System.EventHandler(this.listBoxSettingBackups_SelectedIndexChanged);
-            // 
-            // button9
-            // 
-            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(6, 35);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(126, 23);
-            this.button9.TabIndex = 2;
-            this.button9.Text = "Load";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.buttonLoadSettings_Click);
-            // 
-            // buttonSaveSettings
-            // 
-            this.buttonSaveSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSaveSettings.Location = new System.Drawing.Point(6, 6);
-            this.buttonSaveSettings.Name = "buttonSaveSettings";
-            this.buttonSaveSettings.Size = new System.Drawing.Size(126, 23);
-            this.buttonSaveSettings.TabIndex = 0;
-            this.buttonSaveSettings.Text = "Save";
-            this.buttonSaveSettings.UseVisualStyleBackColor = true;
-            this.buttonSaveSettings.Click += new System.EventHandler(this.buttonSaveSettings_Click);
-            // 
-            // button7
-            // 
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(6, 209);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(216, 23);
-            this.button7.TabIndex = 9;
-            this.button7.Text = "8. Download TeamViewer";
-            this.button7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.buttonInstallTeamViewer_Click);
-            // 
-            // button6
-            // 
-            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(6, 6);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(216, 23);
-            this.button6.TabIndex = 0;
-            this.button6.Text = "1. Install Latest Version";
-            this.button6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // buttonDisableUserAccountControl
-            // 
-            this.buttonDisableUserAccountControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDisableUserAccountControl.Location = new System.Drawing.Point(6, 122);
-            this.buttonDisableUserAccountControl.Name = "buttonDisableUserAccountControl";
-            this.buttonDisableUserAccountControl.Size = new System.Drawing.Size(216, 23);
-            this.buttonDisableUserAccountControl.TabIndex = 5;
-            this.buttonDisableUserAccountControl.Text = "5. Disable User Account Control";
-            this.buttonDisableUserAccountControl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonDisableUserAccountControl.UseVisualStyleBackColor = true;
-            this.buttonDisableUserAccountControl.Click += new System.EventHandler(this.buttonDisableUserAccountControl_Click);
-            // 
-            // buttonDisableUserAccountControlSettings
-            // 
-            this.buttonDisableUserAccountControlSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDisableUserAccountControlSettings.Location = new System.Drawing.Point(228, 122);
-            this.buttonDisableUserAccountControlSettings.Name = "buttonDisableUserAccountControlSettings";
-            this.buttonDisableUserAccountControlSettings.Size = new System.Drawing.Size(57, 23);
-            this.buttonDisableUserAccountControlSettings.TabIndex = 6;
-            this.buttonDisableUserAccountControlSettings.Text = "Restore";
-            this.buttonDisableUserAccountControlSettings.UseVisualStyleBackColor = true;
-            this.buttonDisableUserAccountControlSettings.Click += new System.EventHandler(this.buttonUserAccountControlSettings_Click);
-            // 
-            // buttonDownloadDisplayDriverUninstaller
-            // 
-            this.buttonDownloadDisplayDriverUninstaller.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDownloadDisplayDriverUninstaller.Location = new System.Drawing.Point(6, 64);
-            this.buttonDownloadDisplayDriverUninstaller.Name = "buttonDownloadDisplayDriverUninstaller";
-            this.buttonDownloadDisplayDriverUninstaller.Size = new System.Drawing.Size(216, 23);
-            this.buttonDownloadDisplayDriverUninstaller.TabIndex = 3;
-            this.buttonDownloadDisplayDriverUninstaller.Text = "3. Download Display Driver Uninstaller";
-            this.buttonDownloadDisplayDriverUninstaller.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonDownloadDisplayDriverUninstaller.UseVisualStyleBackColor = true;
-            this.buttonDownloadDisplayDriverUninstaller.Click += new System.EventHandler(this.buttonDownloadDisplayDriverUninstaller_Click);
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(228, 35);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(57, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Restore";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.buttonDeviceInstallationSettings_Click);
-            // 
-            // buttonConfigureAutomaticLogin
-            // 
-            this.buttonConfigureAutomaticLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonConfigureAutomaticLogin.Location = new System.Drawing.Point(6, 151);
-            this.buttonConfigureAutomaticLogin.Name = "buttonConfigureAutomaticLogin";
-            this.buttonConfigureAutomaticLogin.Size = new System.Drawing.Size(216, 23);
-            this.buttonConfigureAutomaticLogin.TabIndex = 7;
-            this.buttonConfigureAutomaticLogin.Text = "6. Configure Automatic Login";
-            this.buttonConfigureAutomaticLogin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonConfigureAutomaticLogin.UseVisualStyleBackColor = true;
-            this.buttonConfigureAutomaticLogin.Click += new System.EventHandler(this.buttonConfigureAutomaticLogin_Click);
-            // 
-            // buttonInstallRecommendedAMDDriver
-            // 
-            this.buttonInstallRecommendedAMDDriver.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonInstallRecommendedAMDDriver.Location = new System.Drawing.Point(6, 93);
-            this.buttonInstallRecommendedAMDDriver.Name = "buttonInstallRecommendedAMDDriver";
-            this.buttonInstallRecommendedAMDDriver.Size = new System.Drawing.Size(216, 23);
-            this.buttonInstallRecommendedAMDDriver.TabIndex = 4;
-            this.buttonInstallRecommendedAMDDriver.Text = "4. Download Recommended AMD Driver";
-            this.buttonInstallRecommendedAMDDriver.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonInstallRecommendedAMDDriver.UseVisualStyleBackColor = true;
-            this.buttonInstallRecommendedAMDDriver.Click += new System.EventHandler(this.buttonInstallRecommendedAMDDriver_Click);
-            // 
-            // buttonDisableAuomaticRepair
-            // 
-            this.buttonDisableAuomaticRepair.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDisableAuomaticRepair.Location = new System.Drawing.Point(6, 180);
-            this.buttonDisableAuomaticRepair.Name = "buttonDisableAuomaticRepair";
-            this.buttonDisableAuomaticRepair.Size = new System.Drawing.Size(216, 23);
-            this.buttonDisableAuomaticRepair.TabIndex = 8;
-            this.buttonDisableAuomaticRepair.Text = "7. Disable Automatic Repair";
-            this.buttonDisableAuomaticRepair.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonDisableAuomaticRepair.UseVisualStyleBackColor = true;
-            this.buttonDisableAuomaticRepair.Click += new System.EventHandler(this.buttonDisableAuomaticRepair_Click);
-            // 
-            // buttonDisableDriverInstallation
-            // 
-            this.buttonDisableDriverInstallation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDisableDriverInstallation.Location = new System.Drawing.Point(6, 35);
-            this.buttonDisableDriverInstallation.Name = "buttonDisableDriverInstallation";
-            this.buttonDisableDriverInstallation.Size = new System.Drawing.Size(216, 23);
-            this.buttonDisableDriverInstallation.TabIndex = 1;
-            this.buttonDisableDriverInstallation.Text = "2. Disable Driver Installation";
-            this.buttonDisableDriverInstallation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonDisableDriverInstallation.UseVisualStyleBackColor = true;
-            this.buttonDisableDriverInstallation.Click += new System.EventHandler(this.buttonDisableDriverInstallation_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(21, 26);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(157, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "(Hold Shift to disable auto-start.)";
-            // 
-            // checkBoxDisableAutoStartPrompt
-            // 
-            this.checkBoxDisableAutoStartPrompt.AutoSize = true;
-            this.checkBoxDisableAutoStartPrompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDisableAutoStartPrompt.Location = new System.Drawing.Point(4, 68);
-            this.checkBoxDisableAutoStartPrompt.Name = "checkBoxDisableAutoStartPrompt";
-            this.checkBoxDisableAutoStartPrompt.Size = new System.Drawing.Size(176, 17);
-            this.checkBoxDisableAutoStartPrompt.TabIndex = 2;
-            this.checkBoxDisableAutoStartPrompt.Tag = "parameter:disable_auto_start_prompt";
-            this.checkBoxDisableAutoStartPrompt.Text = "Disable prompt before auto-start";
-            this.checkBoxDisableAutoStartPrompt.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAutoStart
-            // 
-            this.checkBoxAutoStart.AutoSize = true;
-            this.checkBoxAutoStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxAutoStart.Location = new System.Drawing.Point(6, 6);
-            this.checkBoxAutoStart.Name = "checkBoxAutoStart";
-            this.checkBoxAutoStart.Size = new System.Drawing.Size(104, 17);
-            this.checkBoxAutoStart.TabIndex = 0;
-            this.checkBoxAutoStart.Tag = "parameter:auto_start";
-            this.checkBoxAutoStart.Text = "Auto-start mining";
-            this.checkBoxAutoStart.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxLaunchAtStartup
-            // 
-            this.checkBoxLaunchAtStartup.AutoSize = true;
-            this.checkBoxLaunchAtStartup.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxLaunchAtStartup.Location = new System.Drawing.Point(4, 45);
-            this.checkBoxLaunchAtStartup.Name = "checkBoxLaunchAtStartup";
-            this.checkBoxLaunchAtStartup.Size = new System.Drawing.Size(163, 17);
-            this.checkBoxLaunchAtStartup.TabIndex = 1;
-            this.checkBoxLaunchAtStartup.Tag = "parameter:launch_at_startup";
-            this.checkBoxLaunchAtStartup.Text = "Launch application at startup";
-            this.checkBoxLaunchAtStartup.UseVisualStyleBackColor = true;
-            this.checkBoxLaunchAtStartup.CheckedChanged += new System.EventHandler(this.checkBoxLaunchAtStartup_CheckedChanged);
             // 
             // tabPageBenchmarks
             // 
@@ -1604,7 +1792,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(591, 168);
+            this.tabPage11.Size = new System.Drawing.Size(591, 107);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Records";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -2279,12 +2467,15 @@
             // 
             // tabPageDeviceSettings
             // 
-            this.tabPageDeviceSettings.Controls.Add(this.buttonResetOverclockingSettings);
+            this.tabPageDeviceSettings.Controls.Add(this.groupBox3);
+            this.tabPageDeviceSettings.Controls.Add(this.groupBox13);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonLoadFromFile);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonSaveToFile);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonCopyToOthers);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonResetToDefault);
+            this.tabPageDeviceSettings.Controls.Add(this.comboBoxDeviceSettingsDevice);
             this.tabPageDeviceSettings.Controls.Add(this.buttonResetAllSettings);
-            this.tabPageDeviceSettings.Controls.Add(this.buttonResetAlgorithmSettings);
-            this.tabPageDeviceSettings.Controls.Add(this.buttonResetFanControlSettings);
             this.tabPageDeviceSettings.Controls.Add(this.groupBoxHadrwareAcceleration);
-            this.tabPageDeviceSettings.Controls.Add(this.tabControlDeviceSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
             this.tabPageDeviceSettings.Size = new System.Drawing.Size(616, 335);
@@ -2292,52 +2483,844 @@
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
             // 
-            // buttonResetOverclockingSettings
+            // groupBox3
             // 
-            this.buttonResetOverclockingSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetOverclockingSettings.Location = new System.Drawing.Point(815, 90);
-            this.buttonResetOverclockingSettings.Name = "buttonResetOverclockingSettings";
-            this.buttonResetOverclockingSettings.Size = new System.Drawing.Size(159, 23);
-            this.buttonResetOverclockingSettings.TabIndex = 4;
-            this.buttonResetOverclockingSettings.Text = "Reset Overclocking Settings";
-            this.buttonResetOverclockingSettings.UseVisualStyleBackColor = true;
-            this.buttonResetOverclockingSettings.Visible = false;
-            this.buttonResetOverclockingSettings.Click += new System.EventHandler(this.buttonResetDeviceOverclockingSettings_Click);
+            this.groupBox3.Controls.Add(this.groupBox8);
+            this.groupBox3.Controls.Add(this.comboBoxDeviceSettingsAlgorithm);
+            this.groupBox3.Controls.Add(this.groupBox6);
+            this.groupBox3.Controls.Add(this.groupBox7);
+            this.groupBox3.Location = new System.Drawing.Point(8, 104);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(600, 228);
+            this.groupBox3.TabIndex = 157;
+            this.groupBox3.TabStop = false;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.checkBox1);
+            this.groupBox8.Controls.Add(this.button4);
+            this.groupBox8.Controls.Add(this.dataGridViewMemoryTimings);
+            this.groupBox8.Location = new System.Drawing.Point(384, 11);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(210, 207);
+            this.groupBox8.TabIndex = 158;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Memory Timings";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1.Location = new System.Drawing.Point(7, 19);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(59, 17);
+            this.checkBox1.TabIndex = 159;
+            this.checkBox1.Tag = "memory_timings_enabled";
+            this.checkBox1.Text = "Enable";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.Location = new System.Drawing.Point(66, 176);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(138, 23);
+            this.button4.TabIndex = 158;
+            this.button4.Tag = "copy_across_algorithms";
+            this.button4.Text = "Copy Across Algorithms";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewMemoryTimings
+            // 
+            this.dataGridViewMemoryTimings.AllowUserToAddRows = false;
+            this.dataGridViewMemoryTimings.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dataGridViewMemoryTimings.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
+            this.dataGridViewMemoryTimings.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewMemoryTimings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMemoryTimings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnMemoryTimingsParameters,
+            this.ColumnMemoryTimingsValues});
+            this.dataGridViewMemoryTimings.Location = new System.Drawing.Point(6, 42);
+            this.dataGridViewMemoryTimings.Name = "dataGridViewMemoryTimings";
+            this.dataGridViewMemoryTimings.RowHeadersVisible = false;
+            this.dataGridViewMemoryTimings.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewMemoryTimings.Size = new System.Drawing.Size(198, 128);
+            this.dataGridViewMemoryTimings.TabIndex = 157;
+            this.dataGridViewMemoryTimings.Tag = "memory_timings";
+            this.dataGridViewMemoryTimings.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMemoryTimings_CellContentClick);
+            // 
+            // ColumnMemoryTimingsParameters
+            // 
+            this.ColumnMemoryTimingsParameters.FillWeight = 60F;
+            this.ColumnMemoryTimingsParameters.HeaderText = "Parameter";
+            this.ColumnMemoryTimingsParameters.Name = "ColumnMemoryTimingsParameters";
+            this.ColumnMemoryTimingsParameters.ReadOnly = true;
+            this.ColumnMemoryTimingsParameters.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColumnMemoryTimingsParameters.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ColumnMemoryTimingsValues
+            // 
+            this.ColumnMemoryTimingsValues.FillWeight = 40F;
+            this.ColumnMemoryTimingsValues.HeaderText = "Value";
+            this.ColumnMemoryTimingsValues.Name = "ColumnMemoryTimingsValues";
+            this.ColumnMemoryTimingsValues.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.ColumnMemoryTimingsValues.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // comboBoxDeviceSettingsAlgorithm
+            // 
+            this.comboBoxDeviceSettingsAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDeviceSettingsAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxDeviceSettingsAlgorithm.FormattingEnabled = true;
+            this.comboBoxDeviceSettingsAlgorithm.Location = new System.Drawing.Point(6, 14);
+            this.comboBoxDeviceSettingsAlgorithm.Name = "comboBoxDeviceSettingsAlgorithm";
+            this.comboBoxDeviceSettingsAlgorithm.Size = new System.Drawing.Size(208, 21);
+            this.comboBoxDeviceSettingsAlgorithm.TabIndex = 156;
+            this.comboBoxDeviceSettingsAlgorithm.Tag = "parameter:device_settings_algorithm";
+            this.comboBoxDeviceSettingsAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.label55);
+            this.groupBox6.Controls.Add(this.numericUpDown1);
+            this.groupBox6.Controls.Add(this.label54);
+            this.groupBox6.Controls.Add(this.numericUpDownDevice0EthashPascalIntensity);
+            this.groupBox6.Controls.Add(this.label381);
+            this.groupBox6.Controls.Add(this.numericUpDown281);
+            this.groupBox6.Controls.Add(this.numericUpDownDevice0EthashPascalThreads);
+            this.groupBox6.Controls.Add(this.label380);
+            this.groupBox6.Controls.Add(this.numericUpDown280);
+            this.groupBox6.Controls.Add(this.label194);
+            this.groupBox6.Controls.Add(this.numericUpDownDevice0EthashLocalWorkSize);
+            this.groupBox6.Controls.Add(this.label142);
+            this.groupBox6.Controls.Add(this.label48);
+            this.groupBox6.Controls.Add(this.numericUpDownDevice0EthashPascalPascalIterations);
+            this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox6.Location = new System.Drawing.Point(6, 41);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(208, 177);
+            this.groupBox6.TabIndex = 8;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Tag = "overclocking";
+            this.groupBox6.Text = "Algorithmic";
+            this.groupBox6.Enter += new System.EventHandler(this.groupBox6_Enter);
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(6, 48);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(74, 13);
+            this.label55.TabIndex = 83;
+            this.label55.Tag = "raw_intensity";
+            this.label55.Text = "Raw Intensity:";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown1.Location = new System.Drawing.Point(115, 46);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            8192,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDown1.TabIndex = 82;
+            this.numericUpDown1.Tag = "raw_intensity";
+            this.numericUpDown1.Value = new decimal(new int[] {
+            2048,
+            0,
+            0,
+            0});
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(6, 48);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(49, 13);
+            this.label54.TabIndex = 81;
+            this.label54.Tag = "intensity";
+            this.label54.Text = "Intensity:";
+            // 
+            // numericUpDownDevice0EthashPascalIntensity
+            // 
+            this.numericUpDownDevice0EthashPascalIntensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownDevice0EthashPascalIntensity.Location = new System.Drawing.Point(115, 46);
+            this.numericUpDownDevice0EthashPascalIntensity.Maximum = new decimal(new int[] {
+            8192,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalIntensity.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalIntensity.Name = "numericUpDownDevice0EthashPascalIntensity";
+            this.numericUpDownDevice0EthashPascalIntensity.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDownDevice0EthashPascalIntensity.TabIndex = 80;
+            this.numericUpDownDevice0EthashPascalIntensity.Tag = "intensity";
+            this.numericUpDownDevice0EthashPascalIntensity.Value = new decimal(new int[] {
+            2048,
+            0,
+            0,
+            0});
+            // 
+            // label381
+            // 
+            this.label381.AutoSize = true;
+            this.label381.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label381.Location = new System.Drawing.Point(5, 122);
+            this.label381.Name = "label381";
+            this.label381.Size = new System.Drawing.Size(104, 13);
+            this.label381.TabIndex = 79;
+            this.label381.Tag = "memory_chunk_size";
+            this.label381.Text = "Memory Chunk Size:";
+            this.label381.Click += new System.EventHandler(this.label381_Click);
+            // 
+            // numericUpDown281
+            // 
+            this.numericUpDown281.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown281.Location = new System.Drawing.Point(115, 120);
+            this.numericUpDown281.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDown281.Name = "numericUpDown281";
+            this.numericUpDown281.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDown281.TabIndex = 78;
+            this.numericUpDown281.Tag = "memory_chunk_size";
+            // 
+            // numericUpDownDevice0EthashPascalThreads
+            // 
+            this.numericUpDownDevice0EthashPascalThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownDevice0EthashPascalThreads.Location = new System.Drawing.Point(115, 22);
+            this.numericUpDownDevice0EthashPascalThreads.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalThreads.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalThreads.Name = "numericUpDownDevice0EthashPascalThreads";
+            this.numericUpDownDevice0EthashPascalThreads.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDownDevice0EthashPascalThreads.TabIndex = 67;
+            this.numericUpDownDevice0EthashPascalThreads.Tag = "threads";
+            this.numericUpDownDevice0EthashPascalThreads.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label380
+            // 
+            this.label380.AutoSize = true;
+            this.label380.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label380.Location = new System.Drawing.Point(5, 97);
+            this.label380.Name = "label380";
+            this.label380.Size = new System.Drawing.Size(72, 13);
+            this.label380.TabIndex = 77;
+            this.label380.Tag = "strided_index";
+            this.label380.Text = "Strided Index:";
+            // 
+            // numericUpDown280
+            // 
+            this.numericUpDown280.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDown280.Location = new System.Drawing.Point(115, 95);
+            this.numericUpDown280.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDown280.Name = "numericUpDown280";
+            this.numericUpDown280.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDown280.TabIndex = 76;
+            this.numericUpDown280.Tag = "strided_index";
+            this.numericUpDown280.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label194
+            // 
+            this.label194.AutoSize = true;
+            this.label194.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label194.Location = new System.Drawing.Point(5, 24);
+            this.label194.Name = "label194";
+            this.label194.Size = new System.Drawing.Size(49, 13);
+            this.label194.TabIndex = 71;
+            this.label194.Tag = "threads";
+            this.label194.Text = "Threads:";
+            // 
+            // numericUpDownDevice0EthashLocalWorkSize
+            // 
+            this.numericUpDownDevice0EthashLocalWorkSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownDevice0EthashLocalWorkSize.Location = new System.Drawing.Point(115, 71);
+            this.numericUpDownDevice0EthashLocalWorkSize.Maximum = new decimal(new int[] {
+            256,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashLocalWorkSize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashLocalWorkSize.Name = "numericUpDownDevice0EthashLocalWorkSize";
+            this.numericUpDownDevice0EthashLocalWorkSize.Size = new System.Drawing.Size(47, 20);
+            this.numericUpDownDevice0EthashLocalWorkSize.TabIndex = 74;
+            this.numericUpDownDevice0EthashLocalWorkSize.Tag = "local_work_size";
+            this.numericUpDownDevice0EthashLocalWorkSize.Value = new decimal(new int[] {
+            192,
+            0,
+            0,
+            0});
+            // 
+            // label142
+            // 
+            this.label142.AutoSize = true;
+            this.label142.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label142.Location = new System.Drawing.Point(6, 73);
+            this.label142.Name = "label142";
+            this.label142.Size = new System.Drawing.Size(88, 13);
+            this.label142.TabIndex = 75;
+            this.label142.Tag = "local_work_size";
+            this.label142.Text = "Local Work Size:";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label48.Location = new System.Drawing.Point(6, 73);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(153, 13);
+            this.label48.TabIndex = 72;
+            this.label48.Tag = "secondary_algorithm_iterations";
+            this.label48.Text = "Secondary Algorithm Iterations:";
+            this.label48.Click += new System.EventHandler(this.label48_Click);
+            // 
+            // numericUpDownDevice0EthashPascalPascalIterations
+            // 
+            this.numericUpDownDevice0EthashPascalPascalIterations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownDevice0EthashPascalPascalIterations.Location = new System.Drawing.Point(161, 71);
+            this.numericUpDownDevice0EthashPascalPascalIterations.Maximum = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalPascalIterations.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalPascalIterations.Name = "numericUpDownDevice0EthashPascalPascalIterations";
+            this.numericUpDownDevice0EthashPascalPascalIterations.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownDevice0EthashPascalPascalIterations.TabIndex = 69;
+            this.numericUpDownDevice0EthashPascalPascalIterations.Tag = "secondary_algorithm_iterations";
+            this.numericUpDownDevice0EthashPascalPascalIterations.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.numericUpDownDevice0EthashPascalPascalIterations.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalPascalIterations_ValueChanged);
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.button2);
+            this.groupBox7.Controls.Add(this.label49);
+            this.groupBox7.Controls.Add(this.numericDeviceParameterOverclockingEnabled);
+            this.groupBox7.Controls.Add(this.label53);
+            this.groupBox7.Controls.Add(this.numericDeviceParameterOverclockingMemoryVoltage);
+            this.groupBox7.Controls.Add(this.numericDeviceParameterOverclockingCoreClock);
+            this.groupBox7.Controls.Add(this.label52);
+            this.groupBox7.Controls.Add(this.numericDeviceParameterOverclockingMemoryClock);
+            this.groupBox7.Controls.Add(this.numericDeviceParameterOverclockingCoreVoltage);
+            this.groupBox7.Controls.Add(this.label50);
+            this.groupBox7.Controls.Add(this.label51);
+            this.groupBox7.Controls.Add(this.numericDeviceParameterOverclockingPowerLimit);
+            this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox7.Location = new System.Drawing.Point(220, 11);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(158, 208);
+            this.groupBox7.TabIndex = 9;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Tag = "overclocking";
+            this.groupBox7.Text = "Overclocking";
+            // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(12, 176);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(138, 23);
+            this.button2.TabIndex = 58;
+            this.button2.Tag = "copy_across_algorithms";
+            this.button2.Text = "Copy Across Algorithms";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label49.Location = new System.Drawing.Point(9, 152);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(81, 13);
+            this.label49.TabIndex = 57;
+            this.label49.Text = "Mem. Vol. (mV):";
+            // 
+            // numericDeviceParameterOverclockingEnabled
+            // 
+            this.numericDeviceParameterOverclockingEnabled.AutoSize = true;
+            this.numericDeviceParameterOverclockingEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericDeviceParameterOverclockingEnabled.Location = new System.Drawing.Point(11, 22);
+            this.numericDeviceParameterOverclockingEnabled.Name = "numericDeviceParameterOverclockingEnabled";
+            this.numericDeviceParameterOverclockingEnabled.Size = new System.Drawing.Size(59, 17);
+            this.numericDeviceParameterOverclockingEnabled.TabIndex = 47;
+            this.numericDeviceParameterOverclockingEnabled.Tag = "overclocking_enabled";
+            this.numericDeviceParameterOverclockingEnabled.Text = "Enable";
+            this.numericDeviceParameterOverclockingEnabled.UseVisualStyleBackColor = true;
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label53.Location = new System.Drawing.Point(9, 73);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(84, 13);
+            this.label53.TabIndex = 53;
+            this.label53.Text = "Core Clk. (MHz):";
+            // 
+            // numericDeviceParameterOverclockingMemoryVoltage
+            // 
+            this.numericDeviceParameterOverclockingMemoryVoltage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericDeviceParameterOverclockingMemoryVoltage.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingMemoryVoltage.Location = new System.Drawing.Point(99, 150);
+            this.numericDeviceParameterOverclockingMemoryVoltage.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingMemoryVoltage.Minimum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingMemoryVoltage.Name = "numericDeviceParameterOverclockingMemoryVoltage";
+            this.numericDeviceParameterOverclockingMemoryVoltage.Size = new System.Drawing.Size(50, 20);
+            this.numericDeviceParameterOverclockingMemoryVoltage.TabIndex = 52;
+            this.numericDeviceParameterOverclockingMemoryVoltage.Tag = "overclocking_memory_voltage";
+            this.numericDeviceParameterOverclockingMemoryVoltage.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // numericDeviceParameterOverclockingCoreClock
+            // 
+            this.numericDeviceParameterOverclockingCoreClock.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericDeviceParameterOverclockingCoreClock.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingCoreClock.Location = new System.Drawing.Point(99, 71);
+            this.numericDeviceParameterOverclockingCoreClock.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingCoreClock.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingCoreClock.Name = "numericDeviceParameterOverclockingCoreClock";
+            this.numericDeviceParameterOverclockingCoreClock.Size = new System.Drawing.Size(50, 20);
+            this.numericDeviceParameterOverclockingCoreClock.TabIndex = 49;
+            this.numericDeviceParameterOverclockingCoreClock.Tag = "overclocking_core_clock";
+            this.numericDeviceParameterOverclockingCoreClock.Value = new decimal(new int[] {
+            1280,
+            0,
+            0,
+            0});
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label52.Location = new System.Drawing.Point(9, 99);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(77, 13);
+            this.label52.TabIndex = 54;
+            this.label52.Text = "Core Vol. (mV):";
+            // 
+            // numericDeviceParameterOverclockingMemoryClock
+            // 
+            this.numericDeviceParameterOverclockingMemoryClock.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericDeviceParameterOverclockingMemoryClock.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingMemoryClock.Location = new System.Drawing.Point(99, 124);
+            this.numericDeviceParameterOverclockingMemoryClock.Maximum = new decimal(new int[] {
+            2400,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingMemoryClock.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingMemoryClock.Name = "numericDeviceParameterOverclockingMemoryClock";
+            this.numericDeviceParameterOverclockingMemoryClock.Size = new System.Drawing.Size(50, 20);
+            this.numericDeviceParameterOverclockingMemoryClock.TabIndex = 51;
+            this.numericDeviceParameterOverclockingMemoryClock.Tag = "overclocking_memory_clock";
+            this.numericDeviceParameterOverclockingMemoryClock.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            // 
+            // numericDeviceParameterOverclockingCoreVoltage
+            // 
+            this.numericDeviceParameterOverclockingCoreVoltage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericDeviceParameterOverclockingCoreVoltage.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingCoreVoltage.Location = new System.Drawing.Point(99, 97);
+            this.numericDeviceParameterOverclockingCoreVoltage.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingCoreVoltage.Minimum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingCoreVoltage.Name = "numericDeviceParameterOverclockingCoreVoltage";
+            this.numericDeviceParameterOverclockingCoreVoltage.Size = new System.Drawing.Size(50, 20);
+            this.numericDeviceParameterOverclockingCoreVoltage.TabIndex = 50;
+            this.numericDeviceParameterOverclockingCoreVoltage.Tag = "overclocking_core_voltage";
+            this.numericDeviceParameterOverclockingCoreVoltage.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label50.Location = new System.Drawing.Point(9, 126);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(88, 13);
+            this.label50.TabIndex = 56;
+            this.label50.Text = "Mem. Clk. (MHz):";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label51.Location = new System.Drawing.Point(9, 47);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(81, 13);
+            this.label51.TabIndex = 55;
+            this.label51.Text = "Power Limit (%):";
+            // 
+            // numericDeviceParameterOverclockingPowerLimit
+            // 
+            this.numericDeviceParameterOverclockingPowerLimit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericDeviceParameterOverclockingPowerLimit.Location = new System.Drawing.Point(99, 45);
+            this.numericDeviceParameterOverclockingPowerLimit.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingPowerLimit.Minimum = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.numericDeviceParameterOverclockingPowerLimit.Name = "numericDeviceParameterOverclockingPowerLimit";
+            this.numericDeviceParameterOverclockingPowerLimit.Size = new System.Drawing.Size(50, 20);
+            this.numericDeviceParameterOverclockingPowerLimit.TabIndex = 48;
+            this.numericDeviceParameterOverclockingPowerLimit.Tag = "overclocking_power_limit";
+            this.numericDeviceParameterOverclockingPowerLimit.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.groupBox2);
+            this.groupBox13.Controls.Add(this.groupBox1);
+            this.groupBox13.Controls.Add(this.checkBoxDeviceParameterFanControlEnabled);
+            this.groupBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox13.Location = new System.Drawing.Point(8, 30);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(515, 68);
+            this.groupBox13.TabIndex = 155;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Tag = "fan_control";
+            this.groupBox13.Text = "Fan Control";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label41);
+            this.groupBox2.Controls.Add(this.numericUpDownDeviceParameterFanControlMaximumFanSpeed);
+            this.groupBox2.Controls.Add(this.numericUpDownDeviceParameterFanControlMinimumFanSpeed);
+            this.groupBox2.Controls.Add(this.label37);
+            this.groupBox2.Location = new System.Drawing.Point(296, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(207, 48);
+            this.groupBox2.TabIndex = 157;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Fan Speed";
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label41.Location = new System.Drawing.Point(6, 21);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(47, 13);
+            this.label41.TabIndex = 234;
+            this.label41.Text = "Min. (%):";
+            // 
+            // numericUpDownDeviceParameterFanControlMaximumFanSpeed
+            // 
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Location = new System.Drawing.Point(160, 19);
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Name = "numericUpDownDeviceParameterFanControlMaximumFanSpeed";
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Size = new System.Drawing.Size(39, 20);
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.TabIndex = 5;
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Tag = "fan_control_maximum_fan_speed";
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDownDeviceParameterFanControlMinimumFanSpeed
+            // 
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Location = new System.Drawing.Point(59, 19);
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Name = "numericUpDownDeviceParameterFanControlMinimumFanSpeed";
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Size = new System.Drawing.Size(39, 20);
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.TabIndex = 4;
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Tag = "fan_control_minimum_fan_speed";
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label37.Location = new System.Drawing.Point(104, 21);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(50, 13);
+            this.label37.TabIndex = 236;
+            this.label37.Tag = "";
+            this.label37.Text = "Max. (%):";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.numericUpDownDeviceParameterFanControlTargetTemperature);
+            this.groupBox1.Controls.Add(this.label188);
+            this.groupBox1.Controls.Add(this.numericUpDownDeviceParameterFanControlMaximumTemperature);
+            this.groupBox1.Controls.Add(this.label47);
+            this.groupBox1.Location = new System.Drawing.Point(65, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(224, 48);
+            this.groupBox1.TabIndex = 156;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Temperature";
+            // 
+            // numericUpDownDeviceParameterFanControlTargetTemperature
+            // 
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.Location = new System.Drawing.Point(73, 19);
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.Maximum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.Minimum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.Name = "numericUpDownDeviceParameterFanControlTargetTemperature";
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.Size = new System.Drawing.Size(39, 20);
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.TabIndex = 2;
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.Tag = "fan_control_target_temperature";
+            this.numericUpDownDeviceParameterFanControlTargetTemperature.Value = new decimal(new int[] {
+            75,
+            0,
+            0,
+            0});
+            // 
+            // label188
+            // 
+            this.label188.AutoSize = true;
+            this.label188.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label188.Location = new System.Drawing.Point(6, 21);
+            this.label188.Name = "label188";
+            this.label188.Size = new System.Drawing.Size(61, 13);
+            this.label188.TabIndex = 0;
+            this.label188.Text = "Target (℃):";
+            // 
+            // numericUpDownDeviceParameterFanControlMaximumTemperature
+            // 
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Location = new System.Drawing.Point(177, 19);
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Maximum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Minimum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Name = "numericUpDownDeviceParameterFanControlMaximumTemperature";
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Size = new System.Drawing.Size(39, 20);
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.TabIndex = 3;
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Tag = "fan_control_maximum_temperature";
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Value = new decimal(new int[] {
+            85,
+            0,
+            0,
+            0});
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label47.Location = new System.Drawing.Point(118, 21);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(53, 13);
+            this.label47.TabIndex = 1;
+            this.label47.Tag = "";
+            this.label47.Text = "Max. (℃):";
+            this.label47.Click += new System.EventHandler(this.label47_Click);
+            // 
+            // checkBoxDeviceParameterFanControlEnabled
+            // 
+            this.checkBoxDeviceParameterFanControlEnabled.AutoSize = true;
+            this.checkBoxDeviceParameterFanControlEnabled.Checked = true;
+            this.checkBoxDeviceParameterFanControlEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxDeviceParameterFanControlEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDeviceParameterFanControlEnabled.Location = new System.Drawing.Point(6, 29);
+            this.checkBoxDeviceParameterFanControlEnabled.Name = "checkBoxDeviceParameterFanControlEnabled";
+            this.checkBoxDeviceParameterFanControlEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDeviceParameterFanControlEnabled.TabIndex = 0;
+            this.checkBoxDeviceParameterFanControlEnabled.Tag = "fan_control_enabled";
+            this.checkBoxDeviceParameterFanControlEnabled.Text = "Enable";
+            this.checkBoxDeviceParameterFanControlEnabled.UseVisualStyleBackColor = true;
+            // 
+            // buttonLoadFromFile
+            // 
+            this.buttonLoadFromFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonLoadFromFile.Location = new System.Drawing.Point(428, 4);
+            this.buttonLoadFromFile.Name = "buttonLoadFromFile";
+            this.buttonLoadFromFile.Size = new System.Drawing.Size(50, 23);
+            this.buttonLoadFromFile.TabIndex = 154;
+            this.buttonLoadFromFile.Text = "Load";
+            this.buttonLoadFromFile.UseVisualStyleBackColor = true;
+            this.buttonLoadFromFile.Click += new System.EventHandler(this.DeviceSettingsUserControl_ButtonLoadFromFileClicked);
+            // 
+            // buttonSaveToFile
+            // 
+            this.buttonSaveToFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSaveToFile.Location = new System.Drawing.Point(372, 4);
+            this.buttonSaveToFile.Name = "buttonSaveToFile";
+            this.buttonSaveToFile.Size = new System.Drawing.Size(50, 23);
+            this.buttonSaveToFile.TabIndex = 153;
+            this.buttonSaveToFile.Text = "Save";
+            this.buttonSaveToFile.UseVisualStyleBackColor = true;
+            this.buttonSaveToFile.Click += new System.EventHandler(this.DeviceSettingsUserControl_ButtonSaveToFileClicked);
+            // 
+            // buttonCopyToOthers
+            // 
+            this.buttonCopyToOthers.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCopyToOthers.Location = new System.Drawing.Point(228, 4);
+            this.buttonCopyToOthers.Name = "buttonCopyToOthers";
+            this.buttonCopyToOthers.Size = new System.Drawing.Size(138, 23);
+            this.buttonCopyToOthers.TabIndex = 151;
+            this.buttonCopyToOthers.Text = "Copy to Similar Devices";
+            this.buttonCopyToOthers.UseVisualStyleBackColor = true;
+            this.buttonCopyToOthers.Click += new System.EventHandler(this.DeviceSettingsUserControl_ButtonCopyToOthersClicked);
+            // 
+            // buttonResetToDefault
+            // 
+            this.buttonResetToDefault.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonResetToDefault.Location = new System.Drawing.Point(484, 4);
+            this.buttonResetToDefault.Name = "buttonResetToDefault";
+            this.buttonResetToDefault.Size = new System.Drawing.Size(50, 23);
+            this.buttonResetToDefault.TabIndex = 152;
+            this.buttonResetToDefault.Text = "Reset";
+            this.buttonResetToDefault.UseVisualStyleBackColor = true;
+            this.buttonResetToDefault.Click += new System.EventHandler(this.DeviceSettingsUserControl_ButtonResetToDefaultClicked);
+            // 
+            // comboBoxDeviceSettingsDevice
+            // 
+            this.comboBoxDeviceSettingsDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDeviceSettingsDevice.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxDeviceSettingsDevice.FormattingEnabled = true;
+            this.comboBoxDeviceSettingsDevice.Location = new System.Drawing.Point(8, 5);
+            this.comboBoxDeviceSettingsDevice.Name = "comboBoxDeviceSettingsDevice";
+            this.comboBoxDeviceSettingsDevice.Size = new System.Drawing.Size(214, 21);
+            this.comboBoxDeviceSettingsDevice.TabIndex = 150;
+            this.comboBoxDeviceSettingsDevice.Tag = "parameter:device_settings_device";
+            this.comboBoxDeviceSettingsDevice.SelectedIndexChanged += new System.EventHandler(this.comboBoxDeviceSettingsDevice_SelectedIndexChanged);
             // 
             // buttonResetAllSettings
             // 
             this.buttonResetAllSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetAllSettings.Location = new System.Drawing.Point(815, 3);
+            this.buttonResetAllSettings.Location = new System.Drawing.Point(540, 4);
             this.buttonResetAllSettings.Name = "buttonResetAllSettings";
-            this.buttonResetAllSettings.Size = new System.Drawing.Size(159, 23);
+            this.buttonResetAllSettings.Size = new System.Drawing.Size(68, 23);
             this.buttonResetAllSettings.TabIndex = 5;
             this.buttonResetAllSettings.Text = "Reset All";
             this.buttonResetAllSettings.UseVisualStyleBackColor = true;
             this.buttonResetAllSettings.Click += new System.EventHandler(this.buttonResetAll_Click);
-            // 
-            // buttonResetAlgorithmSettings
-            // 
-            this.buttonResetAlgorithmSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetAlgorithmSettings.Location = new System.Drawing.Point(815, 61);
-            this.buttonResetAlgorithmSettings.Name = "buttonResetAlgorithmSettings";
-            this.buttonResetAlgorithmSettings.Size = new System.Drawing.Size(159, 23);
-            this.buttonResetAlgorithmSettings.TabIndex = 3;
-            this.buttonResetAlgorithmSettings.Text = "Reset Algorithm Settings";
-            this.buttonResetAlgorithmSettings.UseVisualStyleBackColor = true;
-            this.buttonResetAlgorithmSettings.Visible = false;
-            this.buttonResetAlgorithmSettings.Click += new System.EventHandler(this.buttonResetDeviceAlgorithmSettings_Click);
-            // 
-            // buttonResetFanControlSettings
-            // 
-            this.buttonResetFanControlSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetFanControlSettings.Location = new System.Drawing.Point(815, 32);
-            this.buttonResetFanControlSettings.Name = "buttonResetFanControlSettings";
-            this.buttonResetFanControlSettings.Size = new System.Drawing.Size(159, 23);
-            this.buttonResetFanControlSettings.TabIndex = 2;
-            this.buttonResetFanControlSettings.Text = "Reset Fan-Control Settings";
-            this.buttonResetFanControlSettings.UseVisualStyleBackColor = true;
-            this.buttonResetFanControlSettings.Visible = false;
-            this.buttonResetFanControlSettings.Click += new System.EventHandler(this.buttonResetFanControlSettings_Click);
             // 
             // groupBoxHadrwareAcceleration
             // 
@@ -2387,14 +3370,6 @@
             this.checkBoxEnablePhymem.UseVisualStyleBackColor = true;
             this.checkBoxEnablePhymem.CheckedChanged += new System.EventHandler(this.checkBoxEnablePhymem_CheckedChanged);
             // 
-            // tabControlDeviceSettings
-            // 
-            this.tabControlDeviceSettings.Location = new System.Drawing.Point(3, 3);
-            this.tabControlDeviceSettings.Name = "tabControlDeviceSettings";
-            this.tabControlDeviceSettings.SelectedIndex = 0;
-            this.tabControlDeviceSettings.Size = new System.Drawing.Size(806, 488);
-            this.tabControlDeviceSettings.TabIndex = 0;
-            // 
             // tabPageCustomPoolSettings
             // 
             this.tabPageCustomPoolSettings.AutoScroll = true;
@@ -2404,7 +3379,7 @@
             this.tabPageCustomPoolSettings.Controls.Add(this.groupBoxCustmPool0);
             this.tabPageCustomPoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustomPoolSettings.Name = "tabPageCustomPoolSettings";
-            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(616, 396);
+            this.tabPageCustomPoolSettings.Size = new System.Drawing.Size(616, 335);
             this.tabPageCustomPoolSettings.TabIndex = 6;
             this.tabPageCustomPoolSettings.Text = "Custom Pools";
             this.tabPageCustomPoolSettings.UseVisualStyleBackColor = true;
@@ -2433,7 +3408,7 @@
             this.groupBoxCustmPool1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool1.Location = new System.Drawing.Point(3, 108);
             this.groupBoxCustmPool1.Name = "groupBoxCustmPool1";
-            this.groupBoxCustmPool1.Size = new System.Drawing.Size(570, 99);
+            this.groupBoxCustmPool1.Size = new System.Drawing.Size(593, 99);
             this.groupBoxCustmPool1.TabIndex = 1;
             this.groupBoxCustmPool1.TabStop = false;
             this.groupBoxCustmPool1.Text = "Custom Pool 1";
@@ -2490,7 +3465,7 @@
             this.textBoxCustomPool1SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool1SecondaryPassword.Location = new System.Drawing.Point(481, 69);
             this.textBoxCustomPool1SecondaryPassword.Name = "textBoxCustomPool1SecondaryPassword";
-            this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(83, 20);
+            this.textBoxCustomPool1SecondaryPassword.Size = new System.Drawing.Size(106, 20);
             this.textBoxCustomPool1SecondaryPassword.TabIndex = 10;
             this.textBoxCustomPool1SecondaryPassword.Tag = "parameter:custom_pool1_secondary_password";
             // 
@@ -2608,7 +3583,7 @@
             this.textBoxCustomPool1Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool1Password.Location = new System.Drawing.Point(481, 42);
             this.textBoxCustomPool1Password.Name = "textBoxCustomPool1Password";
-            this.textBoxCustomPool1Password.Size = new System.Drawing.Size(83, 20);
+            this.textBoxCustomPool1Password.Size = new System.Drawing.Size(106, 20);
             this.textBoxCustomPool1Password.TabIndex = 5;
             this.textBoxCustomPool1Password.Tag = "parameter:custom_pool1_password";
             // 
@@ -2675,7 +3650,7 @@
             this.groupBoxCustmPool2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool2.Location = new System.Drawing.Point(3, 213);
             this.groupBoxCustmPool2.Name = "groupBoxCustmPool2";
-            this.groupBoxCustmPool2.Size = new System.Drawing.Size(570, 99);
+            this.groupBoxCustmPool2.Size = new System.Drawing.Size(593, 99);
             this.groupBoxCustmPool2.TabIndex = 2;
             this.groupBoxCustmPool2.TabStop = false;
             this.groupBoxCustmPool2.Text = "Custom Pool 2";
@@ -2732,7 +3707,7 @@
             this.textBoxCustomPool2SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool2SecondaryPassword.Location = new System.Drawing.Point(481, 70);
             this.textBoxCustomPool2SecondaryPassword.Name = "textBoxCustomPool2SecondaryPassword";
-            this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(83, 20);
+            this.textBoxCustomPool2SecondaryPassword.Size = new System.Drawing.Size(106, 20);
             this.textBoxCustomPool2SecondaryPassword.TabIndex = 10;
             this.textBoxCustomPool2SecondaryPassword.Tag = "parameter:custom_pool2_secondary_password";
             // 
@@ -2850,7 +3825,7 @@
             this.textBoxCustomPool2Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool2Password.Location = new System.Drawing.Point(481, 43);
             this.textBoxCustomPool2Password.Name = "textBoxCustomPool2Password";
-            this.textBoxCustomPool2Password.Size = new System.Drawing.Size(83, 20);
+            this.textBoxCustomPool2Password.Size = new System.Drawing.Size(106, 20);
             this.textBoxCustomPool2Password.TabIndex = 5;
             this.textBoxCustomPool2Password.Tag = "parameter:custom_pool2_password";
             // 
@@ -2917,7 +3892,7 @@
             this.groupBoxCustmPool3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool3.Location = new System.Drawing.Point(3, 318);
             this.groupBoxCustmPool3.Name = "groupBoxCustmPool3";
-            this.groupBoxCustmPool3.Size = new System.Drawing.Size(570, 99);
+            this.groupBoxCustmPool3.Size = new System.Drawing.Size(593, 99);
             this.groupBoxCustmPool3.TabIndex = 3;
             this.groupBoxCustmPool3.TabStop = false;
             this.groupBoxCustmPool3.Text = "Custom Pool 3";
@@ -2974,7 +3949,7 @@
             this.textBoxCustomPool3SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool3SecondaryPassword.Location = new System.Drawing.Point(481, 72);
             this.textBoxCustomPool3SecondaryPassword.Name = "textBoxCustomPool3SecondaryPassword";
-            this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(83, 20);
+            this.textBoxCustomPool3SecondaryPassword.Size = new System.Drawing.Size(106, 20);
             this.textBoxCustomPool3SecondaryPassword.TabIndex = 10;
             this.textBoxCustomPool3SecondaryPassword.Tag = "parameter:custom_pool3_secondary_password";
             // 
@@ -3092,7 +4067,7 @@
             this.textBoxCustomPool3Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool3Password.Location = new System.Drawing.Point(481, 42);
             this.textBoxCustomPool3Password.Name = "textBoxCustomPool3Password";
-            this.textBoxCustomPool3Password.Size = new System.Drawing.Size(83, 20);
+            this.textBoxCustomPool3Password.Size = new System.Drawing.Size(106, 20);
             this.textBoxCustomPool3Password.TabIndex = 5;
             this.textBoxCustomPool3Password.Tag = "parameter:custom_pool3_password";
             // 
@@ -3159,7 +4134,7 @@
             this.groupBoxCustmPool0.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxCustmPool0.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCustmPool0.Name = "groupBoxCustmPool0";
-            this.groupBoxCustmPool0.Size = new System.Drawing.Size(570, 99);
+            this.groupBoxCustmPool0.Size = new System.Drawing.Size(593, 99);
             this.groupBoxCustmPool0.TabIndex = 0;
             this.groupBoxCustmPool0.TabStop = false;
             this.groupBoxCustmPool0.Text = "Custom Pool 0";
@@ -3202,7 +4177,7 @@
             this.textBoxCustomPool0SecondaryPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool0SecondaryPassword.Location = new System.Drawing.Point(481, 69);
             this.textBoxCustomPool0SecondaryPassword.Name = "textBoxCustomPool0SecondaryPassword";
-            this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(83, 20);
+            this.textBoxCustomPool0SecondaryPassword.Size = new System.Drawing.Size(106, 20);
             this.textBoxCustomPool0SecondaryPassword.TabIndex = 10;
             this.textBoxCustomPool0SecondaryPassword.Tag = "parameter:custom_pool0_secondary_password";
             // 
@@ -3334,7 +4309,7 @@
             this.textBoxCustomPool0Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCustomPool0Password.Location = new System.Drawing.Point(481, 43);
             this.textBoxCustomPool0Password.Name = "textBoxCustomPool0Password";
-            this.textBoxCustomPool0Password.Size = new System.Drawing.Size(83, 20);
+            this.textBoxCustomPool0Password.Size = new System.Drawing.Size(106, 20);
             this.textBoxCustomPool0Password.TabIndex = 5;
             this.textBoxCustomPool0Password.Tag = "parameter:custom_pool0_password";
             // 
@@ -3383,7 +4358,7 @@
             this.tabPagePoolSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPagePoolSettings.Name = "tabPagePoolSettings";
             this.tabPagePoolSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePoolSettings.Size = new System.Drawing.Size(616, 396);
+            this.tabPagePoolSettings.Size = new System.Drawing.Size(616, 335);
             this.tabPagePoolSettings.TabIndex = 0;
             this.tabPagePoolSettings.Text = "Default Pools";
             this.tabPagePoolSettings.UseVisualStyleBackColor = true;
@@ -3396,7 +4371,7 @@
             this.tabControlDefaultPools.Location = new System.Drawing.Point(6, 6);
             this.tabControlDefaultPools.Name = "tabControlDefaultPools";
             this.tabControlDefaultPools.SelectedIndex = 0;
-            this.tabControlDefaultPools.Size = new System.Drawing.Size(584, 313);
+            this.tabControlDefaultPools.Size = new System.Drawing.Size(607, 323);
             this.tabControlDefaultPools.TabIndex = 4;
             // 
             // tabPage4
@@ -3434,7 +4409,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(576, 287);
+            this.tabPage4.Size = new System.Drawing.Size(599, 297);
             this.tabPage4.TabIndex = 0;
             this.tabPage4.Text = "Wallet Addresses";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -3442,7 +4417,7 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button3.Location = new System.Drawing.Point(298, 225);
+            this.button3.Location = new System.Drawing.Point(298, 223);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(62, 20);
             this.button3.TabIndex = 34;
@@ -3463,7 +4438,7 @@
             // 
             this.label44.AutoSize = true;
             this.label44.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label44.Location = new System.Drawing.Point(6, 228);
+            this.label44.Location = new System.Drawing.Point(6, 226);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(95, 13);
             this.label44.TabIndex = 35;
@@ -3483,7 +4458,7 @@
             // textBoxPigeoncoinAddress
             // 
             this.textBoxPigeoncoinAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxPigeoncoinAddress.Location = new System.Drawing.Point(113, 225);
+            this.textBoxPigeoncoinAddress.Location = new System.Drawing.Point(113, 223);
             this.textBoxPigeoncoinAddress.MaxLength = 512;
             this.textBoxPigeoncoinAddress.Name = "textBoxPigeoncoinAddress";
             this.textBoxPigeoncoinAddress.Size = new System.Drawing.Size(179, 20);
@@ -3505,7 +4480,7 @@
             // buttonAEONBalance
             // 
             this.buttonAEONBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonAEONBalance.Location = new System.Drawing.Point(298, 198);
+            this.buttonAEONBalance.Location = new System.Drawing.Point(298, 196);
             this.buttonAEONBalance.Name = "buttonAEONBalance";
             this.buttonAEONBalance.Size = new System.Drawing.Size(62, 20);
             this.buttonAEONBalance.TabIndex = 31;
@@ -3549,7 +4524,7 @@
             // textBoxAEONAddress
             // 
             this.textBoxAEONAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxAEONAddress.Location = new System.Drawing.Point(113, 198);
+            this.textBoxAEONAddress.Location = new System.Drawing.Point(113, 196);
             this.textBoxAEONAddress.MaxLength = 512;
             this.textBoxAEONAddress.Name = "textBoxAEONAddress";
             this.textBoxAEONAddress.Size = new System.Drawing.Size(179, 20);
@@ -3571,7 +4546,7 @@
             // buttonSumokoinBalance
             // 
             this.buttonSumokoinBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonSumokoinBalance.Location = new System.Drawing.Point(298, 171);
+            this.buttonSumokoinBalance.Location = new System.Drawing.Point(298, 169);
             this.buttonSumokoinBalance.Name = "buttonSumokoinBalance";
             this.buttonSumokoinBalance.Size = new System.Drawing.Size(62, 20);
             this.buttonSumokoinBalance.TabIndex = 28;
@@ -3594,7 +4569,7 @@
             // 
             this.label39.AutoSize = true;
             this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label39.Location = new System.Drawing.Point(6, 174);
+            this.label39.Location = new System.Drawing.Point(6, 172);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(98, 13);
             this.label39.TabIndex = 29;
@@ -3613,7 +4588,7 @@
             // textBoxSumokoinAddress
             // 
             this.textBoxSumokoinAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxSumokoinAddress.Location = new System.Drawing.Point(113, 171);
+            this.textBoxSumokoinAddress.Location = new System.Drawing.Point(113, 169);
             this.textBoxSumokoinAddress.MaxLength = 512;
             this.textBoxSumokoinAddress.Name = "textBoxSumokoinAddress";
             this.textBoxSumokoinAddress.Size = new System.Drawing.Size(179, 20);
@@ -3637,7 +4612,7 @@
             // buttonRavenBalance
             // 
             this.buttonRavenBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonRavenBalance.Location = new System.Drawing.Point(298, 144);
+            this.buttonRavenBalance.Location = new System.Drawing.Point(298, 142);
             this.buttonRavenBalance.Name = "buttonRavenBalance";
             this.buttonRavenBalance.Size = new System.Drawing.Size(62, 20);
             this.buttonRavenBalance.TabIndex = 25;
@@ -3659,7 +4634,7 @@
             // 
             this.label38.AutoSize = true;
             this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label38.Location = new System.Drawing.Point(6, 148);
+            this.label38.Location = new System.Drawing.Point(6, 146);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(74, 13);
             this.label38.TabIndex = 26;
@@ -3678,7 +4653,7 @@
             // textBoxRavenAddress
             // 
             this.textBoxRavenAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxRavenAddress.Location = new System.Drawing.Point(113, 144);
+            this.textBoxRavenAddress.Location = new System.Drawing.Point(113, 142);
             this.textBoxRavenAddress.MaxLength = 512;
             this.textBoxRavenAddress.Name = "textBoxRavenAddress";
             this.textBoxRavenAddress.Size = new System.Drawing.Size(179, 20);
@@ -3690,7 +4665,7 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button5.Location = new System.Drawing.Point(298, 251);
+            this.button5.Location = new System.Drawing.Point(298, 249);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(62, 20);
             this.button5.TabIndex = 7;
@@ -3714,7 +4689,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label16.Location = new System.Drawing.Point(6, 254);
+            this.label16.Location = new System.Drawing.Point(6, 252);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(70, 13);
             this.label16.TabIndex = 12;
@@ -3725,7 +4700,7 @@
             // 
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.label28.Location = new System.Drawing.Point(6, 121);
+            this.label28.Location = new System.Drawing.Point(6, 119);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(56, 13);
             this.label28.TabIndex = 23;
@@ -3735,7 +4710,7 @@
             // 
             this.textBoxZcashAddress.Enabled = false;
             this.textBoxZcashAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxZcashAddress.Location = new System.Drawing.Point(113, 251);
+            this.textBoxZcashAddress.Location = new System.Drawing.Point(113, 249);
             this.textBoxZcashAddress.MaxLength = 512;
             this.textBoxZcashAddress.Name = "textBoxZcashAddress";
             this.textBoxZcashAddress.Size = new System.Drawing.Size(179, 20);
@@ -3747,7 +4722,7 @@
             // textBoxLbryAddress
             // 
             this.textBoxLbryAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxLbryAddress.Location = new System.Drawing.Point(113, 117);
+            this.textBoxLbryAddress.Location = new System.Drawing.Point(113, 115);
             this.textBoxLbryAddress.MaxLength = 512;
             this.textBoxLbryAddress.Name = "textBoxLbryAddress";
             this.textBoxLbryAddress.Size = new System.Drawing.Size(179, 20);
@@ -3759,7 +4734,7 @@
             // buttonLbryBalance
             // 
             this.buttonLbryBalance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.buttonLbryBalance.Location = new System.Drawing.Point(298, 117);
+            this.buttonLbryBalance.Location = new System.Drawing.Point(298, 115);
             this.buttonLbryBalance.Name = "buttonLbryBalance";
             this.buttonLbryBalance.Size = new System.Drawing.Size(62, 20);
             this.buttonLbryBalance.TabIndex = 11;
@@ -3774,7 +4749,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(576, 287);
+            this.tabPage5.Size = new System.Drawing.Size(599, 297);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Pool Priorities";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -3839,7 +4814,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(576, 287);
+            this.tabPage6.Size = new System.Drawing.Size(599, 297);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Pool Parameters";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -3954,15 +4929,13 @@
             this.tabPageDashboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
-            this.tabPageDashboard.Size = new System.Drawing.Size(616, 396);
+            this.tabPageDashboard.Size = new System.Drawing.Size(616, 335);
             this.tabPageDashboard.TabIndex = 2;
             this.tabPageDashboard.Text = "Dashboard";
             this.tabPageDashboard.UseVisualStyleBackColor = true;
             // 
             // cartesianChartSpeedPrimaryAlgorithm
             // 
-            this.cartesianChartSpeedPrimaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartSpeedPrimaryAlgorithm.BackColor = System.Drawing.Color.Black;
             this.cartesianChartSpeedPrimaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartSpeedPrimaryAlgorithm.Location = new System.Drawing.Point(331, 26);
@@ -3973,8 +4946,6 @@
             // 
             // cartesianChartSpeedSecondaryAlgorithm
             // 
-            this.cartesianChartSpeedSecondaryAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartSpeedSecondaryAlgorithm.BackColor = System.Drawing.Color.Black;
             this.cartesianChartSpeedSecondaryAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartSpeedSecondaryAlgorithm.Location = new System.Drawing.Point(331, 27);
@@ -3985,8 +4956,6 @@
             // 
             // cartesianChartShare1Minute
             // 
-            this.cartesianChartShare1Minute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartShare1Minute.BackColor = System.Drawing.Color.Black;
             this.cartesianChartShare1Minute.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartShare1Minute.Location = new System.Drawing.Point(331, 27);
@@ -3997,8 +4966,6 @@
             // 
             // cartesianChartShare1Hour
             // 
-            this.cartesianChartShare1Hour.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartShare1Hour.BackColor = System.Drawing.Color.Black;
             this.cartesianChartShare1Hour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartShare1Hour.Location = new System.Drawing.Point(331, 27);
@@ -4009,8 +4976,6 @@
             // 
             // cartesianChartShare1Day
             // 
-            this.cartesianChartShare1Day.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartShare1Day.BackColor = System.Drawing.Color.Black;
             this.cartesianChartShare1Day.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartShare1Day.Location = new System.Drawing.Point(331, 27);
@@ -4021,8 +4986,6 @@
             // 
             // cartesianChartShare1Month
             // 
-            this.cartesianChartShare1Month.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartShare1Month.BackColor = System.Drawing.Color.Black;
             this.cartesianChartShare1Month.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartShare1Month.Location = new System.Drawing.Point(331, 27);
@@ -4033,8 +4996,6 @@
             // 
             // cartesianChartCPUUsage
             // 
-            this.cartesianChartCPUUsage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartCPUUsage.BackColor = System.Drawing.Color.Black;
             this.cartesianChartCPUUsage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartCPUUsage.Location = new System.Drawing.Point(331, 27);
@@ -4045,8 +5006,6 @@
             // 
             // cartesianChartPower
             // 
-            this.cartesianChartPower.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartPower.BackColor = System.Drawing.Color.Black;
             this.cartesianChartPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartPower.Location = new System.Drawing.Point(331, 27);
@@ -4057,8 +5016,6 @@
             // 
             // cartesianChartTemperature
             // 
-            this.cartesianChartTemperature.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartTemperature.BackColor = System.Drawing.Color.Black;
             this.cartesianChartTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartTemperature.Location = new System.Drawing.Point(331, 27);
@@ -4069,8 +5026,6 @@
             // 
             // cartesianChartDeviceActivity
             // 
-            this.cartesianChartDeviceActivity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartDeviceActivity.BackColor = System.Drawing.Color.Black;
             this.cartesianChartDeviceActivity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartDeviceActivity.Location = new System.Drawing.Point(331, 27);
@@ -4080,8 +5035,6 @@
             // 
             // cartesianChartFanSpeed
             // 
-            this.cartesianChartFanSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cartesianChartFanSpeed.BackColor = System.Drawing.Color.Black;
             this.cartesianChartFanSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cartesianChartFanSpeed.Location = new System.Drawing.Point(331, 27);
@@ -4092,8 +5045,6 @@
             // 
             // comboBoxGraphType
             // 
-            this.comboBoxGraphType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxGraphType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGraphType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.comboBoxGraphType.FormattingEnabled = true;
@@ -4113,7 +5064,6 @@
             // 
             // comboBoxGraphCoverage
             // 
-            this.comboBoxGraphCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxGraphCoverage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGraphCoverage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.comboBoxGraphCoverage.FormattingEnabled = true;
@@ -4354,7 +5304,7 @@
             // buttonDeselectAllDevices
             // 
             this.buttonDeselectAllDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonDeselectAllDevices.Location = new System.Drawing.Point(93, 367);
+            this.buttonDeselectAllDevices.Location = new System.Drawing.Point(93, 309);
             this.buttonDeselectAllDevices.Name = "buttonDeselectAllDevices";
             this.buttonDeselectAllDevices.Size = new System.Drawing.Size(84, 23);
             this.buttonDeselectAllDevices.TabIndex = 5;
@@ -4365,7 +5315,7 @@
             // buttonSelectAllDevices
             // 
             this.buttonSelectAllDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonSelectAllDevices.Location = new System.Drawing.Point(3, 367);
+            this.buttonSelectAllDevices.Location = new System.Drawing.Point(3, 309);
             this.buttonSelectAllDevices.Name = "buttonSelectAllDevices";
             this.buttonSelectAllDevices.Size = new System.Drawing.Size(84, 23);
             this.buttonSelectAllDevices.TabIndex = 4;
@@ -4379,9 +5329,9 @@
             this.dataGridViewDevices.AllowUserToDeleteRows = false;
             this.dataGridViewDevices.AllowUserToResizeColumns = false;
             this.dataGridViewDevices.AllowUserToResizeRows = false;
-            dataGridViewCellStyle20.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle21.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridViewDevices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle21;
             this.dataGridViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -4411,9 +5361,9 @@
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
             this.dataGridViewDevices.RowHeadersVisible = false;
-            dataGridViewCellStyle34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.dataGridViewDevices.RowsDefaultCellStyle = dataGridViewCellStyle34;
-            this.dataGridViewDevices.Size = new System.Drawing.Size(610, 199);
+            dataGridViewCellStyle35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewDevices.RowsDefaultCellStyle = dataGridViewCellStyle35;
+            this.dataGridViewDevices.Size = new System.Drawing.Size(610, 141);
             this.dataGridViewDevices.TabIndex = 3;
             this.dataGridViewDevices.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellContentClick);
             this.dataGridViewDevices.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellValueChanged);
@@ -4421,10 +5371,10 @@
             // 
             // enabled
             // 
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle21.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle22.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle22;
             this.enabled.FalseValue = "";
             this.enabled.FillWeight = 30F;
             this.enabled.HeaderText = "";
@@ -4465,8 +5415,8 @@
             // 
             // speed
             // 
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle23;
             this.speed.FillWeight = 180F;
             this.speed.HeaderText = "Speed(s)";
             this.speed.Name = "speed";
@@ -4477,8 +5427,8 @@
             // 
             // shares
             // 
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle24;
             this.shares.FillWeight = 120F;
             this.shares.HeaderText = "Shares";
             this.shares.Name = "shares";
@@ -4491,8 +5441,8 @@
             // 
             this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle25;
             this.activity.FillWeight = 60F;
             this.activity.HeaderText = "Act.";
             this.activity.Name = "activity";
@@ -4503,8 +5453,8 @@
             // 
             // temperature
             // 
-            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle26;
             this.temperature.FillWeight = 60F;
             this.temperature.HeaderText = "Temp.";
             this.temperature.Name = "temperature";
@@ -4515,8 +5465,8 @@
             // 
             // fan
             // 
-            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle26;
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle27;
             this.fan.FillWeight = 60F;
             this.fan.HeaderText = "Fan";
             this.fan.Name = "fan";
@@ -4527,8 +5477,8 @@
             // 
             // power
             // 
-            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power.DefaultCellStyle = dataGridViewCellStyle27;
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power.DefaultCellStyle = dataGridViewCellStyle28;
             this.power.FillWeight = 60F;
             this.power.HeaderText = "Power";
             this.power.Name = "power";
@@ -4539,8 +5489,8 @@
             // 
             // power_limit
             // 
-            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle28;
+            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle29;
             this.power_limit.FillWeight = 60F;
             this.power_limit.HeaderText = "";
             this.power_limit.Name = "power_limit";
@@ -4551,8 +5501,8 @@
             // 
             // core_clock
             // 
-            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle29;
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle30;
             this.core_clock.FillWeight = 90F;
             this.core_clock.HeaderText = "Core";
             this.core_clock.Name = "core_clock";
@@ -4563,8 +5513,8 @@
             // 
             // memory_clock
             // 
-            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle30;
+            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle31;
             this.memory_clock.FillWeight = 90F;
             this.memory_clock.HeaderText = "Memory";
             this.memory_clock.Name = "memory_clock";
@@ -4575,8 +5525,8 @@
             // 
             // memory_info
             // 
-            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomLeft;
-            this.memory_info.DefaultCellStyle = dataGridViewCellStyle31;
+            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomLeft;
+            this.memory_info.DefaultCellStyle = dataGridViewCellStyle32;
             this.memory_info.FillWeight = 140F;
             this.memory_info.HeaderText = "";
             this.memory_info.Name = "memory_info";
@@ -4587,8 +5537,8 @@
             // 
             // memory_used
             // 
-            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_used.DefaultCellStyle = dataGridViewCellStyle32;
+            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_used.DefaultCellStyle = dataGridViewCellStyle33;
             this.memory_used.FillWeight = 80F;
             this.memory_used.HeaderText = "(Used)";
             this.memory_used.Name = "memory_used";
@@ -4597,8 +5547,8 @@
             // 
             // memory_reserved
             // 
-            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle33;
+            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle34;
             this.memory_reserved.FillWeight = 80F;
             this.memory_reserved.HeaderText = "(Rsvd.)";
             this.memory_reserved.Name = "memory_reserved";
@@ -4671,7 +5621,7 @@
             this.tabPage12.Location = new System.Drawing.Point(4, 22);
             this.tabPage12.Name = "tabPage12";
             this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage12.Size = new System.Drawing.Size(594, 160);
+            this.tabPage12.Size = new System.Drawing.Size(594, 99);
             this.tabPage12.TabIndex = 0;
             this.tabPage12.Text = "Current Parameter(s)";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -4682,9 +5632,9 @@
             this.dataGridViewOptimizerBenchmarkingResults.AllowUserToDeleteRows = false;
             this.dataGridViewOptimizerBenchmarkingResults.AllowUserToResizeColumns = false;
             this.dataGridViewOptimizerBenchmarkingResults.AllowUserToResizeRows = false;
-            dataGridViewCellStyle35.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridViewOptimizerBenchmarkingResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle35;
+            dataGridViewCellStyle36.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridViewOptimizerBenchmarkingResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle36;
             this.dataGridViewOptimizerBenchmarkingResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -4704,9 +5654,9 @@
             this.dataGridViewOptimizerBenchmarkingResults.Name = "dataGridViewOptimizerBenchmarkingResults";
             this.dataGridViewOptimizerBenchmarkingResults.ReadOnly = true;
             this.dataGridViewOptimizerBenchmarkingResults.RowHeadersVisible = false;
-            dataGridViewCellStyle40.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.dataGridViewOptimizerBenchmarkingResults.RowsDefaultCellStyle = dataGridViewCellStyle40;
-            this.dataGridViewOptimizerBenchmarkingResults.Size = new System.Drawing.Size(582, 148);
+            dataGridViewCellStyle41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewOptimizerBenchmarkingResults.RowsDefaultCellStyle = dataGridViewCellStyle41;
+            this.dataGridViewOptimizerBenchmarkingResults.Size = new System.Drawing.Size(582, 87);
             this.dataGridViewOptimizerBenchmarkingResults.TabIndex = 20;
             // 
             // dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm
@@ -4720,8 +5670,8 @@
             // 
             // dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter
             // 
-            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter.DefaultCellStyle = dataGridViewCellStyle36;
+            dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter.DefaultCellStyle = dataGridViewCellStyle37;
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter.HeaderText = "Parameter";
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter.Name = "dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter";
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter.ReadOnly = true;
@@ -4731,8 +5681,8 @@
             // 
             // dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter
             // 
-            dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter.DefaultCellStyle = dataGridViewCellStyle37;
+            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter.DefaultCellStyle = dataGridViewCellStyle38;
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter.HeaderText = "Second Parameter";
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter.Name = "dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter";
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter.ReadOnly = true;
@@ -4744,8 +5694,8 @@
             // dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate
             // 
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate.DefaultCellStyle = dataGridViewCellStyle38;
+            dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate.DefaultCellStyle = dataGridViewCellStyle39;
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate.HeaderText = "Success Rate";
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate.Name = "dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate";
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate.ReadOnly = true;
@@ -4754,8 +5704,8 @@
             // 
             // dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed
             // 
-            dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.DefaultCellStyle = dataGridViewCellStyle39;
+            dataGridViewCellStyle40.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.DefaultCellStyle = dataGridViewCellStyle40;
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.HeaderText = "Speed(s)";
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.Name = "dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed";
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.ReadOnly = true;
@@ -4780,9 +5730,9 @@
             this.dataGridViewOptimizerRecords.AllowUserToDeleteRows = false;
             this.dataGridViewOptimizerRecords.AllowUserToResizeColumns = false;
             this.dataGridViewOptimizerRecords.AllowUserToResizeRows = false;
-            dataGridViewCellStyle41.BackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dataGridViewOptimizerRecords.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle41;
+            dataGridViewCellStyle42.BackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle42.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridViewOptimizerRecords.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle42;
             this.dataGridViewOptimizerRecords.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -4802,8 +5752,8 @@
             this.dataGridViewOptimizerRecords.Name = "dataGridViewOptimizerRecords";
             this.dataGridViewOptimizerRecords.ReadOnly = true;
             this.dataGridViewOptimizerRecords.RowHeadersVisible = false;
-            dataGridViewCellStyle45.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.dataGridViewOptimizerRecords.RowsDefaultCellStyle = dataGridViewCellStyle45;
+            dataGridViewCellStyle46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.dataGridViewOptimizerRecords.RowsDefaultCellStyle = dataGridViewCellStyle46;
             this.dataGridViewOptimizerRecords.Size = new System.Drawing.Size(582, 87);
             this.dataGridViewOptimizerRecords.TabIndex = 19;
             // 
@@ -4823,8 +5773,8 @@
             // 
             // dataGridViewTextBoxColumnOptimizerRecordsParameter
             // 
-            dataGridViewCellStyle42.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.DefaultCellStyle = dataGridViewCellStyle42;
+            dataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dataGridViewTextBoxColumnOptimizerRecordsParameter.DefaultCellStyle = dataGridViewCellStyle43;
             this.dataGridViewTextBoxColumnOptimizerRecordsParameter.HeaderText = "Parameter";
             this.dataGridViewTextBoxColumnOptimizerRecordsParameter.Name = "dataGridViewTextBoxColumnOptimizerRecordsParameter";
             this.dataGridViewTextBoxColumnOptimizerRecordsParameter.ReadOnly = true;
@@ -4835,8 +5785,8 @@
             // dataGridViewTextBoxColumnOptimizerRecordsSuccessCount
             // 
             this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle43.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.DefaultCellStyle = dataGridViewCellStyle43;
+            dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.DefaultCellStyle = dataGridViewCellStyle44;
             this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.HeaderText = "Success Rate";
             this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.Name = "dataGridViewTextBoxColumnOptimizerRecordsSuccessCount";
             this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount.ReadOnly = true;
@@ -4845,8 +5795,8 @@
             // 
             // dataGridViewTextBoxColumnOptimizerRecordsSpeed
             // 
-            dataGridViewCellStyle44.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.DefaultCellStyle = dataGridViewCellStyle44;
+            dataGridViewCellStyle45.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.DefaultCellStyle = dataGridViewCellStyle45;
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.HeaderText = "Speed(s)";
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Name = "dataGridViewTextBoxColumnOptimizerRecordsSpeed";
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.ReadOnly = true;
@@ -5357,120 +6307,6 @@
             this.timerStartNextBenchmark.Interval = 10000;
             this.timerStartNextBenchmark.Tick += new System.EventHandler(this.timerStartNextBenchmark_Tick);
             // 
-            // tabControlMisc
-            // 
-            this.tabControlMisc.Controls.Add(this.tabPage7);
-            this.tabControlMisc.Controls.Add(this.tabPage9);
-            this.tabControlMisc.Controls.Add(this.tabPage16);
-            this.tabControlMisc.Controls.Add(this.tabPage17);
-            this.tabControlMisc.Controls.Add(this.tabPage18);
-            this.tabControlMisc.Controls.Add(this.tabPage19);
-            this.tabControlMisc.Location = new System.Drawing.Point(8, 3);
-            this.tabControlMisc.Name = "tabControlMisc";
-            this.tabControlMisc.SelectedIndex = 0;
-            this.tabControlMisc.Size = new System.Drawing.Size(600, 329);
-            this.tabControlMisc.TabIndex = 6;
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.Controls.Add(this.button7);
-            this.tabPage7.Controls.Add(this.button6);
-            this.tabPage7.Controls.Add(this.buttonDisableDriverInstallation);
-            this.tabPage7.Controls.Add(this.buttonDisableUserAccountControl);
-            this.tabPage7.Controls.Add(this.buttonDisableAuomaticRepair);
-            this.tabPage7.Controls.Add(this.buttonDisableUserAccountControlSettings);
-            this.tabPage7.Controls.Add(this.buttonInstallRecommendedAMDDriver);
-            this.tabPage7.Controls.Add(this.buttonDownloadDisplayDriverUninstaller);
-            this.tabPage7.Controls.Add(this.buttonConfigureAutomaticLogin);
-            this.tabPage7.Controls.Add(this.button1);
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(592, 303);
-            this.tabPage7.TabIndex = 0;
-            this.tabPage7.Text = "System Configurations";
-            this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // tabPage9
-            // 
-            this.tabPage9.Controls.Add(this.button11);
-            this.tabPage9.Controls.Add(this.buttonSaveSettings);
-            this.tabPage9.Controls.Add(this.button8);
-            this.tabPage9.Controls.Add(this.button9);
-            this.tabPage9.Controls.Add(this.groupBoxSettingsBackups);
-            this.tabPage9.Location = new System.Drawing.Point(4, 22);
-            this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(592, 303);
-            this.tabPage9.TabIndex = 1;
-            this.tabPage9.Text = "User Settings";
-            this.tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // tabPage16
-            // 
-            this.tabPage16.Controls.Add(this.label2);
-            this.tabPage16.Controls.Add(this.checkBoxAutoStart);
-            this.tabPage16.Controls.Add(this.checkBoxDisableAutoStartPrompt);
-            this.tabPage16.Controls.Add(this.checkBoxLaunchAtStartup);
-            this.tabPage16.Location = new System.Drawing.Point(4, 22);
-            this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(592, 303);
-            this.tabPage16.TabIndex = 2;
-            this.tabPage16.Text = "Automation";
-            this.tabPage16.UseVisualStyleBackColor = true;
-            // 
-            // tabPage17
-            // 
-            this.tabPage17.Controls.Add(this.buttonOpenOpenCLBinaryFolder);
-            this.tabPage17.Controls.Add(this.checkBoxUseDefaultOpenCLBinaries);
-            this.tabPage17.Controls.Add(this.checkBoxReuseCompiledBinaries);
-            this.tabPage17.Location = new System.Drawing.Point(4, 22);
-            this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage17.Size = new System.Drawing.Size(592, 303);
-            this.tabPage17.TabIndex = 3;
-            this.tabPage17.Text = "OpenCL Binaries";
-            this.tabPage17.UseVisualStyleBackColor = true;
-            // 
-            // tabPage18
-            // 
-            this.tabPage18.Controls.Add(this.label12);
-            this.tabPage18.Controls.Add(this.comboBoxCurrency);
-            this.tabPage18.Location = new System.Drawing.Point(4, 22);
-            this.tabPage18.Name = "tabPage18";
-            this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage18.Size = new System.Drawing.Size(592, 303);
-            this.tabPage18.TabIndex = 4;
-            this.tabPage18.Text = "Profitability";
-            this.tabPage18.UseVisualStyleBackColor = true;
-            // 
-            // tabPage19
-            // 
-            this.tabPage19.Controls.Add(this.label34);
-            this.tabPage19.Controls.Add(this.checkBoxAPIEnabled);
-            this.tabPage19.Controls.Add(this.label6);
-            this.tabPage19.Controls.Add(this.numericUpDownAPIPort);
-            this.tabPage19.Controls.Add(this.groupBoxAPIIPRange);
-            this.tabPage19.Controls.Add(this.linkLabel1);
-            this.tabPage19.Location = new System.Drawing.Point(4, 22);
-            this.tabPage19.Name = "tabPage19";
-            this.tabPage19.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage19.Size = new System.Drawing.Size(592, 303);
-            this.tabPage19.TabIndex = 5;
-            this.tabPage19.Text = "API";
-            this.tabPage19.UseVisualStyleBackColor = true;
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(7, 231);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(581, 13);
-            this.label34.TabIndex = 4;
-            this.label34.Text = "Note: The current implementation of the API is incomplete and can be used only to" +
-    " monitor the miner with Awesome Miner.";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -5498,11 +6334,22 @@
             this.tabPageAbout.ResumeLayout(false);
             this.tabPageLog.ResumeLayout(false);
             this.tabPageMiscSettings.ResumeLayout(false);
-            this.groupBoxAPIIPRange.ResumeLayout(false);
-            this.groupBoxAPIIPRange.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).EndInit();
+            this.tabControlMisc.ResumeLayout(false);
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
             this.groupBoxSettingsBackups.ResumeLayout(false);
             this.groupBoxSettingsBackups.PerformLayout();
+            this.tabPage16.ResumeLayout(false);
+            this.tabPage16.PerformLayout();
+            this.tabPage17.ResumeLayout(false);
+            this.tabPage17.PerformLayout();
+            this.tabPage18.ResumeLayout(false);
+            this.tabPage18.PerformLayout();
+            this.tabPage19.ResumeLayout(false);
+            this.tabPage19.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAPIPort)).EndInit();
+            this.groupBoxAPIIPRange.ResumeLayout(false);
+            this.groupBoxAPIIPRange.PerformLayout();
             this.tabPageBenchmarks.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.tabControl4.ResumeLayout(false);
@@ -5528,6 +6375,36 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingRepeats)).EndInit();
             this.tabPageDeviceSettings.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMemoryTimings)).EndInit();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalIntensity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown281)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalThreads)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown280)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashLocalWorkSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDevice0EthashPascalPascalIterations)).EndInit();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingMemoryVoltage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingCoreClock)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingMemoryClock)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingCoreVoltage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericDeviceParameterOverclockingPowerLimit)).EndInit();
+            this.groupBox13.ResumeLayout(false);
+            this.groupBox13.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlMaximumFanSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlMinimumFanSpeed)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlTargetTemperature)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlMaximumTemperature)).EndInit();
             this.groupBoxHadrwareAcceleration.ResumeLayout(false);
             this.groupBoxHadrwareAcceleration.PerformLayout();
             this.tabPageCustomPoolSettings.ResumeLayout(false);
@@ -5581,17 +6458,6 @@
             this.groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationRepeats)).EndInit();
-            this.tabControlMisc.ResumeLayout(false);
-            this.tabPage7.ResumeLayout(false);
-            this.tabPage9.ResumeLayout(false);
-            this.tabPage16.ResumeLayout(false);
-            this.tabPage16.PerformLayout();
-            this.tabPage17.ResumeLayout(false);
-            this.tabPage17.PerformLayout();
-            this.tabPage18.ResumeLayout(false);
-            this.tabPage18.PerformLayout();
-            this.tabPage19.ResumeLayout(false);
-            this.tabPage19.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5699,15 +6565,11 @@
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingEthashPascalEnabled;
         private System.Windows.Forms.DataGridView dataGridViewBenchmarks;
         private System.Windows.Forms.TabPage tabPageDeviceSettings;
-        private System.Windows.Forms.Button buttonResetOverclockingSettings;
         private System.Windows.Forms.Button buttonResetAllSettings;
-        private System.Windows.Forms.Button buttonResetAlgorithmSettings;
-        private System.Windows.Forms.Button buttonResetFanControlSettings;
         private System.Windows.Forms.GroupBox groupBoxHadrwareAcceleration;
         private System.Windows.Forms.CheckBox checkBoxEnableHardwareAccelerationForDefaultSettings;
         private System.Windows.Forms.Label label144;
         private System.Windows.Forms.CheckBox checkBoxEnablePhymem;
-        private System.Windows.Forms.TabControl tabControlDeviceSettings;
         private System.Windows.Forms.TabPage tabPageCustomPoolSettings;
         private System.Windows.Forms.GroupBox groupBoxCustmPool1;
         private System.Windows.Forms.ComboBox comboBoxCustomPool1SecondaryAlgorithm;
@@ -6001,5 +6863,58 @@
         private System.Windows.Forms.TabPage tabPage18;
         private System.Windows.Forms.TabPage tabPage19;
         private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.ComboBox comboBoxDeviceSettingsDevice;
+        private System.Windows.Forms.Button buttonLoadFromFile;
+        private System.Windows.Forms.Button buttonSaveToFile;
+        private System.Windows.Forms.Button buttonCopyToOthers;
+        private System.Windows.Forms.Button buttonResetToDefault;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.NumericUpDown numericUpDownDeviceParameterFanControlTargetTemperature;
+        private System.Windows.Forms.Label label188;
+        private System.Windows.Forms.NumericUpDown numericUpDownDeviceParameterFanControlMaximumTemperature;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.NumericUpDown numericUpDownDeviceParameterFanControlMaximumFanSpeed;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.NumericUpDown numericUpDownDeviceParameterFanControlMinimumFanSpeed;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.CheckBox checkBoxDeviceParameterFanControlEnabled;
+        private System.Windows.Forms.ComboBox comboBoxDeviceSettingsAlgorithm;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalPascalIterations;
+        private System.Windows.Forms.Label label194;
+        private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalThreads;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox numericDeviceParameterOverclockingEnabled;
+        private System.Windows.Forms.NumericUpDown numericDeviceParameterOverclockingMemoryVoltage;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.NumericUpDown numericDeviceParameterOverclockingMemoryClock;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.NumericUpDown numericDeviceParameterOverclockingPowerLimit;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.NumericUpDown numericDeviceParameterOverclockingCoreVoltage;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.NumericUpDown numericDeviceParameterOverclockingCoreClock;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label142;
+        private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashLocalWorkSize;
+        private System.Windows.Forms.Label label381;
+        private System.Windows.Forms.NumericUpDown numericUpDown281;
+        private System.Windows.Forms.Label label380;
+        private System.Windows.Forms.NumericUpDown numericUpDown280;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.DataGridView dataGridViewMemoryTimings;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalIntensity;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnMemoryTimingsParameters;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnMemoryTimingsValues;
     }
 }
