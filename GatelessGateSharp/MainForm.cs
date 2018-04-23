@@ -1295,6 +1295,9 @@ namespace GatelessGateSharp
                 ResetDeviceOverclockingSettings(device);
                 ResetDeviceMemoryTimingSettings(device);
 
+                if (!checkBoxEnableHardwareAccelerationForDefaultSettings.Checked)
+                    continue;
+
                 // Load specific device settings for the device if there are any.
                 string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
                 string extension = ".json";
@@ -1334,41 +1337,39 @@ namespace GatelessGateSharp
             var openCLName = ((OpenCLDevice)device).GetComputeDevice().Name;
             var GCN1 = openCLName == "Capeverde" || openCLName == "Hainan" || openCLName == "Oland" || openCLName == "Pitcairn" || openCLName == "Tahiti";
 
-            /*
             // EthashPascal
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "threads")] = new NumericDeviceParameter((decimal)1);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "intensity")] = new NumericDeviceParameter((decimal)1024);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "secondary_algorithm_iterations")] = new NumericDeviceParameter((decimal)4);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "threads")].Value = (decimal)1;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "intensity")].Value = (decimal)1024;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash_pascal", "secondary_algorithm_iterations")].Value = (decimal)4;
 
             // Ethash
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "threads")] = new NumericDeviceParameter((decimal)1);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "intensity")] = new NumericDeviceParameter((decimal)1024);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")] = new NumericDeviceParameter((decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192));
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "threads")].Value = (decimal)1;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "intensity")].Value = (decimal)1024;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
 
             // Lbry
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "threads")] = new NumericDeviceParameter((decimal)2);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "intensity")] = new NumericDeviceParameter((decimal)32);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")] = new NumericDeviceParameter((decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64));
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "threads")].Value = (decimal)2;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "intensity")].Value = (decimal)32;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
 
             // Lyra2REv2
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "threads")] = new NumericDeviceParameter((decimal)2);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "intensity")] = new NumericDeviceParameter((decimal)4);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "local_work_size")] = new NumericDeviceParameter((decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256));
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "threads")].Value = (decimal)2;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "intensity")].Value = (decimal)4;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
 
             // Pasacal
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "threads")] = new NumericDeviceParameter((decimal)2);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "intensity")] = new NumericDeviceParameter((decimal)32);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "local_work_size")] = new NumericDeviceParameter((decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256));
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "threads")].Value = (decimal)2;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "intensity")].Value = (decimal)32;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "pascal", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
 
             // NeoScrypt
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "threads")] = new NumericDeviceParameter((decimal)1);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "local_work_size")] = new NumericDeviceParameter((decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256));
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "threads")].Value = (decimal)1;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "raw_intensity")] = new NumericDeviceParameter(0);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 256 : 256);
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "neoscrypt", "raw_intensity")].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 8 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 8 * device.GetMaxComputeUnits() :
@@ -1384,13 +1385,11 @@ namespace GatelessGateSharp
                                                                                                           8 * device.GetMaxComputeUnits());
 
             // CryptoNight
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "threads")] = new NumericDeviceParameter((decimal)(device.GetVendor() == "AMD" && openCLName != "Fiji" ? 2 : 1));
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "local_work_size")] = new NumericDeviceParameter(0);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "threads")].Value = (decimal)(device.GetVendor() == "AMD" && openCLName != "Fiji" ? 2 : 1);
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "local_work_size")].Value
                 = (decimal)(device.GetVendor() == "AMD" && (new Regex("Vega")).Match(device.GetName()).Success ? 16 :
                             device.GetVendor() == "AMD" ? 8 :
                                                           4);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "raw_intensity")] = new NumericDeviceParameter(0);
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "raw_intensity")].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 60 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 112 :
@@ -1411,17 +1410,15 @@ namespace GatelessGateSharp
                             device.GetVendor() == "AMD" ? 2 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 4 * device.GetMaxComputeUnits() :
                                                                                                           2 * device.GetMaxComputeUnits());
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "strided_index")] = new NumericDeviceParameter(1);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "memory_chunk_size")] = new NumericDeviceParameter(2);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "strided_index")].Value = 1;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "memory_chunk_size")].Value = 2;
 
             // CryptoNight-Heavy
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "threads")] = new NumericDeviceParameter((decimal)(device.GetVendor() == "AMD" && openCLName != "Fiji" ? 2 : 1));
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "local_work_size")] = new NumericDeviceParameter(0);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "threads")].Value = (decimal)(device.GetVendor() == "AMD" && openCLName != "Fiji" ? 2 : 1);
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "local_work_size")].Value
                 = (decimal)(device.GetVendor() == "AMD" && (new Regex("Vega")).Match(device.GetName()).Success ? 16 :
                             device.GetVendor() == "AMD" ? 8 :
                                                           4);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "raw_intensity")] = new NumericDeviceParameter(0);
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "raw_intensity")].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? 30 :
                             device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" && device.MemorySize <= 4L * 1024 * 1024 * 1024 ? 58 :
@@ -1440,28 +1437,26 @@ namespace GatelessGateSharp
                             device.GetVendor() == "AMD" ? 1 * device.GetMaxComputeUnits() :
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 2 * device.GetMaxComputeUnits() :
                                                                                                           1 * device.GetMaxComputeUnits());
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "strided_index")] = new NumericDeviceParameter(1);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "memory_chunk_size")] = new NumericDeviceParameter(2);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "strided_index")].Value = 1;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_heavy", "memory_chunk_size")].Value = 2;
 
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "threads")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "threads")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "local_work_size")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "local_work_size")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "raw_intensity")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "raw_intensity")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "strided_index")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "strided_index")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "memory_chunk_size")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "memory_chunk_size")].Value);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "threads"          )].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "threads")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "local_work_size"  )].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "local_work_size")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "raw_intensity"    )].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "raw_intensity")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "strided_index"    )].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "strided_index")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight_light", "memory_chunk_size")].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "memory_chunk_size")].Value;
 
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "threads")]           = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "threads")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "local_work_size")]   = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "local_work_size")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "raw_intensity")]     = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "raw_intensity")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "strided_index")]     = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "strided_index")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "memory_chunk_size")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "memory_chunk_size")].Value);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "threads"          )].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "threads")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "local_work_size"  )].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "local_work_size")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "raw_intensity"    )].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "raw_intensity")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "strided_index"    )].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "strided_index")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonightv7", "memory_chunk_size")].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "cryptonight", "memory_chunk_size")].Value;
 
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "threads")] = new NumericDeviceParameter((decimal)2);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "local_work_size")] = new NumericDeviceParameter(0);
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "threads")].Value = (decimal)2;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "local_work_size")].Value
                 = (decimal)(device.GetVendor() == "AMD" && (new Regex("Vega")).Match(device.GetName()).Success ? 64 :
                             device.GetVendor() == "AMD" ? 64 :
                                                           64);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "intensity")] = new NumericDeviceParameter(0);
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "intensity")].Value
                 = (decimal)(device.GetVendor() == "AMD" && device.GetName()    == "Radeon RX 470"       ? 128 :
                             device.GetVendor() == "AMD" && device.GetName()    == "Radeon RX 570"       ? 128 :
@@ -1472,22 +1467,19 @@ namespace GatelessGateSharp
                             device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? 128 :
                                                                                                           128);
 
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16s", "threads")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "threads")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16s", "local_work_size")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "local_work_size")].Value);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16s", "intensity")] = new NumericDeviceParameter(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "intensity")].Value);
-            */
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16s", "threads")].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "threads")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16s", "local_work_size")].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "local_work_size")].Value;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16s", "intensity")].Value = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "x16r", "intensity")].Value;
         }
 
         private void ResetDeviceOverclockingSettings(Device device)
         {
             foreach (var algorithm in AlgorithmList) {
                 try {
-                    /*
-                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")] = new BooleanDeviceParameter(checkBoxEnableHardwareAccelerationForDefaultSettings.Checked);
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")] = new NumericDeviceParameter(100);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")] = new NumericDeviceParameter(0);
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Minimum = 0;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Maximum = 4000;
                     int minCoreClock = ((OpenCLDevice)device).MinCoreClock; if (minCoreClock > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Minimum = minCoreClock;
@@ -1495,7 +1487,6 @@ namespace GatelessGateSharp
                     int coreClockStep = ((OpenCLDevice)device).CoreClockStep; if (coreClockStep > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Increment = coreClockStep;
                     int defaultCoreClock = ((OpenCLDevice)device).DefaultCoreClock; if (defaultCoreClock > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = defaultCoreClock;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")] = new NumericDeviceParameter(0);
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Minimum = 0;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Maximum = 4000;
                     int minMemoryClock = ((OpenCLDevice)device).MinMemoryClock; if (minMemoryClock > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Minimum = minMemoryClock;
@@ -1503,12 +1494,10 @@ namespace GatelessGateSharp
                     int memoryClockStep = ((OpenCLDevice)device).MemoryClockStep; if (memoryClockStep > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Increment = memoryClockStep;
                     int defaultMemoryClock = ((OpenCLDevice)device).DefaultMemoryClock; if (defaultMemoryClock > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = defaultMemoryClock;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")] = new NumericDeviceParameter(0);
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Minimum = 0;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Maximum = 2000;
                     int defaultCoreVoltage = ((OpenCLDevice)device).DefaultCoreVoltage; if (defaultCoreVoltage > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = defaultCoreVoltage;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")] = new NumericDeviceParameter(0);
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Minimum = 0;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
                     int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
@@ -1567,7 +1556,6 @@ namespace GatelessGateSharp
                         if (newMemoryClock > 0)
                             try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = newMemoryClock; } catch (Exception) { }
                     }
-                    */
                 } catch (Exception ex) { Logger(ex); }
             }
         }
@@ -1575,9 +1563,9 @@ namespace GatelessGateSharp
         private void ResetDeviceMemoryTimingSettings(Device device)
         {
             foreach (var algorithm in AlgorithmList) {
-                /*
                 bool ethash = (new Regex(@"^ethash")).Match(algorithm).Success;
-                booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")] = new BooleanDeviceParameter(checkBoxEnableHardwareAccelerationForDefaultSettings.Checked);
+                if (device.GetType() == typeof(AMDPolaris10))
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
                 if (device.GetVendor() == "AMD"
                     && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
                     && device.MemoryVendor == "Elpida") {
@@ -1586,93 +1574,92 @@ namespace GatelessGateSharp
                     //    checkBoxDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
 
                     if (algorithm == "ethash") {
-                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")] = new NumericDeviceParameter(16);
-                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")] = new NumericDeviceParameter(15);
+                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 16;
+                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 15;
                     } else {
-                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")] = new NumericDeviceParameter(16);
-                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")] = new NumericDeviceParameter(15);
+                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 16;
+                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 15;
                     }
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")] = new NumericDeviceParameter(30);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")] = new NumericDeviceParameter(34);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = 30;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = 34;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")] = new NumericDeviceParameter(78);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")] = new NumericDeviceParameter(33);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")] = new NumericDeviceParameter(43);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")] = new NumericDeviceParameter(16);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value = 78;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value = 33;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value = 43;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value = 16;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")] = new NumericDeviceParameter(21);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")] = new NumericDeviceParameter(26);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")] = new NumericDeviceParameter(6);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")] = new NumericDeviceParameter(70);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value = 21;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value = 26;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value = 6;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value = 70;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")] = new NumericDeviceParameter(190);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")] = new NumericDeviceParameter(14);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")] = new NumericDeviceParameter(13);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")] = new NumericDeviceParameter(113);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value = 190;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value = 14;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value = 13;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = 113;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")] = new NumericDeviceParameter(28);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")] = new NumericDeviceParameter(2);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")] = new NumericDeviceParameter(5);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")] = new NumericDeviceParameter(16);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")] = new NumericDeviceParameter(23);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value = 28;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value = 2;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value = 5;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value = 16;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = 23;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")] = new NumericDeviceParameter(4);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")] = new NumericDeviceParameter(3);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")] = new NumericDeviceParameter(25);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")] = new NumericDeviceParameter(6);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = 4;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = 6;
 
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")] = new StringDeviceParameter("20140604");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")] = new StringDeviceParameter("AA4089EA");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc8")] = new StringDeviceParameter("C0040003");
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = "20140604";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")].Text = "AA4089EA";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc8")].Text = "C0040003";
 
                 } else if (device.GetVendor() == "AMD"
                            && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
                            //&& device.MemoryVendor == "Samsung"
                            ) {
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")] = new NumericDeviceParameter(16);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")] = new NumericDeviceParameter(19);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")] = new NumericDeviceParameter(36);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")] = new NumericDeviceParameter(43);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = 16;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = 19;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = 36;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = 43;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")] = new NumericDeviceParameter(140);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")] = new NumericDeviceParameter(33);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")] = new NumericDeviceParameter(41);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")] = new NumericDeviceParameter(17);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value = 140;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_rp")].Value = 33;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value = 41;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value = 17;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")] = new NumericDeviceParameter(16);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")] = new NumericDeviceParameter(28);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")] = new NumericDeviceParameter(5);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")] = new NumericDeviceParameter(74);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value = 16;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value = 28;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value = 5;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trc")].Value = 74;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")] = new NumericDeviceParameter(30);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")] = new NumericDeviceParameter(4);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")] = new NumericDeviceParameter(7);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")] = new NumericDeviceParameter(19);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")] = new NumericDeviceParameter(24);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value = 30;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value = 4;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value = 7;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tw2r")].Value = 19;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = 24;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")] = new NumericDeviceParameter(61);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")] = new NumericDeviceParameter(77);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")] = new NumericDeviceParameter(14);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")] = new NumericDeviceParameter(219);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value = 61;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value = 77;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trp")].Value = 14;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = 219;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")] = new NumericDeviceParameter(0);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")] = new NumericDeviceParameter(3);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")] = new NumericDeviceParameter(25);
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")] = new NumericDeviceParameter(0);
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = 0;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = 0;
 
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_pmg")] = new StringDeviceParameter("101CCC22");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_d0")] = new StringDeviceParameter("00000000");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_d1")] = new StringDeviceParameter("00000000");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_2")] = new StringDeviceParameter("00000F0A");
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_pmg")].Text = "101CCC22";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_d0")].Text = "00000000";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_d1")].Text = "00000000";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_phy_2")].Text = "00000F0A";
 
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")] = new StringDeviceParameter("2014030B");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")] = new StringDeviceParameter("A00089FA");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc4")] = new StringDeviceParameter("E000CDD8");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc8")] = new StringDeviceParameter("00000003");
-                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc9")] = new StringDeviceParameter("14000707");
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = "2014030B";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")].Text = "A00089FA";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc4")].Text = "E000CDD8";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc8")].Text = "00000003";
+                    stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc9")].Text = "14000707";
                 }
-                */
             }
         }
 
@@ -1803,17 +1790,6 @@ namespace GatelessGateSharp
             var status = new NativeMethods.MemoryStatusEx();
 
             NativeMethods.GlobalMemoryStatusEx(status);
-
-            /*
-            MainForm.Logger("dwLength: " + (ulong)status.dwLength);
-            MainForm.Logger("dwMemoryLoad: " + (ulong)status.dwMemoryLoad);
-            MainForm.Logger("ullTotalPhys: " + (ulong)status.ullTotalPhys);
-            MainForm.Logger("ullAvailPhys: " + (ulong)status.ullAvailPhys);
-            MainForm.Logger("ullTotalPageFile: " + (ulong)status.ullTotalPageFile);
-            MainForm.Logger("ullAvailPageFile: " + (ulong)status.ullAvailPageFile);
-            MainForm.Logger("ullTotalVirtual: " + (ulong)status.ullTotalVirtual);
-            MainForm.Logger("ullAvailVirtual: " + (ulong)status.ullAvailVirtual);
-            */
 
             if ((ulong)status.ullTotalPageFile - status.ullTotalPhys < (ulong)24 * 1024 * 1024 * 1024) {
                 var result = MessageBox.Show(Utilities.GetAutoClosingForm(20), "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
@@ -2441,75 +2417,6 @@ namespace GatelessGateSharp
                         }
                     }
                 }
-                    /*
-                        try {
-                            var sql = "select * from device_parameters";
-                            using (var command = new SQLiteCommand(sql, conn)) {
-                                using (var reader = command.ExecuteReader()) {
-                                    while (reader.Read()) {
-                                        var deviceID = (int)reader["device_id"];
-                                        var deviceVendor = (string)reader["device_vendor"];
-                                        var deviceName = (string)reader["device_name"];
-                                        var name = (string)reader["parameter_name"];
-                                        var value = (string)reader["parameter_value"];
-                                        if (deviceID >= Controller.OpenCLDevices.Length || deviceVendor != Controller.OpenCLDevices[deviceID].GetVendor() ||
-                                            deviceName != Controller.OpenCLDevices[deviceID].GetName())
-                                            continue;
-
-                                        var regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
-                                        var match = regex.Match(name);
-                                        var type = match.Success ? match.Groups[1].Value : null;
-                                        var parameter = match.Success ? match.Groups[2].Value : null;
-                                        var tuple = new Tuple<int, string, string>(deviceID, type, parameter);
-                                        try {
-                                            if ((new Regex(@"enabled$")).Match(parameter).Success) {
-                                                checkBoxDeviceParameterArray[tuple].Checked = (value == "true");
-                                            } else if (parameter == "memory_timings_polaris10_seq_misc1"
-                                                       || parameter == "memory_timings_polaris10_seq_misc3"
-                                                       || parameter == "memory_timings_polaris10_seq_misc4"
-                                                       || parameter == "memory_timings_polaris10_seq_misc8"
-                                                       || parameter == "memory_timings_polaris10_seq_misc9"
-                                                       || parameter == "memory_timings_polaris10_seq_pmg"
-                                                       || parameter == "memory_timings_polaris10_phy_d0"
-                                                       || parameter == "memory_timings_polaris10_phy_d1"
-                                                       || parameter == "memory_timings_polaris10_phy_2") {
-                                                textBoxDeviceParameterArray[tuple].Text = value;
-                                            } else if (parameter != null) {
-                                                numericUpDownDeviceParameterArray[tuple].Value = decimal.Parse(value);
-                                            }
-                                        } catch (Exception) {
-                                            Logger("Failed to load " + parameter + " = " + value + " as a device parameter.");
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (Exception ex) {
-                            Logger("Here!");
-                            Logger(ex);
-                        }
-
-                        conn.Close();
-                    }
-                    if (databaseVersion == 0) {
-                        // Values of intensity were reinterpreted at v1.1.14.
-                        ResetDeviceSettings();
-                        checkBoxDisableAutoStartPrompt.Checked = true;
-                    }
-                    if (databaseVersion < 2) {
-                        foreach (var device in Controller.OpenCLDevices) {
-                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value = (decimal)75;
-                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value = (decimal)85;
-                            numericUpDownDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value = (decimal)50;
-                        }
-                    }
-                    if (databaseVersion < 4) {
-                        if (checkBoxCustomPool0Enable.Checked
-                            || checkBoxCustomPool1Enable.Checked
-                            || checkBoxCustomPool2Enable.Checked
-                            || checkBoxCustomPool3Enable.Checked)
-                            checkBoxUseCustomPools.Checked = true;
-                    }
-                    */
                 Logger("Loaded settings.");
                 mAreSettingsDirty = false;
             } catch (Exception ex) {
