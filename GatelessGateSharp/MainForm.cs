@@ -1191,6 +1191,9 @@ namespace GatelessGateSharp
             int algoIndex = comboBoxDeviceSettingsAlgorithm.SelectedIndex;
             string algo = AlgorithmList[algoIndex];
 
+            if (deviceIndex < 0)
+                return;
+
             dataGridViewMemoryTimings.Rows.Clear();
 
             // Render controls invisible if necessary.
@@ -1225,7 +1228,9 @@ namespace GatelessGateSharp
                         label.Visible = visible;
                 }
             }
+            groupBoxMemoryTimings.Visible = (Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDPolaris10)); 
 
+            // Update numeric device parameters.
             foreach (var tuple in numericDeviceParameterArray.Keys) {
                 if (tuple.Item1 != deviceIndex || (tuple.Item2 != "fan_control" && tuple.Item2 != algo))
                     continue;
@@ -1292,7 +1297,7 @@ namespace GatelessGateSharp
 
                 // Load specific device settings for the device if there are any.
                 string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
-                string extension = ".xml";
+                string extension = ".json";
                 string postfix0 = "";
                 string postfix1 = "";
                 try {
@@ -5310,7 +5315,7 @@ namespace GatelessGateSharp
         {
             OpenCLDevice device = Controller.OpenCLDevices[deviceIndex];
 
-            bool memoryTimingsEnabled = booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked;
+            bool memoryTimingsEnabled = (device.GetType() == typeof(AMDPolaris10)) && booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked;
             bool overclockingEnabled = booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked;
             var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
 
@@ -5802,6 +5807,8 @@ namespace GatelessGateSharp
                 tabPageOptimizationTargets.Enabled = idle;
                 numericUpDownOptimizationRepeats.Enabled = idle;
                 numericUpDownOptimizationLength.Enabled = idle;
+
+                groupBoxAlgorithmSpecificDeviceSettings.Enabled = idle;
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
             }
@@ -6695,7 +6702,8 @@ namespace GatelessGateSharp
                 PCIExpress.UnloadPhyMem();
                 foreach (var device in Controller.OpenCLDevices) {
                     foreach (var algorithm in AlgorithmList)
-                        booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
+                        if (device.GetType() == typeof(AMDPolaris10))
+                            booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
                 }
             }
         }

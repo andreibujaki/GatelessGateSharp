@@ -230,8 +230,8 @@
             this.numericUpDownBenchmarkingRepeats = new System.Windows.Forms.NumericUpDown();
             this.label33 = new System.Windows.Forms.Label();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.groupBoxAlgorithmSpecificDeviceSettings = new System.Windows.Forms.GroupBox();
+            this.groupBoxMemoryTimings = new System.Windows.Forms.GroupBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button4 = new System.Windows.Forms.Button();
             this.dataGridViewMemoryTimings = new System.Windows.Forms.DataGridView();
@@ -563,8 +563,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingRepeats)).BeginInit();
             this.tabPageDeviceSettings.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox8.SuspendLayout();
+            this.groupBoxAlgorithmSpecificDeviceSettings.SuspendLayout();
+            this.groupBoxMemoryTimings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMemoryTimings)).BeginInit();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -2467,7 +2467,7 @@
             // 
             // tabPageDeviceSettings
             // 
-            this.tabPageDeviceSettings.Controls.Add(this.groupBox3);
+            this.tabPageDeviceSettings.Controls.Add(this.groupBoxAlgorithmSpecificDeviceSettings);
             this.tabPageDeviceSettings.Controls.Add(this.groupBox13);
             this.tabPageDeviceSettings.Controls.Add(this.buttonLoadFromFile);
             this.tabPageDeviceSettings.Controls.Add(this.buttonSaveToFile);
@@ -2483,29 +2483,29 @@
             this.tabPageDeviceSettings.Text = "Devices";
             this.tabPageDeviceSettings.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
+            // groupBoxAlgorithmSpecificDeviceSettings
             // 
-            this.groupBox3.Controls.Add(this.groupBox8);
-            this.groupBox3.Controls.Add(this.comboBoxDeviceSettingsAlgorithm);
-            this.groupBox3.Controls.Add(this.groupBox6);
-            this.groupBox3.Controls.Add(this.groupBox7);
-            this.groupBox3.Location = new System.Drawing.Point(8, 104);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(600, 228);
-            this.groupBox3.TabIndex = 157;
-            this.groupBox3.TabStop = false;
+            this.groupBoxAlgorithmSpecificDeviceSettings.Controls.Add(this.groupBoxMemoryTimings);
+            this.groupBoxAlgorithmSpecificDeviceSettings.Controls.Add(this.comboBoxDeviceSettingsAlgorithm);
+            this.groupBoxAlgorithmSpecificDeviceSettings.Controls.Add(this.groupBox6);
+            this.groupBoxAlgorithmSpecificDeviceSettings.Controls.Add(this.groupBox7);
+            this.groupBoxAlgorithmSpecificDeviceSettings.Location = new System.Drawing.Point(8, 104);
+            this.groupBoxAlgorithmSpecificDeviceSettings.Name = "groupBoxAlgorithmSpecificDeviceSettings";
+            this.groupBoxAlgorithmSpecificDeviceSettings.Size = new System.Drawing.Size(600, 228);
+            this.groupBoxAlgorithmSpecificDeviceSettings.TabIndex = 157;
+            this.groupBoxAlgorithmSpecificDeviceSettings.TabStop = false;
             // 
-            // groupBox8
+            // groupBoxMemoryTimings
             // 
-            this.groupBox8.Controls.Add(this.checkBox1);
-            this.groupBox8.Controls.Add(this.button4);
-            this.groupBox8.Controls.Add(this.dataGridViewMemoryTimings);
-            this.groupBox8.Location = new System.Drawing.Point(384, 11);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(210, 207);
-            this.groupBox8.TabIndex = 158;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Memory Timings";
+            this.groupBoxMemoryTimings.Controls.Add(this.checkBox1);
+            this.groupBoxMemoryTimings.Controls.Add(this.button4);
+            this.groupBoxMemoryTimings.Controls.Add(this.dataGridViewMemoryTimings);
+            this.groupBoxMemoryTimings.Location = new System.Drawing.Point(384, 11);
+            this.groupBoxMemoryTimings.Name = "groupBoxMemoryTimings";
+            this.groupBoxMemoryTimings.Size = new System.Drawing.Size(210, 207);
+            this.groupBoxMemoryTimings.TabIndex = 158;
+            this.groupBoxMemoryTimings.TabStop = false;
+            this.groupBoxMemoryTimings.Text = "Memory Timings";
             // 
             // checkBox1
             // 
@@ -3080,7 +3080,7 @@
             this.groupBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox13.Location = new System.Drawing.Point(8, 30);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(515, 68);
+            this.groupBox13.Size = new System.Drawing.Size(600, 68);
             this.groupBox13.TabIndex = 155;
             this.groupBox13.TabStop = false;
             this.groupBox13.Tag = "fan_control";
@@ -3092,9 +3092,9 @@
             this.groupBox2.Controls.Add(this.numericUpDownDeviceParameterFanControlMaximumFanSpeed);
             this.groupBox2.Controls.Add(this.numericUpDownDeviceParameterFanControlMinimumFanSpeed);
             this.groupBox2.Controls.Add(this.label37);
-            this.groupBox2.Location = new System.Drawing.Point(296, 12);
+            this.groupBox2.Location = new System.Drawing.Point(337, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(207, 48);
+            this.groupBox2.Size = new System.Drawing.Size(253, 48);
             this.groupBox2.TabIndex = 157;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Fan Speed";
@@ -3105,14 +3105,14 @@
             this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label41.Location = new System.Drawing.Point(6, 21);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(47, 13);
+            this.label41.Size = new System.Drawing.Size(68, 13);
             this.label41.TabIndex = 234;
-            this.label41.Text = "Min. (%):";
+            this.label41.Text = "Minimum (%):";
             // 
             // numericUpDownDeviceParameterFanControlMaximumFanSpeed
             // 
             this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Location = new System.Drawing.Point(160, 19);
+            this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Location = new System.Drawing.Point(205, 19);
             this.numericUpDownDeviceParameterFanControlMaximumFanSpeed.Minimum = new decimal(new int[] {
             20,
             0,
@@ -3131,7 +3131,7 @@
             // numericUpDownDeviceParameterFanControlMinimumFanSpeed
             // 
             this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Location = new System.Drawing.Point(59, 19);
+            this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Location = new System.Drawing.Point(80, 19);
             this.numericUpDownDeviceParameterFanControlMinimumFanSpeed.Minimum = new decimal(new int[] {
             20,
             0,
@@ -3151,12 +3151,12 @@
             // 
             this.label37.AutoSize = true;
             this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label37.Location = new System.Drawing.Point(104, 21);
+            this.label37.Location = new System.Drawing.Point(129, 21);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(50, 13);
+            this.label37.Size = new System.Drawing.Size(71, 13);
             this.label37.TabIndex = 236;
             this.label37.Tag = "";
-            this.label37.Text = "Max. (%):";
+            this.label37.Text = "Maximum (%):";
             // 
             // groupBox1
             // 
@@ -3164,9 +3164,9 @@
             this.groupBox1.Controls.Add(this.label188);
             this.groupBox1.Controls.Add(this.numericUpDownDeviceParameterFanControlMaximumTemperature);
             this.groupBox1.Controls.Add(this.label47);
-            this.groupBox1.Location = new System.Drawing.Point(65, 12);
+            this.groupBox1.Location = new System.Drawing.Point(77, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(224, 48);
+            this.groupBox1.Size = new System.Drawing.Size(248, 48);
             this.groupBox1.TabIndex = 156;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Temperature";
@@ -3208,7 +3208,7 @@
             // numericUpDownDeviceParameterFanControlMaximumTemperature
             // 
             this.numericUpDownDeviceParameterFanControlMaximumTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Location = new System.Drawing.Point(177, 19);
+            this.numericUpDownDeviceParameterFanControlMaximumTemperature.Location = new System.Drawing.Point(200, 19);
             this.numericUpDownDeviceParameterFanControlMaximumTemperature.Maximum = new decimal(new int[] {
             90,
             0,
@@ -3233,12 +3233,12 @@
             // 
             this.label47.AutoSize = true;
             this.label47.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label47.Location = new System.Drawing.Point(118, 21);
+            this.label47.Location = new System.Drawing.Point(119, 21);
             this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(53, 13);
+            this.label47.Size = new System.Drawing.Size(74, 13);
             this.label47.TabIndex = 1;
             this.label47.Tag = "";
-            this.label47.Text = "Max. (℃):";
+            this.label47.Text = "Maximum (℃):";
             this.label47.Click += new System.EventHandler(this.label47_Click);
             // 
             // checkBoxDeviceParameterFanControlEnabled
@@ -3247,7 +3247,7 @@
             this.checkBoxDeviceParameterFanControlEnabled.Checked = true;
             this.checkBoxDeviceParameterFanControlEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxDeviceParameterFanControlEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDeviceParameterFanControlEnabled.Location = new System.Drawing.Point(6, 29);
+            this.checkBoxDeviceParameterFanControlEnabled.Location = new System.Drawing.Point(12, 28);
             this.checkBoxDeviceParameterFanControlEnabled.Name = "checkBoxDeviceParameterFanControlEnabled";
             this.checkBoxDeviceParameterFanControlEnabled.Size = new System.Drawing.Size(59, 17);
             this.checkBoxDeviceParameterFanControlEnabled.TabIndex = 0;
@@ -6375,9 +6375,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingRepeats)).EndInit();
             this.tabPageDeviceSettings.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
+            this.groupBoxAlgorithmSpecificDeviceSettings.ResumeLayout(false);
+            this.groupBoxMemoryTimings.ResumeLayout(false);
+            this.groupBoxMemoryTimings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMemoryTimings)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
@@ -6880,7 +6880,7 @@
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.CheckBox checkBoxDeviceParameterFanControlEnabled;
         private System.Windows.Forms.ComboBox comboBoxDeviceSettingsAlgorithm;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBoxAlgorithmSpecificDeviceSettings;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalPascalIterations;
@@ -6907,7 +6907,7 @@
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.DataGridView dataGridViewMemoryTimings;
-        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.GroupBox groupBoxMemoryTimings;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label54;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalIntensity;
