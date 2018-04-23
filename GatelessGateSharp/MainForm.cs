@@ -834,9 +834,9 @@ namespace GatelessGateSharp
                 booleanDeviceParameterArray[tuple3] = new BooleanDeviceParameter(tuple3, true);
                 foreach (var tuple in new List<Tuple<string, string, int, int, int, int>> {
 
-                    new Tuple<string, string, int, int, int, int>("fan_control", "target_temperature", 80, 40, 90, 1),
-                    new Tuple<string, string, int, int, int, int>("fan_control", "maximum_temperature", 90, 40, 90, 1),
-                    new Tuple<string, string, int, int, int, int>("fan_control", "minimum_fan_speed", 20, 0, 100, 1),
+                    new Tuple<string, string, int, int, int, int>("fan_control", "target_temperature", 75, 40, 90, 1),
+                    new Tuple<string, string, int, int, int, int>("fan_control", "maximum_temperature", 85, 40, 90, 1),
+                    new Tuple<string, string, int, int, int, int>("fan_control", "minimum_fan_speed", 50, 0, 100, 1),
                     new Tuple<string, string, int, int, int, int>("fan_control", "maximum_fan_speed", 100, 0, 100, 1),
 
                     new Tuple<string, string, int, int, int, int>("ethash_pascal", "threads", 1, 1, 4, 1),
@@ -864,25 +864,25 @@ namespace GatelessGateSharp
                     new Tuple<string, string, int, int, int, int>("neoscrypt", "raw_intensity", 32, 1, 32767, 1),
 
                     new Tuple<string, string, int, int, int, int>("cryptonight", "threads", (device.GetVendor() == "AMD" && device.GetComputeDevice().Name != "Fiji") ? 2 : 1, 1, 4, 1),
-                    new Tuple<string, string, int, int, int, int>("cryptonight", "local_work_size", 8, (NVIDIA ? 32 : 64), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
+                    new Tuple<string, string, int, int, int, int>("cryptonight", "local_work_size", 8, 8, 32, 8),
                     new Tuple<string, string, int, int, int, int>("cryptonight", "raw_intensity", 32, 1, 32767, 1),
                     new Tuple<string, string, int, int, int, int>("cryptonight", "strided_index", 1, 0, 2, 1),
                     new Tuple<string, string, int, int, int, int>("cryptonight", "memory_chunk_size", 2, 0, 256, 1),
 
                     new Tuple<string, string, int, int, int, int>("cryptonightv7", "threads", (device.GetVendor() == "AMD" && device.GetComputeDevice().Name != "Fiji") ? 2 : 1, 1, 4, 1),
-                    new Tuple<string, string, int, int, int, int>("cryptonightv7", "local_work_size", 8, (NVIDIA ? 32 : 64), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
+                    new Tuple<string, string, int, int, int, int>("cryptonightv7", "local_work_size", 8, 8, 32, 8),
                     new Tuple<string, string, int, int, int, int>("cryptonightv7", "raw_intensity", 32, 1, 32767, 1),
                     new Tuple<string, string, int, int, int, int>("cryptonightv7", "strided_index", 1, 0, 2, 1),
                     new Tuple<string, string, int, int, int, int>("cryptonightv7", "memory_chunk_size", 2, 0, 256, 1),
 
                     new Tuple<string, string, int, int, int, int>("cryptonight_heavy", "threads", (device.GetVendor() == "AMD" && device.GetComputeDevice().Name != "Fiji") ? 2 : 1, 1, 4, 1),
-                    new Tuple<string, string, int, int, int, int>("cryptonight_heavy", "local_work_size", 8, (NVIDIA ? 32 : 64), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
+                    new Tuple<string, string, int, int, int, int>("cryptonight_heavy", "local_work_size", 8, 8, 32, 8),
                     new Tuple<string, string, int, int, int, int>("cryptonight_heavy", "raw_intensity", 32, 1, 32767, 1),
                     new Tuple<string, string, int, int, int, int>("cryptonight_heavy", "strided_index", 1, 0, 2, 1),
                     new Tuple<string, string, int, int, int, int>("cryptonight_heavy", "memory_chunk_size", 2, 0, 256, 1),
 
                     new Tuple<string, string, int, int, int, int>("cryptonight_light", "threads", (device.GetVendor() == "AMD" && device.GetComputeDevice().Name != "Fiji") ? 2 : 1, 1, 4, 1),
-                    new Tuple<string, string, int, int, int, int>("cryptonight_light", "local_work_size", 8, (NVIDIA ? 32 : 64), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
+                    new Tuple<string, string, int, int, int, int>("cryptonight_light", "local_work_size", 8, 8, 32, 8),
                     new Tuple<string, string, int, int, int, int>("cryptonight_light", "raw_intensity", 32, 1, 32767, 1),
                     new Tuple<string, string, int, int, int, int>("cryptonight_light", "strided_index", 1, 0, 2, 1),
                     new Tuple<string, string, int, int, int, int>("cryptonight_light", "memory_chunk_size", 2, 0, 256, 1),
@@ -1668,8 +1668,8 @@ namespace GatelessGateSharp
             mAreSettingsDirty = true;
             booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked = true;
 
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value = 80;
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value = 90;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value = 75;
+            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value = 85;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value = 20;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value = 100;
         }
@@ -4832,10 +4832,8 @@ namespace GatelessGateSharp
             }
         }
 
-        void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode, string variant)
+        void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode, string algorithm)
         {
-            var algorithm = variant;
-
             if (mDevFeeMode)
                 throw new InvalidOperationException();
             this.Activate();
@@ -4851,7 +4849,7 @@ namespace GatelessGateSharp
                 if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
                     EnableHardwareManagement(deviceIndex, algorithm);
                     for (i = 0; i < numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "threads")].Value; ++i) {
-                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex], variant);
+                        OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex], algorithm);
                         Controller.Miners.Add(miner);
                         miner.Start(stratum,
                             Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "raw_intensity")]
@@ -5300,10 +5298,12 @@ namespace GatelessGateSharp
                         Logger("Launching X16R miners for " + pool + "...");
                         LaunchOpenCLX16RMiners(pool, DefaultAlgorithm);
                     }
-                    if (Controller.PrimaryStratum != null && Controller.Miners.Count > 0) {
-                        return;
+                    if (Controller.PrimaryStratum == null) {
+                        Logger("Failed to connect to stratum servers at " + pool + ".");
+                    } else if (Controller.Miners.Count <= 0) {
+                        Logger("Failed to launch miner(s) for " + pool + ".");
                     } else {
-                        Logger("Failed to launch miner(s) for " + pool);
+                        return;
                     }
                 } catch (UnrecoverableException ex) {
                     throw ex;
@@ -7908,15 +7908,15 @@ namespace GatelessGateSharp
                         var settings = (DeviceSettings)(new System.Xml.Serialization.XmlSerializer(typeof(DeviceSettings))).Deserialize(reader);
                         foreach (var tuple in settings.BooleanValues) {
                             var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
-                            try { booleanDeviceParameterArray[key].Checked = tuple.Item3; } catch (Exception ex) { Logger(ex); }
+                            try { booleanDeviceParameterArray[key].Checked = tuple.Item3; } catch (Exception ex) { Logger("Unable to load " + tuple.Item2 + " for Device #" + deviceIndex + "."); }
                         }
                         foreach (var tuple in settings.NumericValues) {
                             var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
-                            try { numericDeviceParameterArray[key].Value = tuple.Item3; } catch (Exception ex) { Logger(ex); }
+                            try { numericDeviceParameterArray[key].Value = tuple.Item3; } catch (Exception) { Logger("Unable to load " + tuple.Item2 + " for Device #" + deviceIndex + "."); }
                         }
                         foreach (var tuple in settings.StringValues) {
                             var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
-                            try { stringDeviceParameterArray[key].Text = tuple.Item3; } catch (Exception ex) { Logger(ex); }
+                            try { stringDeviceParameterArray[key].Text = tuple.Item3; } catch (Exception ex) { Logger("Unable to load " + tuple.Item2 + " for Device #" + deviceIndex + "."); }
                         }
                     }
                 }
@@ -7934,12 +7934,14 @@ namespace GatelessGateSharp
                 if (device.PNPString != null)
                     postfix = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)(&REV[^\\]*\\.*)?$")).Replace(device.PNPString, "$1"));
 
-                openFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+                openFileDialog.Filter = "JSON files (*.json)|*.json|XML files (*.xml)|*.xml|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.FileName = (path != null) ? path : (device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0) + postfix + ".json");
 
                 if (path != null || openFileDialog.ShowDialog() == DialogResult.OK) {
+                    if (path == null)
+                        path = openFileDialog.FileName;
                     if ((new Regex(@"\.xml$")).Match(path).Success) {
                         LoadDeviceSettingsFromXMLFile(deviceIndex, path);
                     } else {
