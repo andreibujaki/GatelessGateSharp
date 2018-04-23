@@ -824,7 +824,6 @@ namespace GatelessGateSharp
 
         private void InitializeDeviceSettings()
         {
-            System.Globalization.TextInfo textInfo = new System.Globalization.CultureInfo("en-US", false).TextInfo;
             Tuple<int, string, string> tuple3;
 
             foreach (var device in Controller.OpenCLDevices) {
@@ -898,8 +897,7 @@ namespace GatelessGateSharp
                     var tuple2 = new Tuple<int, string, string>(device.DeviceIndex, tuple.Item1, tuple.Item2);
                     numericDeviceParameterArray[tuple2] = new NumericDeviceParameter(tuple2, tuple.Item3, tuple.Item4, tuple.Item5, tuple.Item6);
 
-                    var newItem = textInfo.ToTitleCase(tuple.Item2);
-                    newItem = (new Regex(@"_").Replace(newItem, " "));
+                    var newItem = GetPrettyDeviceParameterName(tuple.Item2);
                     if (tuple.Item1 != "fan_control" && !comboBoxBenchmarkingFirstParameter.Items.Contains(newItem)) {
                         comboBoxBenchmarkingFirstParameter.Items.Add(newItem);
                         comboBoxBenchmarkingSecondParameter.Items.Add(newItem);
@@ -940,9 +938,7 @@ namespace GatelessGateSharp
                         var tuple2 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, tuple.Item1);
                         numericDeviceParameterArray[tuple2] = new NumericDeviceParameter(tuple2, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5);
 
-                        var newItem = textInfo.ToTitleCase(tuple.Item1);
-                        newItem = (new Regex(@"_").Replace(newItem, " "));
-                        newItem = (new Regex(@"Overclocking ").Replace(newItem, "Overclocking/"));
+                        var newItem = GetPrettyDeviceParameterName(tuple.Item1);
                         if (!comboBoxBenchmarkingFirstParameter.Items.Contains(newItem)) {
                             comboBoxBenchmarkingFirstParameter.Items.Add(newItem);
                             comboBoxBenchmarkingSecondParameter.Items.Add(newItem);
@@ -987,8 +983,7 @@ namespace GatelessGateSharp
                             var tuple2 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, tuple.Item1);
                             numericDeviceParameterArray[tuple2] = new NumericDeviceParameter(tuple2, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5);
 
-                            var newItem = tuple.Item1.ToUpper();
-                            newItem = (new Regex(@"MEMORY_TIMINGS_POLARIS10_").Replace(newItem, "Memory Timings (Polaris10)/"));
+                            var newItem = GetPrettyDeviceParameterName(tuple.Item1);
                             if (!comboBoxBenchmarkingFirstParameter.Items.Contains(newItem)) {
                                 comboBoxBenchmarkingFirstParameter.Items.Add(newItem);
                                 comboBoxBenchmarkingSecondParameter.Items.Add(newItem);
@@ -1009,8 +1004,7 @@ namespace GatelessGateSharp
                             var tuple2 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, tuple.Item1);
                             stringDeviceParameterArray[tuple2] = new StringDeviceParameter(tuple2, tuple.Item2);
 
-                            var newItem = tuple.Item1.ToUpper();
-                            newItem = (new Regex(@"MEMORY_TIMINGS_POLARIS10_").Replace(newItem, "Memory Timings (Polaris10)/"));
+                            var newItem = GetPrettyDeviceParameterName(tuple.Item1);
                             if (!comboBoxBenchmarkingFirstParameter.Items.Contains(newItem)) {
                                 comboBoxBenchmarkingFirstParameter.Items.Add(newItem);
                                 comboBoxBenchmarkingSecondParameter.Items.Add(newItem);
@@ -1062,6 +1056,20 @@ namespace GatelessGateSharp
                     }
                 }
             }
+        }
+
+        static System.Globalization.TextInfo sTextInfo = new System.Globalization.CultureInfo("en-US", false).TextInfo;
+
+        private static string GetPrettyDeviceParameterName(string original)
+        {
+            string newItem = original;
+            if ((new Regex(@"^memory_timings_polaris10_")).Match(newItem).Success) {
+                newItem = (new Regex(@"MEMORY_TIMINGS_POLARIS10_").Replace(newItem.ToUpper(), "Memory Timings (Polaris10)/"));
+            } else {
+                newItem = (new Regex(@"_").Replace(sTextInfo.ToTitleCase(newItem), " "));
+                newItem = (new Regex(@"Overclocking ").Replace(newItem, "Overclocking/"));
+            }
+            return newItem;
         }
 
         private void checkBoxDeviceParameter_CheckedChanged(object sender, EventArgs e)
@@ -2422,7 +2430,10 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 Logger(ex);
             }
-
+            if (comboBoxBenchmarkingFirstParameter.SelectedIndex < 0)
+                comboBoxBenchmarkingFirstParameter.SelectedIndex = 0;
+            if (comboBoxBenchmarkingSecondParameter.SelectedIndex < 0)
+                comboBoxBenchmarkingSecondParameter.SelectedIndex = 0;
             MainForm.Instance.Enabled = true;
         }
 
@@ -7028,7 +7039,8 @@ namespace GatelessGateSharp
                             numericUpDownBenchmarkingFirstParameterEnd.Value = min;
                         }
                         numericUpDownBenchmarkingFirstParameterStep.Value = step;
-                        comboBoxBenchmarkingFirstParameter.SelectedIndex = comboBoxBenchmarkingFirstParameter.FindStringExact(paramType + "_" + parameterName);
+
+                        comboBoxBenchmarkingFirstParameter.SelectedIndex = comboBoxBenchmarkingFirstParameter.FindStringExact(GetPrettyDeviceParameterName(parameterName));
 
                         checkBoxBenchmarkingSecondParameterEnabled.Checked = false;
                     }
