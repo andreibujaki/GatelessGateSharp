@@ -844,7 +844,7 @@ namespace GatelessGateSharp
 
                     new Tuple<string, string, int, int, int, int>("ethash", "threads", 1, 1, 4, 1),
                     new Tuple<string, string, int, int, int, int>("ethash", "intensity", 1024, 1, 32767, 1),
-                    new Tuple<string, string, int, int, int, int>("ethash", "local_work_size", 192, (NVIDIA ? 32 : 64), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
+                    new Tuple<string, string, int, int, int, int>("ethash", "local_work_size", 192, (NVIDIA ? 96 : 128), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
 
                     new Tuple<string, string, int, int, int, int>("lbry", "threads", 2, 1, 4, 1),
                     new Tuple<string, string, int, int, int, int>("lbry", "intensity", 32, 1, 32767, 1),
@@ -6849,7 +6849,8 @@ namespace GatelessGateSharp
                 Tuple<int, string, string> tuple;
                 if (ConvertBenchmarkParameterToDeviceParameterTuple(deviceIndex, algorithm, param.Name, out tuple)) {
                     try {
-                        numericDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value);
+                        if (numericDeviceParameterArray.Keys.Contains(tuple))
+                            numericDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value);
                     } catch (Exception ex) { Logger(ex); }
                 }
             } else {
@@ -6858,7 +6859,8 @@ namespace GatelessGateSharp
                         Tuple<int, string, string> tuple;
                         if (ConvertBenchmarkParameterToDeviceParameterTuple(device.DeviceIndex, algorithm, param.Name, out tuple)) {
                             try {
-                                numericDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[device.DeviceIndex] : param.Value);
+                                if (numericDeviceParameterArray.Keys.Contains(tuple))
+                                    numericDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[device.DeviceIndex] : param.Value);
                                 if ((new Regex(@"^overclocking_")).Match(tuple.Item3).Success) {
                                     booleanDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "overclocking_enabled")].Checked = true;
                                 } else if ((new Regex(@"^memory_timings_")).Match(tuple.Item3).Success) {
@@ -7049,10 +7051,8 @@ namespace GatelessGateSharp
                     string firstParameter = ((string)comboBoxBenchmarkingFirstParameter.SelectedItem).ToLower();
                     string secondParameter = ((string)comboBoxBenchmarkingSecondParameter.SelectedItem).ToLower();
                     Regex regex = new Regex(@"[ ()/]+");
-                    firstParameter = regex.Replace(firstParameter, "");
-                    secondParameter = regex.Replace(secondParameter, "");
-                    Logger("firstParameter:  " + firstParameter);
-                    Logger("secondParameter: " + secondParameter);
+                    firstParameter = regex.Replace(firstParameter, "_");
+                    secondParameter = regex.Replace(secondParameter, "_");
                     if (!checkBoxBenchmarkingFirstParameterEnabled.Checked) {
                         foreach (var defaultAlgorithm in algorithmList) {
                             var param0 = new Controller.BenchmarkParameter("default_algorithm", defaultAlgorithm, DefaultAlgorithm);
@@ -7069,7 +7069,11 @@ namespace GatelessGateSharp
                             for (int deviceID = 0; deviceID < Controller.OpenCLDevices.Length; ++deviceID) {
                                 Tuple<int, string, string> tuple1;
                                 ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, firstParameter, out tuple1);
-                                param1OriginalValues.Add(numericDeviceParameterArray[tuple1].Value.ToString());
+                                string originalValue = null;
+                                try {
+                                    originalValue = numericDeviceParameterArray[tuple1].Value.ToString();
+                                } catch (Exception) { }
+                                param1OriginalValues.Add(originalValue);
                             }
 
                             int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
@@ -7535,46 +7539,10 @@ namespace GatelessGateSharp
                     if (totalSpeedSecondary > 0)
                         dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "Speed"].Value += ", " + ConvertHashrateToString(totalSpeedSecondary / successCount);
                 }
-                if (record.Parameters.Count >= 2) {
-                    var s = record.Parameters[1].Name;
-                    s = (new Regex(@"^(" + AlgorithmListRegexPattern + @")_")).Replace(s, "");
-                    var regex = new Regex(@"^memory_timings_polaris10_");
-                    if (regex.Match(s).Success) {
-                        s = regex.Replace(s, "");
-                        s = s.ToUpper();
-                    }
-                    s = (new Regex(@"^overclocking_")).Replace(s, "");
-                    s = (new Regex(@"^threads$")).Replace(s, "Threads");
-                    s = (new Regex(@"^intensity$")).Replace(s, "Intensity");
-                    s = (new Regex(@"^raw_intensity$")).Replace(s, "Raw Intensity");
-                    s = (new Regex(@"^local_work_size$")).Replace(s, "Local Work Size");
-                    s = (new Regex(@"^secondary_algorithm_iterations$")).Replace(s, "Seconday Algorithm Iterations");
-                    s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
-                    s = (new Regex(@"^memory_clock$")).Replace(s, "Memory Clock");
-                    s = (new Regex(@"^core_voltage$")).Replace(s, "Core Voltage");
-                    s = (new Regex(@"^memory_voltage$")).Replace(s, "Memory Voltage");
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "FirstParameter"].Value = s + ": " + record.Parameters[1].Value;
-                }
-                if (record.Parameters.Count >= 3) {
-                    var s = record.Parameters[2].Name;
-                    s = (new Regex(@"^(" + AlgorithmListRegexPattern + @")_")).Replace(s, "");
-                    var regex = new Regex(@"^memory_timings_polaris10_");
-                    if (regex.Match(s).Success) {
-                        s = regex.Replace(s, "");
-                        s = s.ToUpper();
-                    }
-                    s = (new Regex(@"^overclocking_")).Replace(s, "");
-                    s = (new Regex(@"^threads$")).Replace(s, "Threads");
-                    s = (new Regex(@"^intensity$")).Replace(s, "Intensity");
-                    s = (new Regex(@"^raw_intensity$")).Replace(s, "Raw Intensity");
-                    s = (new Regex(@"^local_work_size$")).Replace(s, "Local Work Size");
-                    s = (new Regex(@"^secondary_algorithm_iterations$")).Replace(s, "Seconday Algorithm Iterations");
-                    s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
-                    s = (new Regex(@"^memory_clock$")).Replace(s, "Memory Clock");
-                    s = (new Regex(@"^core_voltage$")).Replace(s, "Core Voltage");
-                    s = (new Regex(@"^memory_voltage$")).Replace(s, "Memory Voltage");
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "SecondParameter"].Value = s + ": " + record.Parameters[2].Value;
-                }
+                if (record.Parameters.Count >= 2)
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "FirstParameter"].Value = GetPrettyDeviceParameterName(record.Parameters[1].Name) + ": " + record.Parameters[1].Value;
+                if (record.Parameters.Count >= 3)
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "SecondParameter"].Value = GetPrettyDeviceParameterName(record.Parameters[2].Name) + ": " + record.Parameters[1].Value;
             }
         }
 
@@ -7597,24 +7565,7 @@ namespace GatelessGateSharp
                     if (record.SpeedSecondaryAlgorithm > 0)
                         dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeed"].Value += ", " + ConvertHashrateToString(record.SpeedSecondaryAlgorithm);
                 }
-                var s = record.ParameterWithValues;
-                s = (new Regex(@"^(" + AlgorithmListRegexPattern + @")_")).Replace(s, "");
-                var regex = new Regex(@"^memory_timings_polaris10_");
-                if (regex.Match(s).Success) {
-                    s = regex.Replace(s, "");
-                    s = s.ToUpper();
-                }
-                s = (new Regex(@"^overclocking_")).Replace(s, "");
-                s = (new Regex(@"^threads")).Replace(s, "Threads");
-                s = (new Regex(@"^intensity")).Replace(s, "Intensity");
-                s = (new Regex(@"^raw_intensity")).Replace(s, "Raw Intensity");
-                s = (new Regex(@"^local_work_size")).Replace(s, "Local Work Size");
-                s = (new Regex(@"^secondary_algorithm_iterations")).Replace(s, "Seconday Algorithm Iterations");
-                s = (new Regex(@"^core_clock$")).Replace(s, "Core Clock");
-                s = (new Regex(@"^memory_clock")).Replace(s, "Memory Clock");
-                s = (new Regex(@"^core_voltage")).Replace(s, "Core Voltage");
-                s = (new Regex(@"^memory_voltage")).Replace(s, "Memory Voltage");
-                dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsParameter"].Value = s;
+                dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsParameter"].Value = GetPrettyDeviceParameterName(record.ParameterWithValues);
             }
         }
 
@@ -7697,7 +7648,7 @@ namespace GatelessGateSharp
                     if (checkBoxOptimizationAlgorithmicSettings.Checked) {
                         if (algorithm != "ethash_pascal" && algorithm != "ethash")
                             AddOptimizerEntries(deviceIndexList, algorithm, "threads");
-                        if (algorithm != "ethash_pascal" && algorithm != "x16r" && algorithm != "x16s")
+                        if (algorithm != "ethash_pascal" && algorithm != "ethash" && algorithm != "x16r" && algorithm != "x16s" && algorithm != "x16s")
                             AddOptimizerEntries(deviceIndexList, algorithm, "local_work_size");
                         if (algorithm == "cryptonight" || algorithm == "cryptonightv7" || algorithm == "cryptonight_heavy" || algorithm == "cryptonight_light" || algorithm == "neoscrypt") {
                             AddOptimizerEntries(deviceIndexList, algorithm, "raw_intensity");
