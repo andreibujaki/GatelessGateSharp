@@ -4,7 +4,7 @@
 who is interested in mining so-called altcoins such as Ethereum and Monero. If you are relatively new to mining, I would recommend
 reading the following guide first:
 
-* Absolute Biginner's Guide for Cryptomining with Gateless Gate Sharp
+* [Absolute Biginner's Guide for Cryptomining with Gateless Gate Sharp](BeginnersGuide.md)
 
 Otherwise, you can pick any topics of your interest from the following list.
 
