@@ -11,39 +11,40 @@ using System.Collections.Specialized;
 
 namespace GatelessGateSharp {
     class PCIExpress {
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern int LoadPhyMemDriver();
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern void UnloadPhyMemDriver();
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern int ReadPCI(uint busNum, uint devNum, uint funcNum, uint regOff, uint bytes, IntPtr pValue);
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern int WritePCI(uint busNum, uint devNum, uint funcNum, uint regOff, uint bytes, IntPtr pValue);
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern IntPtr MapPhyMem(UInt64 phyAddr, uint memSize);
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern void UnmapPhyMem(IntPtr pVirAddr, uint memSize);
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern int ReadFromAMDGPURegister(int busNum, uint regNo, out uint ptrValue);
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern int WriteToGMC81Register(int busNum, uint regNo, uint value, uint mask = 0xffffffff);
-        [DllImport("phymem_wrapper.dll")]
+        [DllImport("PhyMemWrapper.dll")]
         public static extern int UpdateGMC81Registers(int busNum,
-            uint value, uint mask,
-            uint value1, uint mask1,
-            uint value2, uint mask2,
-            uint value3, uint mask3,
-            uint value4, uint mask4,
-            uint value5, uint mask5,
-            uint value6, uint mask6,
-            uint value7, uint mask7,
-            uint value8, uint mask8,
-            uint value9, uint mask9,
-            uint value10, uint mask10,
-            uint value11, uint mask11,
-            uint value12, uint mask12,
-            uint value13, uint mask13,
-            uint value14, uint mask14,
+            uint value,
+            uint value1,
+            uint value2,
+            uint value3,
+            uint value4,
+            uint value5,
+            uint value6,
+            uint value7,
+            uint value8,
+            uint value9,   
+            uint value10,
+            uint value11,
+            uint value12,
+            uint value13,
+            uint value14,
+            uint value15,
             uint default_value3);
         
         [StructLayout(LayoutKind.Sequential)]

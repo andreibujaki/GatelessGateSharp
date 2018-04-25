@@ -52,6 +52,17 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle42 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle46 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -65,17 +76,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle41 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle42 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle46 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle43 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle44 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle45 = new System.Windows.Forms.DataGridViewCellStyle();
             this.timerStatsUpdates = new System.Windows.Forms.Timer(this.components);
             this.timerDevFee = new System.Windows.Forms.Timer(this.components);
             this.timerWatchdog = new System.Windows.Forms.Timer(this.components);
@@ -232,9 +232,9 @@
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
             this.groupBoxAlgorithmSpecificDeviceSettings = new System.Windows.Forms.GroupBox();
             this.groupBoxMemoryTimings = new System.Windows.Forms.GroupBox();
-            this.button10 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.button4 = new System.Windows.Forms.Button();
+            this.buttonMemoryTimingsAppyStrap = new System.Windows.Forms.Button();
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled = new System.Windows.Forms.CheckBox();
+            this.buttonMemoryTimingsCopyAcrossAlgorithms = new System.Windows.Forms.Button();
             this.dataGridViewMemoryTimings = new System.Windows.Forms.DataGridView();
             this.ColumnMemoryTimingsParameters = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnMemoryTimingsValues = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -285,8 +285,6 @@
             this.buttonResetToDefault = new System.Windows.Forms.Button();
             this.comboBoxDeviceSettingsDevice = new System.Windows.Forms.ComboBox();
             this.buttonResetAllSettings = new System.Windows.Forms.Button();
-            this.groupBoxHadrwareAcceleration = new System.Windows.Forms.GroupBox();
-            this.label144 = new System.Windows.Forms.Label();
             this.checkBoxEnableHardwareAccelerationForDefaultSettings = new System.Windows.Forms.CheckBox();
             this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
             this.tabPageCustomPoolSettings = new System.Windows.Forms.TabPage();
@@ -455,22 +453,6 @@
             this.buttonDeselectAllDevices = new System.Windows.Forms.Button();
             this.buttonSelectAllDevices = new System.Windows.Forms.Button();
             this.dataGridViewDevices = new System.Windows.Forms.DataGridView();
-            this.enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vendor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.shares = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.activity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.temperature = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fan = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.power = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.power_limit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.core_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.memory_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.memory_info = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.memory_used = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.memory_reserved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControlMainForm = new System.Windows.Forms.TabControl();
             this.tabPageOptimization = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -530,6 +512,23 @@
             this.label42 = new System.Windows.Forms.Label();
             this.timerStartNextBenchmark = new System.Windows.Forms.Timer(this.components);
             this.toolTipMainForm = new System.Windows.Forms.ToolTip(this.components);
+            this.button4 = new System.Windows.Forms.Button();
+            this.enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vendor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.shares = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.activity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.temperature = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fan = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.power = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.power_limit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.core_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memory_clock = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memory_info = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memory_used = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memory_reserved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStripMainForm.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -589,7 +588,6 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlTargetTemperature)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlMaximumTemperature)).BeginInit();
-            this.groupBoxHadrwareAcceleration.SuspendLayout();
             this.tabPageCustomPoolSettings.SuspendLayout();
             this.groupBoxCustmPool1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCustomPool1SecondaryPort)).BeginInit();
@@ -1716,7 +1714,6 @@
             this.dataGridViewBenchmarks.RowsDefaultCellStyle = dataGridViewCellStyle19;
             this.dataGridViewBenchmarks.Size = new System.Drawing.Size(579, 95);
             this.dataGridViewBenchmarks.TabIndex = 5;
-            this.dataGridViewBenchmarks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBenchmarks_CellContentClick);
             this.dataGridViewBenchmarks.SelectionChanged += new System.EventHandler(this.dataGridViewBenchmarks_SelectionChanged);
             // 
             // dataGridViewTextBoxColumnBenchmarksDeviceIndex
@@ -2479,7 +2476,6 @@
             this.tabPageDeviceSettings.Controls.Add(this.buttonResetToDefault);
             this.tabPageDeviceSettings.Controls.Add(this.comboBoxDeviceSettingsDevice);
             this.tabPageDeviceSettings.Controls.Add(this.buttonResetAllSettings);
-            this.tabPageDeviceSettings.Controls.Add(this.groupBoxHadrwareAcceleration);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
             this.tabPageDeviceSettings.Size = new System.Drawing.Size(616, 335);
@@ -2489,6 +2485,8 @@
             // 
             // groupBoxAlgorithmSpecificDeviceSettings
             // 
+            this.groupBoxAlgorithmSpecificDeviceSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBoxAlgorithmSpecificDeviceSettings.Controls.Add(this.groupBoxMemoryTimings);
             this.groupBoxAlgorithmSpecificDeviceSettings.Controls.Add(this.comboBoxDeviceSettingsAlgorithm);
             this.groupBoxAlgorithmSpecificDeviceSettings.Controls.Add(this.groupBox6);
@@ -2501,9 +2499,11 @@
             // 
             // groupBoxMemoryTimings
             // 
-            this.groupBoxMemoryTimings.Controls.Add(this.button10);
-            this.groupBoxMemoryTimings.Controls.Add(this.checkBox1);
-            this.groupBoxMemoryTimings.Controls.Add(this.button4);
+            this.groupBoxMemoryTimings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBoxMemoryTimings.Controls.Add(this.buttonMemoryTimingsAppyStrap);
+            this.groupBoxMemoryTimings.Controls.Add(this.checkBoxDeviceSettingsMemoryTimingsEnabled);
+            this.groupBoxMemoryTimings.Controls.Add(this.buttonMemoryTimingsCopyAcrossAlgorithms);
             this.groupBoxMemoryTimings.Controls.Add(this.dataGridViewMemoryTimings);
             this.groupBoxMemoryTimings.Location = new System.Drawing.Point(384, 11);
             this.groupBoxMemoryTimings.Name = "groupBoxMemoryTimings";
@@ -2512,41 +2512,43 @@
             this.groupBoxMemoryTimings.TabStop = false;
             this.groupBoxMemoryTimings.Text = "Memory Timings";
             // 
-            // button10
+            // buttonMemoryTimingsAppyStrap
             // 
-            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(131, 13);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(73, 23);
-            this.button10.TabIndex = 160;
-            this.button10.Tag = "memory_timings_apply_strap";
-            this.button10.Text = "Apply Strap";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.buttonMemoryTimingsApplyStrap_Click);
+            this.buttonMemoryTimingsAppyStrap.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonMemoryTimingsAppyStrap.Location = new System.Drawing.Point(131, 13);
+            this.buttonMemoryTimingsAppyStrap.Name = "buttonMemoryTimingsAppyStrap";
+            this.buttonMemoryTimingsAppyStrap.Size = new System.Drawing.Size(73, 23);
+            this.buttonMemoryTimingsAppyStrap.TabIndex = 160;
+            this.buttonMemoryTimingsAppyStrap.Tag = "memory_timings_apply_strap";
+            this.buttonMemoryTimingsAppyStrap.Text = "Apply Strap";
+            this.buttonMemoryTimingsAppyStrap.UseVisualStyleBackColor = true;
+            this.buttonMemoryTimingsAppyStrap.Click += new System.EventHandler(this.buttonMemoryTimingsApplyStrap_Click);
             // 
-            // checkBox1
+            // checkBoxDeviceSettingsMemoryTimingsEnabled
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(7, 19);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(59, 17);
-            this.checkBox1.TabIndex = 159;
-            this.checkBox1.Tag = "memory_timings_enabled";
-            this.checkBox1.Text = "Enable";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.AutoSize = true;
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.Location = new System.Drawing.Point(7, 19);
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.Name = "checkBoxDeviceSettingsMemoryTimingsEnabled";
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.TabIndex = 159;
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.Tag = "memory_timings_enabled";
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.Text = "Enable";
+            this.checkBoxDeviceSettingsMemoryTimingsEnabled.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // buttonMemoryTimingsCopyAcrossAlgorithms
             // 
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(66, 176);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(138, 23);
-            this.button4.TabIndex = 158;
-            this.button4.Tag = "memory_timings_copy_across_algorithms";
-            this.button4.Text = "Copy Across Algorithms";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.buttonMemoryTimingsCopyAcrossAlgorithms_Click);
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.Location = new System.Drawing.Point(66, 176);
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.Name = "buttonMemoryTimingsCopyAcrossAlgorithms";
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.Size = new System.Drawing.Size(138, 23);
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.TabIndex = 158;
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.Tag = "memory_timings_copy_across_algorithms";
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.Text = "Copy Across Algorithms";
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.UseVisualStyleBackColor = true;
+            this.buttonMemoryTimingsCopyAcrossAlgorithms.Click += new System.EventHandler(this.buttonMemoryTimingsCopyAcrossAlgorithms_Click);
             // 
             // dataGridViewMemoryTimings
             // 
@@ -2554,6 +2556,8 @@
             this.dataGridViewMemoryTimings.AllowUserToDeleteRows = false;
             dataGridViewCellStyle20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.dataGridViewMemoryTimings.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
+            this.dataGridViewMemoryTimings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewMemoryTimings.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewMemoryTimings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMemoryTimings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -2566,7 +2570,7 @@
             this.dataGridViewMemoryTimings.Size = new System.Drawing.Size(198, 128);
             this.dataGridViewMemoryTimings.TabIndex = 157;
             this.dataGridViewMemoryTimings.Tag = "memory_timings";
-            this.dataGridViewMemoryTimings.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMemoryTimings_CellContentClick);
+            this.dataGridViewMemoryTimings.SelectionChanged += new System.EventHandler(this.dataGridViewMemoryTimings_SelectionChanged);
             // 
             // ColumnMemoryTimingsParameters
             // 
@@ -2621,7 +2625,6 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Tag = "overclocking";
             this.groupBox6.Text = "Algorithmic";
-            this.groupBox6.Enter += new System.EventHandler(this.groupBox6_Enter);
             // 
             // label55
             // 
@@ -2701,7 +2704,6 @@
             this.label381.TabIndex = 79;
             this.label381.Tag = "memory_chunk_size";
             this.label381.Text = "Memory Chunk Size:";
-            this.label381.Click += new System.EventHandler(this.label381_Click);
             // 
             // numericUpDown281
             // 
@@ -2827,7 +2829,6 @@
             this.label48.TabIndex = 72;
             this.label48.Tag = "secondary_algorithm_iterations";
             this.label48.Text = "Secondary Algorithm Iterations:";
-            this.label48.Click += new System.EventHandler(this.label48_Click);
             // 
             // numericUpDownDevice0EthashPascalPascalIterations
             // 
@@ -2852,7 +2853,6 @@
             0,
             0,
             0});
-            this.numericUpDownDevice0EthashPascalPascalIterations.ValueChanged += new System.EventHandler(this.numericUpDownDevice0EthashPascalPascalIterations_ValueChanged);
             // 
             // groupBox7
             // 
@@ -3258,7 +3258,6 @@
             this.label47.TabIndex = 1;
             this.label47.Tag = "";
             this.label47.Text = "Maximum (℃):";
-            this.label47.Click += new System.EventHandler(this.label47_Click);
             // 
             // checkBoxDeviceParameterFanControlEnabled
             // 
@@ -3341,33 +3340,12 @@
             this.buttonResetAllSettings.UseVisualStyleBackColor = true;
             this.buttonResetAllSettings.Click += new System.EventHandler(this.buttonResetAll_Click);
             // 
-            // groupBoxHadrwareAcceleration
-            // 
-            this.groupBoxHadrwareAcceleration.Controls.Add(this.label144);
-            this.groupBoxHadrwareAcceleration.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.245F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxHadrwareAcceleration.Location = new System.Drawing.Point(3, 497);
-            this.groupBoxHadrwareAcceleration.Name = "groupBoxHadrwareAcceleration";
-            this.groupBoxHadrwareAcceleration.Size = new System.Drawing.Size(387, 85);
-            this.groupBoxHadrwareAcceleration.TabIndex = 1;
-            this.groupBoxHadrwareAcceleration.TabStop = false;
-            this.groupBoxHadrwareAcceleration.Text = "Hardware Acceleration";
-            // 
-            // label144
-            // 
-            this.label144.AutoSize = true;
-            this.label144.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label144.Location = new System.Drawing.Point(6, 62);
-            this.label144.Name = "label144";
-            this.label144.Size = new System.Drawing.Size(375, 13);
-            this.label144.TabIndex = 2;
-            this.label144.Text = "Note: These features are highly experimental and may cause system instability.";
-            // 
             // checkBoxEnableHardwareAccelerationForDefaultSettings
             // 
             this.checkBoxEnableHardwareAccelerationForDefaultSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxEnableHardwareAccelerationForDefaultSettings.AutoSize = true;
             this.checkBoxEnableHardwareAccelerationForDefaultSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Location = new System.Drawing.Point(69, 372);
+            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Location = new System.Drawing.Point(137, 372);
             this.checkBoxEnableHardwareAccelerationForDefaultSettings.Name = "checkBoxEnableHardwareAccelerationForDefaultSettings";
             this.checkBoxEnableHardwareAccelerationForDefaultSettings.Size = new System.Drawing.Size(133, 17);
             this.checkBoxEnableHardwareAccelerationForDefaultSettings.TabIndex = 1;
@@ -3381,7 +3359,7 @@
             this.checkBoxEnablePhymem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxEnablePhymem.AutoSize = true;
             this.checkBoxEnablePhymem.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxEnablePhymem.Location = new System.Drawing.Point(4, 372);
+            this.checkBoxEnablePhymem.Location = new System.Drawing.Point(69, 372);
             this.checkBoxEnablePhymem.Name = "checkBoxEnablePhymem";
             this.checkBoxEnablePhymem.Size = new System.Drawing.Size(67, 17);
             this.checkBoxEnablePhymem.TabIndex = 0;
@@ -5393,193 +5371,6 @@
             this.dataGridViewDevices.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDevices_CellValueChanged);
             this.dataGridViewDevices.SelectionChanged += new System.EventHandler(this.dataGridViewDevices_SelectionChanged);
             // 
-            // enabled
-            // 
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle22.NullValue = false;
-            this.enabled.DefaultCellStyle = dataGridViewCellStyle22;
-            this.enabled.FalseValue = "";
-            this.enabled.FillWeight = 30F;
-            this.enabled.HeaderText = "";
-            this.enabled.Name = "enabled";
-            this.enabled.ReadOnly = true;
-            this.enabled.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.enabled.TrueValue = "";
-            this.enabled.Width = 20;
-            // 
-            // id
-            // 
-            this.id.FillWeight = 30F;
-            this.id.HeaderText = "#";
-            this.id.Name = "id";
-            this.id.ReadOnly = true;
-            this.id.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.id.Width = 20;
-            // 
-            // vendor
-            // 
-            this.vendor.FillWeight = 80F;
-            this.vendor.HeaderText = "Vendor";
-            this.vendor.Name = "vendor";
-            this.vendor.ReadOnly = true;
-            this.vendor.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.vendor.Width = 56;
-            // 
-            // name
-            // 
-            this.name.FillWeight = 200F;
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.name.Width = 133;
-            // 
-            // speed
-            // 
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.speed.DefaultCellStyle = dataGridViewCellStyle23;
-            this.speed.FillWeight = 180F;
-            this.speed.HeaderText = "Speed(s)";
-            this.speed.Name = "speed";
-            this.speed.ReadOnly = true;
-            this.speed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.speed.Width = 120;
-            // 
-            // shares
-            // 
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.shares.DefaultCellStyle = dataGridViewCellStyle24;
-            this.shares.FillWeight = 120F;
-            this.shares.HeaderText = "Shares";
-            this.shares.Name = "shares";
-            this.shares.ReadOnly = true;
-            this.shares.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.shares.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.shares.Width = 80;
-            // 
-            // activity
-            // 
-            this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.activity.DataPropertyName = "activity";
-            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.activity.DefaultCellStyle = dataGridViewCellStyle25;
-            this.activity.FillWeight = 60F;
-            this.activity.HeaderText = "Act.";
-            this.activity.Name = "activity";
-            this.activity.ReadOnly = true;
-            this.activity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.activity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.activity.Width = 40;
-            // 
-            // temperature
-            // 
-            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.temperature.DefaultCellStyle = dataGridViewCellStyle26;
-            this.temperature.FillWeight = 60F;
-            this.temperature.HeaderText = "Temp.";
-            this.temperature.Name = "temperature";
-            this.temperature.ReadOnly = true;
-            this.temperature.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.temperature.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.temperature.Width = 40;
-            // 
-            // fan
-            // 
-            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.fan.DefaultCellStyle = dataGridViewCellStyle27;
-            this.fan.FillWeight = 60F;
-            this.fan.HeaderText = "Fan";
-            this.fan.Name = "fan";
-            this.fan.ReadOnly = true;
-            this.fan.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.fan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.fan.Width = 40;
-            // 
-            // power
-            // 
-            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power.DefaultCellStyle = dataGridViewCellStyle28;
-            this.power.FillWeight = 60F;
-            this.power.HeaderText = "Power";
-            this.power.Name = "power";
-            this.power.ReadOnly = true;
-            this.power.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.power.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.power.Width = 40;
-            // 
-            // power_limit
-            // 
-            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.power_limit.DefaultCellStyle = dataGridViewCellStyle29;
-            this.power_limit.FillWeight = 60F;
-            this.power_limit.HeaderText = "";
-            this.power_limit.Name = "power_limit";
-            this.power_limit.ReadOnly = true;
-            this.power_limit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.power_limit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.power_limit.Width = 40;
-            // 
-            // core_clock
-            // 
-            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.core_clock.DefaultCellStyle = dataGridViewCellStyle30;
-            this.core_clock.FillWeight = 90F;
-            this.core_clock.HeaderText = "Core";
-            this.core_clock.Name = "core_clock";
-            this.core_clock.ReadOnly = true;
-            this.core_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.core_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.core_clock.Width = 60;
-            // 
-            // memory_clock
-            // 
-            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle31;
-            this.memory_clock.FillWeight = 90F;
-            this.memory_clock.HeaderText = "Memory";
-            this.memory_clock.Name = "memory_clock";
-            this.memory_clock.ReadOnly = true;
-            this.memory_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.memory_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.memory_clock.Width = 60;
-            // 
-            // memory_info
-            // 
-            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.BottomLeft;
-            this.memory_info.DefaultCellStyle = dataGridViewCellStyle32;
-            this.memory_info.FillWeight = 140F;
-            this.memory_info.HeaderText = "";
-            this.memory_info.Name = "memory_info";
-            this.memory_info.ReadOnly = true;
-            this.memory_info.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.memory_info.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.memory_info.Width = 93;
-            // 
-            // memory_used
-            // 
-            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_used.DefaultCellStyle = dataGridViewCellStyle33;
-            this.memory_used.FillWeight = 80F;
-            this.memory_used.HeaderText = "(Used)";
-            this.memory_used.Name = "memory_used";
-            this.memory_used.ReadOnly = true;
-            this.memory_used.Width = 53;
-            // 
-            // memory_reserved
-            // 
-            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle34;
-            this.memory_reserved.FillWeight = 80F;
-            this.memory_reserved.HeaderText = "(Rsvd.)";
-            this.memory_reserved.Name = "memory_reserved";
-            this.memory_reserved.ReadOnly = true;
-            this.memory_reserved.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.memory_reserved.Width = 53;
-            // 
             // tabControlMainForm
             // 
             this.tabControlMainForm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -5915,7 +5706,6 @@
             this.checkBoxOptimizationEthashEnabled.Tag = "parameter:optimization_ethash_enabled";
             this.checkBoxOptimizationEthashEnabled.Text = "Ethash";
             this.checkBoxOptimizationEthashEnabled.UseVisualStyleBackColor = true;
-            this.checkBoxOptimizationEthashEnabled.CheckedChanged += new System.EventHandler(this.checkBox11_CheckedChanged);
             // 
             // checkBoxOptimizationCryptoNightV7Enabled
             // 
@@ -6335,11 +6125,210 @@
             this.timerStartNextBenchmark.Interval = 10000;
             this.timerStartNextBenchmark.Tick += new System.EventHandler(this.timerStartNextBenchmark_Tick);
             // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button4.Location = new System.Drawing.Point(12, 368);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(49, 23);
+            this.button4.TabIndex = 8;
+            this.button4.Text = "Help";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.buttonHelp_Click);
+            // 
+            // enabled
+            // 
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle22.NullValue = false;
+            this.enabled.DefaultCellStyle = dataGridViewCellStyle22;
+            this.enabled.FalseValue = "";
+            this.enabled.FillWeight = 30F;
+            this.enabled.HeaderText = "";
+            this.enabled.Name = "enabled";
+            this.enabled.ReadOnly = true;
+            this.enabled.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.enabled.TrueValue = "";
+            this.enabled.Width = 20;
+            // 
+            // id
+            // 
+            this.id.FillWeight = 30F;
+            this.id.HeaderText = "#";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.id.Width = 20;
+            // 
+            // vendor
+            // 
+            this.vendor.FillWeight = 80F;
+            this.vendor.HeaderText = "Vendor";
+            this.vendor.Name = "vendor";
+            this.vendor.ReadOnly = true;
+            this.vendor.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.vendor.Width = 56;
+            // 
+            // name
+            // 
+            this.name.FillWeight = 200F;
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.name.Width = 133;
+            // 
+            // speed
+            // 
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.speed.DefaultCellStyle = dataGridViewCellStyle23;
+            this.speed.FillWeight = 180F;
+            this.speed.HeaderText = "Speed(s)";
+            this.speed.Name = "speed";
+            this.speed.ReadOnly = true;
+            this.speed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.speed.Width = 120;
+            // 
+            // shares
+            // 
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.shares.DefaultCellStyle = dataGridViewCellStyle24;
+            this.shares.FillWeight = 120F;
+            this.shares.HeaderText = "Shares";
+            this.shares.Name = "shares";
+            this.shares.ReadOnly = true;
+            this.shares.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.shares.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.shares.Width = 80;
+            // 
+            // activity
+            // 
+            this.activity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.activity.DataPropertyName = "activity";
+            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.activity.DefaultCellStyle = dataGridViewCellStyle25;
+            this.activity.FillWeight = 60F;
+            this.activity.HeaderText = "Act.";
+            this.activity.Name = "activity";
+            this.activity.ReadOnly = true;
+            this.activity.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.activity.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.activity.Width = 40;
+            // 
+            // temperature
+            // 
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.temperature.DefaultCellStyle = dataGridViewCellStyle26;
+            this.temperature.FillWeight = 60F;
+            this.temperature.HeaderText = "Temp.";
+            this.temperature.Name = "temperature";
+            this.temperature.ReadOnly = true;
+            this.temperature.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.temperature.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.temperature.Width = 40;
+            // 
+            // fan
+            // 
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.fan.DefaultCellStyle = dataGridViewCellStyle27;
+            this.fan.FillWeight = 60F;
+            this.fan.HeaderText = "Fan";
+            this.fan.Name = "fan";
+            this.fan.ReadOnly = true;
+            this.fan.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.fan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.fan.Width = 40;
+            // 
+            // power
+            // 
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power.DefaultCellStyle = dataGridViewCellStyle28;
+            this.power.FillWeight = 60F;
+            this.power.HeaderText = "Power";
+            this.power.Name = "power";
+            this.power.ReadOnly = true;
+            this.power.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.power.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.power.Width = 40;
+            // 
+            // power_limit
+            // 
+            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.power_limit.DefaultCellStyle = dataGridViewCellStyle29;
+            this.power_limit.FillWeight = 60F;
+            this.power_limit.HeaderText = "";
+            this.power_limit.Name = "power_limit";
+            this.power_limit.ReadOnly = true;
+            this.power_limit.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.power_limit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.power_limit.Width = 40;
+            // 
+            // core_clock
+            // 
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.core_clock.DefaultCellStyle = dataGridViewCellStyle30;
+            this.core_clock.FillWeight = 90F;
+            this.core_clock.HeaderText = "Core";
+            this.core_clock.Name = "core_clock";
+            this.core_clock.ReadOnly = true;
+            this.core_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.core_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.core_clock.Width = 60;
+            // 
+            // memory_clock
+            // 
+            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_clock.DefaultCellStyle = dataGridViewCellStyle31;
+            this.memory_clock.FillWeight = 90F;
+            this.memory_clock.HeaderText = "Memory";
+            this.memory_clock.Name = "memory_clock";
+            this.memory_clock.ReadOnly = true;
+            this.memory_clock.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.memory_clock.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.memory_clock.Width = 60;
+            // 
+            // memory_info
+            // 
+            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.memory_info.DefaultCellStyle = dataGridViewCellStyle32;
+            this.memory_info.FillWeight = 140F;
+            this.memory_info.HeaderText = "";
+            this.memory_info.Name = "memory_info";
+            this.memory_info.ReadOnly = true;
+            this.memory_info.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.memory_info.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.memory_info.Width = 93;
+            // 
+            // memory_used
+            // 
+            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_used.DefaultCellStyle = dataGridViewCellStyle33;
+            this.memory_used.FillWeight = 80F;
+            this.memory_used.HeaderText = "(Used)";
+            this.memory_used.Name = "memory_used";
+            this.memory_used.ReadOnly = true;
+            this.memory_used.Width = 53;
+            // 
+            // memory_reserved
+            // 
+            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.memory_reserved.DefaultCellStyle = dataGridViewCellStyle34;
+            this.memory_reserved.FillWeight = 80F;
+            this.memory_reserved.HeaderText = "(Rsvd.)";
+            this.memory_reserved.Name = "memory_reserved";
+            this.memory_reserved.ReadOnly = true;
+            this.memory_reserved.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.memory_reserved.Width = 53;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(624, 421);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.checkBoxEnableHardwareAccelerationForDefaultSettings);
             this.Controls.Add(this.buttonRunBenchmarks);
             this.Controls.Add(this.buttonRunOptimizer);
@@ -6435,8 +6424,6 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlTargetTemperature)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDeviceParameterFanControlMaximumTemperature)).EndInit();
-            this.groupBoxHadrwareAcceleration.ResumeLayout(false);
-            this.groupBoxHadrwareAcceleration.PerformLayout();
             this.tabPageCustomPoolSettings.ResumeLayout(false);
             this.groupBoxCustmPool1.ResumeLayout(false);
             this.groupBoxCustmPool1.PerformLayout();
@@ -6596,9 +6583,7 @@
         private System.Windows.Forms.DataGridView dataGridViewBenchmarks;
         private System.Windows.Forms.TabPage tabPageDeviceSettings;
         private System.Windows.Forms.Button buttonResetAllSettings;
-        private System.Windows.Forms.GroupBox groupBoxHadrwareAcceleration;
         private System.Windows.Forms.CheckBox checkBoxEnableHardwareAccelerationForDefaultSettings;
-        private System.Windows.Forms.Label label144;
         private System.Windows.Forms.CheckBox checkBoxEnablePhymem;
         private System.Windows.Forms.TabPage tabPageCustomPoolSettings;
         private System.Windows.Forms.GroupBox groupBoxCustmPool1;
@@ -6825,22 +6810,6 @@
         private System.Windows.Forms.ComboBox comboBoxGraphType;
         private System.Windows.Forms.ComboBox comboBoxGraphCoverage;
         private System.Windows.Forms.CheckBox checkBoxUseCustomPools;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn speed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn shares;
-        private System.Windows.Forms.DataGridViewTextBoxColumn activity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn temperature;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fan;
-        private System.Windows.Forms.DataGridViewTextBoxColumn power;
-        private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
-        private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_info;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
-        private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
         private System.Windows.Forms.TabControl tabControlDefaultPools;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TabPage tabPage5;
@@ -6923,10 +6892,10 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.DataGridView dataGridViewMemoryTimings;
         private System.Windows.Forms.GroupBox groupBoxMemoryTimings;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button buttonMemoryTimingsCopyAcrossAlgorithms;
         private System.Windows.Forms.Label label54;
         private System.Windows.Forms.NumericUpDown numericUpDownDevice0EthashPascalIntensity;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBoxDeviceSettingsMemoryTimingsEnabled;
         private System.Windows.Forms.Label label55;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnMemoryTimingsParameters;
@@ -6947,6 +6916,23 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsParameter;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSuccessCount;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSpeed;
-        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button buttonMemoryTimingsAppyStrap;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn vendor;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn speed;
+        private System.Windows.Forms.DataGridViewTextBoxColumn shares;
+        private System.Windows.Forms.DataGridViewTextBoxColumn activity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn temperature;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn power;
+        private System.Windows.Forms.DataGridViewTextBoxColumn power_limit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn core_clock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_clock;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_info;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
+        private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
     }
 }

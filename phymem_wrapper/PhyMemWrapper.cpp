@@ -30,8 +30,8 @@
 
 
 extern "C" {
-#include "phymem.h"
-#include "phymem_wrapper.h"
+#include "PhyMem.h"
+#include "PhyMemWrapper.h"
 
     CRITICAL_SECTION phymemMutex;
 
@@ -659,21 +659,22 @@ end:
 
     __declspec(dllexport)
         BOOL UpdateGMC81Registers(int32_t busNum,
-                                  uint32_t value0, uint32_t mask0,
-                                  uint32_t value1, uint32_t mask1,
-                                  uint32_t value2, uint32_t mask2,
-                                  uint32_t value3, uint32_t mask3,
-                                  uint32_t value4, uint32_t mask4,
-                                  uint32_t value5, uint32_t mask5,
-                                  uint32_t value6, uint32_t mask6,
-                                  uint32_t value7, uint32_t mask7,
-                                  uint32_t value8, uint32_t mask8,
-                                  uint32_t value9, uint32_t mask9,
-                                  uint32_t value10, uint32_t mask10,
-                                  uint32_t value11, uint32_t mask11,
-                                  uint32_t value12, uint32_t mask12,
-                                  uint32_t value13, uint32_t mask13,
-                                  uint32_t value14, uint32_t mask14,
+                                  uint32_t value0,
+                                  uint32_t value1,
+                                  uint32_t value2,
+                                  uint32_t value3,
+                                  uint32_t value4,
+                                  uint32_t value5,
+                                  uint32_t value6,
+                                  uint32_t value7,
+                                  uint32_t value8,
+                                  uint32_t value9,
+                                  uint32_t value10,
+                                  uint32_t value11,
+                                  uint32_t value12,
+                                  uint32_t value13,
+                                  uint32_t value14,
+                                  uint32_t value15,
                                   uint32_t default_value3)
     {
         BOOL ret = true;  
@@ -720,12 +721,14 @@ end:
         const uint32_t mmMC_SEQ_PMG_TIMING_LP = 0xad3;
         const uint32_t mmMC_ARB_DRAM_TIMING_1 = 0x9fc;
         const uint32_t mmMC_ARB_DRAM_TIMING2_1 = 0x9ff;
+        const uint32_t mmMC_ARB_BURST_TIME = 0xa02;
 
         const uint32_t mmGRBM_STATUS = 0x2004;
         const uint32_t GRBM_STATUS__GUI_ACTIVE_MASK = 0x80000000;
         
         if ((*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) != (default_value3 & 0xff000000)) {
 
+            *(virtual_addr + mmMC_ARB_BURST_TIME) = (*(virtual_addr + mmMC_ARB_BURST_TIME) & 0x000003ff) | (value15 & 0xfffffc00);
             *(virtual_addr + mmMC_ARB_DRAM_TIMING) = value0;
             *(virtual_addr + mmMC_ARB_DRAM_TIMING2) = value1;
 

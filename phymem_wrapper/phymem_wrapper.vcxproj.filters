@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="phymem_wrapper.cpp">
+    <ClCompile Include="PhyMemWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="DLLMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="phymem_wrapper.h">
+    <ClInclude Include="PhyMemWrapper.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="phymem.h">
+    <ClInclude Include="PhyMem.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

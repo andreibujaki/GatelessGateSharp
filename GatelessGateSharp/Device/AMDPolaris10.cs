@@ -2134,15 +2134,7 @@ namespace GatelessGateSharp {
         UInt32 misc4;
         UInt32 misc8;
         UInt32 misc9;
-        UInt32 PMGTimingsMask;
-        UInt32 PHYTimingsD0Mask;
-        UInt32 PHYTimingsD1Mask;
-        UInt32 PHYTimings2Mask;
-        UInt32 misc1Mask;
-        UInt32 misc3Mask;
-        UInt32 misc4Mask;
-        UInt32 misc8Mask;
-        UInt32 misc9Mask;
+        MC_ARB_BURST_TIME ARBBurstTime = new MC_ARB_BURST_TIME();
 
         public override void PrepareMemoryTimingMods(string algorithm)
         {
@@ -2207,6 +2199,13 @@ namespace GatelessGateSharp {
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc8", out misc8);
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc9", out misc9);
 
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_state0", out value); ARBBurstTime.STATE0 = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_state1", out value); ARBBurstTime.STATE1 = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrds0", out value); ARBBurstTime.TRRDS0 = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrds1", out value); ARBBurstTime.TRRDS1 = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrdl0", out value); ARBBurstTime.TRRDL0 = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrdl1", out value); ARBBurstTime.TRRDL1 = value;
+
             //MemoryTimingModsEnabled = true;
         }
 
@@ -2223,21 +2222,22 @@ namespace GatelessGateSharp {
 
             PCIExpress.UpdateGMC81Registers(
                 busNumber,
-                ARBTimings.Data, ARBTimings.Mask,
-                ARBTimings2.Data, ARBTimings2.Mask,
-                RASTimings.Data, RASTimings.Mask,
-                CASTimings.Data, CASTimings.Mask,
-                miscTimings.Data, miscTimings.Mask,
-                miscTimings2.Data, miscTimings2.Mask,
-                PMGTimings, PMGTimingsMask,
-                PHYTimingsD0, PHYTimingsD0Mask,
-                PHYTimingsD1, PHYTimingsD1Mask,
-                PHYTimings2, PHYTimings2Mask,
-                misc1, misc1Mask,
-                misc3, misc3Mask,
-                misc4, misc4Mask,
-                misc8, misc8Mask,
-                misc9, misc9Mask,
+                ARBTimings.Data, 
+                ARBTimings2.Data, 
+                RASTimings.Data,
+                CASTimings.Data, 
+                miscTimings.Data, 
+                miscTimings2.Data, 
+                PMGTimings, 
+                PHYTimingsD0, 
+                PHYTimingsD1,
+                PHYTimings2, 
+                misc1,
+                misc3,
+                misc4,
+                misc8,
+                misc9,    
+                ARBBurstTime.Data,
                 mDefaultCASTimings.Data);
         }
 

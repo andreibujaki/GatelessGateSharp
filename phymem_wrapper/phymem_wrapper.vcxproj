@@ -51,12 +51,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="phymem_wrapper.cpp" />
+    <ClCompile Include="DLLMain.cpp" />
+    <ClCompile Include="PhyMemWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="phymem.h" />
-    <ClInclude Include="phymem_wrapper.h" />
+    <ClInclude Include="PhyMem.h" />
+    <ClInclude Include="PhyMemWrapper.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5677641C-725E-4A22-A441-AC8FEFA214FD}</ProjectGuid>
@@ -66,7 +66,7 @@
     <Configuration>Win8.1 Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
     <RootNamespace>DllForDrivers1</RootNamespace>
-    <ProjectName>phymem_wrapper</ProjectName>
+    <ProjectName>PhyMemWrapper</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|Win32'" Label="Configuration">
