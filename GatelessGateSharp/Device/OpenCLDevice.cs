@@ -877,6 +877,24 @@ namespace GatelessGateSharp
             }
         }
 
+        public bool GetECCErrorCounts(out int SEC, out int DED) {
+            int supported;
+
+            SEC = DED = 0;
+            if (ADL.ADL_Workstation_ECC_Caps == null || ADL.ADL_Workstation_ECCData_Get == null)
+                return false;
+            var ret = ADL.ADL_Workstation_ECC_Caps(ADLAdapterIndex, out supported);
+            if (ret != ADL.ADL_SUCCESS || supported == 0)
+                return false;
+            ADLECCData data = new ADLECCData();
+            var buffer = Marshal.AllocCoTaskMem(Marshal.SizeOf(data));
+            ret = ADL.ADL_Workstation_ECCData_Get(ADLAdapterIndex, buffer);
+            data = (ADLECCData)Marshal.PtrToStructure(buffer, data.GetType());
+            SEC = data.Sec;
+            DED = data.Ded;
+            return (ret == ADL.ADL_SUCCESS);
+        }
+
         public int Power {
             get {
                 if (ADLVersion < 6)

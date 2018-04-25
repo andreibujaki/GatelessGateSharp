@@ -152,6 +152,10 @@ namespace ATI.ADL
 
     internal delegate int ADL2_Graphics_Versions_Get(IntPtr context, IntPtr lpVersionsInfo);
 
+    internal delegate int ADL_Workstation_ECC_Caps(int iAdapterIndex, out int lpSupported);
+    internal delegate int ADL_Workstation_ECC_Set(int iAdapterIndex, int iDesiredMode);
+    internal delegate int ADL_Workstation_ECCData_Get(int iAdapterIndex, IntPtr lpAdlEccData);
+
     #endregion Export Delegates
 
     #region Export Struct
@@ -429,6 +433,13 @@ namespace ATI.ADL
         internal string CatalystWebLink;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLECCData
+    {
+        internal int Sec;
+        internal int Ded;
+    }
+
     #endregion Export Struct
 
     #region ADL Class
@@ -601,6 +612,16 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL2_Graphics_Versions_Get(IntPtr context, IntPtr lpVersionsInfo);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Workstation_ECC_Caps(int iAdapterIndex, out int lpSupported);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Workstation_ECCData_Get(int iAdapterIndex, IntPtr lpAdlEccData);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL_Workstation_ECC_Set(int iAdapterIndex, int iDesiredMode);
+
             #endregion DLLImport
         }
         #endregion Class ADLImport
@@ -1352,6 +1373,64 @@ namespace ATI.ADL
         private static bool ADL2_Graphics_Versions_Get_Check = false;
         #endregion ADL2_Graphics_Versions_Get
 
+        #region ADL_Workstation_ECC_Caps
+        /// <summary> ADL_Workstation_ECC_Caps Delegates</summary>
+        internal static ADL_Workstation_ECC_Caps ADL_Workstation_ECC_Caps {
+            get {
+                if (!ADL_Workstation_ECC_Caps_Check && null == ADL_Workstation_ECC_Caps_) {
+                    ADL_Workstation_ECC_Caps_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Workstation_ECC_Caps")) {
+                        ADL_Workstation_ECC_Caps_ = ADLImport.ADL_Workstation_ECC_Caps;
+                    }
+                }
+                return ADL_Workstation_ECC_Caps_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Workstation_ECC_Caps ADL_Workstation_ECC_Caps_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Workstation_ECC_Caps_Check = false;
+        #endregion ADL_Workstation_ECC_Caps
+
+        #region ADL_Workstation_ECCData_Get
+        /// <summary> ADL_Workstation_ECCData_Get Delegates</summary>
+        internal static ADL_Workstation_ECCData_Get ADL_Workstation_ECCData_Get {
+            get {
+                if (!ADL_Workstation_ECCData_Get_Check && null == ADL_Workstation_ECCData_Get_) {
+                    ADL_Workstation_ECCData_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Workstation_ECCData_Get")) {
+                        ADL_Workstation_ECCData_Get_ = ADLImport.ADL_Workstation_ECCData_Get;
+                    }
+                }
+                return ADL_Workstation_ECCData_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Workstation_ECCData_Get ADL_Workstation_ECCData_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Workstation_ECCData_Get_Check = false;
+        #endregion ADL_Workstation_ECCData_Get
+
+        //ADL_Workstation_ECC_Set
+
+        #region ADL_Workstation_ECC_Set
+        /// <summary> ADL_Workstation_ECC_Set Delegates</summary>
+        internal static ADL_Workstation_ECC_Set ADL_Workstation_ECC_Set {
+            get {
+                if (!ADL_Workstation_ECC_Set_Check && null == ADL_Workstation_ECC_Set_) {
+                    ADL_Workstation_ECC_Set_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL_Workstation_ECC_Set")) {
+                        ADL_Workstation_ECC_Set_ = ADLImport.ADL_Workstation_ECC_Set;
+                    }
+                }
+                return ADL_Workstation_ECC_Set_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL_Workstation_ECC_Set ADL_Workstation_ECC_Set_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL_Workstation_ECC_Set_Check = false;
+        #endregion ADL_Workstation_ECC_Set
         #endregion Export Functions
     }
     #endregion ADL Class

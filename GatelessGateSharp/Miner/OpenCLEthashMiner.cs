@@ -139,7 +139,7 @@ namespace GatelessGateSharp
 
                                 System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                                 sw.Start();
-                                int divider = 8;
+                                int divider = 32;
                                 mEthashGlobalWorkSizeArray[0] = ethashDAGSize / 64;
                                 mEthashGlobalWorkSizeArray[0] /= divider;
                                 if (mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0] > 0)

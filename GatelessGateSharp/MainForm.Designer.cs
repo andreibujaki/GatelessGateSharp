@@ -529,6 +529,7 @@
             this.memory_info = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.memory_used = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.memory_reserved = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnECCData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStripMainForm.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -5358,7 +5359,8 @@
             this.memory_clock,
             this.memory_info,
             this.memory_used,
-            this.memory_reserved});
+            this.memory_reserved,
+            this.ColumnECCData});
             this.dataGridViewDevices.Location = new System.Drawing.Point(3, 162);
             this.dataGridViewDevices.Name = "dataGridViewDevices";
             this.dataGridViewDevices.ReadOnly = true;
@@ -6323,6 +6325,13 @@
             this.memory_reserved.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.memory_reserved.Width = 53;
             // 
+            // ColumnECCData
+            // 
+            this.ColumnECCData.HeaderText = "";
+            this.ColumnECCData.Name = "ColumnECCData";
+            this.ColumnECCData.ReadOnly = true;
+            this.ColumnECCData.Width = 120;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -6934,5 +6943,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_info;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_used;
         private System.Windows.Forms.DataGridViewTextBoxColumn memory_reserved;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnECCData;
     }
 }

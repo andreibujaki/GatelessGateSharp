@@ -239,6 +239,13 @@ namespace GatelessGateSharp
 
         private static string sLoggerBuffer = "";
 
+        private bool IsBenchmarkRunning {
+            get { return (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running); }
+        }
+
+        private bool IsMining {
+            get { return (Controller.AppState == Controller.ApplicationGlobalState.Mining); }
+        }
 
 
         #region Initialization
@@ -2812,7 +2819,7 @@ namespace GatelessGateSharp
                     var coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
 
-                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && averageHashrate != 0) {
+                    if (IsMining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
                         UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
                     }
@@ -2826,7 +2833,7 @@ namespace GatelessGateSharp
                     var coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
 
-                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && averageHashrate != 0) {
+                    if (IsMining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
                         UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
                     }
@@ -2837,7 +2844,7 @@ namespace GatelessGateSharp
                         balance = (double)data["balance"];
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
-                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && sNanopoolEthereumEarningStats != null) {
+                    if (IsMining && sNanopoolEthereumEarningStats != null) {
                         var earningData = (JContainer)sNanopoolEthereumEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
                         UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
@@ -2849,7 +2856,7 @@ namespace GatelessGateSharp
                         balance = (double)data["balance"];
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * XMRRate) + " " + currency + ")";
-                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && sNanopoolMoneroEarningStats != null) {
+                    if (IsMining && sNanopoolMoneroEarningStats != null) {
                         var earningData = (JContainer)sNanopoolMoneroEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
                         UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
@@ -2860,7 +2867,7 @@ namespace GatelessGateSharp
                         balance = double.Parse((string)sDwarfPoolEthereumStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
-                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && sNanopoolEthereumEarningStats != null) { // TODO
+                    if (IsMining && sNanopoolEthereumEarningStats != null) { // TODO
                         var earningData = (JContainer)sNanopoolEthereumEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
                         UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
@@ -2871,7 +2878,7 @@ namespace GatelessGateSharp
                         balance = double.Parse((string)sDwarfPoolMoneroStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
                     } catch (Exception) { }
                     labelBalance.Text = string.Format("{0:N6}", balance) + " XMR (" + string.Format("{0:N2}", balance * XMRRate) + " " + currency + ")";
-                    if (Controller.AppState == Controller.ApplicationGlobalState.Mining && sNanopoolMoneroEarningStats != null) { // TODO
+                    if (IsMining && sNanopoolMoneroEarningStats != null) { // TODO
                         var earningData = (JContainer)sNanopoolMoneroEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
                         UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
@@ -2896,7 +2903,7 @@ namespace GatelessGateSharp
                 } catch (Exception) { }
             labelBalance.Text = string.Format("{0:N6}", balance) + " BTC (" + string.Format("{0:N2}", balance * BTCRate) + " " + currency + ")";
 
-            if (Controller.AppState == Controller.ApplicationGlobalState.Mining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
+            if (IsMining && textBoxBitcoinAddress.Text != "" && !DevFeeMode) {
                 double price = 0;
                 result = (JContainer)sNiceHashGlobalCurrentStats["result"];
                 stats = (JArray)result["stats"];
@@ -2959,26 +2966,26 @@ namespace GatelessGateSharp
                     + ")";
 
                 // Pool
-                mCurrentPool = (Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.PrimaryStratum != null) ? (Controller.PrimaryStratum.PoolName) :
+                mCurrentPool = (IsMining && Controller.PrimaryStratum != null) ? (Controller.PrimaryStratum.PoolName) :
                                CustomPoolEnabled && checkBoxCustomPool0Enable.Checked ? textBoxCustomPool0Host.Text :
                                CustomPoolEnabled && checkBoxCustomPool1Enable.Checked ? textBoxCustomPool1Host.Text :
                                CustomPoolEnabled && checkBoxCustomPool2Enable.Checked ? textBoxCustomPool2Host.Text :
                                CustomPoolEnabled && checkBoxCustomPool3Enable.Checked ? textBoxCustomPool3Host.Text :
                                (string)listBoxPoolPriorities.Items[0];
                 var currentSecondaryPool
-                             = (Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.SecondaryStratum != null) ? (Controller.SecondaryStratum.PoolName) :
+                             = (IsMining && Controller.SecondaryStratum != null) ? (Controller.SecondaryStratum.PoolName) :
                                CustomPoolEnabled && checkBoxCustomPool0Enable.Checked && comboBoxCustomPool0SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool0SecondaryHost.Text :
                                CustomPoolEnabled && checkBoxCustomPool1Enable.Checked && comboBoxCustomPool1SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool1SecondaryHost.Text :
                                CustomPoolEnabled && checkBoxCustomPool2Enable.Checked && comboBoxCustomPool2SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool2SecondaryHost.Text :
                                CustomPoolEnabled && checkBoxCustomPool3Enable.Checked && comboBoxCustomPool3SecondaryAlgorithm.SelectedIndex != 0 ? textBoxCustomPool3SecondaryHost.Text :
                                "";
-                if (Controller.AppState == Controller.ApplicationGlobalState.Mining && mDevFeeMode) {
+                if (IsMining && mDevFeeMode) {
                     labelCurrentPool.Text = "DEVFEE(" + Parameters.DevFeePercentage + "%; " + string.Format("{0:N0}", Parameters.DevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
                     labelCurrentSecondaryPool.Text = "";
-                } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining && !CustomPoolEnabled && Controller.PrimaryStratum != null && Controller.SecondaryStratum != null) {
+                } else if (IsMining && !CustomPoolEnabled && Controller.PrimaryStratum != null && Controller.SecondaryStratum != null) {
                     labelCurrentPool.Text = mCurrentPool + " (" + Controller.PrimaryStratum.ServerAddress + ")";
                     labelCurrentSecondaryPool.Text = currentSecondaryPool + " (" + Controller.SecondaryStratum.ServerAddress + ")";
-                } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining && !CustomPoolEnabled && Controller.PrimaryStratum != null) {
+                } else if (IsMining && !CustomPoolEnabled && Controller.PrimaryStratum != null) {
                     labelCurrentPool.Text = mCurrentPool + " (" + Controller.PrimaryStratum.ServerAddress + ")";
                     labelCurrentSecondaryPool.Text = "";
                 } else {
@@ -3158,6 +3165,13 @@ namespace GatelessGateSharp
                         ManagedCuda.Nvml.NvmlNativeMethods.nvmlDeviceGetClockInfo(nvmlDeviceArray[deviceIndex], ManagedCuda.Nvml.nvmlClockType.Mem, ref clock);
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = clock.ToString() + " MHz";
                     }
+
+                    int SEC, DED;
+                    bool supported = device.GetECCErrorCounts(out SEC, out DED);
+                    dataGridViewDevices.Rows[deviceIndex].Cells["ColumnECCData"].Value = (supported ? (" SEC:" + SEC + ", DED:" + DED) : "");
+                    dataGridViewDevices.Rows[deviceIndex].Cells["ColumnECCData"].Style.ForeColor = DED > 0 ? Color.Red :
+                                                                                                   SEC > 0 ? Color.Purple :
+                                                                                                             Color.Blue;
                 }
             } catch (Exception ex) {
                 Logger(ex);
@@ -3743,9 +3757,9 @@ namespace GatelessGateSharp
                 timerWatchdog.Enabled = false;
                 mBackgroundTasksCancellationTokenSource.Cancel();
 
-                if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                if (IsBenchmarkRunning) {
                     StopBenchmarks();
-                } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining) {
+                } else if (IsMining) {
                     StopMining(false);
                 }
                 foreach (var device in Controller.OpenCLDevices) {
@@ -4446,9 +4460,9 @@ namespace GatelessGateSharp
             CryptoNightStratum stratum = null;
             var niceHashMode = false;
 
-            if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var hosts = (algorithm == "cryptonightv7") ? GetNiceHashCryptoNightV7Servers() : GetNiceHashCryptoNightServers();
                 foreach (var host in hosts)
@@ -4458,7 +4472,7 @@ namespace GatelessGateSharp
                             break;
                         } catch (Exception ex) { Logger(ex); }
                 niceHashMode = true;
-            } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "DwarfPool" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
+            } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "DwarfPool" && (IsBenchmarkRunning || textBoxMoneroAddress.Text.Length > 0)) {
                 var username = mDevFeeMode ? Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix : textBoxMoneroAddress.Text;
                 if (!mDevFeeMode && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
@@ -5572,7 +5586,7 @@ namespace GatelessGateSharp
                 if (unrecoverableException != null || Controller.PrimaryStratum == null || !Controller.Miners.Any()) {
                     StopMining();
 
-                    if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                    if (IsBenchmarkRunning) {
                         Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
                         timerBenchmarks_Tick();
                     } else if (MessageBox.Show(
@@ -5583,7 +5597,7 @@ namespace GatelessGateSharp
                     }
                 } else {
                     timerDevFee.Interval = Parameters.DevFeeInitialDelayInSeconds * 1000;
-                    timerDevFee.Enabled = true;
+                    timerDevFee.Enabled = (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
                     mDevFeeModeStartTime = DateTime.Now;
                     timerWatchdog.Enabled = true;
                     Controller.AppState = Controller.ApplicationGlobalState.Mining;
@@ -5599,7 +5613,7 @@ namespace GatelessGateSharp
                 if (!CheckSettingsBeforeMining())
                     return;
                 StartMining();
-            } else if (Controller.AppState == Controller.ApplicationGlobalState.Mining) {
+            } else if (IsMining) {
                 StopMining();
             }
         }
@@ -5670,7 +5684,7 @@ namespace GatelessGateSharp
                                               && (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
                                               && (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
                                               && (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
-                                              && !(Controller.AppState == Controller.ApplicationGlobalState.Mining && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
+                                              && !(IsMining && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
                 buttonRunOptimizer.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
                                               && ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running)
                                                    || (Controller.AppState == Controller.ApplicationGlobalState.Idle 
@@ -5692,14 +5706,14 @@ namespace GatelessGateSharp
 
                 buttonStart.Text
                     = Controller.StopWatch.Elapsed.TotalSeconds == 0 ? "Start" :
-                      Controller.AppState == Controller.ApplicationGlobalState.Mining ? "Pause" :
+                      IsMining ? "Pause" :
                                                                                         "Resume";
                 buttonRunBenchmarks.Text
-                    = (Controller.AppState == Controller.ApplicationGlobalState.Mining
+                    = (IsMining
                        && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.NotRunning) ? "Abort Benchmarking" :
                                                                                                        "Benchmark";
                 buttonRunOptimizer.Text
-                    = (Controller.AppState == Controller.ApplicationGlobalState.Mining
+                    = (IsMining
                        && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? "Stop Optimizer" :
                                                                                                        "Optimize";
                 buttonReleaseMemory.Enabled = idle;
@@ -6182,7 +6196,7 @@ namespace GatelessGateSharp
                     Controller.AppState = Controller.ApplicationGlobalState.Switching;
                     tabControlMainForm.Enabled = buttonStart.Enabled = false;
                     StopMining();
-                    if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                    if (IsBenchmarkRunning) {
                         Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
                         timerBenchmarks_Tick();
                     } else if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes) { 
@@ -7226,7 +7240,7 @@ namespace GatelessGateSharp
 
         private void StopBenchmarks()
         {
-            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+            if (IsBenchmarkRunning) {
                 StopMining();
                 if (Controller.BenchmarkEntries.Count > 0) {
                     var algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
@@ -7274,7 +7288,7 @@ namespace GatelessGateSharp
 
             // Handle previous failure if necessary.
             var result = new Controller.BenchmarkResult();
-            result.Success = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running);
+            result.Success = IsBenchmarkRunning;
             if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Resuming) {
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) {
                     tabControlMainForm.SelectedIndex = 4;
@@ -7636,7 +7650,7 @@ namespace GatelessGateSharp
 
         private void timerResetStopwatch_Tick(object sender, EventArgs e)
         {
-            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+            if (IsBenchmarkRunning) {
                 timerResetStopwatch.Enabled = false;
                 timerBenchmarks.Enabled = false;
                 Controller.StopWatch.Reset();
