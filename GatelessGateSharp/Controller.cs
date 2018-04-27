@@ -132,7 +132,7 @@ namespace GatelessGateSharp {
                             interval = Parameters.MemoryTimingUpdateInterval;
                             device.UpdateMemoryTimings();
                         }
-                    } catch (Exception ex) { }
+                    } catch (Exception ex) { MainForm.Logger(ex); }
                 }
                 System.Threading.Thread.Sleep(interval);
             }

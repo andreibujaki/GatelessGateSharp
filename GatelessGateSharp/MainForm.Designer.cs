@@ -184,8 +184,8 @@
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPageBenchmarkingAlgorithms = new System.Windows.Forms.TabControl();
-            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.tabControlBenchmarkingParameters = new System.Windows.Forms.TabControl();
+            this.tabPageBenchmarkingAlgorithms = new System.Windows.Forms.TabPage();
             this.buttonBenchmarkingDelectAllAlgorithms = new System.Windows.Forms.Button();
             this.buttonBenchmarkingSelectAllAlgorithms = new System.Windows.Forms.Button();
             this.checkBoxBenchmarkingCryptoNightLightEnabled = new System.Windows.Forms.CheckBox();
@@ -222,13 +222,10 @@
             this.labelBenchmarkingSpeed = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.checkBoxBenchmarkingCoolGPUDown = new System.Windows.Forms.CheckBox();
-            this.checkBoxBenchmarkingUseAverageSpeeds = new System.Windows.Forms.CheckBox();
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure = new System.Windows.Forms.CheckBox();
             this.progressBarBenchmarking = new System.Windows.Forms.ProgressBar();
             this.labelBenchmarkingRemaining = new System.Windows.Forms.Label();
             this.label35 = new System.Windows.Forms.Label();
-            this.numericUpDownBenchmarkingLength = new System.Windows.Forms.NumericUpDown();
-            this.label31 = new System.Windows.Forms.Label();
             this.numericUpDownBenchmarkingRepeats = new System.Windows.Forms.NumericUpDown();
             this.label33 = new System.Windows.Forms.Label();
             this.tabPageDeviceSettings = new System.Windows.Forms.TabPage();
@@ -491,8 +488,8 @@
             this.dataGridViewTextBoxColumnOptimizerRecordsParameter = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnOptimizerRecordsSuccessCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabPageOptimizationTargets = new System.Windows.Forms.TabControl();
-            this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.tabControlOptimizationParameters = new System.Windows.Forms.TabControl();
+            this.tabPageOptimizationAlgorithms = new System.Windows.Forms.TabPage();
             this.button10 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
             this.checkBoxOptimizationX16SEnabled = new System.Windows.Forms.CheckBox();
@@ -507,7 +504,7 @@
             this.checkBoxOptimizationPascalEnabled = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationLbryEnabled = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationLyra2REv2Enabled = new System.Windows.Forms.CheckBox();
-            this.tabPage15 = new System.Windows.Forms.TabPage();
+            this.tabPageOptimizationTargets = new System.Windows.Forms.TabPage();
             this.button13 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
             this.checkBoxOptimizationUndervoltingMemory = new System.Windows.Forms.CheckBox();
@@ -524,19 +521,17 @@
             this.labelOptimizationDeviceCaption = new System.Windows.Forms.Label();
             this.labelOptimizationDevice = new System.Windows.Forms.Label();
             this.checkBoxOptimizationCoolGPUDown = new System.Windows.Forms.CheckBox();
-            this.checkBoxOptimizationUseAverageSpeeds = new System.Windows.Forms.CheckBox();
             this.checkBoxOptimizationRepeatUntilStopped = new System.Windows.Forms.CheckBox();
             this.labelOptimizationSpeedCaption = new System.Windows.Forms.Label();
             this.checkBoxOptimizationDoNotRepeatAfterFailure = new System.Windows.Forms.CheckBox();
             this.labelOptimizationSpeed = new System.Windows.Forms.Label();
             this.progressBarOptimizer = new System.Windows.Forms.ProgressBar();
-            this.numericUpDownOptimizationLength = new System.Windows.Forms.NumericUpDown();
-            this.label40 = new System.Windows.Forms.Label();
             this.numericUpDownOptimizationRepeats = new System.Windows.Forms.NumericUpDown();
             this.label42 = new System.Windows.Forms.Label();
             this.timerStartNextBenchmark = new System.Windows.Forms.Timer(this.components);
             this.toolTipMainForm = new System.Windows.Forms.ToolTip(this.components);
             this.button4 = new System.Windows.Forms.Button();
+            this.timerMemoryTimings = new System.Windows.Forms.Timer(this.components);
             this.statusStripMainForm.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -558,8 +553,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBenchmarkingResults)).BeginInit();
             this.tabPage10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBenchmarks)).BeginInit();
+            this.tabControlBenchmarkingParameters.SuspendLayout();
             this.tabPageBenchmarkingAlgorithms.SuspendLayout();
-            this.tabPage8.SuspendLayout();
             this.tabPageBenchmarkingFirstParameter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterStep)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterStart)).BeginInit();
@@ -569,7 +564,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterEnd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStart)).BeginInit();
             this.groupBoxBenchmarkingOtherParameters.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingRepeats)).BeginInit();
             this.tabPageDeviceSettings.SuspendLayout();
             this.groupBoxAlgorithmSpecificDeviceSettings.SuspendLayout();
@@ -629,11 +623,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerBenchmarkingResults)).BeginInit();
             this.tabPage13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerRecords)).BeginInit();
+            this.tabControlOptimizationParameters.SuspendLayout();
+            this.tabPageOptimizationAlgorithms.SuspendLayout();
             this.tabPageOptimizationTargets.SuspendLayout();
-            this.tabPage14.SuspendLayout();
-            this.tabPage15.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationRepeats)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1535,7 +1528,7 @@
             // tabPageBenchmarks
             // 
             this.tabPageBenchmarks.Controls.Add(this.panel1);
-            this.tabPageBenchmarks.Controls.Add(this.tabPageBenchmarkingAlgorithms);
+            this.tabPageBenchmarks.Controls.Add(this.tabControlBenchmarkingParameters);
             this.tabPageBenchmarks.Controls.Add(this.groupBoxBenchmarkingOtherParameters);
             this.tabPageBenchmarks.Location = new System.Drawing.Point(4, 22);
             this.tabPageBenchmarks.Name = "tabPageBenchmarks";
@@ -1551,9 +1544,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.tabControl4);
-            this.panel1.Location = new System.Drawing.Point(6, 196);
+            this.panel1.Location = new System.Drawing.Point(6, 181);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(604, 133);
+            this.panel1.Size = new System.Drawing.Size(604, 148);
             this.panel1.TabIndex = 19;
             // 
             // tabControl4
@@ -1566,7 +1559,7 @@
             this.tabControl4.Location = new System.Drawing.Point(2, 0);
             this.tabControl4.Name = "tabControl4";
             this.tabControl4.SelectedIndex = 0;
-            this.tabControl4.Size = new System.Drawing.Size(599, 133);
+            this.tabControl4.Size = new System.Drawing.Size(599, 148);
             this.tabControl4.TabIndex = 18;
             // 
             // tabPage11
@@ -1575,7 +1568,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(591, 107);
+            this.tabPage11.Size = new System.Drawing.Size(591, 122);
             this.tabPage11.TabIndex = 1;
             this.tabPage11.Text = "Current Parameter(s)";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -1610,7 +1603,7 @@
             this.dataGridViewBenchmarkingResults.RowHeadersVisible = false;
             dataGridViewCellStyle52.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.dataGridViewBenchmarkingResults.RowsDefaultCellStyle = dataGridViewCellStyle52;
-            this.dataGridViewBenchmarkingResults.Size = new System.Drawing.Size(579, 95);
+            this.dataGridViewBenchmarkingResults.Size = new System.Drawing.Size(579, 110);
             this.dataGridViewBenchmarkingResults.TabIndex = 16;
             this.dataGridViewBenchmarkingResults.SelectionChanged += new System.EventHandler(this.dataGridViewBenchmarkingResults_SelectionChanged);
             // 
@@ -1674,7 +1667,7 @@
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(591, 107);
+            this.tabPage10.Size = new System.Drawing.Size(591, 122);
             this.tabPage10.TabIndex = 0;
             this.tabPage10.Text = "Speeds";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -1893,46 +1886,46 @@
             this.Column4.ReadOnly = true;
             this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // tabControlBenchmarkingParameters
+            // 
+            this.tabControlBenchmarkingParameters.Controls.Add(this.tabPageBenchmarkingAlgorithms);
+            this.tabControlBenchmarkingParameters.Controls.Add(this.tabPageBenchmarkingFirstParameter);
+            this.tabControlBenchmarkingParameters.Controls.Add(this.tabPageBenchmarkingSecondParameter);
+            this.tabControlBenchmarkingParameters.Location = new System.Drawing.Point(246, 6);
+            this.tabControlBenchmarkingParameters.Name = "tabControlBenchmarkingParameters";
+            this.tabControlBenchmarkingParameters.SelectedIndex = 0;
+            this.tabControlBenchmarkingParameters.Size = new System.Drawing.Size(367, 169);
+            this.tabControlBenchmarkingParameters.TabIndex = 17;
+            // 
             // tabPageBenchmarkingAlgorithms
             // 
-            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.tabPage8);
-            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.tabPageBenchmarkingFirstParameter);
-            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.tabPageBenchmarkingSecondParameter);
-            this.tabPageBenchmarkingAlgorithms.Location = new System.Drawing.Point(278, 6);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.buttonBenchmarkingDelectAllAlgorithms);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.buttonBenchmarkingSelectAllAlgorithms);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingCryptoNightLightEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingX16SEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingCryptoNightHeavyEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingCryptoNightV7Enabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingEthashPascalEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingEthashEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingCryptoNightEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingNeoScryptEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingX16REnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingPascalEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingLbryEnabled);
+            this.tabPageBenchmarkingAlgorithms.Controls.Add(this.checkBoxBenchmarkingLyra2REv2Enabled);
+            this.tabPageBenchmarkingAlgorithms.Location = new System.Drawing.Point(4, 22);
             this.tabPageBenchmarkingAlgorithms.Name = "tabPageBenchmarkingAlgorithms";
-            this.tabPageBenchmarkingAlgorithms.SelectedIndex = 0;
-            this.tabPageBenchmarkingAlgorithms.Size = new System.Drawing.Size(335, 184);
-            this.tabPageBenchmarkingAlgorithms.TabIndex = 17;
-            // 
-            // tabPage8
-            // 
-            this.tabPage8.Controls.Add(this.buttonBenchmarkingDelectAllAlgorithms);
-            this.tabPage8.Controls.Add(this.buttonBenchmarkingSelectAllAlgorithms);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingCryptoNightLightEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingX16SEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingCryptoNightHeavyEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingCryptoNightV7Enabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingEthashPascalEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingEthashEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingCryptoNightEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingNeoScryptEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingX16REnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingPascalEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingLbryEnabled);
-            this.tabPage8.Controls.Add(this.checkBoxBenchmarkingLyra2REv2Enabled);
-            this.tabPage8.Location = new System.Drawing.Point(4, 22);
-            this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(327, 158);
-            this.tabPage8.TabIndex = 1;
-            this.tabPage8.Text = "Algorithms";
-            this.tabPage8.UseVisualStyleBackColor = true;
-            this.tabPage8.Click += new System.EventHandler(this.tabPage8_Click);
+            this.tabPageBenchmarkingAlgorithms.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBenchmarkingAlgorithms.Size = new System.Drawing.Size(359, 143);
+            this.tabPageBenchmarkingAlgorithms.TabIndex = 1;
+            this.tabPageBenchmarkingAlgorithms.Text = "Algorithms";
+            this.tabPageBenchmarkingAlgorithms.UseVisualStyleBackColor = true;
+            this.tabPageBenchmarkingAlgorithms.Click += new System.EventHandler(this.tabPage8_Click);
             // 
             // buttonBenchmarkingDelectAllAlgorithms
             // 
             this.buttonBenchmarkingDelectAllAlgorithms.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonBenchmarkingDelectAllAlgorithms.Location = new System.Drawing.Point(247, 129);
+            this.buttonBenchmarkingDelectAllAlgorithms.Location = new System.Drawing.Point(279, 114);
             this.buttonBenchmarkingDelectAllAlgorithms.Name = "buttonBenchmarkingDelectAllAlgorithms";
             this.buttonBenchmarkingDelectAllAlgorithms.Size = new System.Drawing.Size(74, 23);
             this.buttonBenchmarkingDelectAllAlgorithms.TabIndex = 13;
@@ -1943,7 +1936,7 @@
             // buttonBenchmarkingSelectAllAlgorithms
             // 
             this.buttonBenchmarkingSelectAllAlgorithms.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonBenchmarkingSelectAllAlgorithms.Location = new System.Drawing.Point(167, 129);
+            this.buttonBenchmarkingSelectAllAlgorithms.Location = new System.Drawing.Point(199, 114);
             this.buttonBenchmarkingSelectAllAlgorithms.Name = "buttonBenchmarkingSelectAllAlgorithms";
             this.buttonBenchmarkingSelectAllAlgorithms.Size = new System.Drawing.Size(74, 23);
             this.buttonBenchmarkingSelectAllAlgorithms.TabIndex = 12;
@@ -2120,7 +2113,7 @@
             this.tabPageBenchmarkingFirstParameter.Location = new System.Drawing.Point(4, 22);
             this.tabPageBenchmarkingFirstParameter.Name = "tabPageBenchmarkingFirstParameter";
             this.tabPageBenchmarkingFirstParameter.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBenchmarkingFirstParameter.Size = new System.Drawing.Size(327, 158);
+            this.tabPageBenchmarkingFirstParameter.Size = new System.Drawing.Size(359, 143);
             this.tabPageBenchmarkingFirstParameter.TabIndex = 0;
             this.tabPageBenchmarkingFirstParameter.Text = "First Parameter";
             this.tabPageBenchmarkingFirstParameter.UseVisualStyleBackColor = true;
@@ -2235,7 +2228,7 @@
             this.tabPageBenchmarkingSecondParameter.Controls.Add(this.comboBoxBenchmarkingSecondParameter);
             this.tabPageBenchmarkingSecondParameter.Location = new System.Drawing.Point(4, 22);
             this.tabPageBenchmarkingSecondParameter.Name = "tabPageBenchmarkingSecondParameter";
-            this.tabPageBenchmarkingSecondParameter.Size = new System.Drawing.Size(327, 158);
+            this.tabPageBenchmarkingSecondParameter.Size = new System.Drawing.Size(359, 143);
             this.tabPageBenchmarkingSecondParameter.TabIndex = 2;
             this.tabPageBenchmarkingSecondParameter.Text = "Second Parameter";
             this.tabPageBenchmarkingSecondParameter.UseVisualStyleBackColor = true;
@@ -2342,18 +2335,15 @@
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.labelBenchmarkingSpeed);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.label36);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.checkBoxBenchmarkingCoolGPUDown);
-            this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.checkBoxBenchmarkingUseAverageSpeeds);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.checkBoxBenchmarkingDoNotRepeatAfterFailure);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.progressBarBenchmarking);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.labelBenchmarkingRemaining);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.label35);
-            this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.numericUpDownBenchmarkingLength);
-            this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.label31);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.numericUpDownBenchmarkingRepeats);
             this.groupBoxBenchmarkingOtherParameters.Controls.Add(this.label33);
             this.groupBoxBenchmarkingOtherParameters.Location = new System.Drawing.Point(6, 6);
             this.groupBoxBenchmarkingOtherParameters.Name = "groupBoxBenchmarkingOtherParameters";
-            this.groupBoxBenchmarkingOtherParameters.Size = new System.Drawing.Size(266, 184);
+            this.groupBoxBenchmarkingOtherParameters.Size = new System.Drawing.Size(234, 169);
             this.groupBoxBenchmarkingOtherParameters.TabIndex = 15;
             this.groupBoxBenchmarkingOtherParameters.TabStop = false;
             this.groupBoxBenchmarkingOtherParameters.Text = "Status";
@@ -2380,7 +2370,7 @@
             // checkBoxBenchmarkingCoolGPUDown
             // 
             this.checkBoxBenchmarkingCoolGPUDown.AutoSize = true;
-            this.checkBoxBenchmarkingCoolGPUDown.Location = new System.Drawing.Point(8, 158);
+            this.checkBoxBenchmarkingCoolGPUDown.Location = new System.Drawing.Point(8, 135);
             this.checkBoxBenchmarkingCoolGPUDown.Name = "checkBoxBenchmarkingCoolGPUDown";
             this.checkBoxBenchmarkingCoolGPUDown.Size = new System.Drawing.Size(102, 17);
             this.checkBoxBenchmarkingCoolGPUDown.TabIndex = 156;
@@ -2388,25 +2378,12 @@
             this.checkBoxBenchmarkingCoolGPUDown.Text = "Cool GPU down";
             this.checkBoxBenchmarkingCoolGPUDown.UseVisualStyleBackColor = true;
             // 
-            // checkBoxBenchmarkingUseAverageSpeeds
-            // 
-            this.checkBoxBenchmarkingUseAverageSpeeds.AutoSize = true;
-            this.checkBoxBenchmarkingUseAverageSpeeds.Checked = true;
-            this.checkBoxBenchmarkingUseAverageSpeeds.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingUseAverageSpeeds.Location = new System.Drawing.Point(8, 112);
-            this.checkBoxBenchmarkingUseAverageSpeeds.Name = "checkBoxBenchmarkingUseAverageSpeeds";
-            this.checkBoxBenchmarkingUseAverageSpeeds.Size = new System.Drawing.Size(124, 17);
-            this.checkBoxBenchmarkingUseAverageSpeeds.TabIndex = 155;
-            this.checkBoxBenchmarkingUseAverageSpeeds.Tag = "parameter:benchmarking_use_average_speeds";
-            this.checkBoxBenchmarkingUseAverageSpeeds.Text = "Use average speeds";
-            this.checkBoxBenchmarkingUseAverageSpeeds.UseVisualStyleBackColor = true;
-            // 
             // checkBoxBenchmarkingDoNotRepeatAfterFailure
             // 
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.AutoSize = true;
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked = true;
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Location = new System.Drawing.Point(8, 135);
+            this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Location = new System.Drawing.Point(8, 112);
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Name = "checkBoxBenchmarkingDoNotRepeatAfterFailure";
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.Size = new System.Drawing.Size(102, 17);
             this.checkBoxBenchmarkingDoNotRepeatAfterFailure.TabIndex = 150;
@@ -2418,7 +2395,7 @@
             // 
             this.progressBarBenchmarking.Location = new System.Drawing.Point(6, 19);
             this.progressBarBenchmarking.Name = "progressBarBenchmarking";
-            this.progressBarBenchmarking.Size = new System.Drawing.Size(251, 20);
+            this.progressBarBenchmarking.Size = new System.Drawing.Size(222, 20);
             this.progressBarBenchmarking.Step = 1;
             this.progressBarBenchmarking.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBarBenchmarking.TabIndex = 146;
@@ -2441,38 +2418,6 @@
             this.label35.Size = new System.Drawing.Size(60, 13);
             this.label35.TabIndex = 144;
             this.label35.Text = "Remaining:";
-            // 
-            // numericUpDownBenchmarkingLength
-            // 
-            this.numericUpDownBenchmarkingLength.Location = new System.Drawing.Point(160, 86);
-            this.numericUpDownBenchmarkingLength.Maximum = new decimal(new int[] {
-            86400,
-            0,
-            0,
-            0});
-            this.numericUpDownBenchmarkingLength.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDownBenchmarkingLength.Name = "numericUpDownBenchmarkingLength";
-            this.numericUpDownBenchmarkingLength.Size = new System.Drawing.Size(39, 20);
-            this.numericUpDownBenchmarkingLength.TabIndex = 13;
-            this.numericUpDownBenchmarkingLength.Tag = "parameter:benchmarking_length";
-            this.numericUpDownBenchmarkingLength.Value = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(101, 88);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(57, 13);
-            this.label31.TabIndex = 12;
-            this.label31.Text = "Length (s):";
             // 
             // numericUpDownBenchmarkingRepeats
             // 
@@ -5639,7 +5584,7 @@
             // tabPageOptimization
             // 
             this.tabPageOptimization.Controls.Add(this.panel2);
-            this.tabPageOptimization.Controls.Add(this.tabPageOptimizationTargets);
+            this.tabPageOptimization.Controls.Add(this.tabControlOptimizationParameters);
             this.tabPageOptimization.Controls.Add(this.groupBox5);
             this.tabPageOptimization.Location = new System.Drawing.Point(4, 22);
             this.tabPageOptimization.Name = "tabPageOptimization";
@@ -5655,9 +5600,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.Controls.Add(this.tabControl5);
-            this.panel2.Location = new System.Drawing.Point(6, 201);
+            this.panel2.Location = new System.Drawing.Point(6, 182);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(604, 128);
+            this.panel2.Size = new System.Drawing.Size(604, 147);
             this.panel2.TabIndex = 157;
             // 
             // tabControl5
@@ -5670,7 +5615,7 @@
             this.tabControl5.Location = new System.Drawing.Point(2, 2);
             this.tabControl5.Name = "tabControl5";
             this.tabControl5.SelectedIndex = 0;
-            this.tabControl5.Size = new System.Drawing.Size(599, 125);
+            this.tabControl5.Size = new System.Drawing.Size(599, 144);
             this.tabControl5.TabIndex = 155;
             // 
             // tabPage12
@@ -5679,7 +5624,7 @@
             this.tabPage12.Location = new System.Drawing.Point(4, 22);
             this.tabPage12.Name = "tabPage12";
             this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage12.Size = new System.Drawing.Size(591, 99);
+            this.tabPage12.Size = new System.Drawing.Size(591, 118);
             this.tabPage12.TabIndex = 0;
             this.tabPage12.Text = "Current Parameter";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -5714,7 +5659,7 @@
             this.dataGridViewOptimizerBenchmarkingResults.RowHeadersVisible = false;
             dataGridViewCellStyle87.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.dataGridViewOptimizerBenchmarkingResults.RowsDefaultCellStyle = dataGridViewCellStyle87;
-            this.dataGridViewOptimizerBenchmarkingResults.Size = new System.Drawing.Size(579, 87);
+            this.dataGridViewOptimizerBenchmarkingResults.Size = new System.Drawing.Size(579, 106);
             this.dataGridViewOptimizerBenchmarkingResults.TabIndex = 20;
             this.dataGridViewOptimizerBenchmarkingResults.SelectionChanged += new System.EventHandler(this.dataGridViewOptimizerBenchmarkingResults_SelectionChanged);
             // 
@@ -5771,7 +5716,7 @@
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.ReadOnly = true;
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.Width = 120;
+            this.dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed.Width = 130;
             // 
             // tabPage13
             // 
@@ -5779,7 +5724,7 @@
             this.tabPage13.Location = new System.Drawing.Point(4, 22);
             this.tabPage13.Name = "tabPage13";
             this.tabPage13.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage13.Size = new System.Drawing.Size(591, 99);
+            this.tabPage13.Size = new System.Drawing.Size(591, 118);
             this.tabPage13.TabIndex = 1;
             this.tabPage13.Text = "Records";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -5814,7 +5759,7 @@
             this.dataGridViewOptimizerRecords.RowHeadersVisible = false;
             dataGridViewCellStyle92.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.dataGridViewOptimizerRecords.RowsDefaultCellStyle = dataGridViewCellStyle92;
-            this.dataGridViewOptimizerRecords.Size = new System.Drawing.Size(579, 87);
+            this.dataGridViewOptimizerRecords.Size = new System.Drawing.Size(579, 106);
             this.dataGridViewOptimizerRecords.TabIndex = 19;
             this.dataGridViewOptimizerRecords.SelectionChanged += new System.EventHandler(this.dataGridViewOptimizerRecords_SelectionChanged);
             // 
@@ -5864,46 +5809,46 @@
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.ReadOnly = true;
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Width = 120;
+            this.dataGridViewTextBoxColumnOptimizerRecordsSpeed.Width = 130;
             // 
-            // tabPageOptimizationTargets
+            // tabControlOptimizationParameters
             // 
-            this.tabPageOptimizationTargets.Controls.Add(this.tabPage14);
-            this.tabPageOptimizationTargets.Controls.Add(this.tabPage15);
-            this.tabPageOptimizationTargets.Location = new System.Drawing.Point(278, 6);
-            this.tabPageOptimizationTargets.Name = "tabPageOptimizationTargets";
-            this.tabPageOptimizationTargets.SelectedIndex = 0;
-            this.tabPageOptimizationTargets.Size = new System.Drawing.Size(335, 189);
-            this.tabPageOptimizationTargets.TabIndex = 156;
+            this.tabControlOptimizationParameters.Controls.Add(this.tabPageOptimizationAlgorithms);
+            this.tabControlOptimizationParameters.Controls.Add(this.tabPageOptimizationTargets);
+            this.tabControlOptimizationParameters.Location = new System.Drawing.Point(246, 6);
+            this.tabControlOptimizationParameters.Name = "tabControlOptimizationParameters";
+            this.tabControlOptimizationParameters.SelectedIndex = 0;
+            this.tabControlOptimizationParameters.Size = new System.Drawing.Size(367, 170);
+            this.tabControlOptimizationParameters.TabIndex = 156;
             // 
-            // tabPage14
+            // tabPageOptimizationAlgorithms
             // 
-            this.tabPage14.Controls.Add(this.button10);
-            this.tabPage14.Controls.Add(this.button12);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationX16SEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationEthashPascalEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationCryptoNightLightEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationEthashEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationCryptoNightV7Enabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationCryptoNightEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationX16REnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationNeoScryptEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationCryptoNightHeavyEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationPascalEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationLbryEnabled);
-            this.tabPage14.Controls.Add(this.checkBoxOptimizationLyra2REv2Enabled);
-            this.tabPage14.Location = new System.Drawing.Point(4, 22);
-            this.tabPage14.Name = "tabPage14";
-            this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage14.Size = new System.Drawing.Size(327, 163);
-            this.tabPage14.TabIndex = 0;
-            this.tabPage14.Text = "Algorithms";
-            this.tabPage14.UseVisualStyleBackColor = true;
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.button10);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.button12);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationX16SEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationEthashPascalEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationCryptoNightLightEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationEthashEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationCryptoNightV7Enabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationCryptoNightEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationX16REnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationNeoScryptEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationCryptoNightHeavyEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationPascalEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationLbryEnabled);
+            this.tabPageOptimizationAlgorithms.Controls.Add(this.checkBoxOptimizationLyra2REv2Enabled);
+            this.tabPageOptimizationAlgorithms.Location = new System.Drawing.Point(4, 22);
+            this.tabPageOptimizationAlgorithms.Name = "tabPageOptimizationAlgorithms";
+            this.tabPageOptimizationAlgorithms.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageOptimizationAlgorithms.Size = new System.Drawing.Size(359, 144);
+            this.tabPageOptimizationAlgorithms.TabIndex = 0;
+            this.tabPageOptimizationAlgorithms.Text = "Algorithms";
+            this.tabPageOptimizationAlgorithms.UseVisualStyleBackColor = true;
             // 
             // button10
             // 
             this.button10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button10.Location = new System.Drawing.Point(247, 134);
+            this.button10.Location = new System.Drawing.Point(279, 113);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(74, 23);
             this.button10.TabIndex = 15;
@@ -5914,7 +5859,7 @@
             // button12
             // 
             this.button12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button12.Location = new System.Drawing.Point(167, 134);
+            this.button12.Location = new System.Drawing.Point(199, 113);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(74, 23);
             this.button12.TabIndex = 14;
@@ -6078,29 +6023,29 @@
             this.checkBoxOptimizationLyra2REv2Enabled.Text = "Lyra2REv2";
             this.checkBoxOptimizationLyra2REv2Enabled.UseVisualStyleBackColor = true;
             // 
-            // tabPage15
+            // tabPageOptimizationTargets
             // 
-            this.tabPage15.Controls.Add(this.button13);
-            this.tabPage15.Controls.Add(this.button14);
-            this.tabPage15.Controls.Add(this.checkBoxOptimizationUndervoltingMemory);
-            this.tabPage15.Controls.Add(this.checkBoxOptimizationAlgorithmicSettings);
-            this.tabPage15.Controls.Add(this.checkBoxOptimizationUndervoltingCore);
-            this.tabPage15.Controls.Add(this.checkBoxOptimizationMemoryTimings);
-            this.tabPage15.Controls.Add(this.checkBoxOptimizationOverclockingMemory);
-            this.tabPage15.Controls.Add(this.checkBoxOptimizationMemoryTimingsExtended);
-            this.tabPage15.Controls.Add(this.checkBoxOptimizationOverclockingCore);
-            this.tabPage15.Location = new System.Drawing.Point(4, 22);
-            this.tabPage15.Name = "tabPage15";
-            this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage15.Size = new System.Drawing.Size(327, 163);
-            this.tabPage15.TabIndex = 1;
-            this.tabPage15.Text = "Targets";
-            this.tabPage15.UseVisualStyleBackColor = true;
+            this.tabPageOptimizationTargets.Controls.Add(this.button13);
+            this.tabPageOptimizationTargets.Controls.Add(this.button14);
+            this.tabPageOptimizationTargets.Controls.Add(this.checkBoxOptimizationUndervoltingMemory);
+            this.tabPageOptimizationTargets.Controls.Add(this.checkBoxOptimizationAlgorithmicSettings);
+            this.tabPageOptimizationTargets.Controls.Add(this.checkBoxOptimizationUndervoltingCore);
+            this.tabPageOptimizationTargets.Controls.Add(this.checkBoxOptimizationMemoryTimings);
+            this.tabPageOptimizationTargets.Controls.Add(this.checkBoxOptimizationOverclockingMemory);
+            this.tabPageOptimizationTargets.Controls.Add(this.checkBoxOptimizationMemoryTimingsExtended);
+            this.tabPageOptimizationTargets.Controls.Add(this.checkBoxOptimizationOverclockingCore);
+            this.tabPageOptimizationTargets.Location = new System.Drawing.Point(4, 22);
+            this.tabPageOptimizationTargets.Name = "tabPageOptimizationTargets";
+            this.tabPageOptimizationTargets.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageOptimizationTargets.Size = new System.Drawing.Size(359, 144);
+            this.tabPageOptimizationTargets.TabIndex = 1;
+            this.tabPageOptimizationTargets.Text = "Targets";
+            this.tabPageOptimizationTargets.UseVisualStyleBackColor = true;
             // 
             // button13
             // 
             this.button13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button13.Location = new System.Drawing.Point(247, 134);
+            this.button13.Location = new System.Drawing.Point(279, 115);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(74, 23);
             this.button13.TabIndex = 15;
@@ -6111,7 +6056,7 @@
             // button14
             // 
             this.button14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button14.Location = new System.Drawing.Point(167, 134);
+            this.button14.Location = new System.Drawing.Point(199, 115);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(74, 23);
             this.button14.TabIndex = 14;
@@ -6129,7 +6074,6 @@
             this.checkBoxOptimizationUndervoltingMemory.Tag = "parameter:optimization_undervolting_memory";
             this.checkBoxOptimizationUndervoltingMemory.Text = "Memory Voltage";
             this.checkBoxOptimizationUndervoltingMemory.UseVisualStyleBackColor = true;
-            this.checkBoxOptimizationUndervoltingMemory.CheckedChanged += new System.EventHandler(this.checkBoxOptimizationUndervoltingMemory_CheckedChanged);
             // 
             // checkBoxOptimizationAlgorithmicSettings
             // 
@@ -6207,19 +6151,16 @@
             this.groupBox5.Controls.Add(this.labelOptimizationDeviceCaption);
             this.groupBox5.Controls.Add(this.labelOptimizationDevice);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationCoolGPUDown);
-            this.groupBox5.Controls.Add(this.checkBoxOptimizationUseAverageSpeeds);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationRepeatUntilStopped);
             this.groupBox5.Controls.Add(this.labelOptimizationSpeedCaption);
             this.groupBox5.Controls.Add(this.checkBoxOptimizationDoNotRepeatAfterFailure);
             this.groupBox5.Controls.Add(this.labelOptimizationSpeed);
             this.groupBox5.Controls.Add(this.progressBarOptimizer);
-            this.groupBox5.Controls.Add(this.numericUpDownOptimizationLength);
-            this.groupBox5.Controls.Add(this.label40);
             this.groupBox5.Controls.Add(this.numericUpDownOptimizationRepeats);
             this.groupBox5.Controls.Add(this.label42);
             this.groupBox5.Location = new System.Drawing.Point(6, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(266, 189);
+            this.groupBox5.Size = new System.Drawing.Size(234, 170);
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Status";
@@ -6229,7 +6170,7 @@
             this.checkBoxOptimizationExtendRange.AutoSize = true;
             this.checkBoxOptimizationExtendRange.Checked = true;
             this.checkBoxOptimizationExtendRange.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationExtendRange.Location = new System.Drawing.Point(133, 112);
+            this.checkBoxOptimizationExtendRange.Location = new System.Drawing.Point(116, 112);
             this.checkBoxOptimizationExtendRange.Name = "checkBoxOptimizationExtendRange";
             this.checkBoxOptimizationExtendRange.Size = new System.Drawing.Size(89, 17);
             this.checkBoxOptimizationExtendRange.TabIndex = 152;
@@ -6245,16 +6186,16 @@
             "Neutral",
             "Stabilizing",
             "Aggressive"});
-            this.comboBoxOptimizationApproach.Location = new System.Drawing.Point(182, 158);
+            this.comboBoxOptimizationApproach.Location = new System.Drawing.Point(161, 86);
             this.comboBoxOptimizationApproach.Name = "comboBoxOptimizationApproach";
-            this.comboBoxOptimizationApproach.Size = new System.Drawing.Size(75, 21);
+            this.comboBoxOptimizationApproach.Size = new System.Drawing.Size(58, 21);
             this.comboBoxOptimizationApproach.TabIndex = 159;
             this.comboBoxOptimizationApproach.Tag = "parameter:optimizer_approac";
             // 
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(130, 161);
+            this.label32.Location = new System.Drawing.Point(103, 89);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(56, 13);
             this.label32.TabIndex = 158;
@@ -6282,7 +6223,7 @@
             // checkBoxOptimizationCoolGPUDown
             // 
             this.checkBoxOptimizationCoolGPUDown.AutoSize = true;
-            this.checkBoxOptimizationCoolGPUDown.Location = new System.Drawing.Point(8, 158);
+            this.checkBoxOptimizationCoolGPUDown.Location = new System.Drawing.Point(8, 135);
             this.checkBoxOptimizationCoolGPUDown.Name = "checkBoxOptimizationCoolGPUDown";
             this.checkBoxOptimizationCoolGPUDown.Size = new System.Drawing.Size(102, 17);
             this.checkBoxOptimizationCoolGPUDown.TabIndex = 155;
@@ -6290,23 +6231,10 @@
             this.checkBoxOptimizationCoolGPUDown.Text = "Cool GPU down";
             this.checkBoxOptimizationCoolGPUDown.UseVisualStyleBackColor = true;
             // 
-            // checkBoxOptimizationUseAverageSpeeds
-            // 
-            this.checkBoxOptimizationUseAverageSpeeds.AutoSize = true;
-            this.checkBoxOptimizationUseAverageSpeeds.Checked = true;
-            this.checkBoxOptimizationUseAverageSpeeds.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationUseAverageSpeeds.Location = new System.Drawing.Point(8, 112);
-            this.checkBoxOptimizationUseAverageSpeeds.Name = "checkBoxOptimizationUseAverageSpeeds";
-            this.checkBoxOptimizationUseAverageSpeeds.Size = new System.Drawing.Size(124, 17);
-            this.checkBoxOptimizationUseAverageSpeeds.TabIndex = 154;
-            this.checkBoxOptimizationUseAverageSpeeds.Tag = "parameter:optimization_use_average_speeds";
-            this.checkBoxOptimizationUseAverageSpeeds.Text = "Use average speeds";
-            this.checkBoxOptimizationUseAverageSpeeds.UseVisualStyleBackColor = true;
-            // 
             // checkBoxOptimizationRepeatUntilStopped
             // 
             this.checkBoxOptimizationRepeatUntilStopped.AutoSize = true;
-            this.checkBoxOptimizationRepeatUntilStopped.Location = new System.Drawing.Point(133, 135);
+            this.checkBoxOptimizationRepeatUntilStopped.Location = new System.Drawing.Point(115, 135);
             this.checkBoxOptimizationRepeatUntilStopped.Name = "checkBoxOptimizationRepeatUntilStopped";
             this.checkBoxOptimizationRepeatUntilStopped.Size = new System.Drawing.Size(113, 17);
             this.checkBoxOptimizationRepeatUntilStopped.TabIndex = 153;
@@ -6329,7 +6257,7 @@
             this.checkBoxOptimizationDoNotRepeatAfterFailure.AutoSize = true;
             this.checkBoxOptimizationDoNotRepeatAfterFailure.Checked = true;
             this.checkBoxOptimizationDoNotRepeatAfterFailure.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOptimizationDoNotRepeatAfterFailure.Location = new System.Drawing.Point(8, 135);
+            this.checkBoxOptimizationDoNotRepeatAfterFailure.Location = new System.Drawing.Point(8, 112);
             this.checkBoxOptimizationDoNotRepeatAfterFailure.Name = "checkBoxOptimizationDoNotRepeatAfterFailure";
             this.checkBoxOptimizationDoNotRepeatAfterFailure.Size = new System.Drawing.Size(102, 17);
             this.checkBoxOptimizationDoNotRepeatAfterFailure.TabIndex = 150;
@@ -6350,42 +6278,10 @@
             // 
             this.progressBarOptimizer.Location = new System.Drawing.Point(6, 19);
             this.progressBarOptimizer.Name = "progressBarOptimizer";
-            this.progressBarOptimizer.Size = new System.Drawing.Size(251, 20);
+            this.progressBarOptimizer.Size = new System.Drawing.Size(222, 20);
             this.progressBarOptimizer.Step = 1;
             this.progressBarOptimizer.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBarOptimizer.TabIndex = 146;
-            // 
-            // numericUpDownOptimizationLength
-            // 
-            this.numericUpDownOptimizationLength.Location = new System.Drawing.Point(160, 86);
-            this.numericUpDownOptimizationLength.Maximum = new decimal(new int[] {
-            86400,
-            0,
-            0,
-            0});
-            this.numericUpDownOptimizationLength.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDownOptimizationLength.Name = "numericUpDownOptimizationLength";
-            this.numericUpDownOptimizationLength.Size = new System.Drawing.Size(39, 20);
-            this.numericUpDownOptimizationLength.TabIndex = 13;
-            this.numericUpDownOptimizationLength.Tag = "parameter:optimization_length";
-            this.numericUpDownOptimizationLength.Value = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(101, 88);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(57, 13);
-            this.label40.TabIndex = 12;
-            this.label40.Text = "Length (s):";
             // 
             // numericUpDownOptimizationRepeats
             // 
@@ -6429,6 +6325,10 @@
             this.button4.Text = "Help";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.buttonHelp_Click);
+            // 
+            // timerMemoryTimings
+            // 
+            this.timerMemoryTimings.Interval = 5000;
             // 
             // MainForm
             // 
@@ -6483,9 +6383,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBenchmarkingResults)).EndInit();
             this.tabPage10.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBenchmarks)).EndInit();
+            this.tabControlBenchmarkingParameters.ResumeLayout(false);
             this.tabPageBenchmarkingAlgorithms.ResumeLayout(false);
-            this.tabPage8.ResumeLayout(false);
-            this.tabPage8.PerformLayout();
+            this.tabPageBenchmarkingAlgorithms.PerformLayout();
             this.tabPageBenchmarkingFirstParameter.ResumeLayout(false);
             this.tabPageBenchmarkingFirstParameter.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingFirstParameterStep)).EndInit();
@@ -6498,7 +6398,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingSecondParameterStart)).EndInit();
             this.groupBoxBenchmarkingOtherParameters.ResumeLayout(false);
             this.groupBoxBenchmarkingOtherParameters.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBenchmarkingRepeats)).EndInit();
             this.tabPageDeviceSettings.ResumeLayout(false);
             this.groupBoxAlgorithmSpecificDeviceSettings.ResumeLayout(false);
@@ -6573,14 +6472,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerBenchmarkingResults)).EndInit();
             this.tabPage13.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOptimizerRecords)).EndInit();
+            this.tabControlOptimizationParameters.ResumeLayout(false);
+            this.tabPageOptimizationAlgorithms.ResumeLayout(false);
+            this.tabPageOptimizationAlgorithms.PerformLayout();
             this.tabPageOptimizationTargets.ResumeLayout(false);
-            this.tabPage14.ResumeLayout(false);
-            this.tabPage14.PerformLayout();
-            this.tabPage15.ResumeLayout(false);
-            this.tabPage15.PerformLayout();
+            this.tabPageOptimizationTargets.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOptimizationRepeats)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -6668,8 +6566,6 @@
         private System.Windows.Forms.ProgressBar progressBarBenchmarking;
         private System.Windows.Forms.Label labelBenchmarkingRemaining;
         private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingLength;
-        private System.Windows.Forms.Label label31;
         private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingRepeats;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingFirstParameterStep;
@@ -6830,8 +6726,6 @@
         private System.Windows.Forms.Label labelOptimizationSpeedCaption;
         private System.Windows.Forms.Label labelOptimizationSpeed;
         private System.Windows.Forms.ProgressBar progressBarOptimizer;
-        private System.Windows.Forms.NumericUpDown numericUpDownOptimizationLength;
-        private System.Windows.Forms.Label label40;
         private System.Windows.Forms.NumericUpDown numericUpDownOptimizationRepeats;
         private System.Windows.Forms.Label label42;
         private System.Windows.Forms.DataGridView dataGridViewOptimizerBenchmarkingResults;
@@ -6841,8 +6735,6 @@
         private System.Windows.Forms.CheckBox checkBoxOptimizationMemoryTimings;
         private System.Windows.Forms.CheckBox checkBoxOptimizationAlgorithmicSettings;
         private System.Windows.Forms.CheckBox checkBoxOptimizationRepeatUntilStopped;
-        private System.Windows.Forms.CheckBox checkBoxOptimizationUseAverageSpeeds;
-        private System.Windows.Forms.CheckBox checkBoxBenchmarkingUseAverageSpeeds;
         private System.Windows.Forms.CheckBox checkBoxOptimizationMemoryTimingsExtended;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingX16REnabled;
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingCryptoNightHeavyEnabled;
@@ -6924,8 +6816,8 @@
         private System.Windows.Forms.TabControl tabControl4;
         private System.Windows.Forms.TabPage tabPage10;
         private System.Windows.Forms.TabPage tabPage11;
-        private System.Windows.Forms.TabControl tabPageBenchmarkingAlgorithms;
-        private System.Windows.Forms.TabPage tabPage8;
+        private System.Windows.Forms.TabControl tabControlBenchmarkingParameters;
+        private System.Windows.Forms.TabPage tabPageBenchmarkingAlgorithms;
         private System.Windows.Forms.TabPage tabPageBenchmarkingFirstParameter;
         private System.Windows.Forms.TabPage tabPageBenchmarkingSecondParameter;
         private System.Windows.Forms.NumericUpDown numericUpDownBenchmarkingSecondParameterStep;
@@ -6940,9 +6832,9 @@
         private System.Windows.Forms.TabPage tabPage12;
         private System.Windows.Forms.TabPage tabPage13;
         private System.Windows.Forms.Label label32;
-        private System.Windows.Forms.TabControl tabPageOptimizationTargets;
-        private System.Windows.Forms.TabPage tabPage14;
-        private System.Windows.Forms.TabPage tabPage15;
+        private System.Windows.Forms.TabControl tabControlOptimizationParameters;
+        private System.Windows.Forms.TabPage tabPageOptimizationAlgorithms;
+        private System.Windows.Forms.TabPage tabPageOptimizationTargets;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ComboBox comboBoxOptimizationApproach;
@@ -7013,16 +6905,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxBenchmarkingResultsSecondParameter;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxBenchmarkingResultsSuccessRate;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxBenchmarkingResultsSpeed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsAlgorithm;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsParameter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSuccessCount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSpeed;
         private System.Windows.Forms.Button buttonMemoryTimingsAppyStrap;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.DataGridViewCheckBoxColumn enabled;
@@ -7049,5 +6931,16 @@
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsAlgorithm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsParameter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSuccessCount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSpeed;
+        private System.Windows.Forms.Timer timerMemoryTimings;
     }
 }

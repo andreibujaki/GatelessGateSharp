@@ -101,7 +101,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.6";
+        public static string appVersion = "1.3.7";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string databaseFileName = "GatelessGateSharp.sqlite";
@@ -202,7 +202,8 @@ namespace GatelessGateSharp
             public Tuple<int, string, string> Tuple;
             public string Text;
 
-            public StringDeviceParameter(Tuple<int, string, string> aTuple, string aText) {
+            public StringDeviceParameter(Tuple<int, string, string> aTuple, string aText)
+            {
                 Tuple = aTuple;
                 Text = aText;
             }
@@ -234,6 +235,8 @@ namespace GatelessGateSharp
 
         private string mCurrentPool = "NiceHash";
 
+        private int mCurrentBenchmarkLength = 10;
+
         public static MainForm Instance { get { return instance; } }
         public static bool DevFeeMode { get { return Instance.mDevFeeMode; } }
 
@@ -254,7 +257,7 @@ namespace GatelessGateSharp
         }
 
 
-#region Initialization
+        #region Initialization
 
         public MainForm()
         {
@@ -561,6 +564,15 @@ namespace GatelessGateSharp
                 comboBoxDeviceSettingsDevice.Items.Add("#" + i.ToString() + ": " + Controller.OpenCLDevices[i].GetVendor() + " " + Controller.OpenCLDevices[i].GetName());
             }
             comboBoxDeviceSettingsDevice.SelectedIndex = 0;
+
+            foreach (var device in Controller.OpenCLDevices) {
+                device.TargetPowerLimit = 100;
+                device.TargetCoreClock = device.DefaultCoreClock;
+                device.TargetCoreVoltage = device.DefaultCoreVoltage;
+                device.TargetMemoryClock = device.DefaultMemoryClock;
+                device.TargetMemoryVoltage = device.DefaultMemoryVoltage;
+                device.OverclockingEnabled = true;
+            }
 
             UpdateStats();
             timerStatsUpdates.Enabled = true;
@@ -2305,13 +2317,14 @@ namespace GatelessGateSharp
             } else {
                 filePath = (new Regex("'")).Replace(filePath, "");
             }
-            Application.DoEvents();
+
+            if (!System.IO.File.Exists(filePath))
+                Logger("Configuration file not found.");
             Logger("Loading settings from " + filePath + "...");
             UpdateLog();
-            Application.DoEvents();
             MainForm.Instance.Enabled = false;
-
             int databaseVersion = 0;
+
             try {
                 var root = JsonConvert.DeserializeObject<Dictionary<string, object>>(string.Join("\n", System.IO.File.ReadAllLines(filePath)));
 
@@ -2521,8 +2534,10 @@ namespace GatelessGateSharp
                         var match = regex.Match(tag);
                         var type = match.Success ? match.Groups[1].Value : null;
                         var name = match.Success ? match.Groups[2].Value : null;
-                        if (type == "parameter")
+                        if (type == "parameter") {
+                            Logger(name);
                             parameters.Add(name, (string)comboBox.SelectedItem);
+                        }
                     }
                     foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
                         var tag = (string)(textBox.GetType().GetProperty("Tag").GetValue(textBox));
@@ -3010,7 +3025,7 @@ namespace GatelessGateSharp
                 var elapsedTimeInSeconds = benchmarking ? (long)Controller.BenchmarkStopwatch.Elapsed.TotalSeconds : (long)Controller.StopWatch.Elapsed.TotalSeconds;
 
                 if (benchmarking) {
-                    var remaining = Controller.BenchmarkEntries.Count * (int)numericUpDownBenchmarkingRepeats.Value * (int)numericUpDownBenchmarkingLength.Value;
+                    var remaining = Controller.BenchmarkEntries.Count * (int)numericUpDownBenchmarkingRepeats.Value * mCurrentBenchmarkLength;
                     labelBenchmarkingRemaining.Text = "About " + (remaining / 60) + " minutes";
                 } else {
                     labelBenchmarkingRemaining.Text = "-";
@@ -3803,11 +3818,11 @@ namespace GatelessGateSharp
         {
             try {
                 using (var stream = System.IO.File.Open(AppStateFilePath, System.IO.FileMode.Create))
-                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) { 
-                    sw.WriteLine((state == Controller.ApplicationGlobalState.Idle)         ? "Idle" :
+                using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream)) {
+                    sw.WriteLine((state == Controller.ApplicationGlobalState.Idle) ? "Idle" :
                                  (state == Controller.ApplicationGlobalState.Initializing) ? "Initializing" :
-                                 (state == Controller.ApplicationGlobalState.Mining)       ? "Mining" :
-                                 (state == Controller.ApplicationGlobalState.Switching)    ? "Switching" :
+                                 (state == Controller.ApplicationGlobalState.Mining) ? "Mining" :
+                                 (state == Controller.ApplicationGlobalState.Switching) ? "Switching" :
                                                                                              "Idle");
                     sw.Flush();
 #pragma warning disable 618, 612
@@ -3822,6 +3837,7 @@ namespace GatelessGateSharp
         {
             try {
                 UpdateStats();
+                USBWatchdog.KeepAlive();
             } catch (Exception ex) {
                 Logger(ex);
             }
@@ -4261,8 +4277,9 @@ namespace GatelessGateSharp
             public string name;
             public long delay;
             public long time;
+            public string continent;
 
-            public StratumServerInfo(string aName, long aDelay)
+            public StratumServerInfo(string aName, long aDelay, string aContinent)
             {
                 name = aName;
                 delay = aDelay;
@@ -4273,11 +4290,17 @@ namespace GatelessGateSharp
                 }
                 if (time >= 0)
                     time += delay;
+                continent = aContinent;
             }
 
             public int CompareTo(StratumServerInfo other)
             {
-                if (time == other.time)
+                string currentContinent = Utilities.GetContinentCode();
+                if (continent == currentContinent && other.continent != currentContinent)
+                    return -1;
+                else if (continent != currentContinent && other.continent == currentContinent)
+                    return 1;
+                else if (time == other.time)
                     return 0;
                 else if (other.time < 0 && time >= 0)
                     return -1;
@@ -4290,17 +4313,17 @@ namespace GatelessGateSharp
             }
         };
 
-#region GetServers
+        #region GetServers
 
         List<StratumServerInfo> GetNiceHashLyra2REv2Servers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("lyra2rev2.usa.nicehash.com", 0),
-                new StratumServerInfo("lyra2rev2.eu.nicehash.com", 0),
-                new StratumServerInfo("lyra2rev2.hk.nicehash.com", 150),
-                new StratumServerInfo("lyra2rev2.jp.nicehash.com", 100),
-                new StratumServerInfo("lyra2rev2.in.nicehash.com", 200),
-                new StratumServerInfo("lyra2rev2.br.nicehash.com", 180)
+                new StratumServerInfo("lyra2rev2.usa.nicehash.com", 0,   "NA"),
+                new StratumServerInfo("lyra2rev2.eu.nicehash.com",  0,   "EU"),
+                new StratumServerInfo("lyra2rev2.hk.nicehash.com",  150, "AS"),
+                new StratumServerInfo("lyra2rev2.jp.nicehash.com",  100, "AS"),
+                new StratumServerInfo("lyra2rev2.in.nicehash.com",  200, "AS"),
+                new StratumServerInfo("lyra2rev2.br.nicehash.com",  180, "SA")
             };
             hosts.Sort();
             return hosts;
@@ -4309,12 +4332,12 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNiceHashNeoScryptServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("neoscrypt.usa.nicehash.com", 0),
-                new StratumServerInfo("neoscrypt.eu.nicehash.com", 0),
-                new StratumServerInfo("neoscrypt.hk.nicehash.com", 150),
-                new StratumServerInfo("neoscrypt.jp.nicehash.com", 100),
-                new StratumServerInfo("neoscrypt.in.nicehash.com", 200),
-                new StratumServerInfo("neoscrypt.br.nicehash.com", 180)
+                new StratumServerInfo("neoscrypt.usa.nicehash.com", 0,   "NA"),
+                new StratumServerInfo("neoscrypt.eu.nicehash.com",  0,   "EU"),
+                new StratumServerInfo("neoscrypt.hk.nicehash.com",  150, "AS"),
+                new StratumServerInfo("neoscrypt.jp.nicehash.com",  100, "AS"),
+                new StratumServerInfo("neoscrypt.in.nicehash.com",  200, "AS"),
+                new StratumServerInfo("neoscrypt.br.nicehash.com",  180, "SA")
             };
             hosts.Sort();
             return hosts;
@@ -4323,12 +4346,12 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNiceHashLbryServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("lbry.usa.nicehash.com", 0),
-                new StratumServerInfo("lbry.eu.nicehash.com", 0),
-                new StratumServerInfo("lbry.hk.nicehash.com", 150),
-                new StratumServerInfo("lbry.jp.nicehash.com", 100),
-                new StratumServerInfo("lbry.in.nicehash.com", 200),
-                new StratumServerInfo("lbry.br.nicehash.com", 180)
+                new StratumServerInfo("lbry.usa.nicehash.com", 0,   "NA"),
+                new StratumServerInfo("lbry.eu.nicehash.com",  0,   "EU"),
+                new StratumServerInfo("lbry.hk.nicehash.com",  150, "AS"),
+                new StratumServerInfo("lbry.jp.nicehash.com",  100, "AS"),
+                new StratumServerInfo("lbry.in.nicehash.com",  200, "AS"),
+                new StratumServerInfo("lbry.br.nicehash.com",  180, "SA")
             };
             hosts.Sort();
             return hosts;
@@ -4337,12 +4360,12 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNiceHashEthashServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("daggerhashimoto.usa.nicehash.com", 0),
-                new StratumServerInfo("daggerhashimoto.eu.nicehash.com", 0),
-                new StratumServerInfo("daggerhashimoto.hk.nicehash.com", 150),
-                new StratumServerInfo("daggerhashimoto.jp.nicehash.com", 100),
-                new StratumServerInfo("daggerhashimoto.in.nicehash.com", 200),
-                new StratumServerInfo("daggerhashimoto.br.nicehash.com", 180)
+                new StratumServerInfo("daggerhashimoto.usa.nicehash.com", 0,   "NA"),
+                new StratumServerInfo("daggerhashimoto.eu.nicehash.com",  0,   "EU"),
+                new StratumServerInfo("daggerhashimoto.hk.nicehash.com",  150, "AS"),
+                new StratumServerInfo("daggerhashimoto.jp.nicehash.com",  100, "AS"),
+                new StratumServerInfo("daggerhashimoto.in.nicehash.com",  200, "AS"),
+                new StratumServerInfo("daggerhashimoto.br.nicehash.com",  180, "SA")
             };
             hosts.Sort();
             return hosts;
@@ -4351,12 +4374,12 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNanopoolEthashServers()
         {
             var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("eth-eu1.nanopool.org", 0),
-                                new StratumServerInfo("eth-eu2.nanopool.org", 0),
-                                new StratumServerInfo("eth-asia1.nanopool.org", 0),
-                                new StratumServerInfo("eth-us-east1.nanopool.org", 0),
-                                new StratumServerInfo("eth-us-west1.nanopool.org", 0)
-                            };
+                new StratumServerInfo("eth-eu1.nanopool.org",      0, "EU"),
+                new StratumServerInfo("eth-eu2.nanopool.org",      0, "EU"),
+                new StratumServerInfo("eth-asia1.nanopool.org",    0, "AS"),
+                new StratumServerInfo("eth-us-east1.nanopool.org", 0, "NA"),
+                new StratumServerInfo("eth-us-west1.nanopool.org", 0, "NA")
+            };
             hosts.Sort();
             return hosts;
         }
@@ -4364,12 +4387,12 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNiceHashCryptoNightServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("cryptonight.usa.nicehash.com", 0),
-                new StratumServerInfo("cryptonight.eu.nicehash.com", 0),
-                new StratumServerInfo("cryptonight.hk.nicehash.com", 150),
-                new StratumServerInfo("cryptonight.jp.nicehash.com", 100),
-                new StratumServerInfo("cryptonight.in.nicehash.com", 200),
-                new StratumServerInfo("cryptonight.br.nicehash.com", 180)
+                new StratumServerInfo("cryptonight.usa.nicehash.com", 0,   "NA"),
+                new StratumServerInfo("cryptonight.eu.nicehash.com",  0,   "EU"),
+                new StratumServerInfo("cryptonight.hk.nicehash.com",  150, "AS"),
+                new StratumServerInfo("cryptonight.jp.nicehash.com",  100, "AS"),
+                new StratumServerInfo("cryptonight.in.nicehash.com",  200, "AS"),
+                new StratumServerInfo("cryptonight.br.nicehash.com",  180, "SA")
             };
             hosts.Sort();
             return hosts;
@@ -4378,12 +4401,12 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNiceHashCryptoNightV7Servers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("cryptonightv7.usa.nicehash.com", 0),
-                new StratumServerInfo("cryptonightv7.eu.nicehash.com", 0),
-                new StratumServerInfo("cryptonightv7.hk.nicehash.com", 150),
-                new StratumServerInfo("cryptonightv7.jp.nicehash.com", 100),
-                new StratumServerInfo("cryptonightv7.in.nicehash.com", 200),
-                new StratumServerInfo("cryptonightv7.br.nicehash.com", 180)
+                new StratumServerInfo("cryptonightv7.usa.nicehash.com", 0,   "NA"),
+                new StratumServerInfo("cryptonightv7.eu.nicehash.com",  0,   "EU"),
+                new StratumServerInfo("cryptonightv7.hk.nicehash.com",  150, "AS"),
+                new StratumServerInfo("cryptonightv7.jp.nicehash.com",  100, "AS"),
+                new StratumServerInfo("cryptonightv7.in.nicehash.com",  200, "AS"),
+                new StratumServerInfo("cryptonightv7.br.nicehash.com",  180, "SA")
             };
             hosts.Sort();
             return hosts;
@@ -4392,12 +4415,12 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNiceHashPascalServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("pascal.usa.nicehash.com", 0),
-                new StratumServerInfo("pascal.eu.nicehash.com", 0),
-                new StratumServerInfo("pascal.hk.nicehash.com", 150),
-                new StratumServerInfo("pascal.jp.nicehash.com", 100),
-                new StratumServerInfo("pascal.in.nicehash.com", 200),
-                new StratumServerInfo("pascal.br.nicehash.com", 180)
+                new StratumServerInfo("pascal.usa.nicehash.com", 0,   "NA"),
+                new StratumServerInfo("pascal.eu.nicehash.com",  0,   "EU"),
+                new StratumServerInfo("pascal.hk.nicehash.com",  150, "AS"),
+                new StratumServerInfo("pascal.jp.nicehash.com",  100, "AS"),
+                new StratumServerInfo("pascal.in.nicehash.com",  200, "AS"),
+                new StratumServerInfo("pascal.br.nicehash.com",  180, "SA")
             };
             hosts.Sort();
             return hosts;
@@ -4406,8 +4429,8 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetDwarfPoolCryptoNightServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("xmr-eu.dwarfpool.com", 0),
-                new StratumServerInfo("xmr-usa.dwarfpool.com", 0)
+                new StratumServerInfo("xmr-eu.dwarfpool.com",  0, "EU"),
+                new StratumServerInfo("xmr-usa.dwarfpool.com", 0, "NA")
             };
             hosts.Sort();
             return hosts;
@@ -4416,11 +4439,11 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNanopoolCryptoNightServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("xmr-eu1.nanopool.org", 0),
-                new StratumServerInfo("xmr-eu2.nanopool.org", 0),
-                new StratumServerInfo("xmr-us-east1.nanopool.org", 0),
-                new StratumServerInfo("xmr-us-west1.nanopool.org", 0),
-                new StratumServerInfo("xmr-asia1.nanopool.org", 0)
+                new StratumServerInfo("xmr-eu1.nanopool.org",      0, "EU"),
+                new StratumServerInfo("xmr-eu2.nanopool.org",      0, "EU"),
+                new StratumServerInfo("xmr-us-east1.nanopool.org", 0, "NA"),
+                new StratumServerInfo("xmr-us-west1.nanopool.org", 0, "NA"),
+                new StratumServerInfo("xmr-asia1.nanopool.org",    0, "AS")
             };
             hosts.Sort();
             return hosts;
@@ -4429,13 +4452,13 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetNanopoolPascalServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("pasc-eu1.nanopool.org", 0),
-                new StratumServerInfo("pasc-eu2.nanopool.org", 0),
-                new StratumServerInfo("pasc-us-east1.nanopool.org", 0),
-                new StratumServerInfo("pasc-us-west1.nanopool.org", 0),
-                new StratumServerInfo("pasc-asia1.nanopool.org", 0),
-                new StratumServerInfo("pasc-jp1.nanopool.org", 0),
-                new StratumServerInfo("pasc-au1.nanopool.org", 0)
+                new StratumServerInfo("pasc-eu1.nanopool.org",      0, "EU"),
+                new StratumServerInfo("pasc-eu2.nanopool.org",      0, "EU"),
+                new StratumServerInfo("pasc-us-east1.nanopool.org", 0, "NA"),
+                new StratumServerInfo("pasc-us-west1.nanopool.org", 0, "NA"),
+                new StratumServerInfo("pasc-asia1.nanopool.org",    0, "AS"),
+                new StratumServerInfo("pasc-jp1.nanopool.org",      0, "AS"),
+                new StratumServerInfo("pasc-au1.nanopool.org",      0, "OS")
             };
             hosts.Sort();
             return hosts;
@@ -4444,9 +4467,9 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetMiningPoolHubEthereumServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("us-east.ethash-hub.miningpoolhub.com", 0),
-                new StratumServerInfo("europe.ethash-hub.miningpoolhub.com", 0),
-                new StratumServerInfo("asia.ethash-hub.miningpoolhub.com", 0),
+                new StratumServerInfo("us-east.ethash-hub.miningpoolhub.com", 0, "NA"),
+                new StratumServerInfo("europe.ethash-hub.miningpoolhub.com",  0, "EU"),
+                new StratumServerInfo("asia.ethash-hub.miningpoolhub.com",    0, "AS"),
             };
             hosts.Sort();
             return hosts;
@@ -4455,15 +4478,15 @@ namespace GatelessGateSharp
         List<StratumServerInfo> GetMiningPoolHubMoneroServers()
         {
             var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("us-east.cryptonight-hub.miningpoolhub.com", 0),
-                new StratumServerInfo("europe.cryptonight-hub.miningpoolhub.com", 0),
-                new StratumServerInfo("asia.cryptonight-hub.miningpoolhub.com", 0),
+                new StratumServerInfo("us-east.cryptonight-hub.miningpoolhub.com", 0, "NA"),
+                new StratumServerInfo("europe.cryptonight-hub.miningpoolhub.com",  0, "EU"),
+                new StratumServerInfo("asia.cryptonight-hub.miningpoolhub.com",    0, "AS"),
             };
             hosts.Sort();
             return hosts;
         }
 
-#endregion
+        #endregion
 
         public void LaunchOpenCLCryptoNightMiners(string pool, string algorithm)
         {
@@ -4822,19 +4845,19 @@ namespace GatelessGateSharp
                         }
             } else if (pool == "DwarfPool" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("eth-eu.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-us.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-us2.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-ru.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-asia.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-cn.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-cn2.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-sg.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-au.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-ru2.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-hk.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-br.dwarfpool.com", 0),
-                                new StratumServerInfo("eth-ar.dwarfpool.com", 0)
+                                new StratumServerInfo("eth-eu.dwarfpool.com",   0, "EU"),
+                                new StratumServerInfo("eth-us.dwarfpool.com",   0, "US"),
+                                new StratumServerInfo("eth-us2.dwarfpool.com",  0, "US"),
+                                new StratumServerInfo("eth-ru.dwarfpool.com",   0, "EU"),
+                                new StratumServerInfo("eth-asia.dwarfpool.com", 0, "AS"),
+                                new StratumServerInfo("eth-cn.dwarfpool.com",   0, "AS"),
+                                new StratumServerInfo("eth-cn2.dwarfpool.com",  0, "AS"),
+                                new StratumServerInfo("eth-sg.dwarfpool.com",   0, "AS"),
+                                new StratumServerInfo("eth-au.dwarfpool.com",   0, "OS"),
+                                new StratumServerInfo("eth-ru2.dwarfpool.com",  0, "EU"),
+                                new StratumServerInfo("eth-hk.dwarfpool.com",   0, "AS"),
+                                new StratumServerInfo("eth-br.dwarfpool.com",   0, "SA"),
+                                new StratumServerInfo("eth-ar.dwarfpool.com",   0, "SA")
                             };
                 var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
                 if (!mDevFeeMode && textBoxRigID.Text != "")
@@ -4850,10 +4873,10 @@ namespace GatelessGateSharp
                         }
             } else if (pool == "ethermine.org" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("us1.ethermine.org", 0),
-                                new StratumServerInfo("us2.ethermine.org", 0),
-                                new StratumServerInfo("eu1.ethermine.org", 0),
-                                new StratumServerInfo("asia1.ethermine.org", 0)
+                                new StratumServerInfo("us1.ethermine.org",   0, "US"),
+                                new StratumServerInfo("us2.ethermine.org",   0, "US"),
+                                new StratumServerInfo("eu1.ethermine.org",   0, "EU"),
+                                new StratumServerInfo("asia1.ethermine.org", 0, "AS")
                             };
                 var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
                 if (!mDevFeeMode && textBoxRigID.Text != "")
@@ -4869,10 +4892,10 @@ namespace GatelessGateSharp
                         }
             } else if (pool == "ethpool.org" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
-                                new StratumServerInfo("us1.ethpool.org", 0),
-                                new StratumServerInfo("us2.ethpool.org", 0),
-                                new StratumServerInfo("eu1.ethpool.org", 0),
-                                new StratumServerInfo("asia1.ethpool.org", 0)
+                                new StratumServerInfo("us1.ethpool.org",   0, "US"),
+                                new StratumServerInfo("us2.ethpool.org",   0, "US"),
+                                new StratumServerInfo("eu1.ethpool.org",   0, "EU"),
+                                new StratumServerInfo("asia1.ethpool.org", 0, "AS")
                             };
                 var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
                 if (!mDevFeeMode && textBoxRigID.Text != "")
@@ -5281,7 +5304,7 @@ namespace GatelessGateSharp
                 LaunchOpenCLEthashMinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
             } else if (prettyAlgoName == "CryptoNight" || prettyAlgoName == "CryptoNight (NiceHash)" || prettyAlgoName == "CryptoNightV7" || prettyAlgoName == "CryptoNight-Heavy" || prettyAlgoName == "CryptoNight-Light") {
-                var algo = (prettyAlgoName == "CryptoNightV7"    ) ? "cryptonightv7" :
+                var algo = (prettyAlgoName == "CryptoNightV7") ? "cryptonightv7" :
                            (prettyAlgoName == "CryptoNight-Heavy") ? "cryptonight_heavy" :
                            (prettyAlgoName == "CryptoNight-Light") ? "cryptonight_light" :
                                                                      "cryptonight";
@@ -5318,24 +5341,21 @@ namespace GatelessGateSharp
             bool overclockingEnabled = booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked;
             var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
 
-            if (memoryTimingsEnabled)
-                device.PrepareMemoryTimingMods(algorithm);
             if (overclockingEnabled) {
                 device.TargetPowerLimit = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
                 device.TargetCoreClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
                 device.TargetMemoryClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
                 device.TargetCoreVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
                 device.TargetMemoryVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
-            }
-
-            //if (overclockingEnabled)
-            //    device.UpdateOverclockingSettings();
-            //if (overclockingEnabled)
-            //    device.UpdateMemoryTimings();
-            if (overclockingEnabled)
+                //device.ResetOverclockingSettings();
+                device.UpdateOverclockingSettings();
                 device.OverclockingEnabled = true;
-            if (memoryTimingsEnabled)
+            }
+            if (memoryTimingsEnabled) {
+                device.PrepareMemoryTimingMods(algorithm);
+                device.UpdateMemoryTimings();
                 device.MemoryTimingModsEnabled = true;
+            }
 
             if (booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
                 device.TargetTemperature = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
@@ -5344,6 +5364,7 @@ namespace GatelessGateSharp
                 device.TargetMaxFanSpeed = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_fan_speed".ToLower())].Value);
                 device.FanControlEnabled = true;
             }
+
         }
 
         private void LaunchMiners()
@@ -5524,9 +5545,9 @@ namespace GatelessGateSharp
 
                 if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
                     foreach (var device in Controller.OpenCLDevices) {
-                        //device.MemoryTimingModsEnabled = false;
+                        device.MemoryTimingModsEnabled = false;
                         //device.OverclockingEnabled = false;
-                        //device.ResetOverclockingSettings();
+                        //zdevice.ResetOverclockingSettings();
                         device.FanControlEnabled = false;
                         device.FanSpeed = -1;
                     }
@@ -5701,8 +5722,8 @@ namespace GatelessGateSharp
                                               && !(IsMining && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
                 buttonRunOptimizer.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
                                               && ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running)
-                                                   || (Controller.AppState == Controller.ApplicationGlobalState.Idle 
-                                                       && Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning 
+                                                   || (Controller.AppState == Controller.ApplicationGlobalState.Idle
+                                                       && Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning
                                                        && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning));
 
                 textBoxMoneroAddress.ForeColor = (textBoxMoneroAddress.Text == string.Empty || textBoxMoneroAddress.Text == Parameters.DevFeeMoneroAddress) ? Color.Red : Color.Black;
@@ -5801,20 +5822,18 @@ namespace GatelessGateSharp
                 cartesianChartShare1Day.Visible = ((string)comboBoxGraphType.SelectedItem == "Share") && ((string)comboBoxGraphCoverage.SelectedItem == "1 Day");
                 cartesianChartShare1Month.Visible = ((string)comboBoxGraphType.SelectedItem == "Share") && ((string)comboBoxGraphCoverage.SelectedItem == "1 Month");
 
-                checkBoxBenchmarkingCoolGPUDown.Enabled = checkBoxBenchmarkingDoNotRepeatAfterFailure.Enabled = checkBoxBenchmarkingUseAverageSpeeds.Enabled = idle;
-                tabPageBenchmarkingAlgorithms.Enabled = idle;
+                checkBoxBenchmarkingCoolGPUDown.Enabled = checkBoxBenchmarkingDoNotRepeatAfterFailure.Enabled = idle;
+                tabControlBenchmarkingParameters.Enabled = idle;
                 tabPageBenchmarkingFirstParameter.Enabled = idle;
                 tabPageBenchmarkingSecondParameter.Enabled = idle && checkBoxBenchmarkingFirstParameterEnabled.Checked;
                 numericUpDownBenchmarkingRepeats.Enabled = idle;
-                numericUpDownBenchmarkingLength.Enabled = idle;
                 comboBoxBenchmarkingFirstParameter.Enabled = numericUpDownBenchmarkingFirstParameterStart.Enabled = numericUpDownBenchmarkingFirstParameterEnd.Enabled = numericUpDownBenchmarkingFirstParameterStep.Enabled = checkBoxBenchmarkingFirstParameterEnabled.Checked;
                 comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterStart.Enabled = numericUpDownBenchmarkingSecondParameterEnd.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
 
-                checkBoxOptimizationCoolGPUDown.Enabled = checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = checkBoxOptimizationUseAverageSpeeds.Enabled = comboBoxOptimizationApproach.Enabled = idle;
-                tabPageOptimizationTargets.Enabled = idle;
-                tabPageOptimizationTargets.Enabled = idle;
+                checkBoxOptimizationCoolGPUDown.Enabled = checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = comboBoxOptimizationApproach.Enabled = idle;
+                tabControlOptimizationParameters.Enabled = idle;
+                tabControlOptimizationParameters.Enabled = idle;
                 numericUpDownOptimizationRepeats.Enabled = idle;
-                numericUpDownOptimizationLength.Enabled = idle;
 
                 groupBoxOveclocking.Enabled = idle;
                 groupBoxAlgorithmicSettings.Enabled = idle;
@@ -5822,6 +5841,22 @@ namespace GatelessGateSharp
                 buttonMemoryTimingsAppyStrap.Enabled = buttonMemoryTimingsCopyAcrossAlgorithms.Enabled = dataGridViewMemoryTimings.Enabled = idle && checkBoxDeviceSettingsMemoryTimingsEnabled.Checked;
 
                 checkBoxEnableHardwareAccelerationForDefaultSettings.Enabled = checkBoxEnablePhymem.Enabled = idle;
+
+                int count = 0;
+                foreach (var checkBox in tabPageBenchmarkingAlgorithms.FindAllChildrenByType<CheckBox>())
+                    count += (checkBox.Checked ? 1 : 0);
+                tabPageBenchmarkingAlgorithms.Text = "Algorithms " + (count > 0 ? ("(" + count + ")") : "");
+                count = 0;
+                foreach (var checkBox in tabPageOptimizationAlgorithms.FindAllChildrenByType<CheckBox>())
+                    count += (checkBox.Checked ? 1 : 0);
+                tabPageOptimizationAlgorithms.Text = "Algorithms " + (count > 0 ? ("(" + count + ")") : "");
+                count = 0;
+                foreach (var checkBox in tabPageOptimizationTargets.FindAllChildrenByType<CheckBox>())
+                    count += (checkBox.Checked ? 1 : 0);
+                tabPageOptimizationTargets.Text = "Targets " + (count > 0 ? ("(" + count + ")") : "");
+
+                tabPageBenchmarkingFirstParameter.Text = "1st Parameter" + ((checkBoxBenchmarkingFirstParameterEnabled.Checked) ? (": " + (new Regex(@"^.*/(.*)$")).Replace(comboBoxBenchmarkingFirstParameter.SelectedItem.ToString(), "$1")) : " (Disabled)");
+                tabPageBenchmarkingSecondParameter.Text = "2nd Parameter" + ((checkBoxBenchmarkingSecondParameterEnabled.Checked) ? (": " + (new Regex(@"^.*/(.*)$")).Replace(comboBoxBenchmarkingSecondParameter.SelectedItem.ToString(), "$1")) : " (Disabled)");
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
             }
@@ -5877,7 +5912,7 @@ namespace GatelessGateSharp
                 }
         }
 
-#region DEVFEE
+        #region DEVFEE
 
         private bool SwitchToStratumForDEVFEE()
         {
@@ -6075,7 +6110,7 @@ namespace GatelessGateSharp
             } else if (algo == "cryptonight_light") {
                 var username = Parameters.DevFeeAEONAddress;
                 try {
-                        newPrimaryStratum = new CryptoNightStratum("pool.aeon.hashvault.pro", 5555, username, "DEVFEE:me@yurio.net", "Hash Vault", algo);
+                    newPrimaryStratum = new CryptoNightStratum("pool.aeon.hashvault.pro", 5555, username, "DEVFEE:me@yurio.net", "Hash Vault", algo);
                 } catch (Exception ex) { Logger(ex); }
 
                 if (newPrimaryStratum == null) {
@@ -6180,7 +6215,7 @@ namespace GatelessGateSharp
                 mDevFeeModeStartTime = DateTime.Now;
         }
 
-#endregion
+        #endregion
 
         private Exception GetUnrecoverableException()
         {
@@ -6221,7 +6256,7 @@ namespace GatelessGateSharp
                     if (IsBenchmarkRunning) {
                         Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
                         timerBenchmarks_Tick();
-                    } else if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes) { 
+                    } else if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes) {
                         timerAutoStart.Enabled = true;
                     }
                 } else {
@@ -6801,7 +6836,7 @@ namespace GatelessGateSharp
             Controller.AppState = Controller.ApplicationGlobalState.Mining;
             tabControlMainForm.Enabled = buttonStart.Enabled = true;
         }
-        
+
         private void buttonOpenOpenCLBinaryFolder_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(SavedOpenCLBinaryKernelPathBase);
@@ -6974,7 +7009,7 @@ namespace GatelessGateSharp
                                 Logger(ex);
                             }
                         }
-                }
+                    }
                 }
             }
         }
@@ -7045,13 +7080,6 @@ namespace GatelessGateSharp
                     if (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
                         tabControlMainForm.SelectedIndex = 4;
 
-                    if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
-                        timerBenchmarks.Interval = ((int)numericUpDownOptimizationLength.Value * 1000);
-                        timerResetStopwatch.Interval = 100;
-                    } else {
-                        timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingLength.Value * 1000);
-                        timerResetStopwatch.Interval = 100;
-                    }
                     timerBenchmarks.Enabled = false;
                     timerResetStopwatch.Enabled = false;
 
@@ -7324,13 +7352,11 @@ namespace GatelessGateSharp
             if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Resuming) {
                 if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) {
                     tabControlMainForm.SelectedIndex = 4;
-                    timerBenchmarks.Interval = ((int)numericUpDownBenchmarkingLength.Value * 1000);
-                    timerResetStopwatch.Interval = 100;
                 } else {
                     tabControlMainForm.SelectedIndex = 5;
-                    timerBenchmarks.Interval = ((int)numericUpDownOptimizationLength.Value * 1000);
-                    timerResetStopwatch.Interval = 100;
                 }
+                timerBenchmarks.Interval = (mCurrentBenchmarkLength * 1000);
+                timerResetStopwatch.Interval = 100;
                 Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
             }
 
@@ -7364,7 +7390,10 @@ namespace GatelessGateSharp
                     break;
                 }
             }
-            bool useAverageSpeeds = !optimization ? checkBoxBenchmarkingUseAverageSpeeds.Checked : checkBoxOptimizationUseAverageSpeeds.Checked;
+            bool useAverageSpeeds = false;
+            foreach (var device in devices)
+                useAverageSpeeds = useAverageSpeeds || numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, defaultAlgorithm, "threads")].Value > 1;
+
             result.SpeedPrimaryAlgorithm = result.SpeedSecondaryAlgorithm = 0;
             if (useAverageSpeeds) {
                 if (!optimization) {
@@ -7428,7 +7457,7 @@ namespace GatelessGateSharp
                 Program.Kill();
             }
             */
-            
+
             // Update the current benchmark entry.
             if (result.Success)
                 StopMining(); // Stop the previous benchmark.
@@ -7438,7 +7467,7 @@ namespace GatelessGateSharp
             foreach (var param in Controller.BenchmarkEntries[0].Parameters)
                 SetBenchmarkParameter(param, algorithm, true);
             mAreSettingsDirty = false;
-            var doNotRepeatAfterFailure = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) 
+            var doNotRepeatAfterFailure = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running)
                                               ? checkBoxOptimizationDoNotRepeatAfterFailure.Checked
                                               : checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked;
             if (Controller.BenchmarkEntries[0].Remaining <= 0 || (doNotRepeatAfterFailure && !result.Success)) {
@@ -7498,13 +7527,13 @@ namespace GatelessGateSharp
                     || (record.SuccessCount > bestRecord.SuccessCount)
                     || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore > bestRecord.StabilityScore)
                     || (aggressiveOptimizationForVoltage && record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && int.Parse(record.Parameters[1].Value) < int.Parse(bestRecord.Parameters[1].Value))
-                    || (aggressiveOptimizationForClock   && record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && int.Parse(record.Parameters[1].Value) > int.Parse(bestRecord.Parameters[1].Value))
-                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm)) { 
+                    || (aggressiveOptimizationForClock && record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && int.Parse(record.Parameters[1].Value) > int.Parse(bestRecord.Parameters[1].Value))
+                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm)) {
 
                     bestRecord = record;
                 }
             }
-            
+
             if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
                 for (int i = Controller.BenchmarkEntries.Count - 1; i >= 0; --i) {
                     var entry = Controller.BenchmarkEntries[i];
@@ -7519,7 +7548,7 @@ namespace GatelessGateSharp
             // Sort benchmark entries.
             Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => {
                 return (e1.Results.Count - e1.SuccessCount) != (e2.Results.Count - e2.SuccessCount) ? ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)) :
-                        (e2.SuccessCount != e1.SuccessCount)                                         ? (e2.SuccessCount - e1.SuccessCount) :
+                        (e2.SuccessCount != e1.SuccessCount) ? (e2.SuccessCount - e1.SuccessCount) :
                                                                                                         (e1.ID - e2.ID);
             }));
             UpdateBenchmarkRecords();
@@ -7562,7 +7591,7 @@ namespace GatelessGateSharp
                     device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
                 }
                 tabControlMainForm.SelectedIndex = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? 5 : 4;
-                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) 
+                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
                     progressBarBenchmarking.Value = 100;
                 LoadSettingsFromJSONConfigFile();
 
@@ -7610,6 +7639,14 @@ namespace GatelessGateSharp
             UpdateControls();
             Logger("Cooling down before benchmark...");
             Application.DoEvents();
+
+            bool useAverageSpeeds = false;
+            foreach (var device in Controller.OpenCLDevices)
+                if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value))
+                    useAverageSpeeds = useAverageSpeeds || numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, DefaultAlgorithm, "threads")].Value > 1;
+            mCurrentBenchmarkLength = (useAverageSpeeds) ? Parameters.BenchmarkLengthMultipleThreads : Parameters.BenchmarkLengthSingleThread;
+            timerBenchmarks.Interval = (mCurrentBenchmarkLength * 1000);
+            timerResetStopwatch.Interval = 100;
 
             bool coolGPUDown = (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
                                    ? checkBoxOptimizationCoolGPUDown.Checked
@@ -7676,7 +7713,7 @@ namespace GatelessGateSharp
                     dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Style.ForeColor = (record.SuccessCount >= record.ResultCount) ? Color.Green : Color.Red;
                 } else {
                     dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Value = "0 (0%)";
-                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Style.ForeColor =  Color.Red;
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSuccessCount"].Style.ForeColor = Color.Red;
                 }
                 if (record.SuccessCount > 0) {
                     dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeed"].Value = ConvertHashrateToString(record.SpeedPrimaryAlgorithm);
@@ -7917,7 +7954,7 @@ namespace GatelessGateSharp
 
         public void SaveDeviceSettings(int deviceIndex)
         {
-            try { 
+            try {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 Device device = Controller.OpenCLDevices[deviceIndex];
 
@@ -8302,11 +8339,6 @@ namespace GatelessGateSharp
         {
             foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(((Control)sender).Parent))
                 checkBox.Checked = false;
-        }
-
-        private void checkBoxOptimizationUndervoltingMemory_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

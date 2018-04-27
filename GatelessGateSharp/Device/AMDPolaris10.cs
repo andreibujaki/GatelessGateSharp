@@ -2216,10 +2216,6 @@ namespace GatelessGateSharp {
             if (!PCIExpress.Available || busNumber <= 0 /*|| !this.MemoryTimingModsEnabled*/)
                 return;
 
-            uint currentCASData = 0;
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out currentCASData);
-            MC_SEQ_CAS_TIMING currentCASTimings = new MC_SEQ_CAS_TIMING(currentCASData);
-
             PCIExpress.UpdateGMC81Registers(
                 busNumber,
                 ARBTimings.Data, 

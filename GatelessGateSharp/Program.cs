@@ -78,6 +78,8 @@ namespace GatelessGateSharp
             Process.GetCurrentProcess().PriorityClass = Parameters.ProcessPriority;  
             System.Threading.Thread.CurrentThread.Priority = Parameters.MainThreadPriority;
 
+            USBWatchdog.Initialize();
+
             Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable("GPU_MAX_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable("GPU_USE_SYNC_OBJECTS", "1", EnvironmentVariableTarget.Process);
@@ -122,6 +124,8 @@ namespace GatelessGateSharp
 
             if (attachedToConsole)
                 FreeConsole();
+
+            USBWatchdog.Deactivate();
 
             return 0;
         }

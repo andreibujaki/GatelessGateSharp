@@ -22,6 +22,9 @@ namespace GatelessGateSharp {
         public static readonly int MaxLogFileSize = 1024 * 1024;
         public static readonly int LogMaxNumLines = 256;
 
+        public static readonly int BenchmarkLengthMultipleThreads = 60;
+        public static readonly int BenchmarkLengthSingleThread = 10;
+        
         // I really need the DEVFEE to continue to develop this miner and to make my wife happy. Thank you. - zawawa
         public static readonly int DevFeePercentage = 1;
         public static readonly int DevFeeDurationInSeconds = 60;

@@ -728,7 +728,7 @@ end:
         
         if ((*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) != (default_value3 & 0xff000000)) {
 
-            *(virtual_addr + mmMC_ARB_BURST_TIME) = (*(virtual_addr + mmMC_ARB_BURST_TIME) & 0x000003ff) | (value15 & 0xfffffc00);
+            *(virtual_addr + mmMC_ARB_BURST_TIME) = value15; // (*(virtual_addr + mmMC_ARB_BURST_TIME) & 0x000003ff) | (value15 & 0xfffffc00);
             *(virtual_addr + mmMC_ARB_DRAM_TIMING) = value0;
             *(virtual_addr + mmMC_ARB_DRAM_TIMING2) = value1;
 
