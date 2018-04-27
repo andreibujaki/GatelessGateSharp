@@ -14,7 +14,7 @@ aims at stability with a much simpler design and the managed .NET Framework.
 All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
 Please refer to **[Prerequisites](#prerequisites)** and **[the online manual](https://github.com/zawawawa/GatelessGateSharp/blob/v1.3/Documentation/TOC.md)** for details.
 
-![Screen Shot](https://i.imgur.com/XiVc70d.png)
+![Screen Shot](https://i.imgur.com/gsiVgfP.png)
 
 Currently, the miner supports the following algorithms:
 
