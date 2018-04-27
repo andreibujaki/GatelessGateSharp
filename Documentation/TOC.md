@@ -15,7 +15,7 @@ Otherwise, you can pick any topics of your interest from the following list.
 * Mining with Custom Pools
 * Device Settings (Algorithmic)
 * Device Settings (Overclocking)
-* [Device Settings (Memory Timings; Advanced)](DeviceSettingsMemoryTimings)
+* [Device Settings (Memory Timings; Advanced)](DeviceSettingsMemoryTimings.md)
 * Benchmarking
 * Optimization (Advanced)
 * Building GGS from the Source Codes (Advanced)
