@@ -565,6 +565,8 @@ namespace GatelessGateSharp
             }
             comboBoxDeviceSettingsDevice.SelectedIndex = 0;
 
+            // for stability
+            /*
             foreach (var device in Controller.OpenCLDevices) {
                 device.TargetPowerLimit = 100;
                 device.TargetCoreClock = device.DefaultCoreClock;
@@ -573,6 +575,7 @@ namespace GatelessGateSharp
                 device.TargetMemoryVoltage = device.DefaultMemoryVoltage;
                 device.OverclockingEnabled = true;
             }
+            */
 
             UpdateStats();
             timerStatsUpdates.Enabled = true;
@@ -5347,15 +5350,14 @@ namespace GatelessGateSharp
                 device.TargetMemoryClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
                 device.TargetCoreVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
                 device.TargetMemoryVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
-                //device.ResetOverclockingSettings();
-                device.UpdateOverclockingSettings();
-                device.OverclockingEnabled = true;
             }
-            if (memoryTimingsEnabled) {
+            if (memoryTimingsEnabled)
                 device.PrepareMemoryTimingMods(algorithm);
-                device.UpdateMemoryTimings();
+            if (overclockingEnabled)
+                device.OverclockingEnabled = true;
+            if (memoryTimingsEnabled)
                 device.MemoryTimingModsEnabled = true;
-            }
+            
 
             if (booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
                 device.TargetTemperature = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
@@ -5546,8 +5548,8 @@ namespace GatelessGateSharp
                 if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
                     foreach (var device in Controller.OpenCLDevices) {
                         device.MemoryTimingModsEnabled = false;
-                        //device.OverclockingEnabled = false;
-                        //zdevice.ResetOverclockingSettings();
+                        device.OverclockingEnabled = false;
+                        device.ResetOverclockingSettings();
                         device.FanControlEnabled = false;
                         device.FanSpeed = -1;
                     }
@@ -7885,9 +7887,9 @@ namespace GatelessGateSharp
                 LoadSettingsFromJSONConfigFile();
                 if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
                     foreach (var device in Controller.OpenCLDevices) {
-                        //device.MemoryTimingModsEnabled = false;
-                        //device.OverclockingEnabled = false;
-                        //device.ResetOverclockingSettings();
+                        device.MemoryTimingModsEnabled = false;
+                        device.OverclockingEnabled = false;
+                        device.ResetOverclockingSettings();
                         device.FanControlEnabled = false;
                         device.FanSpeed = -1;
                     }
@@ -8077,12 +8079,6 @@ namespace GatelessGateSharp
 
                         JArray devices = (JArray)(root["devices"]);
                         foreach (JObject deviceSettings in devices) {
-                            //int deviceIndex = (int)deviceSettings["device_id"];
-                            //if (deviceIndex >= Controller.OpenCLDevices.Length)
-                            //    continue;
-                            //var device = Controller.OpenCLDevices[deviceIndex];
-                            //if ((string)deviceSettings["device_vendor"] != device.GetVendor() || (string)deviceSettings["device_name"] != device.GetName())
-                            //    continue;
 
                             foreach (var deviceParameter in deviceSettings) {
                                 var name = deviceParameter.Key;
@@ -8103,7 +8099,7 @@ namespace GatelessGateSharp
                                         try {
                                             numericDeviceParameterArray[tuple].Value = (decimal)(double)deviceParameter.Value;
                                         } catch (Exception) {
-                                            Logger("Failed to read device parameter for Device #" + device.DeviceIndex + ": " + type + "_" + parameter + ", " + deviceParameter.Value);
+                                            Logger("Failed to read device parameter for Device #" + device.DeviceIndex + " " + type + "_" + parameter + ", " + deviceParameter.Value);
                                         }
                                     }
                                 }

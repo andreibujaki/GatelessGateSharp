@@ -128,7 +128,7 @@ namespace GatelessGateSharp {
                     try {
                         if (device.OverclockingEnabled)
                             device.UpdateOverclockingSettings();
-                        if (device.MemoryTimingModsEnabled) {
+                        if (device.MemoryTimingModsEnabled && device.MemoryClock == device.TargetMemoryClock) {
                             interval = Parameters.MemoryTimingUpdateInterval;
                             device.UpdateMemoryTimings();
                         }
