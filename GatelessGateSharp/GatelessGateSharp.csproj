@@ -167,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADL.cs" />
+    <Compile Include="CLRX.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Device\AMDDevice.cs" />
     <Compile Include="Device\OpenCLDevice.cs" />
@@ -241,6 +242,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="AssemblyKernels\GCN3_neoscrypt_256.isa" />
     <None Include="Kernels\aes_helper.cl" />
     <None Include="Kernels\blake.cl" />
     <None Include="Kernels\blake256.cl" />
@@ -267,8 +269,7 @@
     <None Include="Kernels\luffa.cl" />
     <None Include="Kernels\Lyra2REv2.cl" />
     <None Include="Kernels\Lyra2v2.cl" />
-    <None Include="Kernels\neoscrypt.cl" />
-    <None Include="Kernels\neoscrypt_64.cl" />
+    <None Include="Kernels\neoscrypt_new.cl" />
     <None Include="Kernels\pascal.cl" />
     <None Include="Kernels\ripemd160.cl" />
     <None Include="Kernels\sha256.cl" />
@@ -337,11 +338,24 @@
   <ItemGroup>
     <Folder Include="BinaryKernels\" />
   </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
+xcopy /i /s /y $(SolutionDir)CLRX $(TargetDir)CLRX
 xcopy "$(ProjectDir)DeviceSettings" "$(TargetDir)DeviceSettings"  /i /s /y
 xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
+xcopy /i /s /y $(ProjectDir)AssemblyKernels $(TargetDir)AssemblyKernels
 xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
 xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)
@@ -352,8 +366,7 @@ copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpLauncher\bin\$(Configuration)\GatelessGateSharpLauncher.exe $(TargetDir)
 "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:16777216
-showdown makehtml  -i $(SolutionDir)README.md -o README.html
-</PostBuildEvent>
+showdown makehtml  -i $(SolutionDir)README.md -o README.html</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

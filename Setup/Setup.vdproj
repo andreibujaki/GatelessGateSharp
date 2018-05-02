@@ -33,6 +33,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_035EE921340342B2A2FC87AF58F6A579"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0858430A555F4C8B81BE3B6130B2C4D3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0943C3634AFE44968D51441FD1073EEB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -76,6 +88,12 @@
         "Entry"
         {
         "MsmKey" = "8:_1AFDB47BC1694C519D6740BC48BFF894"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1CBEF9EB0961405295853687471AA551"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -465,6 +483,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9C1998E4E07C4DD4B2E5C5D58A2F1397"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9D7A9860266A40D5B78CC8F8EDDE7B04"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_9EC3AA48DB754D8C8B930AC6F66EB1AA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -496,6 +526,12 @@
         "Entry"
         {
         "MsmKey" = "8:_AC2025F001F74A4D91260F082FA0B1E5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ADB6AF5BA9AF4CA69F00566233E77852"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -765,6 +801,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FC8B25A37C334871B4F55B7080ED21A0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_94470E592BF34FCEBF3FC318A54CC736"
         "MsmSig" = "8:_UNDEFINED"
@@ -927,7 +969,7 @@
             {
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:3"
+            "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:https://download.microsoft.com/download/8/E/2/8E2BDDE7-F06E-44CC-A145-56C6B9BBE5DD/NDP471-KB4033344-Web.exe"
                 "Items"
@@ -972,18 +1014,46 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_0D7915E0710F425E808A0320C1DE666C"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_2A99F4193C34400786361E35FF7F89CA"
+            {
+            "Name" = "8:NDP471-KB4033344-Web.exe"
+            "Condition" = "8:"
+            "Object" = "8:_1CBEF9EB0961405295853687471AA551"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8: /s /v/qn"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_045BD645_E80E_4A29_80D1_DF26B47BC8DA"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_556B67B69788473598460A9DAA580ADF"
+            {
+            "Name" = "8:vc_redist.x64.exe"
+            "Condition" = "8:"
+            "Object" = "8:_0858430A555F4C8B81BE3B6130B2C4D3"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:/v/qn"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_EA62D155_653A_4D32_A4F5_AC69578ED9DB"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_EA4F58B65E004BFF90E506FE998E01BF"
             {
             "Name" = "8:GatelessGateSharpLauncher.exe"
             "Condition" = "8:"
             "Object" = "8:_DC0D118C4EAC4B149C2356AACC426DCC"
             "FileType" = "3:2"
-            "InstallAction" = "3:1"
+            "InstallAction" = "3:2"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_EECA51EB_C2BD_415E_8CC2_AE3E853770BD"
-            "InstallerClass" = "11:FALSE"
+            "Sequence" = "3:3"
+            "Identifier" = "8:_8456A1C8_3696_43F4_BC47_986F480AE9B4"
+            "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:"
             }
         }
@@ -1013,7 +1083,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.3.6.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Cloo, Version=1.3.7.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_005BA131E503E55D3259C325B392A218"
@@ -1069,6 +1139,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_035EE921340342B2A2FC87AF58F6A579"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\CLRX\\clrxdisasm.exe"
+            "TargetName" = "8:clrxdisasm.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_8290E3D81DE843129CC02A0E8665CF93"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0858430A555F4C8B81BE3B6130B2C4D3"
+            {
+            "SourcePath" = "8:..\\Prerequisites\\vc_redist.x64.exe"
+            "TargetName" = "8:vc_redist.x64.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_91E59E13586E41BD80F9ABA4BA9BAE5B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0943C3634AFE44968D51441FD1073EEB"
@@ -1217,6 +1327,26 @@
             "TargetName" = "8:Hawaii_x16r_64.bin"
             "Tag" = "8:"
             "Folder" = "8:_5F382E37727146FCAE4934AF6392980A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1CBEF9EB0961405295853687471AA551"
+            {
+            "SourcePath" = "8:..\\Prerequisites\\NDP471-KB4033344-Web.exe"
+            "TargetName" = "8:NDP471-KB4033344-Web.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_91E59E13586E41BD80F9ABA4BA9BAE5B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1477,7 +1607,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.3.6.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpMonitor, Version=1.3.7.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3F257B72128849FFBA6BAEFBFEC78450"
@@ -2461,7 +2591,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.3.6.0, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharp, Version=1.3.7.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_94470E592BF34FCEBF3FC318A54CC736"
@@ -2588,6 +2718,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C1998E4E07C4DD4B2E5C5D58A2F1397"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\CLRX\\clrxasm.exe"
+            "TargetName" = "8:clrxasm.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_8290E3D81DE843129CC02A0E8665CF93"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9D7A9860266A40D5B78CC8F8EDDE7B04"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\CLRX\\CLRXAmdAsm.dll"
+            "TargetName" = "8:CLRXAmdAsm.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_8290E3D81DE843129CC02A0E8665CF93"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9EC3AA48DB754D8C8B930AC6F66EB1AA"
             {
             "SourcePath" = "8:..\\GatelessGateSharp\\BinaryKernels\\Tonga_ethash_pascal_256.bin"
@@ -2694,6 +2864,26 @@
             "TargetName" = "8:blake.cl"
             "Tag" = "8:"
             "Folder" = "8:_8C01C16FD26A4D52AFD91187105134F1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ADB6AF5BA9AF4CA69F00566233E77852"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\CLRX\\CLRXUtils.dll"
+            "TargetName" = "8:CLRXUtils.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_8290E3D81DE843129CC02A0E8665CF93"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3265,7 +3455,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:GatelessGateSharpLauncher, Version=1.3.6.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:GatelessGateSharpLauncher, Version=1.3.7.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_DC0D118C4EAC4B149C2356AACC426DCC"
@@ -3592,6 +3782,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FC8B25A37C334871B4F55B7080ED21A0"
+            {
+            "SourcePath" = "8:..\\GatelessGateSharp\\bin\\Release\\CLRX\\CLRXAmdBin.dll"
+            "TargetName" = "8:CLRXAmdBin.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_8290E3D81DE843129CC02A0E8665CF93"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -3674,6 +3884,17 @@
                         {
                         }
                     }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8290E3D81DE843129CC02A0E8665CF93"
+                    {
+                    "Name" = "8:CLRX"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_CAD79EAAC9564EF5ADCF0FC822097AA7"
+                        "Folders"
+                        {
+                        }
+                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_8C01C16FD26A4D52AFD91187105134F1"
                     {
                     "Name" = "8:Kernels"
@@ -3681,6 +3902,17 @@
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_F63850678FE645CE969F35C5F5E2EDE3"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_91E59E13586E41BD80F9ABA4BA9BAE5B"
+                    {
+                    "Name" = "8:Prerequisites"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_13BEDB78858144F4BBF0E7431EA6FFC2"
                         "Folders"
                         {
                         }
@@ -3715,7 +3947,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gateless Gate Sharp"
         "ProductCode" = "8:{C393337D-1837-4765-996C-33C6C50BF1C3}"
-        "PackageCode" = "8:{6B863CED-5B3B-489F-B0AF-0D917391369C}"
+        "PackageCode" = "8:{EB049E89-F4D3-4976-BD63-020F8BC85374}"
         "UpgradeCode" = "8:{548B8FA3-94B1-4EB1-87FA-986C66752324}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

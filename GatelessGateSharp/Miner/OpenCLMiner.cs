@@ -48,7 +48,6 @@ namespace GatelessGateSharp
             }
         }
 
-
         private OpenCLDevice mDevice;
         private ComputeCommandQueue mQueue;
 
@@ -61,33 +60,50 @@ namespace GatelessGateSharp
             : base(aDevice, aAlgorithmName, aFirstAlgorithmName, aSecondAlgorithmName)
         {
             mDevice = aDevice;
-            mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.None); // ComputeCommandQueueFlags.OutOfOrderExecution);
+            mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.None);
         }
 
         protected ComputeProgram BuildProgram(string programName, long localWorkSize, string optionsAMD, string optionsNVIDIA, string optionsOthers) {
             ComputeProgram program;
+            string defaultAssemblyFilePath = (OpenCLDevice.IsGCN3) ? @"AssemblyKernels\GCN3_" + programName + "_" + localWorkSize + ".isa"
+                                                                   : null;
             string defultBinaryFilePath = @"BinaryKernels\" + ComputeDevice.Name + "_" + programName + "_" + localWorkSize + ".bin";
             string savedBinaryFilePath = (MainForm.SavedOpenCLBinaryKernelPathBase + @"\") + ComputeDevice.Name + "_" + programName + "_" + localWorkSize + ".bin";
             string sourceFilePath = @"Kernels\" + programName + ".cl";
-            String buildOptions = (OpenCLDevice.GetVendor() == "AMD" ? optionsAMD : OpenCLDevice.GetVendor() == "NVIDIA" ? optionsNVIDIA : optionsOthers) + " -IKernels -DWORKSIZE=" + localWorkSize;
+            String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? optionsAMD + " -D__AMD__" : 
+                                   OpenCLDevice.GetVendor() == "NVIDIA" ? optionsNVIDIA + " -D__NVIDIA__" : 
+                                                                          optionsOthers) + " -IKernels -DWORKSIZE=" + localWorkSize;
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
             try {
-                if (!MainForm.UseDefaultOpenCLBinariesChecked)
+                if (defaultAssemblyFilePath == null)
                     throw new Exception();
-                byte[] binary = System.IO.File.ReadAllBytes(defultBinaryFilePath);
-                program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { ComputeDevice });
-                MainForm.Logger("Loaded " + defultBinaryFilePath + " for Device #" + DeviceIndex + ".");
-            } catch (Exception) {
+                CLRX assembler = new CLRX();
+                program = new ComputeProgram(Context, new List<byte[]>() { assembler.Assemble(OpenCLDevice, defaultAssemblyFilePath) }, new List<ComputeDevice>() { ComputeDevice });
+                MainForm.Logger("Loaded " + defaultAssemblyFilePath + " for Device #" + DeviceIndex + ".");
+            } catch (Exception ex) {
+                if (ex.Message != string.Empty) {
+                    MainForm.Logger("Failed to load " + defaultAssemblyFilePath + ".");
+                    MainForm.Logger(ex);
+                }
                 try {
-                    if (!MainForm.ReuseCompiledBinariesChecked)
+                    if (!MainForm.UseDefaultOpenCLBinariesChecked)
                         throw new Exception();
-                    byte[] binary = System.IO.File.ReadAllBytes(savedBinaryFilePath);
+                    byte[] binary = System.IO.File.ReadAllBytes(defultBinaryFilePath);
                     program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { ComputeDevice });
-                    MainForm.Logger("Loaded " + savedBinaryFilePath + " for Device #" + DeviceIndex + ".");
+                    MainForm.Logger("Loaded " + defultBinaryFilePath + " for Device #" + DeviceIndex + ".");
                 } catch (Exception) {
-                    String source = System.IO.File.ReadAllText(sourceFilePath);
-                    program = new ComputeProgram(Context, source);
-                    MainForm.Logger(@"Loaded " + sourceFilePath + " for Device #" + DeviceIndex + ".");
+                    try {
+                        if (!MainForm.ReuseCompiledBinariesChecked)
+                            throw new Exception();
+                        byte[] binary = System.IO.File.ReadAllBytes(savedBinaryFilePath);
+                        program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { ComputeDevice });
+                        MainForm.Logger("Loaded " + savedBinaryFilePath + " for Device #" + DeviceIndex + ".");
+                    } catch (Exception) {
+                        String source = System.IO.File.ReadAllText(sourceFilePath);
+                        program = new ComputeProgram(Context, source);
+                        MainForm.Logger(@"Loaded " + sourceFilePath + " for Device #" + DeviceIndex + ".");
+                    }
                 }
             }
             try {

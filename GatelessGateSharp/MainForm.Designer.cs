@@ -87,7 +87,6 @@
             this.toolStripMainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerFailOver = new System.Windows.Forms.Timer(this.components);
-            this.buttonReleaseMemory = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.buttonRunBenchmarks = new System.Windows.Forms.Button();
             this.timerBenchmarks = new System.Windows.Forms.Timer(this.components);
@@ -285,8 +284,7 @@
             this.buttonResetToDefault = new System.Windows.Forms.Button();
             this.comboBoxDeviceSettingsDevice = new System.Windows.Forms.ComboBox();
             this.buttonResetAllSettings = new System.Windows.Forms.Button();
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings = new System.Windows.Forms.CheckBox();
-            this.checkBoxEnablePhymem = new System.Windows.Forms.CheckBox();
+            this.checkBoxBoostPerformance = new System.Windows.Forms.CheckBox();
             this.tabPageCustomPoolSettings = new System.Windows.Forms.TabPage();
             this.groupBoxCustmPool1 = new System.Windows.Forms.GroupBox();
             this.comboBoxCustomPool1SecondaryAlgorithm = new System.Windows.Forms.ComboBox();
@@ -431,11 +429,10 @@
             this.comboBoxGraphCoverage = new System.Windows.Forms.ComboBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label31 = new System.Windows.Forms.Label();
             this.checkBoxUseCustomPools = new System.Windows.Forms.CheckBox();
             this.comboBoxDefaultAlgorithm = new System.Windows.Forms.ComboBox();
-            this.buttonRestoreStockSettings = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
-            this.buttonBoostPerformance = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.labelCurrentSpeed = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -532,6 +529,7 @@
             this.toolTipMainForm = new System.Windows.Forms.ToolTip(this.components);
             this.button4 = new System.Windows.Forms.Button();
             this.timerMemoryTimings = new System.Windows.Forms.Timer(this.components);
+            this.button15 = new System.Windows.Forms.Button();
             this.statusStripMainForm.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
             this.tabPageLog.SuspendLayout();
@@ -707,22 +705,10 @@
             this.timerFailOver.Interval = 10;
             this.timerFailOver.Tick += new System.EventHandler(this.timerFailOver_Tick);
             // 
-            // buttonReleaseMemory
-            // 
-            this.buttonReleaseMemory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonReleaseMemory.Location = new System.Drawing.Point(171, 368);
-            this.buttonReleaseMemory.Name = "buttonReleaseMemory";
-            this.buttonReleaseMemory.Size = new System.Drawing.Size(101, 23);
-            this.buttonReleaseMemory.TabIndex = 1;
-            this.buttonReleaseMemory.Text = "Release Memory";
-            this.buttonReleaseMemory.UseVisualStyleBackColor = true;
-            this.buttonReleaseMemory.Visible = false;
-            this.buttonReleaseMemory.Click += new System.EventHandler(this.buttonReleaseMemory_Click);
-            // 
             // buttonRunBenchmarks
             // 
-            this.buttonRunBenchmarks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRunBenchmarks.Location = new System.Drawing.Point(363, 368);
+            this.buttonRunBenchmarks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonRunBenchmarks.Location = new System.Drawing.Point(185, 368);
             this.buttonRunBenchmarks.Name = "buttonRunBenchmarks";
             this.buttonRunBenchmarks.Size = new System.Drawing.Size(79, 23);
             this.buttonRunBenchmarks.TabIndex = 6;
@@ -742,8 +728,8 @@
             // 
             // buttonRunOptimizer
             // 
-            this.buttonRunOptimizer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRunOptimizer.Location = new System.Drawing.Point(278, 368);
+            this.buttonRunOptimizer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonRunOptimizer.Location = new System.Drawing.Point(270, 368);
             this.buttonRunOptimizer.Name = "buttonRunOptimizer";
             this.buttonRunOptimizer.Size = new System.Drawing.Size(79, 23);
             this.buttonRunOptimizer.TabIndex = 7;
@@ -3333,35 +3319,22 @@
             this.buttonResetAllSettings.UseVisualStyleBackColor = true;
             this.buttonResetAllSettings.Click += new System.EventHandler(this.buttonResetAll_Click);
             // 
-            // checkBoxEnableHardwareAccelerationForDefaultSettings
+            // checkBoxBoostPerformance
             // 
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.AutoSize = true;
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Location = new System.Drawing.Point(137, 372);
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Name = "checkBoxEnableHardwareAccelerationForDefaultSettings";
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Size = new System.Drawing.Size(133, 17);
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.TabIndex = 1;
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Tag = "parameter:enable_overclocking_for_default_settings";
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.Text = "Hardware acceleration";
-            this.toolTipMainForm.SetToolTip(this.checkBoxEnableHardwareAccelerationForDefaultSettings, "Enable hardware acceleration for default settings.");
-            this.checkBoxEnableHardwareAccelerationForDefaultSettings.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxEnablePhymem
-            // 
-            this.checkBoxEnablePhymem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBoxEnablePhymem.AutoSize = true;
-            this.checkBoxEnablePhymem.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxEnablePhymem.Location = new System.Drawing.Point(69, 372);
-            this.checkBoxEnablePhymem.Name = "checkBoxEnablePhymem";
-            this.checkBoxEnablePhymem.Size = new System.Drawing.Size(67, 17);
-            this.checkBoxEnablePhymem.TabIndex = 0;
-            this.checkBoxEnablePhymem.Tag = "parameter:enable_phymem";
-            this.checkBoxEnablePhymem.Text = "PhyMem";
-            this.toolTipMainForm.SetToolTip(this.checkBoxEnablePhymem, "Enable PhyMem. It allows for direct hardware access but may cause system instabil" +
-        "ity.");
-            this.checkBoxEnablePhymem.UseVisualStyleBackColor = true;
-            this.checkBoxEnablePhymem.CheckedChanged += new System.EventHandler(this.checkBoxEnablePhymem_CheckedChanged);
+            this.checkBoxBoostPerformance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxBoostPerformance.AutoSize = true;
+            this.checkBoxBoostPerformance.BackColor = System.Drawing.Color.Salmon;
+            this.checkBoxBoostPerformance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxBoostPerformance.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBoxBoostPerformance.Location = new System.Drawing.Point(108, 107);
+            this.checkBoxBoostPerformance.Name = "checkBoxBoostPerformance";
+            this.checkBoxBoostPerformance.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxBoostPerformance.TabIndex = 1;
+            this.checkBoxBoostPerformance.Tag = "parameter:boost_performance";
+            this.checkBoxBoostPerformance.Text = "Boost Performance";
+            this.toolTipMainForm.SetToolTip(this.checkBoxBoostPerformance, "Enable hardware acceleration for default settings.");
+            this.checkBoxBoostPerformance.UseVisualStyleBackColor = false;
+            this.checkBoxBoostPerformance.CheckedChanged += new System.EventHandler(this.checkBoxBoostPerformance_CheckedChanged);
             // 
             // tabPageCustomPoolSettings
             // 
@@ -5085,11 +5058,11 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label31);
             this.tabPage2.Controls.Add(this.checkBoxUseCustomPools);
+            this.tabPage2.Controls.Add(this.checkBoxBoostPerformance);
             this.tabPage2.Controls.Add(this.comboBoxDefaultAlgorithm);
-            this.tabPage2.Controls.Add(this.buttonRestoreStockSettings);
             this.tabPage2.Controls.Add(this.label7);
-            this.tabPage2.Controls.Add(this.buttonBoostPerformance);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.labelCurrentSpeed);
             this.tabPage2.Controls.Add(this.label3);
@@ -5101,6 +5074,16 @@
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Compute";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.label31.Location = new System.Drawing.Point(6, 106);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(85, 13);
+            this.label31.TabIndex = 152;
+            this.label31.Text = "Device Settings:";
             // 
             // checkBoxUseCustomPools
             // 
@@ -5125,16 +5108,6 @@
             this.comboBoxDefaultAlgorithm.Tag = "parameter:default_algorithm";
             this.comboBoxDefaultAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxDefaultAlgorithm_SelectedIndexChanged);
             // 
-            // buttonRestoreStockSettings
-            // 
-            this.buttonRestoreStockSettings.Location = new System.Drawing.Point(162, 101);
-            this.buttonRestoreStockSettings.Name = "buttonRestoreStockSettings";
-            this.buttonRestoreStockSettings.Size = new System.Drawing.Size(150, 23);
-            this.buttonRestoreStockSettings.TabIndex = 1;
-            this.buttonRestoreStockSettings.Text = "Restore Stock Settings";
-            this.buttonRestoreStockSettings.UseVisualStyleBackColor = true;
-            this.buttonRestoreStockSettings.Click += new System.EventHandler(this.buttonRestoreStockSettings_Click);
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -5144,16 +5117,6 @@
             this.label7.Size = new System.Drawing.Size(90, 13);
             this.label7.TabIndex = 150;
             this.label7.Text = "Default Algorithm:";
-            // 
-            // buttonBoostPerformance
-            // 
-            this.buttonBoostPerformance.Location = new System.Drawing.Point(6, 101);
-            this.buttonBoostPerformance.Name = "buttonBoostPerformance";
-            this.buttonBoostPerformance.Size = new System.Drawing.Size(150, 23);
-            this.buttonBoostPerformance.TabIndex = 0;
-            this.buttonBoostPerformance.Text = "Boost Performance";
-            this.buttonBoostPerformance.UseVisualStyleBackColor = true;
-            this.buttonBoostPerformance.Click += new System.EventHandler(this.buttonBoostPerformance_Click);
             // 
             // label4
             // 
@@ -6318,9 +6281,9 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button4.Location = new System.Drawing.Point(12, 368);
+            this.button4.Location = new System.Drawing.Point(4, 368);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(49, 23);
+            this.button4.Size = new System.Drawing.Size(79, 23);
             this.button4.TabIndex = 8;
             this.button4.Text = "Help";
             this.button4.UseVisualStyleBackColor = true;
@@ -6330,18 +6293,26 @@
             // 
             this.timerMemoryTimings.Interval = 5000;
             // 
+            // button15
+            // 
+            this.button15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button15.Location = new System.Drawing.Point(89, 368);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(79, 23);
+            this.button15.TabIndex = 9;
+            this.button15.Text = "Support";
+            this.button15.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(624, 421);
+            this.Controls.Add(this.button15);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.checkBoxEnableHardwareAccelerationForDefaultSettings);
             this.Controls.Add(this.buttonRunBenchmarks);
             this.Controls.Add(this.buttonRunOptimizer);
-            this.Controls.Add(this.checkBoxEnablePhymem);
             this.Controls.Add(this.statusStripMainForm);
-            this.Controls.Add(this.buttonReleaseMemory);
             this.Controls.Add(this.tabControlMainForm);
             this.Controls.Add(this.buttonRelaunch);
             this.Controls.Add(this.buttonStart);
@@ -6497,7 +6468,6 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripMainFormProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Timer timerFailOver;
-        private System.Windows.Forms.Button buttonReleaseMemory;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Button buttonRunBenchmarks;
         private System.Windows.Forms.Timer timerBenchmarks;
@@ -6586,8 +6556,7 @@
         private System.Windows.Forms.DataGridView dataGridViewBenchmarks;
         private System.Windows.Forms.TabPage tabPageDeviceSettings;
         private System.Windows.Forms.Button buttonResetAllSettings;
-        private System.Windows.Forms.CheckBox checkBoxEnableHardwareAccelerationForDefaultSettings;
-        private System.Windows.Forms.CheckBox checkBoxEnablePhymem;
+        private System.Windows.Forms.CheckBox checkBoxBoostPerformance;
         private System.Windows.Forms.TabPage tabPageCustomPoolSettings;
         private System.Windows.Forms.GroupBox groupBoxCustmPool1;
         private System.Windows.Forms.ComboBox comboBoxCustomPool1SecondaryAlgorithm;
@@ -6701,8 +6670,6 @@
         private System.Windows.Forms.Label labelCurrentPool;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBoxDefaultAlgorithm;
-        private System.Windows.Forms.Button buttonRestoreStockSettings;
-        private System.Windows.Forms.Button buttonBoostPerformance;
         private System.Windows.Forms.Label labelElapsedTime;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label labelCurrentSpeed;
@@ -6942,5 +6909,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSuccessCount;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsSpeed;
         private System.Windows.Forms.Timer timerMemoryTimings;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Button button15;
     }
 }

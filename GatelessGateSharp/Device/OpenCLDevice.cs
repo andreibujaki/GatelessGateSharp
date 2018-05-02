@@ -61,6 +61,11 @@ namespace GatelessGateSharp
             return mName;
         }
 
+        public override String GetOpenCLName()
+        {
+            return mComputeDevice.Name;
+        }
+
         private System.Threading.Mutex computeByteBufferListMutex = new System.Threading.Mutex();
         List<ComputeBuffer<byte>> computeByteBufferList = new List<ComputeBuffer<byte>> { };
 
@@ -544,7 +549,9 @@ namespace GatelessGateSharp
             if (ADLAdapterIndex < 0)
                 return;
 
-            PowerLimit = 100;
+            var enabled = OverclockingEnabled;
+            OverclockingEnabled = false;
+            TargetPowerLimit = 100;
 
             if (ADLVersion >= 7
                 && ADL.ADL2_OverdriveN_SystemClocks_Get != null 
@@ -561,14 +568,12 @@ namespace GatelessGateSharp
                 memoryData.iMode = (int)ADLODNControlType.ODNControlType_Default;
                 Marshal.StructureToPtr(memoryData, mODNLevelsBuffer_MemoryClocks, false);
 
-                /*
-                var s = "";
-                for (int i = 0; i < systemData.iNumberOfPerformanceLevels; ++i)
-                    s += systemData.aLevels[i].iClock + " " + systemData.aLevels[i].iVddc + " " + systemData.aLevels[i].iEnabled + "\n";
-                for (int i = 0; i < memoryData.iNumberOfPerformanceLevels; ++i)
-                    s += memoryData.aLevels[i].iClock + " " + memoryData.aLevels[i].iVddc + " " + memoryData.aLevels[i].iEnabled + "\n";
-                MessageBox.Show(s);
-                */
+                //var s = "";
+                //for (int i = 0; i < systemData.iNumberOfPerformanceLevels; ++i)
+                //    s += systemData.aLevels[i].iClock + " " + systemData.aLevels[i].iVddc + " " + systemData.aLevels[i].iEnabled + "\n";
+                //for (int i = 0; i < memoryData.iNumberOfPerformanceLevels; ++i)
+                //    s += memoryData.aLevels[i].iClock + " " + memoryData.aLevels[i].iVddc + " " + memoryData.aLevels[i].iEnabled + "\n";
+                //MessageBox.Show(s);
 
                 ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, mODNLevelsBuffer_MemoryClocks);
                 ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, mODNLevelsBuffer_SystemClocks);
@@ -585,6 +590,8 @@ namespace GatelessGateSharp
                 if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 1, levelsBuffer) == ADL.ADL_SUCCESS)
                     ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
             }
+
+            OverclockingEnabled = enabled;
         }
 
 
@@ -945,7 +952,6 @@ namespace GatelessGateSharp
                 // OverDrive Next
                 var systemData = mOSADLODNPerformanceLevelsData_SystemClocks;
                 systemData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
-                bool first = true;
                 for (int i = systemData.iNumberOfPerformanceLevels - 1; i >= 0; --i) {
                     systemData.aLevels[i].iClock = TargetCoreClock * 100;
                     systemData.aLevels[i].iVddc = TargetCoreVoltage;

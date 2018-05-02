@@ -565,18 +565,6 @@ namespace GatelessGateSharp
             }
             comboBoxDeviceSettingsDevice.SelectedIndex = 0;
 
-            // for stability
-            /*
-            foreach (var device in Controller.OpenCLDevices) {
-                device.TargetPowerLimit = 100;
-                device.TargetCoreClock = device.DefaultCoreClock;
-                device.TargetCoreVoltage = device.DefaultCoreVoltage;
-                device.TargetMemoryClock = device.DefaultMemoryClock;
-                device.TargetMemoryVoltage = device.DefaultMemoryVoltage;
-                device.OverclockingEnabled = true;
-            }
-            */
-
             UpdateStats();
             timerStatsUpdates.Enabled = true;
         }
@@ -769,8 +757,12 @@ namespace GatelessGateSharp
         {
             foreach (var device in Controller.OpenCLDevices) {
                 foreach (var algorithm in AlgorithmList) {
-                    if (booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked)
-                        checkBoxEnablePhymem.Checked = true;
+                    if (booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked) {
+                        bool prevValue = updatingUI;
+                        updatingUI = true;
+                        checkBoxBoostPerformance.Checked = true;
+                        updatingUI = prevValue;
+                    }
                 }
             }
         }
@@ -1003,8 +995,10 @@ namespace GatelessGateSharp
                     }
                 }
             }
-            comboBoxBenchmarkingFirstParameter.SelectedIndex = 0;
-            comboBoxBenchmarkingSecondParameter.SelectedIndex = 0;
+            try {
+                comboBoxBenchmarkingFirstParameter.SelectedIndex = 0;
+                comboBoxBenchmarkingSecondParameter.SelectedIndex = 0;
+            } catch (Exception) { }
 
             // Pair device parameters up with corresponding controls.
             foreach (var control in Utilities.FindAllChildrenByType<Control>(tabControlMainForm.TabPages[3])) {
@@ -1305,8 +1299,11 @@ namespace GatelessGateSharp
 
         private void ResetDeviceSettings(OpenCLDevice aDevice = null)
         {
-            var enablePhyMem = checkBoxEnablePhymem.Checked;
+            var prevUpdatingUI = updatingUI;
+            var prevBoostPerformance = checkBoxBoostPerformance.Checked;
             OpenCLDevice[] devices;
+
+            updatingUI = true;
 
             if (aDevice != null) {
                 devices = new OpenCLDevice[] { aDevice };
@@ -1320,7 +1317,7 @@ namespace GatelessGateSharp
                 ResetDeviceOverclockingSettings(device);
                 ResetDeviceMemoryTimingSettings(device);
 
-                if (!checkBoxEnableHardwareAccelerationForDefaultSettings.Checked)
+                if (!checkBoxBoostPerformance.Checked)
                     continue;
 
                 // Load specific device settings for the device if there are any.
@@ -1344,7 +1341,7 @@ namespace GatelessGateSharp
                 }
 
                 // Restore the original preferences for hardware acceleration.
-                if (!checkBoxEnableHardwareAccelerationForDefaultSettings.Checked) {
+                if (!checkBoxBoostPerformance.Checked) {
                     foreach (var algorithm in AlgorithmList) {
                         booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = false;
                         if (device.GetType() == typeof(AMDPolaris10))
@@ -1353,7 +1350,8 @@ namespace GatelessGateSharp
                 }
             }
 
-            checkBoxEnablePhymem.Checked = enablePhyMem;
+            checkBoxBoostPerformance.Checked = prevBoostPerformance;
+            updatingUI = prevUpdatingUI;
             UpdateDevicesTabPage();
         }
 
@@ -1504,7 +1502,7 @@ namespace GatelessGateSharp
         {
             foreach (var algorithm in AlgorithmList) {
                 try {
-                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxBoostPerformance.Checked;
 
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
@@ -1530,7 +1528,7 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
                     int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
 
-                    if (checkBoxEnableHardwareAccelerationForDefaultSettings.Checked) {
+                    if (checkBoxBoostPerformance.Checked) {
                         numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
 
                         var newCoreVoltage
@@ -1595,7 +1593,7 @@ namespace GatelessGateSharp
             foreach (var algorithm in AlgorithmList) {
                 bool ethash = (new Regex(@"^ethash")).Match(algorithm).Success;
                 if (device.GetType() == typeof(AMDPolaris10))
-                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = checkBoxEnableHardwareAccelerationForDefaultSettings.Checked;
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = checkBoxBoostPerformance.Checked;
                 if (device.GetVendor() == "AMD"
                     && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
                     && device.MemoryVendor == "Elpida") {
@@ -2409,6 +2407,12 @@ namespace GatelessGateSharp
                         size.Width = (int)(double)parameter.Value;
                     } else if (parameter.Key == "window_height") {
                         size.Height = (int)(double)parameter.Value;
+                    } else if (parameter.Key == "boost_performance" || parameter.Key == "enable_phymem") {
+                        bool prev = updatingUI;
+                        updatingUI = true;
+                        checkBoxBoostPerformance.Checked = (bool)parameter.Value;
+                        Application.DoEvents();
+                        updatingUI = prev;
                     } else if ((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(parameter.Key).Success) {
                         int index = int.Parse((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(parameter.Key).Groups[1].Captures[0].Value);
                         if (0 <= index && index < Controller.OpenCLDevices.Length)
@@ -3795,7 +3799,7 @@ namespace GatelessGateSharp
                 foreach (var device in Controller.OpenCLDevices) {
                     device.MemoryTimingModsEnabled = false;
                     device.OverclockingEnabled = false;
-                    device.ResetOverclockingSettings();
+                    //device.ResetOverclockingSettings();
                 }
                 if (e.CloseReason == CloseReason.UserClosing) {
                     try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
@@ -5344,6 +5348,9 @@ namespace GatelessGateSharp
             bool overclockingEnabled = booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked;
             var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
 
+            device.OverclockingEnabled = false;
+            device.MemoryTimingModsEnabled = false;
+
             if (overclockingEnabled) {
                 device.TargetPowerLimit = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
                 device.TargetCoreClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
@@ -5357,7 +5364,6 @@ namespace GatelessGateSharp
                 device.OverclockingEnabled = true;
             if (memoryTimingsEnabled)
                 device.MemoryTimingModsEnabled = true;
-            
 
             if (booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
                 device.TargetTemperature = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
@@ -5547,9 +5553,9 @@ namespace GatelessGateSharp
 
                 if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
                     foreach (var device in Controller.OpenCLDevices) {
-                        device.MemoryTimingModsEnabled = false;
-                        device.OverclockingEnabled = false;
-                        device.ResetOverclockingSettings();
+                        //device.MemoryTimingModsEnabled = false;
+                        //device.OverclockingEnabled = false;
+                        //device.ResetOverclockingSettings();
                         device.FanControlEnabled = false;
                         device.FanSpeed = -1;
                     }
@@ -5737,10 +5743,7 @@ namespace GatelessGateSharp
                 textBoxAEONAddress.ForeColor = (textBoxAEONAddress.Text == string.Empty || textBoxAEONAddress.Text == Parameters.DevFeeAEONAddress) ? Color.Red : Color.Black;
                 textBoxSumokoinAddress.ForeColor = (textBoxSumokoinAddress.Text == string.Empty || textBoxSumokoinAddress.Text == Parameters.DevFeeSumokoinAddress) ? Color.Red : Color.Black;
                 textBoxBitcoinAddress.ForeColor = (textBoxBitcoinAddress.Text == string.Empty || textBoxBitcoinAddress.Text == Parameters.DevFeeBitcoinAddress) ? Color.Red : Color.Black;
-
-                buttonBoostPerformance.Enabled = idle;
-                buttonRestoreStockSettings.Enabled = idle;
-
+                
                 buttonSelectAllDevices.Enabled = idle;
                 buttonDeselectAllDevices.Enabled = idle;
 
@@ -5756,7 +5759,6 @@ namespace GatelessGateSharp
                     = (IsMining
                        && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? "Stop Optimizer" :
                                                                                                        "Optimize";
-                buttonReleaseMemory.Enabled = idle;
                 buttonRelaunch.Enabled = idle;
 
                 tabControlDefaultPools.Enabled = idle && !CustomPoolEnabled;
@@ -5842,7 +5844,7 @@ namespace GatelessGateSharp
                 checkBoxDeviceSettingsMemoryTimingsEnabled.Enabled = idle;
                 buttonMemoryTimingsAppyStrap.Enabled = buttonMemoryTimingsCopyAcrossAlgorithms.Enabled = dataGridViewMemoryTimings.Enabled = idle && checkBoxDeviceSettingsMemoryTimingsEnabled.Checked;
 
-                checkBoxEnableHardwareAccelerationForDefaultSettings.Enabled = checkBoxEnablePhymem.Enabled = idle;
+                checkBoxBoostPerformance.Enabled = idle;
 
                 int count = 0;
                 foreach (var checkBox in tabPageBenchmarkingAlgorithms.FindAllChildrenByType<CheckBox>())
@@ -6745,23 +6747,6 @@ namespace GatelessGateSharp
             mUserZcashAddress = textBoxZcashAddress.Text.Trim();
         }
 
-        private void checkBoxEnablePhymem_CheckedChanged(object sender, EventArgs e)
-        {
-            mAreSettingsDirty = true;
-            if (checkBoxEnablePhymem.Checked) {
-                PCIExpress.LoadPhyMem();
-                foreach (var device in Controller.OpenCLDevices)
-                    device.SaveDefaultMemoryTimings();
-            } else {
-                PCIExpress.UnloadPhyMem();
-                foreach (var device in Controller.OpenCLDevices) {
-                    foreach (var algorithm in AlgorithmList)
-                        if (device.GetType() == typeof(AMDPolaris10))
-                            booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
-                }
-            }
-        }
-
         private void dataGridViewDevices_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -6895,34 +6880,7 @@ namespace GatelessGateSharp
             System.Diagnostics.Process.Start(LogFilePathBase);
 
         }
-
-        private void buttonBoostPerformance_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show(
-                        "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
-                        + "This feature will configure overclocking/memory timing settings with preset values for better performance. "
-                        + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
-                        + "You can always confirm the results on the \"Devices\" tab page before you start mining.\n\n"
-                        + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
-                        + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
-                        + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
-                        + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
-                        + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
-                        appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.OK) {
-
-                checkBoxEnableHardwareAccelerationForDefaultSettings.Checked = true;
-                checkBoxEnablePhymem.Checked = true;
-                ResetDeviceSettings();
-            }
-        }
-
-        private void buttonRestoreStockSettings_Click(object sender, EventArgs e)
-        {
-            checkBoxEnablePhymem.Checked = false;
-            checkBoxEnableHardwareAccelerationForDefaultSettings.Checked = false;
-            ResetDeviceSettings();
-        }
-
+        
         private void buttonPrintMemoryTimings_Click(object sender, EventArgs e)
         {
             foreach (var device in Controller.OpenCLDevices)
@@ -8335,6 +8293,44 @@ namespace GatelessGateSharp
         {
             foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(((Control)sender).Parent))
                 checkBox.Checked = false;
+        }
+
+        private void checkBoxBoostPerformance_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxBoostPerformance.Checked && !updatingUI) {
+                var result = MessageBox.Show(
+                        "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
+                        + "This feature will configure overclocking/memory timing settings with preset values for better performance. "
+                        + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
+                        + "You can always confirm the results on the \"Devices\" tab page before you start mining.\n\n"
+                        + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
+                        + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
+                        + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
+                        + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
+                        + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
+                        appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+
+                if (result != System.Windows.Forms.DialogResult.OK) {
+                    checkBoxBoostPerformance.Checked = false;
+                    return;
+                }
+            }
+
+            if (checkBoxBoostPerformance.Checked) { 
+                PCIExpress.LoadPhyMem();
+                foreach (var device in Controller.OpenCLDevices)
+                    device.SaveDefaultMemoryTimings();
+            } else {
+                PCIExpress.UnloadPhyMem();
+                foreach (var device in Controller.OpenCLDevices) {
+                    foreach (var algorithm in AlgorithmList)
+                        if (device.GetType() == typeof(AMDPolaris10))
+                            booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
+                }
+                checkBoxBoostPerformance.Checked = true;
+            }
+            if (!updatingUI)
+                ResetDeviceSettings();
         }
     }
 }

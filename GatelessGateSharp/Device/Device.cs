@@ -20,11 +20,16 @@ namespace GatelessGateSharp
 
         public virtual String GetVendor() { return ""; }
         public virtual String GetName() { return ""; }
+        public virtual String GetOpenCLName() { return ""; }
         public virtual long GetMemorySize() { return 0; }
         public virtual long GetMaxComputeUnits() { return 0; }
 
         public int DeviceIndex { get { return mDeviceIndex; } }
+        public string Vendor { get { return GetVendor(); } }
+        public string Name { get { return GetName(); } }
+        public string OpenCLName { get { return GetOpenCLName(); } }
         public long MemorySize { get { return GetMemorySize(); } }
+        public long MaxComputeUnits { get { return GetMaxComputeUnits(); } }
         public int AcceptedShares { get { return mAcceptedShares; } }
         public int RejectedShares { get { return mRejectedShares; } }
         public double TotalHashesPrimaryAlgorithm = 0;
@@ -56,6 +61,12 @@ namespace GatelessGateSharp
         public virtual string GetMemoryVendor() { return null; }
         public string MemoryType { get { return GetMemoryType(); } }
         public string MemoryVendor { get { return GetMemoryVendor(); } }
+
+        // https://github.com/CLRX/CLRX-mirror/blob/76a2912097a12f7dd274d7319b2698f88ef6d705/doc/GcnIsa.md
+        public bool IsGCN1 { get { return Vendor == "AMD" && (OpenCLName == "Pitcairn" || OpenCLName == "Tahiti" || OpenCLName == "Capeverde" || OpenCLName == "Hainan"); } }
+        public bool IsGCN2 { get { return Vendor == "AMD" && (OpenCLName == "Bonaire" || OpenCLName == "Hawaii"); } }
+        public bool IsGCN3 { get { return Vendor == "AMD" && (OpenCLName == "Tonga" || OpenCLName == "Fiji" || OpenCLName == "Ellesmere" || OpenCLName == "Baffin"); } }
+        public bool IsGCN5 { get { return Vendor == "AMD" && (OpenCLName == "Vega"); } }
 
         public Device(int aDeviceIndex)
         {
