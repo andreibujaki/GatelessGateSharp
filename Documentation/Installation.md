@@ -10,6 +10,6 @@ on your computer. Please note that **Blockchain drivers and modded BIOS'es are n
 
 If you experience problems launching the application after the installation, you could try to install the following dependencies manually: 
 
-[Microsoft .NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56116)
+* [Microsoft .NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56116)
 
-[Microsoft Visual C++ Redistributable for Visual Studio 2017](https://aka.ms/vs/15/release/vc_redist.x64.exe)
+* [Microsoft Visual C++ Redistributable for Visual Studio 2017](https://aka.ms/vs/15/release/vc_redist.x64.exe)
