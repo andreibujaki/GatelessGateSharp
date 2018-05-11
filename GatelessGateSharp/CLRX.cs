@@ -24,7 +24,7 @@ namespace GatelessGateSharp
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
 
                 startInfo.FileName = @"CLRX\clrxasm";
-                startInfo.Arguments = sourceFilePath + " -o \"" + outputFilePath + "\"";
+                startInfo.Arguments = sourceFilePath + " -g " + device.OpenCLName + " -o \"" + outputFilePath + "\"";
                 startInfo.UseShellExecute = false;
                 startInfo.RedirectStandardOutput = true;
                 startInfo.CreateNoWindow = true;

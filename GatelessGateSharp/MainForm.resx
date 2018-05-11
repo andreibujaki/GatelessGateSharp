@@ -309,9 +309,6 @@ You should have received a copy of the GNU General Public License along with Gat
   <metadata name="timerStartNextBenchmark.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>181, 42</value>
   </metadata>
-  <metadata name="toolTipMainForm.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>369, 48</value>
-  </metadata>
   <metadata name="timerMemoryTimings.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>181, 59</value>
   </metadata>

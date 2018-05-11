@@ -156,23 +156,165 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vulkan, Version=0.0.6527.27579, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VulkanSharp.0.1.9\lib\net452\Vulkan.dll</HintPath>
-    </Reference>
-    <Reference Include="Vulkan.Windows, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VulkanSharp.0.1.9\lib\net452\Vulkan.Windows.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADL.cs" />
+    <Compile Include="Cloo\Bindings\CL10.cs" />
+    <Compile Include="Cloo\Bindings\CL11.cs" />
+    <Compile Include="Cloo\Bindings\CL12.cs" />
+    <Compile Include="Cloo\Bindings\CLCommandQueueHandle.cs" />
+    <Compile Include="Cloo\Bindings\CLContextHandle.cs" />
+    <Compile Include="Cloo\Bindings\CLDeviceHandle.cs" />
+    <Compile Include="Cloo\Bindings\CLEventHandle.cs" />
+    <Compile Include="Cloo\Bindings\CLKernelHandle.cs" />
+    <Compile Include="Cloo\Bindings\CLMemoryHandle.cs" />
+    <Compile Include="Cloo\Bindings\CLPlatformHandle.cs" />
+    <Compile Include="Cloo\Bindings\CLProgramHandle.cs" />
+    <Compile Include="Cloo\Bindings\CLSamplerHandle.cs" />
+    <Compile Include="Cloo\Bindings\Clx.cs" />
+    <Compile Include="Cloo\Bindings\Enums.cs" />
+    <Compile Include="Cloo\ComputeBuffer.cs" />
+    <Compile Include="Cloo\ComputeBufferBase.cs" />
+    <Compile Include="Cloo\ComputeCommandQueue.Added.cs" />
+    <Compile Include="Cloo\ComputeCommandQueue.cs" />
+    <Compile Include="Cloo\ComputeCompiler.cs" />
+    <Compile Include="Cloo\ComputeContext.cs" />
+    <Compile Include="Cloo\ComputeContextProperty.cs" />
+    <Compile Include="Cloo\ComputeContextPropertyList.cs" />
+    <Compile Include="Cloo\ComputeDevice.cs" />
+    <Compile Include="Cloo\ComputeEvent.cs" />
+    <Compile Include="Cloo\ComputeEventBase.cs" />
+    <Compile Include="Cloo\ComputeEventList.cs" />
+    <Compile Include="Cloo\ComputeException.cs" />
+    <Compile Include="Cloo\ComputeImage.cs" />
+    <Compile Include="Cloo\ComputeImage2D.cs" />
+    <Compile Include="Cloo\ComputeImage3D.cs" />
+    <Compile Include="Cloo\ComputeImageFormat.cs" />
+    <Compile Include="Cloo\ComputeKernel.cs" />
+    <Compile Include="Cloo\ComputeMemory.cs" />
+    <Compile Include="Cloo\ComputeObject.cs" />
+    <Compile Include="Cloo\ComputePlatform.cs" />
+    <Compile Include="Cloo\ComputeProgram.cs" />
+    <Compile Include="Cloo\ComputeResource.cs" />
+    <Compile Include="Cloo\ComputeSampler.cs" />
+    <Compile Include="Cloo\ComputeSubBuffer.cs" />
+    <Compile Include="Cloo\ComputeTools.cs" />
+    <Compile Include="Cloo\ComputeUserEvent.cs" />
+    <Compile Include="Cloo\SysIntX2.cs" />
+    <Compile Include="Cloo\SysIntX3.cs" />
     <Compile Include="CLRX.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Device\AMDDevice.cs" />
     <Compile Include="Device\OpenCLDevice.cs" />
     <Compile Include="Device\Device.cs" />
     <Compile Include="Device\AMDPolaris10.cs" />
+    <Compile Include="HashLib\Checksum\Adler32.cs" />
+    <Compile Include="HashLib\Checksum\CRC32.cs" />
+    <Compile Include="HashLib\Checksum\CRC64.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\MD5CryptoServiceProvider.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\RIPEMD160Managed .cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA1Cng.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA1CryptoServiceProvider.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA1Managed.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA256Cng.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA256CryptoServiceProvider.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA256Managed.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA384Cng.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA384CryptoServiceProvider.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA384Managed.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA512Cng.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA512CryptoServiceProvider.cs" />
+    <Compile Include="HashLib\Crypto\BuildIn\SHA512Managed.cs" />
+    <Compile Include="HashLib\Crypto\Gost.cs" />
+    <Compile Include="HashLib\Crypto\Grindahl256.cs" />
+    <Compile Include="HashLib\Crypto\Grindahl512.cs" />
+    <Compile Include="HashLib\Crypto\HAS160.cs" />
+    <Compile Include="HashLib\Crypto\Haval.cs" />
+    <Compile Include="HashLib\Crypto\MD2.cs" />
+    <Compile Include="HashLib\Crypto\MD4.cs" />
+    <Compile Include="HashLib\Crypto\MD5.cs" />
+    <Compile Include="HashLib\Crypto\MDBase.cs" />
+    <Compile Include="HashLib\Crypto\Panama.cs" />
+    <Compile Include="HashLib\Crypto\RadioGatun32.cs" />
+    <Compile Include="HashLib\Crypto\RadioGatun64.cs" />
+    <Compile Include="HashLib\Crypto\RIPEMD.cs" />
+    <Compile Include="HashLib\Crypto\RIPEMD128.cs" />
+    <Compile Include="HashLib\Crypto\RIPEMD160.cs" />
+    <Compile Include="HashLib\Crypto\RIPEMD256.cs" />
+    <Compile Include="HashLib\Crypto\RipeMD320.cs" />
+    <Compile Include="HashLib\Crypto\SHA0.cs" />
+    <Compile Include="HashLib\Crypto\SHA1.cs" />
+    <Compile Include="HashLib\Crypto\SHA224.cs" />
+    <Compile Include="HashLib\Crypto\SHA256.cs" />
+    <Compile Include="HashLib\Crypto\SHA256Base.cs" />
+    <Compile Include="HashLib\Crypto\SHA384.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Blake.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\BlueMidnightWish.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\CubeHash.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Echo.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Fugue.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Groestl.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Hamsi.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\JH.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Keccak.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Luffa.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Shabal.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\SHAvite3.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\SIMD.cs" />
+    <Compile Include="HashLib\Crypto\SHA3\Skein.cs" />
+    <Compile Include="HashLib\Crypto\SHA512.cs" />
+    <Compile Include="HashLib\Crypto\SHA512Base.cs" />
+    <Compile Include="HashLib\Crypto\Snefru.cs" />
+    <Compile Include="HashLib\Crypto\Tiger.cs" />
+    <Compile Include="HashLib\Crypto\Tiger2.cs" />
+    <Compile Include="HashLib\Crypto\Whirlpool.cs" />
+    <Compile Include="HashLib\Extensions\ArrayExtensions.cs" />
+    <Compile Include="HashLib\Extensions\Bits.cs" />
+    <Compile Include="HashLib\Extensions\Converters.cs" />
+    <Compile Include="HashLib\Extensions\TypeExtensions.cs" />
+    <Compile Include="HashLib\Hash.cs" />
+    <Compile Include="HashLib\Hash128\Murmur3_128.cs" />
+    <Compile Include="HashLib\Hash32\AP.cs" />
+    <Compile Include="HashLib\Hash32\Bernstein.cs" />
+    <Compile Include="HashLib\Hash32\Bernstein1.cs" />
+    <Compile Include="HashLib\Hash32\BKDR.cs" />
+    <Compile Include="HashLib\Hash32\DEK.cs" />
+    <Compile Include="HashLib\Hash32\DJB.cs" />
+    <Compile Include="HashLib\Hash32\DotNet.cs" />
+    <Compile Include="HashLib\Hash32\ELF.cs" />
+    <Compile Include="HashLib\Hash32\FNV.cs" />
+    <Compile Include="HashLib\Hash32\FNV1a.cs" />
+    <Compile Include="HashLib\Hash32\Jenkins3.cs" />
+    <Compile Include="HashLib\Hash32\JS.cs" />
+    <Compile Include="HashLib\Hash32\Murmur2.cs" />
+    <Compile Include="HashLib\Hash32\Murmur3.cs" />
+    <Compile Include="HashLib\Hash32\OneAtTime.cs" />
+    <Compile Include="HashLib\Hash32\PJW.cs" />
+    <Compile Include="HashLib\Hash32\Rotating.cs" />
+    <Compile Include="HashLib\Hash32\RS.cs" />
+    <Compile Include="HashLib\Hash32\SDBM.cs" />
+    <Compile Include="HashLib\Hash32\ShiftAndXor.cs" />
+    <Compile Include="HashLib\Hash32\SuperFast.cs" />
+    <Compile Include="HashLib\Hash64\FNV1a64.cs" />
+    <Compile Include="HashLib\Hash64\FNV64.cs" />
+    <Compile Include="HashLib\Hash64\Murmur2_64.cs" />
+    <Compile Include="HashLib\Hash64\SipHash.cs" />
+    <Compile Include="HashLib\HashAlgorithmWrapper.cs" />
+    <Compile Include="HashLib\HashBuffer.cs" />
+    <Compile Include="HashLib\HashCryptoBuildIn.cs" />
+    <Compile Include="HashLib\HashCryptoNotBuildIn.cs" />
+    <Compile Include="HashLib\Hashes.cs" />
+    <Compile Include="HashLib\HashFactory.cs" />
+    <Compile Include="HashLib\HashResult.cs" />
+    <Compile Include="HashLib\HashRounds.cs" />
+    <Compile Include="HashLib\HashSize.cs" />
+    <Compile Include="HashLib\HMACBuildInAdapter.cs" />
+    <Compile Include="HashLib\HMACNotBuildInAdapter.cs" />
+    <Compile Include="HashLib\IHash.cs" />
+    <Compile Include="HashLib\IHashInfo.cs" />
+    <Compile Include="HashLib\MultipleTransformsNonBlock.cs" />
     <Compile Include="LiveCharts\ConstantChanges.cs" />
     <Compile Include="MemoryTimingStrapForm.cs">
       <SubType>Form</SubType>
@@ -181,6 +323,8 @@
       <DependentUpon>MemoryTimingStrapForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Miner\OpenCLX16RMiner.cs" />
+    <Compile Include="Nvml\NvmlNativeMethods.cs" />
+    <Compile Include="Nvml\NvmlTypes.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="PCIExpress.cs" />
     <Compile Include="SplashScreen.cs">
@@ -242,7 +386,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
-    <None Include="AssemblyKernels\GCN3_neoscrypt_256.isa" />
     <None Include="Kernels\aes_helper.cl" />
     <None Include="Kernels\blake.cl" />
     <None Include="Kernels\blake256.cl" />
@@ -253,6 +396,7 @@
     <None Include="Kernels\cryptonight_heavy.cl" />
     <None Include="Kernels\cubehash.cl" />
     <None Include="Kernels\echo.cl" />
+    <None Include="Kernels\equihash.cl" />
     <None Include="Kernels\ethash.cl" />
     <None Include="Kernels\ethash_pascal.cl" />
     <None Include="Kernels\ethash_lbry.cl" />
@@ -298,24 +442,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HashLib\HashLib.csproj">
-      <Project>{31880fb6-5b86-42b8-ab92-864045b5d7a2}</Project>
-      <Name>HashLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ManagedCUDA\ManagedCuda.csproj">
-      <Project>{f5a866cc-151e-472a-8020-75f62d74d687}</Project>
-      <Name>ManagedCuda</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Nvml\Nvml.csproj">
-      <Project>{92d51a33-7bf0-47fd-9ece-d758ffe1691d}</Project>
-      <Name>Nvml</Name>
-    </ProjectReference>
-    <ProjectReference Include="Cloo\Cloo.csproj">
-      <Project>{5c25329d-774a-46c8-b52f-66dfd281e9cf}</Project>
-      <Name>Cloo</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
@@ -334,8 +460,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gateless Gate Sharp.ico" />
+    <Content Include="Kernels\equihash-param.h" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AssemblyKernels\" />
     <Folder Include="BinaryKernels\" />
   </ItemGroup>
   <ItemGroup>
@@ -356,15 +484,9 @@ xcopy /i /s /y $(SolutionDir)CLRX $(TargetDir)CLRX
 xcopy "$(ProjectDir)DeviceSettings" "$(TargetDir)DeviceSettings"  /i /s /y
 xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
 xcopy /i /s /y $(ProjectDir)AssemblyKernels $(TargetDir)AssemblyKernels
-xcopy /Y $(SolutionDir)SQLite\x86\SQLite.Interop.dll $(TargetDir)x86\
-xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)x64\
-xcopy /Y $(SolutionDir)SQLite\x64\SQLite.Interop.dll $(TargetDir)
-copy $(SolutionDir)SQLite\System.Data.SQLite.dll $(TargetDir)
-copy $(SolutionDir)SQLite\System.Data.SQLite.dll.config $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
-copy $(SolutionDir)GatelessGateSharpLauncher\bin\$(Configuration)\GatelessGateSharpLauncher.exe $(TargetDir)
 "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:16777216
 showdown makehtml  -i $(SolutionDir)README.md -o README.html</PostBuildEvent>
   </PropertyGroup>

@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Data.SQLite;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -104,7 +103,6 @@ namespace GatelessGateSharp
         public static string appVersion = "1.3.7";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
-        private static string databaseFileName = "GatelessGateSharp.sqlite";
         private static string JSONConfigFileName = "GatelessGateSharp.json";
         private static string logFileName = "GatelessGateSharp.log";
         private static string mAppStateFileName = "GatelessGateSharp_State.txt";
@@ -347,7 +345,7 @@ namespace GatelessGateSharp
             InitializeDeviceSettings();
             ResetDeviceSettings();
             try {
-                if (System.IO.File.Exists(DatabaseFilePath) || System.IO.File.Exists(JSONConfigFilePath))
+                if (System.IO.File.Exists(JSONConfigFilePath))
                     LoadSettingsFromJSONConfigFile();
             } catch (Exception ex) {
                 Logger("Exception in LoadSettingsFromJSONConfigFile(): " + ex.Message + ex.StackTrace);
@@ -648,19 +646,19 @@ namespace GatelessGateSharp
             var device = Controller.OpenCLDevices[deviceIndex];
             var algorithm = AlgorithmList[comboBoxDeviceSettingsAlgorithm.SelectedIndex];
 
-            if (device.GetType() == typeof(AMDPolaris10)) {
+            if (device.GetType() == typeof(AMDGMC81)) {
                 MemoryTimingStrapForm dialog = new MemoryTimingStrapForm();
                 dialog.StartPosition = FormStartPosition.CenterParent;
                 if (dialog.ShowDialog(this) == DialogResult.OK) {
                     try {
                         byte[] bytes = Utilities.StringToByteArray(dialog.textBoxMemoryTimingStrap.Text);
-                        AMDPolaris10.MC_ARB_DRAM_TIMING ARBData = new AMDPolaris10.MC_ARB_DRAM_TIMING();
-                        AMDPolaris10.MC_ARB_DRAM_TIMING2 ARB2Data = new AMDPolaris10.MC_ARB_DRAM_TIMING2();
-                        AMDPolaris10.MC_SEQ_CAS_TIMING CASData = new AMDPolaris10.MC_SEQ_CAS_TIMING();
-                        AMDPolaris10.MC_SEQ_RAS_TIMING RASData = new AMDPolaris10.MC_SEQ_RAS_TIMING();
-                        AMDPolaris10.MC_SEQ_MISC_TIMING MISCData = new AMDPolaris10.MC_SEQ_MISC_TIMING();
-                        AMDPolaris10.MC_SEQ_MISC_TIMING2 MISC2Data = new AMDPolaris10.MC_SEQ_MISC_TIMING2();
-                        AMDPolaris10.MC_SEQ_PMG_TIMING PMGData = new AMDPolaris10.MC_SEQ_PMG_TIMING();
+                        AMDGMC81.MC_ARB_DRAM_TIMING ARBData = new AMDGMC81.MC_ARB_DRAM_TIMING();
+                        AMDGMC81.MC_ARB_DRAM_TIMING2 ARB2Data = new AMDGMC81.MC_ARB_DRAM_TIMING2();
+                        AMDGMC81.MC_SEQ_CAS_TIMING CASData = new AMDGMC81.MC_SEQ_CAS_TIMING();
+                        AMDGMC81.MC_SEQ_RAS_TIMING RASData = new AMDGMC81.MC_SEQ_RAS_TIMING();
+                        AMDGMC81.MC_SEQ_MISC_TIMING MISCData = new AMDGMC81.MC_SEQ_MISC_TIMING();
+                        AMDGMC81.MC_SEQ_MISC_TIMING2 MISC2Data = new AMDGMC81.MC_SEQ_MISC_TIMING2();
+                        AMDGMC81.MC_SEQ_PMG_TIMING PMGData = new AMDGMC81.MC_SEQ_PMG_TIMING();
 
                         ARBData.Data = ((UInt32)bytes[4 * 10 + 0] << 0) | ((UInt32)bytes[4 * 10 + 1] << 8) | ((UInt32)bytes[4 * 10 + 2] << 16) | ((UInt32)bytes[4 * 10 + 3] << 24);
                         numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = ARBData.ACTRD;
@@ -920,7 +918,7 @@ namespace GatelessGateSharp
                         }
                     }
 
-                    if (device.GetType() == typeof(AMDPolaris10)) {
+                    if (device.GetType() == typeof(AMDGMC81)) {
                         tuple3 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled");
                         booleanDeviceParameterArray[tuple3] = new BooleanDeviceParameter(tuple3, false);
                         foreach (var tuple in new List<Tuple<string, int, int, int, int>> {
@@ -1139,7 +1137,7 @@ namespace GatelessGateSharp
             if (tag == "memory_timings" && e.ColumnIndex == 1) {
                 string parameter = dataGridView.Rows[e.RowIndex].Cells[0].Value.ToString().ToLower();
                 string stringValue = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                if (device.GetType() == typeof(AMDPolaris10)) {
+                if (device.GetType() == typeof(AMDGMC81)) {
                     Tuple<int, string, string> tuple = new Tuple<int, string, string>(device.DeviceIndex, algo, "memory_timings_polaris10_" + parameter);
                     if (numericDeviceParameterArray.Keys.Contains(tuple)) {
                         Regex regex = new Regex(@"[^0-9]+");
@@ -1240,7 +1238,7 @@ namespace GatelessGateSharp
                         label.Visible = visible;
                 }
             }
-            groupBoxMemoryTimings.Visible = (Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDPolaris10));
+            groupBoxMemoryTimings.Visible = (Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDGMC81));
 
             updatingUI = true;
 
@@ -1321,21 +1319,21 @@ namespace GatelessGateSharp
                     continue;
 
                 // Load specific device settings for the device if there are any.
-                string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
+                string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName();
                 string extension = ".json";
-                string postfix0 = "";
-                string postfix1 = "";
-                try {
-                    postfix0 = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)\\.*$")).Replace(device.PNPString, "$1"));
-                    postfix1 = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)&REV[^\\]*\\.*$")).Replace(device.PNPString, "$1"));
-                } catch (Exception ex) { Logger(ex); }
+                string postfix_memory_size = string.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
+                string postfix_memory_vendor = (device.MemoryVendor != null) ? (" " + device.MemoryVendor) : "";
+                string postfix_compute_units = string.Format(" {0}CU", device.GetMaxComputeUnits());
+                string postfix0 = postfix_memory_size + postfix_memory_vendor + postfix_compute_units;
+                string postfix1 = postfix_memory_size + postfix_memory_vendor;
+                string postfix2 = postfix_memory_vendor;
+                string postfix3 = postfix_memory_size;
                 ///string postfix2 = String.Format(" ({0} {1})", device.MemoryType, device.MemoryVendor);
-                foreach (var postfix in new List<string> { postfix0, postfix1, "" }) {
+                foreach (var postfix in new List<string> { postfix0, postfix1, postfix2, postfix3, "" }) {
                     string path = deviceSettingsFilePathBase + postfix + extension;
                     if (System.IO.File.Exists(path)) {
                         LoadDeviceSettings(device.DeviceIndex, path);
                         Logger("Loaded " + path + " for Device #" + device.DeviceIndex + ".");
-
                         break;
                     }
                 }
@@ -1344,7 +1342,7 @@ namespace GatelessGateSharp
                 if (!checkBoxBoostPerformance.Checked) {
                     foreach (var algorithm in AlgorithmList) {
                         booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = false;
-                        if (device.GetType() == typeof(AMDPolaris10))
+                        if (device.GetType() == typeof(AMDGMC81))
                             booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
                     }
                 }
@@ -1592,7 +1590,7 @@ namespace GatelessGateSharp
         {
             foreach (var algorithm in AlgorithmList) {
                 bool ethash = (new Regex(@"^ethash")).Match(algorithm).Success;
-                if (device.GetType() == typeof(AMDPolaris10))
+                if (device.GetType() == typeof(AMDGMC81))
                     booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = checkBoxBoostPerformance.Checked;
                 if (device.GetVendor() == "AMD"
                     && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
@@ -1878,27 +1876,6 @@ namespace GatelessGateSharp
                 LoadSettingsFromJSONConfigFile(file);
         }
 
-        private void CreateNewDatabase(string filePath)
-        {
-            SQLiteConnection.CreateFile(filePath);
-            using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
-                conn.Open();
-                var sql = "create table wallet_addresses (coin varchar(64), address varchar(256));";
-                using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
-
-                sql = "create table pools (name varchar(64));";
-                using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
-
-                sql = "create table properties (name varchar(64), value varchar(256));";
-                using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
-
-                sql = "create table device_parameters (device_id int, device_vendor varchar(64), device_name varchar(64), parameter_name varchar(64), parameter_value varchar(256));";
-                using (var command = new SQLiteCommand(sql, conn)) { command.ExecuteNonQuery(); }
-
-                conn.Close();
-            }
-        }
-
         static string AppDataPathBase {
             get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\GatelessGateSharp"; }
         }
@@ -1917,10 +1894,6 @@ namespace GatelessGateSharp
 
         public static string DeviceSettingsPathBase {
             get { return "DeviceSettings"; }
-        }
-
-        static string DatabaseFilePath {
-            get { return AppDataPathBase + "\\" + databaseFileName; }
         }
 
         static string JSONConfigFilePath {
@@ -1949,10 +1922,6 @@ namespace GatelessGateSharp
 
         static string OptimizerRecordsFilePath {
             get { return AppDataPathBase + "\\" + mOptimizerResultsFileName; }
-        }
-
-        static string OldDatabaseFilePath {
-            get { return databaseFileName; }
         }
 
         static string OldLogFilePath {
@@ -2081,239 +2050,9 @@ namespace GatelessGateSharp
             }
         }
 
-        private void LoadSettingsFromDatabase(string filePath = null)
-        {
-            if (filePath == null) {
-                filePath = (System.IO.File.Exists(OldDatabaseFilePath) ? OldDatabaseFilePath : DatabaseFilePath);
-            } else {
-                filePath = (new Regex("'")).Replace(filePath, "");
-            }
-            Application.DoEvents();
-            Logger("Loading settings from " + filePath + "...");
-            UpdateLog();
-            Application.DoEvents();
-            MainForm.Instance.Enabled = false;
-
-            int databaseVersion = 0;
-            try {
-                using (var conn = new SQLiteConnection("Data Source=" + filePath + ";Version=3;")) {
-                    conn.Open();
-                    try {
-                        var sql = "select * from wallet_addresses";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            using (var reader = command.ExecuteReader()) {
-                                while (reader.Read()) {
-                                    if ((string)reader["coin"] == "bitcoin")
-                                        textBoxBitcoinAddress.Text = (string)reader["address"];
-                                    else if ((string)reader["coin"] == "ethereum")
-                                        textBoxEthereumAddress.Text = (string)reader["address"];
-                                    else if ((string)reader["coin"] == "monero")
-                                        textBoxMoneroAddress.Text = (string)reader["address"];
-                                    else if ((string)reader["coin"] == "zcash")
-                                        textBoxZcashAddress.Text = (string)reader["address"];
-                                    else if ((string)reader["coin"] == "pascal")
-                                        textBoxPascalAddress.Text = (string)reader["address"];
-                                    else if ((string)reader["coin"] == "lbry")
-                                        textBoxLbryAddress.Text = (string)reader["address"];
-                                }
-                            }
-                        }
-                    } catch (Exception ex) { Logger(ex); }
-
-                    try {
-                        var sql = "select * from pools";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            using (var reader = command.ExecuteReader()) {
-                                var oldItems = new List<string>();
-                                foreach (string poolName in listBoxPoolPriorities.Items)
-                                    oldItems.Add(poolName);
-                                listBoxPoolPriorities.Items.Clear();
-                                while (reader.Read())
-                                    listBoxPoolPriorities.Items.Add((string)reader["name"]);
-                                foreach (var poolName in oldItems)
-                                    if (!listBoxPoolPriorities.Items.Contains(poolName))
-                                        listBoxPoolPriorities.Items.Add(poolName);
-                            }
-                        }
-                    } catch (Exception ex) { Logger(ex); }
-
-                    try {
-                        var sql = "select * from properties";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            using (var reader = command.ExecuteReader()) {
-                                while (reader.Read()) {
-                                    var propertyName = (string)reader["name"];
-                                    if (propertyName == "database_version") {
-                                        databaseVersion = int.Parse((string)reader["value"]);
-                                    } else if (propertyName == "coin_to_mine") {
-                                        // This field is obsolete.
-                                        var coinToMine = (string)reader["value"];
-                                        if (coinToMine == "ethereum") {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Ethash");
-                                        } else if (coinToMine == "ethereum_pascal") {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Ethash/Pascal");
-                                        } else if (coinToMine == "monero") {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("CryptoNight");
-                                        } else if (coinToMine == "zcash") {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Equihash");
-                                        } else if (coinToMine == "lbry") {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Lbry");
-                                        } else if (coinToMine == "pascal") {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Pascal");
-                                        } else if (coinToMine == "feathercoin") {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("NeoScrypt");
-                                        } else if (coinToMine == "monacoin") {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Lyra2REv2");
-                                        } else {
-                                            comboBoxDefaultAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.FindStringExact("Ethash/Pascal");
-                                        }
-                                    } else if ((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Success) {
-                                        int index = int.Parse((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(propertyName).Groups[1].Captures[0].Value);
-                                        if (0 <= index && index < Controller.OpenCLDevices.Length)
-                                            dataGridViewDevices.Rows[index].Cells["enabled"].Value = (string)reader["value"] == "true";
-                                    }
-
-                                    foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
-                                        var tag = (string)(comboBox.GetType().GetProperty("Tag").GetValue(comboBox));
-                                        if (tag == null)
-                                            continue;
-                                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
-                                        var match = regex.Match(tag);
-                                        var type = match.Success ? match.Groups[1].Value : null;
-                                        var name = match.Success ? match.Groups[2].Value : null;
-                                        if (type == "parameter" && name == propertyName) {
-                                            if (name == "currency" && !comboBox.Items.Contains((string)reader["value"]))
-                                                comboBox.Items.Add((string)reader["value"]);
-                                            try { comboBox.SelectedIndex = comboBox.FindStringExact((string)reader["value"]); } catch (Exception) { }
-                                        }
-                                    }
-
-                                    foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
-                                        var tag = (string)(textBox.GetType().GetProperty("Tag").GetValue(textBox));
-                                        if (tag == null)
-                                            continue;
-                                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
-                                        var match = regex.Match(tag);
-                                        var type = match.Success ? match.Groups[1].Value : null;
-                                        var name = match.Success ? match.Groups[2].Value : null;
-                                        if (type == "parameter" && name == propertyName)
-                                            textBox.Text = (string)reader["value"];
-                                    }
-
-                                    foreach (var checkBox in Utilities.FindAllChildrenByType<CheckBox>(this)) {
-                                        var tag = (string)(checkBox.GetType().GetProperty("Tag").GetValue(checkBox));
-                                        if (tag == null)
-                                            continue;
-                                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
-                                        var match = regex.Match(tag);
-                                        var type = match.Success ? match.Groups[1].Value : null;
-                                        var name = match.Success ? match.Groups[2].Value : null;
-                                        if (type == "parameter" && name == propertyName)
-                                            checkBox.Checked = (string)reader["value"] == "true";
-                                    }
-
-                                    foreach (var numericUpDown in Utilities.FindAllChildrenByType<NumericUpDown>(this)) {
-                                        var tag = (string)(numericUpDown.GetType().GetProperty("Tag").GetValue(numericUpDown));
-                                        if (tag == null)
-                                            continue;
-                                        var regex = new System.Text.RegularExpressions.Regex(@"^([a-z_0-9]+):([a-z_0-9]+)$");
-                                        var match = regex.Match(tag);
-                                        var type = match.Success ? match.Groups[1].Value : null;
-                                        var name = match.Success ? match.Groups[2].Value : null;
-                                        if (type == "parameter" && name == propertyName)
-                                            numericUpDown.Value = decimal.Parse((string)reader["value"]);
-                                    }
-                                }
-                            }
-                        }
-                    } catch (Exception ex) {
-                        Logger(ex);
-                    }
-
-                    try {
-                        var sql = "select * from device_parameters";
-                        using (var command = new SQLiteCommand(sql, conn)) {
-                            using (var reader = command.ExecuteReader()) {
-                                while (reader.Read()) {
-                                    var deviceID = (int)reader["device_id"];
-                                    var deviceVendor = (string)reader["device_vendor"];
-                                    var deviceName = (string)reader["device_name"];
-                                    var name = (string)reader["parameter_name"];
-                                    var value = (string)reader["parameter_value"];
-                                    if (deviceID >= Controller.OpenCLDevices.Length || deviceVendor != Controller.OpenCLDevices[deviceID].GetVendor() ||
-                                        deviceName != Controller.OpenCLDevices[deviceID].GetName())
-                                        continue;
-
-                                    var regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
-                                    var match = regex.Match(name);
-                                    var type = match.Success ? match.Groups[1].Value : null;
-                                    var parameter = match.Success ? match.Groups[2].Value : null;
-                                    var tuple = new Tuple<int, string, string>(deviceID, type, parameter);
-                                    try {
-                                        if ((new Regex(@"enabled$")).Match(parameter).Success) {
-                                            booleanDeviceParameterArray[tuple].Checked = (value == "true");
-                                        } else if (parameter == "memory_timings_polaris10_seq_misc1"
-                                                   || parameter == "memory_timings_polaris10_seq_misc3"
-                                                   || parameter == "memory_timings_polaris10_seq_misc4"
-                                                   || parameter == "memory_timings_polaris10_seq_misc8"
-                                                   || parameter == "memory_timings_polaris10_seq_misc9"
-                                                   || parameter == "memory_timings_polaris10_seq_pmg"
-                                                   || parameter == "memory_timings_polaris10_phy_d0"
-                                                   || parameter == "memory_timings_polaris10_phy_d1"
-                                                   || parameter == "memory_timings_polaris10_phy_2") {
-                                            stringDeviceParameterArray[tuple].Text = value;
-                                        } else if (parameter != null) {
-                                            numericDeviceParameterArray[tuple].Value = decimal.Parse(value);
-                                        }
-                                    } catch (Exception) {
-                                        Logger("Failed to load " + parameter + " = " + value + " as a device parameter.");
-                                    }
-                                }
-                            }
-                        }
-                    } catch (Exception ex) {
-                        Logger("Here!");
-                        Logger(ex);
-                    }
-
-                    conn.Close();
-                }
-                if (databaseVersion == 0) {
-                    // Values of intensity were reinterpreted at v1.1.14.
-                    ResetDeviceSettings();
-                    checkBoxDisableAutoStartPrompt.Checked = true;
-                }
-                if (databaseVersion < 2) {
-                    foreach (var device in Controller.OpenCLDevices) {
-                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value = (decimal)75;
-                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "maximum_temperature".ToLower())].Value = (decimal)85;
-                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "minimum_fan_speed".ToLower())].Value = (decimal)50;
-                    }
-                }
-                if (databaseVersion < 4) {
-                    if (checkBoxCustomPool0Enable.Checked
-                        || checkBoxCustomPool1Enable.Checked
-                        || checkBoxCustomPool2Enable.Checked
-                        || checkBoxCustomPool3Enable.Checked)
-                        checkBoxUseCustomPools.Checked = true;
-                }
-                Logger("Loaded settings.");
-                mAreSettingsDirty = false;
-            } catch (Exception ex) {
-                Logger(ex);
-            }
-
-            MainForm.Instance.Enabled = true;
-        }
-
         private void LoadSettingsFromJSONConfigFile(string filePath = null)
         {
-            if (filePath == null && System.IO.File.Exists(DatabaseFilePath)) {
-                LoadSettingsFromDatabase();
-                SaveSettingsToJSONConfigFile();
-                System.IO.File.Delete(DatabaseFilePath);
-                return;
-            } else if (filePath == null) {
+            if (filePath == null) {
                 filePath = JSONConfigFilePath;
             } else {
                 filePath = (new Regex("'")).Replace(filePath, "");
@@ -5344,7 +5083,7 @@ namespace GatelessGateSharp
         {
             OpenCLDevice device = Controller.OpenCLDevices[deviceIndex];
 
-            bool memoryTimingsEnabled = (device.GetType() == typeof(AMDPolaris10)) && booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked;
+            bool memoryTimingsEnabled = (device.GetType() == typeof(AMDGMC81)) && booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked;
             bool overclockingEnabled = booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked;
             var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
 
@@ -7102,7 +6841,7 @@ namespace GatelessGateSharp
                             var computeDevice = Controller.OpenCLDevices[deviceIndex].GetComputeDevice();
                             min = (value - computeDevice.MaxComputeUnits / 2 >= numericUpDown.Minimum) ? value - computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Minimum;
                             max = (value + computeDevice.MaxComputeUnits / 2 <= numericUpDown.Maximum) ? value + computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Maximum;
-                        } else if (parameterName == "local_work_size" && paramType == "cryptonight") {
+                        } else if (parameterName == "local_work_size" && (new Regex(@"^cryptonight")).IsMatch(paramType)) {
                             min = 8;
                             max = 16;
                             step = 8;
@@ -7865,12 +7604,12 @@ namespace GatelessGateSharp
                     mAreSettingsDirty = true;
                 }
                 regex = new Regex(@"^memory_timings_polaris10_");
-                if (regex.Match(parameter).Success && Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDPolaris10)) {
+                if (regex.Match(parameter).Success && Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDGMC81)) {
                     booleanDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "overclocking_enabled")].Checked = true;
                     booleanDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_enabled")].Checked = true;
                     mAreSettingsDirty = true;
                 }
-                if (!regex.Match(parameter).Success || Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDPolaris10))
+                if (!regex.Match(parameter).Success || Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDGMC81))
                     Controller.OptimizerEntries.Add(new Controller.OptimizerEntry(deviceIndex, algorithm, parameter));
             }
         }
@@ -7918,14 +7657,15 @@ namespace GatelessGateSharp
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 Device device = Controller.OpenCLDevices[deviceIndex];
 
-                string postfix = "";
-                if (device.PNPString != null)
-                    postfix = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)(&REV[^\\]*\\.*)?$")).Replace(device.PNPString, "$1"));
+                string postfix_memory_size = string.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
+                string postfix_memory_vendor = (device.MemoryVendor != null) ? (" " + device.MemoryVendor) : "";
+                string postfix_compute_units = string.Format(" {0}CU", device.GetMaxComputeUnits());
+                string postfix = postfix_memory_size + postfix_memory_vendor + postfix_compute_units;
 
                 saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
                 saveFileDialog.FilterIndex = 1;
                 saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.FileName = device.GetVendor() + " " + device.GetName() + String.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0) + postfix + ".json";
+                saveFileDialog.FileName = device.GetVendor() + " " + device.GetName() + postfix + ".json";
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                     using (var stream = System.IO.File.Open(System.IO.Path.GetFullPath(saveFileDialog.FileName), System.IO.FileMode.Create))
@@ -8160,19 +7900,19 @@ namespace GatelessGateSharp
             if (!PCIExpress.Available || busNumber <= 0)
                 return;
 
-            if (device.GetType() == typeof(AMDPolaris10)) {
+            if (device.GetType() == typeof(AMDGMC81)) {
                 try {
-                    AMDPolaris10.MC_ARB_BURST_TIME BurstTimeData = new AMDPolaris10.MC_ARB_BURST_TIME();
-                    AMDPolaris10.MC_ARB_DRAM_TIMING ARBData = new AMDPolaris10.MC_ARB_DRAM_TIMING();
-                    AMDPolaris10.MC_ARB_DRAM_TIMING2 ARB2Data = new AMDPolaris10.MC_ARB_DRAM_TIMING2();
-                    AMDPolaris10.MC_SEQ_CAS_TIMING CASData = new AMDPolaris10.MC_SEQ_CAS_TIMING();
-                    AMDPolaris10.MC_SEQ_RAS_TIMING RASData = new AMDPolaris10.MC_SEQ_RAS_TIMING();
-                    AMDPolaris10.MC_SEQ_MISC_TIMING MISCData = new AMDPolaris10.MC_SEQ_MISC_TIMING();
-                    AMDPolaris10.MC_SEQ_MISC_TIMING2 MISC2Data = new AMDPolaris10.MC_SEQ_MISC_TIMING2();
-                    AMDPolaris10.MC_SEQ_PMG_TIMING PMGData = new AMDPolaris10.MC_SEQ_PMG_TIMING();
+                    AMDGMC81.MC_ARB_BURST_TIME BurstTimeData = new AMDGMC81.MC_ARB_BURST_TIME();
+                    AMDGMC81.MC_ARB_DRAM_TIMING ARBData = new AMDGMC81.MC_ARB_DRAM_TIMING();
+                    AMDGMC81.MC_ARB_DRAM_TIMING2 ARB2Data = new AMDGMC81.MC_ARB_DRAM_TIMING2();
+                    AMDGMC81.MC_SEQ_CAS_TIMING CASData = new AMDGMC81.MC_SEQ_CAS_TIMING();
+                    AMDGMC81.MC_SEQ_RAS_TIMING RASData = new AMDGMC81.MC_SEQ_RAS_TIMING();
+                    AMDGMC81.MC_SEQ_MISC_TIMING MISCData = new AMDGMC81.MC_SEQ_MISC_TIMING();
+                    AMDGMC81.MC_SEQ_MISC_TIMING2 MISC2Data = new AMDGMC81.MC_SEQ_MISC_TIMING2();
+                    AMDGMC81.MC_SEQ_PMG_TIMING PMGData = new AMDGMC81.MC_SEQ_PMG_TIMING();
 
                     UInt32 data;
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_ARB_BURST_TIME, out data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_ARB_BURST_TIME, out data);
                     BurstTimeData.Data = data;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_state0")].Value = BurstTimeData.STATE0;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_state1")].Value = BurstTimeData.STATE1;
@@ -8181,32 +7921,32 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trrdl0")].Value = BurstTimeData.TRRDL0;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trrdl1")].Value = BurstTimeData.TRRDL1;
 
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_ARB_DRAM_TIMING, out data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_ARB_DRAM_TIMING, out data);
                     ARBData.Data = data;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_actrd")].Value = ARBData.ACTRD;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_actwr")].Value = ARBData.ACTWR;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_rasmactrd")].Value = ARBData.RASMACTRD;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_rasmactwr")].Value = ARBData.RASMACTWR;
 
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_ARB_DRAM_TIMING2, out data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_ARB_DRAM_TIMING2, out data);
                     ARB2Data.Data = data;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_ras2ras")].Value = ARB2Data.RAS2RAS;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_rp")].Value = ARB2Data.RP;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_wrplusrp")].Value = ARB2Data.WRPLUSRP;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_bus_turn")].Value = ARB2Data.BUS_TURN;
 
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_PMG_TIMING, out data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_PMG_TIMING, out data);
                     PMGData.Data = data;
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_pmg")].Text = String.Format("{0:X8}", PMGData.Data);
 
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_RAS_TIMING, out data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_RAS_TIMING, out data);
                     RASData.Data = data;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value = RASData.TRCDR;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value = RASData.TRCDW;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value = RASData.TRRD;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trc")].Value = RASData.TRC;
 
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_CAS_TIMING, out data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_CAS_TIMING, out data);
                     CASData.Data = data;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tr2r")].Value = CASData.TR2R;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tr2w")].Value = CASData.TR2W;
@@ -8214,14 +7954,14 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tccdl")].Value = CASData.TCCDL;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = CASData.TCL;
 
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_MISC_TIMING, out data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC_TIMING, out data);
                     MISCData.Data = data;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value = MISCData.TRP_RDA;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value = MISCData.TRP_WRA;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trp")].Value = MISCData.TRP;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = MISCData.TRFC;
 
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_MISC_TIMING2, out data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC_TIMING2, out data);
                     MISC2Data.Data = data;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = MISC2Data.FAW;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = MISC2Data.T32AW;
@@ -8229,14 +7969,14 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
 
                     UInt32 MISC1Data, MISC3Data, MISC4Data, MISC8Data, MISC9Data, PHYD0Data, PHYD1Data, PHY2Data;
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_MISC1, out MISC1Data);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_MISC3, out MISC3Data);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_MISC4, out MISC4Data);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_MISC8, out MISC8Data);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_SEQ_MISC9, out MISC9Data);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_PHY_TIMING_D0, out PHYD0Data);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_PHY_TIMING_D1, out PHYD1Data);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDPolaris10.GMC81Registers.mmMC_PHY_TIMING_2, out PHY2Data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC1, out MISC1Data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC3, out MISC3Data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC4, out MISC4Data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC8, out MISC8Data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC9, out MISC9Data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_PHY_TIMING_D0, out PHYD0Data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_PHY_TIMING_D1, out PHYD1Data);
+                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_PHY_TIMING_2, out PHY2Data);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = String.Format("{0:X8}", MISC1Data);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")].Text = String.Format("{0:X8}", MISC3Data);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_misc4")].Text = String.Format("{0:X8}", MISC4Data);
@@ -8324,7 +8064,7 @@ namespace GatelessGateSharp
                 PCIExpress.UnloadPhyMem();
                 foreach (var device in Controller.OpenCLDevices) {
                     foreach (var algorithm in AlgorithmList)
-                        if (device.GetType() == typeof(AMDPolaris10))
+                        if (device.GetType() == typeof(AMDGMC81))
                             booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
                 }
                 checkBoxBoostPerformance.Checked = true;

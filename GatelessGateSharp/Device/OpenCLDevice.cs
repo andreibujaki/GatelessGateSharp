@@ -209,8 +209,8 @@ namespace GatelessGateSharp
             OpenCLDevice[] devices = new OpenCLDevice[computeDevices.Length];
             var deviceIndex = 0;
             foreach (var computeDevice in computeDevices) {
-                if (computeDevice.Vendor == "Advanced Micro Devices, Inc." && computeDevice.Name == "Ellesmere") {
-                    devices[deviceIndex] = new AMDPolaris10(deviceIndex, computeDevice);
+                if (computeDevice.Vendor == "Advanced Micro Devices, Inc." && (computeDevice.Name == "Ellesmere" || computeDevice.Name == "Baffin" || computeDevice.Name == "gfx804")) {
+                    devices[deviceIndex] = new AMDGMC81(deviceIndex, computeDevice);
                 } else {
                     devices[deviceIndex] = new OpenCLDevice(deviceIndex, computeDevice);
                 }

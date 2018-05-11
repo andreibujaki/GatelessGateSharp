@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
+  <Product Id="{C393337D-1837-4765-996C-33C6C50BF1C3}" Name="Gateless Gate Sharp" Language="1033" Version="!(bind.fileVersion.FILE_GatelessGateSharp.exe)" Manufacturer="Zawawa Software LLC" UpgradeCode="{548B8FA3-94B1-4EB1-87FA-986C66752324}">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" Title="WiXSetup" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="COMPANYFOLDER" Name="Zawawa Software LLC">
+          <Directory Id="INSTALLFOLDER" Name="Gateless Gate Sharp">
+            <Directory Id="FOLDER_AssemblyKernels" Name="AssemblyKernels" />
+            <Directory Id="FOLDER_BinaryKernels" Name="BinaryKernels" />
+            <Directory Id="FOLDER_Kernels" Name="Kernels" />
+            <Directory Id="FOLDER_CLRX" Name="CLRX" />
+            <Directory Id="FOLDER_DeviceSettings" Name="DeviceSettings" />
+          </Directory>
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="Gateless Gate Sharp"/>
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="SOURCEDIRECTORY_AssembryKernels" Value="$(var.GatelessGateSharp.ProjectDir)AssembryKernels" />
+    <Property Id="SOURCEDIRECTORY_BinaryKernels"   Value="$(var.GatelessGateSharp.ProjectDir)BinaryKernels"   />
+    <Property Id="SOURCEDIRECTORY_Kernels"         Value="$(var.GatelessGateSharp.ProjectDir)Kernels"         />
+    <Property Id="SOURCEDIRECTORY_CLRX"            Value="$(var.GatelessGateSharp.ProjectDir)CLRX"            />
+    <Property Id="SOURCEDIRECTORY_DeviceSettings"  Value="$(var.GatelessGateSharp.ProjectDir)DeviceSettings"  />
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="ProductComponent" Win64="yes" Guid="{F909F787-488B-4D5B-9C32-D5CA42619171}">
+        <File Id="FILE_GatelessGateSharp.exe" Source="$(var.GatelessGateSharp.TargetPath)"  />
+        <File Id="FILE_GatelessGateSharpMonitor.exe" Source="$(var.GatelessGateSharpMonitor.TargetPath)" />
+        <File Id="FILE_Newtonsoft.Json.dll" Source="$(var.GatelessGateSharp.TargetDir)Newtonsoft.Json.dll" />
+        <File Id="FILE_PhyMemWrapper.dll" Source="$(var.GatelessGateSharp.TargetDir)PhyMemWrapper.dll" />
+        <File Id="FILE_LiveCharts.dll" Source="$(var.GatelessGateSharp.TargetDir)LiveCharts.dll" />
+        <File Id="FILE_LiveCharts.WinForms.dll" Source="$(var.GatelessGateSharp.TargetDir)LiveCharts.WinForms.dll" />
+        <File Id="FILE_LiveCharts.Wpf.dll" Source="$(var.GatelessGateSharp.TargetDir)LiveCharts.Wpf.dll" />
+        <File Id="FILE_IPAddressRange.dll" Source="$(var.GatelessGateSharp.TargetDir)IPAddressRange.dll" />
+        <File Id="FILE_HtmlAgilityPack.dll" Source="$(var.GatelessGateSharp.TargetDir)HtmlAgilityPack.dll" />
+        <File Id="FILE_nvml.dll" Source="$(var.GatelessGateSharp.TargetDir)nvml.dll" />
+        <File Id="FILE_OpenCL.dll" Source="$(var.GatelessGateSharp.TargetDir)OpenCL.dll" />
+        <File Id="FILE_phymem.sys" Source="$(var.GatelessGateSharp.TargetDir)phymem.sys" />
+        <File Id="FILE_README.html" Source="$(var.GatelessGateSharp.TargetDir)README.html" />
+      </Component>
+      <Component Id="CopyComponent" Guid="{ECC1A040-D3CD-41DA-9C94-C83769B73490}" Win64="yes">
+        <CopyFile Id="COPYFILE_AssembryKernels" SourceProperty="SOURCEDIRECTORY_AssembryKernels" DestinationDirectory="FOLDER_AssemblyKernels" SourceName="*" />
+        <CopyFile Id="COPYFILE_BinaryKernels"   SourceProperty="SOURCEDIRECTORY_BinaryKernels"   DestinationDirectory="FOLDER_BinaryKernels"   SourceName="*" />
+        <CopyFile Id="COPYFILE_Kernels"         SourceProperty="SOURCEDIRECTORY_Kernels"         DestinationDirectory="FOLDER_Kernels"         SourceName="*" />
+        <CopyFile Id="COPYFILE_CLRX"            SourceProperty="SOURCEDIRECTORY_CLRX"            DestinationDirectory="FOLDER_CLRX"            SourceName="*" />
+        <CopyFile Id="COPYFILE_DeviceSettings"  SourceProperty="SOURCEDIRECTORY_DeviceSettings"  DestinationDirectory="FOLDER_DeviceSettings"  SourceName="*" />
+      </Component>
+      <Component Id="ApplicationShortcut" Guid="{440FAE8E-5EA7-4E1F-9421-CC499FF13D47}" Win64="yes">
+        <Shortcut
+            Id="ApplicationStartMenuShortcut"
+            Name="Gateless Gate Sharp"
+            Description="Gateless Gate Sharp, a multi-algorithm OpenCL miner"
+            Target="[#FILE_GatelessGateSharp.exe]"
+            WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue
+            Root="HKCU"
+            Key="Software\ZawawaSoftwareLLC\GatelessGateSharp"
+            Name="installed" Type="integer" Value="1"
+            KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

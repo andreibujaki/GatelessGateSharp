@@ -8,7 +8,7 @@ using Cloo;
 
 
 namespace GatelessGateSharp {
-    class AMDPolaris10 : AMDDevice {
+    class AMDGMC81 : AMDDevice {
         public enum GMC81Registers : uint {
             ixMC_TSM_DEBUG_GCNT = 0x0,
             ixMC_IO_DEBUG_UP_0 = 0x0,
@@ -2048,7 +2048,7 @@ namespace GatelessGateSharp {
         MC_SEQ_MISC_TIMING2 mDefaultMISC2Timings;
         MC_SEQ_PMG_TIMING mDefaultPMGTimings;
 
-        public AMDPolaris10(int aDeviceIndex, ComputeDevice aComputeDevice)
+        public AMDGMC81(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex, aComputeDevice) {
         }
 
