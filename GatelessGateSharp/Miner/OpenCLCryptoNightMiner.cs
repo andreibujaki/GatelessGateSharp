@@ -64,9 +64,9 @@ namespace GatelessGateSharp {
             Variant = aVariant;
         }
 
-        public void Start(CryptoNightStratum aStratum, int aRowIntensity, int aLocalWorkSize, int aStridedIndex, int aMemoryChunkSize, bool aNicehashMode = false) {
+        public void Start(CryptoNightStratum aStratum, int aRawIntensity, int aLocalWorkSize, int aStridedIndex, int aMemoryChunkSize, bool aNicehashMode = false) {
             Stratum = aStratum;
-            globalWorkSizeA[0] = globalWorkSizeB[0] = aRowIntensity * aLocalWorkSize;
+            globalWorkSizeA[0] = globalWorkSizeB[0] = aRawIntensity * aLocalWorkSize;
             localWorkSizeA[0] = localWorkSizeB[0] = aLocalWorkSize;
             mNicehashMode = aNicehashMode;
             mStridedIndex = aStridedIndex;

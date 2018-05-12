@@ -2034,56 +2034,9 @@ namespace GatelessGateSharp {
                 Mask = 0x0;
             }
         }
-
-        UInt32 mDefaultMisc1Data;
-        UInt32 mDefaultMisc3Data;
-        UInt32 mDefaultMisc8Data;
-        UInt32 mDefaultMisc9Data;
-
-        MC_ARB_DRAM_TIMING mDefaultARBTimings;
-        MC_ARB_DRAM_TIMING2 mDefaultARB2Timings;
-        MC_SEQ_CAS_TIMING mDefaultCASTimings;
-        MC_SEQ_RAS_TIMING mDefaultRASTimings;
-        MC_SEQ_MISC_TIMING mDefaultMISCTimings;
-        MC_SEQ_MISC_TIMING2 mDefaultMISC2Timings;
-        MC_SEQ_PMG_TIMING mDefaultPMGTimings;
-
+        
         public AMDGMC81(int aDeviceIndex, ComputeDevice aComputeDevice)
             : base(aDeviceIndex, aComputeDevice) {
-        }
-
-        public override void SaveDefaultMemoryTimings()
-        {
-            int busNumber = GetComputeDevice().PciBusIdAMD;
-            if (!PCIExpress.Available || busNumber <= 0)
-                return;
-
-            uint mDefaultARBData = 0;
-            uint mDefaultARB2Data = 0;
-            uint mDefaultRASData = 0;
-            uint mDefaultCASData = 0;
-            uint mDefaultMISCData = 0;
-            uint mDefaultMISC2Data = 0;
-            uint mDefaultPMGData = 0;
-
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out mDefaultARBData);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out mDefaultARB2Data);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out mDefaultCASData);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_RAS_TIMING, out mDefaultRASData);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING, out mDefaultMISCData);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC_TIMING2, out mDefaultMISC2Data);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_PMG_TIMING, out mDefaultPMGData);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC1, out mDefaultMisc1Data);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC3, out mDefaultMisc3Data);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC8, out mDefaultMisc8Data);
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC9, out mDefaultMisc9Data);
-            mDefaultARBTimings = new MC_ARB_DRAM_TIMING(mDefaultARBData);
-            mDefaultARB2Timings = new MC_ARB_DRAM_TIMING2(mDefaultARB2Data);
-            mDefaultCASTimings = new MC_SEQ_CAS_TIMING(mDefaultCASData);
-            mDefaultRASTimings = new MC_SEQ_RAS_TIMING(mDefaultRASData);
-            mDefaultMISCTimings = new MC_SEQ_MISC_TIMING(mDefaultMISCData);
-            mDefaultMISC2Timings = new MC_SEQ_MISC_TIMING2(mDefaultMISC2Data);
-            mDefaultPMGTimings = new MC_SEQ_PMG_TIMING(mDefaultPMGData);
         }
 
         string mMemoryType = null;
@@ -2091,9 +2044,10 @@ namespace GatelessGateSharp {
 
         private void UpdateMemoryInfo()
         {
+            if (!PCIExpress.Available)
+                return;
             int busNumber = GetComputeDevice().PciBusIdAMD;
-
-            if (!PCIExpress.Available || busNumber <= 0)
+            if (busNumber <= 0)
                 return;
 
             uint misc0Data = 0;
@@ -2102,8 +2056,6 @@ namespace GatelessGateSharp {
             mMemoryType = misc0.MemoryType;
             mMemoryVendor = misc0.MemoryVendor;
         }
-
-
 
         public override string GetMemoryType()
         {
@@ -2135,12 +2087,14 @@ namespace GatelessGateSharp {
         UInt32 misc8;
         UInt32 misc9;
         MC_ARB_BURST_TIME ARBBurstTime = new MC_ARB_BURST_TIME();
+        UInt32 mDefaultCASTimings;
 
         public override void PrepareMemoryTimingMods(string algorithm)
         {
+            if (!PCIExpress.Available)
+                return;
             int busNumber = GetComputeDevice().PciBusIdAMD;
-
-            if (!PCIExpress.Available || busNumber <= 0)
+            if (busNumber <= 0)
                 return;
 
             uint misc0Data = 0;
@@ -2148,6 +2102,8 @@ namespace GatelessGateSharp {
             MC_SEQ_MISC0 misc0 = new MC_SEQ_MISC0(misc0Data);
             mMemoryType = misc0.MemoryType;
             mMemoryVendor = misc0.MemoryVendor;
+
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out mDefaultCASTimings);
 
             ARBTimings = new MC_ARB_DRAM_TIMING();
             ARBTimings2 = new MC_ARB_DRAM_TIMING2();
@@ -2211,9 +2167,10 @@ namespace GatelessGateSharp {
 
         public override void UpdateMemoryTimings()
         {
+            if (!PCIExpress.Available)
+                return;
             int busNumber = GetComputeDevice().PciBusIdAMD;
-
-            if (!PCIExpress.Available || busNumber <= 0 /*|| !this.MemoryTimingModsEnabled*/)
+            if (busNumber <= 0)
                 return;
 
             PCIExpress.UpdateGMC81Registers(
@@ -2234,14 +2191,15 @@ namespace GatelessGateSharp {
                 misc8,
                 misc9,    
                 ARBBurstTime.Data,
-                mDefaultCASTimings.Data);
+                mDefaultCASTimings);
         }
 
         public override void PrintMemoryTimings()
         {
+            if (!PCIExpress.Available && !PCIExpress.LoadPhyMem())
+                return;
             int busNumber = GetComputeDevice().PciBusIdAMD;
-
-            if (!PCIExpress.Available || busNumber <= 0)
+            if (busNumber <= 0)
                 return;
 
             uint ARBData = 0;

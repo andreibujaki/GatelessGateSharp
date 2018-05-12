@@ -100,7 +100,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.7";
+        public static string appVersion = "1.3.8";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string JSONConfigFileName = "GatelessGateSharp.json";
@@ -343,7 +343,8 @@ namespace GatelessGateSharp
                 Logger("Exception in InitializeDevices(): " + ex.Message + ex.StackTrace);
             }
             InitializeDeviceSettings();
-            ResetDeviceSettings();
+            //ResetDeviceSettings();
+            RestoreDeviceStockSettings();
             try {
                 if (System.IO.File.Exists(JSONConfigFilePath))
                     LoadSettingsFromJSONConfigFile();
@@ -751,24 +752,11 @@ namespace GatelessGateSharp
             UpdateControls();
         }
 
-        void checkBoxMemoryTimingsEnabled_CheckedChanged(object sender, EventArgs e)
-        {
-            foreach (var device in Controller.OpenCLDevices) {
-                foreach (var algorithm in AlgorithmList) {
-                    if (booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked) {
-                        bool prevValue = updatingUI;
-                        updatingUI = true;
-                        checkBoxBoostPerformance.Checked = true;
-                        updatingUI = prevValue;
-                    }
-                }
-            }
-        }
-
         void DeviceSettingsUserControl_ButtonResetToDefaultClicked(object sender, EventArgs e)
         {
             int deviceIndex = comboBoxDeviceSettingsDevice.SelectedIndex;
             ResetDeviceSettings(Controller.OpenCLDevices[deviceIndex]);
+            mAreSettingsDirty = true;
         }
 
         void DeviceSettingsUserControl_ButtonSaveToFileClicked(object sender, EventArgs e)
@@ -1295,10 +1283,72 @@ namespace GatelessGateSharp
             UpdateControls();
         }
 
+        void RestoreDeviceStockSettings(OpenCLDevice aDevice = null)
+        {
+            var prevUpdatingUI = updatingUI;
+            OpenCLDevice[] devices;
+
+            updatingUI = true;
+
+            if (aDevice != null) {
+                devices = new OpenCLDevice[] { aDevice };
+            } else {
+                devices = Controller.OpenCLDevices;
+            }
+
+            foreach (var device in devices) {
+                ResetDeviceAlgorithmicSettings(device);
+                LoadSpecificDeviceSettings(device); // Use algorithmic settings.
+                ResetDeviceFanControlSettings(device);
+                ResetDeviceMemoryTimingSettings(device);
+
+                foreach (var algorithm in AlgorithmList) {
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = false;
+                    if (device.GetType() == typeof(AMDGMC81))
+                        booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
+
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = device.DefaultCoreClock;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = device.DefaultCoreVoltage;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = device.DefaultMemoryClock;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = device.DefaultMemoryVoltage;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
+
+                    device.FanSpeed = -1;
+                    device.ResetOverclockingSettings();
+                }
+            }
+
+            updatingUI = prevUpdatingUI;
+            UpdateDevicesTabPage();
+        }
+
+        private void LoadSpecificDeviceSettings(OpenCLDevice device)
+        {
+            // Load specific device settings for the device if there are any.
+            string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName();
+            string extension = ".json";
+            string postfix_memory_size = string.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
+            string postfix_memory_vendor = (device.MemoryVendor != null) ? (" " + device.MemoryVendor) : "";
+            string postfix_compute_units = string.Format(" {0}CU", device.GetMaxComputeUnits());
+            string postfix0 = postfix_memory_size + postfix_memory_vendor + postfix_compute_units;
+            string postfix1 = postfix_memory_size + postfix_memory_vendor;
+            string postfix2 = postfix_memory_vendor;
+            string postfix3 = postfix_memory_size;
+            ///string postfix2 = String.Format(" ({0} {1})", device.MemoryType, device.MemoryVendor);
+            foreach (var postfix in new List<string> { postfix0, postfix1, postfix2, postfix3, "" }) {
+                string path = deviceSettingsFilePathBase + postfix + extension;
+                if (System.IO.File.Exists(path)) {
+                    LoadDeviceSettings(device.DeviceIndex, path);
+                    Logger("Loaded " + path + " for Device #" + device.DeviceIndex + ".");
+                    break;
+                }
+            }
+            UpdateDevicesTabPage();
+        }
+
         private void ResetDeviceSettings(OpenCLDevice aDevice = null)
         {
             var prevUpdatingUI = updatingUI;
-            var prevBoostPerformance = checkBoxBoostPerformance.Checked;
             OpenCLDevice[] devices;
 
             updatingUI = true;
@@ -1315,40 +1365,9 @@ namespace GatelessGateSharp
                 ResetDeviceOverclockingSettings(device);
                 ResetDeviceMemoryTimingSettings(device);
 
-                if (!checkBoxBoostPerformance.Checked)
-                    continue;
-
-                // Load specific device settings for the device if there are any.
-                string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName();
-                string extension = ".json";
-                string postfix_memory_size = string.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
-                string postfix_memory_vendor = (device.MemoryVendor != null) ? (" " + device.MemoryVendor) : "";
-                string postfix_compute_units = string.Format(" {0}CU", device.GetMaxComputeUnits());
-                string postfix0 = postfix_memory_size + postfix_memory_vendor + postfix_compute_units;
-                string postfix1 = postfix_memory_size + postfix_memory_vendor;
-                string postfix2 = postfix_memory_vendor;
-                string postfix3 = postfix_memory_size;
-                ///string postfix2 = String.Format(" ({0} {1})", device.MemoryType, device.MemoryVendor);
-                foreach (var postfix in new List<string> { postfix0, postfix1, postfix2, postfix3, "" }) {
-                    string path = deviceSettingsFilePathBase + postfix + extension;
-                    if (System.IO.File.Exists(path)) {
-                        LoadDeviceSettings(device.DeviceIndex, path);
-                        Logger("Loaded " + path + " for Device #" + device.DeviceIndex + ".");
-                        break;
-                    }
-                }
-
-                // Restore the original preferences for hardware acceleration.
-                if (!checkBoxBoostPerformance.Checked) {
-                    foreach (var algorithm in AlgorithmList) {
-                        booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = false;
-                        if (device.GetType() == typeof(AMDGMC81))
-                            booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
-                    }
-                }
+                LoadSpecificDeviceSettings(device);
             }
 
-            checkBoxBoostPerformance.Checked = prevBoostPerformance;
             updatingUI = prevUpdatingUI;
             UpdateDevicesTabPage();
         }
@@ -1500,7 +1519,7 @@ namespace GatelessGateSharp
         {
             foreach (var algorithm in AlgorithmList) {
                 try {
-                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = checkBoxBoostPerformance.Checked;
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = true;
 
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
@@ -1526,7 +1545,6 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
                     int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
 
-                    if (checkBoxBoostPerformance.Checked) {
                         numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
 
                         var newCoreVoltage
@@ -1579,7 +1597,6 @@ namespace GatelessGateSharp
                                                                                                                 defaultMemoryClock);
                         if (newMemoryClock > 0)
                             try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = newMemoryClock; } catch (Exception) { }
-                    }
                 } catch (Exception ex) { Logger(ex); }
             }
 
@@ -1591,7 +1608,7 @@ namespace GatelessGateSharp
             foreach (var algorithm in AlgorithmList) {
                 bool ethash = (new Regex(@"^ethash")).Match(algorithm).Success;
                 if (device.GetType() == typeof(AMDGMC81))
-                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = checkBoxBoostPerformance.Checked;
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = true;
                 if (device.GetVendor() == "AMD"
                     && (new System.Text.RegularExpressions.Regex(@"Radeon RX [45][78]0")).Match(device.GetName()).Success
                     && device.MemoryVendor == "Elpida") {
@@ -1979,7 +1996,7 @@ namespace GatelessGateSharp
                 }
                 try {
                     list.Add(new CommandLineParameter(argument));
-                } catch (Exception ex) {
+                } catch (Exception) {
                     Logger("Invalid argument: " + argument);
                 }
             }
@@ -2146,12 +2163,6 @@ namespace GatelessGateSharp
                         size.Width = (int)(double)parameter.Value;
                     } else if (parameter.Key == "window_height") {
                         size.Height = (int)(double)parameter.Value;
-                    } else if (parameter.Key == "boost_performance" || parameter.Key == "enable_phymem") {
-                        bool prev = updatingUI;
-                        updatingUI = true;
-                        checkBoxBoostPerformance.Checked = (bool)parameter.Value;
-                        Application.DoEvents();
-                        updatingUI = prev;
                     } else if ((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(parameter.Key).Success) {
                         int index = int.Parse((new System.Text.RegularExpressions.Regex(@"^enable_gpu([0-9]+)$")).Match(parameter.Key).Groups[1].Captures[0].Value);
                         if (0 <= index && index < Controller.OpenCLDevices.Length)
@@ -2374,7 +2385,7 @@ namespace GatelessGateSharp
                 name = System.DateTime.Now.ToString("yyyy-MM-dd--HHmm") + ".json";
             try {
                 System.IO.File.Copy(JSONConfigFilePath, SettingsBackupPathBase + "\\" + name);
-            } catch (Exception ex) { }
+            } catch (Exception) { }
             UpdateSettingBackupList();
         }
 
@@ -2987,7 +2998,7 @@ namespace GatelessGateSharp
                     text = Instance.textBoxAdminIPRange.Text;
                 }
                 return IPAddressRange.Parse(text);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 //Logger(ex);
                 return null;
             }
@@ -3005,7 +3016,7 @@ namespace GatelessGateSharp
                     text = Instance.textBoxAllowedIPRange.Text;
                 }
                 return IPAddressRange.Parse(text);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 // Logger(ex);
                 return null;
             }
@@ -3023,7 +3034,7 @@ namespace GatelessGateSharp
                     text = Instance.textBoxDeniedIPRange.Text;
                 }
                 return IPAddressRange.Parse(text);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 // Logger(ex);
                 return null;
             }
@@ -5097,6 +5108,13 @@ namespace GatelessGateSharp
                 device.TargetCoreVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
                 device.TargetMemoryVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
             }
+            if (memoryTimingsEnabled) {
+                if (PCIExpress.Available || PCIExpress.LoadPhyMem()) {
+                    device.PrepareMemoryTimingMods(algorithm);
+                } else {
+                    memoryTimingsEnabled = false;
+                }
+            }
             if (memoryTimingsEnabled)
                 device.PrepareMemoryTimingMods(algorithm);
             if (overclockingEnabled)
@@ -5526,8 +5544,8 @@ namespace GatelessGateSharp
                 buttonCopyToSimilarDevices.Enabled = idle;
                 buttonLoadFromFile.Enabled = idle;
                 buttonSaveToFile.Enabled = idle;
-                buttonResetToDefault.Enabled = idle;
-                buttonResetAllSettings.Enabled = idle;
+                buttonDeviceBoostPerformance.Enabled = idle;
+                buttonDeviceRestoreStockSettings.Enabled = idle;
 
                 var fanControlEnabled = checkBoxDeviceParameterFanControlEnabled.Checked;
                 checkBoxDeviceParameterFanControlEnabled.Enabled = idle;
@@ -5583,7 +5601,10 @@ namespace GatelessGateSharp
                 checkBoxDeviceSettingsMemoryTimingsEnabled.Enabled = idle;
                 buttonMemoryTimingsAppyStrap.Enabled = buttonMemoryTimingsCopyAcrossAlgorithms.Enabled = dataGridViewMemoryTimings.Enabled = idle && checkBoxDeviceSettingsMemoryTimingsEnabled.Checked;
 
-                checkBoxBoostPerformance.Enabled = idle;
+                buttonBoostPerformance.Enabled = idle;
+                buttonRestoreStockSettings.Enabled = idle;
+                buttonDeviceBoostPerformance.Enabled = idle;
+                buttonDeviceRestoreStockSettings.Enabled = idle;
 
                 int count = 0;
                 foreach (var checkBox in tabPageBenchmarkingAlgorithms.FindAllChildrenByType<CheckBox>())
@@ -6146,7 +6167,7 @@ namespace GatelessGateSharp
 
         public static void DownloadRecommendedAMDDriver()
         {
-            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.2-Release-Notes.aspx");
+            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx");
         }
 
         private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e)
@@ -6231,10 +6252,11 @@ namespace GatelessGateSharp
             }
         }
 
-        private void buttonResetAll_Click(object sender, EventArgs e)
+        private void buttonDeviceResoreStockSettings_Click(object sender, EventArgs e)
         {
+            int deviceIndex = comboBoxDeviceSettingsDevice.SelectedIndex;
+            RestoreDeviceStockSettings(Controller.OpenCLDevices[deviceIndex]);
             mAreSettingsDirty = true;
-            ResetDeviceSettings();
         }
 
         int mCPUUsage = 0;
@@ -6324,7 +6346,7 @@ namespace GatelessGateSharp
                         .ToList()
                         .ForEach(x => {
                             var href = x.Attributes["href"].Value;
-                            var regex = new System.Text.RegularExpressions.Regex(@"^/zawawawa/GatelessGateSharp/releases/download/[^/]+/([^/]+\.msi)$");
+                            var regex = new System.Text.RegularExpressions.Regex(@"^/zawawawa/GatelessGateSharp/releases/download/[^/]+/([^/]+\.exe)$");
                             var match = regex.Match(href);
                             if (match.Success) {
                                 mLatestReleaseName = latestReleaseName;
@@ -6442,7 +6464,7 @@ namespace GatelessGateSharp
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                     LoadSettingsFromJSONConfigFile(openFileDialog.FileName);
-            } catch (Exception ex) { }
+            } catch (Exception) { }
         }
 
         private void listBoxPoolPriorities_SelectedIndexChanged(object sender, EventArgs e)
@@ -6622,6 +6644,8 @@ namespace GatelessGateSharp
         
         private void buttonPrintMemoryTimings_Click(object sender, EventArgs e)
         {
+            if (!PCIExpress.Available && !PCIExpress.LoadPhyMem())
+                return;
             foreach (var device in Controller.OpenCLDevices)
                 device.PrintMemoryTimings();
         }
@@ -7735,7 +7759,7 @@ namespace GatelessGateSharp
                         var settings = (DeviceSettings)(new System.Xml.Serialization.XmlSerializer(typeof(DeviceSettings))).Deserialize(reader);
                         foreach (var tuple in settings.BooleanValues) {
                             var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
-                            try { booleanDeviceParameterArray[key].Checked = tuple.Item3; } catch (Exception ex) { Logger("Unable to load " + tuple.Item2 + " for Device #" + deviceIndex + "."); }
+                            try { booleanDeviceParameterArray[key].Checked = tuple.Item3; } catch (Exception) { Logger("Unable to load " + tuple.Item2 + " for Device #" + deviceIndex + "."); }
                         }
                         foreach (var tuple in settings.NumericValues) {
                             var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
@@ -7743,7 +7767,7 @@ namespace GatelessGateSharp
                         }
                         foreach (var tuple in settings.StringValues) {
                             var key = new Tuple<int, string, string>(deviceIndex, tuple.Item1, tuple.Item2);
-                            try { stringDeviceParameterArray[key].Text = tuple.Item3; } catch (Exception ex) { Logger("Unable to load " + tuple.Item2 + " for Device #" + deviceIndex + "."); }
+                            try { stringDeviceParameterArray[key].Text = tuple.Item3; } catch (Exception) { Logger("Unable to load " + tuple.Item2 + " for Device #" + deviceIndex + "."); }
                         }
                     }
                 }
@@ -7895,11 +7919,14 @@ namespace GatelessGateSharp
             var deviceIndex = comboBoxDeviceSettingsDevice.SelectedIndex;
             var device = Controller.OpenCLDevices[deviceIndex];
             var algorithm = AlgorithmList[comboBoxDeviceSettingsAlgorithm.SelectedIndex];
-            int busNumber = device.GetComputeDevice().PciBusIdAMD;
 
-            if (!PCIExpress.Available || busNumber <= 0)
+            if (!PCIExpress.Available && !PCIExpress.LoadPhyMem())
+                return;
+            int busNumber = device.GetComputeDevice().PciBusIdAMD;
+            if (busNumber <= 0)
                 return;
 
+ 
             if (device.GetType() == typeof(AMDGMC81)) {
                 try {
                     AMDGMC81.MC_ARB_BURST_TIME BurstTimeData = new AMDGMC81.MC_ARB_BURST_TIME();
@@ -8035,42 +8062,30 @@ namespace GatelessGateSharp
                 checkBox.Checked = false;
         }
 
-        private void checkBoxBoostPerformance_CheckedChanged(object sender, EventArgs e)
+        private void buttonBoostPerformance_Click(object sender, EventArgs e)
         {
-            if (checkBoxBoostPerformance.Checked && !updatingUI) {
-                var result = MessageBox.Show(
-                        "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
-                        + "This feature will configure overclocking/memory timing settings with preset values for better performance. "
-                        + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
-                        + "You can always confirm the results on the \"Devices\" tab page before you start mining.\n\n"
-                        + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
-                        + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
-                        + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
-                        + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
-                        + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
-                        appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            var result = MessageBox.Show(
+                    "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
+                    + "This feature will configure overclocking/memory timing settings with preset values for better performance. "
+                    + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
+                    + "You can always confirm the results on the \"Devices\" tab page before you start mining.\n\n"
+                    + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
+                    + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
+                    + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
+                    + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
+                    + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
+                    appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
-                if (result != System.Windows.Forms.DialogResult.OK) {
-                    checkBoxBoostPerformance.Checked = false;
-                    return;
-                }
-            }
-
-            if (checkBoxBoostPerformance.Checked) { 
-                PCIExpress.LoadPhyMem();
-                foreach (var device in Controller.OpenCLDevices)
-                    device.SaveDefaultMemoryTimings();
-            } else {
-                PCIExpress.UnloadPhyMem();
-                foreach (var device in Controller.OpenCLDevices) {
-                    foreach (var algorithm in AlgorithmList)
-                        if (device.GetType() == typeof(AMDGMC81))
-                            booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
-                }
-                checkBoxBoostPerformance.Checked = true;
-            }
-            if (!updatingUI)
+            if (result != System.Windows.Forms.DialogResult.OK) {
                 ResetDeviceSettings();
+                mAreSettingsDirty = true;
+            }
+        }
+
+        private void buttonRestoreStockSettings_Click(object sender, EventArgs e)
+        {
+            RestoreDeviceStockSettings();
+            mAreSettingsDirty = true;
         }
     }
 }

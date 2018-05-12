@@ -134,10 +134,6 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SQLite\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
@@ -386,6 +382,12 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="DeviceSettings\AMD Radeon RX 470 4.0GB Elpida.json" />
+    <None Include="DeviceSettings\AMD Radeon RX 470 4.0GB.json" />
+    <None Include="DeviceSettings\AMD Radeon RX 480 8.0GB Samsung.json" />
+    <None Include="DeviceSettings\AMD Radeon RX 480 8.0GB.json" />
+    <None Include="DeviceSettings\AMD Radeon RX 570 4.0GB.json" />
+    <None Include="DeviceSettings\AMD Radeon RX 580 8.0GB.json" />
     <None Include="Kernels\aes_helper.cl" />
     <None Include="Kernels\blake.cl" />
     <None Include="Kernels\blake256.cl" />
@@ -413,7 +415,6 @@
     <None Include="Kernels\luffa.cl" />
     <None Include="Kernels\Lyra2REv2.cl" />
     <None Include="Kernels\Lyra2v2.cl" />
-    <None Include="Kernels\neoscrypt_new.cl" />
     <None Include="Kernels\pascal.cl" />
     <None Include="Kernels\ripemd160.cl" />
     <None Include="Kernels\sha256.cl" />
@@ -487,8 +488,24 @@ xcopy /i /s /y $(ProjectDir)AssemblyKernels $(TargetDir)AssemblyKernels
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
 copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
+
+cd $(SolutionDir)GatelessGateSharp\bin\$(Configuration)
+rmdir "..\Gateless Gate Sharp" /s /q
+xcopy . "..\Gateless Gate Sharp" /s /i /y
+cd "..\Gateless Gate Sharp"
+del *.xml
+del *.pdb
+del GatelessGateSharp.exe.config GatelessGateSharp.vshost.exe.config GatelessGateSharp.vshost.exe.manifest GatelessGateSharp.vshost.exe
+del *.lib
+del *.exp
+del AssemblyKernels\*.bat
+del AssemblyKernels\*.original
+del "..\Gateless Gate Sharp\GatelessGateSharp.vshost.exe"
+
+cd $(SolutionDir)
 "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:16777216
-showdown makehtml  -i $(SolutionDir)README.md -o README.html</PostBuildEvent>
+showdown makehtml  -i $(SolutionDir)README.md -o README.html
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,24 +2,25 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>5e4c431d-1e37-4909-b4dc-f13d123c2dba</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>Gateless_Gate_Sharp_Setup</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Product.wxs" />
+    <Compile Include="HeatGeneratedFileList.wxs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GatelessGateSharpMonitor\GatelessGateSharpMonitor.csproj">
@@ -40,6 +41,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
       <Name>WixUIExtension</Name>
@@ -51,10 +56,19 @@
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>cd $(SolutionDir)GatelessGateSharp\bin\$(Configuration)
-"c:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x64\signtool.exe" sign /sha1 1B4A0DC00154061C27AF52EE28EA555544517DEE /tr http://timestamp.digicert.com /td sha256 /fd sha256 GatelessGateSharp.exe GatelessGateSharpMonitor.exe Newtonsoft.Json.dll PhyMemWrapper.dll LiveCharts%2a.dll IPAddressRange.dll CLRX\%2a.%2a HtmlAgilityPack.dll nvml.dll</PreBuildEvent>
+    <PreBuildEvent>
+cd "$(SolutionDir)GatelessGateSharp\bin\Gateless Gate Sharp"
+signtool.exe sign /sha1 1B4A0DC00154061C27AF52EE28EA555544517DEE /tr http://timestamp.digicert.com /td sha256 /fd sha256 %2a.exe %2a.dll CLRX\%2a.%2a
+cd $(SolutionDir)GatelessGateSharp\bin
+del Gateless_Gate_Sharp_%2a.zip
+del Gateless_Gate_Sharp_%2a.7z
+"c:\Program Files\7-Zip\7z.exe" a -y Gateless_Gate_Sharp_@(VersionNumber).zip "Gateless Gate Sharp"
+"c:\Program Files\7-Zip\7z.exe" a -y Gateless_Gate_Sharp_@(VersionNumber).7z  "Gateless Gate Sharp"
+move %2a.zip $(TargetDir)
+move %2a.7z $(TargetDir)
+    </PreBuildEvent>
   </PropertyGroup>
-  <Target Name="PostBuildMacros">
+  <Target Name="PreBuildMacros">
     <GetAssemblyIdentity AssemblyFiles="$(SolutionDir)GatelessGateSharp\bin\$(Configuration)\GatelessGateSharp.exe">
       <Output TaskParameter="Assemblies" ItemName="Targets" />
     </GetAssemblyIdentity>
@@ -63,33 +77,23 @@
     </ItemGroup>
   </Target>
   <PropertyGroup>
-    <PostBuildEventDependsOn>
-    $(PostBuildEventDependsOn);
-    PostBuildMacros;
-  </PostBuildEventDependsOn>
+    <DefineConstants>HarvestPath=$(SolutionDir)GatelessGateSharp\bin\$(Configuration)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>"c:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x64\signtool.exe" sign /sha1 1B4A0DC00154061C27AF52EE28EA555544517DEE /tr http://timestamp.digicert.com /td sha256 /fd sha256 $(TargetPath)
-ren $(TargetPath) Gateless_Gate_Sharp_@(VersionNumber)_Setup.msi
-cd $(SolitionDir)\GatelessGateSharp\bin\Release
-del %2a.xml
-del %2a.pdb
-del GatelessGateSharp.exe.config GatelessGateSharp.vshost.exe.config GatelessGateSharp.vshost.exe.manifest GatelessGateSharp.vshost.exe
-del %2a.lib
-del %2a.exp
-del AssemblyKernel\%2a.bat
-del AssemblyKernel\%2a.original
-rmdir "..\Gateless Gate Sharp" /s /q
-xcopy . "..\Gateless Gate Sharp" /s /i /y
-del "..\Gateless Gate Sharp\GatelessGateSharp.vshost.exe"
-cd ..
-del Gateless_Gate_Sharp_%2a.zip
-del Gateless_Gate_Sharp_%2a.7z
-"c:\Program Files\7-Zip\7z.exe" a -y Gateless_Gate_Sharp_@(VersionNumber).zip "Gateless Gate Sharp"
-"c:\Program Files\7-Zip\7z.exe" a -y Gateless_Gate_Sharp_@(VersionNumber).7z  "Gateless Gate Sharp"
-move %2a.zip $(TargetDir)
-move %2a.7z $(TargetDir)
-start $(TargetDir)</PostBuildEvent>
+    <PreBuildEventDependsOn>
+    $(PreBuildEventDependsOn);
+    PreBuildMacros;
+  </PreBuildEventDependsOn>
+  </PropertyGroup>
+  <Target Name="BeforeBuild">
+    <HeatDirectory Directory="$(SolutionDir)GatelessGateSharp\bin\Gateless Gate Sharp" PreprocessorVariable="var.HarvestPath" OutputFile="HeatGeneratedFileList.wxs" ComponentGroupName="HeatGenerated" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+"c:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x64\signtool.exe" sign /sha1 1B4A0DC00154061C27AF52EE28EA555544517DEE /tr http://timestamp.digicert.com /td sha256 /fd sha256 $(TargetPath)
+
+start $(TargetDir)
+</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

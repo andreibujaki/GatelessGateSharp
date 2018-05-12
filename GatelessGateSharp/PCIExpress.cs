@@ -66,15 +66,16 @@ namespace GatelessGateSharp {
             public UInt32 reserved4;
         }
         
-        static bool sAvailable = false;
         static PCIConfigurationSpace config = new PCIConfigurationSpace();
 
-        public static bool Available { get { return sAvailable; } }
+        public static bool Available = false;
 
         public static bool LoadPhyMem() {
-            if (LoadPhyMemDriver() != 0) {
+            if (Available) {
+                return true;
+            } else if (LoadPhyMemDriver() != 0) {
                 MainForm.Logger("Loaded PhyMem.");
-                sAvailable = true;
+                Available = true;
             } else {
                 MainForm.Logger("Failed to load phymem.");
                 return false;
@@ -84,10 +85,10 @@ namespace GatelessGateSharp {
         }
 
         public static void UnloadPhyMem() {
-            if (!sAvailable)
+            if (!Available)
                 return;
             UnloadPhyMemDriver();
-            sAvailable = false;
+            Available = false;
             MainForm.Logger("Unloaded PhyMem.");
         }
     }

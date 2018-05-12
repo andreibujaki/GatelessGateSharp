@@ -280,11 +280,10 @@
             this.checkBoxDeviceParameterFanControlEnabled = new System.Windows.Forms.CheckBox();
             this.buttonLoadFromFile = new System.Windows.Forms.Button();
             this.buttonSaveToFile = new System.Windows.Forms.Button();
+            this.buttonDeviceRestoreStockSettings = new System.Windows.Forms.Button();
             this.buttonCopyToSimilarDevices = new System.Windows.Forms.Button();
-            this.buttonResetToDefault = new System.Windows.Forms.Button();
+            this.buttonDeviceBoostPerformance = new System.Windows.Forms.Button();
             this.comboBoxDeviceSettingsDevice = new System.Windows.Forms.ComboBox();
-            this.buttonResetAllSettings = new System.Windows.Forms.Button();
-            this.checkBoxBoostPerformance = new System.Windows.Forms.CheckBox();
             this.tabPageCustomPoolSettings = new System.Windows.Forms.TabPage();
             this.groupBoxCustmPool1 = new System.Windows.Forms.GroupBox();
             this.comboBoxCustomPool1SecondaryAlgorithm = new System.Windows.Forms.ComboBox();
@@ -429,6 +428,8 @@
             this.comboBoxGraphCoverage = new System.Windows.Forms.ComboBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.buttonRestoreStockSettings = new System.Windows.Forms.Button();
+            this.buttonBoostPerformance = new System.Windows.Forms.Button();
             this.label31 = new System.Windows.Forms.Label();
             this.checkBoxUseCustomPools = new System.Windows.Forms.CheckBox();
             this.comboBoxDefaultAlgorithm = new System.Windows.Forms.ComboBox();
@@ -1699,7 +1700,7 @@
             this.dataGridViewBenchmarks.RowHeadersVisible = false;
             dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.dataGridViewBenchmarks.RowsDefaultCellStyle = dataGridViewCellStyle19;
-            this.dataGridViewBenchmarks.Size = new System.Drawing.Size(579, 95);
+            this.dataGridViewBenchmarks.Size = new System.Drawing.Size(579, 110);
             this.dataGridViewBenchmarks.TabIndex = 5;
             this.dataGridViewBenchmarks.SelectionChanged += new System.EventHandler(this.dataGridViewBenchmarks_SelectionChanged);
             // 
@@ -2438,10 +2439,10 @@
             this.tabPageDeviceSettings.Controls.Add(this.groupBox13);
             this.tabPageDeviceSettings.Controls.Add(this.buttonLoadFromFile);
             this.tabPageDeviceSettings.Controls.Add(this.buttonSaveToFile);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonDeviceRestoreStockSettings);
             this.tabPageDeviceSettings.Controls.Add(this.buttonCopyToSimilarDevices);
-            this.tabPageDeviceSettings.Controls.Add(this.buttonResetToDefault);
+            this.tabPageDeviceSettings.Controls.Add(this.buttonDeviceBoostPerformance);
             this.tabPageDeviceSettings.Controls.Add(this.comboBoxDeviceSettingsDevice);
-            this.tabPageDeviceSettings.Controls.Add(this.buttonResetAllSettings);
             this.tabPageDeviceSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageDeviceSettings.Name = "tabPageDeviceSettings";
             this.tabPageDeviceSettings.Size = new System.Drawing.Size(616, 335);
@@ -3255,7 +3256,7 @@
             // buttonLoadFromFile
             // 
             this.buttonLoadFromFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonLoadFromFile.Location = new System.Drawing.Point(428, 4);
+            this.buttonLoadFromFile.Location = new System.Drawing.Point(446, 4);
             this.buttonLoadFromFile.Name = "buttonLoadFromFile";
             this.buttonLoadFromFile.Size = new System.Drawing.Size(50, 23);
             this.buttonLoadFromFile.TabIndex = 154;
@@ -3266,7 +3267,7 @@
             // buttonSaveToFile
             // 
             this.buttonSaveToFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSaveToFile.Location = new System.Drawing.Point(372, 4);
+            this.buttonSaveToFile.Location = new System.Drawing.Point(390, 4);
             this.buttonSaveToFile.Name = "buttonSaveToFile";
             this.buttonSaveToFile.Size = new System.Drawing.Size(50, 23);
             this.buttonSaveToFile.TabIndex = 153;
@@ -3274,27 +3275,38 @@
             this.buttonSaveToFile.UseVisualStyleBackColor = true;
             this.buttonSaveToFile.Click += new System.EventHandler(this.DeviceSettingsUserControl_ButtonSaveToFileClicked);
             // 
+            // buttonDeviceRestoreStockSettings
+            // 
+            this.buttonDeviceRestoreStockSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDeviceRestoreStockSettings.Location = new System.Drawing.Point(558, 4);
+            this.buttonDeviceRestoreStockSettings.Name = "buttonDeviceRestoreStockSettings";
+            this.buttonDeviceRestoreStockSettings.Size = new System.Drawing.Size(50, 23);
+            this.buttonDeviceRestoreStockSettings.TabIndex = 5;
+            this.buttonDeviceRestoreStockSettings.Text = "Stock";
+            this.buttonDeviceRestoreStockSettings.UseVisualStyleBackColor = true;
+            this.buttonDeviceRestoreStockSettings.Click += new System.EventHandler(this.buttonDeviceResoreStockSettings_Click);
+            // 
             // buttonCopyToSimilarDevices
             // 
             this.buttonCopyToSimilarDevices.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCopyToSimilarDevices.Location = new System.Drawing.Point(228, 4);
             this.buttonCopyToSimilarDevices.Name = "buttonCopyToSimilarDevices";
-            this.buttonCopyToSimilarDevices.Size = new System.Drawing.Size(138, 23);
+            this.buttonCopyToSimilarDevices.Size = new System.Drawing.Size(158, 23);
             this.buttonCopyToSimilarDevices.TabIndex = 151;
             this.buttonCopyToSimilarDevices.Text = "Copy to Similar Devices";
             this.buttonCopyToSimilarDevices.UseVisualStyleBackColor = true;
             this.buttonCopyToSimilarDevices.Click += new System.EventHandler(this.DeviceSettingsUserControl_ButtonCopyToOthersClicked);
             // 
-            // buttonResetToDefault
+            // buttonDeviceBoostPerformance
             // 
-            this.buttonResetToDefault.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetToDefault.Location = new System.Drawing.Point(484, 4);
-            this.buttonResetToDefault.Name = "buttonResetToDefault";
-            this.buttonResetToDefault.Size = new System.Drawing.Size(50, 23);
-            this.buttonResetToDefault.TabIndex = 152;
-            this.buttonResetToDefault.Text = "Reset";
-            this.buttonResetToDefault.UseVisualStyleBackColor = true;
-            this.buttonResetToDefault.Click += new System.EventHandler(this.DeviceSettingsUserControl_ButtonResetToDefaultClicked);
+            this.buttonDeviceBoostPerformance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDeviceBoostPerformance.Location = new System.Drawing.Point(502, 4);
+            this.buttonDeviceBoostPerformance.Name = "buttonDeviceBoostPerformance";
+            this.buttonDeviceBoostPerformance.Size = new System.Drawing.Size(50, 23);
+            this.buttonDeviceBoostPerformance.TabIndex = 152;
+            this.buttonDeviceBoostPerformance.Text = "Boost";
+            this.buttonDeviceBoostPerformance.UseVisualStyleBackColor = true;
+            this.buttonDeviceBoostPerformance.Click += new System.EventHandler(this.DeviceSettingsUserControl_ButtonResetToDefaultClicked);
             // 
             // comboBoxDeviceSettingsDevice
             // 
@@ -3307,34 +3319,6 @@
             this.comboBoxDeviceSettingsDevice.TabIndex = 150;
             this.comboBoxDeviceSettingsDevice.Tag = "parameter:device_settings_device";
             this.comboBoxDeviceSettingsDevice.SelectedIndexChanged += new System.EventHandler(this.comboBoxDeviceSettingsDevice_SelectedIndexChanged);
-            // 
-            // buttonResetAllSettings
-            // 
-            this.buttonResetAllSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonResetAllSettings.Location = new System.Drawing.Point(540, 4);
-            this.buttonResetAllSettings.Name = "buttonResetAllSettings";
-            this.buttonResetAllSettings.Size = new System.Drawing.Size(68, 23);
-            this.buttonResetAllSettings.TabIndex = 5;
-            this.buttonResetAllSettings.Text = "Reset All";
-            this.buttonResetAllSettings.UseVisualStyleBackColor = true;
-            this.buttonResetAllSettings.Click += new System.EventHandler(this.buttonResetAll_Click);
-            // 
-            // checkBoxBoostPerformance
-            // 
-            this.checkBoxBoostPerformance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBoxBoostPerformance.AutoSize = true;
-            this.checkBoxBoostPerformance.BackColor = System.Drawing.Color.Salmon;
-            this.checkBoxBoostPerformance.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxBoostPerformance.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBoxBoostPerformance.Location = new System.Drawing.Point(108, 107);
-            this.checkBoxBoostPerformance.Name = "checkBoxBoostPerformance";
-            this.checkBoxBoostPerformance.Size = new System.Drawing.Size(116, 17);
-            this.checkBoxBoostPerformance.TabIndex = 1;
-            this.checkBoxBoostPerformance.Tag = "parameter:boost_performance";
-            this.checkBoxBoostPerformance.Text = "Boost Performance";
-            this.toolTipMainForm.SetToolTip(this.checkBoxBoostPerformance, "Enable hardware acceleration for default settings.");
-            this.checkBoxBoostPerformance.UseVisualStyleBackColor = false;
-            this.checkBoxBoostPerformance.CheckedChanged += new System.EventHandler(this.checkBoxBoostPerformance_CheckedChanged);
             // 
             // tabPageCustomPoolSettings
             // 
@@ -5058,9 +5042,10 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.buttonRestoreStockSettings);
+            this.tabPage2.Controls.Add(this.buttonBoostPerformance);
             this.tabPage2.Controls.Add(this.label31);
             this.tabPage2.Controls.Add(this.checkBoxUseCustomPools);
-            this.tabPage2.Controls.Add(this.checkBoxBoostPerformance);
             this.tabPage2.Controls.Add(this.comboBoxDefaultAlgorithm);
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Controls.Add(this.label4);
@@ -5074,6 +5059,28 @@
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Compute";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // buttonRestoreStockSettings
+            // 
+            this.buttonRestoreStockSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonRestoreStockSettings.Location = new System.Drawing.Point(238, 101);
+            this.buttonRestoreStockSettings.Name = "buttonRestoreStockSettings";
+            this.buttonRestoreStockSettings.Size = new System.Drawing.Size(74, 23);
+            this.buttonRestoreStockSettings.TabIndex = 172;
+            this.buttonRestoreStockSettings.Text = "Restore All";
+            this.buttonRestoreStockSettings.UseVisualStyleBackColor = true;
+            this.buttonRestoreStockSettings.Click += new System.EventHandler(this.buttonRestoreStockSettings_Click);
+            // 
+            // buttonBoostPerformance
+            // 
+            this.buttonBoostPerformance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonBoostPerformance.Location = new System.Drawing.Point(111, 101);
+            this.buttonBoostPerformance.Name = "buttonBoostPerformance";
+            this.buttonBoostPerformance.Size = new System.Drawing.Size(121, 23);
+            this.buttonBoostPerformance.TabIndex = 171;
+            this.buttonBoostPerformance.Text = "Boost Performance";
+            this.buttonBoostPerformance.UseVisualStyleBackColor = true;
+            this.buttonBoostPerformance.Click += new System.EventHandler(this.buttonBoostPerformance_Click);
             // 
             // label31
             // 
@@ -5633,7 +5640,6 @@
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm.ReadOnly = true;
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm.Width = 80;
             // 
             // dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter
             // 
@@ -6555,8 +6561,7 @@
         private System.Windows.Forms.CheckBox checkBoxBenchmarkingEthashPascalEnabled;
         private System.Windows.Forms.DataGridView dataGridViewBenchmarks;
         private System.Windows.Forms.TabPage tabPageDeviceSettings;
-        private System.Windows.Forms.Button buttonResetAllSettings;
-        private System.Windows.Forms.CheckBox checkBoxBoostPerformance;
+        private System.Windows.Forms.Button buttonDeviceRestoreStockSettings;
         private System.Windows.Forms.TabPage tabPageCustomPoolSettings;
         private System.Windows.Forms.GroupBox groupBoxCustmPool1;
         private System.Windows.Forms.ComboBox comboBoxCustomPool1SecondaryAlgorithm;
@@ -6817,7 +6822,7 @@
         private System.Windows.Forms.Button buttonLoadFromFile;
         private System.Windows.Forms.Button buttonSaveToFile;
         private System.Windows.Forms.Button buttonCopyToSimilarDevices;
-        private System.Windows.Forms.Button buttonResetToDefault;
+        private System.Windows.Forms.Button buttonDeviceBoostPerformance;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.NumericUpDown numericUpDownDeviceParameterFanControlTargetTemperature;
         private System.Windows.Forms.Label label188;
@@ -6898,11 +6903,6 @@
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.Button button14;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsDeviceIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsAlgorithm;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnOptimizerRecordsParameter;
@@ -6911,5 +6911,12 @@
         private System.Windows.Forms.Timer timerMemoryTimings;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button buttonRestoreStockSettings;
+        private System.Windows.Forms.Button buttonBoostPerformance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsAlgorithm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsFirstParameter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSecondParameter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSuccessRate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxOptimizerBenchmarkingResultsSpeed;
     }
 }

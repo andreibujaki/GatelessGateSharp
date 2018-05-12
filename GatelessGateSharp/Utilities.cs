@@ -557,7 +557,7 @@ namespace GatelessGateSharp
                 if (sCountryCode != null)
                     return sCountryCode;
                 using (WebClient wc = new WebClient()) {
-                    return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(wc.DownloadString("https://ipinfo.io/json"))["country"];
+                    return (sCountryCode = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(wc.DownloadString("https://ipinfo.io/json"))["country"]);
                 }
             } catch (Exception) {
                 return null;
