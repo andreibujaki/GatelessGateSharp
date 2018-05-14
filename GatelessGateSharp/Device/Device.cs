@@ -13,7 +13,8 @@ namespace GatelessGateSharp
 {
     public class Device : IDisposable
     {
-        private int mDeviceIndex;
+        public int DeviceIndex;
+
         private int mAcceptedShares;
         private int mRejectedShares;
         private System.Threading.Mutex mMutex = new System.Threading.Mutex();
@@ -24,7 +25,6 @@ namespace GatelessGateSharp
         public virtual long GetMemorySize() { return 0; }
         public virtual long GetMaxComputeUnits() { return 0; }
 
-        public int DeviceIndex { get { return mDeviceIndex; } }
         public string Vendor { get { return GetVendor(); } }
         public string Name { get { return GetName(); } }
         public string OpenCLName { get { return GetOpenCLName(); } }
@@ -70,7 +70,7 @@ namespace GatelessGateSharp
 
         public Device(int aDeviceIndex)
         {
-            mDeviceIndex = aDeviceIndex;
+            DeviceIndex = aDeviceIndex;
             mAcceptedShares = 0;
             mRejectedShares = 0;
             OverclockingEnabled = false;

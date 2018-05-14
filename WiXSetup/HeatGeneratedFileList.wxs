@@ -38,9 +38,6 @@
             <Component Id="cmp46AD2A71B79D2F1399F269A08A3249D2" Guid="*">
                 <File Id="fil639D7C1056145B7EEA780175AB862984" KeyPath="yes" Source="$(var.HarvestPath)\PhyMemWrapper.dll" />
             </Component>
-            <Component Id="cmp4118AC6D52E8B8B69D7F6C32F68325D8" Guid="*">
-                <File Id="fil97769374407AB6582861A06C4DA76F1D" KeyPath="yes" Source="$(var.HarvestPath)\README.html" />
-            </Component>
             <Directory Id="dirE3D1E0B6837DDD4581B09A1996205535" Name="BinaryKernels">
                 <Component Id="cmp1A698FAB2912F7EF549129B929350ED6" Guid="*">
                     <File Id="filA683E865018039FA58EBE80744DAA942" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Baffin_ethash_pascal_256.bin" />
@@ -235,17 +232,14 @@
                 </Component>
             </Directory>
             <Directory Id="dirCE39192B2DC4D9EB1E8E5C9CDE47DC02" Name="DeviceSettings">
-                <Component Id="cmp85745813CB65C0C51FDDE2175905C51C" Guid="*">
-                    <File Id="fil0AB02D0331EEF80747BB7D2F950D7DA5" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 470 4.0GB (VEN_1002&amp;DEV_67DF&amp;SUBSYS_0B311002).json" />
+                <Component Id="cmp67DC826B2850495DF8D21059B1344249" Guid="*">
+                    <File Id="fil4EE49E730E971EBFCFDD5A8FB8952ABE" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon R9 Nano 4.0GB 64CU.json" />
                 </Component>
                 <Component Id="cmpFAE2D0C3E7F79D1D9067CB7883898D39" Guid="*">
                     <File Id="fil2626AC18852DAE674D34AB6BA424FC93" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 470 4.0GB Elpida.json" />
                 </Component>
                 <Component Id="cmpA9C4040B02EE224CC8B08280DFCC97AC" Guid="*">
                     <File Id="filC2B6E6243C3E161508E1A1354CA3EF5D" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 470 4.0GB.json" />
-                </Component>
-                <Component Id="cmp97767F0E768469538A0515DBC4956B2A" Guid="*">
-                    <File Id="filC68F6C740715F0834B43AE7ABA8C5205" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 480 8.0GB (VEN_1002&amp;DEV_67DF&amp;SUBSYS_94801682).json" />
                 </Component>
                 <Component Id="cmpF75028940B472DD999F1BEE231272CB2" Guid="*">
                     <File Id="filA359A42B483C7BADA51D846CA7476646" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 480 8.0GB Samsung.json" />
@@ -258,6 +252,9 @@
                 </Component>
                 <Component Id="cmp5FEFAC6200CF4C1B4790CD9B6BA45264" Guid="*">
                     <File Id="filB042473CEBD94D8A68D09E00069BB763" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 580 8.0GB.json" />
+                </Component>
+                <Component Id="cmp5BF8D70A10CE28C3C54A8CA34C5A2C94" Guid="*">
+                    <File Id="fil055F9739893F50779B743338DBB00529" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX Vega 56 8.0GB 56CU.json" />
                 </Component>
             </Directory>
             <Directory Id="dirEDCE65B1F324B9247526436A0ADAFCE7" Name="Kernels">
@@ -413,7 +410,6 @@
             <ComponentRef Id="cmp30CAD646F7DAC8538F6230FF3D08C5B3" />
             <ComponentRef Id="cmp28FB22B28D9FFBC15D2050E172F311EF" />
             <ComponentRef Id="cmp46AD2A71B79D2F1399F269A08A3249D2" />
-            <ComponentRef Id="cmp4118AC6D52E8B8B69D7F6C32F68325D8" />
             <ComponentRef Id="cmp1A698FAB2912F7EF549129B929350ED6" />
             <ComponentRef Id="cmpFDDD0B16290C7011F1E64ADAEE146277" />
             <ComponentRef Id="cmpFBC8E48FDD61FC10A1F471493FFA3929" />
@@ -477,14 +473,14 @@
             <ComponentRef Id="cmpDC03EBC01ACCD5375701EC495A3031AD" />
             <ComponentRef Id="cmp52F5E8C4170C642082441A4EAF4F542F" />
             <ComponentRef Id="cmp71D7C1F575EB4B3209D8E68E29690A21" />
-            <ComponentRef Id="cmp85745813CB65C0C51FDDE2175905C51C" />
+            <ComponentRef Id="cmp67DC826B2850495DF8D21059B1344249" />
             <ComponentRef Id="cmpFAE2D0C3E7F79D1D9067CB7883898D39" />
             <ComponentRef Id="cmpA9C4040B02EE224CC8B08280DFCC97AC" />
-            <ComponentRef Id="cmp97767F0E768469538A0515DBC4956B2A" />
             <ComponentRef Id="cmpF75028940B472DD999F1BEE231272CB2" />
             <ComponentRef Id="cmp3EBEADD39D9CDA135A54FD8E93005106" />
             <ComponentRef Id="cmp33D75D00E42B8E682D77FE1C53A11B83" />
             <ComponentRef Id="cmp5FEFAC6200CF4C1B4790CD9B6BA45264" />
+            <ComponentRef Id="cmp5BF8D70A10CE28C3C54A8CA34C5A2C94" />
             <ComponentRef Id="cmpD03172C4FB9C92B1CB84095EEDC0D106" />
             <ComponentRef Id="cmpD8587CFAFCD570CD282A944EA1D6E61B" />
             <ComponentRef Id="cmpC205C78C70140118369AB48627181A50" />

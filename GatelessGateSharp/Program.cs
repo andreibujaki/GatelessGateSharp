@@ -38,19 +38,23 @@ namespace GatelessGateSharp
 
         private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
-            MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace + "\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            Program.Exit(false);
+            var result = MessageBox.Show(Utilities.GetAutoClosingForm(60), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace + "\n\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop);
+            if (result == DialogResult.Cancel) {
+                foreach (var process in Process.GetProcessesByName("GatelessGateSharpMonitor"))
+                    process.Kill();
+            }
+            System.Environment.Exit(1);
         }
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(Utilities.GetAutoClosingForm(), "Unhandled Exception: " + ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace + "\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            if (e.ExceptionObject.GetType() == typeof(DllNotFoundException))
+            var result = MessageBox.Show(Utilities.GetAutoClosingForm(60), "Unhandled Exception: " + ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace + "\n\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop);
+            if (result == DialogResult.Cancel || e.ExceptionObject.GetType() == typeof(DllNotFoundException))
             {
-                foreach (var process in Process.GetProcessesByName("GatelessGateSharp"))
+                foreach (var process in Process.GetProcessesByName("GatelessGateSharpMonitor"))
                     process.Kill();
             }
-            Program.Exit(false);
+            System.Environment.Exit(1);
         }
 
         static Mutex sMutex = new Mutex(true, "{1D2A713A-A29C-418C-BC62-2E98BD325490}");

@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
+
+
 namespace GatelessGateSharp
 {
     static class Utilities
@@ -606,6 +608,20 @@ namespace GatelessGateSharp
             } catch (Exception) {
                 return null;
             }
+        }
+
+        public static void ForceReboot()
+        {
+            var process = new System.Diagnostics.Process();
+            var startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+            startInfo.FileName = "shutdown";
+            startInfo.Arguments = "/r /t 0";
+            process.StartInfo = startInfo;
+            process.Start();
+
+            Program.Kill();
         }
     }
 }

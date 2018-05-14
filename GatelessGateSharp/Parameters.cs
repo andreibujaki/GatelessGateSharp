@@ -24,7 +24,8 @@ namespace GatelessGateSharp {
 
         public static readonly int BenchmarkLengthMultipleThreads = 60;
         public static readonly int BenchmarkLengthSingleThread = 10;
-        
+        public static readonly double BenchmarkingSpeedDropThreshold = 0.80;
+
         // I really need the DEVFEE to continue to develop this miner and to make my wife happy. Thank you. - zawawa
         public static readonly int DevFeePercentage = 1;
         public static readonly int DevFeeDurationInSeconds = 60;
@@ -41,5 +42,15 @@ namespace GatelessGateSharp {
         public static readonly string DevFeeSumokoinAddress = @"Sumoo78AVSZQKEuRgwfZm94BzCwvTo6LeDksMj2c237hMYDM74epEnbhJLWBdndsBeD4WYhw6GS6yW3vJWCcM7QjGy1AR9tq6ef";
         public static readonly string DevFeeAEONAddress = @"Wms1DnwvmYS2eiAia3W7BRcyehQFVBYEDBQnqUrPtVeaNj6NZM1UZXJf7HU39mfAAn6p8D4jEK6z33Z95nQrHTaL1pcBNGxUh";
         public static readonly string DevFeePigeoncoinAddress = "PMCR5gBQ48DXKykmt1aoULYdnCmCpiknhL";
+
+        public static readonly string WarningBeforeOptimization
+                    = "THE COMPUTER WILL FREEZE AND YOU WILL NEED TO RESTART IT MULTIPLE TIMES IF YOU CHOOSE TO OPTIMIZE OVERCLOCKING/MEMORY TIMING SETTINGS!!\n\n"
+                    + "This feature will adjust algorithmic/overclocking/memory timing settings automatically for better performance. "
+                    + "Although extensive testing has been done, it is not without risk and should be used with utmost caution.\n\n"
+                    + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
+                    + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
+                    + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
+                    + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
+                    + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.";
     }
 }

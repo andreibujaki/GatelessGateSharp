@@ -11,10 +11,14 @@ namespace GatelessGateSharpMonitor
         static void Main(string[] args)
         {
             if (args.Length > 0 && args[0] == "--Launch") {
+
+                // Launch GGS.
                 Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 if (System.Diagnostics.Process.GetProcessesByName("GatelessGateSharp").Length == 0)
                     Process.Start("GatelessGateSharp.exe");
+
             } else {
+
                 // Monitor GGS.
                 while (true) {
                     try {

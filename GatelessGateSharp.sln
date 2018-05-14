@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatelessGateSharpMonitor", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{155B4298-BFA8-480E-A595-2A9EB93E3855}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Benchmarks.md = Benchmarks.md
 		README.md = README.md
 	EndProjectSection
 EndProject

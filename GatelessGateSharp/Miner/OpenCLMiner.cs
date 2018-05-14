@@ -76,26 +76,26 @@ namespace GatelessGateSharp
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
             try {
-                if (defaultAssemblyFilePath == null)
-                    throw new Exception();
+                if (String.IsNullOrEmpty(defaultAssemblyFilePath) || !System.IO.File.Exists(defaultAssemblyFilePath))
+                    throw new Exception("");
                 CLRX assembler = new CLRX();
                 program = new ComputeProgram(Context, new List<byte[]>() { assembler.Assemble(OpenCLDevice, defaultAssemblyFilePath) }, new List<ComputeDevice>() { ComputeDevice });
                 MainForm.Logger("Loaded " + defaultAssemblyFilePath + " for Device #" + DeviceIndex + ".");
             } catch (Exception ex) {
-                if (ex.Message != string.Empty) {
+                if (!String.IsNullOrEmpty(ex.Message)) {
                     MainForm.Logger("Failed to load " + defaultAssemblyFilePath + ".");
                     MainForm.Logger(ex);
                 }
                 try {
-                    if (!MainForm.UseDefaultOpenCLBinariesChecked)
-                        throw new Exception();
+                    if (!MainForm.UseDefaultOpenCLBinariesChecked || String.IsNullOrEmpty(defultBinaryFilePath) || !System.IO.File.Exists(defultBinaryFilePath))
+                        throw new Exception("");
                     byte[] binary = System.IO.File.ReadAllBytes(defultBinaryFilePath);
                     program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { ComputeDevice });
                     MainForm.Logger("Loaded " + defultBinaryFilePath + " for Device #" + DeviceIndex + ".");
                 } catch (Exception) {
                     try {
                         if (!MainForm.ReuseCompiledBinariesChecked)
-                            throw new Exception();
+                            throw new Exception("");
                         byte[] binary = System.IO.File.ReadAllBytes(savedBinaryFilePath);
                         program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { ComputeDevice });
                         MainForm.Logger("Loaded " + savedBinaryFilePath + " for Device #" + DeviceIndex + ".");

@@ -18,6 +18,7 @@
 
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -131,6 +132,21 @@ namespace GatelessGateSharp
                    (algorithmName == "cryptonightv7") ? "CryptoNightV7" :
                                             null;
         }
+        public string GetPrettyAlgorithmNameForBenchmarkTable(string algorithmName)
+        {
+            return (algorithmName == "x16r") ? null :
+                   (algorithmName == "x16s") ? "X16S/X16R" :
+                                               GetPrettyAlgorithmName(algorithmName);
+        }
+
+        public static string[] SpeedRelatedDeviceParameters = new string[] {
+            "current_speed_primary_algorithm",
+            "current_speed_secondary_algorithm",
+            "best_speed_primary_algorithm",
+            "best_speed_secondary_algorithm",
+            "baseline_speed_primary_algorithm",
+            "baseline_speed_secondary_algorithm",
+        };
 
         private System.Threading.Mutex loggerMutex = new System.Threading.Mutex();
 
@@ -187,6 +203,15 @@ namespace GatelessGateSharp
             public NumericUpDown NumericUpDown;
 
             public NumericDeviceParameter(Tuple<int, string, string> aTuple, int aValue, int aMinimum, int aMaximum, int aIncrement)
+            {
+                Tuple = aTuple;
+                Value = aValue;
+                Maximum = aMaximum;
+                Minimum = aMinimum;
+                Increment = aIncrement;
+            }
+
+            public NumericDeviceParameter(Tuple<int, string, string> aTuple, decimal aValue, decimal aMinimum, decimal aMaximum, decimal aIncrement)
             {
                 Tuple = aTuple;
                 Value = aValue;
@@ -268,10 +293,8 @@ namespace GatelessGateSharp
             // Create a regex patterm for algorithms.
             // Must place "cryptonight" at the very end.
             AlgorithmListRegexPattern = "";
-            foreach (var algorithm in AlgorithmList) {
-                if (algorithm != "cryptonight")
+            foreach (var algorithm in AlgorithmList.Where((a) => (a != "cryptonight")))
                     AlgorithmListRegexPattern += algorithm + "|";
-            }
             AlgorithmListRegexPattern += "cryptonight";
 
             InitializeComponent();
@@ -343,7 +366,7 @@ namespace GatelessGateSharp
                 Logger("Exception in InitializeDevices(): " + ex.Message + ex.StackTrace);
             }
             InitializeDeviceSettings();
-            //ResetDeviceSettings();
+            //ResetDeviceSetxtings();
             RestoreDeviceStockSettings();
             try {
                 if (System.IO.File.Exists(JSONConfigFilePath))
@@ -419,24 +442,14 @@ namespace GatelessGateSharp
             ThreadPool.QueueUserWorkItem(new WaitCallback(Task_KillInterferingProcesses), mBackgroundTasksCancellationTokenSource.Token);
             mAreSettingsDirty = false;
 
-            if (System.IO.File.Exists(BenchmarkEntriesFilePath)) {
-                try {
-                    using (var reader = new System.IO.StreamReader(BenchmarkEntriesFilePath))
-                        Controller.BenchmarkEntries = (List<Controller.BenchmarkEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Deserialize(reader);
-                } catch (Exception ex) { Logger(ex); }
-            }
-            if (System.IO.File.Exists(BenchmarkRecordsFilePath)) {
-                try {
-                    using (var reader = new System.IO.StreamReader(BenchmarkRecordsFilePath))
-                        Controller.BenchmarkRecords = (List<Controller.BenchmarkEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Deserialize(reader);
-                    UpdateBenchmarkRecords();
-                } catch (Exception ex) { Logger(ex); }
-            }
-
             if (System.IO.File.Exists(OptimizerEntriesFilePath)) {
                 try {
                     using (var reader = new System.IO.StreamReader(OptimizerEntriesFilePath))
                         Controller.OptimizerEntries = (List<Controller.OptimizerEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.OptimizerEntry>))).Deserialize(reader);
+                    if (Controller.OptimizerEntries.Count > 0) {
+                        Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
+                        Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
+                    }
                 } catch (Exception ex) { Logger(ex); }
             }
             if (System.IO.File.Exists(OptimizerRecordsFilePath)) {
@@ -447,10 +460,23 @@ namespace GatelessGateSharp
                 } catch (Exception ex) { Logger(ex); }
             }
 
+            if (System.IO.File.Exists(BenchmarkEntriesFilePath)) {
+                try {
+                    using (var reader = new System.IO.StreamReader(BenchmarkEntriesFilePath))
+                        Controller.BenchmarkEntries = (List<Controller.BenchmarkEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Deserialize(reader);
+                    if (Controller.BenchmarkEntries.Count > 0) {
+                        Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
+                        using (var reader = new System.IO.StreamReader(BenchmarkRecordsFilePath))
+                            Controller.BenchmarkRecords = (List<Controller.BenchmarkEntry>)(new System.Xml.Serialization.XmlSerializer(typeof(List<Controller.BenchmarkEntry>))).Deserialize(reader);
+                        UpdateBenchmarkRecords();
+                    }
+                } catch (Exception ex) { Logger(ex); }
+            }
+
             Controller.AppState = Controller.ApplicationGlobalState.Idle;
             UpdateControls();
 
-            if (Controller.BenchmarkEntries.Count > 0) {
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Resuming) {
                 splashScreen.Dispose();
                 Application.DoEvents();
                 if (!System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
@@ -458,15 +484,16 @@ namespace GatelessGateSharp
                     && (MessageBox.Show(Utilities.GetAutoClosingForm(), "The miner seems to have crashed during benchmarking/optimization.\nThis is normal, and it will automatically resume in 10 seconds.",
                             "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
                     // Resume benchmarking.
-                    if (Controller.OptimizerEntries.Count > 0)
-                        Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
-                    Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
-                    timerBenchmarks_Tick();
+                    timerBenchmarking_Tick();
                 } else {
                     Controller.OptimizerEntries.Clear();
                     Controller.BenchmarkEntries.Clear();
                     try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                     try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                    try { System.IO.File.Delete(OptimizerRecordsFilePath); } catch (Exception ex) { Logger(ex); }
+                    try { System.IO.File.Delete(BenchmarkRecordsFilePath); } catch (Exception ex) { Logger(ex); }
+                    Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                    Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
                 }
             } else {
                 // Auto-start mining if necessary.
@@ -489,6 +516,7 @@ namespace GatelessGateSharp
                     buttonStart.Enabled = true;
                 }
             }
+            UpdateControls();
         }
 
         #endregion
@@ -509,6 +537,13 @@ namespace GatelessGateSharp
             Logger("Number of Devices: " + Controller.OpenCLDevices.Length);
 
             ADLInitialized = OpenCLDevice.InitializeADL(Controller.OpenCLDevices);
+            Array.Sort<OpenCLDevice>(
+                Controller.OpenCLDevices, 
+                (a, b)
+                =>(  (b.ADLAdapterIndex >= 0 ? b.PCIDeviceID : name.Index + 256)
+                   - (a.ADLAdapterIndex >= 0 ? a.PCIDeviceID : name.Index + 256)));
+            for (int index = 0; index < Controller.OpenCLDevices.Length; ++index)
+                Controller.OpenCLDevices[index].DeviceIndex = index;
 
             try {
                 if (ManagedCuda.Nvml.NvmlNativeMethods.nvmlInit() == 0) {
@@ -762,13 +797,13 @@ namespace GatelessGateSharp
         void DeviceSettingsUserControl_ButtonSaveToFileClicked(object sender, EventArgs e)
         {
             int deviceIndex = comboBoxDeviceSettingsDevice.SelectedIndex;
-            SaveDeviceSettings(deviceIndex);
+            SaveDeviceSettings(deviceIndex, SpeedRelatedDeviceParameters);
         }
 
         void DeviceSettingsUserControl_ButtonLoadFromFileClicked(object sender, EventArgs e)
         {
             int deviceIndex = comboBoxDeviceSettingsDevice.SelectedIndex;
-            LoadDeviceSettings(deviceIndex);
+            LoadDeviceSettings(Controller.OpenCLDevices[deviceIndex]);
         }
 
         void DeviceSettingsUserControl_ButtonCopyToOthersClicked(object sender, EventArgs e)
@@ -865,7 +900,25 @@ namespace GatelessGateSharp
                     }
                 }
 
+                foreach (var algorithm in AlgorithmList.Where((a) => (a != "x16r"))) {
+                    foreach (var param in new List<string> {
+                        "current_speed_primary_algorithm",
+                        "current_speed_secondary_algorithm",
+                        "best_speed_primary_algorithm",
+                        "best_speed_secondary_algorithm",
+                        "baseline_speed_primary_algorithm",
+                        "baseline_speed_secondary_algorithm",
+                    }) {
+                        var tuple_speed = new Tuple<int, string, string>(device.DeviceIndex, algorithm, param);
+                        numericDeviceParameterArray[tuple_speed] = new NumericDeviceParameter(tuple_speed, 0, 0, decimal.MaxValue, 1);
+                    }
+                }
+
                 foreach (var algorithm in AlgorithmList) {
+                    bool algorithmEnabled = (new Regex("^ethash")).IsMatch(algorithm) ? device.MemorySize >= 4L * 1024 * 1024 * 1024 : true;
+                    tuple3 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, "algorithm_enabled");
+                    booleanDeviceParameterArray[tuple3] = new BooleanDeviceParameter(tuple3, algorithmEnabled);
+
                     int minCoreClock = ((OpenCLDevice)device).MinCoreClock; if (minCoreClock < 0) minCoreClock = 300;
                     int maxCoreClock = ((OpenCLDevice)device).MaxCoreClock; if (maxCoreClock < 0) maxCoreClock = 4000;
                     int coreClockStep = ((OpenCLDevice)device).CoreClockStep; if (coreClockStep < 0) coreClockStep = 5;
@@ -1244,7 +1297,7 @@ namespace GatelessGateSharp
                     newRow.Cells[0].Value = match.Groups[2].Value.ToUpper();
                     newRow.Cells[1].Value = param.Value.ToString();
                     newRow.Resizable = DataGridViewTriState.False;
-                } else {
+                } else if (param.NumericUpDown != null) {
                     try {
                         param.NumericUpDown.Minimum = param.Minimum;
                         param.NumericUpDown.Maximum = param.Maximum;
@@ -1298,7 +1351,7 @@ namespace GatelessGateSharp
 
             foreach (var device in devices) {
                 ResetDeviceAlgorithmicSettings(device);
-                LoadSpecificDeviceSettings(device); // Use algorithmic settings.
+                LoadDefaultDeviceSettings(device); // Use algorithmic settings.
                 ResetDeviceFanControlSettings(device);
                 ResetDeviceMemoryTimingSettings(device);
 
@@ -1322,7 +1375,7 @@ namespace GatelessGateSharp
             UpdateDevicesTabPage();
         }
 
-        private void LoadSpecificDeviceSettings(OpenCLDevice device)
+        private void LoadDefaultDeviceSettings(OpenCLDevice device)
         {
             // Load specific device settings for the device if there are any.
             string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName();
@@ -1338,7 +1391,7 @@ namespace GatelessGateSharp
             foreach (var postfix in new List<string> { postfix0, postfix1, postfix2, postfix3, "" }) {
                 string path = deviceSettingsFilePathBase + postfix + extension;
                 if (System.IO.File.Exists(path)) {
-                    LoadDeviceSettings(device.DeviceIndex, path);
+                    LoadDeviceSettings(device, path, SpeedRelatedDeviceParameters);
                     Logger("Loaded " + path + " for Device #" + device.DeviceIndex + ".");
                     break;
                 }
@@ -1365,7 +1418,7 @@ namespace GatelessGateSharp
                 ResetDeviceOverclockingSettings(device);
                 ResetDeviceMemoryTimingSettings(device);
 
-                LoadSpecificDeviceSettings(device);
+                LoadDefaultDeviceSettings(device);
             }
 
             updatingUI = prevUpdatingUI;
@@ -2075,8 +2128,11 @@ namespace GatelessGateSharp
                 filePath = (new Regex("'")).Replace(filePath, "");
             }
 
-            if (!System.IO.File.Exists(filePath))
+            if (!System.IO.File.Exists(filePath)) {
                 Logger("Configuration file not found.");
+                return;
+            }
+
             Logger("Loading settings from " + filePath + "...");
             UpdateLog();
             MainForm.Instance.Enabled = false;
@@ -2172,6 +2228,8 @@ namespace GatelessGateSharp
                         if (parameter.Key == "currency" && !comboBox.Items.Contains((string)parameter.Value))
                             comboBox.Items.Add((string)parameter.Value);
                         try { comboBox.SelectedIndex = comboBox.FindStringExact((string)parameter.Value); } catch (Exception) { comboBox.SelectedIndex = 0; }
+                        if (comboBox.SelectedIndex < 0)
+                            comboBox.SelectedIndex = 0;
                     } else if (textBoxParameterArray.Keys.Contains(parameter.Key)) {
                         var textBox = textBoxParameterArray[parameter.Key];
                         textBox.Text = (string)parameter.Value;
@@ -2186,63 +2244,10 @@ namespace GatelessGateSharp
                 this.Location = location;
                 this.Size = size;
 
-                JArray devices = (JArray)(root["devices"]);
-                foreach (JObject deviceSettings in devices) {
-                    int deviceIndex = (int)deviceSettings["device_id"];
-                    if (deviceIndex >= Controller.OpenCLDevices.Length)
-                        continue;
-                    var device = Controller.OpenCLDevices[deviceIndex];
-                    if ((string)deviceSettings["device_vendor"] != device.GetVendor() || (string)deviceSettings["device_name"] != device.GetName())
-                        continue;
+                JArray deviceSettingsArray = (JArray)(root["devices"]);
+                foreach (var device in Controller.OpenCLDevices)
+                    LoadDeviceSettingsFromJSONObject(device, deviceSettingsArray);
 
-                    foreach (var deviceParameter in deviceSettings) {
-                        var name = deviceParameter.Key;
-
-                        // first format
-                        var regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
-                        var match = regex.Match(name);
-                        if (match.Success) {
-                            var type = match.Success ? match.Groups[1].Value : null;
-                            var parameter = match.Success ? match.Groups[2].Value : null;
-                            var tuple = new Tuple<int, string, string>(deviceIndex, type, parameter);
-
-                            if (booleanDeviceParameterArray.Keys.Contains(tuple)) {
-                                booleanDeviceParameterArray[tuple].Checked = (bool)deviceParameter.Value;
-                            } else if (stringDeviceParameterArray.Keys.Contains(tuple)) {
-                                stringDeviceParameterArray[tuple].Text = (string)deviceParameter.Value;
-                            } else if (numericDeviceParameterArray.Keys.Contains(tuple)) {
-                                try {
-                                    numericDeviceParameterArray[tuple].Value = (decimal)(double)deviceParameter.Value;
-                                } catch (Exception) {
-                                    Logger("Failed to read device parameter for Device #" + device.DeviceIndex + ": " + type + "_" + parameter + ", " + deviceParameter.Value);
-                                }
-                            }
-                        }
-
-                        // second format (cleaner)
-                        regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)$");
-                        match = regex.Match(name);
-                        if (match.Success) {
-                            var type = match.Groups[1].Value;
-                            var deviceSubparameters = (JObject)(deviceParameter.Value);
-                            foreach (var deviceSubparameter in deviceSubparameters) {
-                                var tuple = new Tuple<int, string, string>(deviceIndex, type, deviceSubparameter.Key);
-
-                                if (booleanDeviceParameterArray.Keys.Contains(tuple)) {
-                                    booleanDeviceParameterArray[tuple].Checked = (bool)deviceSubparameter.Value;
-                                } else if (stringDeviceParameterArray.Keys.Contains(tuple)) {
-                                    stringDeviceParameterArray[tuple].Text = (string)deviceSubparameter.Value;
-                                } else if (numericDeviceParameterArray.Keys.Contains(tuple)) {
-                                    try {
-                                        numericDeviceParameterArray[tuple].Value = (decimal)(double)deviceSubparameter.Value;
-                                    } catch (Exception) {
-                                        Logger("Failed to read device parameter for Device #" + device.DeviceIndex + ": " + type + ", " + deviceSubparameter.Key + ", " + deviceSubparameter.Value);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
                 Logger("Loaded settings.");
                 mAreSettingsDirty = false;
             } catch (Exception ex) {
@@ -2253,7 +2258,89 @@ namespace GatelessGateSharp
             if (comboBoxBenchmarkingSecondParameter.SelectedIndex < 0)
                 comboBoxBenchmarkingSecondParameter.SelectedIndex = 0;
             UpdateDevicesTabPage();
+            UpdateBenchmarkTable();
             MainForm.Instance.Enabled = true;
+        }
+        
+        private void LoadDeviceSettingsFromJSONObject(OpenCLDevice device, JArray deviceSettingsArray, string[] excludedParameters = null)
+        {
+            JObject deviceSettings = null;
+
+            // Find the best match.
+            // Look for a perfect match.
+            foreach (JObject candidate in deviceSettingsArray) {
+                if ((int)candidate["device_id"] == device.DeviceIndex
+                    && (string)candidate["device_vendor"] == device.GetVendor()
+                    && (string)candidate["device_name"] == device.GetName()
+                    && (string)candidate["device_pnp_string"] == device.PNPString) {
+                    deviceSettings = candidate;
+                    Logger("Loading settings for " + device.Vendor + " " + device.Name + "...");
+                    break;
+                }
+            }
+            if (deviceSettings == null) {
+                foreach (JObject candidate in deviceSettingsArray) {
+                    if ((string)candidate["device_vendor"] == device.GetVendor()
+                        && (string)candidate["device_name"] == device.GetName()
+                        && (string)candidate["device_pnp_string"] == device.PNPString) {
+                        deviceSettings = candidate;
+                        Logger("Loading settings for " + device.Vendor + " " + device.Name + "... (Device ID did not match.)");
+                        break;
+                    }
+                }
+                if (deviceSettings == null) {
+                    foreach (JObject candidate in deviceSettingsArray) {
+                        if ((int)candidate["device_id"] == device.DeviceIndex
+                            && (string)candidate["device_vendor"] == device.GetVendor()
+                            && (string)candidate["device_name"] == device.GetName()) {
+                            deviceSettings = candidate;
+                            Logger("Loading settings for " + device.Vendor + " " + device.Name + "... (PNP string did not match.)");
+                            break;
+                        }
+                    }
+                    if (deviceSettings == null) {
+                        foreach (JObject candidate in deviceSettingsArray) {
+                            if ((string)candidate["device_vendor"] == device.GetVendor()
+                                && (string)candidate["device_name"] == device.GetName()) {
+                                deviceSettings = candidate;
+                                Logger("Loading settings for " + device.Vendor + " " + device.Name + "... (Device ID and PNP string did not match.)");
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (deviceSettings == null) {
+                Logger("Failed to load settings for " + device.Vendor + " " + device.Name + ".");
+                return;
+            }
+
+            foreach (var deviceParameter in deviceSettings) {
+                var name = deviceParameter.Key;
+
+                var match = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)$").Match(name);
+                if (match.Success) {
+                    var type = match.Groups[1].Value;
+                    var deviceSubparameters = (JObject)(deviceParameter.Value);
+                    foreach (var deviceSubparameter in deviceSubparameters) {
+                        if (excludedParameters != null && excludedParameters.Contains(deviceSubparameter.Key))
+                            continue;
+                        var tuple = new Tuple<int, string, string>(device.DeviceIndex, type, deviceSubparameter.Key);
+
+                        if (booleanDeviceParameterArray.Keys.Contains(tuple)) {
+                            booleanDeviceParameterArray[tuple].Checked = (bool)deviceSubparameter.Value;
+                        } else if (stringDeviceParameterArray.Keys.Contains(tuple)) {
+                            stringDeviceParameterArray[tuple].Text = (string)deviceSubparameter.Value;
+                        } else if (numericDeviceParameterArray.Keys.Contains(tuple)) {
+                            try {
+                                numericDeviceParameterArray[tuple].Value = (decimal)(double)deviceSubparameter.Value;
+                            } catch (Exception) {
+                                Logger("Failed to read device parameter for Device #" + device.DeviceIndex + ": " + type + ", " + deviceSubparameter.Key + ", " + deviceSubparameter.Value);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void SaveSettingsToJSONConfigFile(string filePath = null)
@@ -2266,8 +2353,6 @@ namespace GatelessGateSharp
             Application.DoEvents();
             MainForm.Instance.Enabled = false;
 
-            // Delete the old database in case it is corrupt.
-            try { System.IO.File.Delete(filePath); } catch (Exception) { }
             try {
                 using (var stream = System.IO.File.Open(filePath, System.IO.FileMode.Create))
                 using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream))
@@ -2350,7 +2435,7 @@ namespace GatelessGateSharp
                             deviceParameters.Add(algorithm, new Dictionary<string, object> { });
                         foreach (var key in numericDeviceParameterArray.Keys)
                             if (key.Item1 == deviceIndex)
-                                ((Dictionary<string, object>)(deviceParameters[key.Item2]))[key.Item3] = (int)numericDeviceParameterArray[key].Value;
+                                ((Dictionary<string, object>)(deviceParameters[key.Item2]))[key.Item3] = numericDeviceParameterArray[key].Value;
                         foreach (var key in booleanDeviceParameterArray.Keys)
                             if (key.Item1 == deviceIndex)
                                 ((Dictionary<string, object>)(deviceParameters[key.Item2]))[key.Item3] = booleanDeviceParameterArray[key].Checked;
@@ -2777,8 +2862,8 @@ namespace GatelessGateSharp
                     labelCurrentSecondaryPool.Text = "";
                 }
 
-                var benchmarking = Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running && Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning;
-                var optimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running;
+                var benchmarking = IsBenchmarkRunning && !IsOptimizerRunning;
+                var optimization = IsOptimizerRunning && IsOptimizerRunning;
                 var elapsedTimeInSeconds = benchmarking ? (long)Controller.BenchmarkStopwatch.Elapsed.TotalSeconds : (long)Controller.StopWatch.Elapsed.TotalSeconds;
 
                 if (benchmarking) {
@@ -2846,7 +2931,7 @@ namespace GatelessGateSharp
                                                            speedSecondary > 0 ? ConvertHashrateToString(speedPrimary) + ", " + ConvertHashrateToString(speedSecondary) :
                                                                                                          ConvertHashrateToString(speedPrimary);
 
-                    if (Controller.AppState != Controller.ApplicationGlobalState.Mining || Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running) {
+                    if (Controller.AppState != Controller.ApplicationGlobalState.Mining || IsBenchmarkRunning) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Style.ForeColor = Color.Black;
                         dataGridViewDevices.Rows[deviceIndex].Cells["shares"].Value = "-";
                     } else if (device.AcceptedShares + device.RejectedShares == 0) {
@@ -4710,17 +4795,16 @@ namespace GatelessGateSharp
         {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
                     for (i = 0; i < numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "threads")].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
                     EnableHardwareManagement(deviceIndex, algorithm);
                     for (i = 0; i < numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "threads")].Value; ++i) {
                         OpenCLCryptoNightMiner miner = new OpenCLCryptoNightMiner(Controller.OpenCLDevices[deviceIndex], algorithm);
@@ -4747,20 +4831,21 @@ namespace GatelessGateSharp
 
         void LaunchOpenCLDualEthashLbryMinersWithStratum(EthashStratum stratum, LbryStratum stratum2)
         {
+            string algorithm = "ethash_lbry";
+
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
                     minerCount += 1;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    EnableHardwareManagement(deviceIndex, "ethash_lbry");
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
+                    EnableHardwareManagement(deviceIndex, algorithm);
                     OpenCLDualEthashLbryMiner dualMiner = new OpenCLDualEthashLbryMiner(Controller.OpenCLDevices[deviceIndex]);
                     Controller.Miners.Add(dualMiner);
                     dualMiner.Start(stratum,
@@ -4784,28 +4869,29 @@ namespace GatelessGateSharp
 
         void LaunchOpenCLDualEthashPascalMinersWithStratum(EthashStratum stratum, PascalStratum stratum2)
         {
+            string algorithm = "ethash_pascal";
+
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
-                    minerCount += Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash_pascal", "threads")].Value));
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
+                    minerCount += Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "threads")].Value));
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
 
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
-                    EnableHardwareManagement(deviceIndex, "ethash_pascal");
-                    for (int i = 0; i < numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash_pascal", "threads")].Value; ++i) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
+                    EnableHardwareManagement(deviceIndex, algorithm);
+                    for (int i = 0; i < numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "threads")].Value; ++i) {
                         OpenCLDualEthashPascalMiner dualMiner = new OpenCLDualEthashPascalMiner(Controller.OpenCLDevices[deviceIndex]);
                         Controller.Miners.Add(dualMiner);
                         dualMiner.Start(stratum,
                                 stratum2,
-                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash_pascal", "intensity")]
+                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "intensity")]
                                 .Value)),
-                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash_pascal", "secondary_algorithm_iterations")]
+                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "secondary_algorithm_iterations")]
                                 .Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
 
@@ -4820,19 +4906,20 @@ namespace GatelessGateSharp
 
         void LaunchOpenCLEthashMinersWithStratum(EthashStratum stratum)
         {
+            string algorithm = "ethash";
+
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
                     for (i = 0; i < numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "threads")].Value; ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
                     EnableHardwareManagement(deviceIndex, "ethash");
                     for (i = 0; i < numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "threads")].Value; ++i) {
                         OpenCLEthashMiner miner = new OpenCLEthashMiner(Controller.OpenCLDevices[deviceIndex]);
@@ -4854,19 +4941,20 @@ namespace GatelessGateSharp
 
         void LaunchOpenCLLbryMinersWithStratum(LbryStratum stratum)
         {
+            string algorithm = "lbry";
+
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
                     for (i = 0; i < Convert.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "threads")].Value); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
                     EnableHardwareManagement(deviceIndex, "lbry");
                     for (i = 0; i < Convert.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "threads")].Value); ++i) {
                         OpenCLLbryMiner miner = new OpenCLLbryMiner(Controller.OpenCLDevices[deviceIndex]);
@@ -4886,19 +4974,20 @@ namespace GatelessGateSharp
 
         void LaunchOpenCLPascalMinersWithStratum(PascalStratum stratum)
         {
+            string algorithm = "pascal";
+
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "pascal", "threads")].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
                     EnableHardwareManagement(deviceIndex, "pascal");
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "pascal", "threads")].Value)); ++i) {
                         OpenCLPascalMiner miner = new OpenCLPascalMiner(Controller.OpenCLDevices[deviceIndex]);
@@ -4918,19 +5007,20 @@ namespace GatelessGateSharp
 
         void LaunchOpenCLNeoScryptMinersWithStratum(NeoScryptStratum stratum)
         {
+            string algorithm = "neoscrypt";
+
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "neoscrypt", "threads")].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
                     EnableHardwareManagement(deviceIndex, "neoscrypt");
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "neoscrypt", "threads")].Value)); ++i) {
                         OpenCLNeoScryptMiner miner = new OpenCLNeoScryptMiner(Controller.OpenCLDevices[deviceIndex]);
@@ -4951,19 +5041,20 @@ namespace GatelessGateSharp
 
         void LaunchOpenCLLyra2REv2MinersWithStratum(Lyra2REv2Stratum stratum)
         {
+            string algorithm = "lyra2rev2";
+
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lyra2rev2", "threads")].Value)); ++i)
                         ++minerCount;
             toolStripMainFormProgressBar.Maximum = minerCount;
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
                     EnableHardwareManagement(deviceIndex, "lyra2rev2");
                     for (i = 0; i < Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lyra2rev2", "threads")].Value)); ++i) {
                         OpenCLLyra2REv2Miner miner = new OpenCLLyra2REv2Miner(Controller.OpenCLDevices[deviceIndex]);
@@ -4986,12 +5077,11 @@ namespace GatelessGateSharp
         {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            this.Activate();
             toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
             int deviceIndex, i, minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 int threads = Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "threads")].Value));
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
                     for (i = 0; i < threads; ++i)
                         ++minerCount;
 
@@ -5000,7 +5090,7 @@ namespace GatelessGateSharp
             minerCount = 0;
             for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
                 int threads = Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "threads")].Value));
-                if ((bool)(dataGridViewDevices.Rows[deviceIndex].Cells["enabled"].Value)) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
                     EnableHardwareManagement(deviceIndex, algorithm);
                     for (i = 0; i < threads; ++i) {
                         OpenCLX16RMiner miner = new OpenCLX16RMiner(Controller.OpenCLDevices[deviceIndex], algorithm);
@@ -5356,12 +5446,14 @@ namespace GatelessGateSharp
 
         private void StartMining()
         {
-            if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
+            if (Controller.AppState == Controller.ApplicationGlobalState.Idle
+                || Controller.AppState == Controller.ApplicationGlobalState.Switching) {
+
                 Controller.AppState = Controller.ApplicationGlobalState.Switching;
                 UpdateControls();
                 Application.DoEvents();
                 Controller.StopWatch.Start();
-                if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
+                if (!IsBenchmarkRunning)
                     tabControlMainForm.SelectedIndex = 0;
                 if (mAreSettingsDirty)
                     SaveSettingsToJSONConfigFile();
@@ -5385,10 +5477,11 @@ namespace GatelessGateSharp
 
                 if (unrecoverableException != null || Controller.PrimaryStratum == null || !Controller.Miners.Any()) {
                     StopMining();
+                    Controller.AppState = Controller.ApplicationGlobalState.Idle;
 
                     if (IsBenchmarkRunning) {
                         Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
-                        timerBenchmarks_Tick();
+                        timerBenchmarking_Tick();
                     } else if (MessageBox.Show(
                         Utilities.GetAutoClosingForm(20),
                         (unrecoverableException != null ? unrecoverableException.Message : "Failed to launch miner.") + "\nWould you like to stop mining now?",
@@ -5404,6 +5497,7 @@ namespace GatelessGateSharp
                 }
             }
             UpdateDevicesTabPage();
+            UpdateControls();
         }
 
         private void buttonStart_Click(object sender = null, EventArgs e = null)
@@ -5468,28 +5562,29 @@ namespace GatelessGateSharp
                 return;
             try {
                 var idle = (Controller.AppState == Controller.ApplicationGlobalState.Idle)
-                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
-                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
+                                      && (!IsBenchmarkRunning)
+                                      && (!IsOptimizerRunning);
 
-                tabControlMainForm.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown);
-                comboBoxDefaultAlgorithm.Enabled = (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
-                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
+                tabControlMainForm.Enabled = (   Controller.AppState != Controller.ApplicationGlobalState.Switching 
+                                              && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown);
+                comboBoxDefaultAlgorithm.Enabled = (!IsBenchmarkRunning)
+                                      && (!IsOptimizerRunning)
                                       && (Controller.AppState != Controller.ApplicationGlobalState.Switching)
                                       && !checkBoxUseCustomPools.Checked;
                 checkBoxUseCustomPools.Enabled = idle;
                 buttonStart.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
-                                      && (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning)
-                                      && (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning);
+                                      && (!IsBenchmarkRunning)
+                                      && (!IsOptimizerRunning);
                 buttonRunBenchmarks.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
-                                              && (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
+                                              && (!IsOptimizerRunning)
                                               && (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
                                               && (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
                                               && !(IsMining && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
                 buttonRunOptimizer.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
-                                              && ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running)
+                                              && ((IsOptimizerRunning && IsBenchmarkRunning)
                                                    || (Controller.AppState == Controller.ApplicationGlobalState.Idle
-                                                       && Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning
-                                                       && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning));
+                                                       && !IsOptimizerRunning
+                                                       && !IsBenchmarkRunning));
 
                 textBoxMoneroAddress.ForeColor = (textBoxMoneroAddress.Text == string.Empty || textBoxMoneroAddress.Text == Parameters.DevFeeMoneroAddress) ? Color.Red : Color.Black;
                 textBoxEthereumAddress.ForeColor = (textBoxEthereumAddress.Text == string.Empty || textBoxEthereumAddress.Text == Parameters.DevFeeEthereumAddress) ? Color.Red : Color.Black;
@@ -5514,7 +5609,7 @@ namespace GatelessGateSharp
                                                                                                        "Benchmark";
                 buttonRunOptimizer.Text
                     = (IsMining
-                       && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? "Stop Optimizer" :
+                       && IsOptimizerRunning) ? "Stop Optimizer" :
                                                                                                        "Optimize";
                 buttonRelaunch.Enabled = idle;
 
@@ -5554,7 +5649,12 @@ namespace GatelessGateSharp
                 numericUpDownDeviceParameterFanControlMinimumFanSpeed.Enabled = idle && fanControlEnabled;
                 numericUpDownDeviceParameterFanControlMaximumFanSpeed.Enabled = idle && fanControlEnabled;
 
+                int deviceIndex = comboBoxDeviceSettingsDevice.SelectedIndex;
                 var overclockingEnabled = numericDeviceParameterOverclockingEnabled.Checked;
+                labelDeviceParameterOverclockingCoreClock.Visible = numericDeviceParameterOverclockingCoreClock.Visible = Controller.OpenCLDevices[deviceIndex].DefaultCoreClock > 0;
+                labelDeviceParameterOverclockingCoreVoltage.Visible = numericDeviceParameterOverclockingCoreVoltage.Visible = Controller.OpenCLDevices[deviceIndex].DefaultCoreVoltage > 0;
+                labelDeviceParameterOverclockingMemoryClock.Visible = numericDeviceParameterOverclockingMemoryClock.Visible = Controller.OpenCLDevices[deviceIndex].DefaultMemoryClock > 0;
+                labelDeviceParameterOverclockingMemoryVoltage.Visible = numericDeviceParameterOverclockingMemoryVoltage.Visible = Controller.OpenCLDevices[deviceIndex].DefaultMemoryVoltage > 0;
                 numericDeviceParameterOverclockingPowerLimit.Enabled = overclockingEnabled;
                 numericDeviceParameterOverclockingCoreClock.Enabled = overclockingEnabled;
                 numericDeviceParameterOverclockingCoreVoltage.Enabled = overclockingEnabled;
@@ -5599,7 +5699,8 @@ namespace GatelessGateSharp
                 groupBoxOveclocking.Enabled = idle;
                 groupBoxAlgorithmicSettings.Enabled = idle;
                 checkBoxDeviceSettingsMemoryTimingsEnabled.Enabled = idle;
-                buttonMemoryTimingsAppyStrap.Enabled = buttonMemoryTimingsCopyAcrossAlgorithms.Enabled = dataGridViewMemoryTimings.Enabled = idle && checkBoxDeviceSettingsMemoryTimingsEnabled.Checked;
+                buttonMemoryTimingsCopyAcrossAlgorithms.Enabled = idle;
+                buttonMemoryTimingsAppyStrap.Enabled = dataGridViewMemoryTimings.Enabled = idle && checkBoxDeviceSettingsMemoryTimingsEnabled.Checked;
 
                 buttonBoostPerformance.Enabled = idle;
                 buttonRestoreStockSettings.Enabled = idle;
@@ -5621,6 +5722,10 @@ namespace GatelessGateSharp
 
                 tabPageBenchmarkingFirstParameter.Text = "1st Parameter" + ((checkBoxBenchmarkingFirstParameterEnabled.Checked) ? (": " + (new Regex(@"^.*/(.*)$")).Replace(comboBoxBenchmarkingFirstParameter.SelectedItem.ToString(), "$1")) : " (Disabled)");
                 tabPageBenchmarkingSecondParameter.Text = "2nd Parameter" + ((checkBoxBenchmarkingSecondParameterEnabled.Checked) ? (": " + (new Regex(@"^.*/(.*)$")).Replace(comboBoxBenchmarkingSecondParameter.SelectedItem.ToString(), "$1")) : " (Disabled)");
+
+                buttonBenchmarkingClear.Enabled = idle;
+                buttonBenchmarkingReset.Enabled = idle;
+
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
             }
@@ -6019,7 +6124,7 @@ namespace GatelessGateSharp
                     StopMining();
                     if (IsBenchmarkRunning) {
                         Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Resuming;
-                        timerBenchmarks_Tick();
+                        timerBenchmarking_Tick();
                     } else if (MessageBox.Show(Utilities.GetAutoClosingForm(10), ex.Message + "\n\nMining will automatically resume in 10 seconds.\nWould you like to stop mining now?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Error) != System.Windows.Forms.DialogResult.Yes) {
                         timerAutoStart.Enabled = true;
                     }
@@ -6671,10 +6776,17 @@ namespace GatelessGateSharp
 
         private void comboBoxDefaultAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mAreSettingsDirty = true;
-            if (Controller.AppState != Controller.ApplicationGlobalState.Initializing && Controller.AppState != Controller.ApplicationGlobalState.Idle)
-                timerFailOver.Enabled = true;
-            comboBoxDeviceSettingsAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.SelectedIndex;
+            if (Controller.AppState != Controller.ApplicationGlobalState.Initializing 
+                && Controller.AppState != Controller.ApplicationGlobalState.Switching
+                && !IsBenchmarkRunning
+                && !IsOptimizerRunning) {
+
+                if (Controller.AppState == Controller.ApplicationGlobalState.Mining)
+                    timerFailOver.Enabled = true;
+
+                mAreSettingsDirty = true;
+                comboBoxDeviceSettingsAlgorithm.SelectedIndex = comboBoxDefaultAlgorithm.SelectedIndex;
+            }
         }
 
         bool ConvertBenchmarkParameterToDeviceParameterTuple(int deviceID, string algorithm, string param, out Tuple<int, string, string> tuple)
@@ -6688,52 +6800,66 @@ namespace GatelessGateSharp
             }
         }
 
-        private void SetBenchmarkParameter(Controller.BenchmarkParameter param, string algorithm, bool restore = false)
+        private void SetBenchmarkParameter(Controller.BenchmarkParameter param, string algorithm)
         {
             if (param.Name == "default_algorithm") {
-                DefaultAlgorithm = (restore) ? param.OriginalValues[0] : param.Value;
+
+                DefaultAlgorithm = param.Value;
                 checkBoxUseCustomPools.Checked = false;
-                /*
-                if (checkBoxUseCustomPools.Checked) {
-                    checkBoxCustomPool0Enable.Checked = (string)comboBoxCustomPool0Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
-                    checkBoxCustomPool1Enable.Checked = (string)comboBoxCustomPool1Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
-                    checkBoxCustomPool2Enable.Checked = (string)comboBoxCustomPool2Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
-                    checkBoxCustomPool3Enable.Checked = (string)comboBoxCustomPool3Algorithm.SelectedItem == GetPrettyAlgorithmName(param.Value);
-                }
-                */
-            } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+
+            } else if (IsOptimizerRunning) {
+
                 int deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
                 Tuple<int, string, string> tuple;
                 if (ConvertBenchmarkParameterToDeviceParameterTuple(deviceIndex, algorithm, param.Name, out tuple)) {
                     try {
                         if (numericDeviceParameterArray.Keys.Contains(tuple))
-                            numericDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value);
+                            numericDeviceParameterArray[tuple].Value = decimal.Parse(param.Value);
+                        if (algorithm == "x16s") {
+                            Tuple<int, string, string> tuple2 = new Tuple<int, string, string>(tuple.Item1, "x16r", tuple.Item3);
+                            if (numericDeviceParameterArray.Keys.Contains(tuple2))
+                                numericDeviceParameterArray[tuple2].Value = decimal.Parse(param.Value);
+                        }
                     } catch (Exception ex) { Logger(ex); }
                 }
+
             } else {
+
                 foreach (var device in Controller.OpenCLDevices) {
-                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                    if (IsDeviceEnabled(device, algorithm)) {
                         Tuple<int, string, string> tuple;
                         if (ConvertBenchmarkParameterToDeviceParameterTuple(device.DeviceIndex, algorithm, param.Name, out tuple)) {
                             try {
                                 if (numericDeviceParameterArray.Keys.Contains(tuple))
-                                    numericDeviceParameterArray[tuple].Value = decimal.Parse((restore) ? param.OriginalValues[device.DeviceIndex] : param.Value);
+                                    numericDeviceParameterArray[tuple].Value = decimal.Parse(param.Value);
                                 if ((new Regex(@"^overclocking_")).Match(tuple.Item3).Success) {
                                     booleanDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "overclocking_enabled")].Checked = true;
                                 } else if ((new Regex(@"^memory_timings_")).Match(tuple.Item3).Success) {
                                     booleanDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "overclocking_enabled")].Checked = true;
                                     booleanDeviceParameterArray[new Tuple<int, string, string>(tuple.Item1, tuple.Item2, "memory_timings_enabled")].Checked = true;
                                 }
+                                if (algorithm == "x16s") {
+                                    Tuple<int, string, string> tuple2 = new Tuple<int, string, string>(tuple.Item1, "x16r", tuple.Item3);
+                                    if (numericDeviceParameterArray.Keys.Contains(tuple2))
+                                        numericDeviceParameterArray[tuple2].Value = decimal.Parse(param.Value);
+                                    if ((new Regex(@"^overclocking_")).Match(tuple2.Item3).Success) {
+                                        booleanDeviceParameterArray[new Tuple<int, string, string>(tuple2.Item1, tuple2.Item2, "overclocking_enabled")].Checked = true;
+                                    } else if ((new Regex(@"^memory_timings_")).Match(tuple.Item3).Success) {
+                                        booleanDeviceParameterArray[new Tuple<int, string, string>(tuple2.Item1, tuple2.Item2, "overclocking_enabled")].Checked = true;
+                                        booleanDeviceParameterArray[new Tuple<int, string, string>(tuple2.Item1, tuple.Item2, "memory_timings_enabled")].Checked = true;
+                                    }
+                                }
                             } catch (Exception ex) {
                                 Logger("device.DeviceIndex: " + device.DeviceIndex);
                                 Logger("param.Name: " + param.Name);
-                                Logger("decimal.Parse((restore) ? param.OriginalValues[deviceIndex] : param.Value): " + decimal.Parse((restore) ? param.OriginalValues[device.DeviceIndex] : param.Value));
+                                Logger("decimal.Parse(param.Value): " + decimal.Parse(param.Value));
                                 Logger("numericUpDownDeviceParameterArray[tuple].Maximum: " + numericDeviceParameterArray[tuple].Maximum);
                                 Logger(ex);
                             }
                         }
                     }
                 }
+
             }
         }
 
@@ -6790,18 +6916,23 @@ namespace GatelessGateSharp
         private void StartBenchmarks()
         {
             try {
-                if (Controller.AppState == Controller.ApplicationGlobalState.Idle
-                    && Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) {
+                if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
+
+                    Controller.AppState = Controller.ApplicationGlobalState.Switching;
+                    Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
+                    UpdateControls();
+
+                    dataGridViewBenchmarkingResults.Rows.Clear();
+                    if (!IsOptimizerRunning) {
+                        tabControlMainForm.SelectedIndex = 4;
+                        tabControlBenchmarking.SelectedIndex = (!checkBoxBenchmarkingFirstParameterEnabled.Checked) ? 0 : 1;
+                    }
 
                     if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
                         checkBoxDeviceParameterFanControlEnabled.Checked = true;
                         numericUpDownDeviceParameterFanControlMaximumFanSpeed.Value = 100;
                         numericUpDownDeviceParameterFanControlMinimumFanSpeed.Value = 100;
                     }
-
-                    int benchmarkEntryID = 0;
-                    if (Controller.OptimizerState != Controller.ApplicationOptimizerState.Running)
-                        tabControlMainForm.SelectedIndex = 4;
 
                     timerBenchmarks.Enabled = false;
                     timerResetStopwatch.Enabled = false;
@@ -6815,11 +6946,12 @@ namespace GatelessGateSharp
                     List<string> algorithmList = new List<string> { };
                     var enabledDeviceCount = 0;
                     var deviceIndex = -1;
-                    if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    if (IsOptimizerRunning) {
                         enabledDeviceCount = 1;
                         deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
                         labelOptimizationDevice.Text = "#" + deviceIndex + " " + Controller.OpenCLDevices[deviceIndex].GetVendor() + " " + Controller.OpenCLDevices[deviceIndex].GetName();
                         algorithmList.Add(Controller.OptimizerEntries[0].Algorithm);
+                        Debug.Assert(IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithmList[0]));
                         foreach (var device in Controller.OpenCLDevices)
                             dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = (device.DeviceIndex == deviceIndex);
                     } else {
@@ -6829,172 +6961,15 @@ namespace GatelessGateSharp
                                 ++enabledDeviceCount;
                             }
                         }
-                        if (checkBoxBenchmarkingEthashPascalEnabled.Checked) algorithmList.Add("ethash_pascal");
-                        if (checkBoxBenchmarkingEthashEnabled.Checked) algorithmList.Add("ethash");
-                        if (checkBoxBenchmarkingNeoScryptEnabled.Checked) algorithmList.Add("neoscrypt");
-                        if (checkBoxBenchmarkingPascalEnabled.Checked) algorithmList.Add("pascal");
-                        if (checkBoxBenchmarkingLbryEnabled.Checked) algorithmList.Add("lbry");
-                        if (checkBoxBenchmarkingLyra2REv2Enabled.Checked) algorithmList.Add("lyra2rev2");
-                        if (checkBoxBenchmarkingX16REnabled.Checked) algorithmList.Add("x16r");
-                        if (checkBoxBenchmarkingX16SEnabled.Checked) algorithmList.Add("x16s");
-                        if (checkBoxBenchmarkingCryptoNightEnabled.Checked) algorithmList.Add("cryptonight");
-                        if (checkBoxBenchmarkingCryptoNightV7Enabled.Checked) algorithmList.Add("cryptonightv7");
-                        if (checkBoxBenchmarkingCryptoNightHeavyEnabled.Checked) algorithmList.Add("cryptonight_heavy");
-                        if (checkBoxBenchmarkingCryptoNightLightEnabled.Checked) algorithmList.Add("cryptonight_light");
+                        algorithmList = BenchmarkedAlgorithmList;
                     }
 
-                    // Set up automatic optimizations.
-                    if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
-                        String paramType = algorithmList[0];
-                        var parameterName = Controller.OptimizerEntries[0].Parameter;
-
-                        // Set up the parameter.
-                        var numericUpDown = numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, paramType, parameterName)];
-                        int multiplier = !checkBoxOptimizationExtendRange.Checked ? 1 :
-                                            (int)numericUpDown.Value < 50 ? 2 :
-                                                                                    3;
-                        var value = (int)numericUpDown.Value;
-                        var step = numericUpDown.Increment;
-                        var min = (value - step * multiplier >= numericUpDown.Minimum) ? value - step * multiplier : (int)numericUpDown.Minimum;
-                        var max = (value + step * multiplier <= numericUpDown.Maximum) ? value + step * multiplier : (int)numericUpDown.Maximum;
-                        if (parameterName == "threads") {
-                            min = 1;
-                            max = 2;
-                            step = 1;
-                        } else if (parameterName == "raw_intensity") {
-                            var computeDevice = Controller.OpenCLDevices[deviceIndex].GetComputeDevice();
-                            min = (value - computeDevice.MaxComputeUnits / 2 >= numericUpDown.Minimum) ? value - computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Minimum;
-                            max = (value + computeDevice.MaxComputeUnits / 2 <= numericUpDown.Maximum) ? value + computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Maximum;
-                        } else if (parameterName == "local_work_size" && (new Regex(@"^cryptonight")).IsMatch(paramType)) {
-                            min = 8;
-                            max = 16;
-                            step = 8;
-                        } else if (parameterName == "local_work_size") {
-                            var isNVIDIA = Controller.OpenCLDevices[deviceIndex].GetVendor() == "NVIDIA";
-                            step = isNVIDIA ? 32 : 64;
-                            min = step;
-                            max = isNVIDIA ? 512 : 256;
-                        }
-                        checkBoxBenchmarkingFirstParameterEnabled.Checked = true;
-                        if ((string)comboBoxOptimizationApproach.SelectedItem == "Aggressive") {
-                            if (parameterName == "overclocking_memory_clock" || parameterName == "overclocking_core_clock") {
-                                min = value;
-                            } else {
-                                max = value;
-                            }
-                        } else if ((string)comboBoxOptimizationApproach.SelectedItem == "Stabilizing") {
-                            if (parameterName == "overclocking_memory_clock" || parameterName == "overclocking_core_clock") {
-                                max = value;
-                            } else {
-                                min = value;
-                            }
-                        }
-                        if (parameterName == "overclocking_memory_clock" || parameterName == "overclocking_core_clock") {
-                            numericUpDownBenchmarkingFirstParameterStart.Value = min;
-                            numericUpDownBenchmarkingFirstParameterEnd.Value = max;
-                        } else {
-                            numericUpDownBenchmarkingFirstParameterStart.Value = max;
-                            numericUpDownBenchmarkingFirstParameterEnd.Value = min;
-                        }
-                        numericUpDownBenchmarkingFirstParameterStep.Value = step;
-
-                        comboBoxBenchmarkingFirstParameter.SelectedIndex = comboBoxBenchmarkingFirstParameter.FindStringExact(GetPrettyDeviceParameterName(parameterName));
-
-                        checkBoxBenchmarkingSecondParameterEnabled.Checked = false;
-                    }
-
-                    // Set up benchmarks.
-                    string firstParameter = ((string)comboBoxBenchmarkingFirstParameter.SelectedItem).ToLower();
-                    string secondParameter = ((string)comboBoxBenchmarkingSecondParameter.SelectedItem).ToLower();
-                    Regex regex = new Regex(@"[ ()/]+");
-                    firstParameter = regex.Replace(firstParameter, "_");
-                    secondParameter = regex.Replace(secondParameter, "_");
-                    if (!checkBoxBenchmarkingFirstParameterEnabled.Checked) {
-                        foreach (var defaultAlgorithm in algorithmList) {
-                            var param0 = new Controller.BenchmarkParameter("default_algorithm", defaultAlgorithm, DefaultAlgorithm);
-                            var entry = new Controller.BenchmarkEntry();
-                            entry.ID = benchmarkEntryID++;
-                            entry.Parameters.Add(param0);
-                            entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
-                            Controller.BenchmarkEntries.Add(entry);
-                        }
-                    } else if (!checkBoxBenchmarkingSecondParameterEnabled.Checked) {
-                        foreach (var defaultAlgorithm in algorithmList) {
-                            var param0 = new Controller.BenchmarkParameter("default_algorithm", defaultAlgorithm, DefaultAlgorithm);
-                            var param1OriginalValues = new List<string> { };
-                            for (int deviceID = 0; deviceID < Controller.OpenCLDevices.Length; ++deviceID) {
-                                Tuple<int, string, string> tuple1;
-                                ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, firstParameter, out tuple1);
-                                string originalValue = null;
-                                try {
-                                    originalValue = numericDeviceParameterArray[tuple1].Value.ToString();
-                                } catch (Exception) { }
-                                param1OriginalValues.Add(originalValue);
-                            }
-
-                            int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
-                                            ? (int)numericUpDownBenchmarkingFirstParameterStep.Value
-                                            : -(int)numericUpDownBenchmarkingFirstParameterStep.Value;
-                            for (int i = (int)numericUpDownBenchmarkingFirstParameterStart.Value;
-                                iStep >= 0 ? i <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value : i >= (int)numericUpDownBenchmarkingFirstParameterEnd.Value;
-                                i += iStep) {
-
-                                var param1 = new Controller.BenchmarkParameter(firstParameter, i.ToString(), param1OriginalValues);
-                                var entry = new Controller.BenchmarkEntry();
-                                entry.ID = benchmarkEntryID++;
-                                entry.Parameters.Add(param0);
-                                entry.Parameters.Add(param1);
-                                entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
-                                Controller.BenchmarkEntries.Add(entry);
-                            }
-                        }
-                    } else {
-                        foreach (var defaultAlgorithm in algorithmList) {
-                            var param0 = new Controller.BenchmarkParameter("default_algorithm", defaultAlgorithm, DefaultAlgorithm);
-                            var param1OriginalValues = new List<string> { };
-                            var param2OriginalValues = new List<string> { };
-                            for (int deviceID = 0; deviceID < Controller.OpenCLDevices.Length; ++deviceID) {
-                                Tuple<int, string, string> tuple1, tuple2;
-                                ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, firstParameter, out tuple1);
-                                ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, secondParameter, out tuple2);
-                                param1OriginalValues.Add(numericDeviceParameterArray[tuple1].Value.ToString());
-                                param2OriginalValues.Add(numericDeviceParameterArray[tuple2].Value.ToString());
-                            }
-
-                            int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
-                                            ? (int)numericUpDownBenchmarkingFirstParameterStep.Value
-                                            : -(int)numericUpDownBenchmarkingFirstParameterStep.Value;
-                            for (int i = (int)numericUpDownBenchmarkingFirstParameterStart.Value;
-                                iStep >= 0 ? i <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value : i >= (int)numericUpDownBenchmarkingFirstParameterEnd.Value;
-                                i += iStep) {
-
-                                var param1 = new Controller.BenchmarkParameter(firstParameter, i.ToString(), param1OriginalValues);
-
-                                int jStep = (int)numericUpDownBenchmarkingSecondParameterStart.Value <= (int)numericUpDownBenchmarkingSecondParameterEnd.Value
-                                                ? (int)numericUpDownBenchmarkingSecondParameterStep.Value
-                                                : -(int)numericUpDownBenchmarkingSecondParameterStep.Value;
-                                for (int j = (int)numericUpDownBenchmarkingSecondParameterStart.Value;
-                                    jStep >= 0 ? j <= (int)numericUpDownBenchmarkingSecondParameterEnd.Value : j >= (int)numericUpDownBenchmarkingSecondParameterEnd.Value;
-                                    j += jStep) {
-
-                                    var param2 = new Controller.BenchmarkParameter(secondParameter, j.ToString(), param2OriginalValues);
-                                    var entry = new Controller.BenchmarkEntry();
-                                    entry.ID = benchmarkEntryID++;
-                                    entry.Parameters.Add(param0);
-                                    entry.Parameters.Add(param1);
-                                    entry.Parameters.Add(param2);
-                                    entry.Remaining = ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
-                                    Controller.BenchmarkEntries.Add(entry);
-                                }
-                            }
-                        }
-                    }
-                    //Controller.BenchmarkEntries.Shuffle();
-                    Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => { return ((e1.Results.Count - e1.SuccessCount) == (e2.Results.Count - e2.SuccessCount)) ? (e2.SuccessCount - e1.SuccessCount) : ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)); }));
-                    SaveBenchmarkState();
+                    if (IsOptimizerRunning)
+                        SetUpParametersForOptimization(deviceIndex, algorithmList[0]);
+                    SetUpBenchmarksForParameter(algorithmList);
 
                     // Start the first benchmark.
-                    if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
+                    if (IsOptimizerRunning) {
                         progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
                         progressBarOptimizer.Maximum = Controller.OptimizerEntries.Count + Controller.OptimizerRecords.Count;
                         if (checkBoxOptimizationRepeatUntilStopped.Checked) {
@@ -7005,18 +6980,169 @@ namespace GatelessGateSharp
                     } else {
                         progressBarBenchmarking.Value = 0;
                     }
-                    dataGridViewBenchmarkingResults.Rows.Clear();
-                    var algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
-                    foreach (var param in Controller.BenchmarkEntries[0].Parameters)
-                        SetBenchmarkParameter(param, algorithm);
-                    foreach (var device in Controller.OpenCLDevices) {
-                        device.ClearShares();
-                        device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
-                    }
-                    mAreSettingsDirty = false;
                     PrepareForNextBenchmark();
                 }
             } catch (Exception ex) { Logger(ex); }
+        }
+
+        void SetUpBenchmarksForParameter(List<string> algorithmList)
+        {
+            int benchmarkEntryID = 0;
+            string firstParameter = ((string)comboBoxBenchmarkingFirstParameter.SelectedItem).ToLower();
+            string secondParameter = ((string)comboBoxBenchmarkingSecondParameter.SelectedItem).ToLower();
+            Regex regex = new Regex(@"[ ()/]+");
+
+            firstParameter = regex.Replace(firstParameter, "_");
+            secondParameter = regex.Replace(secondParameter, "_");
+            if (!checkBoxBenchmarkingFirstParameterEnabled.Checked) {
+                foreach (var defaultAlgorithm in algorithmList) {
+                    var param0 = new Controller.BenchmarkParameter("default_algorithm", defaultAlgorithm, DefaultAlgorithm);
+                    var entry = new Controller.BenchmarkEntry();
+                    entry.ID = benchmarkEntryID++;
+                    entry.Parameters.Add(param0);
+                    entry.Remaining = ((IsOptimizerRunning) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
+                    Controller.BenchmarkEntries.Add(entry);
+                }
+            } else if (!checkBoxBenchmarkingSecondParameterEnabled.Checked) {
+                foreach (var defaultAlgorithm in algorithmList) {
+                    var param0 = new Controller.BenchmarkParameter("default_algorithm", defaultAlgorithm, DefaultAlgorithm);
+                    var param1OriginalValues = new List<string> { };
+                    for (int deviceID = 0; deviceID < Controller.OpenCLDevices.Length; ++deviceID) {
+                        Tuple<int, string, string> tuple1;
+                        ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, firstParameter, out tuple1);
+                        string originalValue = null;
+                        try {
+                            originalValue = numericDeviceParameterArray[tuple1].Value.ToString();
+                        } catch (Exception) { }
+                        param1OriginalValues.Add(originalValue);
+                    }
+
+                    int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
+                                    ? (int)numericUpDownBenchmarkingFirstParameterStep.Value
+                                    : -(int)numericUpDownBenchmarkingFirstParameterStep.Value;
+                    for (int i = (int)numericUpDownBenchmarkingFirstParameterStart.Value;
+                        iStep >= 0 ? i <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value : i >= (int)numericUpDownBenchmarkingFirstParameterEnd.Value;
+                        i += iStep) {
+
+                        var param1 = new Controller.BenchmarkParameter(firstParameter, i.ToString(), param1OriginalValues);
+                        var entry = new Controller.BenchmarkEntry();
+                        entry.ID = benchmarkEntryID++;
+                        entry.Parameters.Add(param0);
+                        entry.Parameters.Add(param1);
+                        entry.Remaining = ((IsOptimizerRunning) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
+                        Controller.BenchmarkEntries.Add(entry);
+                    }
+                }
+            } else {
+                foreach (var defaultAlgorithm in algorithmList) {
+                    var param0 = new Controller.BenchmarkParameter("default_algorithm", defaultAlgorithm, DefaultAlgorithm);
+                    var param1OriginalValues = new List<string> { };
+                    var param2OriginalValues = new List<string> { };
+                    for (int deviceID = 0; deviceID < Controller.OpenCLDevices.Length; ++deviceID) {
+                        Tuple<int, string, string> tuple1, tuple2;
+                        ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, firstParameter, out tuple1);
+                        ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, secondParameter, out tuple2);
+                        param1OriginalValues.Add(numericDeviceParameterArray[tuple1].Value.ToString());
+                        param2OriginalValues.Add(numericDeviceParameterArray[tuple2].Value.ToString());
+                    }
+
+                    int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
+                                    ? (int)numericUpDownBenchmarkingFirstParameterStep.Value
+                                    : -(int)numericUpDownBenchmarkingFirstParameterStep.Value;
+                    for (int i = (int)numericUpDownBenchmarkingFirstParameterStart.Value;
+                        iStep >= 0 ? i <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value : i >= (int)numericUpDownBenchmarkingFirstParameterEnd.Value;
+                        i += iStep) {
+
+                        var param1 = new Controller.BenchmarkParameter(firstParameter, i.ToString(), param1OriginalValues);
+
+                        int jStep = (int)numericUpDownBenchmarkingSecondParameterStart.Value <= (int)numericUpDownBenchmarkingSecondParameterEnd.Value
+                                        ? (int)numericUpDownBenchmarkingSecondParameterStep.Value
+                                        : -(int)numericUpDownBenchmarkingSecondParameterStep.Value;
+                        for (int j = (int)numericUpDownBenchmarkingSecondParameterStart.Value;
+                            jStep >= 0 ? j <= (int)numericUpDownBenchmarkingSecondParameterEnd.Value : j >= (int)numericUpDownBenchmarkingSecondParameterEnd.Value;
+                            j += jStep) {
+
+                            var param2 = new Controller.BenchmarkParameter(secondParameter, j.ToString(), param2OriginalValues);
+                            var entry = new Controller.BenchmarkEntry();
+                            entry.ID = benchmarkEntryID++;
+                            entry.Parameters.Add(param0);
+                            entry.Parameters.Add(param1);
+                            entry.Parameters.Add(param2);
+                            entry.Remaining = ((IsOptimizerRunning) ? (int)numericUpDownOptimizationRepeats.Value : (int)numericUpDownBenchmarkingRepeats.Value);
+                            Controller.BenchmarkEntries.Add(entry);
+                        }
+                    }
+                }
+            }
+            //Controller.BenchmarkEntries.Shuffle();
+            Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => { return ((e1.Results.Count - e1.SuccessCount) == (e2.Results.Count - e2.SuccessCount)) ? (e2.SuccessCount - e1.SuccessCount) : ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)); }));
+            SaveBenchmarkState();
+        }
+
+        void SetUpParametersForOptimization(int deviceIndex, String algorithm)
+        {
+            var parameterName = Controller.OptimizerEntries[0].Parameter;
+
+            // Set up the parameter.
+            var numericUpDown = numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, parameterName)];
+            int multiplier = !checkBoxOptimizationExtendRange.Checked ? 1 :
+                                (int)numericUpDown.Value < 50         ? 2 :
+                                                                        3;
+            var value = (int)numericUpDown.Value;
+            var step = numericUpDown.Increment;
+            var min = (value - step * multiplier >= numericUpDown.Minimum) ? value - step * multiplier : (int)numericUpDown.Minimum;
+            var max = (value + step * multiplier <= numericUpDown.Maximum) ? value + step * multiplier : (int)numericUpDown.Maximum;
+            if (parameterName == "threads") {
+                min = 1;
+                max = 2;
+                step = 1;
+            } else if (parameterName == "raw_intensity") {
+                var computeDevice = Controller.OpenCLDevices[deviceIndex].GetComputeDevice();
+                min = (value - computeDevice.MaxComputeUnits / 2 >= numericUpDown.Minimum) ? value - computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Minimum;
+                max = (value + computeDevice.MaxComputeUnits / 2 <= numericUpDown.Maximum) ? value + computeDevice.MaxComputeUnits / 2 : (int)numericUpDown.Maximum;
+            } else if (parameterName == "local_work_size" && (new Regex(@"^cryptonight")).IsMatch(algorithm)) {
+                min = 8;
+                max = 16;
+                step = 8;
+            } else if (parameterName == "local_work_size") {
+                var isNVIDIA = Controller.OpenCLDevices[deviceIndex].GetVendor() == "NVIDIA";
+                step = isNVIDIA ? 32 : 64;
+                min = step;
+                max = isNVIDIA ? 512 : 256;
+            }
+            checkBoxBenchmarkingFirstParameterEnabled.Checked = true;
+            bool reversed
+                = parameterName == "overclocking_memory_clock"
+                || parameterName == "overclocking_core_clock"
+                || parameterName == "threads"
+                || parameterName == "intensity"
+                || parameterName == "raw_intensity"
+                || parameterName == "local_work_size";
+            if ((string)comboBoxOptimizationApproach.SelectedItem == "Aggressive") {
+                if (reversed) {
+                    min = value;
+                } else {
+                    max = value;
+                }
+            } else if ((string)comboBoxOptimizationApproach.SelectedItem == "Stabilizing") {
+                if (reversed) {
+                    max = value;
+                } else {
+                    min = value;
+                }
+            }
+            if (reversed) {
+                numericUpDownBenchmarkingFirstParameterStart.Value = min;
+                numericUpDownBenchmarkingFirstParameterEnd.Value = max;
+            } else {
+                numericUpDownBenchmarkingFirstParameterStart.Value = max;
+                numericUpDownBenchmarkingFirstParameterEnd.Value = min;
+            }
+            numericUpDownBenchmarkingFirstParameterStep.Value = step;
+
+            comboBoxBenchmarkingFirstParameter.SelectedIndex = comboBoxBenchmarkingFirstParameter.FindStringExact(GetPrettyDeviceParameterName(parameterName));
+
+            checkBoxBenchmarkingSecondParameterEnabled.Checked = false; // We don't want to save the current temporary state.
         }
 
         private void StopBenchmarks()
@@ -7031,6 +7157,7 @@ namespace GatelessGateSharp
                 }
                 */
                 LoadSettingsFromJSONConfigFile();
+                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                 Controller.BenchmarkEntries.Clear();
                 Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
                 timerBenchmarks.Enabled = false;
@@ -7046,35 +7173,116 @@ namespace GatelessGateSharp
         private void buttonRunBenchmarks_Click(object sender = null, EventArgs e = null)
         {
             Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
-            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.NotRunning) {
+            if (!IsBenchmarkRunning) {
                 if (!CheckSettingsBeforeMining())
                     return;
+                mAreSettingsDirty = true;
+                SaveSettingsToJSONConfigFile();
                 StartBenchmarks();
             } else {
                 StopBenchmarks();
-                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
-                LoadSettingsFromJSONConfigFile();
             }
-            UpdateDevicesTabPage();
         }
 
-        private void timerBenchmarks_Tick(object sender = null, EventArgs e = null)
+        private void UpdateBenchmarkTable()
         {
-            if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running
-                && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
-                return;
+            foreach (var device in Controller.OpenCLDevices) {
+                foreach (var algo in AlgorithmList.Where ((a)=>(a != "x16r"))) {
+                    foreach (DataGridViewColumn column in dataGridViewBenchmarks.Columns) {
+                        if (column.HeaderText == GetPrettyAlgorithmNameForBenchmarkTable(algo)) {
+                            double speedPrimaryAlgorithm = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algo, "current_speed_primary_algorithm")].Value;
+                            double speedSecondaryAlgorithm = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algo, "current_speed_secondary_algorithm")].Value;
+                            double baselineSpeedPrimaryAlgorithm = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algo, "baseline_speed_primary_algorithm")].Value;
+                            double baselineSpeedSecondaryAlgorithm = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algo, "baseline_speed_secondary_algorithm")].Value;
 
-            bool parametersUpdated = false;
+                            if (speedPrimaryAlgorithm > 0) {
+                                dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value
+                                    = ConvertHashrateToString(speedPrimaryAlgorithm).ToString()
+                                    + (speedSecondaryAlgorithm <= 0 ? "" : ", " + (ConvertHashrateToString(speedSecondaryAlgorithm)).ToString());
+                                if (speedPrimaryAlgorithm >= 1.01 * baselineSpeedPrimaryAlgorithm && baselineSpeedPrimaryAlgorithm > 0) {
+                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value += " (↑" + String.Format("{0:P0}", (speedPrimaryAlgorithm - baselineSpeedPrimaryAlgorithm) / baselineSpeedPrimaryAlgorithm) + ")";
+                                } else if (speedPrimaryAlgorithm <= 0.99 * baselineSpeedPrimaryAlgorithm && baselineSpeedPrimaryAlgorithm > 0) {
+                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value += " (↓" + String.Format("{0:P0}", (baselineSpeedPrimaryAlgorithm - speedPrimaryAlgorithm) / baselineSpeedPrimaryAlgorithm) + ")";
+                                }
+                                if (speedPrimaryAlgorithm >= 1.05 * baselineSpeedPrimaryAlgorithm && baselineSpeedPrimaryAlgorithm > 0) {
+                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.ForeColor = Color.Green;
+                                } else if (speedPrimaryAlgorithm <= 0.95 * baselineSpeedPrimaryAlgorithm && baselineSpeedPrimaryAlgorithm > 0) {
+                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.ForeColor = Color.Red;
+                                } else {
+                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.ForeColor = Color.Black;
+                                }
+                            } else {
+                                dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value = "";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void UpdateBenchmarks(Device aDevice, string aAlgorithm, double aSpeedPrimaryAlgorithm, double aSpeedSecondaryAlgorithm)
+        {
+            if (aSpeedPrimaryAlgorithm < 0)
+                return;
+            try {
+                numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "current_speed_primary_algorithm")].Value = (decimal)aSpeedPrimaryAlgorithm;
+                numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "current_speed_secondary_algorithm")].Value = (decimal)aSpeedSecondaryAlgorithm;
+                if (aSpeedPrimaryAlgorithm > (double)numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "best_speed_primary_algorithm")].Value) {
+                    numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "best_speed_primary_algorithm")].Value = (decimal)aSpeedPrimaryAlgorithm;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "best_speed_secondary_algorithm")].Value = (decimal)aSpeedSecondaryAlgorithm;
+                }
+                if ((double)numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "baseline_speed_primary_algorithm")].Value <= 0) {
+                    numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "baseline_speed_primary_algorithm")].Value = (decimal)aSpeedPrimaryAlgorithm;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "baseline_speed_secondary_algorithm")].Value = (decimal)aSpeedSecondaryAlgorithm;
+                }
+            } catch (Exception ex) { Logger(ex); }
+        }
+
+        private void ClearBenchmarks()
+        {
+            try {
+                foreach (var device in Controller.OpenCLDevices) {
+                    foreach (var algorithm in AlgorithmList.Where((a) => (a != "x16r"))) {
+                        foreach (var param in SpeedRelatedDeviceParameters)
+                            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, param)].Value = 0;
+                    }
+                }
+            } catch (Exception ex) { Logger(ex); }
+        }
+
+        private void ResetBenchmarks()
+        {
+            try {
+                foreach (var device in Controller.OpenCLDevices) {
+                    foreach (var algorithm in AlgorithmList.Where((a) => (a != "x16r"))) {
+                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "baseline_speed_primary_algorithm")].Value 
+                            = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_speed_primary_algorithm")].Value;
+                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "baseline_speed_secondary_algorithm")].Value 
+                            = numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_speed_secondary_algorithm")].Value;
+                    }
+                }
+            } catch (Exception ex) { Logger(ex); }
+        }
+
+        private void timerBenchmarking_Tick(object sender = null, EventArgs e = null)
+        {
+            Debug.Assert(Controller.BenchmarkEntries[0].Parameters[0].Name == "default_algorithm");
+            string defaultAlgorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
 
             timerResetStopwatch.Enabled = false;
             timerBenchmarks.Enabled = false;
+
+            if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running
+                && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
+                return;
 
             // Handle previous failure if necessary.
             var result = new Controller.BenchmarkResult();
             result.Success = IsBenchmarkRunning;
             if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Resuming) {
-                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning) {
+                if (!IsOptimizerRunning) {
                     tabControlMainForm.SelectedIndex = 4;
+                    tabControlBenchmarking.SelectedIndex = !checkBoxBenchmarkingFirstParameterEnabled.Checked ? 0 : 1;
                 } else {
                     tabControlMainForm.SelectedIndex = 5;
                 }
@@ -7084,20 +7292,17 @@ namespace GatelessGateSharp
             }
 
             // Select the appropriate device(s).
-            bool optimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running;
             var enabledDeviceCount = 0;
             var deviceIndex = -1;
             var devices = new List<Device>();
-            if (optimization) {
+            if (IsOptimizerRunning) {
                 enabledDeviceCount = 1;
                 deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
-                foreach (var device in Controller.OpenCLDevices)
-                    dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = (device.DeviceIndex == deviceIndex);
                 devices.Clear();
                 devices.Add(Controller.OpenCLDevices[deviceIndex]);
             } else {
                 foreach (var device in Controller.OpenCLDevices) {
-                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                    if (IsDeviceEnabled(device, defaultAlgorithm)) {
                         devices.Add(device);
                         deviceIndex = device.DeviceIndex;
                         ++enabledDeviceCount;
@@ -7105,92 +7310,61 @@ namespace GatelessGateSharp
                 }
             }
 
-            // Update the result tables.
-            string defaultAlgorithm = null;
-            foreach (var param in Controller.BenchmarkEntries[0].Parameters) {
-                if (param.Name == "default_algorithm") {
-                    defaultAlgorithm = param.Value;
-                    break;
-                }
-            }
+            // Calculate the speeds and update the result tables.
             bool useAverageSpeeds = false;
             foreach (var device in devices)
                 useAverageSpeeds = useAverageSpeeds || numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, defaultAlgorithm, "threads")].Value > 1;
-
             result.SpeedPrimaryAlgorithm = result.SpeedSecondaryAlgorithm = 0;
+            var updateBenchmarkTable = (Controller.BenchmarkEntries[0].Parameters.Count <= 1);
+            if (updateBenchmarkTable)
+                LoadSettingsFromJSONConfigFile();
             if (useAverageSpeeds) {
-                if (!optimization) {
-                    foreach (var device in devices) {
-                        foreach (DataGridViewColumn column in dataGridViewBenchmarks.Columns) {
-                            if (column.HeaderText == GetPrettyAlgorithmName(defaultAlgorithm) && Controller.StopWatch.Elapsed.TotalSeconds > 0) {
-                                dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value
-                                    = (ConvertHashrateToString(device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString()
-                                    + (device.TotalHashesSecondaryAlgorithm <= 0 ? "" : ", " + (ConvertHashrateToString(device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds)).ToString());
-                                break;
-                            }
-                        }
-                    }
-                }
                 foreach (var device in devices) {
                     result.SpeedPrimaryAlgorithm += device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
                     result.SpeedSecondaryAlgorithm += device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds;
+                    if (updateBenchmarkTable)
+                        UpdateBenchmarks(device, defaultAlgorithm, device.TotalHashesPrimaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds, device.TotalHashesSecondaryAlgorithm / Controller.StopWatch.Elapsed.TotalSeconds);
                 }
             } else {
-                if (!optimization) {
-                    foreach (var device in devices) {
-                        foreach (DataGridViewColumn column in dataGridViewBenchmarks.Columns) {
-                            if (column.HeaderText == GetPrettyAlgorithmName(defaultAlgorithm) && Controller.StopWatch.Elapsed.TotalSeconds > 0) {
-                                double speedPrimaryAlgorithm = 0;
-                                double speedSecondaryAlgorithm = 0;
-                                foreach (var miner in Controller.Miners) {
-                                    if (miner.DeviceIndex == device.DeviceIndex) {
-                                        speedPrimaryAlgorithm += miner.Speed;
-                                        speedSecondaryAlgorithm += miner.SpeedSecondaryAlgorithm;
-                                    }
-                                }
-                                dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value
-                                    = ConvertHashrateToString(speedPrimaryAlgorithm).ToString()
-                                    + (device.TotalHashesSecondaryAlgorithm <= 0 ? "" : ", " + (ConvertHashrateToString(speedSecondaryAlgorithm)).ToString());
-                                break;
-                            }
-                        }
-                    }
-                }
+                double[] speedPrimaryAlgorithmArray = new double[Controller.OpenCLDevices.Length];
+                double[] speedSecondaryAlgorithmArray = new double[Controller.OpenCLDevices.Length];
                 foreach (var miner in Controller.Miners) {
                     result.SpeedPrimaryAlgorithm += miner.Speed;
                     result.SpeedSecondaryAlgorithm += miner.SpeedSecondaryAlgorithm;
+                    speedPrimaryAlgorithmArray[miner.DeviceIndex] += miner.Speed;
+                    speedSecondaryAlgorithmArray[miner.DeviceIndex] += miner.SpeedSecondaryAlgorithm;
                 }
+                if (updateBenchmarkTable)
+                    foreach (var device in devices)
+                        UpdateBenchmarks(device, defaultAlgorithm, speedPrimaryAlgorithmArray[device.DeviceIndex], speedSecondaryAlgorithmArray[device.DeviceIndex]);
             }
-            if (!optimization)
+            if (updateBenchmarkTable) {
+                mAreSettingsDirty = true;
+                SaveSettingsToJSONConfigFile();
+                UpdateBenchmarkTable();
+            }
+
+            if (!IsOptimizerRunning)
                 progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
 
             // Restart if there is a sudden speed drop.
-            /*
-            if (Controller.BenchmarkEntries[0].Results.Count > 0 && result.Success && Controller.BenchmarkEntries[0].SpeedPrimaryAlgorithm * 0.9 > result.SpeedPrimaryAlgorithm) {
-
-                var process = new System.Diagnostics.Process();
-                var startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-
-                startInfo.FileName = "shutdown";
-                startInfo.Arguments = "/r /t 0";
-                process.StartInfo = startInfo;
-                process.Start();
-
-                Program.Kill();
+            if (Controller.BenchmarkEntries[0].Results.Count > 0
+                && result.Success
+                && Controller.BenchmarkEntries[0].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > result.SpeedPrimaryAlgorithm) {
+                MainForm.Logger("Sudden speed drop was detected during benchmarking/optimization. Rebooting...");
+                MainForm.UpdateLog();
+                Utilities.ForceReboot();
             }
-            */
 
             // Update the current benchmark entry.
+            if (result.Success && result.SpeedPrimaryAlgorithm <= 0)
+                result.Success = false;
             if (result.Success)
                 StopMining(); // Stop the previous benchmark.
             Controller.BenchmarkEntries[0].Results.Add(result);
             Controller.BenchmarkEntries[0].Remaining -= 1;
             var algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
-            foreach (var param in Controller.BenchmarkEntries[0].Parameters)
-                SetBenchmarkParameter(param, algorithm, true);
-            mAreSettingsDirty = false;
-            var doNotRepeatAfterFailure = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running)
+            var doNotRepeatAfterFailure = (IsOptimizerRunning)
                                               ? checkBoxOptimizationDoNotRepeatAfterFailure.Checked
                                               : checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked;
             if (Controller.BenchmarkEntries[0].Remaining <= 0 || (doNotRepeatAfterFailure && !result.Success)) {
@@ -7198,12 +7372,136 @@ namespace GatelessGateSharp
                 Controller.BenchmarkRecords.Add(Controller.BenchmarkEntries[0]);
                 Controller.BenchmarkEntries.RemoveAt(0);
             }
-            //if ((Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) && Controller.OptimizerEntries[0].StopAtFailure && !result.Success)
-            //    Controller.BenchmarkEntries.Clear();
+            if (IsOptimizerRunning
+                && checkBoxOptimizationDoNotRepeatAfterFailure.Checked
+                && !result.Success) {
+                bool found = false;
+                foreach (var entry in Controller.BenchmarkRecords) {
+                    found = true;
+                    foreach (var r in entry.Results)
+                        found = found && r.Success;
+                    if (found)
+                        break;
+                }
+                if (found)
+                    Controller.BenchmarkEntries.Clear();
+            }
 
             // Check the current benchmark status.
             // First, identify the best record.
+            Controller.BenchmarkEntry bestRecord = FindBestRecordInBenchmarkEntries();
+
+            // Get rid of the losers.
+            if (IsOptimizerRunning) {
+                for (int i = Controller.BenchmarkEntries.Count - 1; i >= 0; --i) {
+                    var entry = Controller.BenchmarkEntries[i];
+                    if (entry.Remaining + entry.SuccessCount < bestRecord.SuccessCount) {
+                        entry.Remaining = 0;
+                        Controller.BenchmarkRecords.Add(entry);
+                        Controller.BenchmarkEntries.RemoveAt(i);
+                    }
+                }
+            }
+
+            // Sort benchmark entries.
+            Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => {
+                return (e1.Results.Count - e1.SuccessCount) != (e2.Results.Count - e2.SuccessCount) ? ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)) :
+                        (e2.SuccessCount != e1.SuccessCount) ? (e2.SuccessCount - e1.SuccessCount) :
+                                                                                                        (e1.ID - e2.ID);
+            }));
+            UpdateBenchmarkRecords();
+
+            // Update parameters if optimization is done.
+            var done = (Controller.BenchmarkEntries.Count <= 0);
+            if (done && IsOptimizerRunning) {
+                var entry = new Controller.OptimizerEntry(Controller.OptimizerEntries[0]);
+                entry.ParameterWithValues = "";
+                if (bestRecord != null && bestRecord.SuccessCount > 0) {
+                    LoadSettingsFromJSONConfigFile();
+                    algorithm = bestRecord.Parameters[0].Value;
+                    for (int paramIndex = 1; paramIndex < bestRecord.Parameters.Count; ++paramIndex) {
+                        SetBenchmarkParameter(bestRecord.Parameters[paramIndex], algorithm);
+                    }
+                    if (bestRecord.SpeedPrimaryAlgorithm > 0)
+                        UpdateBenchmarks(Controller.OpenCLDevices[deviceIndex], algorithm, bestRecord.SpeedPrimaryAlgorithm, bestRecord.SpeedSecondaryAlgorithm);
+                    mAreSettingsDirty = true;
+                    SaveSettingsToJSONConfigFile();
+                    entry.SuccessCount = bestRecord.SuccessCount;
+                    entry.ResultCount = bestRecord.Results.Count;
+                    entry.SpeedPrimaryAlgorithm = bestRecord.SpeedPrimaryAlgorithm;
+                    entry.SpeedSecondaryAlgorithm = bestRecord.SpeedSecondaryAlgorithm;
+                    entry.ParameterWithValues = entry.Parameter + ": " + bestRecord.Parameters[1].OriginalValues[deviceIndex] + "→" + bestRecord.Parameters[1].Value;
+                } else {
+                    entry.ParameterWithValues = entry.Parameter + ": -";
+                }
+                if (IsOptimizerRunning)
+                    Controller.OptimizerRecords.Add(entry);
+            }
+
+            if (!done) {
+                SaveBenchmarkState();
+                PrepareForNextBenchmark();
+            } else {
+                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+                Controller.StopWatch.Reset();
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.ClearShares();
+                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
+                }
+                tabControlMainForm.SelectedIndex = (IsOptimizerRunning) ? 5 : 4;
+                if (!IsOptimizerRunning)
+                    progressBarBenchmarking.Value = 100;
+                
+                // Restart if there is a sudden speed drop.
+                if (IsOptimizerRunning) {
+                    for (int prevIndex = Controller.OptimizerRecords.Count - 1; prevIndex >= 0; --prevIndex) {
+                        if (Controller.OptimizerRecords[prevIndex].DeviceIndex == Controller.OptimizerEntries[0].DeviceIndex) {
+                            if (Controller.OptimizerRecords[prevIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerEntries[0].SpeedPrimaryAlgorithm) {
+                                MainForm.Logger("Sudden speed drop was detected during benchmarking/optimization. Rebooting...");
+                                MainForm.UpdateLog();
+                                Utilities.ForceReboot();
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (IsOptimizerRunning && Controller.OptimizerEntries.Count <= 1 && !checkBoxOptimizationRepeatUntilStopped.Checked) {
+                    Controller.OptimizerEntries.Clear();
+                    progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
+                    progressBarOptimizer.Maximum = Controller.OptimizerRecords.Count;
+                    progressBarOptimizer.Style = ProgressBarStyle.Continuous;
+                    UpdateOptimizerRecords();
+                    Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+                    try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+
+                    if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
+                        foreach (var device in Controller.OpenCLDevices) {
+                            device.FanControlEnabled = false;
+                            device.FanSpeed = -1;
+                        }
+                    }
+                } else if (IsOptimizerRunning) {
+                    var entry = Controller.OptimizerEntries[0];
+                    Controller.OptimizerEntries.RemoveAt(0);
+                    if (checkBoxOptimizationRepeatUntilStopped.Checked) {
+                        Controller.OptimizerEntries.Add(entry);
+                    } else {
+                        progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
+                        progressBarOptimizer.Maximum = Controller.OptimizerEntries.Count + Controller.OptimizerRecords.Count;
+                    }
+                    UpdateOptimizerRecords();
+                    SaveOptimizerState();
+                    StartBenchmarks();
+                }
+            }
+            UpdateDevicesTabPage();
+        }
+
+        Controller.BenchmarkEntry FindBestRecordInBenchmarkEntries()
+        {
             Controller.BenchmarkEntry bestRecord = null;
+
             bool dirty = false;
             do {
                 // Calculate the average speed.
@@ -7237,12 +7535,12 @@ namespace GatelessGateSharp
             Controller.BenchmarkRecords.Sort(delegate (Controller.BenchmarkEntry e1, Controller.BenchmarkEntry e2) { return e1.ID.CompareTo(e2.ID); });
             for (int i = 0; i < Controller.BenchmarkRecords.Count; ++i) {
                 Controller.BenchmarkRecords[i].StabilityScore = Controller.BenchmarkRecords[i].SuccessCount;
-                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && checkBoxOptimizationExtendRange.Checked) {
+                if (IsOptimizerRunning && checkBoxOptimizationExtendRange.Checked) {
                     Controller.BenchmarkRecords[i].StabilityScore += (i > 0) ? Controller.BenchmarkRecords[i - 1].SuccessCount : Controller.BenchmarkRecords[i].SuccessCount;
                     Controller.BenchmarkRecords[i].StabilityScore += (i < Controller.BenchmarkRecords.Count - 1) ? Controller.BenchmarkRecords[i + 1].SuccessCount : Controller.BenchmarkRecords[i].SuccessCount;
                 }
             }
-            bool aggressiveOptimization = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && ((string)comboBoxOptimizationApproach.SelectedItem == "Aggressive");
+            bool aggressiveOptimization = IsOptimizerRunning && ((string)comboBoxOptimizationApproach.SelectedItem == "Aggressive");
             foreach (var record in Controller.BenchmarkRecords.Concat(Controller.BenchmarkEntries).OrderBy(o => o.ID)) {
                 bool aggressiveOptimizationForVoltage = aggressiveOptimization && (record.Parameters[1].Name == "overclocking_core_voltage" || record.Parameters[1].Name == "overclocking_memory_voltage");
                 bool aggressiveOptimizationForClock = aggressiveOptimization && (record.Parameters[1].Name == "overclocking_core_clock" || record.Parameters[1].Name == "overclocking_memory_clock");
@@ -7257,126 +7555,36 @@ namespace GatelessGateSharp
                 }
             }
 
-            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
-                for (int i = Controller.BenchmarkEntries.Count - 1; i >= 0; --i) {
-                    var entry = Controller.BenchmarkEntries[i];
-                    if (entry.Remaining + entry.SuccessCount < bestRecord.SuccessCount) {
-                        entry.Remaining = 0;
-                        Controller.BenchmarkRecords.Add(entry);
-                        Controller.BenchmarkEntries.RemoveAt(i);
-                    }
-                }
-            }
-
-            // Sort benchmark entries.
-            Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => {
-                return (e1.Results.Count - e1.SuccessCount) != (e2.Results.Count - e2.SuccessCount) ? ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)) :
-                        (e2.SuccessCount != e1.SuccessCount) ? (e2.SuccessCount - e1.SuccessCount) :
-                                                                                                        (e1.ID - e2.ID);
-            }));
-            UpdateBenchmarkRecords();
-
-            var done = (Controller.BenchmarkEntries.Count <= 0);
-            var updateParameters = (done && Controller.OptimizerState == Controller.ApplicationOptimizerState.Running);
-
-            if (done && updateParameters) {
-                var entry = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? new Controller.OptimizerEntry(Controller.OptimizerEntries[0]) : new Controller.OptimizerEntry();
-                entry.ParameterWithValues = "";
-                if (bestRecord != null && bestRecord.SuccessCount > 0) {
-                    foreach (var param in bestRecord.Parameters) {
-                        algorithm = bestRecord.Parameters[0].Value;
-                        SetBenchmarkParameter(param, algorithm);
-                        parametersUpdated = parametersUpdated || (param.Value != param.OriginalValues[deviceIndex]);
-                    }
-                    mAreSettingsDirty = true;
-                    SaveSettingsToJSONConfigFile();
-                    entry.SuccessCount = bestRecord.SuccessCount;
-                    entry.ResultCount = bestRecord.Results.Count;
-                    entry.SpeedPrimaryAlgorithm = bestRecord.SpeedPrimaryAlgorithm;
-                    entry.SpeedSecondaryAlgorithm = bestRecord.SpeedSecondaryAlgorithm;
-                    entry.ParameterWithValues = entry.Parameter + ": " + bestRecord.Parameters[1].OriginalValues[deviceIndex] + "→" + bestRecord.Parameters[1].Value;
-                } else {
-                    entry.ParameterWithValues = entry.Parameter + ": -";
-                }
-                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
-                    Controller.OptimizerRecords.Add(entry);
-                }
-            }
-
-            if (!done) {
-                SaveBenchmarkState();
-                PrepareForNextBenchmark();
-            } else {
-                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
-                Controller.StopWatch.Reset();
-                foreach (var device in Controller.OpenCLDevices) {
-                    device.ClearShares();
-                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
-                }
-                tabControlMainForm.SelectedIndex = (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) ? 5 : 4;
-                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
-                    progressBarBenchmarking.Value = 100;
-                LoadSettingsFromJSONConfigFile();
-
-                if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running && Controller.OptimizerEntries.Count <= 1 && !checkBoxOptimizationRepeatUntilStopped.Checked) {
-                    Controller.OptimizerEntries.Clear();
-                    progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
-                    progressBarOptimizer.Maximum = Controller.OptimizerRecords.Count;
-                    progressBarOptimizer.Style = ProgressBarStyle.Continuous;
-                    UpdateOptimizerRecords();
-                    Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
-                    try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
-
-                    if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
-                        foreach (var device in Controller.OpenCLDevices) {
-                            device.FanControlEnabled = false;
-                            device.FanSpeed = -1;
-                        }
-                    }
-                } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
-                    var entry = Controller.OptimizerEntries[0];
-                    Controller.OptimizerEntries.RemoveAt(0);
-                    if (checkBoxOptimizationRepeatUntilStopped.Checked) {
-                        Controller.OptimizerEntries.Add(entry);
-                    } else {
-                        progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
-                        progressBarOptimizer.Maximum = Controller.OptimizerEntries.Count + Controller.OptimizerRecords.Count;
-                    }
-                    UpdateOptimizerRecords();
-                    SaveOptimizerState();
-                    Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
-                    StartBenchmarks();
-                }
-            }
-            UpdateDevicesTabPage();
+            return bestRecord;
         }
 
         private void PrepareForNextBenchmark()
         {
             Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
-            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
+            if (!IsOptimizerRunning)
                 progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
             UpdateBenchmarkRecords();
-            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running)
+            if (IsOptimizerRunning)
                 UpdateOptimizerRecords();
             UpdateControls();
-            Logger("Cooling down before benchmark...");
+            Logger("Cooling devices down before benchmark...");
             Application.DoEvents();
 
+            // Use the averate speed if there are multiple threads.
             bool useAverageSpeeds = false;
             foreach (var device in Controller.OpenCLDevices)
-                if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value))
+                if (IsDeviceEnabled(Controller.OpenCLDevices[device.DeviceIndex], DefaultAlgorithm))
                     useAverageSpeeds = useAverageSpeeds || numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, DefaultAlgorithm, "threads")].Value > 1;
             mCurrentBenchmarkLength = (useAverageSpeeds) ? Parameters.BenchmarkLengthMultipleThreads : Parameters.BenchmarkLengthSingleThread;
             timerBenchmarks.Interval = (mCurrentBenchmarkLength * 1000);
             timerResetStopwatch.Interval = 100;
 
-            bool coolGPUDown = (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning)
+            bool coolGPUDown = (!IsOptimizerRunning)
                                    ? checkBoxOptimizationCoolGPUDown.Checked
                                    : checkBoxOptimizationCoolGPUDown.Checked;
             if (coolGPUDown) {
                 foreach (var device in Controller.OpenCLDevices) {
-                    if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
+                    if (IsDeviceEnabled(Controller.OpenCLDevices[device.DeviceIndex], DefaultAlgorithm)) {
                         device.FanControlEnabled = true;
                         device.FanSpeed = 100;
                     }
@@ -7388,8 +7596,8 @@ namespace GatelessGateSharp
 
         private void UpdateBenchmarkRecords()
         {
-            var dataGridView = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running ? dataGridViewOptimizerBenchmarkingResults : dataGridViewBenchmarkingResults;
-            var dataGridViewName = Controller.OptimizerState == Controller.ApplicationOptimizerState.Running ? "dataGridViewTextBoxOptimizerBenchmarkingResults" : "dataGridViewTextBoxBenchmarkingResults";
+            var dataGridView = IsOptimizerRunning ? dataGridViewOptimizerBenchmarkingResults : dataGridViewBenchmarkingResults;
+            var dataGridViewName = IsOptimizerRunning ? "dataGridViewTextBoxOptimizerBenchmarkingResults" : "dataGridViewTextBoxBenchmarkingResults";
 
             dataGridViewBenchmarkingResults.Rows.Clear();
             dataGridViewOptimizerBenchmarkingResults.Rows.Clear();
@@ -7419,7 +7627,7 @@ namespace GatelessGateSharp
                 if (record.Parameters.Count >= 2)
                     dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "FirstParameter"].Value = GetPrettyDeviceParameterName(record.Parameters[1].Name, true) + ": " + record.Parameters[1].Value;
                 if (record.Parameters.Count >= 3)
-                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "SecondParameter"].Value = GetPrettyDeviceParameterName(record.Parameters[2].Name, true) + ": " + record.Parameters[1].Value;
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "SecondParameter"].Value = GetPrettyDeviceParameterName(record.Parameters[2].Name, true) + ": " + record.Parameters[2].Value;
             }
         }
 
@@ -7485,19 +7693,49 @@ namespace GatelessGateSharp
                 dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = false;
         }
 
-        private void buttonOptimizer_Click(object sender, EventArgs e)
+        List<string> OptimizedAlgorithmList {
+            get {
+                List<string> optimizedAlgorithmList = new List<string> { };
+                if (checkBoxOptimizationEthashPascalEnabled.Checked) optimizedAlgorithmList.Add("ethash_pascal");
+                if (checkBoxOptimizationEthashEnabled.Checked) optimizedAlgorithmList.Add("ethash");
+                if (checkBoxOptimizationNeoScryptEnabled.Checked) optimizedAlgorithmList.Add("neoscrypt");
+                if (checkBoxOptimizationPascalEnabled.Checked) optimizedAlgorithmList.Add("pascal");
+                if (checkBoxOptimizationLbryEnabled.Checked) optimizedAlgorithmList.Add("lbry");
+                if (checkBoxOptimizationLyra2REv2Enabled.Checked) optimizedAlgorithmList.Add("lyra2rev2");
+                if (checkBoxOptimizationX16SEnabled.Checked) optimizedAlgorithmList.Add("x16s");
+                if (checkBoxOptimizationCryptoNightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight");
+                if (checkBoxOptimizationCryptoNightV7Enabled.Checked) optimizedAlgorithmList.Add("cryptonightv7");
+                if (checkBoxOptimizationCryptoNightHeavyEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_heavy");
+                if (checkBoxOptimizationCryptoNightLightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_light");
+                return optimizedAlgorithmList;
+            }
+        }
+
+        List<string> BenchmarkedAlgorithmList {
+            get {
+                List<string> benchmarkedAlgorithmList = new List<string> { };
+                if (checkBoxBenchmarkingEthashPascalEnabled.Checked) benchmarkedAlgorithmList.Add("ethash_pascal");
+                if (checkBoxBenchmarkingEthashEnabled.Checked) benchmarkedAlgorithmList.Add("ethash");
+                if (checkBoxBenchmarkingNeoScryptEnabled.Checked) benchmarkedAlgorithmList.Add("neoscrypt");
+                if (checkBoxBenchmarkingPascalEnabled.Checked) benchmarkedAlgorithmList.Add("pascal");
+                if (checkBoxBenchmarkingLbryEnabled.Checked) benchmarkedAlgorithmList.Add("lbry");
+                if (checkBoxBenchmarkingLyra2REv2Enabled.Checked) benchmarkedAlgorithmList.Add("lyra2rev2");
+                if (checkBoxBenchmarkingX16SEnabled.Checked) benchmarkedAlgorithmList.Add("x16s");
+                if (checkBoxBenchmarkingCryptoNightEnabled.Checked) benchmarkedAlgorithmList.Add("cryptonight");
+                if (checkBoxBenchmarkingCryptoNightV7Enabled.Checked) benchmarkedAlgorithmList.Add("cryptonightv7");
+                if (checkBoxBenchmarkingCryptoNightHeavyEnabled.Checked) benchmarkedAlgorithmList.Add("cryptonight_heavy");
+                if (checkBoxBenchmarkingCryptoNightLightEnabled.Checked) benchmarkedAlgorithmList.Add("cryptonight_light");
+                return benchmarkedAlgorithmList;
+            }
+        }
+
+        private void buttonRunOptimizer_Click(object sender, EventArgs e)
         {
-            if (Controller.OptimizerState == Controller.ApplicationOptimizerState.NotRunning
-                && MessageBox.Show(
-                      "THE COMPUTER WILL FREEZE AND YOU WILL NEED TO RESTART IT MULTIPLE TIMES IF YOU CHOOSE TO OPTIMIZE OVERCLOCKING/MEMORY TIMING SETTINGS!!\n\n"
-                    + "This feature will adjust algorithmic/overclocking/memory timing settings automatically for better performance. "
-                    + "Although extensive testing has been done, it is not without risk and should be used with utmost caution.\n\n"
-                    + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
-                    + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
-                    + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
-                    + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
-                    + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
-                    appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.OK) {
+            if (!IsOptimizerRunning
+                && MessageBox.Show(Parameters.WarningBeforeOptimization, appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
+
+                mAreSettingsDirty = true;
+                SaveSettingsToJSONConfigFile();
 
                 List<int> deviceIndexList = new List<int> { };
                 foreach (var device in Controller.OpenCLDevices) {
@@ -7507,106 +7745,33 @@ namespace GatelessGateSharp
                     deviceIndexList.Add(device.DeviceIndex);
                 }
 
-                List<string> optimizedAlgorithmList = new List<string> { };
-                if (checkBoxOptimizationEthashPascalEnabled.Checked) optimizedAlgorithmList.Add("ethash_pascal");
-                if (checkBoxOptimizationEthashEnabled.Checked) optimizedAlgorithmList.Add("ethash");
-                if (checkBoxOptimizationNeoScryptEnabled.Checked) optimizedAlgorithmList.Add("neoscrypt");
-                if (checkBoxOptimizationPascalEnabled.Checked) optimizedAlgorithmList.Add("pascal");
-                if (checkBoxOptimizationLbryEnabled.Checked) optimizedAlgorithmList.Add("lbry");
-                if (checkBoxOptimizationLyra2REv2Enabled.Checked) optimizedAlgorithmList.Add("lyra2rev2");
-                if (checkBoxOptimizationX16REnabled.Checked) optimizedAlgorithmList.Add("x16r");
-                if (checkBoxOptimizationX16SEnabled.Checked) optimizedAlgorithmList.Add("x16s");
-                if (checkBoxOptimizationCryptoNightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight");
-                if (checkBoxOptimizationCryptoNightV7Enabled.Checked) optimizedAlgorithmList.Add("cryptonightv7");
-                if (checkBoxOptimizationCryptoNightHeavyEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_heavy");
-                if (checkBoxOptimizationCryptoNightLightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_light");
-
-                Controller.OptimizerEntries.Clear();
-                foreach (var algorithm in optimizedAlgorithmList) {
-                    if (checkBoxOptimizationAlgorithmicSettings.Checked) {
-                        if (algorithm != "ethash_pascal" && algorithm != "ethash")
-                            AddOptimizerEntries(deviceIndexList, algorithm, "threads");
-                        if (algorithm != "ethash_pascal" && algorithm != "ethash" && algorithm != "x16r" && algorithm != "x16s" && algorithm != "x16s")
-                            AddOptimizerEntries(deviceIndexList, algorithm, "local_work_size");
-                        if (algorithm == "cryptonight" || algorithm == "cryptonightv7" || algorithm == "cryptonight_heavy" || algorithm == "cryptonight_light" || algorithm == "neoscrypt") {
-                            AddOptimizerEntries(deviceIndexList, algorithm, "raw_intensity");
-                        } else {
-                            AddOptimizerEntries(deviceIndexList, algorithm, "intensity");
-                        }
-                    }
-
-                    if (checkBoxOptimizationUndervoltingCore.Checked)
-                        AddOptimizerEntries(deviceIndexList, algorithm, "overclocking_core_voltage");
-
-                    if (checkBoxOptimizationUndervoltingMemory.Checked)
-                        AddOptimizerEntries(deviceIndexList, algorithm, "overclocking_memory_voltage");
-
-                    if (checkBoxOptimizationOverclockingMemory.Checked)
-                        AddOptimizerEntries(deviceIndexList, algorithm, "overclocking_memory_clock");
-
-                    if (checkBoxOptimizationOverclockingCore.Checked)
-                        AddOptimizerEntries(deviceIndexList, algorithm, "overclocking_core_clock");
-
-                    if (checkBoxOptimizationMemoryTimings.Checked) {
-                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
-                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
-                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_faw");
-                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_t32aw");
-
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_actrd");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactrd");
-
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_actwr");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactwr");
-
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trc");
-                    }
-
-                    if (checkBoxOptimizationMemoryTimingsExtended.Checked) {
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trp");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_rp");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_bus_turn");
-
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tr2w");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tw2r");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tr2r");
-                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tcl");
-
-                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tredc");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trcdr");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trp_rda");
-
-                        //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_twedc");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_wrplusrp");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trcdw");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trp_wra");
-
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_ras2ras");
-                        AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trfc");
-                    }
-                }
-                if (Controller.OptimizerEntries.Count > 0) {
-                    tabControlMainForm.SelectedIndex = 5;
-                    Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
-                    Controller.OptimizerRecords.Clear();
-                    UpdateOptimizerRecords();
-                    SaveOptimizerState();
-                    StartBenchmarks();
-                } else if (deviceIndexList.Count <= 0) {
+                if (deviceIndexList.Count <= 0) {
                     MessageBox.Show("Failed to start optimizer. Please select at least one device.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                } else if (optimizedAlgorithmList.Count <= 0) {
+                    return;
+                } else if (OptimizedAlgorithmList.Count <= 0) {
                     MessageBox.Show("Failed to start optimizer. Please select at least one algorithm.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-            } else if (Controller.OptimizerState == Controller.ApplicationOptimizerState.Running) {
-                StopBenchmarks();
-                Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+
                 Controller.OptimizerEntries.Clear();
-                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
-                try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
-                progressBarOptimizer.Style = ProgressBarStyle.Continuous;
-                progressBarOptimizer.Value = 0;
-                LoadSettingsFromJSONConfigFile();
-                if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
+                AddAllOptimizerEntries(deviceIndexList);
+
+                if (Controller.OptimizerEntries.Count <= 0) {
+                    MessageBox.Show("Failed to start optimizer. Please select at least one parameter.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                tabControlMainForm.SelectedIndex = 5;
+                Controller.OptimizerState = Controller.ApplicationOptimizerState.Running;
+                Controller.OptimizerRecords.Clear();
+                UpdateOptimizerRecords();
+                SaveOptimizerState();
+                StartBenchmarks();
+
+            } else if (IsOptimizerRunning) {
+
+                StopBenchmarks();
+                if (checkBoxOptimizationCoolGPUDown.Checked) {
                     foreach (var device in Controller.OpenCLDevices) {
                         device.MemoryTimingModsEnabled = false;
                         device.OverclockingEnabled = false;
@@ -7615,13 +7780,89 @@ namespace GatelessGateSharp
                         device.FanSpeed = -1;
                     }
                 }
+                Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+                Controller.OptimizerEntries.Clear();
+                try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+                progressBarOptimizer.Style = ProgressBarStyle.Continuous;
+                progressBarOptimizer.Value = 0;
+                LoadSettingsFromJSONConfigFile();
             }
-            UpdateDevicesTabPage();
         }
 
-        private void AddOptimizerEntries(List<int> deviceIndexList, string algorithm, string parameter)
+        private void AddAllOptimizerEntries(List<int> deviceIndexList)
+        {
+            foreach (var algorithm in OptimizedAlgorithmList) {
+                if (checkBoxOptimizationAlgorithmicSettings.Checked) {
+                    if (algorithm != "ethash_pascal" && algorithm != "ethash")
+                        AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "threads");
+                    if (algorithm != "ethash_pascal" && algorithm != "x16r" && algorithm != "x16s" && algorithm != "x16s")
+                        AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "local_work_size");
+                    if (algorithm == "cryptonight" || algorithm == "cryptonightv7" || algorithm == "cryptonight_heavy" || algorithm == "cryptonight_light" || algorithm == "neoscrypt") {
+                        AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "raw_intensity");
+                    } else {
+                        AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "intensity");
+                    }
+                }
+
+                if (checkBoxOptimizationUndervoltingCore.Checked)
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_core_voltage");
+
+                if (checkBoxOptimizationUndervoltingMemory.Checked)
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_memory_voltage");
+
+                if (checkBoxOptimizationOverclockingMemory.Checked)
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_memory_clock");
+
+                if (checkBoxOptimizationOverclockingCore.Checked)
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_core_clock");
+
+                if (checkBoxOptimizationMemoryTimings.Checked) {
+                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
+                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
+                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_faw");
+                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_t32aw");
+
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_actrd");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactrd");
+
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_actwr");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactwr");
+
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trc");
+                }
+
+                if (checkBoxOptimizationMemoryTimingsExtended.Checked) {
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_rp");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_bus_turn");
+
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tr2w");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tw2r");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tr2r");
+                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tcl");
+
+                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tredc");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdr");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp_rda");
+
+                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_twedc");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_wrplusrp");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdw");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp_wra");
+
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_ras2ras");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trfc");
+                }
+            }
+        }
+
+        private void AddOptimizerEntriesForParameter(List<int> deviceIndexList, string algorithm, string parameter)
         {
             foreach (var deviceIndex in deviceIndexList) {
+                var device = Controller.OpenCLDevices[deviceIndex];
+                if (!IsDeviceEnabled(device, algorithm))
+                    continue;
                 var regex = new Regex(@"^overclocking_");
                 if (regex.Match(parameter).Success) {
                     booleanDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "overclocking_enabled")].Checked = true;
@@ -7632,42 +7873,57 @@ namespace GatelessGateSharp
                     booleanDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "overclocking_enabled")].Checked = true;
                     booleanDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_enabled")].Checked = true;
                     mAreSettingsDirty = true;
+                } else if (regex.Match(parameter).Success) {
+                    continue;
                 }
-                if (!regex.Match(parameter).Success || Controller.OpenCLDevices[deviceIndex].GetType() == typeof(AMDGMC81))
-                    Controller.OptimizerEntries.Add(new Controller.OptimizerEntry(deviceIndex, algorithm, parameter));
+
+                if (parameter == "overclocking_core_clock" && device.DefaultCoreClock < 0) continue;
+                if (parameter == "overclocking_core_voltage" && device.DefaultCoreVoltage < 0) continue;
+                if (parameter == "overclocking_memory_clock" && device.DefaultMemoryClock < 0) continue;
+                if (parameter == "overclocking_memry_voltage" && device.DefaultMemoryVoltage < 0) continue;
+
+                Controller.OptimizerEntries.Add(new Controller.OptimizerEntry(deviceIndex, algorithm, parameter));
             }
         }
 
         private void timerStartNextBenchmark_Tick(object sender, EventArgs e)
         {
             timerStartNextBenchmark.Enabled = false;
-            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.CoolingDown) {
-                if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
-                    foreach (var device in Controller.OpenCLDevices) {
-                        if ((bool)(dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value)) {
-                            device.FanControlEnabled = false;
-                            device.FanSpeed = -1;
-                        }
+            if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
+                return;
+
+            if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
+                foreach (var device in Controller.OpenCLDevices) {
+                    if (IsDeviceEnabled(device, DefaultAlgorithm)) {
+                        device.FanControlEnabled = false;
+                        device.FanSpeed = -1;
                     }
                 }
-                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
-                string algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
-                foreach (var param in Controller.BenchmarkEntries[0].Parameters)
-                    SetBenchmarkParameter(param, algorithm);
-                mAreSettingsDirty = false;
-                StartMining();
-                Controller.BenchmarkStopwatch.Reset();
-                Controller.BenchmarkStopwatch.Start();
-                Controller.StopWatch.Reset();
-                Controller.StopWatch.Start();
-                foreach (var device in Controller.OpenCLDevices) {
-                    device.ClearShares();
-                    device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
-                }
-                //Application.DoEvents();
-                timerResetStopwatch.Enabled = true;
-                //timerBenchmarks.Enabled = true;
             }
+
+            Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
+            string algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
+            foreach (var param in Controller.BenchmarkEntries[0].Parameters)
+                SetBenchmarkParameter(param, algorithm);
+            if (IsOptimizerRunning) {
+                foreach (var device in Controller.OpenCLDevices)
+                    dataGridViewDevices.Rows[device.DeviceIndex].Cells["enabled"].Value = (device.DeviceIndex == Controller.OptimizerEntries[0].DeviceIndex);
+            }
+            mAreSettingsDirty = false;
+
+            StartMining();
+
+            Controller.BenchmarkStopwatch.Reset();
+            Controller.BenchmarkStopwatch.Start();
+            Controller.StopWatch.Reset();
+            Controller.StopWatch.Start();
+            foreach (var device in Controller.OpenCLDevices) {
+                device.ClearShares();
+                device.TotalHashesPrimaryAlgorithm = device.TotalHashesSecondaryAlgorithm = 0;
+            }
+            UpdateControls();
+            Application.DoEvents();
+            timerResetStopwatch.Enabled = true;
         }
 
         private void dataGridViewBenchmarkingResults_SelectionChanged(object sender, EventArgs e)
@@ -7675,7 +7931,7 @@ namespace GatelessGateSharp
             dataGridViewBenchmarkingResults.ClearSelection();
         }
 
-        public void SaveDeviceSettings(int deviceIndex)
+        public void SaveDeviceSettings(int deviceIndex, string[] excludedParameters = null)
         {
             try {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -7708,13 +7964,13 @@ namespace GatelessGateSharp
                         foreach (var algorithm in AlgorithmList)
                             deviceParameters.Add(algorithm, new Dictionary<string, object> { });
                         foreach (var key in numericDeviceParameterArray.Keys)
-                            if (key.Item1 == deviceIndex)
+                            if (key.Item1 == deviceIndex && (excludedParameters == null || !excludedParameters.Contains(key.Item3)))
                                 ((Dictionary<string, object>)(deviceParameters[key.Item2]))[key.Item3] = (int)numericDeviceParameterArray[key].Value;
                         foreach (var key in booleanDeviceParameterArray.Keys)
-                            if (key.Item1 == deviceIndex)
+                            if (key.Item1 == deviceIndex && (excludedParameters == null || !excludedParameters.Contains(key.Item3)))
                                 ((Dictionary<string, object>)(deviceParameters[key.Item2]))[key.Item3] = booleanDeviceParameterArray[key].Checked;
                         foreach (var key in stringDeviceParameterArray.Keys)
-                            if (key.Item1 == deviceIndex)
+                            if (key.Item1 == deviceIndex && (excludedParameters == null || !excludedParameters.Contains(key.Item3)))
                                 ((Dictionary<string, object>)(deviceParameters[key.Item2]))[key.Item3] = stringDeviceParameterArray[key].Text;
                         devices.Add(deviceParameters);
                         root.Add("devices", devices);
@@ -7774,12 +8030,12 @@ namespace GatelessGateSharp
                 mAreSettingsDirty = true;
             } catch (Exception ex) { Logger(ex); }
             UpdateDevicesTabPage();
+            UpdateBenchmarkTable();
         }
 
-        public void LoadDeviceSettings(int deviceIndex, string path = null)
+        public void LoadDeviceSettings(OpenCLDevice device, string path = null, string[] excludedParameters = null)
         {
             try {
-                Device device = Controller.OpenCLDevices[deviceIndex];
                 OpenFileDialog openFileDialog = new OpenFileDialog();
 
                 string postfix = "";
@@ -7795,66 +8051,17 @@ namespace GatelessGateSharp
                     if (path == null)
                         path = openFileDialog.FileName;
                     if ((new Regex(@"\.xml$")).Match(path).Success) {
-                        LoadDeviceSettingsFromXMLFile(deviceIndex, path);
+                        LoadDeviceSettingsFromXMLFile(device.DeviceIndex, path);
                     } else {
                         var root = JsonConvert.DeserializeObject<Dictionary<string, object>>(string.Join("\n", System.IO.File.ReadAllLines(path)));
 
-                        JArray devices = (JArray)(root["devices"]);
-                        foreach (JObject deviceSettings in devices) {
-
-                            foreach (var deviceParameter in deviceSettings) {
-                                var name = deviceParameter.Key;
-
-                                // first format
-                                var regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
-                                var match = regex.Match(name);
-                                if (match.Success) {
-                                    var type = match.Success ? match.Groups[1].Value : null;
-                                    var parameter = match.Success ? match.Groups[2].Value : null;
-                                    var tuple = new Tuple<int, string, string>(deviceIndex, type, parameter);
-
-                                    if (booleanDeviceParameterArray.Keys.Contains(tuple)) {
-                                        booleanDeviceParameterArray[tuple].Checked = (bool)deviceParameter.Value;
-                                    } else if (stringDeviceParameterArray.Keys.Contains(tuple)) {
-                                        stringDeviceParameterArray[tuple].Text = (string)deviceParameter.Value;
-                                    } else if (numericDeviceParameterArray.Keys.Contains(tuple)) {
-                                        try {
-                                            numericDeviceParameterArray[tuple].Value = (decimal)(double)deviceParameter.Value;
-                                        } catch (Exception) {
-                                            Logger("Failed to read device parameter for Device #" + device.DeviceIndex + " " + type + "_" + parameter + ", " + deviceParameter.Value);
-                                        }
-                                    }
-                                }
-
-                                // second format (cleaner)
-                                regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)$");
-                                match = regex.Match(name);
-                                if (match.Success) {
-                                    var type = match.Groups[1].Value;
-                                    var deviceSubparameters = (JObject)(deviceParameter.Value);
-                                    foreach (var deviceSubparameter in deviceSubparameters) {
-                                        var tuple = new Tuple<int, string, string>(deviceIndex, type, deviceSubparameter.Key);
-
-                                        if (booleanDeviceParameterArray.Keys.Contains(tuple)) {
-                                            booleanDeviceParameterArray[tuple].Checked = (bool)deviceSubparameter.Value;
-                                        } else if (stringDeviceParameterArray.Keys.Contains(tuple)) {
-                                            stringDeviceParameterArray[tuple].Text = (string)deviceSubparameter.Value;
-                                        } else if (numericDeviceParameterArray.Keys.Contains(tuple)) {
-                                            try {
-                                                numericDeviceParameterArray[tuple].Value = (decimal)(double)deviceSubparameter.Value;
-                                            } catch (Exception) {
-                                                Logger("Failed to read device parameter for Device #" + device.DeviceIndex + ": " + type + ", " + deviceSubparameter.Key + ", " + deviceSubparameter.Value);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        mAreSettingsDirty = true;
+                        JArray deviceSettingsArray = (JArray)(root["devices"]);
+                        LoadDeviceSettingsFromJSONObject(device, deviceSettingsArray, excludedParameters);
                     }
                 }
             } catch (Exception ex) { Logger(ex); }
             UpdateDevicesTabPage();
+            UpdateBenchmarkTable();
         }
 
         private void textBoxRavenAddress_TextChanged(object sender, EventArgs e)
@@ -8086,6 +8293,31 @@ namespace GatelessGateSharp
         {
             RestoreDeviceStockSettings();
             mAreSettingsDirty = true;
+        }
+
+        private void buttonBenchmarkingClear_Click(object sender, EventArgs e)
+        {
+            ClearBenchmarks();
+            UpdateBenchmarkTable();
+        }
+
+        private void buttonBenchmarkingReset_Click(object sender, EventArgs e)
+        {
+            ResetBenchmarks();
+            UpdateBenchmarkTable();
+        }
+
+        public bool IsDeviceEnabled(OpenCLDevice device, string algorithm = null)
+        {
+            if (algorithm != null) {
+                return (bool)dataGridViewDevices.Rows[device.DeviceIndex].Cells[0].Value
+                       && booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "algorithm_enabled")].Checked;
+            } else {
+                bool enabled = true;
+                foreach (var algo in AlgorithmList) 
+                    enabled = enabled && booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algo, "algorithm_enabled")].Checked;
+                return enabled;
+            }
         }
     }
 }
