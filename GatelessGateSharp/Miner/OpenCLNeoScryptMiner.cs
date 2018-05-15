@@ -103,6 +103,8 @@ namespace GatelessGateSharp
                         NeoScryptStratum.Work neoscryptWork;
                         NeoScryptStratum.Job neoscryptJob;
 
+                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
                         while (!Stopped && (neoscryptWork = Stratum.GetWork()) != null && (neoscryptJob = neoscryptWork.Job) != null) {
                             MarkAsAlive();
 
@@ -113,8 +115,6 @@ namespace GatelessGateSharp
                             consoleUpdateStopwatch.Start();
 
                             while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(neoscryptJob)) {
-                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                sw.Start();
 
                                 MarkAsAlive();
 
@@ -136,8 +136,8 @@ namespace GatelessGateSharp
                                 }
                                 neoscryptStartNonce += (UInt32)mNeoScryptGlobalWorkSizeArray[0];
 
-                                sw.Stop();
                                 ReportHashCount((double)mNeoScryptGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
+                                sw.Restart();
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (NeoScrypt)", Speed / 1000));
                                     consoleUpdateStopwatch.Restart();

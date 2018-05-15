@@ -205,6 +205,8 @@ namespace GatelessGateSharp {
                         PascalStratum.Work pascalWork;
                         PascalStratum.Job pascalJob;
 
+                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
                         while (!Stopped
                             && (ethashWork = PrimaryStratum.GetWork()) != null && (ethashJob = ethashWork.GetJob()) != null
                             && (pascalWork = SecondaryStratum.GetWork()) != null && (pascalJob = pascalWork.Job) != null) {
@@ -241,8 +243,7 @@ namespace GatelessGateSharp {
                                 DAGCache cache = new DAGCache(ethashEpoch, ethashWork.GetJob().Seedhash);
                                 ethashDAGSize = Utilities.GetDAGSize(ethashEpoch);
 
-                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                sw.Start();
+                                sw.Restart();
                                 mEthashGlobalWorkSizeArray[0] = ethashDAGSize / 64;
                                 mEthashGlobalWorkSizeArray[0] /= 8;
                                 if (mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0] > 0)
@@ -272,15 +273,13 @@ namespace GatelessGateSharp {
                                 MemoryUsage -= DAGCacheBuffer.Size;
                                 if (Stopped || PrimaryStratum.GetJob() == null || !PrimaryStratum.GetJob().ID.Equals(ethashJobID))
                                     break;
-                                sw.Stop();
                                 MainForm.Logger("Generated DAG for Epoch #" + ethashEpoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
+                                sw.Restart();
                             }
 
                             consoleUpdateStopwatch.Start();
 
                             while (!Stopped && PrimaryStratum.GetJob().ID.Equals(ethashJobID) && PrimaryStratum.PoolExtranonce.Equals(ethashPoolExtranonce) && SecondaryStratum.GetJob().Equals(pascalJob)) {
-                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                sw.Start();
 
                                 MarkAsAlive();
 
@@ -324,8 +323,8 @@ namespace GatelessGateSharp {
                                 }
                                 pascalStartNonce += (UInt32)mEthashGlobalWorkSizeArray[0] * mPascalRatio;
 
-                                sw.Stop();
                                 ReportHashCount((double)mEthashGlobalWorkSizeArray[0] * 0.75, (double)mEthashGlobalWorkSizeArray[0] * mPascalRatio, sw.Elapsed.TotalSeconds);
+                                sw.Restart();
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Ethash), ", Speed / (1000000)) + String.Format("{0:N2} Mh/s (Pascal)", SpeedSecondaryAlgorithm / (1000000)));
                                     consoleUpdateStopwatch.Restart();

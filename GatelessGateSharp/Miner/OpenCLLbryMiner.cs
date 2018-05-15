@@ -109,6 +109,8 @@ namespace GatelessGateSharp
                         LbryStratum.Work lbryWork;
                         LbryStratum.Job lbryJob;
 
+                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
                         while (!Stopped && (lbryWork = Stratum.GetWork()) != null && (lbryJob = lbryWork.Job) != null)
                         {
                             MarkAsAlive();
@@ -123,8 +125,6 @@ namespace GatelessGateSharp
 
                             while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(lbryJob))
                             {
-                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                sw.Start();
 
                                 MarkAsAlive();
 
@@ -153,8 +153,8 @@ namespace GatelessGateSharp
                                 }
                                 lbryStartNonce += (UInt32)mLbryGlobalWorkSizeArray[0] * (uint)mIterations;
 
-                                sw.Stop();
                                 ReportHashCount((double)mLbryGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
+                                sw.Restart();
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Lbry)", Speed / 1000000));

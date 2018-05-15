@@ -4338,8 +4338,6 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLCryptoNightMiners(string pool, string algorithm)
         {
-            if (IsBenchmarkRunning)
-                throw new InvalidOperationException();
             CryptoNightStratum stratum = null;
             var niceHashMode = false;
 
@@ -4452,8 +4450,6 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLLbryMiners(string pool)
         {
-            if (IsBenchmarkRunning)
-                throw new InvalidOperationException();
             LbryStratum stratum = null;
 
             if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -4482,8 +4478,6 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLNeoScryptMiners(string pool)
         {
-            if (IsBenchmarkRunning)
-                throw new InvalidOperationException();
             NeoScryptStratum stratum = null;
 
             if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -4512,8 +4506,6 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLLyra2REv2Miners(string pool)
         {
-            if (IsBenchmarkRunning)
-                throw new InvalidOperationException();
             Lyra2REv2Stratum stratum = null;
 
             if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -4542,8 +4534,6 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLX16RMiners(string pool, string variant)
         {
-            if (IsBenchmarkRunning)
-                throw new InvalidOperationException();
             X16RStratum stratum = null;
 
             if (variant == "x16r" && pool == "CryptoPool Party" && (IsBenchmarkRunning || textBoxRavenAddress.Text.Length > 0)) {
@@ -4571,8 +4561,6 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLDualEthashPascalMiners(string pool)
         {
-            if (IsBenchmarkRunning)
-                throw new InvalidOperationException();
             EthashStratum ethashStratum = null;
             PascalStratum pascalStratum = null;
 
@@ -4634,8 +4622,6 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLPascalMiners(string pool)
         {
-            if (IsBenchmarkRunning)
-                throw new InvalidOperationException();
             PascalStratum stratum = null;
 
             if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
@@ -4674,8 +4660,6 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLEthashMiners(string pool)
         {
-            if (IsBenchmarkRunning)
-                throw new InvalidOperationException();
             EthashStratum stratum = null;
 
             if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {

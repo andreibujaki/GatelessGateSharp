@@ -183,6 +183,8 @@ namespace GatelessGateSharp
                         PascalStratum.Work pascalWork;
                         PascalStratum.Job pascalJob;
 
+                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
                         while (!Stopped && (pascalWork = Stratum.GetWork()) != null && (pascalJob = pascalWork.Job) != null)
                         {
                             MarkAsAlive();
@@ -199,9 +201,6 @@ namespace GatelessGateSharp
 
                             while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(pascalJob))
                             {
-                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                sw.Start();
-
                                 MarkAsAlive();
 
                                 pascalSearchKernel.SetValueArgument<UInt32>(2, pascalStartNonce);
@@ -221,8 +220,8 @@ namespace GatelessGateSharp
                                 }
                                 pascalStartNonce += (UInt32)mPascalGlobalWorkSizeArray[0];
 
-                                sw.Stop();
                                 ReportHashCount((double)mPascalGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
+                                sw.Restart();
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Pascal)", Speed / 1000000));

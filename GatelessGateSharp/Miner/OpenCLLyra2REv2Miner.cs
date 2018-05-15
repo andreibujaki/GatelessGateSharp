@@ -1210,6 +1210,8 @@ namespace GatelessGateSharp
                             Lyra2REv2Stratum.Work lyra2rev2Work;
                             Lyra2REv2Stratum.Job lyra2rev2Job;
 
+                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                            sw.Start();
                             while (!Stopped && (lyra2rev2Work = Stratum.GetWork()) != null && (lyra2rev2Job = lyra2rev2Work.Job) != null) {
                                 MarkAsAlive();
 
@@ -1220,8 +1222,6 @@ namespace GatelessGateSharp
                                 consoleUpdateStopwatch.Start();
 
                                 while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(lyra2rev2Job)) {
-                                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                    sw.Start();
 
                                     MarkAsAlive();
 
@@ -1251,8 +1251,8 @@ namespace GatelessGateSharp
                                     }
                                     lyra2rev2StartNonce += (UInt32)mLyra2REv2GlobalWorkSizeArray[0];
 
-                                    sw.Stop();
                                     ReportHashCount((double)mLyra2REv2GlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
+                                    sw.Restart();
                                     if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                         MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (Lyra2REv2)", Speed / 1000));
                                         consoleUpdateStopwatch.Restart();

@@ -193,6 +193,8 @@ namespace GatelessGateSharp
                             X16RStratum.Work X16RWork;
                             X16RStratum.Job X16RJob;
 
+                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                            sw.Start();
                             while (!Stopped && (X16RWork = Stratum.GetWork()) != null && (X16RJob = X16RWork.Job) != null) {
                                 MarkAsAlive();
 
@@ -220,8 +222,6 @@ namespace GatelessGateSharp
                                 consoleUpdateStopwatch.Start();
 
                                 while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(X16RJob)) {
-                                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                    sw.Start();
 
                                     MarkAsAlive();
 
@@ -323,8 +323,8 @@ namespace GatelessGateSharp
                                     }
                                     X16RStartNonce += (UInt32)X16RGlobalWorkSizeArray[0];
 
-                                    sw.Stop();
                                     ReportHashCount((double)X16RGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
+                                    sw.Restart();
                                     if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                         MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (X16R)", Speed / 1000000));
                                         consoleUpdateStopwatch.Restart();

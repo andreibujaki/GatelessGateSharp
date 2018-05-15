@@ -150,6 +150,8 @@ namespace GatelessGateSharp
                     mEthashSearchKernel.SetMemoryArgument(7, mLbryInputBuffer);
                     mEthashSearchKernel.SetMemoryArgument(8, mLbryOutputBuffer);
 
+                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                    sw.Start();
                     while (!Stopped && (ethashWork = mEthashStratum.GetWork()) != null && (lbryWork = mLbryStratum.GetWork()) != null)
                     {
                         MarkAsAlive();
@@ -185,8 +187,7 @@ namespace GatelessGateSharp
                             DAGCache cache = new DAGCache(ethashEpoch, ethashWork.GetJob().Seedhash);
                             ethashDAGSize = Utilities.GetDAGSize(ethashEpoch);
 
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
+                            sw.Restart();
                             mEthashGlobalWorkSizeArray[0] = ethashDAGSize / 64;
                             mEthashGlobalWorkSizeArray[0] /= 8;
                             if (mEthashGlobalWorkSizeArray[0] % mEthashLocalWorkSizeArray[0] > 0)
@@ -216,15 +217,12 @@ namespace GatelessGateSharp
                                 break;
                             sw.Stop();
                             MainForm.Logger("Generated DAG for Epoch #" + ethashEpoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
+                            consoleUpdateStopwatch.Restart();
                         }
 
-                        consoleUpdateStopwatch.Start();
 
                         while (!Stopped && mEthashStratum.GetJob().ID.Equals(ethashJobID) && mEthashStratum.PoolExtranonce.Equals(ethashPoolExtranonce) && mLbryStratum.GetJob().Equals(lbryJob))
                         {
-                            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                            sw.Start();
-
                             MarkAsAlive();
 
                             mEthashGlobalWorkOffsetArray[0] = 0;
@@ -277,8 +275,8 @@ namespace GatelessGateSharp
                             }
                             lbryStartNonce += (UInt32)mEthashGlobalWorkSizeArray[0] / 4;
 
-                            sw.Stop();
                             Speed = ((double)mEthashGlobalWorkSizeArray[0] * 3 / 4) / sw.Elapsed.TotalSeconds;
+                            sw.Restart();
                             double speedSecondary = (((double)mEthashGlobalWorkSizeArray[0] / 4) / sw.Elapsed.TotalSeconds);
                             if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                             {

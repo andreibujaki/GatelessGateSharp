@@ -164,6 +164,8 @@ namespace GatelessGateSharp {
                         CryptoNightStratum.Work work;
                         CryptoNightStratum.Job job;
 
+                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
                         while (!Stopped && (work = Stratum.GetWork()) != null && (job = work.GetJob()) != null) {
                             MarkAsAlive();
 
@@ -216,8 +218,6 @@ namespace GatelessGateSharp {
                                         break;
                                 }
 
-                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                sw.Start();
                                 output[255] = 0; // output[255] is used as an atomic counter.
                                 Queue.Write<UInt32>(outputBuffer, true, 0, outputSize, (IntPtr)outputPtr, null);
                                 terminate[0] = 0;
@@ -252,8 +252,8 @@ namespace GatelessGateSharp {
                                 }
                                 startNonce += (UInt32)globalWorkSizeA[0];
 
-                                sw.Stop();
                                 ReportHashCount(((double)globalWorkSizeA[0]), 0, sw.Elapsed.TotalSeconds); 
+                                sw.Restart();
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                     MainForm.Logger("Device #" + DeviceIndex + " (CryptoNight): " + String.Format("{0:N2} h/s", Speed));
                                     consoleUpdateStopwatch.Restart();
