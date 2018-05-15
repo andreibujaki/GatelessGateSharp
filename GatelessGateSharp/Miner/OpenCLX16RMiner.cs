@@ -45,7 +45,9 @@ namespace GatelessGateSharp
             Variant = aVariant;
         }
 
-        public void Start(X16RStratum aX16RStratum, int aX16RIntensity, int aX16RLocalWorkSize) {
+        public void Start(X16RStratum aX16RStratum, int aX16RIntensity, int aX16RLocalWorkSize, int aKernelOptimizationLevel = -1)
+        {
+            KernelOptimizationLevel = aKernelOptimizationLevel;
             Stratum = aX16RStratum;
             X16RGlobalWorkSizeArray[0] = aX16RIntensity * OpenCLDevice.GetMaxComputeUnits() * aX16RLocalWorkSize;
             X16RLocalWorkSizeArray[0] = aX16RLocalWorkSize;
@@ -75,7 +77,7 @@ namespace GatelessGateSharp
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
                 program = BuildProgram("x16r", X16RLocalWorkSizeArray[0],
-                    "-O5",
+                    "",
                     "", 
                     "");
 
@@ -320,10 +322,9 @@ namespace GatelessGateSharp
                                             Stratum.Submit(Device, X16RWork, X16ROutput[i]);
                                     }
                                     X16RStartNonce += (UInt32)X16RGlobalWorkSizeArray[0];
-                                    Device.TotalHashesPrimaryAlgorithm += (double)X16RGlobalWorkSizeArray[0];
 
                                     sw.Stop();
-                                    Speed = ((double)X16RGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                                    ReportHashCount((double)X16RGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
                                     if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                         MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (X16R)", Speed / 1000000));
                                         consoleUpdateStopwatch.Restart();

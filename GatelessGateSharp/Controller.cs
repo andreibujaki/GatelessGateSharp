@@ -41,6 +41,7 @@ namespace GatelessGateSharp {
             public int StabilityScore;
             public double SpeedPrimaryAlgorithm;
             public double SpeedSecondaryAlgorithm;
+            public bool Rebooted;
         }
 
         [System.SerializableAttribute()]
@@ -106,6 +107,7 @@ namespace GatelessGateSharp {
         public static ApplicationOptimizerState OptimizerState = ApplicationOptimizerState.NotRunning;
         public static List<OptimizerEntry> OptimizerEntries = new List<OptimizerEntry>() { };
         public static List<OptimizerEntry> OptimizerRecords = new List<OptimizerEntry>() { };
+        public static Mutex OpenCLBinaryMutex = new Mutex();
 
         public static OpenCLDevice[] OpenCLDevices;
         public static Stratum PrimaryStratum;

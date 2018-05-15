@@ -69,7 +69,7 @@ namespace GatelessGateSharp
                 program = BuildProgram(
                     "lbry",
                     mLbryLocalWorkSizeArray[0],
-                    "-O1 -DITERATIONS=" + mIterations,
+                    "-DITERATIONS=" + mIterations,
                     "-DITERATIONS=" + mIterations,
                     "-DITERATIONS=" + mIterations);
 

@@ -55,6 +55,7 @@ namespace GatelessGateSharp
         public ComputeCommandQueue Queue { get { return mQueue; } }
 
         public ComputeDevice ComputeDevice { get { return mDevice.GetComputeDevice(); } }
+        public int KernelOptimizationLevel = 5;
 
         protected OpenCLMiner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
             : base(aDevice, aAlgorithmName, aFirstAlgorithmName, aSecondAlgorithmName)
@@ -63,14 +64,15 @@ namespace GatelessGateSharp
             mQueue = new ComputeCommandQueue(Context, ComputeDevice, ComputeCommandQueueFlags.None);
         }
 
-        protected ComputeProgram BuildProgram(string programName, long localWorkSize, string optionsAMD, string optionsNVIDIA, string optionsOthers) {
+        protected ComputeProgram BuildProgram(string programName, long localWorkSize, string optionsAMD, string optionsNVIDIA, string optionsOthers, string binaryFilePathPostFix = null) {
             ComputeProgram program;
-            string defaultAssemblyFilePath = (OpenCLDevice.IsGCN3) ? @"AssemblyKernels\GCN3_" + programName + "_" + localWorkSize + ".isa"
+            string defaultAssemblyFilePath = (OpenCLDevice.IsGCN3) ? @"AssemblyKernels\GCN3_" + programName + "_LWS" + localWorkSize + ".isa"
                                                                    : null;
-            string defultBinaryFilePath = @"BinaryKernels\" + ComputeDevice.Name + "_" + programName + "_" + localWorkSize + ".bin";
-            string savedBinaryFilePath = (MainForm.SavedOpenCLBinaryKernelPathBase + @"\") + ComputeDevice.Name + "_" + programName + "_" + localWorkSize + ".bin";
+            string binaryFileName = ComputeDevice.Name + "_" + programName + "_LWS" + localWorkSize + "_O" + KernelOptimizationLevel + (binaryFilePathPostFix != null ? "_" + binaryFilePathPostFix : "") + ".bin";
+            string defultBinaryFilePath = @"BinaryKernels\" + binaryFileName;
+            string savedBinaryFilePath = (MainForm.SavedOpenCLBinaryKernelPathBase + @"\") + binaryFileName;
             string sourceFilePath = @"Kernels\" + programName + ".cl";
-            String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? optionsAMD + " -D__AMD__" : 
+            String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? optionsAMD + " -D__AMD__ -O" + KernelOptimizationLevel : 
                                    OpenCLDevice.GetVendor() == "NVIDIA" ? optionsNVIDIA + " -D__NVIDIA__" : 
                                                                           optionsOthers) + " -IKernels -DWORKSIZE=" + localWorkSize;
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
@@ -96,10 +98,17 @@ namespace GatelessGateSharp
                     try {
                         if (!MainForm.ReuseCompiledBinariesChecked)
                             throw new Exception("");
-                        byte[] binary = System.IO.File.ReadAllBytes(savedBinaryFilePath);
+                        byte[] binary;
+                        if (Controller.OpenCLBinaryMutex.WaitOne(1000)) {
+                            binary = System.IO.File.ReadAllBytes(savedBinaryFilePath);
+                            Controller.OpenCLBinaryMutex.ReleaseMutex();
+                        } else {
+                            throw new Exception();
+                        }
                         program = new ComputeProgram(Context, new List<byte[]>() { binary }, new List<ComputeDevice>() { ComputeDevice });
                         MainForm.Logger("Loaded " + savedBinaryFilePath + " for Device #" + DeviceIndex + ".");
                     } catch (Exception) {
+                        try { Controller.OpenCLBinaryMutex.ReleaseMutex(); } catch (Exception) { }
                         String source = System.IO.File.ReadAllText(sourceFilePath);
                         program = new ComputeProgram(Context, source);
                         MainForm.Logger(@"Loaded " + sourceFilePath + " for Device #" + DeviceIndex + ".");
@@ -112,10 +121,14 @@ namespace GatelessGateSharp
                     try {
                         string tempFileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".temp";
                         System.IO.File.WriteAllBytes(tempFileName, program.Binaries[0]);
-                        System.IO.File.Copy(tempFileName, savedBinaryFilePath, true);
+                        if (Controller.OpenCLBinaryMutex.WaitOne(1000)) {
+                            System.IO.File.Copy(tempFileName, savedBinaryFilePath, true);
+                            Controller.OpenCLBinaryMutex.ReleaseMutex();
+                        }
                         System.IO.File.Delete(tempFileName);
                     } catch (Exception ex) {
                         MainForm.Logger(ex);
+                        try { Controller.OpenCLBinaryMutex.ReleaseMutex(); } catch (Exception) { }
                     }
                 }
             } catch (Exception) {

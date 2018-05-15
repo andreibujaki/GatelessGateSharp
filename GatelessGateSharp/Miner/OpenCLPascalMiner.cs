@@ -46,8 +46,9 @@ namespace GatelessGateSharp
         {
         }
 
-        public void Start(PascalStratum aPascalStratum, int aPascalIntensity, int aPascalLocalWorkSize)
+        public void Start(PascalStratum aPascalStratum, int aPascalIntensity, int aPascalLocalWorkSize, int aKernelOptimizationLevel = -1)
         {
+            KernelOptimizationLevel = aKernelOptimizationLevel;
             Stratum = aPascalStratum;
             mPascalGlobalWorkSizeArray[0] = aPascalIntensity * OpenCLDevice.GetMaxComputeUnits() * aPascalLocalWorkSize;
             mPascalLocalWorkSizeArray[0] = aPascalLocalWorkSize;
@@ -147,7 +148,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                program = BuildProgram("pascal", mPascalLocalWorkSizeArray[0], "-O1", "", "");
+                program = BuildProgram("pascal", mPascalLocalWorkSizeArray[0], "", "", "");
 
                 using (var pascalSearchKernel = program.CreateKernel("search"))
                 using (var pascalInputBuffer = new ComputeBuffer<byte>(Context, ComputeMemoryFlags.ReadOnly, sPascalInputSize))
@@ -221,8 +222,7 @@ namespace GatelessGateSharp
                                 pascalStartNonce += (UInt32)mPascalGlobalWorkSizeArray[0];
 
                                 sw.Stop();
-                                Speed = ((double)mPascalGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
-                                Device.TotalHashesPrimaryAlgorithm += (double)mPascalGlobalWorkSizeArray[0];
+                                ReportHashCount((double)mPascalGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Pascal)", Speed / 1000000));

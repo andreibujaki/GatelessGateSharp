@@ -33,19 +33,42 @@ namespace GatelessGateSharp
         private String mSecondAlgorithmName = "";
         private System.Threading.Thread mMinerThread = null;
         private DateTime mLastAlive = DateTime.Now;
-
+        private System.Diagnostics.Stopwatch mStopwatch = new System.Diagnostics.Stopwatch();
         public OpenCLDevice Device { get { return mDevice; } }
         public int DeviceIndex { get { return mDevice.DeviceIndex; } }
         public bool Stopped { get { return mStopped; } }
         public bool Done { get { return mDone; } }
         public double Speed { get; set; }
         public double SpeedSecondaryAlgorithm { get; set; }
+        public double AverageSpeed { get { return Runtime > 0 ? (HashCount / Runtime) : 0; } }
+        public double AverageSpeedSecondaryAlgorithm { get { return Runtime > 0 ? (HashCountSecondaryAlgorithm / Runtime) : 0; } }
         public String AlgorithmName { get { return mAlgorithmName; } }
         public String PrimaryAlgorithmName { get { return mFirstAlgorithmName; } }
         public String SecondaryAlgorithmName { get { return mSecondAlgorithmName; } }
         public ComputeContext Context { get { return mDevice.Context; } }
         public UnrecoverableException UnrecoverableException { get; set; }
         public long MemoryUsage { get; set; }
+        public double Runtime = 0;
+        public double HashCount = 0;
+        public double HashCountSecondaryAlgorithm = 0;
+
+        public void ResetHashCount()
+        {
+            Runtime = 0;
+            HashCount = 0;
+            HashCountSecondaryAlgorithm = 0;
+        }
+
+        public void ReportHashCount(double aHashCount, double aHashCountSecondaryAlgorithm, double aRuntime)
+        {
+            if (aRuntime > 0) {
+                Runtime += aRuntime;
+                HashCount += aHashCount;
+                HashCountSecondaryAlgorithm += aHashCountSecondaryAlgorithm;
+                Speed = aHashCount / aRuntime;
+                SpeedSecondaryAlgorithm = aHashCountSecondaryAlgorithm / aRuntime;
+            }
+        }
 
         protected Miner(OpenCLDevice aDevice, String aAlgorithmName, String aFirstAlgorithmName = "", String aSecondAlgorithmName = "")
         {

@@ -36,16 +36,17 @@ namespace GatelessGateSharp
         long[] mNeoScryptGlobalWorkOffsetArray = new long[] { 0 };
         UInt32[] mNeoScryptOutput = new UInt32[sNeoScryptOutputSize];
         byte[] mNeoScryptInput = new byte[sNeoScryptInputSize];
-        
+
         public OpenCLNeoScryptMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "neoscrypt") {
         }
 
-        public void Start(NeoScryptStratum aNeoScryptStratum, int aNeoScryptRawIntensity, int aNeoScryptLocalWorkSize) {
+        public void Start(NeoScryptStratum aNeoScryptStratum, int aNeoScryptRawIntensity, int aNeoScryptLocalWorkSize, int aKernelOptimizationLevel = -1) {
+            KernelOptimizationLevel = aKernelOptimizationLevel;
             Stratum = aNeoScryptStratum;
             mNeoScryptGlobalWorkSizeArray[0] = aNeoScryptRawIntensity * aNeoScryptLocalWorkSize;
             mNeoScryptLocalWorkSizeArray[0] = aNeoScryptLocalWorkSize;
-
+        
             base.Start();
         }
 
@@ -68,7 +69,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                program = BuildProgram("neoscrypt", mNeoScryptLocalWorkSizeArray[0], "-O5 -legacy", "", "");
+                program = BuildProgram("neoscrypt", mNeoScryptLocalWorkSizeArray[0], "-legacy", "", "");
 
                 neoScryptGlobalCacheBuffer = OpenCLDevice.RequestComputeByteBuffer(ComputeMemoryFlags.ReadWrite, (mNeoScryptGlobalWorkSizeArray[0] * 32768));
                 MemoryUsage = sNeoScryptInputSize + sNeoScryptOutputSize + neoScryptGlobalCacheBuffer.Size;
@@ -136,8 +137,7 @@ namespace GatelessGateSharp
                                 neoscryptStartNonce += (UInt32)mNeoScryptGlobalWorkSizeArray[0];
 
                                 sw.Stop();
-                                Speed = ((double)mNeoScryptGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
-                                Device.TotalHashesPrimaryAlgorithm += (double)mNeoScryptGlobalWorkSizeArray[0];
+                                ReportHashCount((double)mNeoScryptGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (NeoScrypt)", Speed / 1000));
                                     consoleUpdateStopwatch.Restart();

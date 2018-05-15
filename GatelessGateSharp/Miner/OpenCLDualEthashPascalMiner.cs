@@ -48,7 +48,9 @@ namespace GatelessGateSharp {
             : base(aGatelessGateDevice, "ethash_pascal", "ethash", "pascal") {
         }
 
-        public void Start(EthashStratum aEthashStratum, PascalStratum aPascalStratum, int aEthashIntensity, int aPascalIterations) {
+        public void Start(EthashStratum aEthashStratum, PascalStratum aPascalStratum, int aEthashIntensity, int aPascalIterations, int aKernelOptimizationLevel = -1)
+        {
+            KernelOptimizationLevel = aKernelOptimizationLevel;
             PrimaryStratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = 256;
             mEthashIntensity = aEthashIntensity;
@@ -154,7 +156,7 @@ namespace GatelessGateSharp {
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                program = BuildProgram("ethash_pascal", mEthashLocalWorkSizeArray[0], "-O1", "", "");
+                program = BuildProgram("ethash_pascal", mEthashLocalWorkSizeArray[0], "", "", "");
 
                 MemoryUsage = 256;
                 MemoryUsage += 32;
@@ -323,10 +325,7 @@ namespace GatelessGateSharp {
                                 pascalStartNonce += (UInt32)mEthashGlobalWorkSizeArray[0] * mPascalRatio;
 
                                 sw.Stop();
-                                Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * 0.75;
-                                Device.TotalHashesPrimaryAlgorithm += (double)mEthashGlobalWorkSizeArray[0] * 0.75;
-                                SpeedSecondaryAlgorithm = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mPascalRatio;
-                                Device.TotalHashesSecondaryAlgorithm += (double)mEthashGlobalWorkSizeArray[0] * mPascalRatio;
+                                ReportHashCount((double)mEthashGlobalWorkSizeArray[0] * 0.75, (double)mEthashGlobalWorkSizeArray[0] * mPascalRatio, sw.Elapsed.TotalSeconds);
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Ethash), ", Speed / (1000000)) + String.Format("{0:N2} Mh/s (Pascal)", SpeedSecondaryAlgorithm / (1000000)));
                                     consoleUpdateStopwatch.Restart();

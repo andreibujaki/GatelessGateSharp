@@ -32,8 +32,6 @@ namespace GatelessGateSharp
         public long MaxComputeUnits { get { return GetMaxComputeUnits(); } }
         public int AcceptedShares { get { return mAcceptedShares; } }
         public int RejectedShares { get { return mRejectedShares; } }
-        public double TotalHashesPrimaryAlgorithm = 0;
-        public double TotalHashesSecondaryAlgorithm = 0;
 
         public bool OverclockingEnabled { get; set; }
         public int TargetPowerLimit { get; set; }
@@ -63,10 +61,34 @@ namespace GatelessGateSharp
         public string MemoryVendor { get { return GetMemoryVendor(); } }
 
         // https://github.com/CLRX/CLRX-mirror/blob/76a2912097a12f7dd274d7319b2698f88ef6d705/doc/GcnIsa.md
+        public bool IsAMD { get { return Vendor == "AMD"; } }
+        public bool IsNVIDIA { get { return Vendor == "NVIDIA"; } }
         public bool IsGCN1 { get { return Vendor == "AMD" && (OpenCLName == "Pitcairn" || OpenCLName == "Tahiti" || OpenCLName == "Capeverde" || OpenCLName == "Hainan"); } }
         public bool IsGCN2 { get { return Vendor == "AMD" && (OpenCLName == "Bonaire" || OpenCLName == "Hawaii"); } }
         public bool IsGCN3 { get { return Vendor == "AMD" && (OpenCLName == "Tonga" || OpenCLName == "Fiji" || OpenCLName == "Ellesmere" || OpenCLName == "Baffin"); } }
         public bool IsGCN5 { get { return Vendor == "AMD" && (OpenCLName == "Vega"); } }
+
+        public double AverageSpeed {
+            get {
+                double speedPrimaryAlgorithm = 0;
+                foreach (var miner in Controller.Miners) {
+                    if (miner.DeviceIndex == DeviceIndex)
+                        speedPrimaryAlgorithm += miner.AverageSpeed;
+                }
+                return speedPrimaryAlgorithm;
+            }
+        }
+
+        public double AverageSpeedSecondaryAlgorithm {
+            get {
+                double speedSecondaryAlgorithm = 0;
+                foreach (var miner in Controller.Miners) {
+                    if (miner.DeviceIndex == DeviceIndex)
+                        speedSecondaryAlgorithm += miner.AverageSpeedSecondaryAlgorithm;
+                }
+                return speedSecondaryAlgorithm;
+            }
+        }
 
         public Device(int aDeviceIndex)
         {

@@ -72,8 +72,9 @@ namespace GatelessGateSharp
             }
         }
 
-        public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize, LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
+        public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize, LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize, int aKernelOptimizationLevel = -1)
         {
+            KernelOptimizationLevel = aKernelOptimizationLevel;
             mEthashStratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = aEthashLocalWorkSize;
             mEthashGlobalWorkSizeArray[0] = aEthashIntensity * mEthashLocalWorkSizeArray[0] * OpenCLDevice.GetComputeDevice().MaxComputeUnits;
@@ -97,7 +98,7 @@ namespace GatelessGateSharp
             }
             else
             {
-                mEthashProgram = BuildProgram("ethash_lbry", mEthashLocalWorkSizeArray[0], "-O1", "", "");
+                mEthashProgram = BuildProgram("ethash_lbry", mEthashLocalWorkSizeArray[0], "", "", "");
                 mEthashProgramArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashProgram;
                 mEthashDAGKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashDAGKernel = mEthashProgram.CreateKernel("GenerateDAG");
                 mEthashSearchKernelArray[new long[] { DeviceIndex, mEthashLocalWorkSizeArray[0] }] = mEthashSearchKernel = mEthashProgram.CreateKernel("search");

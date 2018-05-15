@@ -43,7 +43,9 @@ namespace GatelessGateSharp
             : base(aGatelessGateDevice, "lyra2rev2") {
         }
 
-        public void Start(Lyra2REv2Stratum aLyra2REv2Stratum, int aLyra2REv2Intensity, int aLyra2REv2LocalWorkSize) {
+        public void Start(Lyra2REv2Stratum aLyra2REv2Stratum, int aLyra2REv2Intensity, int aLyra2REv2LocalWorkSize, int aKernelOptimizationLevel = -1)
+        {
+            KernelOptimizationLevel = aKernelOptimizationLevel;
             Stratum = aLyra2REv2Stratum;
             mLyra2REv2GlobalWorkSizeArray[0] = aLyra2REv2Intensity * OpenCLDevice.GetMaxComputeUnits() * aLyra2REv2LocalWorkSize;
             mLyra2REv2LocalWorkSizeArray[0] = aLyra2REv2LocalWorkSize;
@@ -1155,7 +1157,7 @@ namespace GatelessGateSharp
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
                 program = BuildProgram("lyra2rev2", mLyra2REv2LocalWorkSizeArray[0],
-                    "-O5 -DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0],
+                    "-DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0],
                     "-DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0],
                     "-DMAX_GLOBAL_THREADS=" + mLyra2REv2GlobalWorkSizeArray[0]);
 
@@ -1248,10 +1250,9 @@ namespace GatelessGateSharp
                                             Stratum.Submit(Device, lyra2rev2Work, mLyra2REv2Output[i]);
                                     }
                                     lyra2rev2StartNonce += (UInt32)mLyra2REv2GlobalWorkSizeArray[0];
-                                    Device.TotalHashesPrimaryAlgorithm += (double)mLyra2REv2GlobalWorkSizeArray[0];
 
                                     sw.Stop();
-                                    Speed = ((double)mLyra2REv2GlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
+                                    ReportHashCount((double)mLyra2REv2GlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
                                     if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000) {
                                         MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Kh/s (Lyra2REv2)", Speed / 1000));
                                         consoleUpdateStopwatch.Restart();

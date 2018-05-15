@@ -42,8 +42,9 @@ namespace GatelessGateSharp
         {
         }
 
-        public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize)
+        public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize, int aKernelOptimizationLevel = -1)
         {
+            KernelOptimizationLevel = aKernelOptimizationLevel;
             Stratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = aEthashLocalWorkSize;
             mEthashIntensity = aEthashIntensity;
@@ -70,7 +71,7 @@ namespace GatelessGateSharp
 
                 MainForm.Logger("Miner thread for Device #" + DeviceIndex + " started.");
 
-                program = BuildProgram("ethash", mEthashLocalWorkSizeArray[0], "-O1", "", "");
+                program = BuildProgram("ethash", mEthashLocalWorkSizeArray[0], "", "", "");
 
                 MemoryUsage = 256 + 32;
 
@@ -209,8 +210,7 @@ namespace GatelessGateSharp
                                 ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
 
                                 sw.Stop();
-                                Speed = ((double)mEthashGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds;
-                                Device.TotalHashesPrimaryAlgorithm += (double)mEthashGlobalWorkSizeArray[0];
+                                ReportHashCount((double)mEthashGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
                                     MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", Speed / (1000000)));

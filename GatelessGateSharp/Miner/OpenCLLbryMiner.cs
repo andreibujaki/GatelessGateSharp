@@ -43,8 +43,9 @@ namespace GatelessGateSharp
         {
         }
 
-        public void Start(LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize)
+        public void Start(LbryStratum aLbryStratum, int aLbryIntensity, int aLbryLocalWorkSize, int aKernelOptimizationLevel = -1)
         {
+            KernelOptimizationLevel = aKernelOptimizationLevel;
             Stratum = aLbryStratum;
             mLbryGlobalWorkSizeArray[0] = aLbryIntensity * OpenCLDevice.GetMaxComputeUnits() * aLbryLocalWorkSize;
             mLbryLocalWorkSizeArray[0] = aLbryLocalWorkSize;
@@ -74,7 +75,7 @@ namespace GatelessGateSharp
                 program = BuildProgram(
                     "lbry",
                     mLbryLocalWorkSizeArray[0], 
-                    "-O1 -DITERATIONS=" + mIterations,
+                    "-DITERATIONS=" + mIterations,
                     "-DITERATIONS=" + mIterations,
                     "-DITERATIONS=" + mIterations);
                 
@@ -153,8 +154,7 @@ namespace GatelessGateSharp
                                 lbryStartNonce += (UInt32)mLbryGlobalWorkSizeArray[0] * (uint)mIterations;
 
                                 sw.Stop();
-                                Speed = ((double)mLbryGlobalWorkSizeArray[0]) / sw.Elapsed.TotalSeconds * mIterations;
-                                Device.TotalHashesPrimaryAlgorithm += (double)mLbryGlobalWorkSizeArray[0] * mIterations;
+                                ReportHashCount((double)mLbryGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
                                     MainForm.Logger("Device #" + DeviceIndex + ": " + String.Format("{0:N2} Mh/s (Lbry)", Speed / 1000000));
