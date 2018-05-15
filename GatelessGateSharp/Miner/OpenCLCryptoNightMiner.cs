@@ -196,7 +196,7 @@ namespace GatelessGateSharp {
                             while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().Equals(job)) {
                                 MarkAsAlive();
 
-                                int newVersion = (int)input[0]; // ((int)input[0] >= 7) ? ((int)input[0] - 6) : 0;
+                                int newVersion = Variant == "cryptonight_heavy" ? 5 : (int)input[0]; // ((int)input[0] >= 7) ? ((int)input[0] - 6) : 0;
                                 if (mMoneroVersion != newVersion)
                                     MainForm.Logger("Switching to Monero Version " + newVersion);
                                 mMoneroVersion = newVersion;

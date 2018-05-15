@@ -4338,7 +4338,7 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLCryptoNightMiners(string pool, string algorithm)
         {
-            if (mDevFeeMode)
+            if (IsBenchmarkRunning)
                 throw new InvalidOperationException();
             CryptoNightStratum stratum = null;
             var niceHashMode = false;
@@ -4356,8 +4356,8 @@ namespace GatelessGateSharp
                         } catch (Exception ex) { Logger(ex); }
                 niceHashMode = true;
             } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "DwarfPool" && (IsBenchmarkRunning || textBoxMoneroAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix : textBoxMoneroAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+                var username = IsBenchmarkRunning ? Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix : textBoxMoneroAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var password = textBoxEmail.Text != "" ? textBoxEmail.Text : "x";
                 var hosts = GetDwarfPoolCryptoNightServers();
@@ -4370,9 +4370,9 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "Nanopool" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeMoneroAddress : textBoxMoneroAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "") {
+            } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "Nanopool" && (IsBenchmarkRunning || textBoxMoneroAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeMoneroAddress : textBoxMoneroAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "") {
                     username += "." + textBoxRigID.Text;
                     if (textBoxEmail.Text != "")
                         username += "/" + textBoxEmail.Text;
@@ -4387,42 +4387,42 @@ namespace GatelessGateSharp
                             Logger(ex);
                         }
 
-            } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "mineXMR.com" && (mDevFeeMode || textBoxMoneroAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix : textBoxMoneroAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            } else if ((algorithm == "cryptonight" || algorithm == "cryptonightv7") && pool == "mineXMR.com" && (IsBenchmarkRunning || textBoxMoneroAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeMoneroAddress + Parameters.DevFeeUsernamePostfix : textBoxMoneroAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 stratum = new CryptoNightStratum("pool.minexmr.com", 7777, username, "x", pool, algorithm);
 
-            } else if ((algorithm == "cryptonight_heavy") && pool == "Sumokoin Mining Pool" && (mDevFeeMode || textBoxSumokoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
+            } else if ((algorithm == "cryptonight_heavy") && pool == "Sumokoin Mining Pool" && (IsBenchmarkRunning || textBoxSumokoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
                 stratum = new CryptoNightStratum("pool.sumokoin.com", 5555, username, "x", pool, algorithm);
 
-            } else if ((algorithm == "cryptonight_heavy") && pool == "Hash Vault" && (mDevFeeMode || textBoxSumokoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
+            } else if ((algorithm == "cryptonight_heavy") && pool == "Hash Vault" && (IsBenchmarkRunning || textBoxSumokoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
                 var password = "";
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     password += textBoxRigID.Text;
-                if (!mDevFeeMode && textBoxEmail.Text != "")
+                if (!IsBenchmarkRunning && textBoxEmail.Text != "")
                     password += ":" + textBoxEmail.Text;
                 stratum = new CryptoNightStratum("pool.sumokoin.hashvault.pro", 5555, username, password, pool, algorithm);
 
-            } else if ((algorithm == "cryptonight_light") && pool == "Hash Vault" && (mDevFeeMode || textBoxAEONAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeAEONAddress : textBoxAEONAddress.Text;
+            } else if ((algorithm == "cryptonight_light") && pool == "Hash Vault" && (IsBenchmarkRunning || textBoxAEONAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeAEONAddress : textBoxAEONAddress.Text;
                 var password = "";
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     password += textBoxRigID.Text;
-                if (!mDevFeeMode && textBoxEmail.Text != "")
+                if (!IsBenchmarkRunning && textBoxEmail.Text != "")
                     password += ":" + textBoxEmail.Text;
                 stratum = new CryptoNightStratum("pool.aeon.hashvault.pro", 5555, username, password, pool, algorithm);
 
-            } else if ((algorithm == "cryptonight_light") && pool == "AEON Mining Pool" && (mDevFeeMode || textBoxAEONAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeAEONAddress : textBoxAEONAddress.Text;
+            } else if ((algorithm == "cryptonight_light") && pool == "AEON Mining Pool" && (IsBenchmarkRunning || textBoxAEONAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeAEONAddress : textBoxAEONAddress.Text;
                 var password = "x";
                 stratum = new CryptoNightStratum("mine.aeon-pool.com", 5555, username, password, pool, algorithm);
 
-            } else if ((algorithm == "cryptonight_heavy") && pool == "FairPool" && (mDevFeeMode || textBoxSumokoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            } else if ((algorithm == "cryptonight_heavy") && pool == "FairPool" && (IsBenchmarkRunning || textBoxSumokoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeSumokoinAddress : textBoxSumokoinAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "+" + textBoxRigID.Text;
                 stratum = new CryptoNightStratum("mine.sumo.fairpool.xyz", 5555, username, "x", pool, algorithm);
 
@@ -4452,13 +4452,13 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLLbryMiners(string pool)
         {
-            if (mDevFeeMode)
+            if (IsBenchmarkRunning)
                 throw new InvalidOperationException();
             LbryStratum stratum = null;
 
-            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var hosts = GetNiceHashLbryServers();
                 foreach (var host in hosts)
@@ -4469,8 +4469,8 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
+            } else if (pool == "zpool" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
                 stratum = new LbryStratum("lbry.mine.zpool.ca", 3334, username, "c=BTC", pool);
             }
 
@@ -4482,13 +4482,13 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLNeoScryptMiners(string pool)
         {
-            if (mDevFeeMode)
+            if (IsBenchmarkRunning)
                 throw new InvalidOperationException();
             NeoScryptStratum stratum = null;
 
-            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var hosts = GetNiceHashNeoScryptServers();
                 foreach (var host in hosts)
@@ -4499,8 +4499,8 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
+            } else if (pool == "zpool" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
                 stratum = new NeoScryptStratum("neoscrypt.mine.zpool.ca", 4233, username, "c=BTC", pool);
             }
 
@@ -4512,13 +4512,13 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLLyra2REv2Miners(string pool)
         {
-            if (mDevFeeMode)
+            if (IsBenchmarkRunning)
                 throw new InvalidOperationException();
             Lyra2REv2Stratum stratum = null;
 
-            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var hosts = GetNiceHashLyra2REv2Servers();
                 foreach (var host in hosts)
@@ -4529,8 +4529,8 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "zpool" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
+            } else if (pool == "zpool" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
                 stratum = new Lyra2REv2Stratum("lyra2v2.mine.zpool.ca", 4533, username, "c=BTC", pool);
             }
 
@@ -4542,24 +4542,24 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLX16RMiners(string pool, string variant)
         {
-            if (mDevFeeMode)
+            if (IsBenchmarkRunning)
                 throw new InvalidOperationException();
             X16RStratum stratum = null;
 
-            if (variant == "x16r" && pool == "CryptoPool Party" && (mDevFeeMode || textBoxRavenAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeRavenAddress : textBoxRavenAddress.Text;
+            if (variant == "x16r" && pool == "CryptoPool Party" && (IsBenchmarkRunning || textBoxRavenAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeRavenAddress : textBoxRavenAddress.Text;
                 stratum = new X16RStratum("cryptopool.party", 3636, username, "c=RVN", pool);
-            } else if (variant == "x16r" && pool == "VIRTOPIA" && (mDevFeeMode || textBoxRavenAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeRavenAddress : textBoxRavenAddress.Text;
+            } else if (variant == "x16r" && pool == "VIRTOPIA" && (IsBenchmarkRunning || textBoxRavenAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeRavenAddress : textBoxRavenAddress.Text;
                 stratum = new X16RStratum("stratum.virtopia.ca", 3333, username, "x", pool);
-            } else if (variant == "x16r" && pool == "MiningPanda" && (mDevFeeMode || textBoxRavenAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeRavenAddress : textBoxRavenAddress.Text;
+            } else if (variant == "x16r" && pool == "MiningPanda" && (IsBenchmarkRunning || textBoxRavenAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeRavenAddress : textBoxRavenAddress.Text;
                 stratum = new X16RStratum("miningpanda.site", 3636, username, "x", pool);
-            } else if (variant == "x16r" && pool == "Hash4Life" && (mDevFeeMode || textBoxRavenAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeRavenAddress : textBoxRavenAddress.Text;
+            } else if (variant == "x16r" && pool == "Hash4Life" && (IsBenchmarkRunning || textBoxRavenAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeRavenAddress : textBoxRavenAddress.Text;
                 stratum = new X16RStratum("hash4.life", 3636, username, "c=RVN", pool);
-            } else if (variant == "x16s" && pool == "Pigeoncoin" && (mDevFeeMode || textBoxPigeoncoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeePigeoncoinAddress : textBoxPigeoncoinAddress.Text;
+            } else if (variant == "x16s" && pool == "Pigeoncoin" && (IsBenchmarkRunning || textBoxPigeoncoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeePigeoncoinAddress : textBoxPigeoncoinAddress.Text;
                 stratum = new X16RStratum("pool.pigeoncoin.org", 3663, username, "c=PGN", pool);
             }
 
@@ -4571,14 +4571,14 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLDualEthashPascalMiners(string pool)
         {
-            if (mDevFeeMode)
+            if (IsBenchmarkRunning)
                 throw new InvalidOperationException();
             EthashStratum ethashStratum = null;
             PascalStratum pascalStratum = null;
 
-            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var ethashHosts = GetNiceHashEthashServers();
                 foreach (var ethashHost in ethashHosts)
@@ -4598,9 +4598,9 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "Nanopool" && (mDevFeeMode || (textBoxEthereumAddress.Text.Length > 0 && textBoxPascalAddress.Text.Length > 0))) {
-                var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            } else if (pool == "Nanopool" && (IsBenchmarkRunning || (textBoxEthereumAddress.Text.Length > 0 && textBoxPascalAddress.Text.Length > 0))) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var ethashHosts = GetNanopoolEthashServers();
                 foreach (var ethashHost in ethashHosts)
@@ -4611,8 +4611,8 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-                username = mDevFeeMode ? Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix : textBoxPascalAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+                username = IsBenchmarkRunning ? Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix : textBoxPascalAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var pascalHosts = GetNanopoolPascalServers();
                 foreach (var pascalHost in pascalHosts)
@@ -4634,13 +4634,13 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLPascalMiners(string pool)
         {
-            if (mDevFeeMode)
+            if (IsBenchmarkRunning)
                 throw new InvalidOperationException();
             PascalStratum stratum = null;
 
-            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var hosts = GetNiceHashPascalServers();
                 foreach (var host in hosts)
@@ -4651,9 +4651,9 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "Nanopool" && (mDevFeeMode || textBoxPascalAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix : textBoxPascalAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            } else if (pool == "Nanopool" && (IsBenchmarkRunning || textBoxPascalAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeePascalAddress + Parameters.DevFeeUsernamePostfix : textBoxPascalAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var hosts = GetNanopoolPascalServers();
                 foreach (var host in hosts)
@@ -4674,13 +4674,13 @@ namespace GatelessGateSharp
 
         public void LaunchOpenCLEthashMiners(string pool)
         {
-            if (mDevFeeMode)
+            if (IsBenchmarkRunning)
                 throw new InvalidOperationException();
             EthashStratum stratum = null;
 
-            if (pool == "NiceHash" && (mDevFeeMode || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+            if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 var hosts = GetNiceHashEthashServers();
                 foreach (var host in hosts)
@@ -4691,7 +4691,7 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "DwarfPool" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
+            } else if (pool == "DwarfPool" && (IsBenchmarkRunning || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
                                 new StratumServerInfo("eth-eu.dwarfpool.com",   0, "EU"),
                                 new StratumServerInfo("eth-us.dwarfpool.com",   0, "US"),
@@ -4707,8 +4707,8 @@ namespace GatelessGateSharp
                                 new StratumServerInfo("eth-br.dwarfpool.com",   0, "SA"),
                                 new StratumServerInfo("eth-ar.dwarfpool.com",   0, "SA")
                             };
-                var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+                var username = IsBenchmarkRunning ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 hosts.Sort();
                 foreach (var host in hosts)
@@ -4719,15 +4719,15 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "ethermine.org" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
+            } else if (pool == "ethermine.org" && (IsBenchmarkRunning || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
                                 new StratumServerInfo("us1.ethermine.org",   0, "US"),
                                 new StratumServerInfo("us2.ethermine.org",   0, "US"),
                                 new StratumServerInfo("eu1.ethermine.org",   0, "EU"),
                                 new StratumServerInfo("asia1.ethermine.org", 0, "AS")
                             };
-                var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+                var username = IsBenchmarkRunning ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 hosts.Sort();
                 foreach (var host in hosts)
@@ -4738,15 +4738,15 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "ethpool.org" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
+            } else if (pool == "ethpool.org" && (IsBenchmarkRunning || textBoxEthereumAddress.Text.Length > 0)) {
                 var hosts = new List<StratumServerInfo> {
                                 new StratumServerInfo("us1.ethpool.org",   0, "US"),
                                 new StratumServerInfo("us2.ethpool.org",   0, "US"),
                                 new StratumServerInfo("eu1.ethpool.org",   0, "EU"),
                                 new StratumServerInfo("asia1.ethpool.org", 0, "AS")
                             };
-                var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "")
+                var username = IsBenchmarkRunning ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     username += "." + textBoxRigID.Text;
                 hosts.Sort();
                 foreach (var host in hosts)
@@ -4757,9 +4757,9 @@ namespace GatelessGateSharp
                         } catch (Exception ex) {
                             Logger(ex);
                         }
-            } else if (pool == "Nanopool" && (mDevFeeMode || textBoxEthereumAddress.Text.Length > 0)) {
-                var username = mDevFeeMode ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
-                if (!mDevFeeMode && textBoxRigID.Text != "") {
+            } else if (pool == "Nanopool" && (IsBenchmarkRunning || textBoxEthereumAddress.Text.Length > 0)) {
+                var username = IsBenchmarkRunning ? Parameters.DevFeeEthereumAddress + Parameters.DevFeeUsernamePostfix : textBoxEthereumAddress.Text;
+                if (!IsBenchmarkRunning && textBoxRigID.Text != "") {
                     username += "." + textBoxRigID.Text;
                     if (textBoxEmail.Text != "")
                         username += "/" + textBoxEmail.Text;
@@ -4796,6 +4796,7 @@ namespace GatelessGateSharp
                 Controller.PrimaryStratum = (Stratum)stratum;
             }
         }
+
 
         void LaunchOpenCLCryptoNightMinersWithStratum(CryptoNightStratum stratum, bool niceHashMode, string algorithm)
         {
@@ -5758,7 +5759,7 @@ namespace GatelessGateSharp
                 tabPageBenchmarkingSecondParameter.Text = "2nd Parameter" + ((checkBoxBenchmarkingSecondParameterEnabled.Checked) ? (": " + (new Regex(@"^.*/(.*)$")).Replace(comboBoxBenchmarkingSecondParameter.SelectedItem.ToString(), "$1")) : " (Disabled)");
 
                 buttonBenchmarkingClear.Enabled = idle;
-                buttonBenchmarkingReset.Enabled = idle;
+                buttonBenchmarkingResetCurrentSpeeds.Enabled = idle;
 
             } catch (Exception ex) {
                 Logger("Exception in UpdateControls(): " + ex.Message + ex.StackTrace);
@@ -7734,17 +7735,17 @@ namespace GatelessGateSharp
         List<string> OptimizedAlgorithmList {
             get {
                 List<string> optimizedAlgorithmList = new List<string> { };
-                if (checkBoxOptimizationEthashPascalEnabled.Checked) optimizedAlgorithmList.Add("ethash_pascal");
                 if (checkBoxOptimizationEthashEnabled.Checked) optimizedAlgorithmList.Add("ethash");
+                if (checkBoxOptimizationEthashPascalEnabled.Checked) optimizedAlgorithmList.Add("ethash_pascal");
                 if (checkBoxOptimizationNeoScryptEnabled.Checked) optimizedAlgorithmList.Add("neoscrypt");
-                if (checkBoxOptimizationPascalEnabled.Checked) optimizedAlgorithmList.Add("pascal");
-                if (checkBoxOptimizationLbryEnabled.Checked) optimizedAlgorithmList.Add("lbry");
-                if (checkBoxOptimizationLyra2REv2Enabled.Checked) optimizedAlgorithmList.Add("lyra2rev2");
                 if (checkBoxOptimizationX16SEnabled.Checked) optimizedAlgorithmList.Add("x16s");
                 if (checkBoxOptimizationCryptoNightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight");
                 if (checkBoxOptimizationCryptoNightV7Enabled.Checked) optimizedAlgorithmList.Add("cryptonightv7");
                 if (checkBoxOptimizationCryptoNightHeavyEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_heavy");
                 if (checkBoxOptimizationCryptoNightLightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_light");
+                if (checkBoxOptimizationPascalEnabled.Checked) optimizedAlgorithmList.Add("pascal");
+                if (checkBoxOptimizationLbryEnabled.Checked) optimizedAlgorithmList.Add("lbry");
+                if (checkBoxOptimizationLyra2REv2Enabled.Checked) optimizedAlgorithmList.Add("lyra2rev2");
                 return optimizedAlgorithmList;
             }
         }
@@ -7752,17 +7753,17 @@ namespace GatelessGateSharp
         List<string> BenchmarkedAlgorithmList {
             get {
                 List<string> benchmarkedAlgorithmList = new List<string> { };
-                if (checkBoxBenchmarkingEthashPascalEnabled.Checked) benchmarkedAlgorithmList.Add("ethash_pascal");
                 if (checkBoxBenchmarkingEthashEnabled.Checked) benchmarkedAlgorithmList.Add("ethash");
+                if (checkBoxBenchmarkingEthashPascalEnabled.Checked) benchmarkedAlgorithmList.Add("ethash_pascal");
                 if (checkBoxBenchmarkingNeoScryptEnabled.Checked) benchmarkedAlgorithmList.Add("neoscrypt");
-                if (checkBoxBenchmarkingPascalEnabled.Checked) benchmarkedAlgorithmList.Add("pascal");
-                if (checkBoxBenchmarkingLbryEnabled.Checked) benchmarkedAlgorithmList.Add("lbry");
-                if (checkBoxBenchmarkingLyra2REv2Enabled.Checked) benchmarkedAlgorithmList.Add("lyra2rev2");
                 if (checkBoxBenchmarkingX16SEnabled.Checked) benchmarkedAlgorithmList.Add("x16s");
                 if (checkBoxBenchmarkingCryptoNightEnabled.Checked) benchmarkedAlgorithmList.Add("cryptonight");
                 if (checkBoxBenchmarkingCryptoNightV7Enabled.Checked) benchmarkedAlgorithmList.Add("cryptonightv7");
                 if (checkBoxBenchmarkingCryptoNightHeavyEnabled.Checked) benchmarkedAlgorithmList.Add("cryptonight_heavy");
                 if (checkBoxBenchmarkingCryptoNightLightEnabled.Checked) benchmarkedAlgorithmList.Add("cryptonight_light");
+                if (checkBoxBenchmarkingPascalEnabled.Checked) benchmarkedAlgorithmList.Add("pascal");
+                if (checkBoxBenchmarkingLbryEnabled.Checked) benchmarkedAlgorithmList.Add("lbry");
+                if (checkBoxBenchmarkingLyra2REv2Enabled.Checked) benchmarkedAlgorithmList.Add("lyra2rev2");
                 return benchmarkedAlgorithmList;
             }
         }
