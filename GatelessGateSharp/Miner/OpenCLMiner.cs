@@ -66,11 +66,10 @@ namespace GatelessGateSharp
 
         protected ComputeProgram BuildProgram(string programName, long localWorkSize, string optionsAMD, string optionsNVIDIA, string optionsOthers, string binaryFilePathPostFix = null) {
             ComputeProgram program;
-            string defaultAssemblyFilePath = (OpenCLDevice.IsGCN3) ? @"AssemblyKernels\GCN3_" + programName + "_LWS" + localWorkSize + ".isa"
+            string defaultAssemblyFilePath = (OpenCLDevice.IsGCN3) ? @"AssemblyKernels\GCN3_" + programName + "_LWS" + localWorkSize + (binaryFilePathPostFix != null ? "_" + binaryFilePathPostFix : "") + ".isa"
                                                                    : null;
-            string binaryFileName = ComputeDevice.Name + "_" + programName + "_LWS" + localWorkSize + "_O" + KernelOptimizationLevel + (binaryFilePathPostFix != null ? "_" + binaryFilePathPostFix : "") + ".bin";
-            string defultBinaryFilePath = @"BinaryKernels\" + binaryFileName;
-            string savedBinaryFilePath = (MainForm.SavedOpenCLBinaryKernelPathBase + @"\") + binaryFileName;
+            string defultBinaryFilePath = @"BinaryKernels\" + ComputeDevice.Name + "_" + programName + "_LWS" + localWorkSize + (binaryFilePathPostFix != null ? "_" + binaryFilePathPostFix : "") + ".bin";
+            string savedBinaryFilePath = (MainForm.SavedOpenCLBinaryKernelPathBase + @"\") + ComputeDevice.Name + "_" + programName + "_LWS" + localWorkSize + "_O" + KernelOptimizationLevel + (binaryFilePathPostFix != null ? "_" + binaryFilePathPostFix : "") + ".bin";
             string sourceFilePath = @"Kernels\" + programName + ".cl";
             String buildOptions = (OpenCLDevice.GetVendor() == "AMD"    ? optionsAMD + " -D__AMD__ -O" + KernelOptimizationLevel : 
                                    OpenCLDevice.GetVendor() == "NVIDIA" ? optionsNVIDIA + " -D__NVIDIA__" : 

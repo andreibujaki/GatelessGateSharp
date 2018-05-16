@@ -148,13 +148,22 @@
     <value>382, 17</value>
   </metadata>
   <data name="richTextBoxAbout.Text" xml:space="preserve">
-    <value>Copyright 2017 Yurio Miyazawa (a.k.a zawawa) &lt;me@yurio.net&gt;
+    <value>Gateless Gate Sharp
+Copyright 2017-2018 Yurio Miyazawa a.k.a zawawa &lt;me@yurio.net&gt;
 
 Gateless Gate Sharp is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 Gateless Gate Sharp is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with Gateless Gate Sharp.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</value>
+You should have received a copy of the GNU General Public License along with Gateless Gate Sharp.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+
+
+Gateless Gate Sharp utilizes codes from the following projects:
+
+sgminer-gm, GPL-3.0 License
+xmr-stak, GPL-3.0 License
+Cloo, Copyright (c) 2009 - 2011 Fatjon Sakiqi
+HashLib, CDDL-1.0 License </value>
   </data>
   <metadata name="toolTipMainForm.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>

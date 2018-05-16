@@ -256,7 +256,7 @@ namespace GatelessGateSharp
         private bool mDevFeeMode = true;
         private DateTime mDevFeeModeStartTime = DateTime.Now; // dummy
 
-        private string mCurrentPool = "NiceHash";
+        private string CurrentPool = "NiceHash";
 
         private int mCurrentBenchmarkLength = 10;
 
@@ -304,7 +304,6 @@ namespace GatelessGateSharp
             mUserLbryAddress = textBoxLbryAddress.Text;
             mUserEthereumAddress = textBoxEthereumAddress.Text;
             mUserBitcoinAddress = textBoxBitcoinAddress.Text;
-            mUserZcashAddress = textBoxZcashAddress.Text;
             mUserRavenAddress = textBoxRavenAddress.Text;
 
             foreach (var algorithm in AlgorithmList) {
@@ -2673,24 +2672,25 @@ namespace GatelessGateSharp
                 labelPriceDay.Text = "-";
                 labelPriceWeek.Text = "-";
                 labelPriceMonth.Text = "-";
+                tabControlDashboard.TabPages[1].Text = "Pool: " + CurrentPool;
 
-                if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "ethash" && textBoxBitcoinAddress.Text != "") {
+                if (CurrentPool == "NiceHash" && DefaultAlgorithm == "ethash" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 20, totalSpeed, 1000000000.0);
-                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "ethash_pascal" && textBoxBitcoinAddress.Text != "") {
+                } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "ethash_pascal" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 20, totalSpeed, 1000000000.0, 25, secondaryTotalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "cryptonight" && textBoxBitcoinAddress.Text != "") {
+                } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "cryptonight" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 22, totalSpeed, 1000000.0);
-                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "lbry" && textBoxBitcoinAddress.Text != "") {
+                } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "lbry" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 23, totalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "pascal" && textBoxBitcoinAddress.Text != "") {
+                } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "pascal" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 58 - 33, totalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "neoscrypt" && textBoxBitcoinAddress.Text != "") {
+                } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "neoscrypt" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 41 - 33, totalSpeed, 1000000000.0);
-                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "lyra2rev2" && textBoxBitcoinAddress.Text != "") {
+                } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "lyra2rev2" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 47 - 33, totalSpeed, 1000000000000.0);
-                } else if (mCurrentPool == "NiceHash" && DefaultAlgorithm == "cryptonightv7" && textBoxBitcoinAddress.Text != "") {
+                } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "cryptonightv7" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 63 - 33, totalSpeed, 1000000.0);
-                } else if (mCurrentPool == "ethermine.org" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "" && sEthermineStats != null) {
+                } else if (CurrentPool == "ethermine.org" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "" && sEthermineStats != null) {
                     var response = sEthermineStats;
                     var data = (JContainer)response["data"];
                     var balance = (double)data["unpaid"] * 1e-18;
@@ -2700,9 +2700,9 @@ namespace GatelessGateSharp
 
                     if (IsMining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
-                        UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
+                        UpdateProfitabilityInformation("ETH", price, ETHRate, currency);
                     }
-                } else if (mCurrentPool == "ethpool.org" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "" && sEthpoolStats != null) {
+                } else if (CurrentPool == "ethpool.org" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "" && sEthpoolStats != null) {
                     var data = (JContainer)sEthpoolStats["data"];
                     double balance = 0;
                     try {
@@ -2714,9 +2714,9 @@ namespace GatelessGateSharp
 
                     if (IsMining && averageHashrate != 0) {
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
-                        UpdateLabelsForProfitability("ETH", price, ETHRate, currency);
+                        UpdateProfitabilityInformation("ETH", price, ETHRate, currency);
                     }
-                } else if (mCurrentPool == "Nanopool" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "") {
+                } else if (CurrentPool == "Nanopool" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "") {
                     var data = (JContainer)sNanopoolEthereumStats["data"];
                     double balance = 0;
                     try {
@@ -2726,9 +2726,9 @@ namespace GatelessGateSharp
                     if (IsMining && sNanopoolEthereumEarningStats != null) {
                         var earningData = (JContainer)sNanopoolEthereumEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
-                        UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
+                        UpdateProfitabilityInformation("ETH", price1Day, ETHRate, currency);
                     }
-                } else if (mCurrentPool == "Nanopool" && DefaultAlgorithm == "cryptonight" && textBoxMoneroAddress.Text != "") {
+                } else if (CurrentPool == "Nanopool" && DefaultAlgorithm == "cryptonight" && textBoxMoneroAddress.Text != "") {
                     var data = (JContainer)sNanopoolMoneroStats["data"];
                     double balance = 0;
                     try {
@@ -2738,9 +2738,9 @@ namespace GatelessGateSharp
                     if (IsMining && sNanopoolMoneroEarningStats != null) {
                         var earningData = (JContainer)sNanopoolMoneroEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
-                        UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
+                        UpdateProfitabilityInformation("XMR", price1Day, XMRRate, currency);
                     }
-                } else if (mCurrentPool == "DwarfPool" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "") {
+                } else if (CurrentPool == "DwarfPool" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "") {
                     double balance = 0;
                     try {
                         balance = double.Parse((string)sDwarfPoolEthereumStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
@@ -2749,9 +2749,9 @@ namespace GatelessGateSharp
                     if (IsMining && sNanopoolEthereumEarningStats != null) { // TODO
                         var earningData = (JContainer)sNanopoolEthereumEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
-                        UpdateLabelsForProfitability("ETH", price1Day, ETHRate, currency);
+                        UpdateProfitabilityInformation("ETH", price1Day, ETHRate, currency);
                     }
-                } else if (mCurrentPool == "DwarfPool" && DefaultAlgorithm == "cryptonight" && textBoxMoneroAddress.Text != "") {
+                } else if (CurrentPool == "DwarfPool" && DefaultAlgorithm == "cryptonight" && textBoxMoneroAddress.Text != "") {
                     double balance = 0;
                     try {
                         balance = double.Parse((string)sDwarfPoolMoneroStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
@@ -2760,7 +2760,7 @@ namespace GatelessGateSharp
                     if (IsMining && sNanopoolMoneroEarningStats != null) { // TODO
                         var earningData = (JContainer)sNanopoolMoneroEarningStats["data"];
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
-                        UpdateLabelsForProfitability("XMR", price1Day, XMRRate, currency);
+                        UpdateProfitabilityInformation("XMR", price1Day, XMRRate, currency);
                     }
                 }
             } catch (Exception) {
@@ -2793,15 +2793,16 @@ namespace GatelessGateSharp
                         else if ((double)item["algo"] == secondaryAlgo)
                             price += double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * secondaryTotalSpeed / secondarySpeedDivisor;
                     } catch (Exception) { }
-                UpdateLabelsForProfitability("BTC", price, BTCRate, currency);
+                UpdateProfitabilityInformation("BTC", price, BTCRate, currency);
             }
         }
 
-        void UpdateLabelsForProfitability(string coin, double price, double rate, string currency)
+        void UpdateProfitabilityInformation(string coin, double price, double rate, string currency)
         {
             labelPriceDay.Text = string.Format("{0:N6}", price) + " " + coin + "/Day (" + string.Format("{0:N2}", price * rate) + " " + currency + "/Day)";
             labelPriceWeek.Text = string.Format("{0:N6}", price * 7) + " " + coin + "/Week (" + string.Format("{0:N2}", price * 7 * rate) + " " + currency + "/Week)";
             labelPriceMonth.Text = string.Format("{0:N6}", price * (365.25 / 12)) + " " + coin + "/Month (" + string.Format("{0:N2}", price * (365.25 / 12) * rate) + " " + currency + "/Month)";
+            tabControlDashboard.TabPages[1].Text = "Pool: " + CurrentPool + " (" + string.Format("{0:N2}", price * (365.25 / 12) * rate) + " " + currency + "/Month)";
         }
 
         private string ConvertHashrateToString(double totalSpeed)
@@ -2845,7 +2846,7 @@ namespace GatelessGateSharp
                     + ")";
 
                 // Pool
-                mCurrentPool = (IsMining && Controller.PrimaryStratum != null) ? (Controller.PrimaryStratum.PoolName) :
+                CurrentPool = (IsMining && Controller.PrimaryStratum != null) ? (Controller.PrimaryStratum.PoolName) :
                                CustomPoolEnabled && checkBoxCustomPool0Enable.Checked ? textBoxCustomPool0Host.Text :
                                CustomPoolEnabled && checkBoxCustomPool1Enable.Checked ? textBoxCustomPool1Host.Text :
                                CustomPoolEnabled && checkBoxCustomPool2Enable.Checked ? textBoxCustomPool2Host.Text :
@@ -2862,13 +2863,13 @@ namespace GatelessGateSharp
                     labelCurrentPool.Text = "DEVFEE(" + Parameters.DevFeePercentage + "%; " + string.Format("{0:N0}", Parameters.DevFeeDurationInSeconds - (DateTime.Now - mDevFeeModeStartTime).TotalSeconds) + " seconds remaining...)";
                     labelCurrentSecondaryPool.Text = "";
                 } else if (IsMining && !CustomPoolEnabled && Controller.PrimaryStratum != null && Controller.SecondaryStratum != null) {
-                    labelCurrentPool.Text = mCurrentPool + " (" + Controller.PrimaryStratum.ServerAddress + ")";
+                    labelCurrentPool.Text = CurrentPool + " (" + Controller.PrimaryStratum.ServerAddress + ")";
                     labelCurrentSecondaryPool.Text = currentSecondaryPool + " (" + Controller.SecondaryStratum.ServerAddress + ")";
                 } else if (IsMining && !CustomPoolEnabled && Controller.PrimaryStratum != null) {
-                    labelCurrentPool.Text = mCurrentPool + " (" + Controller.PrimaryStratum.ServerAddress + ")";
+                    labelCurrentPool.Text = CurrentPool + " (" + Controller.PrimaryStratum.ServerAddress + ")";
                     labelCurrentSecondaryPool.Text = "";
                 } else {
-                    labelCurrentPool.Text = mCurrentPool;
+                    labelCurrentPool.Text = CurrentPool;
                     labelCurrentSecondaryPool.Text = "";
                 }
 
@@ -6639,12 +6640,6 @@ namespace GatelessGateSharp
             mUserMoneroAddress = textBoxMoneroAddress.Text = textBoxMoneroAddress.Text.Trim();
         }
 
-        private void textBoxZcashAddress_TextChanged(object sender, EventArgs e)
-        {
-            mAreSettingsDirty = true;
-            mUserZcashAddress = textBoxZcashAddress.Text.Trim();
-        }
-
         private void dataGridViewDevices_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -7603,8 +7598,8 @@ namespace GatelessGateSharp
                 }
             }
             foreach (var record in Controller.BenchmarkRecords.Concat(Controller.BenchmarkEntries).OrderBy(o => o.ID)) {
-                bool voltage = (record.Parameters[1].Name == "overclocking_core_voltage" || record.Parameters[1].Name == "overclocking_memory_voltage");
-                bool clock = (record.Parameters[1].Name == "overclocking_core_clock" || record.Parameters[1].Name == "overclocking_memory_clock");
+                bool voltage = record.Parameters.Count >= 2 && (record.Parameters[1].Name == "overclocking_core_voltage" || record.Parameters[1].Name == "overclocking_memory_voltage");
+                bool clock = record.Parameters.Count >= 2 && (record.Parameters[1].Name == "overclocking_core_clock" || record.Parameters[1].Name == "overclocking_memory_clock");
                 if (bestRecord == null
                     || (record.SuccessCount > bestRecord.SuccessCount)
                     || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore > bestRecord.StabilityScore)
@@ -7862,14 +7857,16 @@ namespace GatelessGateSharp
         {
             foreach (var algorithm in OptimizedAlgorithmList) {
                 if (checkBoxOptimizationAlgorithmicSettings.Checked) {
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "strided_index");
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "kernel_optimization_level");
-
                     if (algorithm != "ethash_pascal" && algorithm != "ethash")
                         AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "threads");
 
-                    if (algorithm != "ethash_pascal" && algorithm != "x16r" && algorithm != "x16s" && algorithm != "x16s")
+                    if (algorithm != "ethash_pascal" && algorithm != "x16r" && algorithm != "x16s")
                         AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "local_work_size");
+
+                    if (algorithm != "x16r" && algorithm != "x16s")
+                        AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "kernel_optimization_level");
+
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "strided_index");
 
                     if (algorithm == "cryptonight" || algorithm == "cryptonightv7" || algorithm == "cryptonight_heavy" || algorithm == "cryptonight_light" || algorithm == "neoscrypt") {
                         AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "raw_intensity");

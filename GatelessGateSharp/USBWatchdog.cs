@@ -12,13 +12,13 @@ namespace GatelessGateSharp
     class USBWatchdog
     {
         static SerialPort sSerialPort = null;
-        static byte sCommand = 0x01;
+        static byte sCommand = 0x01; // 10 sec
 
         public static void Initialize()
         {
             foreach (string s in SerialPort.GetPortNames()) {
                 try {
-                    MainForm.Logger("Checking " + s + " for USB watchdog...");
+                    MainForm.Logger("Probing " + s + " for USB watchdog...");
                     var serialPort = new SerialPort(s);
                     serialPort.BaudRate = 9600;
                     serialPort.ReadTimeout = 100;
