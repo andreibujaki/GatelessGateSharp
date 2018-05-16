@@ -22,7 +22,7 @@ namespace GatelessGateSharp {
         public static readonly int MaxLogFileSize = 1024 * 1024;
         public static readonly int LogMaxNumLines = 256;
 
-        public static readonly int BenchmarkLengthMultipleThreads = 60;
+        public static readonly int BenchmarkLengthMultipleThreads = 10;
         public static readonly int BenchmarkLengthSingleThread = 10;
         public static readonly double BenchmarkingSpeedDropThreshold = 0.80;
 

@@ -108,6 +108,8 @@ namespace GatelessGateSharp
                         EthashStratum.Work ethashWork;
                         EthashStratum.Job ethashJob;
 
+                        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                        sw.Start();
                         while (!Stopped && (ethashWork = Stratum.GetWork()) != null && (ethashJob = ethashWork.GetJob()) != null)
                         {
                             MarkAsAlive();
@@ -138,8 +140,7 @@ namespace GatelessGateSharp
                                 DAGCache cache = new DAGCache(ethashEpoch, ethashWork.GetJob().Seedhash);
                                 ethashDAGSize = Utilities.GetDAGSize(ethashEpoch);
 
-                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                sw.Start();
+                                sw.Restart();
                                 int divider = 32;
                                 mEthashGlobalWorkSizeArray[0] = ethashDAGSize / 64;
                                 mEthashGlobalWorkSizeArray[0] /= divider;
@@ -170,8 +171,8 @@ namespace GatelessGateSharp
                                 DAGCacheBuffer.Dispose();
                                 if (Stopped || Stratum.GetJob() == null || !Stratum.GetJob().ID.Equals(ethashJobID))
                                     break;
-                                sw.Stop();
                                 MainForm.Logger("Generated DAG for Epoch #" + ethashEpoch + " (" + (long)sw.Elapsed.TotalMilliseconds + "ms).");
+                                sw.Restart();
                             }
 
                             consoleUpdateStopwatch.Start();
@@ -196,8 +197,6 @@ namespace GatelessGateSharp
                                 searchKernel.SetValueArgument<UInt64>(5, target); // target
                                 searchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
 
-                                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                                sw.Start();
                                 ethashOutput[255] = 0; // ethashOutput[255] is used as an atomic counter.
                                 Queue.Write<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
                                 Queue.Execute(searchKernel, mEthashGlobalWorkOffsetArray, mEthashGlobalWorkSizeArray, mEthashLocalWorkSizeArray, null);
@@ -209,8 +208,8 @@ namespace GatelessGateSharp
                                 }
                                 ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
 
-                                sw.Stop();
                                 ReportHashCount((double)mEthashGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
+                                sw.Restart();
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {
                                     MainForm.Logger("Device #" + DeviceIndex + " (Ethash): " + String.Format("{0:N2} Mh/s", Speed / (1000000)));

@@ -121,13 +121,12 @@ namespace GatelessGateSharp
                     try {
                         string tempFileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".temp";
                         System.IO.File.WriteAllBytes(tempFileName, program.Binaries[0]);
-                        if (Controller.OpenCLBinaryMutex.WaitOne(1000)) {
-                            System.IO.File.Copy(tempFileName, savedBinaryFilePath, true);
-                            Controller.OpenCLBinaryMutex.ReleaseMutex();
-                        }
+                        Controller.OpenCLBinaryMutex.WaitOne();
+                        System.IO.File.Copy(tempFileName, savedBinaryFilePath, true);
                         System.IO.File.Delete(tempFileName);
                     } catch (Exception ex) {
                         MainForm.Logger(ex);
+                    } finally { 
                         try { Controller.OpenCLBinaryMutex.ReleaseMutex(); } catch (Exception) { }
                     }
                 }
