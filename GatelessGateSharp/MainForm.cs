@@ -2385,10 +2385,8 @@ namespace GatelessGateSharp
                         var match = regex.Match(tag);
                         var type = match.Success ? match.Groups[1].Value : null;
                         var name = match.Success ? match.Groups[2].Value : null;
-                        if (type == "parameter") {
-                            Logger(name);
+                        if (type == "parameter")
                             parameters.Add(name, (string)comboBox.SelectedItem);
-                        }
                     }
                     foreach (var textBox in Utilities.FindAllChildrenByType<TextBox>(this)) {
                         var tag = (string)(textBox.GetType().GetProperty("Tag").GetValue(textBox));
@@ -7069,8 +7067,8 @@ namespace GatelessGateSharp
                         Tuple<int, string, string> tuple1, tuple2;
                         ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, firstParameter, out tuple1);
                         ConvertBenchmarkParameterToDeviceParameterTuple(deviceID, defaultAlgorithm, secondParameter, out tuple2);
-                        param1OriginalValues.Add(numericDeviceParameterArray[tuple1].Value.ToString());
-                        param2OriginalValues.Add(numericDeviceParameterArray[tuple2].Value.ToString());
+                        param2OriginalValues.Add(numericDeviceParameterArray.Keys.Contains(tuple1) ? numericDeviceParameterArray[tuple1].Value.ToString() : null);
+                        param2OriginalValues.Add(numericDeviceParameterArray.Keys.Contains(tuple2) ? numericDeviceParameterArray[tuple2].Value.ToString() : null);
                     }
 
                     int iStep = (int)numericUpDownBenchmarkingFirstParameterStart.Value <= (int)numericUpDownBenchmarkingFirstParameterEnd.Value
@@ -7339,7 +7337,8 @@ namespace GatelessGateSharp
                 if (IsOptimizerRunning && Controller.OptimizerRecords.Count >= 2 && Controller.BenchmarkEntries.Count <= 0) {
                     for (int prevIndex = Controller.OptimizerRecords.Count - 2; prevIndex >= 0; --prevIndex) {
                         if (Controller.OptimizerRecords[prevIndex].DeviceIndex == Controller.OptimizerRecords.Last().DeviceIndex) {
-                            if (Controller.OptimizerRecords[prevIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerRecords.Last().SpeedPrimaryAlgorithm) {
+                            if (Controller.OptimizerRecords.Last().SpeedPrimaryAlgorithm > 0 
+                                && Controller.OptimizerRecords[prevIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerRecords.Last().SpeedPrimaryAlgorithm) {
                                 MainForm.Logger("Sudden speed drop was detected during benchmarking/optimization. Rebooting... (2)");
                                 MainForm.UpdateLog();
                                 Controller.OptimizerEntries.Insert(0, Controller.OptimizerRecords.Last());
@@ -7616,7 +7615,6 @@ namespace GatelessGateSharp
 
         private void PrepareForNextBenchmark()
         {
-            Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
             if (!IsOptimizerRunning)
                 progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
             UpdateBenchmarkRecords();
@@ -7624,14 +7622,13 @@ namespace GatelessGateSharp
                 UpdateOptimizerRecords();
             UpdateControls();
             Logger("Cooling devices down before benchmark...");
-            Application.DoEvents();
+            UpdateLog();
 
-            // Use the averate speed if there are multiple threads.
-            bool useAverageSpeeds = false;
+            bool multipleGPUThreads = false;
             foreach (var device in Controller.OpenCLDevices)
                 if (IsDeviceEnabled(Controller.OpenCLDevices[device.DeviceIndex], DefaultAlgorithm))
-                    useAverageSpeeds = useAverageSpeeds || numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, DefaultAlgorithm, "threads")].Value > 1;
-            mCurrentBenchmarkLength = (useAverageSpeeds) ? Parameters.BenchmarkLengthMultipleThreads : Parameters.BenchmarkLengthSingleThread;
+                    multipleGPUThreads = multipleGPUThreads || numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, DefaultAlgorithm, "threads")].Value > 1;
+            mCurrentBenchmarkLength = (multipleGPUThreads) ? Parameters.BenchmarkLengthMultipleThreads : Parameters.BenchmarkLengthSingleThread;
             timerFinishCurrentBenchmark.Interval = (mCurrentBenchmarkLength * 1000);
             timerResetStopwatch.Interval = 100;
 
@@ -7651,6 +7648,8 @@ namespace GatelessGateSharp
             timerStartNextBenchmark.Enabled = true;
             timerFinishCurrentBenchmark.Enabled = false;
             timerResetStopwatch.Enabled = false;
+            Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
+            UpdateControls();
         }
 
         private void UpdateBenchmarkRecords()
@@ -7875,17 +7874,17 @@ namespace GatelessGateSharp
                     }
                 }
 
-                if (checkBoxOptimizationUndervoltingCore.Checked)
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_core_voltage");
-
-                if (checkBoxOptimizationUndervoltingMemory.Checked)
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_memory_voltage");
-
                 if (checkBoxOptimizationOverclockingMemory.Checked)
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_memory_clock");
 
                 if (checkBoxOptimizationOverclockingCore.Checked)
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_core_clock");
+
+                if (checkBoxOptimizationUndervoltingMemory.Checked)
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_memory_voltage");
+
+                if (checkBoxOptimizationUndervoltingCore.Checked)
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_core_voltage");
 
                 if (checkBoxOptimizationMemoryTimings.Checked) {
                     //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
@@ -7964,8 +7963,8 @@ namespace GatelessGateSharp
             timerFinishCurrentBenchmark.Enabled = false;
             timerResetStopwatch.Enabled = false;
 
-            if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
-                return;
+            //if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
+            //    return;
 
             if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
                 foreach (var device in Controller.OpenCLDevices) {
@@ -7977,6 +7976,7 @@ namespace GatelessGateSharp
             }
 
             Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
+            UpdateControls();
             string algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
             foreach (var param in Controller.BenchmarkEntries[0].Parameters)
                 SetBenchmarkParameter(param, algorithm);
@@ -7994,7 +7994,6 @@ namespace GatelessGateSharp
             Controller.StopWatch.Start();
             foreach (var device in Controller.OpenCLDevices)
                 device.ClearShares();
-            UpdateControls();
             Application.DoEvents();
 
             timerStartNextBenchmark.Enabled = false;

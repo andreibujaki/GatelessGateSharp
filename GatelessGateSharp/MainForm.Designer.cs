@@ -6034,7 +6034,7 @@
             // checkBoxOptimizationUndervoltingMemory
             // 
             this.checkBoxOptimizationUndervoltingMemory.AutoSize = true;
-            this.checkBoxOptimizationUndervoltingMemory.Location = new System.Drawing.Point(6, 67);
+            this.checkBoxOptimizationUndervoltingMemory.Location = new System.Drawing.Point(6, 52);
             this.checkBoxOptimizationUndervoltingMemory.Name = "checkBoxOptimizationUndervoltingMemory";
             this.checkBoxOptimizationUndervoltingMemory.Size = new System.Drawing.Size(102, 17);
             this.checkBoxOptimizationUndervoltingMemory.TabIndex = 158;
@@ -6058,7 +6058,7 @@
             // checkBoxOptimizationUndervoltingCore
             // 
             this.checkBoxOptimizationUndervoltingCore.AutoSize = true;
-            this.checkBoxOptimizationUndervoltingCore.Location = new System.Drawing.Point(6, 44);
+            this.checkBoxOptimizationUndervoltingCore.Location = new System.Drawing.Point(123, 51);
             this.checkBoxOptimizationUndervoltingCore.Name = "checkBoxOptimizationUndervoltingCore";
             this.checkBoxOptimizationUndervoltingCore.Size = new System.Drawing.Size(87, 17);
             this.checkBoxOptimizationUndervoltingCore.TabIndex = 157;
@@ -6069,7 +6069,7 @@
             // checkBoxOptimizationMemoryTimings
             // 
             this.checkBoxOptimizationMemoryTimings.AutoSize = true;
-            this.checkBoxOptimizationMemoryTimings.Location = new System.Drawing.Point(145, 6);
+            this.checkBoxOptimizationMemoryTimings.Location = new System.Drawing.Point(7, 74);
             this.checkBoxOptimizationMemoryTimings.Name = "checkBoxOptimizationMemoryTimings";
             this.checkBoxOptimizationMemoryTimings.Size = new System.Drawing.Size(132, 17);
             this.checkBoxOptimizationMemoryTimings.TabIndex = 154;
@@ -6080,7 +6080,7 @@
             // checkBoxOptimizationOverclockingMemory
             // 
             this.checkBoxOptimizationOverclockingMemory.AutoSize = true;
-            this.checkBoxOptimizationOverclockingMemory.Location = new System.Drawing.Point(6, 90);
+            this.checkBoxOptimizationOverclockingMemory.Location = new System.Drawing.Point(6, 29);
             this.checkBoxOptimizationOverclockingMemory.Name = "checkBoxOptimizationOverclockingMemory";
             this.checkBoxOptimizationOverclockingMemory.Size = new System.Drawing.Size(93, 17);
             this.checkBoxOptimizationOverclockingMemory.TabIndex = 156;
@@ -6091,7 +6091,7 @@
             // checkBoxOptimizationMemoryTimingsExtended
             // 
             this.checkBoxOptimizationMemoryTimingsExtended.AutoSize = true;
-            this.checkBoxOptimizationMemoryTimingsExtended.Location = new System.Drawing.Point(145, 29);
+            this.checkBoxOptimizationMemoryTimingsExtended.Location = new System.Drawing.Point(141, 74);
             this.checkBoxOptimizationMemoryTimingsExtended.Name = "checkBoxOptimizationMemoryTimingsExtended";
             this.checkBoxOptimizationMemoryTimingsExtended.Size = new System.Drawing.Size(151, 17);
             this.checkBoxOptimizationMemoryTimingsExtended.TabIndex = 154;
@@ -6102,7 +6102,7 @@
             // checkBoxOptimizationOverclockingCore
             // 
             this.checkBoxOptimizationOverclockingCore.AutoSize = true;
-            this.checkBoxOptimizationOverclockingCore.Location = new System.Drawing.Point(6, 113);
+            this.checkBoxOptimizationOverclockingCore.Location = new System.Drawing.Point(123, 28);
             this.checkBoxOptimizationOverclockingCore.Name = "checkBoxOptimizationOverclockingCore";
             this.checkBoxOptimizationOverclockingCore.Size = new System.Drawing.Size(78, 17);
             this.checkBoxOptimizationOverclockingCore.TabIndex = 155;

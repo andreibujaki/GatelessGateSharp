@@ -21,19 +21,7 @@
 #define LEGACY
 #endif
 
-#if defined(__GCNMINC__)
-uint2 amd_bitalign(uint2 src0, uint2 src1, uint2 src2)
-{
-    uint2 dst;
-    __asm("v_alignbit_b32 %0, %2, %3, %4\n"
-          "v_alignbit_b32 %1, %5, %6, %7"
-          : "=v" (dst.x), "=v" (dst.y)
-          : "v" (src0.x), "v" (src1.x), "v" (src2.x),
-		    "v" (src0.y), "v" (src1.y), "v" (src2.y));
-    return dst;
-}
-#define mem_fence barrier
-#elif defined(cl_amd_media_ops) && !defined(__GCNMINC__)
+#if defined(cl_amd_media_ops)
 #pragma OPENCL EXTENSION cl_amd_media_ops : enable
 #elif defined(cl_nv_pragma_unroll)
 uint amd_bitalign(uint src0, uint src1, uint src2)
