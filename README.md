@@ -5,9 +5,9 @@ It focuses on performance, stability, and ease of use, featuring a one-of-a-kind
 and a powerful built-in optimizer. Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), this miner
 aims at stability with a much simpler design and the managed .NET Framework.
 
-* [GatelessGateSharpInstaller.exe](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.8-alpha/GatelessGateSharpInstaller.exe) (Windows x64 Installer; highly recommended)
-* [Gateless_Gate_Sharp_1.3.8_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.8-alpha/Gateless_Gate_Sharp_1.3.8_alpha.7z)
-* [Gateless_Gate_Sharp_1.3.8_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.8-alpha/Gateless_Gate_Sharp_1.3.8_alpha.zip)
+* [GatelessGateSharpInstaller.exe](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/GatelessGateSharpInstaller.exe) (Windows x64 Installer; highly recommended)
+* [Gateless_Gate_Sharp_1.3.7_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha.7z)
+* [Gateless_Gate_Sharp_1.3.7_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha.zip)
 
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
