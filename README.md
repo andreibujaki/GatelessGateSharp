@@ -49,17 +49,17 @@ In addition to the default pools, support for custom pools is also available.
 The minimum requirements for the miner are as follows:
 
 * Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.
-* 64-bit Windows operating system.
+* Windows 8.1 64-bit or later (Windows 10 strongly recommended.)
 * [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx) or later for AMD cards.
 * [.NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56116) and [Visual C++ Redistributable 2017](https://go.microsoft.com/fwlink/?LinkId=746572) if you do not use the installer.
 
-Please note that the current focus of the project is on AMD and this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 18.1.1](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.1.1-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire, if applicable, and choose Compute for GPU Workload in Radeon Settings.**
+Please note that the current focus of the project is on AMD and this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire, if applicable, and choose "Compute for GPU Workload" in Radeon Settings.**
 
 ![Screen Shot](https://i.imgur.com/TNIBhCa.png)
 
 ## About the DEVFEE
 
-This miner has a built-in 1% DEVFEE. I must emphasize that **I absolutely need the DEVFEE in order to continue this project, and I will not provide any support for those who run binaries I did not sign.** This project requires a full-time attention and testing is quite expensive. The DEVFEE is non-negotiable. If you don't like it, please go elsewhere.
+This miner has a built-in 1% DEVFEE. Moreover, shares submitted during benchmarking/optimization will go to the developer. I must emphasize that **I absolutely need the DEVFEE in order to continue this project, and I will not provide any support for those who run binaries I did not sign.** This project requires a full-time attention and testing is quite expensive. The DEVFEE is non-negotiable. If you don't like it, please go elsewhere.
 
 ## About BIOS Mods
 
