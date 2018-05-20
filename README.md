@@ -9,6 +9,8 @@ aims at stability with a much simpler design and the managed .NET Framework.
 * [Gateless_Gate_Sharp_1.3.7_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha.7z)
 * [Gateless_Gate_Sharp_1.3.7_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha.zip)
 
+**Note: Please DO NOT USE UTILITIES FOR OVERCLOCKING SUCH AS MSI AFTERBURNER with Gateless Gate Sharp.**
+
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
 All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
