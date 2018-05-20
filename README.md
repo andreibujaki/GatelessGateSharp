@@ -9,8 +9,6 @@ aims at stability with a much simpler design and the managed .NET Framework.
 * [Gateless_Gate_Sharp_1.3.7_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha.7z)
 * [Gateless_Gate_Sharp_1.3.7_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha.zip)
 
-**Note: Please DO NOT USE UTILITIES FOR OVERCLOCKING SUCH AS MSI AFTERBURNER with Gateless Gate Sharp.**
-
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
 All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
@@ -55,7 +53,9 @@ The minimum requirements for the miner are as follows:
 * [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx) or later for AMD cards.
 * [.NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56116) and [Visual C++ Redistributable 2017](https://go.microsoft.com/fwlink/?LinkId=746572) if you do not use the installer.
 
-Please note that the current focus of the project is on AMD and this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire, if applicable, and choose "Compute for GPU Workload" in Radeon Settings.**
+**Note: Please DO NOT USE UTILITIES FOR OVERCLOCKING SUCH AS MSI AFTERBURNER with Gateless Gate Sharp.**
+
+The current focus of the project is on AMD and this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire, if applicable, and choose "Compute for GPU Workload" in Radeon Settings.**
 
 ![Screen Shot](https://i.imgur.com/TNIBhCa.png)
 
