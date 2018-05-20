@@ -13,7 +13,8 @@ namespace GatelessGateSharp {
             Idle = 0,
             Mining = 1,
             Switching = 2,
-            Initializing = 3
+            Initializing = 3,
+            Relaunching = 4,
         };
 
         public enum ApplicationBenchmarkState

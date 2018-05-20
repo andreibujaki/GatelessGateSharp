@@ -287,14 +287,27 @@ namespace ATI.ADL
 
     /// <summary> ADLFanSpeedInfo Structure</summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct 	ADLFanSpeedValue
+    internal struct ADLFanSpeedValue
     {
         /// <summary>The size of the structure</summary>
         int Size;
         /// <summary> </summary>
-        internal int 	iSpeedType;
-        internal int 	iFanSpeed;
-        internal int 	iFlags;
+        internal int iSpeedType;
+        internal int iFanSpeed;
+        internal int iFlags;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct ADLODNFanControl
+    {
+        internal int iMode;
+        internal int iFanControlMode;
+        internal int iCurrentFanSpeedMode;
+        internal int iCurrentFanSpeed;
+        internal int iTargetFanSpeed;
+        internal int iTargetTemperature;
+        internal int iMinPerformanceClock;
+        internal int iMinFanLimit;
     }
 
     /// <summary> ADLODNPerformanceStatus Structure</summary>
@@ -621,7 +634,7 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Workstation_ECC_Set(int iAdapterIndex, int iDesiredMode);
-
+            
             #endregion DLLImport
         }
         #endregion Class ADLImport
@@ -1411,7 +1424,45 @@ namespace ATI.ADL
         private static bool ADL_Workstation_ECCData_Get_Check = false;
         #endregion ADL_Workstation_ECCData_Get
 
-        //ADL_Workstation_ECC_Set
+        //ADL2_OverdriveN_FanControl_Get
+
+        #region ADL2_OverdriveN_FanControl_Get
+        /// <summary> ADL2_OverdriveN_FanControl_Get Delegates</summary>
+        internal static ADL2_OverdriveN_FanControl_Get ADL2_OverdriveN_FanControl_Get {
+            get {
+                if (!ADL2_OverdriveN_FanControl_Get_Check && null == ADL2_OverdriveN_FanControl_Get_) {
+                    ADL2_OverdriveN_FanControl_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_OverdriveN_FanControl_Get")) {
+                        ADL2_OverdriveN_FanControl_Get_ = ADLImport.ADL2_OverdriveN_FanControl_Get;
+                    }
+                }
+                return ADL2_OverdriveN_FanControl_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_OverdriveN_FanControl_Get ADL2_OverdriveN_FanControl_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_OverdriveN_FanControl_Get_Check = false;
+        #endregion ADL2_OverdriveN_FanControl_Get
+
+        #region ADL2_OverdriveN_FanControl_Set
+        /// <summary> ADL2_OverdriveN_FanControl_Set Delegates</summary>
+        internal static ADL2_OverdriveN_FanControl_Set ADL2_OverdriveN_FanControl_Set {
+            get {
+                if (!ADL2_OverdriveN_FanControl_Set_Check && null == ADL2_OverdriveN_FanControl_Set_) {
+                    ADL2_OverdriveN_FanControl_Set_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_OverdriveN_FanControl_Set")) {
+                        ADL2_OverdriveN_FanControl_Set_ = ADLImport.ADL2_OverdriveN_FanControl_Set;
+                    }
+                }
+                return ADL2_OverdriveN_FanControl_Set_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_OverdriveN_FanControl_Set ADL2_OverdriveN_FanControl_Set_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_OverdriveN_FanControl_Set_Check = false;
+        #endregion ADL2_OverdriveN_FanControl_Set
 
         #region ADL_Workstation_ECC_Set
         /// <summary> ADL_Workstation_ECC_Set Delegates</summary>

@@ -402,7 +402,6 @@
     <None Include="Kernels\ethash.cl" />
     <None Include="Kernels\ethash_pascal.cl" />
     <None Include="Kernels\ethash_lbry.cl" />
-    <None Include="Kernels\ethash_pascal_256.cl" />
     <None Include="Kernels\fugue.cl" />
     <None Include="Kernels\groestl.cl" />
     <None Include="Kernels\groestl256.cl" />

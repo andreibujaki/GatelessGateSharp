@@ -22,7 +22,7 @@ namespace GatelessGateSharp {
         public static readonly int MaxLogFileSize = 1024 * 1024;
         public static readonly int LogMaxNumLines = 256;
 
-        public static readonly int BenchmarkLengthMultipleThreads = 10;
+        public static readonly int BenchmarkLengthMultipleThreads = 20;
         public static readonly int BenchmarkLengthSingleThread = 10;
         public static readonly double BenchmarkingSpeedDropThreshold = 0.80;
 
@@ -46,11 +46,6 @@ namespace GatelessGateSharp {
         public static readonly string WarningBeforeOptimization
                     = "THE COMPUTER WILL FREEZE AND YOU WILL NEED TO RESTART IT MULTIPLE TIMES IF YOU CHOOSE TO OPTIMIZE OVERCLOCKING/MEMORY TIMING SETTINGS!!\n\n"
                     + "This feature will adjust algorithmic/overclocking/memory timing settings automatically for better performance. "
-                    + "Although extensive testing has been done, it is not without risk and should be used with utmost caution.\n\n"
-                    + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
-                    + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
-                    + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
-                    + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
-                    + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.";
+                    + "Although extensive testing has been done, it is not without risk and should be used with utmost caution.";
     }
 }

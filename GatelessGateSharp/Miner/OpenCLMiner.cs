@@ -66,7 +66,7 @@ namespace GatelessGateSharp
 
         protected ComputeProgram BuildProgram(string programName, long localWorkSize, string optionsAMD, string optionsNVIDIA, string optionsOthers, string binaryFilePathPostFix = null) {
             ComputeProgram program;
-            string defaultAssemblyFilePath = (OpenCLDevice.IsGCN3) ? @"AssemblyKernels\GCN3_" + programName + "_LWS" + localWorkSize + (binaryFilePathPostFix != null ? "_" + binaryFilePathPostFix : "") + ".isa"
+            string defaultAssemblyFilePath = (OpenCLDevice.IsGCN3) ? @"AssemblyKernels\GCN3_" + programName + "_LWS" + localWorkSize + ".isa"
                                                                    : null;
             string defultBinaryFilePath = @"BinaryKernels\" + ComputeDevice.Name + "_" + programName + "_LWS" + localWorkSize + (binaryFilePathPostFix != null ? "_" + binaryFilePathPostFix : "") + ".bin";
             string savedBinaryFilePath = (MainForm.SavedOpenCLBinaryKernelPathBase + @"\") + ComputeDevice.Name + "_" + programName + "_LWS" + localWorkSize + "_O" + KernelOptimizationLevel + (binaryFilePathPostFix != null ? "_" + binaryFilePathPostFix : "") + ".bin";

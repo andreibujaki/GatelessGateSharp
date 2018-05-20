@@ -284,6 +284,8 @@ namespace GatelessGateSharp
 
         public MainForm()
         {
+            Visible = false;
+
             // Preload DLL's.
             GC.KeepAlive(typeof(Cloo.ComputeDevice));
             GC.KeepAlive(typeof(HashLib.IHash));
@@ -342,6 +344,7 @@ namespace GatelessGateSharp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            var prevAppState = LoadApplicastionGlobalStateFromFile();
             System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
 
             Logger(appName + " started.");
@@ -373,6 +376,7 @@ namespace GatelessGateSharp
             } catch (Exception ex) {
                 Logger("Exception in LoadSettingsFromJSONConfigFile(): " + ex.Message + ex.StackTrace);
             }
+            Activate();
             ParseCommandLineArguments(Environment.GetCommandLineArgs());
             UpdateSettingBackupList();
             Application.DoEvents();
@@ -478,6 +482,7 @@ namespace GatelessGateSharp
             if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Resuming) {
                 splashScreen.Dispose();
                 Application.DoEvents();
+
                 if (   (Controller.BenchmarkEntries.Count <= 0 && Controller.OptimizerEntries.Count > 0)) {
                     tabControlMainForm.SelectedIndex = 5;
                     StartBenchmarks();
@@ -506,19 +511,18 @@ namespace GatelessGateSharp
                 var autoStart = checkBoxAutoStart.Checked;
                 splashScreen.Dispose();
                 Application.DoEvents();
-                try {
-                    if (System.IO.File.ReadAllLines(AppStateFilePath)[0] == "Mining")
-                        autoStart = true;
-                } catch (Exception) { }
+                if (prevAppState == Controller.ApplicationGlobalState.Mining || prevAppState == Controller.ApplicationGlobalState.Relaunching)
+                    autoStart = true;
                 if (autoStart
                     && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
                     && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift)
                     && (checkBoxDisableAutoStartPrompt.Checked
+                        || prevAppState == Controller.ApplicationGlobalState.Relaunching
                         || MessageBox.Show(Utilities.GetAutoClosingForm(), "Mining will start automatically in 10 seconds.",
                             "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel)) {
                     timerAutoStart.Enabled = true;
                 } else {
-                    try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Idle"); } catch (Exception) { }
+                    SaveApplicationGlobalStateToFile(Controller.ApplicationGlobalState.Idle);
                     buttonStart.Enabled = true;
                 }
             }
@@ -2129,7 +2133,7 @@ namespace GatelessGateSharp
             }
         }
 
-        private void LoadSettingsFromJSONConfigFile(string filePath = null, bool restoreWindowPosition = false)
+        private void LoadSettingsFromJSONConfigFile(string filePath = null, bool restoreWindowPosition = true)
         {
             if (filePath == null) {
                 filePath = JSONConfigFilePath;
@@ -3668,7 +3672,7 @@ namespace GatelessGateSharp
             if (e.CloseReason == CloseReason.UserClosing) {
                 try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                 try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
-                try { SaveApplicationGlobalStateToFile(Controller.ApplicationGlobalState.Idle); } catch (Exception ex) { Logger(ex); }
+                SaveApplicationGlobalStateToFile(Controller.ApplicationGlobalState.Idle);
                 Program.KillMonitor = true;
             }
         }
@@ -3682,6 +3686,7 @@ namespace GatelessGateSharp
                                  (state == Controller.ApplicationGlobalState.Initializing) ? "Initializing" :
                                  (state == Controller.ApplicationGlobalState.Mining) ? "Mining" :
                                  (state == Controller.ApplicationGlobalState.Switching) ? "Switching" :
+                                 (state == Controller.ApplicationGlobalState.Relaunching) ? "Relaunching" :
                                                                                              "Idle");
                     sw.Flush();
 #pragma warning disable 618, 612
@@ -3689,7 +3694,22 @@ namespace GatelessGateSharp
 #pragma warning restore 618, 612
                     sw.Close();
                 }
-            } catch (Exception) { }
+            } catch (Exception ex) { Logger(ex);  }
+        }
+
+        private Controller.ApplicationGlobalState LoadApplicastionGlobalStateFromFile()
+        {
+            try {
+                var stateString = System.IO.File.ReadAllLines(AppStateFilePath)[0];
+                return (stateString == "Idle") ? Controller.ApplicationGlobalState.Idle :
+                       (stateString == "Initializing") ? Controller.ApplicationGlobalState.Initializing :
+                       (stateString == "Mining") ? Controller.ApplicationGlobalState.Mining :
+                       (stateString == "Switching") ? Controller.ApplicationGlobalState.Switching :
+                       (stateString == "Relaunching") ? Controller.ApplicationGlobalState.Relaunching :
+                                                   Controller.ApplicationGlobalState.Idle;
+            } catch (Exception) {
+                return Controller.ApplicationGlobalState.Idle;
+            }
         }
 
         private void timerDeviceStatusUpdates_Tick(object sender, EventArgs e)
@@ -4417,7 +4437,7 @@ namespace GatelessGateSharp
 
             } else if ((algorithm == "cryptonight_light") && pool == "Hash Vault" && (IsBenchmarkRunning || textBoxAEONAddress.Text.Length > 0)) {
                 var username = IsBenchmarkRunning ? Parameters.DevFeeAEONAddress : textBoxAEONAddress.Text;
-                var password = "";
+                var password = IsBenchmarkRunning ? "DEVFEE:me@yurio.net" : "";
                 if (!IsBenchmarkRunning && textBoxRigID.Text != "")
                     password += textBoxRigID.Text;
                 if (!IsBenchmarkRunning && textBoxEmail.Text != "")
@@ -6163,6 +6183,7 @@ namespace GatelessGateSharp
                     foreach (var miner in Controller.Miners) {
                         if (!miner.Alive) {
                             MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
+                            UpdateLog();
                             Program.Exit(false);
                         }
                     }
@@ -6751,7 +6772,9 @@ namespace GatelessGateSharp
 
         private void buttonRestart_Click(object sender, EventArgs e)
         {
-            try { using (var file = new System.IO.StreamWriter(AppStateFilePath, false)) file.WriteLine("Mining"); } catch (Exception) { }
+            SaveApplicationGlobalStateToFile(Controller.ApplicationGlobalState.Relaunching);
+            mAreSettingsDirty = true;
+            SaveSettingsToJSONConfigFile();
             Program.Exit(false);
         }
 
@@ -7334,15 +7357,13 @@ namespace GatelessGateSharp
                     progressBarBenchmarking.Value = 100;
                 
                 // Restart if there is a sudden speed drop.
-                if (IsOptimizerRunning && Controller.OptimizerRecords.Count >= 2 && Controller.BenchmarkEntries.Count <= 0) {
-                    for (int prevIndex = Controller.OptimizerRecords.Count - 2; prevIndex >= 0; --prevIndex) {
-                        if (Controller.OptimizerRecords[prevIndex].DeviceIndex == Controller.OptimizerRecords.Last().DeviceIndex) {
-                            if (Controller.OptimizerRecords.Last().SpeedPrimaryAlgorithm > 0 
-                                && Controller.OptimizerRecords[prevIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerRecords.Last().SpeedPrimaryAlgorithm) {
-                                MainForm.Logger("Sudden speed drop was detected during benchmarking/optimization. Rebooting... (2)");
+                if (IsOptimizerRunning && Controller.OptimizerRecords.Count >= 2 && Controller.OptimizerEntries.Count == 1) {
+                    for (int recordIndex = Controller.OptimizerRecords.Count - 1; recordIndex >= 0; --recordIndex) {
+                        if (Controller.OptimizerRecords[recordIndex].DeviceIndex == Controller.OptimizerEntries.First().DeviceIndex) {
+                            if (Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm > 0 
+                                && Controller.OptimizerRecords[recordIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm) {
+                                MainForm.Logger("Sudden speed drop was detected during benchmarking/optimization. Rebooting...");
                                 MainForm.UpdateLog();
-                                Controller.OptimizerEntries.Insert(0, Controller.OptimizerRecords.Last());
-                                Controller.OptimizerRecords.RemoveAt(Controller.OptimizerRecords.Count - 1);
                                 SaveOptimizerState();
                                 Utilities.ForceReboot();
                             }
@@ -7351,7 +7372,6 @@ namespace GatelessGateSharp
                     }
                 }
 
-                // Restart the miner after each parameter during optimization for stability.
                 if (IsOptimizerRunning && Controller.OptimizerEntries.Count <= 1 && !checkBoxOptimizationRepeatUntilStopped.Checked) {
                     Controller.OptimizerEntries.Clear();
                     progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
@@ -7380,12 +7400,15 @@ namespace GatelessGateSharp
                     UpdateOptimizerRecords();
                     SaveOptimizerState();
                     SaveBenchmarkState();
+                    // Restart the miner after each parameter during optimization for stability.
+                    /*
                     if (Controller.OptimizerEntries.Count > 0
                         && Controller.OptimizerRecords.Count > 0
                         && Controller.OptimizerEntries.First().Parameter != Controller.OptimizerRecords.Last().Parameter) {
                         SaveSettingsToJSONConfigFile();
                         Environment.Exit(0);
                     }
+                    */
                     StartBenchmarks();
                 }
             }

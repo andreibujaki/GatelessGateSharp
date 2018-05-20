@@ -495,14 +495,42 @@ namespace GatelessGateSharp
 
                 if (value < 0 && ADL.ADL_Overdrive5_FanSpeedToDefault_Set != null) {
                     ADL.ADL_Overdrive5_FanSpeedToDefault_Set(ADLAdapterIndex, 0);
-                } else if (value >= 0 && ADL.ADL_Overdrive5_FanSpeed_Set != null) {
-                    ADLFanSpeedValue OSADLFanSpeedValueData = new ADLFanSpeedValue();
-                    OSADLFanSpeedValueData.iSpeedType = 1;
-                    OSADLFanSpeedValueData.iFanSpeed = value;
-                    OSADLFanSpeedValueData.iFlags = 0;
-                    var fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLFanSpeedValueData));
-                    Marshal.StructureToPtr(OSADLFanSpeedValueData, fanSpeedValueBuffer, false);
-                    ADL.ADL_Overdrive5_FanSpeed_Set(ADLAdapterIndex, 0, fanSpeedValueBuffer);
+
+                } else {
+                    if (value >= 0 && ADL.ADL2_OverdriveN_FanControl_Get != null) {
+
+                        ADLODNCapabilities capData = new ADLODNCapabilities();
+                        var capBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(capData));
+                        Marshal.StructureToPtr(capData, capBuffer, false);
+                        if (ADL.ADL2_OverdriveN_Capabilities_Get(ADL2Context, ADLAdapterIndex, capBuffer) == ADL.ADL_SUCCESS) {
+                            capData = (ADLODNCapabilities)Marshal.PtrToStructure(capBuffer, capData.GetType());
+
+                            ADLODNFanControl data = new ADLODNFanControl();
+                            var buffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(data));
+                            Marshal.StructureToPtr(data, buffer, false);
+                            if (ADL.ADL2_OverdriveN_FanControl_Get(ADL2Context, ADLAdapterIndex, buffer) == ADL.ADL_SUCCESS) {
+
+                                data = (ADLODNFanControl)Marshal.PtrToStructure(buffer, data.GetType());
+                                data.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                                data.iFanControlMode = (int)ADLODNControlType.ODNControlType_Manual;
+                                data.iTargetTemperature = TargetTemperature;
+                                data.iTargetFanSpeed = capData.fanSpeed.iMin + (value * (capData.fanSpeed.iMax - capData.fanSpeed.iMin)) / 100;
+                                //MainForm.Logger("data.iMinPerformanceClock: " + data.iMinPerformanceClock);
+                                data.iMinPerformanceClock = TargetCoreClock;
+                                Marshal.StructureToPtr(data, buffer, false);
+                                ADL.ADL2_OverdriveN_FanControl_Set(ADL2Context, ADLAdapterIndex, buffer);
+                            }
+                        }
+                    }
+                    if (value >= 0 && ADL.ADL_Overdrive5_FanSpeed_Set != null) {
+                        ADLFanSpeedValue OSADLFanSpeedValueData = new ADLFanSpeedValue();
+                        OSADLFanSpeedValueData.iSpeedType = 1;
+                        OSADLFanSpeedValueData.iFanSpeed = value;
+                        OSADLFanSpeedValueData.iFlags = 1;
+                        var fanSpeedValueBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSADLFanSpeedValueData));
+                        Marshal.StructureToPtr(OSADLFanSpeedValueData, fanSpeedValueBuffer, false);
+                        ADL.ADL_Overdrive5_FanSpeed_Set(ADLAdapterIndex, 0, fanSpeedValueBuffer);
+                    }
                 }
             }
         }
