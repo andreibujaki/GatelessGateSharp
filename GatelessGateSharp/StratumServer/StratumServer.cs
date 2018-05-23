@@ -6,21 +6,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using System.Net.Security;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 
 
 namespace GatelessGateSharp {
-    public class Stratum {
+    public class StratumServer {
         public class Job {
             private Mutex mMutex = new Mutex();
             static Random r = new Random();
             UInt64 nextLocalExtranonce;
-            private Stratum mStratum;
+            private StratumServer mStratum;
 
-            public Stratum Stratum { get { return mStratum; } }
+            public StratumServer Stratum { get { return mStratum; } }
 
-            public Job(Stratum aStratum) {
+            public Job(StratumServer aStratum) {
                 mStratum = aStratum;
                 try { mMutex.WaitOne(5000); } catch (Exception) { }
                 nextLocalExtranonce = 0;
@@ -99,6 +101,8 @@ namespace GatelessGateSharp {
         protected String mAlgorithm = "";
         TcpClient mClient;
         NetworkStream mStream;
+        bool mSecureConnection = false;
+        SslStream mSecureStream;
         StreamReader mStreamReader;
         StreamWriter mStreamWriter;
         Thread mStreamReaderThread;
@@ -187,25 +191,29 @@ namespace GatelessGateSharp {
                 MainForm.Instance.ReportRejectedShare();
             }
 
+            String message = "Share rejected" + (reason == null ? "." : ": " + reason);
             if (shareID >= 0 && !MainForm.DevFeeMode) {
-                MainForm.Logger("Share #" + shareID + " rejected" + (reason == null ? "." : ": " + reason));
-            } else {
-                MainForm.Logger("Share rejected" + (reason == null ? "." : ": " + reason));
+                 message = "Share #" + shareID + " rejected" + (reason == null ? "." : ": " + reason);
+
             }
+            MainForm.Logger(message);
+            if (Controller.BenchmarkState == Controller.ApplicationBenchmarkState.Running)
+                throw new UnrecoverableException(message);
         }
 
         public void Stop() {
             mStopped = true;
         }
 
-        public Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, String aAlgorithm) {
+        public StratumServer(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, String aAlgorithm, bool secure = false) {
             mServerAddress = aServerAddress;
             mServerPort = aServerPort;
             mUsername = aUsername;
             mPassword = aPassword;
-            mPoolName = aPoolName;
+            mPoolName = aPoolName + (secure ? " [SSL]" : "");
             mAlgorithm = aAlgorithm;
             SilentMode = false;
+            mSecureConnection = secure;
 
             mStreamReaderThread = new Thread(new ThreadStart(StreamReaderThread));
             mStreamReaderThread.IsBackground = true;
@@ -246,8 +254,28 @@ namespace GatelessGateSharp {
 
                     mClient = new TcpClient(ServerAddress, ServerPort);
                     mStream = mClient.GetStream();
-                    mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false, 65536);
-                    mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII, 65536);
+                    if (mSecureConnection) {
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                        mSecureStream = new SslStream(
+                            mClient.GetStream(), 
+                            false, 
+                            new RemoteCertificateValidationCallback(
+                                (sender, certificate, chain, policyErrors) => {
+                                    if ((policyErrors == SslPolicyErrors.None) || (policyErrors == SslPolicyErrors.RemoteCertificateNameMismatch))
+                                        return true;
+                                    MainForm.Logger(policyErrors.ToString());
+                                    return false;
+                                }),
+                            null,
+                            EncryptionPolicy.RequireEncryption);
+                        mSecureStream.AuthenticateAsClient("", null, System.Security.Authentication.SslProtocols.Tls12, false);
+                        mStreamReader = new StreamReader(mSecureStream, System.Text.Encoding.ASCII, false, 65536);
+                        mStreamWriter = new StreamWriter(mSecureStream, System.Text.Encoding.ASCII, 65536);
+                    } else {
+                        mStreamReader = new StreamReader(mStream, System.Text.Encoding.ASCII, false, 65536);
+                        mStreamWriter = new StreamWriter(mStream, System.Text.Encoding.ASCII, 65536);
+                    }
                     mStreamReader.BaseStream.ReadTimeout = 3 * 60 * 1000;
                     mStreamWriter.BaseStream.WriteTimeout = 10 * 1000;
                     mReconnectionRequested = false;
@@ -294,7 +322,7 @@ namespace GatelessGateSharp {
             } while (!Stopped && UnrecoverableException == null);
         }
 
-        ~Stratum() {
+        ~StratumServer() {
             if (mStreamReaderThread != null)
                 mStreamReaderThread.Abort();
         }

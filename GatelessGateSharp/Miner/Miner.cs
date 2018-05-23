@@ -160,10 +160,10 @@ namespace GatelessGateSharp
             }
         }
 
-        public virtual void SetPrimaryStratum(Stratum stratum) {
+        public virtual void SetPrimaryStratum(StratumServer stratum) {
             throw new System.InvalidOperationException();
         }
-        public virtual void SetSecondaryStratum(Stratum stratum) {
+        public virtual void SetSecondaryStratum(StratumServer stratum) {
             throw new System.InvalidOperationException();
         }
     }

@@ -137,10 +137,10 @@ namespace GatelessGateSharp {
         public EthashStratum PrimaryStratum { get; set; }
         public PascalStratum SecondaryStratum { get; set; }
 
-        public override void SetPrimaryStratum(Stratum stratum) {
+        public override void SetPrimaryStratum(StratumServer stratum) {
             PrimaryStratum = (EthashStratum)stratum;
         }
-        public override void SetSecondaryStratum(Stratum stratum) {
+        public override void SetSecondaryStratum(StratumServer stratum) {
             SecondaryStratum = (PascalStratum)stratum;
         }
 

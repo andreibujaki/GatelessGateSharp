@@ -60,7 +60,7 @@ namespace GatelessGateSharp
 
         public X16RStratum Stratum { get; set; }
 
-        public override void SetPrimaryStratum(Stratum stratum) {
+        public override void SetPrimaryStratum(StratumServer stratum) {
             Stratum = (X16RStratum)stratum;
         }
 

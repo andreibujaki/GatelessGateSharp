@@ -42,6 +42,7 @@ namespace GatelessGateSharp {
             public int StabilityScore;
             public double SpeedPrimaryAlgorithm;
             public double SpeedSecondaryAlgorithm;
+            public double PowerConsumption;
             public bool Rebooted;
         }
 
@@ -58,6 +59,9 @@ namespace GatelessGateSharp {
             public int ResultCount;
             public double SpeedPrimaryAlgorithm;
             public double SpeedSecondaryAlgorithm;
+            public double PowerConsumption;
+            public double Profitability;
+            public string ProfitabilityUnit;
 
             public OptimizerEntry() { }
             public OptimizerEntry(OptimizerEntry aEntry) { DeviceIndex = aEntry.DeviceIndex; Algorithm = aEntry.Algorithm; Parameter = aEntry.Parameter;}
@@ -99,6 +103,7 @@ namespace GatelessGateSharp {
             public bool Success;
             public double SpeedPrimaryAlgorithm;
             public double SpeedSecondaryAlgorithm;
+            public double PowerConsumption;
         }
 
         public static ApplicationGlobalState AppState = ApplicationGlobalState.Initializing;
@@ -111,10 +116,10 @@ namespace GatelessGateSharp {
         public static Mutex OpenCLBinaryMutex = new Mutex();
 
         public static OpenCLDevice[] OpenCLDevices;
-        public static Stratum PrimaryStratum;
-        public static Stratum PrimaryStratumBackup;
-        public static Stratum SecondaryStratum;
-        public static Stratum SecondaryStratumBackup;
+        public static StratumServer PrimaryStratum;
+        public static StratumServer PrimaryStratumBackup;
+        public static StratumServer SecondaryStratum;
+        public static StratumServer SecondaryStratumBackup;
         public static List<Miner> Miners = new List<Miner>() { };
         public static System.Diagnostics.Stopwatch StopWatch = new System.Diagnostics.Stopwatch();
         public static System.Diagnostics.Stopwatch BenchmarkStopwatch = new System.Diagnostics.Stopwatch();

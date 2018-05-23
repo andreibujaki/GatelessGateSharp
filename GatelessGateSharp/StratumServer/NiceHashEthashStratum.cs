@@ -12,94 +12,34 @@ using Newtonsoft.Json.Linq;
 using HashLib;
 
 
-
 namespace GatelessGateSharp
 {
-    class PascalStratum : Stratum
+    class NiceHashEthashStratum : EthashStratum
     {
-        public new class Work : Stratum.Work
+        public new class Work : EthashStratum.Work
         {
             readonly private Job mJob;
 
-            public Job Job {
-                get { return mJob; }
-            }
+            new public Job GetJob() { return mJob; }
 
             public Work(Job aJob)
                 : base(aJob)
             {
                 mJob = aJob;
             }
-
-
-            public byte[] Blob
-            {
-                get
-                {
-                    byte[] blob = new byte[196];
-                    byte[] coinbase = Utilities.StringToByteArray(
-                          Job.Coinbase1
-                        + Job.Stratum.PoolExtranonce
-                        + LocalExtranonceString
-                        + Job.Coinbase2);
-                    Buffer.BlockCopy(coinbase, 0, blob, 0, coinbase.Length);
-                    var array = Utilities.StringToByteArray(Job.NTime);
-                    blob[192] = array[3];
-                    blob[193] = array[2];
-                    blob[194] = array[1];
-                    blob[195] = array[0];
-
-                    return blob;
-                }
-            }
         }
 
-        public new class Job : Stratum.Job
+        public new class Job : EthashStratum.Job
         {
-            private string mID;
-            private string mCoinbase1;
-            private string mCoinbase2;
-            private string mNTime;
-            private PascalStratum mStratum;
-
-            public String ID { get { return mID; } }
-            public String Coinbase1 { get { return mCoinbase1; } }
-            public String Coinbase2 { get { return mCoinbase2; } }
-            public String NTime { get { return mNTime; } }
-            public new PascalStratum Stratum { get { return mStratum; } }
-
-            public Job(PascalStratum aStratum, string aID, string aCoinbase1, string aCoinbase2, string aNTime)
-                : base(aStratum)
+            public Job(StratumServer aStratum, string aID, string aSeedhash, string aHeaderhash) 
+                : base(aStratum, aID, aSeedhash, aHeaderhash)
             {
-                mStratum = aStratum;
-                mID = aID;
-                mCoinbase1 = aCoinbase1;
-                mCoinbase2 = aCoinbase2;
-                mNTime = aNTime;
-            }
-
-            public bool Equals(Job aJob)
-            {
-                return mID == aJob.mID 
-                    && mCoinbase1 == aJob.Coinbase1 
-                    && mCoinbase2 == aJob.mCoinbase2 
-                    && mNTime == aJob.mNTime;
             }
         }
 
-        private int mJsonRPCMessageID = 1;
-        private Job mJob = null;
+        int mJsonRPCMessageID = 1;
+        string mSubsciptionID = null;
         private Mutex mMutex = new Mutex();
-
-        public Job GetJob()
-        {
-            return mJob;
-        }
-
-        public new Work GetWork()
-        {
-            return new Work(mJob);
-        }
 
         protected override void ProcessLine(String line)
         {
@@ -120,9 +60,10 @@ namespace GatelessGateSharp
                 {
                     bool jobChanged = (mJob == null || mJob.ID != (string)parameters[0]);
                     try { mMutex.WaitOne(5000); } catch (Exception) { }
-                    mJob = (new Job(this, (string)parameters[0], (string)parameters[2], (string)parameters[3], (string)parameters[7]));
+                    mJob = (EthashStratum.Job)(new Job(this, (string)parameters[0], (string)parameters[1], (string)parameters[2]));
                     try  { mMutex.ReleaseMutex(); } catch (Exception) { }
                     if (!SilentMode && jobChanged) MainForm.Logger("Received new job: " + parameters[0]);
+                    //MainForm.Logger("Seedhash: " + parameters[1]);
                 }
                 else if (method.Equals("mining.set_extranonce"))
                 {
@@ -142,20 +83,21 @@ namespace GatelessGateSharp
             }   
             else if (response.ContainsKey("id") && response.ContainsKey("result"))
             {
-                var ID = response["id"].ToString();
-                bool result = (response["result"] == null) ? false : (bool)response["result"];
-
-                if (ID == "3" && !result)
-                {
-                    throw (UnrecoverableException = new UnrecoverableException("Authorization failed."));
+                Int64 ID;
+                try {
+                    ID = (Int64)(response["id"]);
+                } catch (Exception) {
+                    ID = int.Parse((string)(response["id"]));
                 }
-                else if ((ID != "1" && ID != "2" && ID != "3") && result)
+                bool result = (bool)response["result"];
+
+                if (ID > 3 && result)
                 {
                     ReportAcceptedShare();
-                }
-                else if ((ID != "1" && ID != "2" && ID != "3") && !result)
-                {
+                } else if (ID > 3 && !result) {
                     ReportRejectedShare((String)(((JArray)response["error"])[1]));
+                } else if (ID == 3 && !result) {
+                    throw new UnrecoverableException("Authorization failed.");
                 }
             }
             else
@@ -164,7 +106,7 @@ namespace GatelessGateSharp
             }
         }
 
-        protected override void Authorize()
+        override protected void Authorize()
         {
             try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
@@ -174,26 +116,28 @@ namespace GatelessGateSharp
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.subscribe" },
                 { "params", new List<string> {
-                    MainForm.normalizedShortAppName + "/" + MainForm.appVersion
+                    MainForm.normalizedShortAppName + "/" + MainForm.appVersion,
+                    "EthereumStratum/1.0.0"
             }}}));
 
+            Dictionary<String, Object> response;
             try {
-                Dictionary<String, Object> response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
-                //mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
+                response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+                mSubsciptionID = (string)(((JArray)(((JArray)(response["result"]))[0]))[1]);
                 mPoolExtranonce = (string)(((JArray)(response["result"]))[1]);
-                LocalExtranonceSize = (int)(((JArray)(response["result"]))[2]);
-                //MainForm.Logger("mLocalExtranonceSize: " + mLocalExtranonceSize);
             } catch (Exception) {
                 throw this.UnrecoverableException = new AuthorizationFailedException();
             }
-            
+
             // mining.extranonce.subscribe
             WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.extranonce.subscribe" },
                 { "params", new List<string> {
             }}}));
-
+            response = JsonConvert.DeserializeObject<Dictionary<string, Object>>(ReadLine());
+            //MainForm.Logger("mining.extranonce.subscribe: " + response["result"]); // TODO
+            
             WriteLine(JsonConvert.SerializeObject(new Dictionary<string, Object> {
                 { "id", mJsonRPCMessageID++ },
                 { "method", "mining.authorize" },
@@ -204,26 +148,27 @@ namespace GatelessGateSharp
 
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
-        
-        public void Submit(OpenCLDevice aDevice, PascalStratum.Work work, UInt32 aNonce)
+
+        override public void Submit(OpenCLDevice aDevice, EthashStratum.Job job, UInt64 output)
         {
             if (Stopped)
                 return;
-            
-            try  { mMutex.WaitOne(5000); } catch (Exception) { }
 
+            try  { mMutex.WaitOne(5000); } catch (Exception) { }
             ReportSubmittedShare(aDevice);
             try
             {
-                String stringNonce = (String.Format("{3:x2}{2:x2}{1:x2}{0:x2}", ((aNonce >> 0) & 0xff), ((aNonce >> 8) & 0xff), ((aNonce >> 16) & 0xff), ((aNonce >> 24) & 0xff)));
+                String stringNonce
+                      = ((PoolExtranonce.Length == 0) ? (String.Format("{7:x2}{6:x2}{5:x2}{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff), ((output >> 48) & 0xff), ((output >> 56) & 0xff))) :
+                         (PoolExtranonce.Length == 2) ? (String.Format("{6:x2}{5:x2}{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff), ((output >> 48) & 0xff))) :
+                         (PoolExtranonce.Length == 4) ? (String.Format("{5:x2}{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff), ((output >> 40) & 0xff))) :
+                                                        (String.Format("{4:x2}{3:x2}{2:x2}{1:x2}{0:x2}", ((output >> 0) & 0xff), ((output >> 8) & 0xff), ((output >> 16) & 0xff), ((output >> 24) & 0xff), ((output >> 32) & 0xff))));
                 String message = JsonConvert.SerializeObject(new Dictionary<string, Object> {
                     { "id", mJsonRPCMessageID },
                     { "method", "mining.submit" },
                     { "params", new List<string> {
                         Username,
-                        work.Job.ID,
-                        work.LocalExtranonceString,
-                        work.Job.NTime,
+                        job.ID,
                         stringNonce
                 }}});
                 WriteLine(message);
@@ -233,12 +178,11 @@ namespace GatelessGateSharp
                 MainForm.Logger("Failed to submit share: " + ex.Message + "\nReconnecting to the server...");
                 Reconnect();
             }
-
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        public PascalStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "pascal")
+        public NiceHashEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, bool aSecureConnection = false)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, aSecureConnection)
         {
         }
     }

@@ -54,7 +54,7 @@ namespace GatelessGateSharp
 
         public EthashStratum Stratum { get; set; }
 
-        public override void SetPrimaryStratum(Stratum stratum) {
+        public override void SetPrimaryStratum(StratumServer stratum) {
             Stratum = (EthashStratum)stratum;
         }
 

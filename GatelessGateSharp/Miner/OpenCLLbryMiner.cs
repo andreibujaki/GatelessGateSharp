@@ -55,7 +55,7 @@ namespace GatelessGateSharp
 
         public LbryStratum Stratum { get; set; }
 
-        public override void SetPrimaryStratum(Stratum stratum) {
+        public override void SetPrimaryStratum(StratumServer stratum) {
             Stratum = (LbryStratum)stratum;
         }
 

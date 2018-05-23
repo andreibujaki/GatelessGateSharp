@@ -34,7 +34,7 @@ namespace GatelessGateSharp
 
             public byte Extranonce { get { return mExtranonce; } }
 
-            public Job(Stratum aStratum, string aID, string aSeedhash, string aHeaderhash)
+            public Job(StratumServer aStratum, string aID, string aSeedhash, string aHeaderhash)
                 : base(aStratum, aID, aSeedhash, aHeaderhash)
             {
             }
@@ -230,8 +230,8 @@ namespace GatelessGateSharp
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        public OpenEthereumPoolEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, bool aDwalfpoolMode = false)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName)
+        public OpenEthereumPoolEthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, bool aDwalfpoolMode = false, bool aSecureConnection = false)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, aSecureConnection)
         {
             mDwarfpoolMode = aDwalfpoolMode;
         }

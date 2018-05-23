@@ -14,9 +14,9 @@ using HashLib;
 
 namespace GatelessGateSharp
 {
-    class CryptoNightStratum : Stratum
+    class CryptoNightStratum : StratumServer
     {
-        public new class Work : Stratum.Work
+        public new class Work : StratumServer.Work
         {
             readonly private Job mJob;
 
@@ -29,7 +29,7 @@ namespace GatelessGateSharp
             }
         }
 
-        public new class Job : Stratum.Job
+        public new class Job : StratumServer.Job
         {
             readonly String mID;
             readonly String mBlob;
@@ -39,7 +39,7 @@ namespace GatelessGateSharp
             public String Blob { get { return mBlob; } }
             public String Target { get { return mTarget; } }
 
-            public Job(Stratum aStratum, string aID, string aBlob, string aTarget)
+            public Job(StratumServer aStratum, string aID, string aBlob, string aTarget)
                 : base(aStratum)
             {
                 mID = aID;
@@ -163,8 +163,8 @@ namespace GatelessGateSharp
             return new Work(mJob);
         }
 
-        public CryptoNightStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, String aVariant)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, aVariant)
+        public CryptoNightStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, String aVariant, bool aSecureConnection = false)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, aVariant, aSecureConnection)
         {
         }
     }

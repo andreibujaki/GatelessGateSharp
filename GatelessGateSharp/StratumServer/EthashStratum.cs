@@ -14,9 +14,9 @@ using HashLib;
 
 namespace GatelessGateSharp
 {
-    class EthashStratum : Stratum
+    class EthashStratum : StratumServer
     {
-        public new class Work : Stratum.Work
+        public new class Work : StratumServer.Work
         {
             readonly private Job mJob;
 
@@ -42,7 +42,7 @@ namespace GatelessGateSharp
         public const int CACHE_ROUNDS = 3;                 // number of rounds in cache production
         public const int ACCESSES = 64;                    // number of accesses in hashimoto loop
 
-        public new class Job : Stratum.Job
+        public new class Job : StratumServer.Job
         {
             readonly private string mID;
             readonly private string mSeedhash;
@@ -52,7 +52,7 @@ namespace GatelessGateSharp
             public string Seedhash { get { return mSeedhash; } }
             public string Headerhash { get { return mHeaderhash; } }
 
-            public Job(Stratum aStratum, string aID, string aSeedhash, string aHeaderhash) 
+            public Job(StratumServer aStratum, string aID, string aSeedhash, string aHeaderhash) 
                 : base(aStratum)
             {
                 mID = aID;
@@ -234,8 +234,8 @@ namespace GatelessGateSharp
             return new Work(mJob);
         }
 
-        public EthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "ethash")
+        public EthashStratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, bool aSecureConnection = false)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "ethash", aSecureConnection)
         {
         }
 

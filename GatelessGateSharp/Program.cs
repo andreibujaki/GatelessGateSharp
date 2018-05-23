@@ -72,7 +72,15 @@ namespace GatelessGateSharp
         [System.Security.SecurityCritical]
         static int Main(string[] args)
         {
-           var attachedToConsole = AttachConsole(ATTACH_PARENT_PROCESS);
+            // Verify the authenticity of the binaries.
+            if (false
+                && (   !AuthenticodeTools.IsTrusted("GatelessGateSharp.exe")
+                    || !AuthenticodeTools.IsTrusted("GatelessGateSharpMonitor.exe")
+                    || !AuthenticodeTools.IsTrusted("phymem.sys")
+                    || !AuthenticodeTools.IsTrusted("PhyMemWrapper.dll")))
+                Environment.Exit(1);
+
+            var attachedToConsole = AttachConsole(ATTACH_PARENT_PROCESS);
 
             bool mutexResult = false;
             try { mutexResult = sMutex.WaitOne(TimeSpan.Zero, true); } catch (Exception) {}
@@ -84,6 +92,7 @@ namespace GatelessGateSharp
 
             USBWatchdog.Initialize();
 
+            MainForm.Logger("Updating environment variables...");
             Environment.SetEnvironmentVariable("CUDA_CACHE_DISABLE", "1", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable("GPU_MAX_ALLOC_PERCENT", "100", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable("GPU_USE_SYNC_OBJECTS", "1", EnvironmentVariableTarget.Process);
@@ -91,6 +100,7 @@ namespace GatelessGateSharp
             Environment.SetEnvironmentVariable("GPU_MAX_HEAP_SIZE", "100", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable("GPU_FORCE_64BIT_PTR", "0", EnvironmentVariableTarget.Process);
 
+            MainForm.Logger("Adding exception handlers...");
             Application.ThreadException += new ThreadExceptionEventHandler(ThreadExceptionHandler);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
@@ -98,6 +108,7 @@ namespace GatelessGateSharp
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory; // for auto-start
 
             // Launch monitor
+            MainForm.Logger("Launching process monitor...");
             foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharpMonitor"))
                 try { process.Kill(); } catch (Exception) { }
             try

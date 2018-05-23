@@ -65,7 +65,7 @@ namespace GatelessGateSharp
         public bool IsNVIDIA { get { return Vendor == "NVIDIA"; } }
         public bool IsGCN1 { get { return Vendor == "AMD" && (OpenCLName == "Pitcairn" || OpenCLName == "Tahiti" || OpenCLName == "Capeverde" || OpenCLName == "Hainan"); } }
         public bool IsGCN2 { get { return Vendor == "AMD" && (OpenCLName == "Bonaire" || OpenCLName == "Hawaii"); } }
-        public bool IsGCN3 { get { return Vendor == "AMD" && (OpenCLName == "Tonga" || OpenCLName == "Fiji" || OpenCLName == "Ellesmere" || OpenCLName == "Baffin"); } }
+        public bool IsGCN3 { get { return Vendor == "AMD" && (OpenCLName == "Tonga" || OpenCLName == "Fiji" || OpenCLName == "Ellesmere" || OpenCLName == "Baffin" || OpenCLName == "gfx804"); } }
         public bool IsGCN5 { get { return Vendor == "AMD" && (OpenCLName == "Vega"); } }
 
         public double AverageSpeed {
@@ -124,6 +124,41 @@ namespace GatelessGateSharp
         {
             mAcceptedShares = 0;
             mRejectedShares = 0;
+        }
+
+        public double PowerConsumption {
+            get {
+                return GetPowerConsumption();
+            }
+        }
+
+        public virtual double GetPowerConsumption()
+        {
+            return 0;
+        }
+
+        System.Diagnostics.Stopwatch mAveragePowerConsumptionStopwatch = new System.Diagnostics.Stopwatch();
+        System.Diagnostics.Stopwatch mAveragePowerConsumptionUpdateStopwatch = new System.Diagnostics.Stopwatch();
+        double mPowerConsumptionWeighedTotal = 0;
+
+        public void ResetAveragePowerConsumption()
+        {
+            mPowerConsumptionWeighedTotal = 0;
+            mAveragePowerConsumptionStopwatch.Restart();
+            mAveragePowerConsumptionUpdateStopwatch.Restart();
+        }
+
+        public void UpdateAveragePowerConsumption()
+        {
+            if (mAveragePowerConsumptionUpdateStopwatch.ElapsedMilliseconds > 0)
+                mPowerConsumptionWeighedTotal += PowerConsumption * mAveragePowerConsumptionUpdateStopwatch.ElapsedMilliseconds;
+            mAveragePowerConsumptionUpdateStopwatch.Restart();
+        }
+
+        public double GetAveragePowerConsumption()
+        {
+            UpdateAveragePowerConsumption();
+            return mPowerConsumptionWeighedTotal / mAveragePowerConsumptionStopwatch.ElapsedMilliseconds;
         }
     }
 }

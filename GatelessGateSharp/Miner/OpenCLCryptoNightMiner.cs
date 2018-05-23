@@ -77,7 +77,7 @@ namespace GatelessGateSharp {
 
         public CryptoNightStratum Stratum { get; set; }
 
-        public override void SetPrimaryStratum(Stratum stratum) {
+        public override void SetPrimaryStratum(StratumServer stratum) {
             Stratum = (CryptoNightStratum)stratum;
         }
 

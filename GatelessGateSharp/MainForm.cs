@@ -285,19 +285,16 @@ namespace GatelessGateSharp
         public MainForm()
         {
             Visible = false;
-
-            // Preload DLL's.
-            GC.KeepAlive(typeof(Cloo.ComputeDevice));
-            GC.KeepAlive(typeof(HashLib.IHash));
-
             instance = this;
 
             // Create a regex patterm for algorithms.
             // Must place "cryptonight" at the very end.
             AlgorithmListRegexPattern = "";
             foreach (var algorithm in AlgorithmList.Where((a) => (a != "cryptonight")))
-                    AlgorithmListRegexPattern += algorithm + "|";
+                AlgorithmListRegexPattern += algorithm + "|";
             AlgorithmListRegexPattern += "cryptonight";
+
+            Utilities.InstallRootCertificates();
 
             InitializeComponent();
 
@@ -370,6 +367,7 @@ namespace GatelessGateSharp
             InitializeDeviceSettings();
             //ResetDeviceSetxtings();
             RestoreDeviceStockSettings();
+            UpdateNiceHashStats();
             try {
                 if (System.IO.File.Exists(JSONConfigFilePath))
                     LoadSettingsFromJSONConfigFile();
@@ -417,6 +415,9 @@ namespace GatelessGateSharp
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "ForceQueue", 1); } catch (Exception) { }
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 1); } catch (Exception) { }
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1); } catch (Exception) { }
+
+            // For secure connections to Nanopool.
+            try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\Diffie-Hellman", "ClientMinKeyBitLength", 0x200); } catch (Exception) { }
 
             // Remove garbage left by old versions.
             try {
@@ -483,16 +484,16 @@ namespace GatelessGateSharp
                 splashScreen.Dispose();
                 Application.DoEvents();
 
-                if (   (Controller.BenchmarkEntries.Count <= 0 && Controller.OptimizerEntries.Count > 0)) {
+                if ((Controller.BenchmarkEntries.Count <= 0 && Controller.OptimizerEntries.Count > 0)) {
                     tabControlMainForm.SelectedIndex = 5;
                     StartBenchmarks();
                     return;
 
-                } else if ((   !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
+                } else if ((!System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
                         && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift)
                         && (MessageBox.Show(Utilities.GetAutoClosingForm(), "The miner seems to have crashed during benchmarking/optimization.\nThis is normal, and it will automatically resume in 10 seconds.",
                             "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel))) {
-                    
+
                     // Resume benchmarking.
                     timerFinishCurrentBenchmark_Tick();
 
@@ -547,11 +548,16 @@ namespace GatelessGateSharp
             Logger("Number of Devices: " + Controller.OpenCLDevices.Length);
 
             ADLInitialized = OpenCLDevice.InitializeADL(Controller.OpenCLDevices);
+            for (int index = 0; index < Controller.OpenCLDevices.Length; ++index)
+                Controller.OpenCLDevices[index].DeviceIndex = index;
             Array.Sort<OpenCLDevice>(
-                Controller.OpenCLDevices, 
+                Controller.OpenCLDevices,
                 (a, b)
-                =>(  (b.ADLAdapterIndex >= 0 ? b.PCIDeviceID : name.Index + 256)
-                   - (a.ADLAdapterIndex >= 0 ? a.PCIDeviceID : name.Index + 256)));
+                => (a.Vendor != b.Vendor ? string.Compare(a.Vendor, b.Vendor) :
+                    a.GetMaxComputeUnits() != b.GetMaxComputeUnits() ? (int)(b.GetMaxComputeUnits() - a.GetMaxComputeUnits()) :
+                    a.Name != b.Name ? string.Compare(b.Name, a.Name) :
+                    a.GetMemorySize() != b.GetMemorySize() ? (int)(b.GetMemorySize() / 1024 / 1024 - a.GetMemorySize() / 1024 / 1024) :
+                                                             (int)(a.DeviceIndex - b.DeviceIndex)));
             for (int index = 0; index < Controller.OpenCLDevices.Length; ++index)
                 Controller.OpenCLDevices[index].DeviceIndex = index;
 
@@ -588,23 +594,31 @@ namespace GatelessGateSharp
             } else {
             }
 
-            foreach (var device in Controller.OpenCLDevices) {
+            for (int i = 0; i < Controller.OpenCLDevices.Length; ++i) {
+                OpenCLDevice device = Controller.OpenCLDevices[i];
+
                 dataGridViewDevices.Rows.Add(new object[] {
                     true,
                     device.DeviceIndex,
                     device.GetVendor(),
                     device.GetName()
                 });
-                dataGridViewDevices.Rows[dataGridViewDevices.Rows.Count - 1].Resizable = DataGridViewTriState.False;
-            }
+                dataGridViewDevices.Rows[i].Resizable = DataGridViewTriState.False;
 
-            for (int i = 0; i < Controller.OpenCLDevices.Length; ++i) {
-                var newRow = new DataGridViewRow();
-                dataGridViewBenchmarks.Rows.Add();
+                dataGridViewBenchmarks.Rows.Add(new object[] {
+                    device.DeviceIndex,
+                    device.GetVendor(),
+                    device.GetName()
+                });
                 dataGridViewBenchmarks.Rows[i].Resizable = DataGridViewTriState.False;
-                dataGridViewBenchmarks.Rows[i].Cells["dataGridViewTextBoxColumnBenchmarksDeviceIndex"].Value = i.ToString();
-                dataGridViewBenchmarks.Rows[i].Cells["dataGridViewTextBoxColumnBenchmarksDeviceVendor"].Value = Controller.OpenCLDevices[i].GetVendor();
-                dataGridViewBenchmarks.Rows[i].Cells["dataGridViewTextBoxColumnBenchmarksDeviceName"].Value = Controller.OpenCLDevices[i].GetName();
+
+                dataGridViewNiceHashProfitability.Rows.Add(new object[] {
+                    device.DeviceIndex,
+                    device.GetVendor(),
+                    device.GetName()
+                });
+                dataGridViewNiceHashProfitability.Rows[i].Resizable = DataGridViewTriState.False;
+
                 comboBoxDeviceSettingsDevice.Items.Add("#" + i.ToString() + ": " + Controller.OpenCLDevices[i].GetVendor() + " " + Controller.OpenCLDevices[i].GetName());
             }
             comboBoxDeviceSettingsDevice.SelectedIndex = 0;
@@ -911,6 +925,7 @@ namespace GatelessGateSharp
                     foreach (var param in new List<string> {
                         "current_speed_primary_algorithm",
                         "current_speed_secondary_algorithm",
+                        "current_power_consumption",
                         "best_speed_primary_algorithm",
                         "best_speed_secondary_algorithm",
                         "baseline_speed_primary_algorithm",
@@ -959,7 +974,7 @@ namespace GatelessGateSharp
                     tuple3 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled");
                     booleanDeviceParameterArray[tuple3] = new BooleanDeviceParameter(tuple3, false);
                     foreach (var tuple in new List<Tuple<string, int, int, int, int>> {
-                        new Tuple<string, int, int, int, int>("overclocking_power_limit",    120, 1, 120, 1),
+                        new Tuple<string, int, int, int, int>("overclocking_power_limit",    120, 50, 150, 1),
                         new Tuple<string, int, int, int, int>("overclocking_core_clock",     defaultCoreClock, minCoreClock, maxCoreClock, coreClockStep),
                         new Tuple<string, int, int, int, int>("overclocking_memory_clock",   defaultMemoryClock, minMemoryClock, maxMemoryClock, coreClockStep),
                         new Tuple<string, int, int, int, int>("overclocking_core_voltage",   defaultCoreVoltage, minCoreVoltage, maxCoreVoltage, coreVoltageStep),
@@ -1057,8 +1072,11 @@ namespace GatelessGateSharp
             } catch (Exception) { }
 
             // Pair device parameters up with corresponding controls.
-            foreach (var control in Utilities.FindAllChildrenByType<Control>(tabControlMainForm.TabPages[3])) {
-                if ((control.GetType() != typeof(CheckBox) && control.GetType() != typeof(NumericUpDown) && control.GetType() != typeof(DataGridView)) || control.Tag == null || control.Tag.GetType() != typeof(string))
+            foreach (var control in Utilities.FindAllChildrenByType<Control>(tabPageDeviceSettings)) {
+                if ((control.GetType() != typeof(CheckBox) && control.GetType() != typeof(NumericUpDown) && control.GetType() != typeof(DataGridView))
+                    || control.Tag == null
+                    || control.Tag.GetType() != typeof(string)
+                    || (string)control.Tag == "")
                     continue;
 
                 var tag = (string)control.Tag;
@@ -1067,7 +1085,7 @@ namespace GatelessGateSharp
                 if (match.Success)
                     continue;
 
-                regex = new System.Text.RegularExpressions.Regex(@"^(" + AlgorithmListRegexPattern + @"|fan_control|common)_([a-z_0-9]+)$");
+                regex = new System.Text.RegularExpressions.Regex(@"^(fan_control|common)_([a-z_0-9]+)$");
                 match = regex.Match(tag);
                 var type = match.Success ? match.Groups[1].Value : null;
                 var name = match.Success ? match.Groups[2].Value : null;
@@ -1265,7 +1283,7 @@ namespace GatelessGateSharp
             dataGridViewMemoryTimings.Rows.Clear();
 
             // Render controls invisible if necessary.
-            foreach (var control in Utilities.FindAllChildrenByType<Control>(tabControlMainForm.TabPages[3])) {
+            foreach (var control in Utilities.FindAllChildrenByType<Control>(tabPageDeviceSettings)) {
                 if ((control.GetType() != typeof(CheckBox) && control.GetType() != typeof(NumericUpDown)) || control.Tag == null || control.Tag.GetType() != typeof(string))
                     continue;
 
@@ -1288,7 +1306,7 @@ namespace GatelessGateSharp
                 var visible = ((control.GetType() == typeof(CheckBox) && booleanDeviceParameterArray.ContainsKey(tuple))
                     || (control.GetType() == typeof(NumericUpDown) && numericDeviceParameterArray.ContainsKey(tuple)));
                 control.Visible = visible;
-                foreach (var label in Utilities.FindAllChildrenByType<Label>(tabControlMainForm.TabPages[3])) {
+                foreach (var label in Utilities.FindAllChildrenByType<Label>(tabPageDeviceSettings)) {
                     if (label.Tag == null || label.Tag.GetType() != typeof(string))
                         continue;
                     var labelTag = (string)label.Tag;
@@ -1320,7 +1338,7 @@ namespace GatelessGateSharp
                         param.NumericUpDown.Maximum = param.Maximum;
                         param.NumericUpDown.Increment = param.Increment;
                         param.NumericUpDown.Value = param.Value;
-                    } catch (Exception) { Logger("Unable to update " + (string)param.Tuple.Item3 + "."); }
+                    } catch (Exception) { Logger("Unable to update " + (string)param.Tuple.Item3 + "." + " " + param.Tuple.Item1 + " " + (string)param.Tuple.Item2); }
                 }
             }
 
@@ -1346,7 +1364,7 @@ namespace GatelessGateSharp
                 var param = booleanDeviceParameterArray[tuple];
                 try {
                     param.CheckBox.Checked = param.Checked;
-                } catch (Exception) { Logger("Unable to update " + (string)param.Tuple.Item3 + "."); }
+                } catch (Exception ex) { Logger("Unable to update " + (string)param.Tuple.Item3 + "." + " " + param.Tuple.Item1 + " " + (string)param.Tuple.Item2 + ex.Message + " " + ex.StackTrace.ToString()); }
             }
 
             updatingUI = false;
@@ -1394,26 +1412,76 @@ namespace GatelessGateSharp
 
         private void LoadDefaultDeviceSettings(OpenCLDevice device)
         {
-            // Load specific device settings for the device if there are any.
-            string deviceSettingsFilePathBase = DeviceSettingsPathBase + "\\" + device.GetVendor() + " " + device.GetName();
-            string extension = ".json";
-            string postfix_memory_size = string.Format(" {0:0.0}GB", device.MemorySize / 1024.0 / 1024.0 / 1024.0);
-            string postfix_memory_vendor = (device.MemoryVendor != null) ? (" " + device.MemoryVendor) : "";
-            string postfix_compute_units = string.Format(" {0}CU", device.GetMaxComputeUnits());
-            string postfix0 = postfix_memory_size + postfix_memory_vendor + postfix_compute_units;
-            string postfix1 = postfix_memory_size + postfix_memory_vendor;
-            string postfix2 = postfix_memory_vendor;
-            string postfix3 = postfix_memory_size;
-            ///string postfix2 = String.Format(" ({0} {1})", device.MemoryType, device.MemoryVendor);
-            foreach (var postfix in new List<string> { postfix0, postfix1, postfix2, postfix3, "" }) {
-                string path = deviceSettingsFilePathBase + postfix + extension;
-                if (System.IO.File.Exists(path)) {
-                    LoadDeviceSettings(device, path, SpeedRelatedDeviceParameters);
-                    Logger("Loaded " + path + " for Device #" + device.DeviceIndex + ".");
-                    break;
+            string[] files = System.IO.Directory.GetFiles(DeviceSettingsPathBase, "*.json");
+            Regex regex = new Regex(@"\\([a-zA-Z]+) ([a-zA-Z0-9 ]+) ([0-9.]+)GB *([^ ]*) ([0-9]+)CU\.json$");
+
+            foreach (string file in files) {
+                Match match = regex.Match(file);
+                if (match.Success
+                    && match.Groups[1].Value == device.Vendor
+                    && match.Groups[2].Value == device.Name
+                    && match.Groups[3].Value == string.Format("{0:0.0}", device.MemorySize / 1024.0 / 1024.0 / 1024.0)
+                    && match.Groups[4].Value == device.MemoryVendor
+                    && match.Groups[5].Value == string.Format("{0}", device.GetMaxComputeUnits())
+                    ) {
+
+                    LoadDeviceSettings(device, file, SpeedRelatedDeviceParameters);
+                    Logger("Loaded " + file + " for Device #" + device.DeviceIndex + ".");
+                    UpdateDevicesTabPage();
+                    return;
                 }
             }
-            UpdateDevicesTabPage();
+
+            foreach (string file in files) {
+                Match match = regex.Match(file);
+                if (match.Success
+                    && match.Groups[1].Value == device.Vendor
+                    && match.Groups[2].Value == device.Name
+                    && match.Groups[3].Value == string.Format("{0:0.0}", device.MemorySize / 1024.0 / 1024.0 / 1024.0)
+                    && match.Groups[4].Value == device.MemoryVendor
+                    //&& match.Groups[5].Value == string.Format("{0}", device.GetMaxComputeUnits())
+                    ) {
+
+                    LoadDeviceSettings(device, file, SpeedRelatedDeviceParameters);
+                    Logger("Loaded " + file + " for Device #" + device.DeviceIndex + ".");
+                    UpdateDevicesTabPage();
+                    return;
+                }
+            }
+
+            foreach (string file in files) {
+                Match match = regex.Match(file);
+                if (match.Success
+                    && match.Groups[1].Value == device.Vendor
+                    && match.Groups[2].Value == device.Name
+                    && match.Groups[3].Value == string.Format("{0:0.0}", device.MemorySize / 1024.0 / 1024.0 / 1024.0)
+                    //&& match.Groups[4].Value == device.MemoryVendor
+                    //&& match.Groups[5].Value == string.Format("{0}", device.GetMaxComputeUnits())
+                    ) {
+
+                    LoadDeviceSettings(device, file, SpeedRelatedDeviceParameters);
+                    Logger("Loaded " + file + " for Device #" + device.DeviceIndex + ".");
+                    UpdateDevicesTabPage();
+                    return;
+                }
+            }
+
+            foreach (string file in files) {
+                Match match = regex.Match(file);
+                if (match.Success
+                    && match.Groups[1].Value == device.Vendor
+                    && match.Groups[2].Value == device.Name
+                    //&& match.Groups[3].Value == string.Format("{0:0.0}", device.MemorySize / 1024.0 / 1024.0 / 1024.0)
+                    //&& match.Groups[4].Value == device.MemoryVendor
+                    //&& match.Groups[5].Value == string.Format("{0}", device.GetMaxComputeUnits())
+                    ) {
+
+                    LoadDeviceSettings(device, file, SpeedRelatedDeviceParameters);
+                    Logger("Loaded " + file + " for Device #" + device.DeviceIndex + ".");
+                    UpdateDevicesTabPage();
+                    return;
+                }
+            }
         }
 
         private void ResetDeviceSettings(OpenCLDevice aDevice = null)
@@ -1611,58 +1679,58 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
                     int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
 
-                        numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
 
-                        var newCoreVoltage
-                             = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1120 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreVoltage :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1100 :
-                                device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreVoltage :
-                                                                                                              defaultCoreVoltage);
-                        if (newCoreVoltage > 0)
-                            try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = (decimal)newCoreVoltage; } catch (Exception) { }
+                    var newCoreVoltage
+                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1050 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1050 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 1120 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreVoltage :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1100 :
+                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreVoltage :
+                                                                                                          defaultCoreVoltage);
+                    if (newCoreVoltage > 0)
+                        try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = (decimal)newCoreVoltage; } catch (Exception) { }
 
-                        var newMemoryVoltage
-                             = (device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1000 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1000 :
-                                                                                                     defaultMemoryVoltage);
-                        if (newMemoryVoltage > 0)
-                            try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = newMemoryVoltage; } catch (Exception) { }
+                    var newMemoryVoltage
+                         = (device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1000 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1000 :
+                                                                                                 defaultMemoryVoltage);
+                    if (newMemoryVoltage > 0)
+                        try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = newMemoryVoltage; } catch (Exception) { }
 
-                        var newCoreClock
-                            = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultCoreClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultCoreClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1303 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1303 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? defaultCoreClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1000 :
-                                device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreClock :
-                                                                                                                defaultCoreClock);
-                        if (newCoreClock > 0)
-                            try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = newCoreClock; } catch (Exception) { }
+                    var newCoreClock
+                        = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? 1303 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? 1303 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultCoreClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? 1000 :
+                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultCoreClock :
+                                                                                                            defaultCoreClock);
+                    if (newCoreClock > 0)
+                        try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = newCoreClock; } catch (Exception) { }
 
-                        var newMemoryClock
-                            = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultMemoryClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultMemoryClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultMemoryClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? defaultMemoryClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? defaultMemoryClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 500 :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultMemoryClock :
-                                device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? defaultMemoryClock :
-                                device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultMemoryClock :
-                                                                                                                defaultMemoryClock);
-                        if (newMemoryClock > 0)
-                            try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = newMemoryClock; } catch (Exception) { }
+                    var newMemoryClock
+                        = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 470" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 570" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 480" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon RX 580" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 Nano" ? 500 :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7970" ? defaultMemoryClock :
+                            device.GetVendor() == "AMD" && device.GetName() == "Radeon HD 7990" ? defaultMemoryClock :
+                            device.GetVendor() == "NVIDIA" && device.GetName() == "GeForce GTX 1080 Ti" ? defaultMemoryClock :
+                                                                                                            defaultMemoryClock);
+                    if (newMemoryClock > 0)
+                        try { numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = newMemoryClock; } catch (Exception) { }
                 } catch (Exception ex) { Logger(ex); }
             }
 
@@ -2150,6 +2218,7 @@ namespace GatelessGateSharp
             UpdateLog();
             MainForm.Instance.Enabled = false;
             int databaseVersion = 0;
+            string prevAppVersion = null;
 
             try {
                 var root = JsonConvert.DeserializeObject<Dictionary<string, object>>(string.Join("\n", System.IO.File.ReadAllLines(filePath)));
@@ -2224,6 +2293,8 @@ namespace GatelessGateSharp
                     var parameterName = parameter.Key;
                     if (parameter.Key == "database_version") {
                         databaseVersion = (int)parameter.Value;
+                    } else if (parameter.Key == "app_version") {
+                        prevAppVersion = (string)parameter.Value;
                     } else if (restoreWindowPosition && parameter.Key == "window_x") {
                         location.X = (int)(double)parameter.Value;
                     } else if (restoreWindowPosition && parameter.Key == "window_y") {
@@ -2261,6 +2332,19 @@ namespace GatelessGateSharp
                 foreach (var device in Controller.OpenCLDevices)
                     LoadDeviceSettingsFromJSONObject(device, deviceSettingsArray);
 
+                if (databaseVersion < 6) // prior to v1.3.8
+                    checkBoxReuseCompiledBinaries.Checked = true;
+                if (prevAppVersion != appVersion) {
+                    Logger("The user configuration file was created by a different version.\nDeleting saved OpenCL binaries...");
+                    try {
+                        var dir = new System.IO.DirectoryInfo(SavedOpenCLBinaryKernelPathBase);
+                        foreach (var file in dir.EnumerateFiles("*.bin"))
+                            file.Delete();
+                    } catch (Exception ex) {
+                        Logger(ex);
+                    }
+                }
+
                 Logger("Loaded settings.");
                 mAreSettingsDirty = false;
             } catch (Exception ex) {
@@ -2274,7 +2358,7 @@ namespace GatelessGateSharp
             UpdateBenchmarkTable();
             MainForm.Instance.Enabled = true;
         }
-        
+
         private void LoadDeviceSettingsFromJSONObject(OpenCLDevice device, JArray deviceSettingsArray, string[] excludedParameters = null)
         {
             JObject deviceSettings = null;
@@ -2378,7 +2462,7 @@ namespace GatelessGateSharp
                     root.Add("pools", pools);
 
                     Dictionary<string, object> parameters = new Dictionary<string, object> { };
-                    parameters.Add("database_version", 5); // v1.3.6
+                    parameters.Add("database_version", 6); // v1.3.8
                     for (var i = 0; i < Controller.OpenCLDevices.Length; ++i)
                         parameters.Add("enable_gpu" + i, (bool)(dataGridViewDevices.Rows[i].Cells["enabled"].Value));
                     foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
@@ -2423,7 +2507,7 @@ namespace GatelessGateSharp
                         var type = match.Success ? match.Groups[1].Value : null;
                         var name = match.Success ? match.Groups[2].Value : null;
                         if (type == "parameter")
-                            parameters.Add(name, (int)numericUpDown.Value);
+                            parameters.Add(name, (double)numericUpDown.Value);
                     }
                     var windowLocation = this.Location;
                     var windowSize = (this.WindowState == FormWindowState.Normal) ? this.Size : this.RestoreBounds.Size;
@@ -2569,22 +2653,27 @@ namespace GatelessGateSharp
         static Dictionary<string, object> sDwarfPoolEthereumStats = null;
         static Dictionary<string, object> sDwarfPoolMoneroStats = null;
 
+        static void UpdateNiceHashStats()
+        {
+            try {
+                using (var client = new CustomWebClient()) {
+                    var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
+                    sNiceHashGlobalCurrentStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    if (Instance.ValidateBitcoinAddress(false)) {
+                        jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + Instance.mUserBitcoinAddress);
+                        sNiceHashProviderStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
+                    }
+                }
+            } catch (Exception) {
+                Logger("Failed to update NiceHash stats.");
+            }
+        }
+
         static void Task_UpdatePoolStats(object cancellationToken)
         {
             Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
-                try {
-                    if (Instance.ValidateBitcoinAddress(false)) {
-                        using (var client = new CustomWebClient()) {
-                            var jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.provider&addr=" + Instance.mUserBitcoinAddress);
-                            sNiceHashProviderStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                            jsonString = client.DownloadString("https://api.nicehash.com/api?method=stats.global.current");
-                            sNiceHashGlobalCurrentStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                        }
-                    }
-                } catch (Exception) {
-                    Logger("Failed to update NiceHash stats.");
-                }
+                UpdateNiceHashStats();
                 try {
                     if (Instance.ValidateEthereumAddress(false)) {
                         using (var client = new CustomWebClient()) {
@@ -2621,7 +2710,7 @@ namespace GatelessGateSharp
                         }
                     }
                 } catch (Exception) {
-                    Logger("Failed to update Nanopool stats.");
+                    //Logger("Failed to update Nanopool stats.");
                 }
                 try {
                     using (var client = new CustomWebClient()) {
@@ -2635,7 +2724,7 @@ namespace GatelessGateSharp
                         }
                     }
                 } catch (Exception) {
-                    Logger("Failed to update DwarfPool stats.");
+                    //Logger("Failed to update DwarfPool stats.");
                 }
                 System.Threading.Thread.Sleep(5 * 60 * 1000);
             }
@@ -2675,6 +2764,8 @@ namespace GatelessGateSharp
                 labelPriceWeek.Text = "-";
                 labelPriceMonth.Text = "-";
                 tabControlDashboard.TabPages[1].Text = "Pool: " + CurrentPool;
+
+                UpdateNiceHashProfitabilityTable();
 
                 if (CurrentPool == "NiceHash" && DefaultAlgorithm == "ethash" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 20, totalSpeed, 1000000000.0);
@@ -2765,8 +2856,9 @@ namespace GatelessGateSharp
                         UpdateProfitabilityInformation("XMR", price1Day, XMRRate, currency);
                     }
                 }
-            } catch (Exception) {
+            } catch (Exception ex) {
                 Logger("Failed to update pool statistics.");
+                Logger(ex);
             }
         }
 
@@ -2969,8 +3061,9 @@ namespace GatelessGateSharp
                     int fanSpeed = device.FanSpeed;
                     if (fanSpeed >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
-                    int power = device.Power;
-                    if (power >= 0) {
+                    device.UpdateAveragePowerConsumption();
+                    int power = (int)device.PowerConsumption;
+                    if (power > 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["power"].Value = power.ToString() + "W";
                         dataGridViewDevices.Rows[deviceIndex].Cells["power"].Style.ForeColor = Color.Black;
                     }
@@ -2994,6 +3087,17 @@ namespace GatelessGateSharp
                                                                    coreClock < device.DefaultCoreClock ? Color.Blue :
                                                                                   Color.Black;
                     }
+                    /*
+                    int coreVoltage = device.CoreVoltage;
+                    if (coreVoltage >= 0) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["dataGridViewTextBoxColumnCoreVoltage"].Value = coreVoltage.ToString() + "mV";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["dataGridViewTextBoxColumnCoreVoltage"].Style.ForeColor =
+                                                                   device.DefaultCoreVoltage < 0 ? Color.Black :
+                                                                   coreVoltage > device.DefaultCoreVoltage ? Color.Red :
+                                                                   coreVoltage < device.DefaultCoreVoltage ? Color.Blue :
+                                                                                  Color.Black;
+                    }
+                    */
                     int memoryClock = device.MemoryClock;
                     if (memoryClock >= 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_clock"].Value = memoryClock.ToString() + " MHz";
@@ -3003,6 +3107,17 @@ namespace GatelessGateSharp
                                                                    memoryClock < device.DefaultMemoryClock ? Color.Blue :
                                                                                   Color.Black;
                     }
+                    /*
+                    int memoryVoltage = device.MemoryVoltage;
+                    if (memoryVoltage >= 0) {
+                        dataGridViewDevices.Rows[deviceIndex].Cells["dataGridViewTextBoxColumnMemoryVoltage"].Value = memoryVoltage.ToString() + "mV";
+                        dataGridViewDevices.Rows[deviceIndex].Cells["dataGridViewTextBoxColumnMemoryVoltage"].Style.ForeColor =
+                                                                    device.DefaultMemoryVoltage < 0 ? Color.Black :
+                                                                   memoryVoltage > device.DefaultMemoryVoltage ? Color.Red :
+                                                                   memoryVoltage < device.DefaultMemoryVoltage ? Color.Blue :
+                                                                                  Color.Black;
+                    }
+                    */
                     if (device.MemoryType != null && device.MemoryVendor != null) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["memory_info"].Value = device.MemoryVendor + " " + device.MemoryType;
                     }
@@ -3643,7 +3758,7 @@ namespace GatelessGateSharp
 
                 timerFinishCurrentBenchmark.Enabled = false;
                 timerStartNextBenchmark.Enabled = false;
-                timerResetStopwatch.Enabled = false;
+                timerResetStopwatchForBenchmark.Enabled = false;
 
                 mBackgroundTasksCancellationTokenSource.Cancel();
 
@@ -3694,7 +3809,7 @@ namespace GatelessGateSharp
 #pragma warning restore 618, 612
                     sw.Close();
                 }
-            } catch (Exception ex) { Logger(ex);  }
+            } catch (Exception ex) { Logger(ex); }
         }
 
         private Controller.ApplicationGlobalState LoadApplicastionGlobalStateFromFile()
@@ -3739,7 +3854,7 @@ namespace GatelessGateSharp
                 UpdateChart(cartesianChartTemperature, deviceIndex => Controller.OpenCLDevices[deviceIndex].Temperature, ChartType.Device);
                 UpdateChart(cartesianChartFanSpeed, deviceIndex => Controller.OpenCLDevices[deviceIndex].FanSpeed, ChartType.Device);
                 UpdateChart(cartesianChartDeviceActivity, deviceIndex => Controller.OpenCLDevices[deviceIndex].Activity, ChartType.Device);
-                UpdateChart(cartesianChartPower, deviceIndex => (Controller.OpenCLDevices[deviceIndex].Power < 0 ? 0 : Controller.OpenCLDevices[deviceIndex].Power), ChartType.Device);
+                UpdateChart(cartesianChartPower, deviceIndex => (Controller.OpenCLDevices[deviceIndex].PowerConsumption), ChartType.Device);
                 UpdateChart(cartesianChartCPUUsage, dummy => (mCPUUsage), ChartType.Total);
 
                 UpdateChart(cartesianChartSpeedPrimaryAlgorithm,
@@ -4410,7 +4525,7 @@ namespace GatelessGateSharp
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            stratum = new CryptoNightStratum(host.name, 14444, username, "x", pool, algorithm);
+                            stratum = new CryptoNightStratum(host.name, 14433, username, "x", pool, algorithm, true);
                             break;
                         } catch (Exception ex) {
                             Logger(ex);
@@ -4474,7 +4589,7 @@ namespace GatelessGateSharp
             }
 
             if (stratum != null) {
-                Controller.PrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (StratumServer)stratum;
                 LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode, algorithm);
             }
         }
@@ -4503,7 +4618,7 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 LaunchOpenCLLbryMinersWithStratum(stratum);
-                Controller.PrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (StratumServer)stratum;
             }
         }
 
@@ -4531,7 +4646,7 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 LaunchOpenCLNeoScryptMinersWithStratum(stratum);
-                Controller.PrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (StratumServer)stratum;
             }
         }
 
@@ -4559,7 +4674,7 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 LaunchOpenCLLyra2REv2MinersWithStratum(stratum);
-                Controller.PrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (StratumServer)stratum;
             }
         }
 
@@ -4586,7 +4701,7 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 LaunchOpenCLX16RMinersWithStratum(stratum, variant);
-                Controller.PrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (StratumServer)stratum;
             }
         }
 
@@ -4646,8 +4761,8 @@ namespace GatelessGateSharp
 
             if (ethashStratum != null && pascalStratum != null) {
                 LaunchOpenCLDualEthashPascalMinersWithStratum(ethashStratum, pascalStratum);
-                Controller.PrimaryStratum = (Stratum)ethashStratum;
-                Controller.SecondaryStratum = (Stratum)pascalStratum;
+                Controller.PrimaryStratum = (StratumServer)ethashStratum;
+                Controller.SecondaryStratum = (StratumServer)pascalStratum;
             }
         }
 
@@ -4685,7 +4800,7 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 LaunchOpenCLPascalMinersWithStratum(stratum);
-                Controller.PrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (StratumServer)stratum;
             }
         }
 
@@ -4808,7 +4923,7 @@ namespace GatelessGateSharp
 
             if (stratum != null) {
                 LaunchOpenCLEthashMinersWithStratum(stratum);
-                Controller.PrimaryStratum = (Stratum)stratum;
+                Controller.PrimaryStratum = (StratumServer)stratum;
             }
         }
 
@@ -5615,7 +5730,7 @@ namespace GatelessGateSharp
                                       && (!IsBenchmarkRunning)
                                       && (!IsOptimizerRunning);
 
-                tabControlMainForm.Enabled = (   Controller.AppState != Controller.ApplicationGlobalState.Switching 
+                tabControlMainForm.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching
                                               && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown);
                 comboBoxDefaultAlgorithm.Enabled = (!IsBenchmarkRunning)
                                       && (!IsOptimizerRunning)
@@ -5645,7 +5760,7 @@ namespace GatelessGateSharp
                 textBoxAEONAddress.ForeColor = (textBoxAEONAddress.Text == string.Empty || textBoxAEONAddress.Text == Parameters.DevFeeAEONAddress) ? Color.Red : Color.Black;
                 textBoxSumokoinAddress.ForeColor = (textBoxSumokoinAddress.Text == string.Empty || textBoxSumokoinAddress.Text == Parameters.DevFeeSumokoinAddress) ? Color.Red : Color.Black;
                 textBoxBitcoinAddress.ForeColor = (textBoxBitcoinAddress.Text == string.Empty || textBoxBitcoinAddress.Text == Parameters.DevFeeBitcoinAddress) ? Color.Red : Color.Black;
-                
+
                 buttonSelectAllDevices.Enabled = idle;
                 buttonDeselectAllDevices.Enabled = idle;
 
@@ -5714,7 +5829,7 @@ namespace GatelessGateSharp
                 numericUpDownAPIPort.Enabled = !checkBoxAPIEnabled.Checked;
                 groupBoxAPIIPRange.Enabled = !checkBoxAPIEnabled.Checked;
 
-                tabControlMisc.Enabled = idle;
+                //tabControlMisc.Enabled = idle;
 
                 buttonRestoreSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
                 buttonDeleteSettingsBackup.Enabled = listBoxSettingBackups.SelectedIndex >= 0;
@@ -5837,8 +5952,8 @@ namespace GatelessGateSharp
         private bool SwitchToStratumForDEVFEE()
         {
             string algo = Controller.Miners[0].AlgorithmName;
-            Stratum newPrimaryStratum = null;
-            Stratum newSecondaryStratum = null;
+            StratumServer newPrimaryStratum = null;
+            StratumServer newSecondaryStratum = null;
 
             if (algo == "neoscrypt") {
                 var username = Parameters.DevFeeBitcoinAddress;
@@ -5862,7 +5977,7 @@ namespace GatelessGateSharp
                 foreach (var host in hosts)
                     if (host.time >= 0)
                         try {
-                            newPrimaryStratum = new CryptoNightStratum(host.name, 14444, username, "x", host.name, algo);
+                            newPrimaryStratum = new CryptoNightStratum(host.name, 14433, username, "x", host.name, algo, true);
                             break;
                         } catch (Exception ex) { Logger(ex); }
 
@@ -6079,12 +6194,12 @@ namespace GatelessGateSharp
             Logger("Switching back from the DEVFEE mode...");
             mDevFeeMode = false;
 
-            Stratum oldPrimaryStratum = Controller.PrimaryStratum;
+            StratumServer oldPrimaryStratum = Controller.PrimaryStratum;
             Controller.PrimaryStratum = Controller.PrimaryStratumBackup;
             Controller.PrimaryStratumBackup = null;
             oldPrimaryStratum.Stop();
 
-            Stratum oldSecondaryStratum = Controller.SecondaryStratum;
+            StratumServer oldSecondaryStratum = Controller.SecondaryStratum;
             Controller.SecondaryStratum = Controller.SecondaryStratumBackup;
             Controller.SecondaryStratumBackup = null;
             if (oldSecondaryStratum != null)
@@ -6401,7 +6516,10 @@ namespace GatelessGateSharp
         {
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
-                    foreach (var name in new List<string> { "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU", "RadeonSettings", "AfterBurner" })
+                    foreach (var name in new List<string> {
+                        "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU", "RadeonSettings",
+                        "AfterBurner"
+                    })
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
                             try { process.Kill(); } catch (Exception) { }
                 } catch (Exception) { }
@@ -6794,7 +6912,7 @@ namespace GatelessGateSharp
             System.Diagnostics.Process.Start(LogFilePathBase);
 
         }
-        
+
         private void buttonPrintMemoryTimings_Click(object sender, EventArgs e)
         {
             if (!PCIExpress.Available && !PCIExpress.LoadPhyMem())
@@ -6824,7 +6942,7 @@ namespace GatelessGateSharp
 
         private void comboBoxDefaultAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Controller.AppState != Controller.ApplicationGlobalState.Initializing 
+            if (Controller.AppState != Controller.ApplicationGlobalState.Initializing
                 && Controller.AppState != Controller.ApplicationGlobalState.Switching
                 && !IsBenchmarkRunning
                 && !IsOptimizerRunning) {
@@ -6965,7 +7083,7 @@ namespace GatelessGateSharp
         {
             try {
                 timerFinishCurrentBenchmark.Enabled = false;
-                timerResetStopwatch.Enabled = false;
+                timerResetStopwatchForBenchmark.Enabled = false;
 
                 if (Controller.AppState == Controller.ApplicationGlobalState.Idle) {
 
@@ -7134,7 +7252,7 @@ namespace GatelessGateSharp
             // Set up the parameter.
             var numericUpDown = numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, parameterName)];
             int multiplier = !checkBoxOptimizationExtendRange.Checked ? 1 :
-                                (int)numericUpDown.Value < 50         ? 2 :
+                                (int)numericUpDown.Value < 50 ? 2 :
                                                                         3;
             var value = (int)numericUpDown.Value;
             var step = numericUpDown.Increment;
@@ -7158,7 +7276,7 @@ namespace GatelessGateSharp
                 step = 1;
             } else if (parameterName == "strided_index") {
                 min = 0;
-                max = 8;
+                max = 20;
                 step = 1;
             } else if (parameterName == "local_work_size") {
                 var isNVIDIA = Controller.OpenCLDevices[deviceIndex].GetVendor() == "NVIDIA";
@@ -7206,7 +7324,7 @@ namespace GatelessGateSharp
         private void StopBenchmarks()
         {
             timerFinishCurrentBenchmark.Enabled = false;
-            timerResetStopwatch.Enabled = false;
+            timerResetStopwatchForBenchmark.Enabled = false;
             timerStartNextBenchmark.Enabled = false;
 
             if (IsBenchmarkRunning) {
@@ -7237,6 +7355,101 @@ namespace GatelessGateSharp
             }
         }
 
+        static readonly Dictionary<string, int> NiceHashAlgorithmIndexTable = new Dictionary<string, int> {
+            {"neoscrypt", 8 },
+            {"lyra2rev2", 14 },
+            {"ethash", 20 },
+            {"cryptonight", 22 },
+            {"lbry", 23 },
+            {"pascal", 25 },
+            {"cryptonightv7", 30 }
+        };
+
+        static readonly Dictionary<string, double> NiceHashAlgorithmDividerTable = new Dictionary<string, double> {
+            {"neoscrypt", 1000000000.0 },
+            {"lyra2rev2", 1000000000000.0 },
+            {"ethash", 1000000000.0 },
+            {"cryptonight", 1000000.0 },
+            {"lbry", 1000000000000.0 },
+            {"pascal", 1000000000000.0 },
+            {"cryptonightv7", 1000000.0 }
+        };
+
+        private void GetNiceHashProfitability(string algorithm, double speedPrimaryAlgorithm, double speedSecondaryAlgorithm, double powerConsumption, out double profitability, out string profitabilityUnit)
+        {
+            string primaryAlgorithm = algorithm;
+            string secondaryAlgorithm = null;
+            if (algorithm == "ethash_pascal") {
+                primaryAlgorithm = "ethash";
+                secondaryAlgorithm = "pascal";
+            }
+
+            profitability = 0;
+            profitabilityUnit = "";
+            if (sNiceHashGlobalCurrentStats == null)
+                return;
+
+            try {
+                double price = 0;
+                var result = (JContainer)sNiceHashGlobalCurrentStats["result"];
+                var stats = (JArray)result["stats"];
+                foreach (JContainer item in stats) {
+                    try {
+                        if ((int)item["algo"] == NiceHashAlgorithmIndexTable[primaryAlgorithm])
+                            price += double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * speedPrimaryAlgorithm / NiceHashAlgorithmDividerTable[primaryAlgorithm];
+                        else if (secondaryAlgorithm != null && (int)item["algo"] == NiceHashAlgorithmIndexTable[secondaryAlgorithm])
+                            price += double.Parse((string)item["price"], System.Globalization.CultureInfo.InvariantCulture) * speedSecondaryAlgorithm / NiceHashAlgorithmDividerTable[secondaryAlgorithm];
+                    } catch (Exception) { }
+                }
+                if (price <= 0)
+                    return;
+
+                string currency = (string)comboBoxCurrency.SelectedItem;
+                double BTCRate = sBitcoinRates.Keys.Contains<string>(currency) ? sBitcoinRates[currency] : 0;
+                profitability = price * BTCRate - (powerConsumption / 1000) * (double)numericUpDownProfitabililtyCost.Value * 24;
+                profitabilityUnit = currency + "/Day";
+            } catch (Exception ex) { Logger(ex); }
+        }
+
+        private void UpdateNiceHashProfitabilityTable()
+        {
+            if (sNiceHashGlobalCurrentStats == null)
+                return;
+
+            foreach (var device in Controller.OpenCLDevices) {
+                int bestIndex = -1;
+                double bestProfitability = 0;
+                foreach (DataGridViewColumn column in dataGridViewNiceHashProfitability.Columns) {
+                    foreach (var algorithm in AlgorithmList.Where((a) => (a != "x16r" && a != "x16s" && a != "cryptonight_heavy" && a != "cryptonight_light"))) {
+                        if (column.HeaderText == GetPrettyAlgorithmNameForBenchmarkTable(algorithm)) {
+                            double speedPrimaryAlgorithm = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_speed_primary_algorithm")].Value;
+                            double speedSecondaryAlgorithm = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_speed_secondary_algorithm")].Value;
+                            double powerConsumption = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_power_consumption")].Value; ;
+                            double profitability;
+                            string profitabilityUnit;
+                            GetNiceHashProfitability(algorithm, speedPrimaryAlgorithm, speedSecondaryAlgorithm, powerConsumption, out profitability, out profitabilityUnit);
+                            string currency = (string)comboBoxCurrency.SelectedItem;
+                            if (profitability != 0 && speedPrimaryAlgorithm > 0) {
+                                dataGridViewNiceHashProfitability.Rows[device.DeviceIndex].Cells[column.Index].Value
+                                    = String.Format(currency == "JPY" ? "{0:N0}" : "{0:N2}", profitability) + " " + profitabilityUnit;
+                                dataGridViewNiceHashProfitability.Rows[device.DeviceIndex].Cells[column.Index].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
+                                dataGridViewNiceHashProfitability.Rows[device.DeviceIndex].Cells[column.Index].Style.BackColor = (profitability < 0) ? Color.LightPink : dataGridViewNiceHashProfitability.RowTemplate.DefaultCellStyle.BackColor;
+                                if (bestIndex < 0 || profitability > bestProfitability) {
+                                    bestProfitability = profitability;
+                                    bestIndex = column.Index;
+                                }
+                            } else {
+                                dataGridViewNiceHashProfitability.Rows[device.DeviceIndex].Cells[column.Index].Value = "";
+                                dataGridViewNiceHashProfitability.Rows[device.DeviceIndex].Cells[column.Index].Style.BackColor = dataGridViewNiceHashProfitability.RowTemplate.DefaultCellStyle.BackColor;
+                            }
+                        }
+                    }
+                }
+                if (bestIndex >= 0)
+                    dataGridViewNiceHashProfitability.Rows[device.DeviceIndex].Cells[bestIndex].Style.BackColor = Color.LightGreen;
+            }
+        }
+
         private void UpdateBenchmarkTable()
         {
             foreach (var device in Controller.OpenCLDevices) {
@@ -7258,11 +7471,11 @@ namespace GatelessGateSharp
                                     dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value += " (↓" + String.Format("{0:P0}", (baselineSpeedPrimaryAlgorithm - speedPrimaryAlgorithm) / baselineSpeedPrimaryAlgorithm) + ")";
                                 }
                                 if (speedPrimaryAlgorithm >= 1.05 * baselineSpeedPrimaryAlgorithm && baselineSpeedPrimaryAlgorithm > 0) {
-                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.ForeColor = Color.Green;
+                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.BackColor = Color.LightGreen;
                                 } else if (speedPrimaryAlgorithm <= 0.95 * baselineSpeedPrimaryAlgorithm && baselineSpeedPrimaryAlgorithm > 0) {
-                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.ForeColor = Color.Red;
+                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.BackColor = Color.LightPink;
                                 } else {
-                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.ForeColor = Color.Black;
+                                    dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Style.BackColor = dataGridViewBenchmarks.RowsDefaultCellStyle.BackColor;
                                 }
                             } else {
                                 dataGridViewBenchmarks.Rows[device.DeviceIndex].Cells[column.Index].Value = "";
@@ -7271,15 +7484,17 @@ namespace GatelessGateSharp
                     }
                 }
             }
+            UpdateNiceHashProfitabilityTable();
         }
 
-        private void UpdateBenchmarks(Device aDevice, string aAlgorithm, double aSpeedPrimaryAlgorithm, double aSpeedSecondaryAlgorithm)
+        private void UpdateBenchmarks(Device aDevice, string aAlgorithm, double aSpeedPrimaryAlgorithm, double aSpeedSecondaryAlgorithm, double aPowerConsumption)
         {
             if (aSpeedPrimaryAlgorithm < 0)
                 return;
             try {
                 numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "current_speed_primary_algorithm")].Value = (decimal)aSpeedPrimaryAlgorithm;
                 numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "current_speed_secondary_algorithm")].Value = (decimal)aSpeedSecondaryAlgorithm;
+                numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "current_power_consumption")].Value = (decimal)aPowerConsumption;
                 if (aSpeedPrimaryAlgorithm > (double)numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "best_speed_primary_algorithm")].Value) {
                     numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "best_speed_primary_algorithm")].Value = (decimal)aSpeedPrimaryAlgorithm;
                     numericDeviceParameterArray[new Tuple<int, string, string>(aDevice.DeviceIndex, aAlgorithm, "best_speed_secondary_algorithm")].Value = (decimal)aSpeedSecondaryAlgorithm;
@@ -7333,13 +7548,14 @@ namespace GatelessGateSharp
 
         private void timerFinishCurrentBenchmark_Tick(object sender = null, EventArgs e = null)
         {
-            timerResetStopwatch.Enabled = false;
+            timerResetStopwatchForBenchmark.Enabled = false;
             timerStartNextBenchmark.Enabled = false;
             timerFinishCurrentBenchmark.Enabled = false;
 
             if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running
-                && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
+                && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming) {
                 return;
+            }
 
             ProcessPreviousBenchmark();
 
@@ -7431,8 +7647,6 @@ namespace GatelessGateSharp
                 } else {
                     tabControlMainForm.SelectedIndex = 5;
                 }
-                timerFinishCurrentBenchmark.Interval = (mCurrentBenchmarkLength * 1000);
-                timerResetStopwatch.Interval = 100;
                 Controller.BenchmarkState = Controller.ApplicationBenchmarkState.Running;
             }
 
@@ -7456,7 +7670,7 @@ namespace GatelessGateSharp
             }
 
             // Calculate the speeds and update the result tables.
-            result.SpeedPrimaryAlgorithm = result.SpeedSecondaryAlgorithm = 0;
+            result.SpeedPrimaryAlgorithm = result.SpeedSecondaryAlgorithm = result.PowerConsumption = 0;
             var updateBenchmarkTable = (Controller.BenchmarkEntries[0].Parameters.Count <= 1);
             if (updateBenchmarkTable)
                 LoadSettingsFromJSONConfigFile(null, false);
@@ -7464,20 +7678,20 @@ namespace GatelessGateSharp
                 result.SpeedPrimaryAlgorithm += miner.AverageSpeed;
                 result.SpeedSecondaryAlgorithm += miner.AverageSpeedSecondaryAlgorithm;
             }
-            if (updateBenchmarkTable)
+            foreach (var device in devices)
+                result.PowerConsumption += device.GetAveragePowerConsumption();
+            if (updateBenchmarkTable && result.SpeedPrimaryAlgorithm > 0) {
                 foreach (var device in devices)
-                    UpdateBenchmarks(device, defaultAlgorithm, device.AverageSpeed, device.AverageSpeedSecondaryAlgorithm);
-            if (updateBenchmarkTable) {
+                    UpdateBenchmarks(device, defaultAlgorithm, device.AverageSpeed, device.AverageSpeedSecondaryAlgorithm, device.GetAveragePowerConsumption());
                 mAreSettingsDirty = true;
                 SaveSettingsToJSONConfigFile();
                 UpdateBenchmarkTable();
             }
-
+            
             if (!IsOptimizerRunning)
                 progressBarBenchmarking.Value = Controller.BenchmarkRecords.Count * 100 / (Controller.BenchmarkRecords.Count + Controller.BenchmarkEntries.Count);
 
             // Restart if there is a sudden speed drop.
-
             if (Controller.BenchmarkEntries[0].Results.Count > 0
                 && result.Success
                 && Controller.BenchmarkEntries[0].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > result.SpeedPrimaryAlgorithm
@@ -7492,25 +7706,42 @@ namespace GatelessGateSharp
                 Utilities.ForceReboot();
             }
 
+            // Restart if miner threads failed to start.
+            if (Controller.Miners.Count > 0 && result.SpeedPrimaryAlgorithm <= 0) {
+
+                SaveBenchmarkState();
+                MainForm.Logger("Miner threads failed to start during benchmarking/optimization. Rebooting...");
+                MainForm.UpdateLog();
+                Utilities.ForceReboot();
+            }
+
             // Update the current benchmark entry.
             if (result.Success && result.SpeedPrimaryAlgorithm <= 0)
                 result.Success = false;
             if (result.Success)
                 StopMining(); // Stop the previous benchmark.
-            Controller.BenchmarkEntries[0].Results.Add(result);
-            Controller.BenchmarkEntries[0].Remaining -= 1;
-            var algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
-            var doNotRepeatAfterFailure = (IsOptimizerRunning)
-                                              ? checkBoxOptimizationDoNotRepeatAfterFailure.Checked
-                                              : checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked;
-            if (Controller.BenchmarkEntries[0].Remaining <= 0 || (doNotRepeatAfterFailure && !result.Success)) {
-                Controller.BenchmarkEntries[0].Remaining = 0;
-                Controller.BenchmarkRecords.Add(Controller.BenchmarkEntries[0]);
-                Controller.BenchmarkEntries.RemoveAt(0);
+            if (Controller.BenchmarkEntries.Count > 0) {
+                Controller.BenchmarkEntries[0].Results.Add(result);
+                Controller.BenchmarkEntries[0].Remaining -= 1;
+                var algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
+                var doNotRepeatAfterFailure = (IsOptimizerRunning)
+                                                  ? checkBoxOptimizationDoNotRepeatAfterFailure.Checked
+                                                  : checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked;
+                if (Controller.BenchmarkEntries[0].Remaining <= 0 || (doNotRepeatAfterFailure && !result.Success)) {
+                    Controller.BenchmarkEntries[0].Remaining = 0;
+                    Controller.BenchmarkRecords.Add(Controller.BenchmarkEntries[0]);
+                    Controller.BenchmarkEntries.RemoveAt(0);
+                }
             }
+
+            // Finish the current seriess of benchmarks if two benchmarks fails in a row.
             if (IsOptimizerRunning
                 && checkBoxOptimizationDoNotRepeatAfterFailure.Checked
-                && !result.Success) {
+                && !result.Success 
+                && Controller.BenchmarkEntries.Count >= 1
+                && Controller.BenchmarkEntries.Last().Results.Count >= 1
+                && Controller.BenchmarkEntries.Last().Results.Last().Success != true) {
+
                 bool found = false;
                 foreach (var entry in Controller.BenchmarkRecords) {
                     found = true;
@@ -7554,12 +7785,12 @@ namespace GatelessGateSharp
                 entry.ParameterWithValues = "";
                 if (bestRecord != null && bestRecord.SuccessCount > 0) {
                     LoadSettingsFromJSONConfigFile(null, false);
-                    algorithm = bestRecord.Parameters[0].Value;
+                    var algorithm = bestRecord.Parameters[0].Value;
                     for (int paramIndex = 1; paramIndex < bestRecord.Parameters.Count; ++paramIndex) {
                         SetBenchmarkParameter(bestRecord.Parameters[paramIndex], algorithm);
                     }
                     if (bestRecord.SpeedPrimaryAlgorithm > 0) {
-                        UpdateBenchmarks(Controller.OpenCLDevices[deviceIndex], algorithm, bestRecord.SpeedPrimaryAlgorithm, bestRecord.SpeedSecondaryAlgorithm);
+                        UpdateBenchmarks(Controller.OpenCLDevices[deviceIndex], algorithm, bestRecord.SpeedPrimaryAlgorithm, bestRecord.SpeedSecondaryAlgorithm, bestRecord.PowerConsumption);
                         UpdateBenchmarkTable();
                     }
                     mAreSettingsDirty = true;
@@ -7568,6 +7799,8 @@ namespace GatelessGateSharp
                     entry.ResultCount = bestRecord.Results.Count;
                     entry.SpeedPrimaryAlgorithm = bestRecord.SpeedPrimaryAlgorithm;
                     entry.SpeedSecondaryAlgorithm = bestRecord.SpeedSecondaryAlgorithm;
+                    entry.PowerConsumption = bestRecord.PowerConsumption;
+                    GetNiceHashProfitability(algorithm, bestRecord.SpeedPrimaryAlgorithm, bestRecord.SpeedSecondaryAlgorithm, bestRecord.PowerConsumption, out entry.Profitability, out entry.ProfitabilityUnit);
                     entry.ParameterWithValues = entry.Parameter + ": " + bestRecord.Parameters[1].OriginalValues[deviceIndex] + "→" + bestRecord.Parameters[1].Value;
                 } else {
                     entry.ParameterWithValues = entry.Parameter + ": -";
@@ -7588,16 +7821,19 @@ namespace GatelessGateSharp
                     record.SuccessCount = 0;
                     record.SpeedPrimaryAlgorithm = 0;
                     record.SpeedSecondaryAlgorithm = 0;
+                    record.PowerConsumption = 0;
                     foreach (var r in record.Results) {
                         if (r.Success) {
                             ++record.SuccessCount;
                             record.SpeedPrimaryAlgorithm += r.SpeedPrimaryAlgorithm;
                             record.SpeedSecondaryAlgorithm += r.SpeedSecondaryAlgorithm;
+                            record.PowerConsumption += r.PowerConsumption;
                         }
                     }
                     if (record.SuccessCount > 0) {
                         record.SpeedPrimaryAlgorithm /= record.SuccessCount;
                         record.SpeedSecondaryAlgorithm /= record.SuccessCount;
+                        record.PowerConsumption /= record.SuccessCount;
                     }
                 }
                 // Get rid of results with a slow speed.
@@ -7619,17 +7855,18 @@ namespace GatelessGateSharp
                     Controller.BenchmarkRecords[i].StabilityScore += (i < Controller.BenchmarkRecords.Count - 1) ? Controller.BenchmarkRecords[i + 1].SuccessCount : Controller.BenchmarkRecords[i].SuccessCount;
                 }
             }
+            double recordProfitability, bestRecordProfitability = 0;
+            string profitabilityUnit;
             foreach (var record in Controller.BenchmarkRecords.Concat(Controller.BenchmarkEntries).OrderBy(o => o.ID)) {
-                bool voltage = record.Parameters.Count >= 2 && (record.Parameters[1].Name == "overclocking_core_voltage" || record.Parameters[1].Name == "overclocking_memory_voltage");
-                bool clock = record.Parameters.Count >= 2 && (record.Parameters[1].Name == "overclocking_core_clock" || record.Parameters[1].Name == "overclocking_memory_clock");
+                GetNiceHashProfitability(record.Parameters[0].Value, record.SpeedPrimaryAlgorithm, record.SpeedSecondaryAlgorithm, record.PowerConsumption, out recordProfitability, out profitabilityUnit);
                 if (bestRecord == null
                     || (record.SuccessCount > bestRecord.SuccessCount)
                     || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore > bestRecord.StabilityScore)
-                    || (voltage && record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm * 0.97 && int.Parse(record.Parameters[1].Value) < int.Parse(bestRecord.Parameters[1].Value))
-                    || (clock && record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && int.Parse(record.Parameters[1].Value) > int.Parse(bestRecord.Parameters[1].Value))
-                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm)) {
+                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && recordProfitability != 0 && recordProfitability > bestRecordProfitability)
+                    || (record.SuccessCount == bestRecord.SuccessCount && record.StabilityScore == bestRecord.StabilityScore && recordProfitability == 0 && record.SpeedPrimaryAlgorithm > bestRecord.SpeedPrimaryAlgorithm)) {
 
                     bestRecord = record;
+                    bestRecordProfitability = recordProfitability;
                 }
             }
 
@@ -7652,8 +7889,6 @@ namespace GatelessGateSharp
                 if (IsDeviceEnabled(Controller.OpenCLDevices[device.DeviceIndex], DefaultAlgorithm))
                     multipleGPUThreads = multipleGPUThreads || numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, DefaultAlgorithm, "threads")].Value > 1;
             mCurrentBenchmarkLength = (multipleGPUThreads) ? Parameters.BenchmarkLengthMultipleThreads : Parameters.BenchmarkLengthSingleThread;
-            timerFinishCurrentBenchmark.Interval = (mCurrentBenchmarkLength * 1000);
-            timerResetStopwatch.Interval = 100;
 
             bool coolGPUDown = (!IsOptimizerRunning)
                                    ? checkBoxOptimizationCoolGPUDown.Checked
@@ -7670,7 +7905,7 @@ namespace GatelessGateSharp
             timerStartNextBenchmark.Interval = coolGPUDown ? 10000 : 100;
             timerStartNextBenchmark.Enabled = true;
             timerFinishCurrentBenchmark.Enabled = false;
-            timerResetStopwatch.Enabled = false;
+            timerResetStopwatchForBenchmark.Enabled = false;
             Controller.BenchmarkState = Controller.ApplicationBenchmarkState.CoolingDown;
             UpdateControls();
         }
@@ -7689,11 +7924,13 @@ namespace GatelessGateSharp
                 int successCount = 0;
                 double totalSpeedPrimary = 0;
                 double totalSpeedSecondary = 0;
+                double totalPowerConsumption = 0;
                 foreach (var r in record.Results) {
                     if (r.Success) {
                         ++successCount;
                         totalSpeedPrimary += r.SpeedPrimaryAlgorithm;
                         totalSpeedSecondary += r.SpeedSecondaryAlgorithm;
+                        totalPowerConsumption += r.PowerConsumption;
                     }
                 }
                 if (record.Results.Count > 0) {
@@ -7704,6 +7941,11 @@ namespace GatelessGateSharp
                     dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "Speed"].Value = ConvertHashrateToString(totalSpeedPrimary / successCount);
                     if (totalSpeedSecondary > 0)
                         dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "Speed"].Value += ", " + ConvertHashrateToString(totalSpeedSecondary / successCount);
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "PowerConsumption"].Value = String.Format("{0:N0}", (totalPowerConsumption / successCount)) + "W";
+                    double profitability;
+                    string profitabilityUnit;
+                    GetNiceHashProfitability(record.Parameters[0].Value, totalSpeedPrimary / successCount, totalSpeedSecondary / successCount, totalPowerConsumption / successCount, out profitability, out profitabilityUnit);
+                    dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "Profitability"].Value = (profitability != 0) ? String.Format("{0:N4} ", profitability) + profitabilityUnit : "";
                 }
                 if (record.Parameters.Count >= 2)
                     dataGridView.Rows[dataGridView.Rows.Count - 1].Cells[dataGridViewName + "FirstParameter"].Value = GetPrettyDeviceParameterName(record.Parameters[1].Name, true) + ": " + record.Parameters[1].Value;
@@ -7731,32 +7973,37 @@ namespace GatelessGateSharp
                     dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeed"].Value = ConvertHashrateToString(record.SpeedPrimaryAlgorithm);
                     if (record.SpeedSecondaryAlgorithm > 0)
                         dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeed"].Value += ", " + ConvertHashrateToString(record.SpeedSecondaryAlgorithm);
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsPowerConsumption"].Value = String.Format("{0:N0}", (record.PowerConsumption / record.SuccessCount)) + "W";
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsProfitability"].Value = (record.Profitability != 0) ? String.Format("{0:N4} ", (record.Profitability / record.SuccessCount)) + record.ProfitabilityUnit : "";
                 }
                 dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsParameter"].Value = GetPrettyDeviceParameterName(record.ParameterWithValues, true);
             }
         }
 
-        private void timerResetStopwatch_Tick(object sender, EventArgs e)
+        private void timerResetStopwatchForBenchmark_Tick(object sender, EventArgs e)
         {
             if (IsBenchmarkRunning) {
-                timerResetStopwatch.Enabled = false;
+                timerResetStopwatchForBenchmark.Enabled = false;
                 timerStartNextBenchmark.Enabled = false;
-                timerFinishCurrentBenchmark.Enabled = false;
 
                 Controller.StopWatch.Reset();
                 Controller.StopWatch.Start();
-                foreach (var device in Controller.OpenCLDevices)
+                foreach (var device in Controller.OpenCLDevices) {
                     device.ClearShares();
+                    device.ResetAveragePowerConsumption();
+                }
                 foreach (var miner in Controller.Miners) {
                     if (miner.Speed <= 0) {
-                        timerResetStopwatch.Enabled = true;
+                        timerResetStopwatchForBenchmark.Enabled = true;
                         return;
                     }
                     miner.ResetHashCount();
                 }
 
+                timerFinishCurrentBenchmark.Enabled = false;
+                timerFinishCurrentBenchmark.Interval = mCurrentBenchmarkLength * 1000;
                 timerFinishCurrentBenchmark.Enabled = true;
-                timerResetStopwatch.Enabled = false;
+                timerResetStopwatchForBenchmark.Enabled = false;
                 timerStartNextBenchmark.Enabled = false;
             }
         }
@@ -7819,6 +8066,7 @@ namespace GatelessGateSharp
             if (!IsOptimizerRunning
                 && MessageBox.Show(Parameters.WarningBeforeOptimization, appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
 
+                checkBoxLaunchAtStartup.Checked = true;
                 mAreSettingsDirty = true;
                 SaveSettingsToJSONConfigFile();
 
@@ -7882,11 +8130,18 @@ namespace GatelessGateSharp
                     if (algorithm != "ethash_pascal" && algorithm != "ethash")
                         AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "threads");
 
-                    if (algorithm != "ethash_pascal" && algorithm != "x16r" && algorithm != "x16s")
+                    if (algorithm != "ethash_pascal" 
+                        && algorithm != "x16r" 
+                        && algorithm != "x16s"
+                        && algorithm != "cryptonight"
+                        && algorithm != "cryptonightv7" 
+                        && algorithm != "cryptonight_heavy"
+                        && algorithm != "cryptonight_light")
                         AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "local_work_size");
 
-                    if (algorithm != "x16r" && algorithm != "x16s")
-                        AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "kernel_optimization_level");
+                    // Disable this parameter for now as -O1 was problematic with a conbination of Vega and CryptoNightV7
+                    //if (algorithm != "x16r" && algorithm != "x16s")
+                    //    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "kernel_optimization_level");
 
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "strided_index");
 
@@ -7984,7 +8239,7 @@ namespace GatelessGateSharp
         {
             timerStartNextBenchmark.Enabled = false;
             timerFinishCurrentBenchmark.Enabled = false;
-            timerResetStopwatch.Enabled = false;
+            timerResetStopwatchForBenchmark.Enabled = false;
 
             //if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
             //    return;
@@ -8020,8 +8275,9 @@ namespace GatelessGateSharp
             Application.DoEvents();
 
             timerStartNextBenchmark.Enabled = false;
-            timerFinishCurrentBenchmark.Enabled = false;
-            timerResetStopwatch.Enabled = true;
+            timerFinishCurrentBenchmark.Interval = Parameters.BenchmarkTimeout * 1000;
+            timerFinishCurrentBenchmark.Enabled = true;
+            timerResetStopwatchForBenchmark.Enabled = true;
         }
 
         private void dataGridViewBenchmarkingResults_SelectionChanged(object sender, EventArgs e)
@@ -8137,8 +8393,9 @@ namespace GatelessGateSharp
                 OpenFileDialog openFileDialog = new OpenFileDialog();
 
                 string postfix = "";
-                if (device.PNPString != null)
-                    postfix = String.Format(" ({0})", (new Regex(@"^PCI\\([^\\]+)(&REV[^\\]*\\.*)?$")).Replace(device.PNPString, "$1"));
+                if (!String.IsNullOrEmpty(device.MemoryVendor))
+                    postfix = " " + device.MemoryVendor;
+                postfix = " " + device.GetMaxComputeUnits() + "CU";
 
                 openFileDialog.Filter = "JSON files (*.json)|*.json|XML files (*.xml)|*.xml|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
@@ -8422,6 +8679,64 @@ namespace GatelessGateSharp
         {
             UpdateBaselineSpeeds();
             UpdateBenchmarkTable();
+        }
+
+        private void buttonGetNewBitcoinAddress_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.bitaddress.org/");
+        }
+
+        private void buttonGetNewEthereumAddress_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.myetherwallet.com/");
+        }
+
+        private void buttonGetNewMoneroAddress_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://wallet.sumokoin.com/");
+        }
+
+        private void buttonGetNewPascalAddress_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://sourceforge.net/projects/pascalcoin/files/");
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://lbry.io/get");
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/RavenProject/Ravencoin/releases/");
+        }
+
+        private void buttonGetNewAEONAddress_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://wallet.sumokoin.com/");
+        }
+
+        private void buttonGetNewSumokoinAddress_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://wallet.sumokoin.com/");
+        }
+
+        private void buttonGetNewPigeoncoinAddress_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Pigeoncoin/pigeoncoin/releases");
+        }
+
+        private void comboBoxCurrency_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            labelProfitabilityCostUnit.Text = (string)comboBoxCurrency.SelectedItem + "/kWh";
+            UpdateNiceHashProfitabilityTable();
+            mAreSettingsDirty = true;
+        }
+
+        private void numericUpDownProfitabililtyCost_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateNiceHashProfitabilityTable();
+            mAreSettingsDirty = true;
         }
     }
 }

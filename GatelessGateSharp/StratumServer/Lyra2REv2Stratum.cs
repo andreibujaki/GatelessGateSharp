@@ -15,9 +15,9 @@ using HashLib;
 
 namespace GatelessGateSharp
 {
-    class Lyra2REv2Stratum : Stratum
+    class Lyra2REv2Stratum : StratumServer
     {
-        public new class Work : Stratum.Work
+        public new class Work : StratumServer.Work
         {
             readonly private Job mJob;
 
@@ -74,7 +74,7 @@ namespace GatelessGateSharp
             }
         }
 
-        public new class Job : Stratum.Job
+        public new class Job : StratumServer.Job
         {
             private string mID;
             private string mPrevHash;
@@ -271,8 +271,8 @@ namespace GatelessGateSharp
             try  { mMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
-        public Lyra2REv2Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName)
-            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "lyra2rev2")
+        public Lyra2REv2Stratum(String aServerAddress, int aServerPort, String aUsername, String aPassword, String aPoolName, bool aSecureConnection = false)
+            : base(aServerAddress, aServerPort, aUsername, aPassword, aPoolName, "lyra2rev2", aSecureConnection)
         {
         }
     }

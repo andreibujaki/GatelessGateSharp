@@ -1140,7 +1140,7 @@ namespace GatelessGateSharp
 
         public Lyra2REv2Stratum Stratum { get; set; }
 
-        public override void SetPrimaryStratum(Stratum stratum) {
+        public override void SetPrimaryStratum(StratumServer stratum) {
             Stratum = (Lyra2REv2Stratum)stratum;
         }
 

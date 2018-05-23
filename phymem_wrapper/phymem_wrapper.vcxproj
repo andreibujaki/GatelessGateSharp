@@ -51,12 +51,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="atom.cpp" />
     <ClCompile Include="DLLMain.cpp" />
     <ClCompile Include="PhyMemWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="atom-bits.h" />
+    <ClInclude Include="atom-names.h" />
+    <ClInclude Include="atom-types.h" />
+    <ClInclude Include="atom.h" />
+    <ClInclude Include="atombios.h" />
+    <ClInclude Include="ObjectID.h" />
     <ClInclude Include="PhyMem.h" />
     <ClInclude Include="PhyMemWrapper.h" />
+    <ClInclude Include="pptable.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5677641C-725E-4A22-A441-AC8FEFA214FD}</ProjectGuid>

@@ -210,6 +210,8 @@ namespace GatelessGateSharp
             var deviceIndex = 0;
             foreach (var computeDevice in computeDevices) {
                 if (computeDevice.Vendor == "Advanced Micro Devices, Inc." && (computeDevice.Name == "Ellesmere" || computeDevice.Name == "Baffin" || computeDevice.Name == "gfx804")) {
+                    if (!PCIExpress.Available)
+                        PCIExpress.LoadPhyMem();
                     devices[deviceIndex] = new AMDGMC81(deviceIndex, computeDevice);
                 } else {
                     devices[deviceIndex] = new OpenCLDevice(deviceIndex, computeDevice);
@@ -651,9 +653,7 @@ namespace GatelessGateSharp
                     Marshal.StructureToPtr(OSADLPMActivityData, activityBuffer, false);
                     if (ADL.ADL_Overdrive5_CurrentActivity_Get != null && ADL.ADL_Overdrive5_CurrentActivity_Get(ADLAdapterIndex, activityBuffer) == ADL.ADL_SUCCESS) {
                         OSADLPMActivityData = (ADLPMActivity)Marshal.PtrToStructure(activityBuffer, OSADLPMActivityData.GetType());
-                        mCoreVoltageAvailable = mCoreVoltageAvailable && !(OSADLPMActivityData.iVddc <= 800 || OSADLPMActivityData.iVddc > 2000); // The driver may return garbage.
-                        if (mCoreVoltageAvailable)
-                            return OSADLPMActivityData.iVddc;
+                        //return OSADLPMActivityData.iVddc;
                     }
                 }
 
@@ -662,7 +662,8 @@ namespace GatelessGateSharp
 
                 if (ADL.ADL_Overdrive6_VoltageControl_Get != null) {
                     int defaultValue = 0, currentValue = 0;
-                    if (ADL.ADL_Overdrive6_VoltageControl_Get != null && ADL.ADL_Overdrive6_VoltageControl_Get(ADLAdapterIndex, ref currentValue, ref defaultValue) == ADL.ADL_SUCCESS)
+                    if (ADL.ADL_Overdrive6_VoltageControl_Get != null)
+                        ADL.ADL_Overdrive6_VoltageControl_Get(ADLAdapterIndex, ref currentValue, ref defaultValue);
                         return currentValue;
                 }
 
@@ -672,7 +673,7 @@ namespace GatelessGateSharp
                 ADLODNPerformanceStatus OSODNPerformanceStatusData = new ADLODNPerformanceStatus();
                 var statusBuffer = Marshal.AllocCoTaskMem((int)Marshal.SizeOf(OSODNPerformanceStatusData));
                 Marshal.StructureToPtr(OSODNPerformanceStatusData, statusBuffer, false);
-                if (ADL.ADL2_OverdriveN_PerformanceStatus_Get != null && ADL.ADL2_OverdriveN_PerformanceStatus_Get(ADL2Context, ADLAdapterIndex, statusBuffer) != ADL.ADL_SUCCESS)
+                if (ADL.ADL2_OverdriveN_PerformanceStatus_Get == null || ADL.ADL2_OverdriveN_PerformanceStatus_Get(ADL2Context, ADLAdapterIndex, statusBuffer) != ADL.ADL_SUCCESS)
                     return -1;
                 OSODNPerformanceStatusData = (ADLODNPerformanceStatus)Marshal.PtrToStructure(statusBuffer, OSODNPerformanceStatusData.GetType());
                 mCoreVoltageAvailable = mCoreVoltageAvailable && !(OSODNPerformanceStatusData.iVDDC <= 800 || OSODNPerformanceStatusData.iVDDC > 2000); // The driver may return garbage.
@@ -944,20 +945,19 @@ namespace GatelessGateSharp
             return (ret == ADL.ADL_SUCCESS);
         }
 
-        public int Power {
-            get {
-                if (ADLVersion < 6)
-                    return -1;
-
-                int power = 0;
-                if (ADL.ADL_Overdrive6_CurrentPower_Get != null
-                    && ADL.ADL_Overdrive6_CurrentPower_Get(ADLAdapterIndex, 0, ref power) == ADL.ADL_SUCCESS)
-                    return power >> 8;
-                if (ADL.ADL2_Overdrive6_CurrentPower_Get != null
-                    && ADL.ADL2_Overdrive6_CurrentPower_Get(ADL2Context, ADLAdapterIndex, 0, ref power) == ADL.ADL_SUCCESS)
-                    return power >> 8;
+        public override double GetPowerConsumption()
+        {
+            if (ADLVersion < 6)
                 return -1;
-            }
+
+            int power = 0;
+            if (ADL.ADL_Overdrive6_CurrentPower_Get != null
+                && ADL.ADL_Overdrive6_CurrentPower_Get(ADLAdapterIndex, 0, ref power) == ADL.ADL_SUCCESS)
+                return (double)power / 256;
+            if (ADL.ADL2_Overdrive6_CurrentPower_Get != null
+                && ADL.ADL2_Overdrive6_CurrentPower_Get(ADL2Context, ADLAdapterIndex, 0, ref power) == ADL.ADL_SUCCESS)
+                return (double)power / 256;
+            return -1;
         }
 
         public void UpdateOverclockingSettings()

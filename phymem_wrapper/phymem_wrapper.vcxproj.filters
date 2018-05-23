@@ -21,6 +21,9 @@
     <ClCompile Include="DLLMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="atom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhyMemWrapper.h">
@@ -28,6 +31,27 @@
     </ClInclude>
     <ClInclude Include="PhyMem.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="atom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="atombios.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="atom-bits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="atom-names.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="atom-types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pptable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectID.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
