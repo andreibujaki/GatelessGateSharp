@@ -12,7 +12,7 @@ aims at stability with a much simpler design and the managed .NET Framework.
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
 All you have to do to mine is to download and run the installer, launch the miner, enter your wallet address(es), and click the Start button.
-Please refer to **[Prerequisites](#prerequisites)** and **[the online manual](https://github.com/zawawawa/GatelessGateSharp/blob/v1.3/Documentation/TOC.md)** for details.
+Please carefully read **[Prerequisites](#prerequisites)** before installation. The **[online manual](https://github.com/zawawawa/GatelessGateSharp/blob/v1.3/Documentation/TOC.md)**, which is still work in progress, might be helpful, too.
 
 ![Screen Shot](https://i.imgur.com/gsiVgfP.png)
 
@@ -49,8 +49,8 @@ In addition to the default pools, support for custom pools is also available.
 The minimum requirements for the miner are as follows:
 
 * Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.
-* Windows 8.1 64-bit or later (Windows 10 strongly recommended.)
-* [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx) or later for AMD cards.
+* Windows 8.1 64-bit or later. Windows 10 is strongly recommended, but **Windows 10 April 2018 Update is NOT supported** yet.
+* [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx) for AMD cards. (Adrenalin 18.4.1 and 18.5.1 are NOT supported.)
 * [.NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56116) and [Visual C++ Redistributable 2017](https://go.microsoft.com/fwlink/?LinkId=746572) if you do not use the installer.
 
 **Note: Please DO NOT USE UTILITIES FOR OVERCLOCKING SUCH AS MSI AFTERBURNER with Gateless Gate Sharp.**
