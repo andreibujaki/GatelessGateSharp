@@ -28,6 +28,7 @@ namespace GatelessGateSharp
 
         public int ADLVersion { get; set; }
         public int ADLAdapterIndex { get; set; }
+        public string DriverPathExt { get; set; } = null;
 
         public override String GetVendor()
         {
@@ -84,7 +85,10 @@ namespace GatelessGateSharp
                 }
             } catch (Exception ex) { MainForm.Logger(ex); } finally { computeByteBufferListMutex.ReleaseMutex(); }
 
-            return (buffer != null) ? buffer : new ComputeBuffer<byte>(Context, flags, size);
+            buffer = (buffer != null) ? buffer : new ComputeBuffer<byte>(Context, flags, size);
+            if (buffer == null)
+                throw new UnrecoverableException("Out of memory.");
+            return buffer;
         }
 
         public void ReleaseComputeByteBuffer(ComputeBuffer<byte> buffer)
@@ -190,6 +194,8 @@ namespace GatelessGateSharp
 
             foreach (var platform in ComputePlatform.Platforms) {
                 if (platform.Name == "AMD Accelerated Parallel Processing" && doneWithAMD)
+                    continue;
+                if (Regex.Match(platform.Name, "Intel").Success)
                     continue;
 
                 IList<ComputeDevice> openclDevices = platform.Devices;
@@ -378,6 +384,7 @@ namespace GatelessGateSharp
                                     continue;
                                 int available = 0, enabled = 0, ADLVersion = 0;
                                 mDevices[i].PNPString = OSAdapterInfoData.ADLAdapterInfo[mDevices[i].ADLAdapterIndex].PNPString;
+                                mDevices[i].DriverPathExt = OSAdapterInfoData.ADLAdapterInfo[mDevices[i].ADLAdapterIndex].DriverPathExt;
                                 mDevices[i].ADLVersion = -1;
                                 if (ADL.ADL2_Overdrive_Caps != null && ADL.ADL2_Overdrive_Caps(ADL2Context, mDevices[i].ADLAdapterIndex, ref available, ref enabled, ref ADLVersion) == ADL.ADL_SUCCESS
                                     && available != 0

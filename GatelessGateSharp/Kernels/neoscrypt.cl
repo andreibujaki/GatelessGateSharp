@@ -18,16 +18,7 @@
 
 
  /* Use amd_bitalign() because amd_bytealign() might be broken in old drivers */
-#if defined(__GCNMINC__)
-uint amd_bitalign(uint src0, uint src1, uint src2)
-{
-    uint dst;
-    __asm("v_alignbit_b32 %0, %1, %2, %3"
-    : "=v" (dst)
-        : "v" (src0), "v" (src1), "v" (src2));
-    return dst;
-}
-#elif defined(cl_amd_media_ops) && !defined(__GCNMINC__)
+#if defined(cl_amd_media_ops)
 #pragma OPENCL EXTENSION cl_amd_media_ops : enable
 #elif defined(cl_nv_pragma_unroll)
 uint amd_bitalign(uint src0, uint src1, uint src2)

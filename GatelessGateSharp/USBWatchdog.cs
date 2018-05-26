@@ -12,7 +12,7 @@ namespace GatelessGateSharp
     class USBWatchdog
     {
         static SerialPort sSerialPort = null;
-        static byte sCommand = 0x01; // 10 sec
+        static byte sCommand = 0x03; // 30 sec
 
         public static void Initialize()
         {

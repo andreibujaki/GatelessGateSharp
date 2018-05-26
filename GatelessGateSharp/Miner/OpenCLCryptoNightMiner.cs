@@ -152,13 +152,14 @@ namespace GatelessGateSharp {
                         searchKernel3.SetMemoryArgument(1, outputBuffer);
 
                         // Wait for the first job to arrive.
-                        int elapsedTime = 0;
-                        while ((Stratum == null || Stratum.GetJob() == null) && elapsedTime < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped) {
+                        System.Diagnostics.Stopwatch firstJobStopwatch = new System.Diagnostics.Stopwatch();
+                        firstJobStopwatch.Start();
+                        while ((Stratum == null || Stratum.GetJob() == null) && firstJobStopwatch.ElapsedMilliseconds < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped)
                             Thread.Sleep(100);
-                            elapsedTime += 100;
-                        }
-                        if (Stratum == null || Stratum.GetJob() == null)
+                        if (Stratum == null || Stratum.GetJob() == null) { 
                             throw new TimeoutException("Stratum server failed to send a new job.");
+                            return;
+                        }
 
                         System.Diagnostics.Stopwatch consoleUpdateStopwatch = new System.Diagnostics.Stopwatch();
                         CryptoNightStratum.Work work;

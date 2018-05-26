@@ -1,7 +1,7 @@
 {
   "devices": [
     {
-      "device_id": 4,
+      "device_id": 0,
       "device_vendor": "AMD",
       "device_name": "Radeon RX Vega 64",
       "device_pnp_string": "PCI\\VEN_1002&DEV_687F&SUBSYS_E37F1DA2&REV_C1\\8&28DC5D38&0&000000800018",
@@ -19,12 +19,12 @@
         "current_power_consumption": 263,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "ethash_pascal": {
         "threads": 1,
@@ -33,12 +33,12 @@
         "current_power_consumption": 287,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "neoscrypt": {
         "threads": 1,
@@ -47,12 +47,12 @@
         "current_power_consumption": 262,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "x16r": {
         "threads": 2,
@@ -60,12 +60,12 @@
         "intensity": 128,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "x16s": {
         "threads": 2,
@@ -74,25 +74,25 @@
         "current_power_consumption": 284,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "cryptonightv7": {
         "threads": 2,
         "local_work_size": 16,
-        "raw_intensity": 109,
+        "raw_intensity": 105,
         "strided_index": 6,
-        "current_power_consumption": 210,
+        "current_power_consumption": 164,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1530,
+        "overclocking_core_clock": 1590,
         "overclocking_memory_clock": 1100,
-        "overclocking_core_voltage": 1000,
-        "overclocking_memory_voltage": 980,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
         "overclocking_enabled": true
       },
@@ -104,12 +104,12 @@
         "current_power_consumption": 203,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "cryptonight_light": {
         "threads": 2,
@@ -119,27 +119,27 @@
         "current_power_consumption": 221,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "cryptonight": {
         "threads": 2,
         "local_work_size": 16,
-        "raw_intensity": 112,
-        "strided_index": 7,
+        "raw_intensity": 105,
+        "strided_index": 6,
         "current_power_consumption": 216,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "pascal": {
         "threads": 2,
@@ -148,12 +148,12 @@
         "current_power_consumption": 287,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "lbry": {
         "threads": 2,
@@ -162,12 +162,12 @@
         "current_power_consumption": 282,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       },
       "lyra2rev2": {
         "threads": 2,
@@ -176,12 +176,12 @@
         "current_power_consumption": 226,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1630,
-        "overclocking_memory_clock": 945,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 1100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 1100,
+        "overclocking_core_voltage": 950,
+        "overclocking_memory_voltage": 995,
         "algorithm_enabled": true,
-        "overclocking_enabled": false
+        "overclocking_enabled": true
       }
     }
   ]

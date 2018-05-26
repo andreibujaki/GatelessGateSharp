@@ -200,6 +200,7 @@
     <Compile Include="Cloo\SysIntX3.cs" />
     <Compile Include="CLRX.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="DeviceHelper.cs" />
     <Compile Include="Device\AMDDevice.cs" />
     <Compile Include="Device\OpenCLDevice.cs" />
     <Compile Include="Device\Device.cs" />
@@ -412,6 +413,7 @@
     <None Include="Kernels\luffa.cl" />
     <None Include="Kernels\Lyra2REv2.cl" />
     <None Include="Kernels\Lyra2v2.cl" />
+    <None Include="Kernels\neoscrypt.cl" />
     <None Include="Kernels\pascal.cl" />
     <None Include="Kernels\ripemd160.cl" />
     <None Include="Kernels\sha256.cl" />
@@ -484,7 +486,6 @@ xcopy "$(ProjectDir)DeviceSettings" "$(TargetDir)DeviceSettings"  /i /s /y
 xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
 xcopy /i /s /y $(ProjectDir)AssemblyKernels $(TargetDir)AssemblyKernels
 copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
-copy $(SolutionDir)$(SolutionName)\OpenCL.dll $(TargetDir)
 copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
 
 cd $(SolutionDir)GatelessGateSharp\bin\$(Configuration)

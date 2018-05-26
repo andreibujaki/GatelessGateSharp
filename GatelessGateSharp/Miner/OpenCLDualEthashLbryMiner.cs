@@ -132,11 +132,11 @@ namespace GatelessGateSharp
                     ComputeBuffer<byte> ethashDAGBuffer = null;
 
                     // Wait for the first job to arrive.
-                    int elapsedTime = 0;
-                    while ((mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null) && elapsedTime < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped) {
+                    System.Diagnostics.Stopwatch firstJobStopwatch = new System.Diagnostics.Stopwatch();
+                    firstJobStopwatch.Start();
+                    while (   (mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null)
+                           && firstJobStopwatch.ElapsedMilliseconds < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped)
                         Thread.Sleep(100);
-                        elapsedTime += 100;
-                    }
                     if (mEthashStratum == null || mEthashStratum.GetJob() == null || mLbryStratum == null || mLbryStratum.GetJob() == null)
                     {
                         MainForm.Logger("Stratum server failed to send a new job.");

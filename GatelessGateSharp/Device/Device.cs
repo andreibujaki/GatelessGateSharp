@@ -45,7 +45,7 @@ namespace GatelessGateSharp
         public int TargetMinFanSpeed { get; set; }
         public int TargetTemperature { get; set; }
         public int TargetMaxTemperature { get; set; }
-        
+
         public int PCIDeviceID = 0;
         public string PNPString;
 
@@ -67,6 +67,9 @@ namespace GatelessGateSharp
         public bool IsGCN2 { get { return Vendor == "AMD" && (OpenCLName == "Bonaire" || OpenCLName == "Hawaii"); } }
         public bool IsGCN3 { get { return Vendor == "AMD" && (OpenCLName == "Tonga" || OpenCLName == "Fiji" || OpenCLName == "Ellesmere" || OpenCLName == "Baffin" || OpenCLName == "gfx804"); } }
         public bool IsGCN5 { get { return Vendor == "AMD" && (OpenCLName == "Vega"); } }
+
+        public bool IsSpeedStable = false;
+        public double prevSpeed = 0;
 
         public double AverageSpeed {
             get {
@@ -141,15 +144,42 @@ namespace GatelessGateSharp
         System.Diagnostics.Stopwatch mAveragePowerConsumptionUpdateStopwatch = new System.Diagnostics.Stopwatch();
         double mPowerConsumptionWeighedTotal = 0;
 
-        public void ResetAveragePowerConsumption()
+        public void ResetStatistics()
         {
+            prevSpeed = 0;
+            IsSpeedStable = false;
+
             mPowerConsumptionWeighedTotal = 0;
             mAveragePowerConsumptionStopwatch.Restart();
             mAveragePowerConsumptionUpdateStopwatch.Restart();
         }
 
-        public void UpdateAveragePowerConsumption()
+        public double Speed {
+            get {
+                double currentSpeed = 0;
+                foreach (var miner in Controller.Miners)
+                    if (miner.DeviceIndex == DeviceIndex)
+                        currentSpeed += miner.Speed;
+                return currentSpeed;
+            }
+        }
+
+        public double SpeedSecondaryAlgorithm {
+            get {
+                double currentSpeed = 0;
+                foreach (var miner in Controller.Miners)
+                    if (miner.DeviceIndex == DeviceIndex)
+                        currentSpeed += miner.SpeedSecondaryAlgorithm;
+                return currentSpeed;
+            }
+        }
+
+        public void UpdateStatistics()
         {
+            double currentSpeed = Speed;
+            if (prevSpeed > 0 && currentSpeed <= prevSpeed * 1.01)
+                IsSpeedStable = true;
+            prevSpeed = currentSpeed;
             if (mAveragePowerConsumptionUpdateStopwatch.ElapsedMilliseconds > 0)
                 mPowerConsumptionWeighedTotal += PowerConsumption * mAveragePowerConsumptionUpdateStopwatch.ElapsedMilliseconds;
             mAveragePowerConsumptionUpdateStopwatch.Restart();
@@ -157,7 +187,7 @@ namespace GatelessGateSharp
 
         public double GetAveragePowerConsumption()
         {
-            UpdateAveragePowerConsumption();
+            UpdateStatistics();
             return mPowerConsumptionWeighedTotal / mAveragePowerConsumptionStopwatch.ElapsedMilliseconds;
         }
     }

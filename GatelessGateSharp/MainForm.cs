@@ -102,6 +102,7 @@ namespace GatelessGateSharp
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
         public static string appVersion = "1.3.8";
+        private static string sRecommendedAMDDriverVersion = "18.5.1";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
         private static string JSONConfigFileName = "GatelessGateSharp.json";
@@ -114,7 +115,7 @@ namespace GatelessGateSharp
         private static int mLaunchInterval = 1000;
         private bool mAreSettingsDirty = false;
 
-        public static readonly string[] AlgorithmList = { "ethash", "ethash_pascal", "neoscrypt", "x16r", "x16s", "cryptonightv7", "cryptonight_heavy", "cryptonight_light", "cryptonight", "pascal", "lbry", "lyra2rev2" };
+        public static readonly string[] AlgorithmList = { "ethash", "ethash_pascal", "neoscrypt", "x16r", "x16s", "cryptonightv7", "cryptonight_heavy", "cryptonight_light", "cryptonight", "pascal", "lyra2rev2" };
         public static string AlgorithmListRegexPattern;
         public string GetPrettyAlgorithmName(string algorithmName)
         {
@@ -122,7 +123,6 @@ namespace GatelessGateSharp
                    (algorithmName == "ethash") ? "Ethash" :
                    (algorithmName == "pascal") ? "Pascal" :
                    (algorithmName == "neoscrypt") ? "NeoScrypt" :
-                   (algorithmName == "lbry") ? "Lbry" :
                    (algorithmName == "lyra2rev2") ? "Lyra2REv2" :
                    (algorithmName == "x16r") ? "X16R" :
                    (algorithmName == "x16s") ? "X16S" :
@@ -247,7 +247,6 @@ namespace GatelessGateSharp
 
         string mUserMoneroAddress = "";
         string mUserPascalAddress = "";
-        string mUserLbryAddress = "";
         string mUserEthereumAddress = "";
         string mUserBitcoinAddress = "";
         string mUserZcashAddress = "";
@@ -300,7 +299,6 @@ namespace GatelessGateSharp
 
             mUserMoneroAddress = textBoxMoneroAddress.Text;
             mUserPascalAddress = textBoxPascalAddress.Text;
-            mUserLbryAddress = textBoxLbryAddress.Text;
             mUserEthereumAddress = textBoxEthereumAddress.Text;
             mUserBitcoinAddress = textBoxBitcoinAddress.Text;
             mUserRavenAddress = textBoxRavenAddress.Text;
@@ -361,6 +359,7 @@ namespace GatelessGateSharp
 
             try {
                 InitializeDevices();
+                Utilities.UpdateCriticalRegistryKeys();
             } catch (Exception ex) {
                 Logger("Exception in InitializeDevices(): " + ex.Message + ex.StackTrace);
             }
@@ -418,15 +417,7 @@ namespace GatelessGateSharp
 
             // For secure connections to Nanopool.
             try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\Diffie-Hellman", "ClientMinKeyBitLength", 0x200); } catch (Exception) { }
-
-            // Remove garbage left by old versions.
-            try {
-                if (System.IO.File.Exists(OldLogFilePath))
-                    System.IO.File.Delete(OldLogFilePath);
-                if (System.IO.File.Exists(OldAppStateFilePath))
-                    System.IO.File.Delete(OldAppStateFilePath);
-            } catch (Exception) { }
-
+            
             InitializeShareChart(cartesianChartShare1Minute, 60);
             InitializeShareChart(cartesianChartShare1Hour, 60);
             InitializeShareChart(cartesianChartShare1Day, 24);
@@ -476,7 +467,7 @@ namespace GatelessGateSharp
                     }
                 } catch (Exception ex) { Logger(ex); }
             }
-
+            
             Controller.AppState = Controller.ApplicationGlobalState.Idle;
             UpdateControls();
 
@@ -484,12 +475,7 @@ namespace GatelessGateSharp
                 splashScreen.Dispose();
                 Application.DoEvents();
 
-                if ((Controller.BenchmarkEntries.Count <= 0 && Controller.OptimizerEntries.Count > 0)) {
-                    tabControlMainForm.SelectedIndex = 5;
-                    StartBenchmarks();
-                    return;
-
-                } else if ((!System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
+                if ((!System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)
                         && !System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift)
                         && (MessageBox.Show(Utilities.GetAutoClosingForm(), "The miner seems to have crashed during benchmarking/optimization.\nThis is normal, and it will automatically resume in 10 seconds.",
                             "Gateless Gate Sharp", MessageBoxButtons.OKCancel) != DialogResult.Cancel))) {
@@ -538,12 +524,15 @@ namespace GatelessGateSharp
 
         private void InitializeDevices()
         {
+            Logger("Initializing devices...");
+
             try {
                 Controller.OpenCLDevices = OpenCLDevice.GetAllOpenCLDevices();
             } catch (Exception ex) {
                 Logger("Exception in OpenCLDevice.GetAllOpenCLDevices(): " + ex.Message + ex.StackTrace);
                 MessageBox.Show("Failed to initialize OpenCL devices. Please install appropriate device driver(s) for your graphics cards.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Controller.OpenCLDevices = new OpenCLDevice[] { };
+                DownloadRecommendedAMDDriver();
+                Program.Exit(true);
             }
             Logger("Number of Devices: " + Controller.OpenCLDevices.Length);
 
@@ -657,7 +646,9 @@ namespace GatelessGateSharp
                     "memory_timings_polaris10_bus_turn",
 
                     "memory_timings_polaris10_trcdw",
+                    "memory_timings_polaris10_trcdwa",
                     "memory_timings_polaris10_trcdr",
+                    "memory_timings_polaris10_trcdra",
                     "memory_timings_polaris10_trrd",
                     "memory_timings_polaris10_trc",
 
@@ -672,10 +663,14 @@ namespace GatelessGateSharp
                     "memory_timings_polaris10_trp",
                     "memory_timings_polaris10_trfc",
 
+                    "memory_timings_polaris10_pa2rdata",
+                    "memory_timings_polaris10_pa2wdata",
                     "memory_timings_polaris10_faw",
-                    "memory_timings_polaris10_tredc",
-                    "memory_timings_polaris10_twedc",
+                    //"memory_timings_polaris10_tredc",
+                    //"memory_timings_polaris10_twedc",
                     "memory_timings_polaris10_t32aw",
+                    "memory_timings_polaris10_twdatatr",
+
                 })
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, p)].Value
                         = numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, selectedAlgorithm, p)].Value;
@@ -757,8 +752,8 @@ namespace GatelessGateSharp
                         MISC2Data.Data = ((UInt32)bytes[4 * 6 + 0] << 0) | ((UInt32)bytes[4 * 6 + 1] << 8) | ((UInt32)bytes[4 * 6 + 2] << 16) | ((UInt32)bytes[4 * 6 + 3] << 24);
                         numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = MISC2Data.FAW;
                         numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = MISC2Data.T32AW;
-                        numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = MISC2Data.TREDC;
-                        numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
+                        //numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = MISC2Data.TREDC;
+                        //numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
 
                         UInt32 MISC1Data = ((UInt32)bytes[4 * 7 + 0] << 0) | ((UInt32)bytes[4 * 7 + 1] << 8) | ((UInt32)bytes[4 * 7 + 2] << 16) | ((UInt32)bytes[4 * 7 + 3] << 24);
                         stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = String.Format("{0:X8}", MISC1Data);
@@ -865,10 +860,6 @@ namespace GatelessGateSharp
                     new Tuple<string, string, int, int, int, int>("ethash", "threads", 1, 1, 4, 1),
                     new Tuple<string, string, int, int, int, int>("ethash", "intensity", 1024, 1, 32767, 1),
                     new Tuple<string, string, int, int, int, int>("ethash", "local_work_size", 192, (NVIDIA ? 96 : 128), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
-
-                    new Tuple<string, string, int, int, int, int>("lbry", "threads", 2, 1, 4, 1),
-                    new Tuple<string, string, int, int, int, int>("lbry", "intensity", 32, 1, 32767, 1),
-                    new Tuple<string, string, int, int, int, int>("lbry", "local_work_size", 32, (NVIDIA ? 32 : 64), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
 
                     new Tuple<string, string, int, int, int, int>("lyra2rev2", "threads", 2, 1, 4, 1),
                     new Tuple<string, string, int, int, int, int>("lyra2rev2", "intensity", 4, 1, 32767, 1),
@@ -1013,7 +1004,9 @@ namespace GatelessGateSharp
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_bus_turn", 0, 0, 255, 1),
 
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_trcdw", 0, 0, 31, 1),
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_trcdwa", 0, 0, 31, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_trcdr", 0, 0, 31, 1),
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_trcdra", 0, 0, 31, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_trrd", 0, 0, 31, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_trc", 0, 0, 255, 1),
 
@@ -1028,10 +1021,13 @@ namespace GatelessGateSharp
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_trp", 0, 0, 31, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_trfc", 0, 0, 4095, 1),
 
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_pa2rdata", 0, 0, 15, 1),
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_pa2wdata", 0, 0, 15, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_faw", 0, 0, 31, 1),
-                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_tredc", 0, 0, 7, 1),
-                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_twedc", 0, 0, 31, 1),
-                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_t32aw", 0, 0, 127, 1),
+                            //new Tuple<string, int, int, int, int>("memory_timings_polaris10_tredc", 0, 0, 7, 1),
+                            //new Tuple<string, int, int, int, int>("memory_timings_polaris10_twedc", 0, 0, 31, 1),
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_t32aw", 0, 0, 15, 1),
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_twdatatr", 0, 0, 15, 1),
                         }) {
                             var tuple2 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, tuple.Item1);
                             numericDeviceParameterArray[tuple2] = new NumericDeviceParameter(tuple2, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5);
@@ -1527,12 +1523,6 @@ namespace GatelessGateSharp
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "ethash", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 192 : 192);
 
-            // Lbry
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "threads")].Value = (decimal)2;
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "intensity")].Value = (decimal)32;
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Maximum = (decimal)(device.GetVendor() == "NVIDIA" ? 512 : 256);
-            numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lbry", "local_work_size")].Value = (decimal)(device.GetVendor() == "NVIDIA" ? 32 : 64);
-
             // Lyra2REv2
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "threads")].Value = (decimal)2;
             numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "lyra2rev2", "intensity")].Value = (decimal)4;
@@ -1782,8 +1772,8 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = 23;
 
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = 4;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
+                    //numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
+                    //numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = 6;
 
                     stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = "20140604";
@@ -1822,8 +1812,8 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = 219;
 
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = 0;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
+                    //numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
+                    //numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = 0;
 
                     stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_pmg")].Text = "101CCC22";
@@ -2073,14 +2063,6 @@ namespace GatelessGateSharp
 
         static string OptimizerRecordsFilePath {
             get { return AppDataPathBase + "\\" + mOptimizerResultsFileName; }
-        }
-
-        static string OldLogFilePath {
-            get { return logFileName; }
-        }
-
-        static string OldAppStateFilePath {
-            get { return mAppStateFileName; }
         }
 
         class CommandLineParameter
@@ -2463,6 +2445,7 @@ namespace GatelessGateSharp
 
                     Dictionary<string, object> parameters = new Dictionary<string, object> { };
                     parameters.Add("database_version", 6); // v1.3.8
+                    parameters.Add("app_version", appVersion);
                     for (var i = 0; i < Controller.OpenCLDevices.Length; ++i)
                         parameters.Add("enable_gpu" + i, (bool)(dataGridViewDevices.Rows[i].Cells["enabled"].Value));
                     foreach (var comboBox in Utilities.FindAllChildrenByType<ComboBox>(this)) {
@@ -2696,21 +2679,21 @@ namespace GatelessGateSharp
                 }
                 try {
                     using (var client = new CustomWebClient()) {
+                        var jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/approximated_earnings/1");
+                        sNanopoolEthereumEarningStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                         if (Instance.ValidateEthereumAddress(false)) {
-                            var jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/user/" + Instance.mUserEthereumAddress);
+                            jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/user/" + Instance.mUserEthereumAddress);
                             sNanopoolEthereumStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                            jsonString = client.DownloadString("https://api.nanopool.org/v1/eth/approximated_earnings/1");
-                            sNanopoolEthereumEarningStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                         }
+                        jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/approximated_earnings/1000");
                         if (Instance.ValidateMoneroAddress(false)) {
-                            var jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/user/" + Instance.mUserMoneroAddress);
+                            jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/user/" + Instance.mUserMoneroAddress);
                             sNanopoolMoneroStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
-                            jsonString = client.DownloadString("https://api.nanopool.org/v1/xmr/approximated_earnings/1000");
                             sNanopoolMoneroEarningStats = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
                         }
                     }
                 } catch (Exception) {
-                    //Logger("Failed to update Nanopool stats.");
+                    Logger("Failed to update Nanopool stats.");
                 }
                 try {
                     using (var client = new CustomWebClient()) {
@@ -2773,8 +2756,6 @@ namespace GatelessGateSharp
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 20, totalSpeed, 1000000000.0, 25, secondaryTotalSpeed, 1000000000000.0);
                 } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "cryptonight" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 22, totalSpeed, 1000000.0);
-                } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "lbry" && textBoxBitcoinAddress.Text != "") {
-                    UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 23, totalSpeed, 1000000000000.0);
                 } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "pascal" && textBoxBitcoinAddress.Text != "") {
                     UpdateProfitabilityInfoForNiceHash(currency, BTCRate, 58 - 33, totalSpeed, 1000000000000.0);
                 } else if (CurrentPool == "NiceHash" && DefaultAlgorithm == "neoscrypt" && textBoxBitcoinAddress.Text != "") {
@@ -2798,9 +2779,7 @@ namespace GatelessGateSharp
                 } else if (CurrentPool == "ethpool.org" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "" && sEthpoolStats != null) {
                     var data = (JContainer)sEthpoolStats["data"];
                     double balance = 0;
-                    try {
                         balance = (double)data["unpaid"] * 1e-18;
-                    } catch (Exception) { }
                     var averageHashrate = (double)data["averageHashrate"];
                     var coinsPerMin = (double)data["coinsPerMin"];
                     labelBalance.Text = string.Format("{0:N6}", balance) + " ETH (" + string.Format("{0:N2}", balance * ETHRate) + " " + currency + ")";
@@ -2809,7 +2788,7 @@ namespace GatelessGateSharp
                         var price = coinsPerMin * 60 * 24 * (totalSpeed / averageHashrate);
                         UpdateProfitabilityInformation("ETH", price, ETHRate, currency);
                     }
-                } else if (CurrentPool == "Nanopool" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "") {
+            } else if (CurrentPool == "Nanopool" && DefaultAlgorithm == "ethash" && sNanopoolEthereumStats != null&& textBoxEthereumAddress.Text != "") {
                     var data = (JContainer)sNanopoolEthereumStats["data"];
                     double balance = 0;
                     try {
@@ -2821,7 +2800,7 @@ namespace GatelessGateSharp
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
                         UpdateProfitabilityInformation("ETH", price1Day, ETHRate, currency);
                     }
-                } else if (CurrentPool == "Nanopool" && DefaultAlgorithm == "cryptonight" && textBoxMoneroAddress.Text != "") {
+                } else if (CurrentPool == "Nanopool" && DefaultAlgorithm == "cryptonight" && sNanopoolMoneroStats != null && textBoxMoneroAddress.Text != "") {
                     var data = (JContainer)sNanopoolMoneroStats["data"];
                     double balance = 0;
                     try {
@@ -2833,7 +2812,7 @@ namespace GatelessGateSharp
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000.0;
                         UpdateProfitabilityInformation("XMR", price1Day, XMRRate, currency);
                     }
-                } else if (CurrentPool == "DwarfPool" && DefaultAlgorithm == "ethash" && textBoxEthereumAddress.Text != "") {
+                } else if (CurrentPool == "DwarfPool" && DefaultAlgorithm == "ethash" && sDwarfPoolEthereumStats != null && textBoxEthereumAddress.Text != "") {
                     double balance = 0;
                     try {
                         balance = double.Parse((string)sDwarfPoolEthereumStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
@@ -2844,7 +2823,7 @@ namespace GatelessGateSharp
                         double price1Day = (double)(((JContainer)earningData["day"])["coins"]) * totalSpeed / 1000000.0;
                         UpdateProfitabilityInformation("ETH", price1Day, ETHRate, currency);
                     }
-                } else if (CurrentPool == "DwarfPool" && DefaultAlgorithm == "cryptonight" && textBoxMoneroAddress.Text != "") {
+                } else if (CurrentPool == "DwarfPool" && DefaultAlgorithm == "cryptonight" && sDwarfPoolMoneroStats != null && sNanopoolMoneroEarningStats != null & textBoxMoneroAddress.Text != "") {
                     double balance = 0;
                     try {
                         balance = double.Parse((string)sDwarfPoolMoneroStats["wallet_balance"], System.Globalization.CultureInfo.InvariantCulture);
@@ -2858,7 +2837,6 @@ namespace GatelessGateSharp
                 }
             } catch (Exception ex) {
                 Logger("Failed to update pool statistics.");
-                Logger(ex);
             }
         }
 
@@ -3061,7 +3039,7 @@ namespace GatelessGateSharp
                     int fanSpeed = device.FanSpeed;
                     if (fanSpeed >= 0)
                         dataGridViewDevices.Rows[deviceIndex].Cells["fan"].Value = fanSpeed.ToString() + "%";
-                    device.UpdateAveragePowerConsumption();
+                    device.UpdateStatistics();
                     int power = (int)device.PowerConsumption;
                     if (power > 0) {
                         dataGridViewDevices.Rows[deviceIndex].Cells["power"].Value = power.ToString() + "W";
@@ -3788,7 +3766,6 @@ namespace GatelessGateSharp
                 try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                 try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
                 SaveApplicationGlobalStateToFile(Controller.ApplicationGlobalState.Idle);
-                Program.KillMonitor = true;
             }
         }
 
@@ -4229,18 +4206,6 @@ namespace GatelessGateSharp
             }
         }
 
-        public bool ValidateLbryAddress()
-        {
-            var regex = new System.Text.RegularExpressions.Regex(@"^[0-9a-zA-Z]+?$");
-            var match = regex.Match(mUserLbryAddress);
-            if (match.Success) {
-                return true;
-            } else {
-                MessageBox.Show("Please enter a valid Lbry address.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
         public bool ValidateRavenAddress()
         {
             var regex = new System.Text.RegularExpressions.Regex(@"^[0-9a-zA-Z]+?$");
@@ -4332,20 +4297,6 @@ namespace GatelessGateSharp
                 new StratumServerInfo("neoscrypt.jp.nicehash.com",  100, "AS"),
                 new StratumServerInfo("neoscrypt.in.nicehash.com",  200, "AS"),
                 new StratumServerInfo("neoscrypt.br.nicehash.com",  180, "SA")
-            };
-            hosts.Sort();
-            return hosts;
-        }
-
-        List<StratumServerInfo> GetNiceHashLbryServers()
-        {
-            var hosts = new List<StratumServerInfo> {
-                new StratumServerInfo("lbry.usa.nicehash.com", 0,   "NA"),
-                new StratumServerInfo("lbry.eu.nicehash.com",  0,   "EU"),
-                new StratumServerInfo("lbry.hk.nicehash.com",  150, "AS"),
-                new StratumServerInfo("lbry.jp.nicehash.com",  100, "AS"),
-                new StratumServerInfo("lbry.in.nicehash.com",  200, "AS"),
-                new StratumServerInfo("lbry.br.nicehash.com",  180, "SA")
             };
             hosts.Sort();
             return hosts;
@@ -4591,34 +4542,6 @@ namespace GatelessGateSharp
             if (stratum != null) {
                 Controller.PrimaryStratum = (StratumServer)stratum;
                 LaunchOpenCLCryptoNightMinersWithStratum(stratum, niceHashMode, algorithm);
-            }
-        }
-
-        public void LaunchOpenCLLbryMiners(string pool)
-        {
-            LbryStratum stratum = null;
-
-            if (pool == "NiceHash" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix : textBoxBitcoinAddress.Text;
-                if (!IsBenchmarkRunning && textBoxRigID.Text != "")
-                    username += "." + textBoxRigID.Text;
-                var hosts = GetNiceHashLbryServers();
-                foreach (var host in hosts)
-                    if (host.time >= 0)
-                        try {
-                            stratum = new LbryStratum(host.name, 3356, username, "x", pool);
-                            break;
-                        } catch (Exception ex) {
-                            Logger(ex);
-                        }
-            } else if (pool == "zpool" && (IsBenchmarkRunning || textBoxBitcoinAddress.Text.Length > 0)) {
-                var username = IsBenchmarkRunning ? Parameters.DevFeeBitcoinAddress : textBoxBitcoinAddress.Text;
-                stratum = new LbryStratum("lbry.mine.zpool.ca", 3334, username, "c=BTC", pool);
-            }
-
-            if (stratum != null) {
-                LaunchOpenCLLbryMinersWithStratum(stratum);
-                Controller.PrimaryStratum = (StratumServer)stratum;
             }
         }
 
@@ -4967,47 +4890,6 @@ namespace GatelessGateSharp
             }
         }
 
-        void LaunchOpenCLDualEthashLbryMinersWithStratum(EthashStratum stratum, LbryStratum stratum2)
-        {
-            string algorithm = "ethash_lbry";
-
-            if (mDevFeeMode)
-                throw new InvalidOperationException();
-            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
-            int deviceIndex, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
-                    minerCount += 1;
-            toolStripMainFormProgressBar.Maximum = minerCount;
-            minerCount = 0;
-
-            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
-                    EnableHardwareManagement(deviceIndex, algorithm);
-                    OpenCLDualEthashLbryMiner dualMiner = new OpenCLDualEthashLbryMiner(Controller.OpenCLDevices[deviceIndex]);
-                    Controller.Miners.Add(dualMiner);
-                    dualMiner.Start(stratum,
-                        Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "intensity")]
-                            .Value)),
-                        Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "local_work_size")]
-                            .Value)),
-                            stratum2,
-                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "intensity")].Value)),
-                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "local_work_size")].Value)),
-                            Controller.OpenCLDevices[deviceIndex].IsAMD
-                                ? Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "kernel_optimization_level")].Value))
-                                : -1);
-                    toolStripMainFormProgressBar.Value = ++minerCount;
-
-                    for (int j = 0; j < mLaunchInterval; j += 10) {
-                        Application.DoEvents();
-                        System.Threading.Thread.Sleep(10);
-                    }
-
-                }
-            }
-        }
-
         void LaunchOpenCLDualEthashPascalMinersWithStratum(EthashStratum stratum, PascalStratum stratum2)
         {
             string algorithm = "ethash_pascal";
@@ -5073,42 +4955,6 @@ namespace GatelessGateSharp
                                 .Value)),
                             Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "local_work_size")]
                                 .Value)),
-                            Controller.OpenCLDevices[deviceIndex].IsAMD
-                                ? Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "kernel_optimization_level")].Value))
-                                : -1);
-                        toolStripMainFormProgressBar.Value = ++minerCount;
-                        for (int j = 0; j < mLaunchInterval; j += 10) {
-                            Application.DoEvents();
-                            System.Threading.Thread.Sleep(10);
-                        }
-                    }
-                }
-            }
-        }
-
-        void LaunchOpenCLLbryMinersWithStratum(LbryStratum stratum)
-        {
-            string algorithm = "lbry";
-
-            if (mDevFeeMode)
-                throw new InvalidOperationException();
-            toolStripMainFormProgressBar.Value = toolStripMainFormProgressBar.Minimum = 0;
-            int deviceIndex, i, minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex)
-                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm))
-                    for (i = 0; i < Convert.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "threads")].Value); ++i)
-                        ++minerCount;
-            toolStripMainFormProgressBar.Maximum = minerCount;
-            minerCount = 0;
-            for (deviceIndex = 0; deviceIndex < Controller.OpenCLDevices.Length; ++deviceIndex) {
-                if (IsDeviceEnabled(Controller.OpenCLDevices[deviceIndex], algorithm)) {
-                    EnableHardwareManagement(deviceIndex, "lbry");
-                    for (i = 0; i < Convert.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "threads")].Value); ++i) {
-                        OpenCLLbryMiner miner = new OpenCLLbryMiner(Controller.OpenCLDevices[deviceIndex]);
-                        Controller.Miners.Add(miner);
-                        miner.Start(stratum,
-                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "intensity")].Value)),
-                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "lbry", "local_work_size")].Value)),
                             Controller.OpenCLDevices[deviceIndex].IsAMD
                                 ? Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "kernel_optimization_level")].Value))
                                 : -1);
@@ -5279,13 +5125,7 @@ namespace GatelessGateSharp
         {
             if (mDevFeeMode)
                 throw new InvalidOperationException();
-            if (prettyAlgoName == "Ethash" && algo2 == "Lbry") {
-                var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
-                var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
-                LaunchOpenCLDualEthashLbryMinersWithStratum(stratum, stratum2);
-                Controller.PrimaryStratum = stratum;
-                Controller.SecondaryStratum = stratum2;
-            } else if (prettyAlgoName == "Ethash" && algo2 == "Pascal") {
+            if (prettyAlgoName == "Ethash" && algo2 == "Pascal") {
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 var stratum2 = new PascalStratum(host2, port2, login2, password2, host2);
                 LaunchOpenCLDualEthashPascalMinersWithStratum(stratum, stratum2);
@@ -5295,12 +5135,6 @@ namespace GatelessGateSharp
                 var stratum = new OpenEthereumPoolEthashStratum(host, port, login, password, host);
                 LaunchOpenCLEthashMinersWithStratum(stratum);
                 Controller.PrimaryStratum = stratum;
-            } else if (prettyAlgoName == "Ethash (NiceHash)" && algo2 == "Lbry") {
-                var stratum = new NiceHashEthashStratum(host, port, login, password, host);
-                var stratum2 = new LbryStratum(host2, port2, login2, password2, host2);
-                LaunchOpenCLDualEthashLbryMinersWithStratum(stratum, stratum2);
-                Controller.PrimaryStratum = stratum;
-                Controller.SecondaryStratum = stratum2;
             } else if (prettyAlgoName == "Ethash (NiceHash)" && algo2 == "Pascal") {
                 var stratum = new NiceHashEthashStratum(host, port, login, password, host);
                 var stratum2 = new PascalStratum(host2, port2, login2, password2, host2);
@@ -5319,9 +5153,6 @@ namespace GatelessGateSharp
                 var stratum = new CryptoNightStratum(host, port, login, password, host, algo);
                 LaunchOpenCLCryptoNightMinersWithStratum(stratum, (prettyAlgoName == "CryptoNight (NiceHash)"), algo);
                 Controller.PrimaryStratum = stratum;
-            } else if (prettyAlgoName == "Lbry") {
-                var stratum = new LbryStratum(host, port, login, password, host);
-                LaunchOpenCLLbryMinersWithStratum(stratum);
             } else if (prettyAlgoName == "Pascal") {
                 var stratum = new PascalStratum(host, port, login, password, host);
                 LaunchOpenCLPascalMinersWithStratum(stratum);
@@ -5400,9 +5231,28 @@ namespace GatelessGateSharp
 
         private void LaunchMinersForDefaultPools()
         {
-            if (mDevFeeMode)
-                throw new InvalidOperationException();
-            foreach (string pool in listBoxPoolPriorities.Items) {
+            var pools = IsBenchmarkRunning
+                ? new List<string> {
+                    "Nanopool",
+                    "zpool",
+                    "ethermine.org",
+                    "ethpool.org",
+                    "DwarfPool",
+                    "NiceHash",
+                    "Mining Pool Hub",
+                    "mineXMR.com",
+                    "CryptoPool Party",
+                    "VIRTOPIA",
+                    "MiningPanda",
+                    "Hash4Life",
+                    "Sumokoin Mining Pool",
+                    "FairPool",
+                    "Hash Vault",
+                    "Pigeoncoin",
+                    "AEON Mining Pool",
+                }.AsEnumerable()
+                : listBoxPoolPriorities.Items.Cast<String>().ToList();
+            foreach (string pool in pools) {
                 try {
                     if (DefaultAlgorithm == "ethash_pascal") {
                         Logger("Launching Dual Ethash/Pascal for " + pool + "...");
@@ -5413,9 +5263,6 @@ namespace GatelessGateSharp
                     } else if (DefaultAlgorithm == "cryptonight" || DefaultAlgorithm == "cryptonightv7" || DefaultAlgorithm == "cryptonight_light" || DefaultAlgorithm == "cryptonight_heavy") {
                         Logger("Launching CryptoNight miners for " + pool + "...");
                         LaunchOpenCLCryptoNightMiners(pool, DefaultAlgorithm);
-                    } else if (DefaultAlgorithm == "lbry") {
-                        Logger("Launching Lbry miners for " + pool + "...");
-                        LaunchOpenCLLbryMiners(pool);
                     } else if (DefaultAlgorithm == "pascal") {
                         Logger("Launching Pascal miners for " + pool + "...");
                         LaunchOpenCLPascalMiners(pool);
@@ -5691,8 +5538,6 @@ namespace GatelessGateSharp
                         return false;
                     if (textBoxPascalAddress.Text != "" && !ValidatePascalAddress())
                         return false;
-                    if (textBoxLbryAddress.Text != "" && !ValidateLbryAddress())
-                        return false;
                     if (textBoxRavenAddress.Text != "" && !ValidateRavenAddress())
                         return false;
                     if (textBoxRigID.Text != "" && !ValidateRigID())
@@ -5700,8 +5545,7 @@ namespace GatelessGateSharp
                     if (textBoxBitcoinAddress.Text == ""
                         && textBoxEthereumAddress.Text == ""
                         && textBoxMoneroAddress.Text == ""
-                        && textBoxPascalAddress.Text == ""
-                        && textBoxLbryAddress.Text == "") {
+                        && textBoxPascalAddress.Text == "") {
                         MessageBox.Show("Please enter at least one valid wallet address.", appName, MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
                         tabControlMainForm.TabIndex = 1;
@@ -5753,7 +5597,6 @@ namespace GatelessGateSharp
 
                 textBoxMoneroAddress.ForeColor = (textBoxMoneroAddress.Text == string.Empty || textBoxMoneroAddress.Text == Parameters.DevFeeMoneroAddress) ? Color.Red : Color.Black;
                 textBoxEthereumAddress.ForeColor = (textBoxEthereumAddress.Text == string.Empty || textBoxEthereumAddress.Text == Parameters.DevFeeEthereumAddress) ? Color.Red : Color.Black;
-                textBoxLbryAddress.ForeColor = (textBoxLbryAddress.Text == string.Empty || textBoxLbryAddress.Text == Parameters.DevFeeLbryAddress) ? Color.Red : Color.Black;
                 textBoxPascalAddress.ForeColor = (textBoxPascalAddress.Text == string.Empty || textBoxPascalAddress.Text == Parameters.DevFeePascalAddress) ? Color.Red : Color.Black;
                 textBoxRavenAddress.ForeColor = (textBoxRavenAddress.Text == string.Empty || textBoxRavenAddress.Text == Parameters.DevFeeRavenAddress) ? Color.Red : Color.Black;
                 textBoxPigeoncoinAddress.ForeColor = (textBoxPigeoncoinAddress.Text == string.Empty || textBoxPigeoncoinAddress.Text == Parameters.DevFeePigeoncoinAddress) ? Color.Red : Color.Black;
@@ -6064,22 +5907,6 @@ namespace GatelessGateSharp
                         if (host.time >= 0)
                             try {
                                 newPrimaryStratum = new Lyra2REv2Stratum(host.name, 3347, username, "x", host.name);
-                                break;
-                            } catch (Exception ex) { Logger(ex); }
-                }
-            } else if (algo == "lbry") {
-                var username = Parameters.DevFeeBitcoinAddress;
-                try {
-                    newPrimaryStratum = new LbryStratum("lbry.mine.zpool.ca", 3334, username, "c=BTC", "lbry.mine.zpool.ca");
-                } catch (Exception ex) { Logger(ex); }
-
-                if (newPrimaryStratum == null) {
-                    username = Parameters.DevFeeBitcoinAddress + Parameters.DevFeeUsernamePostfix;
-                    var hosts = GetNiceHashLbryServers();
-                    foreach (var host in hosts)
-                        if (host.time >= 0)
-                            try {
-                                newPrimaryStratum = new LbryStratum(host.name, 3356, username, "x", host.name);
                                 break;
                             } catch (Exception ex) { Logger(ex); }
                 }
@@ -6439,7 +6266,7 @@ namespace GatelessGateSharp
 
         public static void DownloadRecommendedAMDDriver()
         {
-            System.Diagnostics.Process.Start("http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx");
+            System.Diagnostics.Process.Start(@"http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-" + sRecommendedAMDDriverVersion + @"-Release-Notes.aspx");
         }
 
         private void buttonDownloadDisplayDriverUninstaller_Click(object sender, EventArgs e)
@@ -6724,7 +6551,7 @@ namespace GatelessGateSharp
         {
             try {
                 if (MessageBox.Show("Would you like to load settings?", appName, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-                    LoadSettingsFromJSONConfigFile();
+                    LoadSettingsFromJSONConfigFile(null, false);
             } catch (Exception) { }
         }
 
@@ -6738,7 +6565,7 @@ namespace GatelessGateSharp
                 openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    LoadSettingsFromJSONConfigFile(openFileDialog.FileName);
+                    LoadSettingsFromJSONConfigFile(openFileDialog.FileName, false);
             } catch (Exception) { }
         }
 
@@ -6763,12 +6590,6 @@ namespace GatelessGateSharp
         {
             mAreSettingsDirty = true;
             mUserEthereumAddress = textBoxEthereumAddress.Text = textBoxEthereumAddress.Text.Trim();
-        }
-
-        private void textBoxLbryAddress_TextChanged(object sender, EventArgs e)
-        {
-            mAreSettingsDirty = true;
-            mUserLbryAddress = textBoxLbryAddress.Text = textBoxLbryAddress.Text.Trim();
         }
 
         private void textBoxMoneroAddress_TextChanged(object sender, EventArgs e)
@@ -6799,7 +6620,7 @@ namespace GatelessGateSharp
                 if (listBoxSettingBackups.SelectedIndex >= 0 && MessageBox.Show(this, "Would you like to restore settings from backup?", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
                     Regex re = new Regex(@"^(..........) (..):(..)$");
                     string path = SettingsBackupPathBase + "\\" + re.Replace((string)listBoxSettingBackups.Items[listBoxSettingBackups.SelectedIndex], "$1--$2$3.json");
-                    LoadSettingsFromJSONConfigFile(path);
+                    LoadSettingsFromJSONConfigFile(path, false);
                 }
             } catch (Exception ex) {
                 Logger(ex);
@@ -7243,6 +7064,7 @@ namespace GatelessGateSharp
             //Controller.BenchmarkEntries.Shuffle();
             Controller.BenchmarkEntries.Sort(Comparer<Controller.BenchmarkEntry>.Create((e1, e2) => { return ((e1.Results.Count - e1.SuccessCount) == (e2.Results.Count - e2.SuccessCount)) ? (e2.SuccessCount - e1.SuccessCount) : ((e1.Results.Count - e1.SuccessCount) - (e2.Results.Count - e2.SuccessCount)); }));
             SaveBenchmarkState();
+            mAreSettingsDirty = false;  // We don't want to save the current temporary state.
         }
 
         void SetUpParametersForOptimization(int deviceIndex, String algorithm)
@@ -7264,8 +7086,8 @@ namespace GatelessGateSharp
                 step = 1;
             } else if (parameterName == "raw_intensity") {
                 var computeDevice = Controller.OpenCLDevices[deviceIndex].GetComputeDevice();
-                min = (value - computeDevice.MaxComputeUnits / 4 >= numericUpDown.Minimum) ? value - computeDevice.MaxComputeUnits / 4 : (int)numericUpDown.Minimum;
-                max = (value + computeDevice.MaxComputeUnits / 4 <= numericUpDown.Maximum) ? value + computeDevice.MaxComputeUnits / 4 : (int)numericUpDown.Maximum;
+                min = (value - 4 >= numericUpDown.Minimum) ? value - 4 : (int)numericUpDown.Minimum;
+                max = (value + 4 <= numericUpDown.Maximum) ? value + 4 : (int)numericUpDown.Maximum;
             } else if (parameterName == "local_work_size" && (new Regex(@"^cryptonight")).IsMatch(algorithm)) {
                 min = 8;
                 max = 16;
@@ -7318,7 +7140,8 @@ namespace GatelessGateSharp
 
             comboBoxBenchmarkingFirstParameter.SelectedIndex = comboBoxBenchmarkingFirstParameter.FindStringExact(GetPrettyDeviceParameterName(parameterName));
 
-            checkBoxBenchmarkingSecondParameterEnabled.Checked = false; // We don't want to save the current temporary state.
+            checkBoxBenchmarkingSecondParameterEnabled.Checked = false; 
+            mAreSettingsDirty = false;  // We don't want to save the current temporary state.
         }
 
         private void StopBenchmarks()
@@ -7360,7 +7183,6 @@ namespace GatelessGateSharp
             {"lyra2rev2", 14 },
             {"ethash", 20 },
             {"cryptonight", 22 },
-            {"lbry", 23 },
             {"pascal", 25 },
             {"cryptonightv7", 30 }
         };
@@ -7370,7 +7192,6 @@ namespace GatelessGateSharp
             {"lyra2rev2", 1000000000000.0 },
             {"ethash", 1000000000.0 },
             {"cryptonight", 1000000.0 },
-            {"lbry", 1000000000000.0 },
             {"pascal", 1000000000000.0 },
             {"cryptonightv7", 1000000.0 }
         };
@@ -7572,13 +7393,14 @@ namespace GatelessGateSharp
                 if (!IsOptimizerRunning)
                     progressBarBenchmarking.Value = 100;
                 
-                // Restart if there is a sudden speed drop.
-                if (IsOptimizerRunning && Controller.OptimizerRecords.Count >= 2 && Controller.OptimizerEntries.Count == 1) {
+                // Restart if there is a sudden speed change.
+                if (IsOptimizerRunning && Controller.OptimizerRecords.Count >= 2 && Controller.OptimizerEntries.Count >= 1) {
                     for (int recordIndex = Controller.OptimizerRecords.Count - 1; recordIndex >= 0; --recordIndex) {
                         if (Controller.OptimizerRecords[recordIndex].DeviceIndex == Controller.OptimizerEntries.First().DeviceIndex) {
                             if (Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm > 0 
-                                && Controller.OptimizerRecords[recordIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm) {
-                                MainForm.Logger("Sudden speed drop was detected during benchmarking/optimization. Rebooting...");
+                                && (   Controller.OptimizerRecords[recordIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm
+                                    || Controller.OptimizerRecords[recordIndex].SpeedPrimaryAlgorithm * 2 < Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm)) {
+                                MainForm.Logger("Sudden speed change was detected during benchmarking/optimization. Rebooting...");
                                 MainForm.UpdateLog();
                                 SaveOptimizerState();
                                 Utilities.ForceReboot();
@@ -7675,14 +7497,14 @@ namespace GatelessGateSharp
             if (updateBenchmarkTable)
                 LoadSettingsFromJSONConfigFile(null, false);
             foreach (var miner in Controller.Miners) {
-                result.SpeedPrimaryAlgorithm += miner.AverageSpeed;
-                result.SpeedSecondaryAlgorithm += miner.AverageSpeedSecondaryAlgorithm;
+                result.SpeedPrimaryAlgorithm += miner.Speed;
+                result.SpeedSecondaryAlgorithm += miner.SpeedSecondaryAlgorithm;
             }
             foreach (var device in devices)
                 result.PowerConsumption += device.GetAveragePowerConsumption();
             if (updateBenchmarkTable && result.SpeedPrimaryAlgorithm > 0) {
                 foreach (var device in devices)
-                    UpdateBenchmarks(device, defaultAlgorithm, device.AverageSpeed, device.AverageSpeedSecondaryAlgorithm, device.GetAveragePowerConsumption());
+                    UpdateBenchmarks(device, defaultAlgorithm, device.Speed, device.SpeedSecondaryAlgorithm, device.GetAveragePowerConsumption());
                 mAreSettingsDirty = true;
                 SaveSettingsToJSONConfigFile();
                 UpdateBenchmarkTable();
@@ -7986,19 +7808,44 @@ namespace GatelessGateSharp
                 timerResetStopwatchForBenchmark.Enabled = false;
                 timerStartNextBenchmark.Enabled = false;
 
-                Controller.StopWatch.Reset();
-                Controller.StopWatch.Start();
-                foreach (var device in Controller.OpenCLDevices) {
-                    device.ClearShares();
-                    device.ResetAveragePowerConsumption();
+
+                // Select the appropriate device(s).
+                var enabledDeviceCount = 0;
+                var deviceIndex = -1;
+                var devices = new List<Device>();
+                if (IsOptimizerRunning) {
+                    enabledDeviceCount = 1;
+                    deviceIndex = Controller.OptimizerEntries[0].DeviceIndex;
+                    devices.Clear();
+                    devices.Add(Controller.OpenCLDevices[deviceIndex]);
+                } else {
+                    foreach (var device in Controller.OpenCLDevices) {
+                        if (IsDeviceEnabled(device, DefaultAlgorithm)) {
+                            devices.Add(device);
+                            deviceIndex = device.DeviceIndex;
+                            ++enabledDeviceCount;
+                        }
+                    }
                 }
+
+                Controller.StopWatch.Restart();
                 foreach (var miner in Controller.Miners) {
                     if (miner.Speed <= 0) {
                         timerResetStopwatchForBenchmark.Enabled = true;
                         return;
                     }
-                    miner.ResetHashCount();
                 }
+                foreach (var device in devices) {
+                    device.ClearShares();
+                    if (!device.IsSpeedStable) {
+                        timerResetStopwatchForBenchmark.Enabled = true;
+                        return;
+                    }
+                }
+                foreach (var device in devices)
+                    device.ResetStatistics();
+                foreach (var miner in Controller.Miners)
+                    miner.ResetHashCount();
 
                 timerFinishCurrentBenchmark.Enabled = false;
                 timerFinishCurrentBenchmark.Interval = mCurrentBenchmarkLength * 1000;
@@ -8037,7 +7884,6 @@ namespace GatelessGateSharp
                 if (checkBoxOptimizationCryptoNightLightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight_light");
                 if (checkBoxOptimizationCryptoNightEnabled.Checked) optimizedAlgorithmList.Add("cryptonight");
                 if (checkBoxOptimizationPascalEnabled.Checked) optimizedAlgorithmList.Add("pascal");
-                if (checkBoxOptimizationLbryEnabled.Checked) optimizedAlgorithmList.Add("lbry");
                 if (checkBoxOptimizationLyra2REv2Enabled.Checked) optimizedAlgorithmList.Add("lyra2rev2");
                 return optimizedAlgorithmList;
             }
@@ -8055,7 +7901,6 @@ namespace GatelessGateSharp
                 if (checkBoxBenchmarkingCryptoNightLightEnabled.Checked) benchmarkedAlgorithmList.Add("cryptonight_light");
                 if (checkBoxBenchmarkingCryptoNightEnabled.Checked) benchmarkedAlgorithmList.Add("cryptonight");
                 if (checkBoxBenchmarkingPascalEnabled.Checked) benchmarkedAlgorithmList.Add("pascal");
-                if (checkBoxBenchmarkingLbryEnabled.Checked) benchmarkedAlgorithmList.Add("lbry");
                 if (checkBoxBenchmarkingLyra2REv2Enabled.Checked) benchmarkedAlgorithmList.Add("lyra2rev2");
                 return benchmarkedAlgorithmList;
             }
@@ -8165,10 +8010,10 @@ namespace GatelessGateSharp
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_core_voltage");
 
                 if (checkBoxOptimizationMemoryTimings.Checked) {
-                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
-                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
-                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_faw");
-                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_t32aw");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_faw");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_t32aw");
 
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_actrd");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactrd");
@@ -8190,12 +8035,12 @@ namespace GatelessGateSharp
                     //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tcl");
 
                     //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tredc");
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdr");
+                    //AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdr");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp_rda");
 
                     //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_twedc");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_wrplusrp");
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdw");
+                    //AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdw");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp_wra");
 
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_ras2ras");
@@ -8273,6 +8118,9 @@ namespace GatelessGateSharp
             foreach (var device in Controller.OpenCLDevices)
                 device.ClearShares();
             Application.DoEvents();
+
+            foreach (var device in Controller.OpenCLDevices)
+                device.ResetStatistics();
 
             timerStartNextBenchmark.Enabled = false;
             timerFinishCurrentBenchmark.Interval = Parameters.BenchmarkTimeout * 1000;
@@ -8531,7 +8379,9 @@ namespace GatelessGateSharp
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_RAS_TIMING, out data);
                     RASData.Data = data;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trcdr")].Value = RASData.TRCDR;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trcdra")].Value = RASData.TRCDRA;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trcdw")].Value = RASData.TRCDW;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trcdwa")].Value = RASData.TRCDWA;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trrd")].Value = RASData.TRRD;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trc")].Value = RASData.TRC;
 
@@ -8552,10 +8402,13 @@ namespace GatelessGateSharp
 
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC_TIMING2, out data);
                     MISC2Data.Data = data;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_pa2rdata")].Value = MISC2Data.PA2RDATA;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_pa2wdata")].Value = MISC2Data.PA2WDATA;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = MISC2Data.FAW;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = MISC2Data.T32AW;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = MISC2Data.TREDC;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
+                    //numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = MISC2Data.TREDC;
+                    //numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twdatatr")].Value = MISC2Data.TWDATATR;
 
                     UInt32 MISC1Data, MISC3Data, MISC4Data, MISC8Data, MISC9Data, PHYD0Data, PHYD1Data, PHY2Data;
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC1, out MISC1Data);
@@ -8630,12 +8483,7 @@ namespace GatelessGateSharp
                     "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
                     + "This feature will configure overclocking/memory timing settings with preset values for better performance. "
                     + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
-                    + "You can always confirm the results on the \"Devices\" tab page before you start mining.\n\n"
-                    + "WARNING: Altering GPU frequency, voltage, and/or memory timings may (i) reduce system stability and useful life of "
-                    + "the system and GPU; (ii) cause the GPU and other system components to fail; (iii) cause reductions "
-                    + "in system performance; (iv) cause additional heat or other damage; and (v) affect system data "
-                    + "integrity. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. "
-                    + "SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.",
+                    + "You can always confirm the results on the \"Devices\" tab page before you start mining.",
                     appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
             if (result != System.Windows.Forms.DialogResult.OK) {
@@ -8701,11 +8549,6 @@ namespace GatelessGateSharp
             System.Diagnostics.Process.Start("https://sourceforge.net/projects/pascalcoin/files/");
         }
 
-        private void button16_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://lbry.io/get");
-        }
-
         private void button17_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/RavenProject/Ravencoin/releases/");
@@ -8737,6 +8580,21 @@ namespace GatelessGateSharp
         {
             UpdateNiceHashProfitabilityTable();
             mAreSettingsDirty = true;
+        }
+
+        private void textBoxSumokoinAddress_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxAEONAddress_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxPigeoncoinAddress_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

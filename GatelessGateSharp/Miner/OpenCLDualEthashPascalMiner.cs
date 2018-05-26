@@ -191,11 +191,11 @@ namespace GatelessGateSharp {
                         searchKernel.SetValueArgument<UInt32>(7 + 5, mPascalRatio);
 
                         // Wait for the first job to arrive.
-                        int elapsedTime = 0;
-                        while ((PrimaryStratum == null || PrimaryStratum.GetJob() == null || SecondaryStratum == null || SecondaryStratum.GetJob() == null) && elapsedTime < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped) {
+                        System.Diagnostics.Stopwatch firstJobStopwatch = new System.Diagnostics.Stopwatch();
+                        firstJobStopwatch.Start();
+                        while (   (PrimaryStratum == null || PrimaryStratum.GetJob() == null || SecondaryStratum == null || SecondaryStratum.GetJob() == null)
+                               && firstJobStopwatch.ElapsedMilliseconds < Parameters.TimeoutForFirstJobInMilliseconds && !Stopped)
                             Thread.Sleep(100);
-                            elapsedTime += 100;
-                        }
                         if (PrimaryStratum == null || PrimaryStratum.GetJob() == null || SecondaryStratum == null || SecondaryStratum.GetJob() == null)
                             throw new TimeoutException("Stratum server failed to send a new job.");
 

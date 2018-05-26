@@ -1863,7 +1863,7 @@ namespace GatelessGateSharp {
             public static readonly UInt32 FAW_MASK      =     0x1f00; public static readonly Int32 FAW__SHIFT      = 8;
             public static readonly UInt32 TREDC_MASK    =     0xe000; public static readonly Int32 TREDC__SHIFT    = 13;
             public static readonly UInt32 TWEDC_MASK    =   0x1f0000; public static readonly Int32 TWEDC__SHIFT    = 16;
-            public static readonly UInt32 T32AW_MASK    =  0xfe00000; public static readonly Int32 T32AW__SHIFT    = 21; // 0x1e00000
+            public static readonly UInt32 T32AW_MASK    =  0x1e00000; public static readonly Int32 T32AW__SHIFT    = 21; // 0x1e00000
             public static readonly UInt32 TWDATATR_MASK = 0xf0000000u; public static readonly Int32 TWDATATR__SHIFT = 28;
 
             public UInt32 Data { get; set; }
@@ -2139,10 +2139,13 @@ namespace GatelessGateSharp {
             MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trp", out value); miscTimings.TRP = value;
             MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trfc", out value); miscTimings.TRFC = value;
 
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_pa2rdata", out value); miscTimings2.PA2RDATA = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_pa2wdata", out value); miscTimings2.PA2WDATA = value;
             MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_faw", out value); miscTimings2.FAW = value;
             MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_t32aw", out value); miscTimings2.T32AW = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tredc", out value); miscTimings2.TREDC = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twedc", out value); miscTimings2.TWEDC = value;
+            //MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tredc", out value); miscTimings2.TREDC = value;
+            //MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twedc", out value); miscTimings2.TWEDC = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twdatatr", out value); miscTimings2.TWDATATR = value;
 
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_pmg", out PMGTimings);
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_phy_d0", out PHYTimingsD0);

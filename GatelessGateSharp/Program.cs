@@ -39,10 +39,8 @@ namespace GatelessGateSharp
         private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
             var result = MessageBox.Show(Utilities.GetAutoClosingForm(60), "Unhandled Thread Exception: " + e.Exception.Message + e.Exception.StackTrace + "\n\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop);
-            if (result == DialogResult.Cancel) {
-                foreach (var process in Process.GetProcessesByName("GatelessGateSharpMonitor"))
-                    process.Kill();
-            }
+            if (result == DialogResult.Cancel)
+                KillMonitor();
             System.Environment.Exit(1);
         }
 
@@ -50,18 +48,26 @@ namespace GatelessGateSharp
         {
             var result = MessageBox.Show(Utilities.GetAutoClosingForm(60), "Unhandled Exception: " + ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).StackTrace + "\n\nRestarting the application...", "Gateless Gate Sharp", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop);
             if (result == DialogResult.Cancel || e.ExceptionObject.GetType() == typeof(DllNotFoundException))
-            {
-                foreach (var process in Process.GetProcessesByName("GatelessGateSharpMonitor"))
-                    process.Kill();
-            }
+                KillMonitor();
             System.Environment.Exit(1);
         }
 
+        public static void KillMonitor()
+        {
+            foreach (var process in System.Diagnostics.Process.GetProcessesByName("GatelessGateSharpMonitor"))
+                try { process.Kill(); } catch (Exception) { }
+        }
+
         static Mutex sMutex = new Mutex(true, "{1D2A713A-A29C-418C-BC62-2E98BD325490}");
-        public static bool KillMonitor { get; set; }
-        public static void Exit() { Application.Exit(); }
-        public static void Exit(bool killMonitor) { KillMonitor = killMonitor; Application.Exit(); }
-        public static void Kill() { try { monitor.Kill(); } catch (Exception) { } System.Environment.Exit(1); }
+        public static void Exit(bool killMonitor = true) {
+            if (killMonitor)
+                KillMonitor();
+            Application.Exit();
+        }
+        public static void Kill() {
+            KillMonitor();
+            System.Environment.Exit(1);
+        }
         static Process monitor = null;
 
         /// <summary>
@@ -127,13 +133,11 @@ namespace GatelessGateSharp
             }
             catch (Exception) { }
             
-            KillMonitor = true;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
-            
-            if (KillMonitor)
-                try { monitor.Kill(); } catch (Exception) { }
+
+            KillMonitor();
 
             try { sMutex.ReleaseMutex(); } catch (Exception) { }
 
