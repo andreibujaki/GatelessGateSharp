@@ -23,8 +23,8 @@ namespace GatelessGateSharp {
         public static readonly int LogMaxNumLines = 256;
 
         public static readonly int BenchmarkTimeout = 120;
-        public static readonly int BenchmarkLengthMultipleThreads = 20;
-        public static readonly int BenchmarkLengthSingleThread = 10;
+        public static readonly int BenchmarkLengthMultipleThreads = 30;
+        public static readonly int BenchmarkLengthSingleThread = 20;
         public static readonly double BenchmarkingSpeedDropThreshold = 0.80;
 
         // I really need the DEVFEE to continue to develop this miner and to make my wife happy. Thank you. - zawawa

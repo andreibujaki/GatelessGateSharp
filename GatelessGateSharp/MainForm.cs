@@ -1387,15 +1387,27 @@ namespace GatelessGateSharp
                 ResetDeviceMemoryTimingSettings(device);
 
                 foreach (var algorithm in AlgorithmList) {
-                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = false;
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = true;
                     if (device.GetType() == typeof(AMDGMC81))
                         booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = device.DefaultCoreClock;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = device.DefaultCoreVoltage;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = device.DefaultMemoryClock;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = device.DefaultMemoryVoltage;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
+                    int coreClock = device.DefaultCoreClock;
+                    int coreVoltage = device.DefaultCoreVoltage;
+                    int memoryClock = device.DefaultMemoryClock;
+                    int memoryVoltage = device.DefaultMemoryVoltage;
+                    bool rx480 = (device.IsAMD && Regex.Match(device.Name, @"^Radeon RX [45]80$").Success);
+                    bool rx470 = (device.IsAMD && Regex.Match(device.Name, @"^Radeon RX [45]70$").Success);
+
+                    if (rx480 && coreClock > 1260) coreClock = 1260;
+                    if (rx470 && coreClock > 1220) coreClock = 1220;
+                    if (rx480 && memoryClock > 2000) memoryClock = 2000;
+                    if (rx480 && memoryClock > 1750) memoryClock = 1750;
+
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = coreClock;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = coreVoltage;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = memoryClock;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = memoryVoltage;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
 
                     device.FanSpeed = -1;
                     device.ResetOverclockingSettings();
@@ -5573,27 +5585,28 @@ namespace GatelessGateSharp
                 var idle = (Controller.AppState == Controller.ApplicationGlobalState.Idle)
                                       && (!IsBenchmarkRunning)
                                       && (!IsOptimizerRunning);
+                var mining = (Controller.AppState == Controller.ApplicationGlobalState.Mining && (!IsBenchmarkRunning) && (!IsOptimizerRunning));
+                var transitioning = (Controller.AppState == Controller.ApplicationGlobalState.Switching
+                                     || Controller.BenchmarkState == Controller.ApplicationBenchmarkState.CoolingDown);
+                var benchmarking = IsBenchmarkRunning && !IsOptimizerRunning;
+                var optimizing = IsOptimizerRunning;
 
-                tabControlMainForm.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching
-                                              && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown);
-                comboBoxDefaultAlgorithm.Enabled = (!IsBenchmarkRunning)
-                                      && (!IsOptimizerRunning)
-                                      && (Controller.AppState != Controller.ApplicationGlobalState.Switching)
+                tabControlMainForm.Enabled = !transitioning;
+                comboBoxDefaultAlgorithm.Enabled = !benchmarking
+                                      && !optimizing
+                                      && !transitioning
                                       && !checkBoxUseCustomPools.Checked;
                 checkBoxUseCustomPools.Enabled = idle;
-                buttonStart.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
-                                      && (!IsBenchmarkRunning)
-                                      && (!IsOptimizerRunning);
-                buttonRunBenchmarks.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
-                                              && (!IsOptimizerRunning)
-                                              && (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
-                                              && (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Resuming)
-                                              && !(IsMining && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.Running);
-                buttonRunOptimizer.Enabled = (Controller.AppState != Controller.ApplicationGlobalState.Switching)
-                                              && ((IsOptimizerRunning && IsBenchmarkRunning)
-                                                   || (Controller.AppState == Controller.ApplicationGlobalState.Idle
-                                                       && !IsOptimizerRunning
-                                                       && !IsBenchmarkRunning));
+                buttonStart.Enabled = idle || mining;
+                buttonRunBenchmarks.Enabled = idle || (benchmarking && !transitioning);
+                buttonRunOptimizer.Enabled = idle || (optimizing && !transitioning);
+                buttonStart.Text
+                    = idle && Controller.StopWatch.Elapsed.TotalSeconds == 0 ? "Start" :
+                      mining                                                 ? "Pause" :
+                                                                               "Resume";
+                buttonRunBenchmarks.Text = (IsBenchmarkRunning) ? "Abort" : "Benchmark";
+                buttonRunOptimizer.Text = (IsOptimizerRunning) ? "Stop" : "Optimize";
+                buttonRelaunch.Enabled = idle;
 
                 textBoxMoneroAddress.ForeColor = (textBoxMoneroAddress.Text == string.Empty || textBoxMoneroAddress.Text == Parameters.DevFeeMoneroAddress) ? Color.Red : Color.Black;
                 textBoxEthereumAddress.ForeColor = (textBoxEthereumAddress.Text == string.Empty || textBoxEthereumAddress.Text == Parameters.DevFeeEthereumAddress) ? Color.Red : Color.Black;
@@ -5606,20 +5619,6 @@ namespace GatelessGateSharp
 
                 buttonSelectAllDevices.Enabled = idle;
                 buttonDeselectAllDevices.Enabled = idle;
-
-                buttonStart.Text
-                    = Controller.StopWatch.Elapsed.TotalSeconds == 0 ? "Start" :
-                      IsMining ? "Pause" :
-                                                                                        "Resume";
-                buttonRunBenchmarks.Text
-                    = (IsMining
-                       && Controller.BenchmarkState != Controller.ApplicationBenchmarkState.NotRunning) ? "Abort Benchmarking" :
-                                                                                                       "Benchmark";
-                buttonRunOptimizer.Text
-                    = (IsMining
-                       && IsOptimizerRunning) ? "Stop Optimizer" :
-                                                                                                       "Optimize";
-                buttonRelaunch.Enabled = idle;
 
                 tabControlDefaultPools.Enabled = idle && !CustomPoolEnabled;
                 dataGridViewDevices.Enabled = idle;
@@ -7385,70 +7384,7 @@ namespace GatelessGateSharp
                 SaveBenchmarkState();
                 PrepareForNextBenchmark();
             } else {
-                Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
-                Controller.StopWatch.Reset();
-                foreach (var device in Controller.OpenCLDevices)
-                    device.ClearShares();
-                tabControlMainForm.SelectedIndex = (IsOptimizerRunning) ? 5 : 4;
-                if (!IsOptimizerRunning)
-                    progressBarBenchmarking.Value = 100;
-                
-                // Restart if there is a sudden speed change.
-                if (IsOptimizerRunning && Controller.OptimizerRecords.Count >= 2 && Controller.OptimizerEntries.Count >= 1) {
-                    for (int recordIndex = Controller.OptimizerRecords.Count - 1; recordIndex >= 0; --recordIndex) {
-                        if (Controller.OptimizerRecords[recordIndex].DeviceIndex == Controller.OptimizerEntries.First().DeviceIndex) {
-                            if (Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm > 0 
-                                && (   Controller.OptimizerRecords[recordIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm
-                                    || Controller.OptimizerRecords[recordIndex].SpeedPrimaryAlgorithm * 2 < Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm)) {
-                                MainForm.Logger("Sudden speed change was detected during benchmarking/optimization. Rebooting...");
-                                MainForm.UpdateLog();
-                                SaveOptimizerState();
-                                Utilities.ForceReboot();
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                if (IsOptimizerRunning && Controller.OptimizerEntries.Count <= 1 && !checkBoxOptimizationRepeatUntilStopped.Checked) {
-                    Controller.OptimizerEntries.Clear();
-                    progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
-                    progressBarOptimizer.Maximum = Controller.OptimizerRecords.Count;
-                    progressBarOptimizer.Style = ProgressBarStyle.Continuous;
-                    UpdateOptimizerRecords();
-                    Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
-                    try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
-
-                    if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
-                        foreach (var device in Controller.OpenCLDevices) {
-                            device.FanControlEnabled = false;
-                            device.FanSpeed = -1;
-                        }
-                    }
-
-                } else if (IsOptimizerRunning) {
-                    var entry = Controller.OptimizerEntries[0];
-                    Controller.OptimizerEntries.RemoveAt(0);
-                    if (checkBoxOptimizationRepeatUntilStopped.Checked) {
-                        Controller.OptimizerEntries.Add(entry);
-                    } else {
-                        progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
-                        progressBarOptimizer.Maximum = Controller.OptimizerEntries.Count + Controller.OptimizerRecords.Count;
-                    }
-                    UpdateOptimizerRecords();
-                    SaveOptimizerState();
-                    SaveBenchmarkState();
-                    // Restart the miner after each parameter during optimization for stability.
-                    /*
-                    if (Controller.OptimizerEntries.Count > 0
-                        && Controller.OptimizerRecords.Count > 0
-                        && Controller.OptimizerEntries.First().Parameter != Controller.OptimizerRecords.Last().Parameter) {
-                        SaveSettingsToJSONConfigFile();
-                        Environment.Exit(0);
-                    }
-                    */
-                    StartBenchmarks();
-                }
+                FinishCurrentBenchmarkRound();
             }
             UpdateDevicesTabPage();
         }
@@ -7496,15 +7432,15 @@ namespace GatelessGateSharp
             var updateBenchmarkTable = (Controller.BenchmarkEntries[0].Parameters.Count <= 1);
             if (updateBenchmarkTable)
                 LoadSettingsFromJSONConfigFile(null, false);
-            foreach (var miner in Controller.Miners) {
-                result.SpeedPrimaryAlgorithm += miner.Speed;
-                result.SpeedSecondaryAlgorithm += miner.SpeedSecondaryAlgorithm;
+            foreach (var device in Controller.OpenCLDevices) {
+                result.SpeedPrimaryAlgorithm += device.AverageSpeed;
+                result.SpeedSecondaryAlgorithm += device.AverageSpeedSecondaryAlgorithm;
             }
             foreach (var device in devices)
                 result.PowerConsumption += device.GetAveragePowerConsumption();
             if (updateBenchmarkTable && result.SpeedPrimaryAlgorithm > 0) {
                 foreach (var device in devices)
-                    UpdateBenchmarks(device, defaultAlgorithm, device.Speed, device.SpeedSecondaryAlgorithm, device.GetAveragePowerConsumption());
+                    UpdateBenchmarks(device, defaultAlgorithm, device.AverageSpeed, device.AverageSpeedSecondaryAlgorithm, device.GetAveragePowerConsumption());
                 mAreSettingsDirty = true;
                 SaveSettingsToJSONConfigFile();
                 UpdateBenchmarkTable();
@@ -7629,6 +7565,74 @@ namespace GatelessGateSharp
                 }
                 if (IsOptimizerRunning)
                     Controller.OptimizerRecords.Add(entry);
+            }
+        }
+
+        void FinishCurrentBenchmarkRound()
+        {
+            Controller.BenchmarkState = Controller.ApplicationBenchmarkState.NotRunning;
+            Controller.StopWatch.Reset();
+            foreach (var device in Controller.OpenCLDevices)
+                device.ClearShares();
+            tabControlMainForm.SelectedIndex = (IsOptimizerRunning) ? 5 : 4;
+            if (!IsOptimizerRunning)
+                progressBarBenchmarking.Value = 100;
+
+            // Restart if there is a sudden speed change.
+            if (IsOptimizerRunning && Controller.OptimizerRecords.Count >= 2 && Controller.OptimizerEntries.Count >= 1) {
+                for (int recordIndex = Controller.OptimizerRecords.Count - 1; recordIndex >= 0; --recordIndex) {
+                    if (Controller.OptimizerRecords[recordIndex].DeviceIndex == Controller.OptimizerEntries.First().DeviceIndex) {
+                        if (Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm > 0
+                            && (Controller.OptimizerRecords[recordIndex].SpeedPrimaryAlgorithm * Parameters.BenchmarkingSpeedDropThreshold > Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm
+                                || Controller.OptimizerRecords[recordIndex].SpeedPrimaryAlgorithm * 2 < Controller.OptimizerEntries.First().SpeedPrimaryAlgorithm)) {
+                            MainForm.Logger("Sudden speed change was detected during benchmarking/optimization. Rebooting...");
+                            MainForm.UpdateLog();
+                            SaveOptimizerState();
+                            Utilities.ForceReboot();
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (IsOptimizerRunning && Controller.OptimizerEntries.Count <= 1 && !checkBoxOptimizationRepeatUntilStopped.Checked) {
+                Controller.OptimizerEntries.Clear();
+                progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
+                progressBarOptimizer.Maximum = Controller.OptimizerRecords.Count;
+                progressBarOptimizer.Style = ProgressBarStyle.Continuous;
+                UpdateOptimizerRecords();
+                Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
+                try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
+
+                if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
+                    foreach (var device in Controller.OpenCLDevices) {
+                        device.FanControlEnabled = false;
+                        device.FanSpeed = -1;
+                    }
+                }
+
+            } else if (IsOptimizerRunning) {
+                var entry = Controller.OptimizerEntries[0];
+                Controller.OptimizerEntries.RemoveAt(0);
+                if (checkBoxOptimizationRepeatUntilStopped.Checked) {
+                    Controller.OptimizerEntries.Add(entry);
+                } else {
+                    progressBarOptimizer.Value = Controller.OptimizerRecords.Count;
+                    progressBarOptimizer.Maximum = Controller.OptimizerEntries.Count + Controller.OptimizerRecords.Count;
+                }
+                UpdateOptimizerRecords();
+                SaveOptimizerState();
+                SaveBenchmarkState();
+                // Restart the miner after each parameter during optimization for stability.
+                /*
+                if (Controller.OptimizerEntries.Count > 0
+                    && Controller.OptimizerRecords.Count > 0
+                    && Controller.OptimizerEntries.First().Parameter != Controller.OptimizerRecords.Last().Parameter) {
+                    SaveSettingsToJSONConfigFile();
+                    Environment.Exit(0);
+                }
+                */
+                StartBenchmarks();
             }
         }
 
@@ -8595,6 +8599,11 @@ namespace GatelessGateSharp
         private void textBoxPigeoncoinAddress_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonSupport_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://bitcointalk.org/index.php?topic=1716584.new");
         }
     }
 }

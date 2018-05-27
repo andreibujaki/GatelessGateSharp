@@ -709,12 +709,39 @@ mcifak4CQsr+DH4pn5SJD7JxtCG3YGswW8QZsw==
                     MainForm.Logger("Disabled ULPS for Device #" + device.DeviceIndex + ".");
                 }
 
-                valueName = "EnableCrossFireAutoLink";
-                dwordValue = (int)Microsoft.Win32.Registry.GetValue(keyName, valueName, 1);
-                if (dwordValue != 0) {
-                    Microsoft.Win32.Registry.SetValue(keyName, valueName, 0);
-                    updated = true;
-                    MainForm.Logger("Disabled CrossFire for Device #" + device.DeviceIndex + ".");
+                foreach (var toBeSetToOne in new string[] {
+                    "EnableAspmL0s", // 1
+                    "EnableAspmL1", // 1
+                    "PP_GPUPowerDownEnabled", // 1
+                    "KMD_EnableContextBasedPowerManagement", // 1
+                    "EnableUvdClockGating", // 1
+                    "EnableVceSwClockGating", // 1
+                    "DisableSAMUPowerGating", // 1
+                    "DisableUVDPowerGatingDynamic", // 1
+                    "DisableVCEPowerGating", // 0
+                    "GCOOPTION_DisableGPIOPowerSaveMode", // must be 1
+                }) {
+                    valueName = toBeSetToOne;
+                    dwordValue = (int)Microsoft.Win32.Registry.GetValue(keyName, valueName, 0);
+                    if (dwordValue != 1) {
+                        Microsoft.Win32.Registry.SetValue(keyName, valueName, 1);
+                        updated = true;
+                        MainForm.Logger("Set " + valueName + " to 1 for Device #" + device.DeviceIndex + ".");
+                    }
+                }
+
+                foreach (var toBeZeroed in new string[] {
+                    "EnableCrossFireAutoLink",
+                    "ECCMode",
+                    
+                }) {
+                    valueName = toBeZeroed;
+                    dwordValue = (int)Microsoft.Win32.Registry.GetValue(keyName, valueName, 1);
+                    if (dwordValue != 0) {
+                        Microsoft.Win32.Registry.SetValue(keyName, valueName, 0);
+                        updated = true;
+                        MainForm.Logger("Set " + valueName + " to 0 for Device #" + device.DeviceIndex + ".");
+                    }
                 }
 
                 valueName = "ODNSettings";
