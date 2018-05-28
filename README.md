@@ -5,9 +5,7 @@ It focuses on performance, stability, and ease of use, featuring a one-of-a-kind
 and a powerful built-in optimizer. Unlike [the original Gateless Gate](https://github.com/zawawawa/gatelessgate), this miner
 aims at stability with a much simpler design and the managed .NET Framework.
 
-* [Gateless_Gate_Sharp_1.3.7_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha_Setup.msi) (Windows x64 Installer; highly recommended)
-* [Gateless_Gate_Sharp_1.3.7_alpha.7z](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha.7z)
-* [Gateless_Gate_Sharp_1.3.7_alpha.zip](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.7-alpha/Gateless_Gate_Sharp_1.3.7_alpha.zip)
+* [Gateless_Gate_Sharp_1.3.7_alpha_Setup.msi](https://github.com/zawawawa/GatelessGateSharp/releases/download/v1.3.8-alpha/GatelessGateSharpInstaller.exe) (Windows x64 Installer)
 
 (Previous releases are found [here](https://github.com/zawawawa/GatelessGateSharp/releases).)
 
@@ -49,15 +47,12 @@ In addition to the default pools, support for custom pools is also available.
 The minimum requirements for the miner are as follows:
 
 * Graphics card(s) with the AMD GCN architecture and/or the NVIDIA Maxwell and Pascal architectures.
-* Windows 8.1 64-bit or later. Windows 10 is strongly recommended, but **Windows 10 April 2018 Update is NOT supported** yet.
-* [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx) for AMD cards. (Adrenalin 18.4.1 and 18.5.1 are NOT supported.)
-* [.NET Framework 4.7.1](https://www.microsoft.com/en-us/download/details.aspx?id=56116) and [Visual C++ Redistributable 2017](https://go.microsoft.com/fwlink/?LinkId=746572) if you do not use the installer.
+* Windows 8.1 64-bit or later (Windows 10 is strongly recommended).
+* [AMD Radeon Software Adrenalin Edition 18.5.1](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.5.1-Release-Notes.aspx) for AMD cards.
 
 **Note: Please DO NOT USE UTILITIES FOR OVERCLOCKING SUCH AS MSI AFTERBURNER with Gateless Gate Sharp.**
 
-The current focus of the project is on AMD and this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 18.3.4](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.3.4-Release-Notes.aspx). Other drivers may or may not work. For the best performance, please **turn off AMD CrossFire, if applicable, and choose "Compute for GPU Workload" in Radeon Settings.**
-
-![Screen Shot](https://i.imgur.com/TNIBhCa.png)
+The current focus of the project is on AMD and this program has been tested mostly against [AMD Radeon Software Adrenalin Edition 18.5.1](http://support.amd.com/en-us/kb-articles/Pages/Radeon-Software-Adrenalin-Edition-18.5.1-Release-Notes.aspx). Other drivers may or may not work.*
 
 ## About the DEVFEE
 
