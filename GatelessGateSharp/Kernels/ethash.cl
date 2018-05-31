@@ -254,6 +254,7 @@ __kernel void search(
 #endif
     __local compute_hash_share * const share = sharebuf + hash_id;
 
+
     // sha3_512(header .. nonce)
     uint2 state[25];
     for (uint i = 0; i < 4; i++)

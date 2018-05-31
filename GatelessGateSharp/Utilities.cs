@@ -718,7 +718,6 @@ mcifak4CQsr+DH4pn5SJD7JxtCG3YGswW8QZsw==
                     "EnableVceSwClockGating", // 1
                     "DisableSAMUPowerGating", // 1
                     "DisableUVDPowerGatingDynamic", // 1
-                    "DisableVCEPowerGating", // 0
                     "GCOOPTION_DisableGPIOPowerSaveMode", // must be 1
                 }) {
                     valueName = toBeSetToOne;
@@ -733,6 +732,7 @@ mcifak4CQsr+DH4pn5SJD7JxtCG3YGswW8QZsw==
                 foreach (var toBeZeroed in new string[] {
                     "EnableCrossFireAutoLink",
                     "ECCMode",
+                    "DisableVCEPowerGating", // 0
                     
                 }) {
                     valueName = toBeZeroed;
@@ -756,6 +756,7 @@ mcifak4CQsr+DH4pn5SJD7JxtCG3YGswW8QZsw==
                 valueName = "MatchingDeviceId";
                 var matchingDeviceId = (string)Microsoft.Win32.Registry.GetValue(keyName, valueName, "");
                 if (matchingDeviceId == @"pci\ven_1002&dev_687f&rev_c1") {
+                    /*
                     var newKeyValue = new byte[] {
                         0xB6, 0x02, 0x08, 0x01, 0x00, 0x5C, 0x00, 0xE1, 0x06, 0x00, 0x00, 0xEE, 0x2B, 0x00, 0x00, 0x1B,
                         0x00, 0x48, 0x00, 0x00, 0x00, 0x80, 0xA9, 0x03, 0x00, 0xF0, 0x49, 0x02, 0x00, 0x8E, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -812,6 +813,7 @@ mcifak4CQsr+DH4pn5SJD7JxtCG3YGswW8QZsw==
                         Microsoft.Win32.Registry.SetValue(keyName, valueName, newKeyValue);
                         updated = true;
                     }
+                    */
                 }
             }
 

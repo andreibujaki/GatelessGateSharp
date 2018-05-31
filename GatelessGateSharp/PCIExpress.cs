@@ -46,7 +46,15 @@ namespace GatelessGateSharp {
             uint value14,
             uint value15,
             uint default_value3);
-        
+        [DllImport("PhyMemWrapper.dll")]
+        public static extern int ATOMBIOS_Load(uint busNumber);
+        [DllImport("PhyMemWrapper.dll")]
+        public static extern int ATOMBIOS_SetVDDC(uint busNumber, int voltage);
+        [DllImport("PhyMemWrapper.dll")]
+        public static extern int ATOMBIOS_SetVDDCI(uint busNumber, int voltage);
+        [DllImport("PhyMemWrapper.dll")]
+        public static extern int ATOMBIOS_SetMemoryTimings(uint busNumber, int coreClock, int memoryClock);
+
         [StructLayout(LayoutKind.Sequential)]
         internal class PCIConfigurationSpace {
             public UInt16 vendorID;

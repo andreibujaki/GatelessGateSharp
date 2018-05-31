@@ -30,6 +30,9 @@
 #include <stdint.h>
 #include <cstdlib>
 #include <cstring>
+#include <chrono>
+#include <thread>
+
 #define kzalloc(size, options) calloc(size, 1)
 #define kfree(p) free(p)
 typedef uint32_t u32;
@@ -42,8 +45,8 @@ typedef uint8_t u8;
 #define DRM_ERROR(msg, param) 
 #define pr_info() 
 #define printk() 
-#define mdelay() 
-#define udelay() 
+#define mdelay(msec) std::this_thread::sleep_for(std::chrono::milliseconds(msec))
+#define udelay(usec) std::this_thread::sleep_for(std::chrono::microseconds(usec))
 #define msleep() 
 #define drm_can_sleep() true
 #define do_div(a, b) ((a) / (b))
@@ -69,12 +72,21 @@ size_t strlcpy(char *dest, const char *src, size_t size)
     }
     return ret;
 }
+
+#define ULONG uint32_t
+#define USHORT uint16_t
+#define UCHAR uint8_t
+#define ATOM_BIG_ENDIAN 0
+#pragma pack(push,1)
+#include "atom.h"
+#include "atombios.h"
+//#pragma pack(pop)
 #include "atom-types.h"
 //
 
 //#define ATOM_DEBUG
 
-#include "atom.h"
+//#include "atom.h"
 #include "atom-names.h"
 #include "atom-bits.h"
 //#include "amdgpu.h"

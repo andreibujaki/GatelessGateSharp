@@ -66,7 +66,7 @@ namespace GatelessGateSharp
         public bool IsGCN1 { get { return Vendor == "AMD" && (OpenCLName == "Pitcairn" || OpenCLName == "Tahiti" || OpenCLName == "Capeverde" || OpenCLName == "Hainan"); } }
         public bool IsGCN2 { get { return Vendor == "AMD" && (OpenCLName == "Bonaire" || OpenCLName == "Hawaii"); } }
         public bool IsGCN3 { get { return Vendor == "AMD" && (OpenCLName == "Tonga" || OpenCLName == "Fiji" || OpenCLName == "Ellesmere" || OpenCLName == "Baffin" || OpenCLName == "gfx804"); } }
-        public bool IsGCN5 { get { return Vendor == "AMD" && (OpenCLName == "Vega"); } }
+        public bool IsGCN5 { get { return Vendor == "AMD" && (OpenCLName == "gfx900"); } }
 
         public bool IsSpeedStable = false;
         public double prevSpeed = 0;

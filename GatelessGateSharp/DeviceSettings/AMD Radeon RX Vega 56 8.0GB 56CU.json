@@ -1,10 +1,10 @@
 {
   "devices": [
     {
-      "device_id": 3,
+      "device_id": 1,
       "device_vendor": "AMD",
       "device_name": "Radeon RX Vega 56",
-      "device_pnp_string": "PCI\\VEN_1002&DEV_687F&SUBSYS_9C301682&REV_C3\\8&6052EDF&0&000000400010",
+      "device_pnp_string": "PCI\\VEN_1002&DEV_687F&SUBSYS_9C301682&REV_C3\\8&31F1EB65&0&000000800010",
       "fan_control": {
         "target_temperature": 75,
         "maximum_temperature": 85,
@@ -87,7 +87,7 @@
         "raw_intensity": 112,
         "strided_index": 1,
         "current_power_consumption": 173,
-        "kernel_optimization_level": 2,
+        "kernel_optimization_level": 5,
         "overclocking_power_limit": 120,
         "overclocking_core_clock": 1535,
         "overclocking_memory_clock": 950,
@@ -146,20 +146,6 @@
         "intensity": 32,
         "local_work_size": 256,
         "current_power_consumption": 179,
-        "kernel_optimization_level": 5,
-        "overclocking_power_limit": 100,
-        "overclocking_core_clock": 1590,
-        "overclocking_memory_clock": 800,
-        "overclocking_core_voltage": 1200,
-        "overclocking_memory_voltage": 950,
-        "algorithm_enabled": true,
-        "overclocking_enabled": false
-      },
-      "lbry": {
-        "threads": 2,
-        "intensity": 32,
-        "local_work_size": 64,
-        "current_power_consumption": 178,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 100,
         "overclocking_core_clock": 1590,

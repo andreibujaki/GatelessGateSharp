@@ -28,7 +28,7 @@
 /* sync atom types to kernel types */
 
 typedef uint16_t USHORT;
-typedef uint32_t ULONG;
+//typedef uint32_t ULONG;
 typedef uint8_t UCHAR;
 
 

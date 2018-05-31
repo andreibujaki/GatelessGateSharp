@@ -30,6 +30,8 @@ namespace GatelessGateSharp
         public int ADLAdapterIndex { get; set; }
         public string DriverPathExt { get; set; } = null;
 
+        public int DriverCoreClock = -1;
+
         public override String GetVendor()
         {
             if (mVendor == null) {
@@ -975,20 +977,29 @@ namespace GatelessGateSharp
             //    return;
 
             PowerLimit = TargetPowerLimit;
+            int currentCoreClock = CoreClock;
 
             if (ADLVersion >= 7
                 && mODNLevelsBuffer_SystemClocks != IntPtr.Zero
                 && mODNLevelsBuffer_MemoryClocks != IntPtr.Zero
+                && currentCoreClock >= 0
                 && TargetCoreClock >= 0
+                && DriverCoreClock >= 0
                 && TargetCoreVoltage >= 0
                 && TargetMemoryClock >= 0
                 && TargetMemoryVoltage >= 0) {
+
+                if (TargetCoreClock > currentCoreClock) {
+                    DriverCoreClock += 1;
+                } else if (TargetCoreClock < currentCoreClock) {
+                    DriverCoreClock -= 1;
+                }
 
                 // OverDrive Next
                 var systemData = mOSADLODNPerformanceLevelsData_SystemClocks;
                 systemData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
                 for (int i = systemData.iNumberOfPerformanceLevels - 1; i >= 0; --i) {
-                    systemData.aLevels[i].iClock = TargetCoreClock * 100;
+                    systemData.aLevels[i].iClock = DriverCoreClock * 100;
                     systemData.aLevels[i].iVddc = TargetCoreVoltage;
                 }
                 Marshal.StructureToPtr(systemData, mODNLevelsBuffer_SystemClocks, false);
@@ -1003,6 +1014,8 @@ namespace GatelessGateSharp
 
                 ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, mODNLevelsBuffer_SystemClocks);
                 ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, mODNLevelsBuffer_MemoryClocks);
+                PCIExpress.ATOMBIOS_SetVDDC(GetComputeDevice().PciBusIdAMD, TargetCoreVoltage);
+                PCIExpress.ATOMBIOS_SetVDDCI(GetComputeDevice().PciBusIdAMD, TargetMemoryVoltage);
 
             } else if (ADLVersion >= 5 && TargetCoreClock >= 0 && TargetMemoryClock >= 0 && TargetCoreVoltage >= 0
                 && ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null

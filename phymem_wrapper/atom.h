@@ -112,7 +112,8 @@
 #define ATOM_IO_IIO		0x80
 
 struct card_info {
-	struct drm_device *dev;
+    uint32_t bus_number;
+
 	void (* reg_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
 	uint32_t (* reg_read)(struct card_info *, uint32_t);          /*  filled by driver */
 	void (* ioreg_write)(struct card_info *, uint32_t, uint32_t);   /*  filled by driver */
@@ -144,9 +145,9 @@ struct atom_context {
 	char vbios_version[20];
 };
 
-extern int amdgpu_atom_debug;
+//extern int amdgpu_atom_debug;
 
-struct atom_context *amdgpu_atom_parse(struct card_info *, void *);
+struct atom_context *amdgpu_atom_parse(struct card_info *, uint8_t *);
 int amdgpu_atom_execute_table(struct atom_context *, int, uint32_t *);
 int amdgpu_atom_asic_init(struct atom_context *);
 void amdgpu_atom_destroy(struct atom_context *);

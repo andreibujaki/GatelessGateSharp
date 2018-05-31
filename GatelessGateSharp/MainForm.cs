@@ -101,7 +101,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.8";
+        public static string appVersion = "1.3.9";
         private static string sRecommendedAMDDriverVersion = "18.5.1";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
@@ -585,6 +585,16 @@ namespace GatelessGateSharp
 
             for (int i = 0; i < Controller.OpenCLDevices.Length; ++i) {
                 OpenCLDevice device = Controller.OpenCLDevices[i];
+
+                try {
+                    if (device.IsAMD) {
+                        if (!PCIExpress.Available)
+                            PCIExpress.LoadPhyMem();
+                        PCIExpress.ATOMBIOS_Load(device.GetComputeDevice().PciBusIdAMD);
+                    }
+                } catch (Exception ex) {
+                    Logger(ex);
+                }
 
                 dataGridViewDevices.Rows.Add(new object[] {
                     true,
@@ -1908,9 +1918,11 @@ namespace GatelessGateSharp
 
             lines = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffff") + " [" + System.Threading.Thread.CurrentThread.ManagedThreadId + "] " + lines + "\r\n";
             Console.Write(lines);
-            try { Instance.loggerMutex.WaitOne(5000); } catch (Exception) { }
+            if (Instance != null) 
+                try { Instance.loggerMutex.WaitOne(5000); } catch (Exception) { }
             sLoggerBuffer += lines;
-            try { Instance.loggerMutex.ReleaseMutex(); } catch (Exception) { }
+            if (Instance != null)
+                try { Instance.loggerMutex.ReleaseMutex(); } catch (Exception) { }
         }
 
         public static void Logger(
@@ -5197,7 +5209,7 @@ namespace GatelessGateSharp
 
             if (overclockingEnabled) {
                 device.TargetPowerLimit = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
-                device.TargetCoreClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
+                device.DriverCoreClock = device.TargetCoreClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
                 device.TargetMemoryClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
                 device.TargetCoreVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
                 device.TargetMemoryVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
@@ -5420,9 +5432,9 @@ namespace GatelessGateSharp
 
                 if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
                     foreach (var device in Controller.OpenCLDevices) {
-                        //device.MemoryTimingModsEnabled = false;
-                        //device.OverclockingEnabled = false;
-                        //device.ResetOverclockingSettings();
+                        device.MemoryTimingModsEnabled = false;
+                        device.OverclockingEnabled = false;
+                        device.ResetOverclockingSettings();
                         device.FanControlEnabled = false;
                         device.FanSpeed = -1;
                     }
@@ -5469,8 +5481,8 @@ namespace GatelessGateSharp
             if (Controller.AppState == Controller.ApplicationGlobalState.Idle
                 || Controller.AppState == Controller.ApplicationGlobalState.Switching) {
 
-                //foreach (var device in Controller.OpenCLDevices)
-                //    device.ReleaseAllComputeBuffers();
+                foreach (var device in Controller.OpenCLDevices)
+                    device.ReleaseAllComputeBuffers();
 
                 Controller.AppState = Controller.ApplicationGlobalState.Switching;
                 UpdateControls();
@@ -6169,14 +6181,21 @@ namespace GatelessGateSharp
                 var startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
-                if (checkBoxLaunchAtStartup.Checked)
-                    startInfo.Arguments = "/C schtasks /create /sc onlogon /tn GatelessGateSharp /rl highest /tr \"\\\"" + Application.ExecutablePath + "\\\"\"";
-                else
+                if (checkBoxLaunchAtStartup.Checked) {
                     startInfo.Arguments = "/C schtasks /delete /f /tn GatelessGateSharp";
-                process.StartInfo = startInfo;
-                process.Start();
-            } catch (Exception) {
-                MessageBox.Show("Failed to complete the operation.", appName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+                    startInfo.Arguments = "/C schtasks /create /sc onlogon /tn GatelessGateSharp /rl highest /tr \"\\\"" + Application.ExecutablePath + "\\\"\"";
+                    process.StartInfo = startInfo;
+                    process.Start();
+                } else {
+                    startInfo.Arguments = "/C schtasks /delete /f /tn GatelessGateSharp";
+                    process.StartInfo = startInfo;
+                    process.Start();
+                }
+            } catch (Exception ex) {
+                Logger(ex);
             }
         }
 
@@ -6375,6 +6394,7 @@ namespace GatelessGateSharp
                         System.Threading.Thread.Sleep(1000);
                     }
                 } catch (Exception) {
+                    /*
                     // https://support.microsoft.com/en-us/help/300956/how-to-manually-rebuild-performance-counter-library-values
                     try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Perflib", "Last Counter", 1846); } catch (Exception) { }
                     try { Microsoft.Win32.Registry.SetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Perflib", "Last Help", 1847); } catch (Exception) { }
@@ -6388,6 +6408,7 @@ namespace GatelessGateSharp
                             }
                         }
                     } catch (Exception) { }
+                    */
                 }
                 System.Threading.Thread.Sleep(1000);
             }
@@ -7244,7 +7265,7 @@ namespace GatelessGateSharp
                         if (column.HeaderText == GetPrettyAlgorithmNameForBenchmarkTable(algorithm)) {
                             double speedPrimaryAlgorithm = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_speed_primary_algorithm")].Value;
                             double speedSecondaryAlgorithm = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_speed_secondary_algorithm")].Value;
-                            double powerConsumption = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_power_consumption")].Value; ;
+                            double powerConsumption = (double)numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "current_power_consumption")].Value;
                             double profitability;
                             string profitabilityUnit;
                             GetNiceHashProfitability(algorithm, speedPrimaryAlgorithm, speedSecondaryAlgorithm, powerConsumption, out profitability, out profitabilityUnit);
@@ -7799,8 +7820,8 @@ namespace GatelessGateSharp
                     dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeed"].Value = ConvertHashrateToString(record.SpeedPrimaryAlgorithm);
                     if (record.SpeedSecondaryAlgorithm > 0)
                         dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsSpeed"].Value += ", " + ConvertHashrateToString(record.SpeedSecondaryAlgorithm);
-                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsPowerConsumption"].Value = String.Format("{0:N0}", (record.PowerConsumption / record.SuccessCount)) + "W";
-                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsProfitability"].Value = (record.Profitability != 0) ? String.Format("{0:N4} ", (record.Profitability / record.SuccessCount)) + record.ProfitabilityUnit : "";
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsPowerConsumption"].Value = String.Format("{0:N0}", (record.PowerConsumption)) + "W";
+                    dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsProfitability"].Value = (record.Profitability != 0) ? String.Format("{0:N4} ", (record.Profitability)) + record.ProfitabilityUnit : "";
                 }
                 dataGridViewOptimizerRecords.Rows[dataGridViewOptimizerRecords.Rows.Count - 1].Cells["dataGridViewTextBoxColumnOptimizerRecordsParameter"].Value = GetPrettyDeviceParameterName(record.ParameterWithValues, true);
             }
@@ -8490,7 +8511,7 @@ namespace GatelessGateSharp
                     + "You can always confirm the results on the \"Devices\" tab page before you start mining.",
                     appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
-            if (result != System.Windows.Forms.DialogResult.OK) {
+            if (result == System.Windows.Forms.DialogResult.OK) {
                 ResetDeviceSettings();
                 mAreSettingsDirty = true;
             }

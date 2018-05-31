@@ -59,8 +59,9 @@ namespace GatelessGateSharp
         }
 
         static Mutex sMutex = new Mutex(true, "{1D2A713A-A29C-418C-BC62-2E98BD325490}");
+        static bool sKillMonitor = true;
         public static void Exit(bool killMonitor = true) {
-            if (killMonitor)
+            if (sKillMonitor = killMonitor)
                 KillMonitor();
             Application.Exit();
         }
@@ -137,7 +138,8 @@ namespace GatelessGateSharp
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
 
-            KillMonitor();
+            if (sKillMonitor)
+                KillMonitor();
 
             try { sMutex.ReleaseMutex(); } catch (Exception) { }
 

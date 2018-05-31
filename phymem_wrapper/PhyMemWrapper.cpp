@@ -26,6 +26,16 @@
 #include <inttypes.h>
 #include <chrono>
 #include <thread>
+#include <mutex>
+
+
+
+#define MAX_BIOS_SIZE (512 * 1024)
+#pragma pack(push,1)
+#include "atom.h"
+#include "atombios.h"
+//#pragma pack(pop)
+std::mutex ATOMBIOSMutex;
 
 
 
@@ -583,7 +593,7 @@ end:
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     };
 
-    static volatile uint32_t *virtualAddrArray[256] = {
+    static volatile uint32_t *virtualAddressArray[256] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -601,58 +611,59 @@ end:
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     };
-
+    
     __declspec(dllexport)
         BOOL ReadFromAMDGPURegister(int32_t busNum, uint32_t regNo, uint32_t *ptrValue)
     {
-        uint32_t configRegistersBase = configRegistersBaseArray[busNum];
+        volatile uint32_t *virtualAddress = virtualAddressArray[busNum];
 
-        if (!configRegistersBase) {
-            if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+        if (virtualAddress == NULL) {
+            uint32_t configRegistersBase = configRegistersBaseArray[busNum];
+
+            if (!configRegistersBase) {
+                if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+                    return FALSE;
+                configRegistersBase &= 0xfffffff0;
+                configRegistersBaseArray[busNum] = configRegistersBase;
+            }
+
+            virtualAddress = (uint32_t *)MapPhyMem(configRegistersBase, MAX_BIOS_SIZE);
+            if (!virtualAddress)
                 return FALSE;
-            configRegistersBase &= 0xfffffff0;
-            configRegistersBaseArray[busNum] = configRegistersBase;
+
+            virtualAddressArray[busNum] = virtualAddress;
         }
 
-        uint32_t *virtual_addr = (uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
-        if (!virtual_addr)
-            return FALSE;
-        *ptrValue = *(virtual_addr + regNo);
-        UnmapPhyMem(virtual_addr, 256 * 1024);
+        *ptrValue = *(virtualAddress + regNo);
 
         return TRUE;
     }
 
-
-
     __declspec(dllexport)
-        BOOL WriteToGMC81Register(int32_t busNum, uint32_t regNo, uint32_t value, uint32_t mask)
+        BOOL WriteToAMDGPURegister(int32_t busNum, uint32_t regNo, uint32_t value)
     {
-        uint32_t configRegistersBase = configRegistersBaseArray[busNum];
+        volatile uint32_t *virtualAddress = virtualAddressArray[busNum];
 
-        if (!configRegistersBase) {
-            if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+        if (virtualAddress == NULL) {
+            uint32_t configRegistersBase = configRegistersBaseArray[busNum];
+
+            if (!configRegistersBase) {
+                if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+                    return FALSE;
+                configRegistersBase &= 0xfffffff0;
+                configRegistersBaseArray[busNum] = configRegistersBase;
+            }
+
+            virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, MAX_BIOS_SIZE);
+            if (!virtualAddress)
                 return FALSE;
-            configRegistersBase &= 0xfffffff0;
-            configRegistersBaseArray[busNum] = configRegistersBase;
+
+            virtualAddressArray[busNum] = virtualAddress;
         }
 
-        volatile uint32_t *virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
-        if (!virtualAddress)
-            return FALSE;
-
-        const uint32_t mmMC_HUB_MISC_STATUS = 0x832;
-        const uint32_t MC_HUB_MISC_STATUS__RPB_BUSY_MASK = 0x8000;
-        const uint32_t MC_HUB_MISC_STATUS__GFX_BUSY_MASK = 0x80000;
-
-        BOOL result = FALSE;
-        if (!(virtualAddress[mmMC_HUB_MISC_STATUS] & (MC_HUB_MISC_STATUS__RPB_BUSY_MASK | MC_HUB_MISC_STATUS__GFX_BUSY_MASK))) {
-            *(virtualAddress + regNo) = (*(virtualAddress + regNo) & ~mask) | (value & mask);
-            result = TRUE;
-        }
-        UnmapPhyMem((uint32_t *)virtualAddress, 256 * 1024);
-
-        return result;
+        *(virtualAddress + regNo) = value;
+        
+        return TRUE;
     }
 
 #define WAIT std::this_thread::sleep_for(std::chrono::nanoseconds(100))
@@ -726,9 +737,9 @@ end:
         const uint32_t mmGRBM_STATUS = 0x2004;
         const uint32_t GRBM_STATUS__GUI_ACTIVE_MASK = 0x80000000;
 
-        //const uint32_t mask5 = 0x01e01f00; // x
-        const uint32_t mask5 = 0xffe01fff; // x
-        //const uint32_t mask5 = 0xffe01fff; // x
+        //const uint32_t mask5 = 0x01e01f00;
+        const uint32_t mask5 = 0xffe01fff;
+        //const uint32_t mask5 = 0xffe01fff;
         value5 = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
 
         if (   (*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) != (default_value3 & 0xff000000)) {
@@ -759,4 +770,336 @@ end:
 
         return ret;
     }
+
+
+    static struct {
+        struct atom_context *context;
+        uint8_t *BIOS;
+        int    BIOSSize;
+        struct card_info card_info;
+    } ATOMBIOSContextArray[256] =
+    {
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+    };
+
+#define AMD_VBIOS_SIGNATURE " 761295520"
+#define AMD_VBIOS_SIGNATURE_OFFSET 0x30
+#define AMD_VBIOS_SIGNATURE_SIZE sizeof(AMD_VBIOS_SIGNATURE)
+#define AMD_VBIOS_SIGNATURE_END (AMD_VBIOS_SIGNATURE_OFFSET + AMD_VBIOS_SIGNATURE_SIZE)
+#define AMD_IS_VALID_VBIOS(p) ((p)[0] == 0x55 && (p)[1] == 0xAA)
+//#define AMD_VBIOS_LENGTH(p) ((p)[2] << 9)
+
+    void reg_write(struct card_info *info, uint32_t addr, uint32_t data)
+    {
+#if FALSE
+        char filename[256];
+        sprintf(filename, "bios%04d.log", info->bus_number);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "reg_write, addr: 0x%08x, data: 0x%08x\n", addr, data);
+        fclose(file);
+#endif
+
+        WriteToAMDGPURegister(info->bus_number, addr, data);
+    }
+
+    uint32_t reg_read(struct card_info *info, uint32_t addr)
+    {
+        uint32_t data;
+        ReadFromAMDGPURegister(info->bus_number, addr, &data);
+      
+#if FALSE
+        char filename[256];
+        sprintf(filename, "bios%04d.log", info->bus_number);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "reg_read, addr: 0x%08x, data: 0x%08x\n", addr, data);
+        fclose(file);
+#endif
+
+        return data;
+    }
+
+    void ioreg_write(struct card_info *info, uint32_t addr, uint32_t data)
+    {
+        char filename[256];
+        sprintf(filename, "bios%04d.log", info->bus_number);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "ioreg_write, addr: 0x%08x, data: 0x%08x\n", addr, data);
+        fclose(file);
+    }
+
+    uint32_t ioreg_read(struct card_info *info, uint32_t addr)
+    {
+        uint32_t data = 0x0;
+
+        char filename[256];
+        sprintf(filename, "bios%04d.log", info->bus_number);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "ioreg_read, addr: 0x%08x, data: 0x%08x\n", addr, data);
+        fclose(file);
+
+        return data;
+    }
+
+    void mc_write(struct card_info *info, uint32_t addr, uint32_t data)
+    {
+        char filename[256];
+        sprintf(filename, "bios%04d.log", info->bus_number);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "mc_write, addr: 0x%08x, data: 0x%08x\n", addr, data);
+        fclose(file);
+    }
+
+    uint32_t mc_read(struct card_info *info, uint32_t addr)
+    {
+        uint32_t data = 0x0;
+
+        char filename[256];
+        sprintf(filename, "bios%04d.log", info->bus_number);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "mc_read, addr: 0x%08x, data: 0x%08x\n", addr, data);
+        fclose(file);
+
+        return data;
+    }
+
+    void pll_write(struct card_info *info, uint32_t addr, uint32_t data)
+    {
+        char filename[256];
+        sprintf(filename, "bios%04d.log", info->bus_number);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "pll_write, addr: 0x%08x, data: 0x%08x\n", addr, data);
+        fclose(file);
+    }
+
+    uint32_t pll_read(struct card_info *info, uint32_t addr)
+    {
+        uint32_t data = 0x0;
+
+        char filename[256];
+        sprintf(filename, "bios%04d.log", info->bus_number);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "pll_read, addr: 0x%08x, data: 0x%08x\n", addr, data);
+        fclose(file);
+
+        return data;
+    }
+
+    __declspec(dllexport)
+        BOOL ATOMBIOS_Load(uint32_t bus_number)
+    {
+        std::lock_guard<std::mutex> guard(ATOMBIOSMutex);
+
+        uint32_t  bios_addr;
+        uint16_t  command;
+
+        ReadPCI(bus_number, 0, 0, 0x4, sizeof(command), &command);
+        command |= 2;
+        WritePCI(bus_number, 0, 0, 0x4, sizeof(command), &command);
+
+        ReadPCI(bus_number, 0, 0, 0x24, sizeof(bios_addr), &bios_addr);
+        bios_addr = ((bios_addr ^ 0x80000) & 0xffffe000);
+
+        bios_addr = (bios_addr | 0x1);
+        WritePCI(bus_number, 0, 0, 0x30, sizeof(bios_addr), &bios_addr);
+        bios_addr = (bios_addr & 0xfffffff0);
+
+        uint8_t *mapped_bios = (uint8_t *)MapPhyMem(bios_addr, MAX_BIOS_SIZE);
+        if (mapped_bios == NULL)
+            return FALSE;
+
+        if (!AMD_IS_VALID_VBIOS(mapped_bios)) {
+            UnmapPhyMem(mapped_bios, MAX_BIOS_SIZE);
+            return FALSE;
+        }
+
+        uint32_t bios_length = MAX_BIOS_SIZE; // AMD_VBIOS_LENGTH(mapped_bios);
+        uint8_t *bios = (uint8_t *)malloc(bios_length);
+        if (bios == NULL) {
+            UnmapPhyMem(mapped_bios, MAX_BIOS_SIZE);
+            return FALSE;
+        }
+        memcpy(bios, mapped_bios, bios_length);
+
+        bios_addr = 0;
+        WritePCI(bus_number, 0, 0, 0x30, sizeof(bios_addr), &bios_addr);
+        UnmapPhyMem(mapped_bios, MAX_BIOS_SIZE);
+
+#if FALSE
+        char filename[256];
+        sprintf(filename, "bios%04d.rom", bus_number);
+        FILE *file = fopen(filename, "wb");
+        fwrite(bios, sizeof(uint8_t), bios_length, file);
+        fclose(file);
+#endif
+        ATOMBIOSContextArray[bus_number].card_info.bus_number = bus_number;
+        ATOMBIOSContextArray[bus_number].card_info.reg_read = reg_read;
+        ATOMBIOSContextArray[bus_number].card_info.reg_write = reg_write;
+        ATOMBIOSContextArray[bus_number].card_info.ioreg_read = ioreg_read;
+        ATOMBIOSContextArray[bus_number].card_info.ioreg_write = ioreg_write;
+        ATOMBIOSContextArray[bus_number].card_info.mc_read = mc_read;
+        ATOMBIOSContextArray[bus_number].card_info.mc_write = mc_write;
+        ATOMBIOSContextArray[bus_number].card_info.pll_read = pll_read;
+        ATOMBIOSContextArray[bus_number].card_info.pll_write = pll_write;
+        ATOMBIOSContextArray[bus_number].context = amdgpu_atom_parse(&ATOMBIOSContextArray[bus_number].card_info, bios);
+
+        uint16_t base = *(uint16_t *)((char *)bios + ATOM_ROM_TABLE_PTR);
+        uint16_t str_pos = *(uint16_t *)((char *)bios + base + ATOM_ROM_MSG_PTR);
+        char *str = ((char *)bios + str_pos);
+        while (*str && ((*str == '\n') || (*str == '\r')))
+            str++;
+        char bios_name[1024];
+        strncpy(bios_name, str, 1023);
+        bios_name[1023] = '\0';
+        for (str = bios_name; *str; ++str)
+            if ((*str == '\n') || (*str == '\r'))
+                *str = '\0';
+        for (str = bios_name + strlen(bios_name) - 1; (str != bios_name) && ((*str == '\n') || (*str == '\r') || (*str == ' ') || (*str == '\t')); --str)
+            *str = '\0';
+
+#if FALSE
+        sprintf(filename, "bios%04d.log", bus_number);
+        file = fopen(filename, "a+");
+        fprintf(file, "bios_name: %s\n", bios_name);
+        fclose(file);
+#endif
+        
+        return TRUE;
+    }
+
+    __declspec(dllexport)
+        BOOL ATOMBIOS_SetVDDC(uint32_t bus_number, int32_t voltage)
+    {
+        std::lock_guard<std::mutex> guard(ATOMBIOSMutex);
+
+        if (ATOMBIOSContextArray[bus_number].context == NULL)
+            return FALSE;
+
+        int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
+        uint8_t frev, crev;
+        amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
+#if FALSE
+        char filename[256];
+        sprintf(filename, "Logs\\bios%04d.log", bus_number);
+        file = fopen(filename, "a+");
+        fprintf(file, "frev: %d\n", (int)(frev));
+        fprintf(file, "crev: %d\n", (int)(crev));
+        fclose(file);
+#endif
+        if (frev != 1 || (crev != 3 && crev != 4))
+            return FALSE;
+
+        union {
+            SET_VOLTAGE_PARAMETERS_V1_3 in;
+        } args;
+        args.in.ucVoltageType = VOLTAGE_TYPE_VDDC;
+        args.in.ucVoltageMode = ATOM_SET_VOLTAGE;
+        args.in.usVoltageLevel = voltage;
+        int priority = GetThreadPriority(GetCurrentThread());
+        SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+        amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+        UnmapPhyMem((PVOID)virtualAddressArray[bus_number], MAX_BIOS_SIZE);
+        virtualAddressArray[bus_number] = NULL;
+        SetThreadPriority(GetCurrentThread(), priority);
+
+        return TRUE;
+    }
+
+    __declspec(dllexport)
+        BOOL ATOMBIOS_SetVDDCI(uint32_t bus_number, int32_t voltage)
+    {
+        std::lock_guard<std::mutex> guard(ATOMBIOSMutex);
+
+        if (ATOMBIOSContextArray[bus_number].context == NULL)
+            return FALSE;
+
+        int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
+        uint8_t frev, crev;
+        amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
+#if FALSE
+        char filename[256];
+        sprintf(filename, "Logs\\bios%04d.log", bus_number);
+        file = fopen(filename, "a+");
+        fprintf(file, "frev: %d\n", (int)(frev));
+        fprintf(file, "crev: %d\n", (int)(crev));
+        fclose(file);
+#endif
+        if (frev != 1 || (crev != 3 && crev != 4))
+            return FALSE;
+
+        union {
+            SET_VOLTAGE_PARAMETERS_V1_3 in;
+        } args;
+        args.in.ucVoltageType = VOLTAGE_TYPE_VDDCI;
+        args.in.ucVoltageMode = ATOM_SET_VOLTAGE;
+        args.in.usVoltageLevel = voltage;
+        int priority = GetThreadPriority(GetCurrentThread());
+        SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+        amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+        UnmapPhyMem((PVOID)virtualAddressArray[bus_number], MAX_BIOS_SIZE);
+        virtualAddressArray[bus_number] = NULL;
+        SetThreadPriority(GetCurrentThread(), priority);
+
+        return TRUE;
+    }
+
+    __declspec(dllexport)
+        BOOL ATOMBIOS_SetMemoryTimings(uint32_t bus_number, int32_t coreClock, int32_t memoryClock)
+    {
+        std::lock_guard<std::mutex> guard(ATOMBIOSMutex);
+
+        if (ATOMBIOSContextArray[bus_number].context == NULL)
+            return FALSE;
+
+        int index = GetIndexIntoMasterTable(COMMAND, DynamicMemorySettings);
+        uint8_t frev, crev;
+        amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
+#if FALSE
+        sprintf(filename, "Logs\\bios%04d.log", bus_number);
+        file = fopen(filename, "a+");
+        fprintf(file, "frev: %d\n", (int)(frev));
+        fprintf(file, "crev: %d\n", (int)(crev));
+        fclose(file);
+#endif
+        //if (frev != 1 || crev != 3)
+        //    return FALSE;
+
+        SET_ENGINE_CLOCK_PS_ALLOCATION engine_clock_parameters;
+        engine_clock_parameters.ulTargetEngineClock = (((unsigned long)coreClock * 100) & SET_CLOCK_FREQ_MASK) | (COMPUTE_ENGINE_PLL_PARAM << 24);
+        engine_clock_parameters.sReserved.ulClock = (((unsigned long)memoryClock * 100) & SET_CLOCK_FREQ_MASK);
+        UnmapPhyMem((PVOID)virtualAddressArray[bus_number], MAX_BIOS_SIZE);
+        virtualAddressArray[bus_number] = NULL;
+        amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&engine_clock_parameters);
+
+        return TRUE;
+    }
 }
+

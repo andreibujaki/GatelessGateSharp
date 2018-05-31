@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
          xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
-	<Bundle Name="Gateless Gate Sharp Bundle" Version="1.3.8" Manufacturer="Zawawa Software LLC" UpgradeCode="cfaf8b75-a167-4a3a-b0dc-b6a6f05c50f0">
+	<Bundle Name="Gateless Gate Sharp" Version="1.3.9" Manufacturer="Zawawa Software LLC" UpgradeCode="cfaf8b75-a167-4a3a-b0dc-b6a6f05c50f0">
 		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense">
       <bal:WixStandardBootstrapperApplication
         LicenseUrl=""
@@ -19,7 +19,9 @@
                   RepairCommand="/repair /passive /norestart"
                   UninstallCommand="/uninstall /passive /norestart"
                   Permanent="no"
-                  Vital="yes" />
+                  Vital="yes">
+        <ExitCode Value="-2147023258" Behavior="success"/>
+      </ExePackage>
       <MsiPackage Id="GatelessGateSharpSetup"
                   SourceFile="$(var.WiXSetup.TargetPath)"
                   DisplayInternalUI="yes"

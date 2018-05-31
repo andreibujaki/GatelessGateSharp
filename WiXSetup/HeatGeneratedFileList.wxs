@@ -2,6 +2,9 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="INSTALLFOLDER">
+            <Component Id="cmp68ADB07AF08A1426815AD3BDF42CE4F6" Guid="*">
+                <File Id="filC9CBDE0814C385DF1C9E496796A4F7CA" KeyPath="yes" Source="$(var.HarvestPath)\Gateless Gate Sharp.lnk" />
+            </Component>
             <Component Id="cmp69591F30184324681A0EF8373EA9D2A6" Guid="*">
                 <File Id="filC38C7164BB644943D4E7CABCE338C149" KeyPath="yes" Source="$(var.HarvestPath)\GatelessGateSharp.exe" />
             </Component>
@@ -29,9 +32,6 @@
             <Component Id="cmpEFB368FCE043485F0641DD456E80FCFD" Guid="*">
                 <File Id="fil62E0058329145C12414CC60D0BB6EFB8" KeyPath="yes" Source="$(var.HarvestPath)\nvml.dll" />
             </Component>
-            <Component Id="cmp30CAD646F7DAC8538F6230FF3D08C5B3" Guid="*">
-                <File Id="fil5CB60D61B5787717AEA7F3D8AD7D09A8" KeyPath="yes" Source="$(var.HarvestPath)\OpenCL.dll" />
-            </Component>
             <Component Id="cmp28FB22B28D9FFBC15D2050E172F311EF" Guid="*">
                 <File Id="fil332410B9E51FC54273C1CDAD2676A750" KeyPath="yes" Source="$(var.HarvestPath)\phymem.sys" />
             </Component>
@@ -39,233 +39,59 @@
                 <File Id="fil639D7C1056145B7EEA780175AB862984" KeyPath="yes" Source="$(var.HarvestPath)\PhyMemWrapper.dll" />
             </Component>
             <Directory Id="dirE3D1E0B6837DDD4581B09A1996205535" Name="BinaryKernels">
-                <Component Id="cmp1A698FAB2912F7EF549129B929350ED6" Guid="*">
-                    <File Id="filA683E865018039FA58EBE80744DAA942" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Baffin_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmpFDDD0B16290C7011F1E64ADAEE146277" Guid="*">
-                    <File Id="fil4707E06FD4B1ED4DF732FDE04AE3350C" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Baffin_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmpFBC8E48FDD61FC10A1F471493FFA3929" Guid="*">
-                    <File Id="fil4BC17F317357EE22F546815AEC2F0067" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Baffin_x16r_64.bin" />
-                </Component>
                 <Component Id="cmp888CAACFE8DF5C285C5F902C292E3A2E" Guid="*">
                     <File Id="filFC95715068891E2EA270472072B5F552" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Baffin_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmpBD6FB880B680178DCD2562C021FF6E5F" Guid="*">
-                    <File Id="filF97EE75036702E3E8414D88BE8A94420" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Bonaire_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp6038E19E454925A6AAC92C2550EBF210" Guid="*">
-                    <File Id="filBC2EE5DA237CFBF9C97601F25037D13F" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Bonaire_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp6001523F2603B1CB3916A865D17D4B7A" Guid="*">
-                    <File Id="fil9066D66C368B2DA692E4B21DD0B1C5E0" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Bonaire_x16r_64.bin" />
                 </Component>
                 <Component Id="cmpEADCB759A3F6799EBE93CE08D2C06AC8" Guid="*">
                     <File Id="fil277D977AC62A9449B13232C192C6B0B4" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Bonaire_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmpEEEF546D71C590E6451088F530F162C2" Guid="*">
-                    <File Id="filB058A675C6D366EE092BD7A69D82A4E1" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Capeverde_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp48CC05240C1443C05E6A171663F4C9B0" Guid="*">
-                    <File Id="filD0E08AD7F6DA2B7136F1DCCFE79918EF" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Capeverde_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmpA3D4D0A08B85F172EEE66089C0B9CE2D" Guid="*">
-                    <File Id="filAE654A6A71023B61334E69579CE163E5" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Capeverde_x16r_64.bin" />
-                </Component>
                 <Component Id="cmpE2BC47C0811801357A69B5A60D1B53BF" Guid="*">
                     <File Id="fil51B854390FDB2335C413207BD33201AD" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Capeverde_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmpF2C58645DE91C04DC3048C02EF631109" Guid="*">
-                    <File Id="fil3DC991DB4E6118C8512C59DF7230BEA7" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Carrizo_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp841F083065895E8E6A7C92DB0E8A7B4C" Guid="*">
-                    <File Id="fil412AFF7BFDE15BB2EADCF33996377309" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Carrizo_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp1D5A30847C85AD0DB88FE5488D0803AE" Guid="*">
-                    <File Id="fil485C010306E3DB1F5DF342279A80CB57" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Carrizo_x16r_64.bin" />
                 </Component>
                 <Component Id="cmp8BB94702A93C5169F41E203A232472E9" Guid="*">
                     <File Id="filED17219F8E30155820AAC2AE2674EEAC" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Carrizo_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmp1DB2D5EE0BD42CE51191131D583450C7" Guid="*">
-                    <File Id="filC2C959B49A2BF515EF540CA41D2E3584" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Ellesmere_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp3CBFA6397C25E68480B047C58B3EDA6A" Guid="*">
-                    <File Id="filB3A5D86200A487F632CCBF7846D46460" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Ellesmere_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp991D96D39EFCB8D66123D1B25FE2A5A3" Guid="*">
-                    <File Id="fil9C11BBF02E4C0C07819117347C2EE07C" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Ellesmere_neoscrypt_64.isa" />
-                </Component>
-                <Component Id="cmpB4456CA895E74750DBA1EB5CA0BE1BF2" Guid="*">
-                    <File Id="fil76868DBA9E4F5C814A2C0B8B7BF819CD" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Ellesmere_x16r_64.bin" />
-                </Component>
                 <Component Id="cmp2C42A3F8F5F276D8EF8AD32D66AA382D" Guid="*">
                     <File Id="filCD94B6065DB22DF96CCD011D68391EB0" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Ellesmere_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmpA395164647E064EC72B323F7314BFBF8" Guid="*">
-                    <File Id="fil474465CB650FF08BFD67864191F3231F" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Fiji_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp5E470CE2224C15D8026551DDD1570007" Guid="*">
-                    <File Id="filE471241EF837B35A1BBA426525167368" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Fiji_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp5663F6F4F0BE9D7E6E0F13C0D7289E6C" Guid="*">
-                    <File Id="filA65E486539CD0EF492C35EB6CAFF1FE3" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Fiji_x16r_64.bin" />
                 </Component>
                 <Component Id="cmpF4EDCB1B9E9904E1D7E1CD7DA793810F" Guid="*">
                     <File Id="fil29A2201194D2C5961EAC871842A96D63" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Fiji_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmp3F721236FF39B7696FED223A774DF550" Guid="*">
-                    <File Id="filA796CCB8B7E7B694F852FDDC278998D4" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\gfx900_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp55D2642B0D78BEBD8834F0001036C6B3" Guid="*">
-                    <File Id="fil6B109540A25A55AAE841E61CE27D0BEF" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\gfx900_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp718A7BCE1A86FC38D4B5F74E43E8BF6F" Guid="*">
-                    <File Id="fil64567D3E82D8230406810DF6DD0C9D9A" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\gfx900_x16r_64.bin" />
-                </Component>
                 <Component Id="cmp3E20541CF93C9F5B19B872CA9DCCE53A" Guid="*">
                     <File Id="fil10AEBDE1F6DC44E149BEC9B3DB4A8664" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\gfx900_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmp3C978769A7E83995B60DFF23AAEDBDEE" Guid="*">
-                    <File Id="filB93CDA92B5C7FCE13BE9AEA537F72AD6" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Hainan_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmpDAB2A32CA721AC1E82323C70F9261D85" Guid="*">
-                    <File Id="filA0735EF66429E31B636AEE0CA95B6FD6" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Hainan_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp91280BAF113258E272ACE84552243960" Guid="*">
-                    <File Id="filC6DF1FA3736A81C5C3DA5AA31625A337" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Hainan_x16r_64.bin" />
                 </Component>
                 <Component Id="cmp2DC0C66479B8D7969A8436884554470E" Guid="*">
                     <File Id="filEEB3FA60CB67AA6C09A11EEE649BE918" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Hainan_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmp73E4CB61753538AB140571B0BE81CC9F" Guid="*">
-                    <File Id="fil19BB744D7AC12655F454D6EEF7FDFAE3" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Hawaii_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp54CE4568AF67CF095D86E8DD3CA348DC" Guid="*">
-                    <File Id="fil38CF8CE756CEBF8BD6C03FC5A2563AAD" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Hawaii_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp2D00011AFDC737BFA26FF325EB9F108A" Guid="*">
-                    <File Id="fil0049B154158C4518EAAAE3812DAA8F29" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Hawaii_x16r_64.bin" />
-                </Component>
                 <Component Id="cmpFF2BF3A7D1E041D2C304BE046BBB6C1A" Guid="*">
                     <File Id="fil67A289CED241106E80CFCB1C49E5AA33" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Hawaii_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmp53AB4B8FBD74B3997C6ABA161B4B6DCE" Guid="*">
-                    <File Id="filC4B075803726224B3F27D4BB2FDA7780" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Iceland_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp5F85F318A82A442CF7F72C1BDFA1334D" Guid="*">
-                    <File Id="fil76FB4C1A193BA579C46DFAB88B578698" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Iceland_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp7E986620EC08765E128E09C29839FE59" Guid="*">
-                    <File Id="fil9CA275D783DC39973514FD85F7DD546E" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Iceland_x16r_64.bin" />
                 </Component>
                 <Component Id="cmp01ADB911A4E74AB56E0A74D3A56838EC" Guid="*">
                     <File Id="filC94AFF2417E2C4B634A06D997D79C58E" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Iceland_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmp80CAFF0EFBE359AE7382B5633B395140" Guid="*">
-                    <File Id="filA3B54089D5E9A0BC0C01127B0294EE94" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Kalindi_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp9661FAE1F48D2724677AC7B5A8003C00" Guid="*">
-                    <File Id="filB9511F70B9C1E40AAF4B7C5561F4E335" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Kalindi_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp0EC59C534D5D5EFDD39529B6D74AEA4A" Guid="*">
-                    <File Id="filF014221CC704CDC8686AC0D4F083F632" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Kalindi_x16r_64.bin" />
-                </Component>
                 <Component Id="cmpEA2680F81F23E57D70D97058CA44F2F6" Guid="*">
                     <File Id="fil31D63D43A5D6700274D1E28DA1893AFA" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Kalindi_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmpCE0148A8EBD7357C0259F6FB60E2DAB4" Guid="*">
-                    <File Id="fil44AB10ADE1769177FA4D716DE733C1F6" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Mullins_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp10C030A864EE8351AD2BF89A1180D4F0" Guid="*">
-                    <File Id="filDF69D5171172DF5974A2A7F66102B1CC" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Mullins_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmpFCDF7AC6F40E5263F3A9CA606DD338E8" Guid="*">
-                    <File Id="fil8D68B6121321FB75F36EA37F78553457" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Mullins_x16r_64.bin" />
                 </Component>
                 <Component Id="cmp93EE5C7BC2F49A7390C10037ED18EA13" Guid="*">
                     <File Id="fil581479A7D129180685A7BAB2204A35DE" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Mullins_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmp3C9FC3F563BC41B747EBB8FF366FDF9E" Guid="*">
-                    <File Id="fil0EEDB797555232D32C5BC8E370D96C81" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Oland_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmpA2D4FF213E59C280F8FF2C968545C670" Guid="*">
-                    <File Id="filEBEDBE951BD1386BD1CAF9EC28A782F9" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Oland_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmpDA6E02DDA020BE03091331B8066BE0A0" Guid="*">
-                    <File Id="fil3D31CB79A22AD1247494C1798792E96D" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Oland_x16r_64.bin" />
-                </Component>
                 <Component Id="cmp8E05935D07F5194735191E8ABF0853AF" Guid="*">
                     <File Id="fil5048FE749BA48B8AC03E93A0058ABD20" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Oland_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmp2F2EADBDA647E2DB0814D3EAB010040D" Guid="*">
-                    <File Id="fil7F190CB5DE2ECC5207D45A5D31E9A901" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Pitcairn_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp56AEE0CFC807A4F8D0392E6EC2AF41EC" Guid="*">
-                    <File Id="filCE1F3A61EE36ECFCB4076F0CCE72E9B0" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Pitcairn_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp1B981FF8672CFF7115E82AB0B4526D09" Guid="*">
-                    <File Id="filA2AA4D7A08D13427BF646DFE116CDA6F" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Pitcairn_x16r_64.bin" />
                 </Component>
                 <Component Id="cmp1618C4BE99D9C653A37CECF0B1E95AFA" Guid="*">
                     <File Id="fil8D919F1B36B8E02DB66F2D7A50528492" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Pitcairn_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmpBE1ACDC13155C04224C9B818205EB093" Guid="*">
-                    <File Id="fil2047076801B52E94BBB1A9DC2AEAB6BD" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Spectre_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp5C1ED1923AA125AD60A9BA442542D64D" Guid="*">
-                    <File Id="filC7D530C50BE2710F76FD6A9B5DCF888F" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Spectre_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp363FD7D5DEBAA46A8F621457E2B2DF24" Guid="*">
-                    <File Id="fil2114AAD8C72D155FE50195357EA2A783" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Spectre_x16r_64.bin" />
-                </Component>
                 <Component Id="cmpDCDBAF6174A6741AD24DF371D219305A" Guid="*">
                     <File Id="fil14E32D6FF60BFE7856B5648095D0F477" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Spectre_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmp791E3AF46FEA118EF8937A03EB99BAD1" Guid="*">
-                    <File Id="fil59A9540C7B95FCBC4037685038EB8A45" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Spooky_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp602FC517D6E145FEAAB549876CA92A48" Guid="*">
-                    <File Id="fil04009C443B71B1DF0333C5C888920914" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Spooky_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmpC717D0544670D040365660EC2EE2E41D" Guid="*">
-                    <File Id="filF660C8CDD1659368026E3F76184BB3C5" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Spooky_x16r_64.bin" />
                 </Component>
                 <Component Id="cmp7F7F9A6C5568F8FE5C724A698207EFCB" Guid="*">
                     <File Id="fil6FE13A4FD5BB95873D5232DA80140D6E" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Spooky_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmpA64F022C73500B71CC64BDEC8FD6CD2D" Guid="*">
-                    <File Id="filA912A38F2911C0936572BC417503E219" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Stoney_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp3D4796000233520E26414A4FBEC1FBB9" Guid="*">
-                    <File Id="fil9B140C6FCB1B818268DBA8548F7962E8" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Stoney_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp58B1A54896A35C2C8D9F8BFB2F8D9A88" Guid="*">
-                    <File Id="fil11556A8BFF978601B55CA852792FA896" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Stoney_x16r_64.bin" />
-                </Component>
                 <Component Id="cmp673A4185747B65E72D61279FF0BC8B15" Guid="*">
                     <File Id="fil475126DFF1669ED0EF8ED6C3CE30BCC9" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Stoney_x16r_LWS64.bin" />
                 </Component>
-                <Component Id="cmp68FE5003B9A96832609ED29CE82C91C6" Guid="*">
-                    <File Id="filD0CA346EAE233EFBE56E7767E7EFA61D" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Tahiti_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmpC61602D9C5A8AD9493EF2DC490CBB437" Guid="*">
-                    <File Id="filCE3E447DA9C1D95D974ADB96936B4B74" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Tahiti_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp48CB0AC1706B7EC80D1AD1E1E07DC91B" Guid="*">
-                    <File Id="fil736588F21192566D2D316A03E659AE43" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Tahiti_x16r_64.bin" />
-                </Component>
                 <Component Id="cmpCAEBCB3B99443AB9ACC78610B6BA1FC3" Guid="*">
                     <File Id="filBFDACE47B31623D612637B2D640C7B19" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Tahiti_x16r_LWS64.bin" />
-                </Component>
-                <Component Id="cmpF06283B89756C62C7811F17537C28514" Guid="*">
-                    <File Id="fil6BDBE878A4325E5F9AB146084A8DC25E" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Tonga_ethash_pascal_256.bin" />
-                </Component>
-                <Component Id="cmp934E6C19B68FB0C0C4720F1F150792A3" Guid="*">
-                    <File Id="fil1C5F92085554C4EFF971874EF5ED28AF" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Tonga_neoscrypt_64.bin" />
-                </Component>
-                <Component Id="cmp359A14C5EEACEF288A18E19FE492CEEE" Guid="*">
-                    <File Id="fil217A8E4681DC5E7E4FE6206C457F1A9A" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Tonga_x16r_64.bin" />
                 </Component>
                 <Component Id="cmp1E2D9A8FEDDAB9D4B304C7D3FC9345C1" Guid="*">
                     <File Id="filD15D1CE4442C9AE28E9E1181F0652E0F" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Tonga_x16r_LWS64.bin" />
@@ -298,32 +124,14 @@
                 <Component Id="cmpB0CF48BA6DB9F483E891083044FF3287" Guid="*">
                     <File Id="filEA6B8FC4B382AA1C5D54DF1A5BB60677" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 470 4.0GB Elpida 32CU.json" />
                 </Component>
-                <Component Id="cmpFAE2D0C3E7F79D1D9067CB7883898D39" Guid="*">
-                    <File Id="fil2626AC18852DAE674D34AB6BA424FC93" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 470 4.0GB Elpida.json" />
-                </Component>
-                <Component Id="cmpA9C4040B02EE224CC8B08280DFCC97AC" Guid="*">
-                    <File Id="filC2B6E6243C3E161508E1A1354CA3EF5D" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 470 4.0GB.json" />
-                </Component>
                 <Component Id="cmp5C0526B10D8CE11FFA753C66FAE0B6EB" Guid="*">
                     <File Id="fil55ACA04FBB46F87820530ACD6B6B5B79" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 480 4.0GB Hynix 36CU.json" />
                 </Component>
                 <Component Id="cmpC270B46F3CDFC09C8EF2C0B77987C8C3" Guid="*">
                     <File Id="filB92E03B5AA4D854C3E37C04F37C834F8" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 480 8.0GB Samsung 36CU.json" />
                 </Component>
-                <Component Id="cmpF75028940B472DD999F1BEE231272CB2" Guid="*">
-                    <File Id="filA359A42B483C7BADA51D846CA7476646" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 480 8.0GB Samsung.json" />
-                </Component>
-                <Component Id="cmp3EBEADD39D9CDA135A54FD8E93005106" Guid="*">
-                    <File Id="fil3BFB192742765A4E465109E48B19569D" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 480 8.0GB.json" />
-                </Component>
                 <Component Id="cmp017A3E154FAF343245B04E841544B652" Guid="*">
                     <File Id="fil877630DAFF084385ABD38ADD36EC6011" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 560 2.0GB Hynix 16CU.json" />
-                </Component>
-                <Component Id="cmp33D75D00E42B8E682D77FE1C53A11B83" Guid="*">
-                    <File Id="filFD254B0D4DC06F1C9FBB59D569F706EE" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 570 4.0GB.json" />
-                </Component>
-                <Component Id="cmp5FEFAC6200CF4C1B4790CD9B6BA45264" Guid="*">
-                    <File Id="filB042473CEBD94D8A68D09E00069BB763" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 580 8.0GB.json" />
                 </Component>
                 <Component Id="cmp5BF8D70A10CE28C3C54A8CA34C5A2C94" Guid="*">
                     <File Id="fil055F9739893F50779B743338DBB00529" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX Vega 56 8.0GB 56CU.json" />
@@ -386,9 +194,6 @@
                 </Component>
                 <Component Id="cmp9D3068B31794FE2AB71783EF02B3E20B" Guid="*">
                     <File Id="fil9D0805937474511FC15ECDC4AE85FA46" KeyPath="yes" Source="$(var.HarvestPath)\Kernels\ethash_pascal.cl" />
-                </Component>
-                <Component Id="cmp2707C6FC302CBC991BEE79B22A82D3A1" Guid="*">
-                    <File Id="fil21B838C5C0843D97C016083AF7E4D91D" KeyPath="yes" Source="$(var.HarvestPath)\Kernels\ethash_pascal_256.cl" />
                 </Component>
                 <Component Id="cmpF81C8C2338D46DE9A6232803F8D67DD3" Guid="*">
                     <File Id="filE8E4E5784DBC4B717D78FF7DCD94C1F5" KeyPath="yes" Source="$(var.HarvestPath)\Kernels\fugue.cl" />
@@ -473,6 +278,7 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="HeatGenerated">
+            <ComponentRef Id="cmp68ADB07AF08A1426815AD3BDF42CE4F6" />
             <ComponentRef Id="cmp69591F30184324681A0EF8373EA9D2A6" />
             <ComponentRef Id="cmp8400620DECF2655151D483066AD25190" />
             <ComponentRef Id="cmp3464F8730E573D338954EC7195CFB4A4" />
@@ -482,85 +288,26 @@
             <ComponentRef Id="cmpB80EB57EF2904D1A74E508B15C150404" />
             <ComponentRef Id="cmpBC4FC00A26E7D32479D42D3411317FC5" />
             <ComponentRef Id="cmpEFB368FCE043485F0641DD456E80FCFD" />
-            <ComponentRef Id="cmp30CAD646F7DAC8538F6230FF3D08C5B3" />
             <ComponentRef Id="cmp28FB22B28D9FFBC15D2050E172F311EF" />
             <ComponentRef Id="cmp46AD2A71B79D2F1399F269A08A3249D2" />
-            <ComponentRef Id="cmp1A698FAB2912F7EF549129B929350ED6" />
-            <ComponentRef Id="cmpFDDD0B16290C7011F1E64ADAEE146277" />
-            <ComponentRef Id="cmpFBC8E48FDD61FC10A1F471493FFA3929" />
             <ComponentRef Id="cmp888CAACFE8DF5C285C5F902C292E3A2E" />
-            <ComponentRef Id="cmpBD6FB880B680178DCD2562C021FF6E5F" />
-            <ComponentRef Id="cmp6038E19E454925A6AAC92C2550EBF210" />
-            <ComponentRef Id="cmp6001523F2603B1CB3916A865D17D4B7A" />
             <ComponentRef Id="cmpEADCB759A3F6799EBE93CE08D2C06AC8" />
-            <ComponentRef Id="cmpEEEF546D71C590E6451088F530F162C2" />
-            <ComponentRef Id="cmp48CC05240C1443C05E6A171663F4C9B0" />
-            <ComponentRef Id="cmpA3D4D0A08B85F172EEE66089C0B9CE2D" />
             <ComponentRef Id="cmpE2BC47C0811801357A69B5A60D1B53BF" />
-            <ComponentRef Id="cmpF2C58645DE91C04DC3048C02EF631109" />
-            <ComponentRef Id="cmp841F083065895E8E6A7C92DB0E8A7B4C" />
-            <ComponentRef Id="cmp1D5A30847C85AD0DB88FE5488D0803AE" />
             <ComponentRef Id="cmp8BB94702A93C5169F41E203A232472E9" />
-            <ComponentRef Id="cmp1DB2D5EE0BD42CE51191131D583450C7" />
-            <ComponentRef Id="cmp3CBFA6397C25E68480B047C58B3EDA6A" />
-            <ComponentRef Id="cmp991D96D39EFCB8D66123D1B25FE2A5A3" />
-            <ComponentRef Id="cmpB4456CA895E74750DBA1EB5CA0BE1BF2" />
             <ComponentRef Id="cmp2C42A3F8F5F276D8EF8AD32D66AA382D" />
-            <ComponentRef Id="cmpA395164647E064EC72B323F7314BFBF8" />
-            <ComponentRef Id="cmp5E470CE2224C15D8026551DDD1570007" />
-            <ComponentRef Id="cmp5663F6F4F0BE9D7E6E0F13C0D7289E6C" />
             <ComponentRef Id="cmpF4EDCB1B9E9904E1D7E1CD7DA793810F" />
-            <ComponentRef Id="cmp3F721236FF39B7696FED223A774DF550" />
-            <ComponentRef Id="cmp55D2642B0D78BEBD8834F0001036C6B3" />
-            <ComponentRef Id="cmp718A7BCE1A86FC38D4B5F74E43E8BF6F" />
             <ComponentRef Id="cmp3E20541CF93C9F5B19B872CA9DCCE53A" />
-            <ComponentRef Id="cmp3C978769A7E83995B60DFF23AAEDBDEE" />
-            <ComponentRef Id="cmpDAB2A32CA721AC1E82323C70F9261D85" />
-            <ComponentRef Id="cmp91280BAF113258E272ACE84552243960" />
             <ComponentRef Id="cmp2DC0C66479B8D7969A8436884554470E" />
-            <ComponentRef Id="cmp73E4CB61753538AB140571B0BE81CC9F" />
-            <ComponentRef Id="cmp54CE4568AF67CF095D86E8DD3CA348DC" />
-            <ComponentRef Id="cmp2D00011AFDC737BFA26FF325EB9F108A" />
             <ComponentRef Id="cmpFF2BF3A7D1E041D2C304BE046BBB6C1A" />
-            <ComponentRef Id="cmp53AB4B8FBD74B3997C6ABA161B4B6DCE" />
-            <ComponentRef Id="cmp5F85F318A82A442CF7F72C1BDFA1334D" />
-            <ComponentRef Id="cmp7E986620EC08765E128E09C29839FE59" />
             <ComponentRef Id="cmp01ADB911A4E74AB56E0A74D3A56838EC" />
-            <ComponentRef Id="cmp80CAFF0EFBE359AE7382B5633B395140" />
-            <ComponentRef Id="cmp9661FAE1F48D2724677AC7B5A8003C00" />
-            <ComponentRef Id="cmp0EC59C534D5D5EFDD39529B6D74AEA4A" />
             <ComponentRef Id="cmpEA2680F81F23E57D70D97058CA44F2F6" />
-            <ComponentRef Id="cmpCE0148A8EBD7357C0259F6FB60E2DAB4" />
-            <ComponentRef Id="cmp10C030A864EE8351AD2BF89A1180D4F0" />
-            <ComponentRef Id="cmpFCDF7AC6F40E5263F3A9CA606DD338E8" />
             <ComponentRef Id="cmp93EE5C7BC2F49A7390C10037ED18EA13" />
-            <ComponentRef Id="cmp3C9FC3F563BC41B747EBB8FF366FDF9E" />
-            <ComponentRef Id="cmpA2D4FF213E59C280F8FF2C968545C670" />
-            <ComponentRef Id="cmpDA6E02DDA020BE03091331B8066BE0A0" />
             <ComponentRef Id="cmp8E05935D07F5194735191E8ABF0853AF" />
-            <ComponentRef Id="cmp2F2EADBDA647E2DB0814D3EAB010040D" />
-            <ComponentRef Id="cmp56AEE0CFC807A4F8D0392E6EC2AF41EC" />
-            <ComponentRef Id="cmp1B981FF8672CFF7115E82AB0B4526D09" />
             <ComponentRef Id="cmp1618C4BE99D9C653A37CECF0B1E95AFA" />
-            <ComponentRef Id="cmpBE1ACDC13155C04224C9B818205EB093" />
-            <ComponentRef Id="cmp5C1ED1923AA125AD60A9BA442542D64D" />
-            <ComponentRef Id="cmp363FD7D5DEBAA46A8F621457E2B2DF24" />
             <ComponentRef Id="cmpDCDBAF6174A6741AD24DF371D219305A" />
-            <ComponentRef Id="cmp791E3AF46FEA118EF8937A03EB99BAD1" />
-            <ComponentRef Id="cmp602FC517D6E145FEAAB549876CA92A48" />
-            <ComponentRef Id="cmpC717D0544670D040365660EC2EE2E41D" />
             <ComponentRef Id="cmp7F7F9A6C5568F8FE5C724A698207EFCB" />
-            <ComponentRef Id="cmpA64F022C73500B71CC64BDEC8FD6CD2D" />
-            <ComponentRef Id="cmp3D4796000233520E26414A4FBEC1FBB9" />
-            <ComponentRef Id="cmp58B1A54896A35C2C8D9F8BFB2F8D9A88" />
             <ComponentRef Id="cmp673A4185747B65E72D61279FF0BC8B15" />
-            <ComponentRef Id="cmp68FE5003B9A96832609ED29CE82C91C6" />
-            <ComponentRef Id="cmpC61602D9C5A8AD9493EF2DC490CBB437" />
-            <ComponentRef Id="cmp48CB0AC1706B7EC80D1AD1E1E07DC91B" />
             <ComponentRef Id="cmpCAEBCB3B99443AB9ACC78610B6BA1FC3" />
-            <ComponentRef Id="cmpF06283B89756C62C7811F17537C28514" />
-            <ComponentRef Id="cmp934E6C19B68FB0C0C4720F1F150792A3" />
-            <ComponentRef Id="cmp359A14C5EEACEF288A18E19FE492CEEE" />
             <ComponentRef Id="cmp1E2D9A8FEDDAB9D4B304C7D3FC9345C1" />
             <ComponentRef Id="cmp411316BC0F2F57C16DD96EE10EA2E023" />
             <ComponentRef Id="cmp21CF05CB99BC291550C306AC55EF78D5" />
@@ -570,15 +317,9 @@
             <ComponentRef Id="cmp056ADCAAFC5B902B136EC74BC80567D7" />
             <ComponentRef Id="cmp67DC826B2850495DF8D21059B1344249" />
             <ComponentRef Id="cmpB0CF48BA6DB9F483E891083044FF3287" />
-            <ComponentRef Id="cmpFAE2D0C3E7F79D1D9067CB7883898D39" />
-            <ComponentRef Id="cmpA9C4040B02EE224CC8B08280DFCC97AC" />
             <ComponentRef Id="cmp5C0526B10D8CE11FFA753C66FAE0B6EB" />
             <ComponentRef Id="cmpC270B46F3CDFC09C8EF2C0B77987C8C3" />
-            <ComponentRef Id="cmpF75028940B472DD999F1BEE231272CB2" />
-            <ComponentRef Id="cmp3EBEADD39D9CDA135A54FD8E93005106" />
             <ComponentRef Id="cmp017A3E154FAF343245B04E841544B652" />
-            <ComponentRef Id="cmp33D75D00E42B8E682D77FE1C53A11B83" />
-            <ComponentRef Id="cmp5FEFAC6200CF4C1B4790CD9B6BA45264" />
             <ComponentRef Id="cmp5BF8D70A10CE28C3C54A8CA34C5A2C94" />
             <ComponentRef Id="cmp5E78A998CD7010B383BE1FA82A8FB425" />
             <ComponentRef Id="cmpD03172C4FB9C92B1CB84095EEDC0D106" />
@@ -599,7 +340,6 @@
             <ComponentRef Id="cmpF3FC23D7E601ABA1349E74E27ABC50EB" />
             <ComponentRef Id="cmpE8DA9EA53A06CC33E7A632DFD68492CE" />
             <ComponentRef Id="cmp9D3068B31794FE2AB71783EF02B3E20B" />
-            <ComponentRef Id="cmp2707C6FC302CBC991BEE79B22A82D3A1" />
             <ComponentRef Id="cmpF81C8C2338D46DE9A6232803F8D67DD3" />
             <ComponentRef Id="cmpAFD53F6E532E4A9A63ECCE5491DB056B" />
             <ComponentRef Id="cmp071B727908F4E0AB93915D87A9C691D2" />
