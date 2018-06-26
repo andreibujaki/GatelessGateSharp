@@ -49,9 +49,7 @@ namespace GatelessGateSharp {
         [DllImport("PhyMemWrapper.dll")]
         public static extern int ATOMBIOS_Load(uint busNumber);
         [DllImport("PhyMemWrapper.dll")]
-        public static extern int ATOMBIOS_SetVDDC(uint busNumber, int voltage);
-        [DllImport("PhyMemWrapper.dll")]
-        public static extern int ATOMBIOS_SetVDDCI(uint busNumber, int voltage);
+        public static extern int ATOMBIOS_SetOverclockingSettings(uint busNumber, int engineClock, int VDDC, int memoryClock, int VDDCI);
         [DllImport("PhyMemWrapper.dll")]
         public static extern int ATOMBIOS_SetMemoryTimings(uint busNumber, int coreClock, int memoryClock);
 

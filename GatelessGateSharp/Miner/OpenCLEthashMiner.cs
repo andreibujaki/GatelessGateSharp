@@ -36,18 +36,20 @@ namespace GatelessGateSharp
         private long[] mEthashGlobalWorkSizeArray = new long[1];
         private long[] mEthashLocalWorkSizeArray = new long[1];
         private int    mEthashIntensity;
+        private int    mEthashIterations;
         
         public OpenCLEthashMiner(OpenCLDevice aGatelessGateDevice)
             : base(aGatelessGateDevice, "ethash")
         {
         }
 
-        public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize, int aKernelOptimizationLevel = -1)
+        public void Start(EthashStratum aEthashStratum, int aEthashIntensity, int aEthashLocalWorkSize, int aKernelOptimizationLevel = -1, int aIterations = 1)
         {
             KernelOptimizationLevel = aKernelOptimizationLevel;
             Stratum = aEthashStratum;
             mEthashLocalWorkSizeArray[0] = aEthashLocalWorkSize;
             mEthashIntensity = aEthashIntensity;
+            mEthashIterations = aIterations;
 
             base.Start();
         }
@@ -179,12 +181,12 @@ namespace GatelessGateSharp
                             while (!Stopped && Stratum.GetJob() != null && Stratum.GetJob().ID.Equals(ethashJobID) && Stratum.PoolExtranonce.Equals(ethashPoolExtranonce))
                             {
                                 MarkAsAlive();
-
-                                mEthashGlobalWorkOffsetArray[0] = 0;
+                                
                                 mEthashGlobalWorkSizeArray[0] = mEthashIntensity * mEthashLocalWorkSizeArray[0] * OpenCLDevice.GetComputeDevice().MaxComputeUnits;
+                                mEthashGlobalWorkOffsetArray[0] = 0;
 
                                 // Get a new local extranonce if necessary.
-                                if ((ethashStartNonce & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8)) + (ulong)mEthashGlobalWorkSizeArray[0]) >= ((ulong)0x1 << (64 - (ethashExtranonceByteArray.Length * 8 + 8))))
+                                if ((ethashStartNonce & (0xfffffffffffffffful >> (ethashExtranonceByteArray.Length * 8 + 8)) + (ulong)mEthashGlobalWorkSizeArray[0] * (ulong)mEthashIterations) >= ((ulong)0x1 << (64 - (ethashExtranonceByteArray.Length * 8 + 8))))
                                     break;
 
                                 UInt64 target = (UInt64)((double)0xffff0000U / ethashDifficulty);
@@ -195,6 +197,7 @@ namespace GatelessGateSharp
                                 searchKernel.SetValueArgument<UInt64>(4, ethashStartNonce); // start_nonce
                                 searchKernel.SetValueArgument<UInt64>(5, target); // target
                                 searchKernel.SetValueArgument<UInt32>(6, 0xffffffffu); // isolate
+                                searchKernel.SetValueArgument<UInt32>(7, (uint)mEthashIterations); // iterations
 
                                 ethashOutput[255] = 0; // ethashOutput[255] is used as an atomic counter.
                                 Queue.Write<UInt32>(ethashOutputBuffer, true, 0, 256, (IntPtr)ethashOutputPtr, null);
@@ -205,9 +208,9 @@ namespace GatelessGateSharp
                                     for (int i = 0; i < ethashOutput[255]; ++i)
                                         Stratum.Submit(Device, ethashWork.GetJob(), ethashStartNonce + (UInt64)ethashOutput[i]);
                                 }
-                                ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0];
+                                ethashStartNonce += (UInt64)mEthashGlobalWorkSizeArray[0] * (ulong)mEthashIterations;
 
-                                ReportHashCount((double)mEthashGlobalWorkSizeArray[0], 0, sw.Elapsed.TotalSeconds);
+                                ReportHashCount((double)mEthashGlobalWorkSizeArray[0] * mEthashIterations, 0, sw.Elapsed.TotalSeconds);
                                 sw.Restart();
                                 if (consoleUpdateStopwatch.ElapsedMilliseconds >= 10 * 1000)
                                 {

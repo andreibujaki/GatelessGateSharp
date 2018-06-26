@@ -869,7 +869,8 @@ namespace GatelessGateSharp
 
                     new Tuple<string, string, int, int, int, int>("ethash", "threads", 1, 1, 4, 1),
                     new Tuple<string, string, int, int, int, int>("ethash", "intensity", 1024, 1, 32767, 1),
-                    new Tuple<string, string, int, int, int, int>("ethash", "local_work_size", 192, (NVIDIA ? 96 : 128), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
+                    new Tuple<string, string, int, int, int, int>("ethash", "local_work_size", 192, (NVIDIA ? 96 : 64), (NVIDIA ? 512 : 256), (NVIDIA ? 32 : 64)),
+                    new Tuple<string, string, int, int, int, int>("ethash", "iterations", 1, 1, 4096, 1),
 
                     new Tuple<string, string, int, int, int, int>("lyra2rev2", "threads", 2, 1, 4, 1),
                     new Tuple<string, string, int, int, int, int>("lyra2rev2", "intensity", 4, 1, 32767, 1),
@@ -975,7 +976,7 @@ namespace GatelessGateSharp
                     tuple3 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled");
                     booleanDeviceParameterArray[tuple3] = new BooleanDeviceParameter(tuple3, false);
                     foreach (var tuple in new List<Tuple<string, int, int, int, int>> {
-                        new Tuple<string, int, int, int, int>("overclocking_power_limit",    120, 50, 150, 1),
+                        new Tuple<string, int, int, int, int>("overclocking_power_limit",    100, 50, 150, 1),
                         new Tuple<string, int, int, int, int>("overclocking_core_clock",     defaultCoreClock, minCoreClock, maxCoreClock, coreClockStep),
                         new Tuple<string, int, int, int, int>("overclocking_memory_clock",   defaultMemoryClock, minMemoryClock, maxMemoryClock, coreClockStep),
                         new Tuple<string, int, int, int, int>("overclocking_core_voltage",   defaultCoreVoltage, minCoreVoltage, maxCoreVoltage, coreVoltageStep),
@@ -1397,7 +1398,7 @@ namespace GatelessGateSharp
                 ResetDeviceMemoryTimingSettings(device);
 
                 foreach (var algorithm in AlgorithmList) {
-                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = true;
+                    booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked = false;
                     if (device.GetType() == typeof(AMDGMC81))
                         booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_enabled")].Checked = false;
 
@@ -1405,22 +1406,14 @@ namespace GatelessGateSharp
                     int coreVoltage = device.DefaultCoreVoltage;
                     int memoryClock = device.DefaultMemoryClock;
                     int memoryVoltage = device.DefaultMemoryVoltage;
-                    bool rx480 = (device.IsAMD && Regex.Match(device.Name, @"^Radeon RX [45]80$").Success);
-                    bool rx470 = (device.IsAMD && Regex.Match(device.Name, @"^Radeon RX [45]70$").Success);
-
-                    if (rx480 && coreClock > 1260) coreClock = 1260;
-                    if (rx470 && coreClock > 1220) coreClock = 1220;
-                    if (rx480 && memoryClock > 2000) memoryClock = 2000;
-                    if (rx480 && memoryClock > 1750) memoryClock = 1750;
 
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value = coreClock;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value = coreVoltage;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value = memoryClock;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = memoryVoltage;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
                     device.FanSpeed = -1;
-                    device.ResetOverclockingSettings();
                 }
             }
 
@@ -1691,7 +1684,7 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Maximum = 2000;
                     int defaultMemoryVoltage = ((OpenCLDevice)device).DefaultMemoryVoltage; if (defaultMemoryVoltage > 0) numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value = defaultMemoryVoltage;
 
-                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 120;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value = 100;
 
                     var newCoreVoltage
                          = (device.GetVendor() == "AMD" && device.GetName() == "Radeon R9 270X" ? defaultCoreVoltage :
@@ -3769,14 +3762,7 @@ namespace GatelessGateSharp
                 } else if (IsMining) {
                     StopMining(false);
                 }
-                foreach (var device in Controller.OpenCLDevices) {
-                    device.MemoryTimingModsEnabled = false;
-                    device.OverclockingEnabled = false;
-                    //device.ResetOverclockingSettings();
-                }
                 SaveSettingsToJSONConfigFile();
-                //if (ADLInitialized && null != ADL.ADL_Main_Control_Destroy)
-                //    ADL.ADL_Main_Control_Destroy();
                 if (PCIExpress.Available)
                     PCIExpress.UnloadPhyMem();
                 foreach (var device in Controller.OpenCLDevices)
@@ -4981,7 +4967,9 @@ namespace GatelessGateSharp
                                 .Value)),
                             Controller.OpenCLDevices[deviceIndex].IsAMD
                                 ? Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "kernel_optimization_level")].Value))
-                                : -1);
+                                : -1,
+                            Convert.ToInt32(Math.Round(numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, "ethash", "iterations")]
+                                .Value)));
                         toolStripMainFormProgressBar.Value = ++minerCount;
                         for (int j = 0; j < mLaunchInterval; j += 10) {
                             Application.DoEvents();
@@ -5204,15 +5192,16 @@ namespace GatelessGateSharp
             bool overclockingEnabled = booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_enabled")].Checked;
             var tuple = new Tuple<int, string>(device.DeviceIndex, algorithm);
 
-            device.OverclockingEnabled = false;
-            device.MemoryTimingModsEnabled = false;
-
             if (overclockingEnabled) {
                 device.TargetPowerLimit = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_power_limit")].Value);
-                device.DriverCoreClock = device.TargetCoreClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
-                device.TargetMemoryClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
+                device.TargetCoreClock = device.DriverCoreClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_clock")].Value);
+                device.TargetMemoryClock = device.DriverMemoryClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
                 device.TargetCoreVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
                 device.TargetMemoryVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
+                if (device.DriverCoreClock > device.DefaultCoreClock)
+                    device.DriverCoreClock = device.DefaultCoreClock;
+                if (device.DriverMemoryClock > device.DefaultMemoryClock)
+                    device.DriverMemoryClock = device.DefaultMemoryClock;
             }
             if (memoryTimingsEnabled) {
                 if (PCIExpress.Available || PCIExpress.LoadPhyMem()) {
@@ -5221,12 +5210,8 @@ namespace GatelessGateSharp
                     memoryTimingsEnabled = false;
                 }
             }
-            if (memoryTimingsEnabled)
-                device.PrepareMemoryTimingMods(algorithm);
-            if (overclockingEnabled)
-                device.OverclockingEnabled = true;
-            if (memoryTimingsEnabled)
-                device.MemoryTimingModsEnabled = true;
+            device.OverclockingEnabled = overclockingEnabled;
+            device.MemoryTimingModsEnabled = memoryTimingsEnabled;
 
             if (booleanDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "enabled")].Checked) {
                 device.TargetTemperature = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, "fan_control", "target_temperature".ToLower())].Value);
@@ -5411,6 +5396,19 @@ namespace GatelessGateSharp
 
                 Controller.AppState = Controller.ApplicationGlobalState.Switching;
 
+                foreach (var device in Controller.OpenCLDevices) {
+                    device.MemoryTimingModsEnabled = false;
+                    device.FanControlEnabled = false;
+                    device.FanSpeed = -1;
+                    //device.OverclockingEnabled = false;
+                    //device.PowerLimit = 100;
+                    //device.TargetCoreClock = device.DefaultCoreClock;
+                    //device.TargetMemoryClock = device.DefaultMemoryClock;
+                    //device.TargetMemoryVoltage = device.DefaultMemoryVoltage;
+                    //device.TargetCoreVoltage = device.DefaultCoreVoltage;
+                    //device.UpdateOverclockingSettings();
+                }
+
                 Controller.StopWatch.Stop();
                 timerWatchdog.Enabled = false;
                 if (mDevFeeMode)
@@ -5428,16 +5426,6 @@ namespace GatelessGateSharp
                             allDone = false;
                             break;
                         }
-                }
-
-                if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
-                    foreach (var device in Controller.OpenCLDevices) {
-                        device.MemoryTimingModsEnabled = false;
-                        device.OverclockingEnabled = false;
-                        device.ResetOverclockingSettings();
-                        device.FanControlEnabled = false;
-                        device.FanSpeed = -1;
-                    }
                 }
 
                 if (Controller.PrimaryStratum != null)
@@ -5702,7 +5690,6 @@ namespace GatelessGateSharp
                 cartesianChartShare1Day.Visible = ((string)comboBoxGraphType.SelectedItem == "Share") && ((string)comboBoxGraphCoverage.SelectedItem == "1 Day");
                 cartesianChartShare1Month.Visible = ((string)comboBoxGraphType.SelectedItem == "Share") && ((string)comboBoxGraphCoverage.SelectedItem == "1 Month");
 
-                checkBoxBenchmarkingCoolGPUDown.Enabled = checkBoxBenchmarkingDoNotRepeatAfterFailure.Enabled = idle;
                 tabControlBenchmarkingParameters.Enabled = idle;
                 tabPageBenchmarkingFirstParameter.Enabled = idle;
                 tabPageBenchmarkingSecondParameter.Enabled = idle && checkBoxBenchmarkingFirstParameterEnabled.Checked;
@@ -5710,7 +5697,7 @@ namespace GatelessGateSharp
                 comboBoxBenchmarkingFirstParameter.Enabled = numericUpDownBenchmarkingFirstParameterStart.Enabled = numericUpDownBenchmarkingFirstParameterEnd.Enabled = numericUpDownBenchmarkingFirstParameterStep.Enabled = checkBoxBenchmarkingFirstParameterEnabled.Checked;
                 comboBoxBenchmarkingSecondParameter.Enabled = numericUpDownBenchmarkingSecondParameterStart.Enabled = numericUpDownBenchmarkingSecondParameterEnd.Enabled = numericUpDownBenchmarkingSecondParameterStep.Enabled = checkBoxBenchmarkingSecondParameterEnabled.Checked;
 
-                checkBoxOptimizationCoolGPUDown.Enabled = checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationDoNotRepeatAfterFailure.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = comboBoxOptimizationApproach.Enabled = idle;
+                checkBoxOptimizationExtendRange.Enabled = checkBoxOptimizationRepeatUntilStopped.Enabled = comboBoxOptimizationApproach.Enabled = idle;
                 tabControlOptimizationParameters.Enabled = idle;
                 tabControlOptimizationParameters.Enabled = idle;
                 numericUpDownOptimizationRepeats.Enabled = idle;
@@ -6137,7 +6124,8 @@ namespace GatelessGateSharp
                         if (!miner.Alive) {
                             MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
                             UpdateLog();
-                            Program.Exit(false);
+                            //Utilities.RestartDriversAndApplication();
+                            Environment.Exit(0);
                         }
                     }
                 }
@@ -6362,7 +6350,7 @@ namespace GatelessGateSharp
             while (!((CancellationToken)cancellationToken).IsCancellationRequested) {
                 try {
                     foreach (var name in new List<string> {
-                        "amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU", "RadeonSettings",
+                        //"amdow", "amddvr", "AUEPMaster", "AUEPMaster", "AUEPUF", "AUEPDU", "RadeonSettings",
                         "AfterBurner"
                     })
                         foreach (var process in System.Diagnostics.Process.GetProcessesByName(name))
@@ -6938,12 +6926,6 @@ namespace GatelessGateSharp
                         tabControlBenchmarking.SelectedIndex = (!checkBoxBenchmarkingFirstParameterEnabled.Checked) ? 0 : 1;
                     }
 
-                    if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
-                        checkBoxDeviceParameterFanControlEnabled.Checked = true;
-                        numericUpDownDeviceParameterFanControlMaximumFanSpeed.Value = 100;
-                        numericUpDownDeviceParameterFanControlMinimumFanSpeed.Value = 100;
-                    }
-
                     if (mAreSettingsDirty)
                         SaveSettingsToJSONConfigFile();
 
@@ -7503,10 +7485,7 @@ namespace GatelessGateSharp
                 Controller.BenchmarkEntries[0].Results.Add(result);
                 Controller.BenchmarkEntries[0].Remaining -= 1;
                 var algorithm = Controller.BenchmarkEntries[0].Parameters[0].Value;
-                var doNotRepeatAfterFailure = (IsOptimizerRunning)
-                                                  ? checkBoxOptimizationDoNotRepeatAfterFailure.Checked
-                                                  : checkBoxBenchmarkingDoNotRepeatAfterFailure.Checked;
-                if (Controller.BenchmarkEntries[0].Remaining <= 0 || (doNotRepeatAfterFailure && !result.Success)) {
+                if (Controller.BenchmarkEntries[0].Remaining <= 0 || !result.Success) {
                     Controller.BenchmarkEntries[0].Remaining = 0;
                     Controller.BenchmarkRecords.Add(Controller.BenchmarkEntries[0]);
                     Controller.BenchmarkEntries.RemoveAt(0);
@@ -7515,7 +7494,6 @@ namespace GatelessGateSharp
 
             // Finish the current seriess of benchmarks if two benchmarks fails in a row.
             if (IsOptimizerRunning
-                && checkBoxOptimizationDoNotRepeatAfterFailure.Checked
                 && !result.Success 
                 && Controller.BenchmarkEntries.Count >= 1
                 && Controller.BenchmarkEntries.Last().Results.Count >= 1
@@ -7625,13 +7603,6 @@ namespace GatelessGateSharp
                 Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
                 try { System.IO.File.Delete(OptimizerEntriesFilePath); } catch (Exception ex) { Logger(ex); }
 
-                if (IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked) {
-                    foreach (var device in Controller.OpenCLDevices) {
-                        device.FanControlEnabled = false;
-                        device.FanSpeed = -1;
-                    }
-                }
-
             } else if (IsOptimizerRunning) {
                 var entry = Controller.OptimizerEntries[0];
                 Controller.OptimizerEntries.RemoveAt(0);
@@ -7737,19 +7708,14 @@ namespace GatelessGateSharp
                     multipleGPUThreads = multipleGPUThreads || numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, DefaultAlgorithm, "threads")].Value > 1;
             mCurrentBenchmarkLength = (multipleGPUThreads) ? Parameters.BenchmarkLengthMultipleThreads : Parameters.BenchmarkLengthSingleThread;
 
-            bool coolGPUDown = (!IsOptimizerRunning)
-                                   ? checkBoxOptimizationCoolGPUDown.Checked
-                                   : checkBoxOptimizationCoolGPUDown.Checked;
-            if (coolGPUDown) {
-                foreach (var device in Controller.OpenCLDevices) {
-                    if (IsDeviceEnabled(Controller.OpenCLDevices[device.DeviceIndex], DefaultAlgorithm)) {
-                        device.FanControlEnabled = true;
-                        device.FanSpeed = 100;
-                    }
+            foreach (var device in Controller.OpenCLDevices) {
+                if (IsDeviceEnabled(Controller.OpenCLDevices[device.DeviceIndex], DefaultAlgorithm)) {
+                    device.FanControlEnabled = true;
+                    device.FanSpeed = 100;
                 }
             }
 
-            timerStartNextBenchmark.Interval = coolGPUDown ? 10000 : 100;
+            timerStartNextBenchmark.Interval = 10000;
             timerStartNextBenchmark.Enabled = true;
             timerFinishCurrentBenchmark.Enabled = false;
             timerResetStopwatchForBenchmark.Enabled = false;
@@ -7974,15 +7940,6 @@ namespace GatelessGateSharp
             } else if (IsOptimizerRunning) {
 
                 StopBenchmarks();
-                if (checkBoxOptimizationCoolGPUDown.Checked) {
-                    foreach (var device in Controller.OpenCLDevices) {
-                        device.MemoryTimingModsEnabled = false;
-                        device.OverclockingEnabled = false;
-                        device.ResetOverclockingSettings();
-                        device.FanControlEnabled = false;
-                        device.FanSpeed = -1;
-                    }
-                }
                 Controller.OptimizerState = Controller.ApplicationOptimizerState.NotRunning;
                 Controller.OptimizerEntries.Clear();
                 try { System.IO.File.Delete(BenchmarkEntriesFilePath); } catch (Exception ex) { Logger(ex); }
@@ -8035,8 +7992,8 @@ namespace GatelessGateSharp
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_core_voltage");
 
                 if (checkBoxOptimizationMemoryTimings.Checked) {
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
+                    //AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
+                    //AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_faw");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_t32aw");
 
@@ -8114,12 +8071,10 @@ namespace GatelessGateSharp
             //if (Controller.BenchmarkState != Controller.ApplicationBenchmarkState.CoolingDown)
             //    return;
 
-            if (!(IsOptimizerRunning && checkBoxOptimizationCoolGPUDown.Checked)) {
-                foreach (var device in Controller.OpenCLDevices) {
-                    if (IsDeviceEnabled(device, DefaultAlgorithm)) {
-                        device.FanControlEnabled = false;
-                        device.FanSpeed = -1;
-                    }
+            foreach (var device in Controller.OpenCLDevices) {
+                if (IsDeviceEnabled(device, DefaultAlgorithm)) {
+                    device.FanControlEnabled = false;
+                    device.FanSpeed = -1;
                 }
             }
 

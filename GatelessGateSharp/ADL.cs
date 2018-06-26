@@ -156,6 +156,8 @@ namespace ATI.ADL
     internal delegate int ADL_Workstation_ECC_Set(int iAdapterIndex, int iDesiredMode);
     internal delegate int ADL_Workstation_ECCData_Get(int iAdapterIndex, IntPtr lpAdlEccData);
 
+    internal delegate int ADL2_Flush_Driver_Data(IntPtr context, int iAdapterIndex);
+
     #endregion Export Delegates
 
     #region Export Struct
@@ -533,7 +535,6 @@ namespace ATI.ADL
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Display_DisplayInfo_Get(int adapterIndex, ref int numDisplays, out IntPtr displayInfoArray, int forceDetect);
 
-
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Overdrive5_Temperature_Get(int adapterIndex, int thermalControllerIndex, IntPtr temperature);
 
@@ -576,7 +577,6 @@ namespace ATI.ADL
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Overdrive6_VoltageControl_Set(int iAdapterIndex, int iValue);
 
-
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL2_Overdrive6_CurrentPower_Get(IntPtr context, int AdapterIndex, int iPowerType, ref int lpCurrentValue);
             
@@ -588,7 +588,6 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL2_Overdrive6_VoltageControl_Set(IntPtr context, int iAdapterIndex, int iValue);
-
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL2_OverdriveN_Capabilities_Get(IntPtr context, int iAdapterIndex, IntPtr lpODCapabilities);
@@ -634,7 +633,10 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL_Workstation_ECC_Set(int iAdapterIndex, int iDesiredMode);
-            
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_Flush_Driver_Data(IntPtr context, int iAdapterIndex);
+
             #endregion DLLImport
         }
         #endregion Class ADLImport
@@ -1196,6 +1198,7 @@ namespace ATI.ADL
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL_Overdrive6_VoltageControl_Set_Check = false;
         #endregion ADL_Overdrive6_VoltageControl_Set
+
         #region ADL2_Overdrive6_CurrentPower_Get
         /// <summary> ADL2_Overdrive6_CurrentPower_Get Delegates</summary>
         internal static ADL2_Overdrive6_CurrentPower_Get ADL2_Overdrive6_CurrentPower_Get {
@@ -1424,8 +1427,6 @@ namespace ATI.ADL
         private static bool ADL_Workstation_ECCData_Get_Check = false;
         #endregion ADL_Workstation_ECCData_Get
 
-        //ADL2_OverdriveN_FanControl_Get
-
         #region ADL2_OverdriveN_FanControl_Get
         /// <summary> ADL2_OverdriveN_FanControl_Get Delegates</summary>
         internal static ADL2_OverdriveN_FanControl_Get ADL2_OverdriveN_FanControl_Get {
@@ -1482,6 +1483,27 @@ namespace ATI.ADL
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL_Workstation_ECC_Set_Check = false;
         #endregion ADL_Workstation_ECC_Set
+
+        // 
+        #region ADL2_Flush_Driver_Data
+        /// <summary> ADL2_Flush_Driver_Data Delegates</summary>
+        internal static ADL2_Flush_Driver_Data ADL2_Flush_Driver_Data {
+            get {
+                if (!ADL2_Flush_Driver_Data_Check && null == ADL2_Flush_Driver_Data_) {
+                    ADL2_Flush_Driver_Data_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_Flush_Driver_Data")) {
+                        ADL2_Flush_Driver_Data_ = ADLImport.ADL2_Flush_Driver_Data;
+                    }
+                }
+                return ADL2_Flush_Driver_Data_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_Flush_Driver_Data ADL2_Flush_Driver_Data_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_Flush_Driver_Data_Check = false;
+        #endregion ADL2_Flush_Driver_Data
+
         #endregion Export Functions
     }
     #endregion ADL Class

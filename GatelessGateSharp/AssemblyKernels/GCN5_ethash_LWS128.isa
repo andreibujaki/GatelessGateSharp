@@ -1,4 +1,4 @@
-worksize = 192
+worksize = 128
 
 .amdcl2
 .64bit

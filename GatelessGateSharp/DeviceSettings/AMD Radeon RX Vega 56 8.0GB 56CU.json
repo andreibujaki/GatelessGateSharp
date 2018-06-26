@@ -14,8 +14,9 @@
       },
       "ethash": {
         "threads": 1,
-        "intensity": 1017,
-        "local_work_size": 256,
+        "intensity": 4,
+        "local_work_size": 192,
+        "iterations": 512,
         "current_power_consumption": 149,
         "kernel_optimization_level": 3,
         "overclocking_power_limit": 100,
@@ -86,15 +87,15 @@
         "local_work_size": 16,
         "raw_intensity": 112,
         "strided_index": 1,
-        "current_power_consumption": 173,
+        "current_power_consumption": 124,
         "kernel_optimization_level": 5,
-        "overclocking_power_limit": 120,
-        "overclocking_core_clock": 1535,
-        "overclocking_memory_clock": 950,
-        "overclocking_core_voltage": 985,
+        "overclocking_power_limit": 100,
+        "overclocking_core_clock": 1590,
+        "overclocking_memory_clock": 800,
+        "overclocking_core_voltage": 1200,
         "overclocking_memory_voltage": 950,
         "algorithm_enabled": true,
-        "overclocking_enabled": true
+        "overclocking_enabled": false
       },
       "cryptonight_heavy": {
         "threads": 2,

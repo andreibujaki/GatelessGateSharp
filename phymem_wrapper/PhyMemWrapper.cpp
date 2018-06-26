@@ -996,74 +996,54 @@ end:
     }
 
     __declspec(dllexport)
-        BOOL ATOMBIOS_SetVDDC(uint32_t bus_number, int32_t voltage)
+        BOOL ATOMBIOS_SetOverclockingSettings(uint32_t bus_number, int32_t engineClock, int32_t VDDC, int32_t memoryClock, int32_t VDDCI)
     {
         std::lock_guard<std::mutex> guard(ATOMBIOSMutex);
 
         if (ATOMBIOSContextArray[bus_number].context == NULL)
             return FALSE;
 
-        int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
         uint8_t frev, crev;
-        amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
-#if FALSE
-        char filename[256];
-        sprintf(filename, "Logs\\bios%04d.log", bus_number);
-        file = fopen(filename, "a+");
-        fprintf(file, "frev: %d\n", (int)(frev));
-        fprintf(file, "crev: %d\n", (int)(crev));
-        fclose(file);
-#endif
-        if (frev != 1 || (crev != 3 && crev != 4))
-            return FALSE;
-
-        union {
-            SET_VOLTAGE_PARAMETERS_V1_3 in;
-        } args;
-        args.in.ucVoltageType = VOLTAGE_TYPE_VDDC;
-        args.in.ucVoltageMode = ATOM_SET_VOLTAGE;
-        args.in.usVoltageLevel = voltage;
         int priority = GetThreadPriority(GetCurrentThread());
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
-        amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
-        UnmapPhyMem((PVOID)virtualAddressArray[bus_number], MAX_BIOS_SIZE);
-        virtualAddressArray[bus_number] = NULL;
-        SetThreadPriority(GetCurrentThread(), priority);
 
-        return TRUE;
-    }
+        {
+            int index = GetIndexIntoMasterTable(COMMAND, DynamicMemorySettings);
+            //amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
 
-    __declspec(dllexport)
-        BOOL ATOMBIOS_SetVDDCI(uint32_t bus_number, int32_t voltage)
-    {
-        std::lock_guard<std::mutex> guard(ATOMBIOSMutex);
+            DYNAMICE_ENGINE_SETTINGS_PARAMETER  args;
+            args.ulClock.ulClockFreq = (uint64_t)engineClock * 100;
+            args.ulClock.ulComputeClockFlag = COMPUTE_ENGINE_PLL_PARAM;
+            args.ulMemoryClock = (uint64_t)memoryClock * 100;
+            amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+        }
 
-        if (ATOMBIOSContextArray[bus_number].context == NULL)
-            return FALSE;
+        {
+            int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
+            amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
 
-        int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
-        uint8_t frev, crev;
-        amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
-#if FALSE
-        char filename[256];
-        sprintf(filename, "Logs\\bios%04d.log", bus_number);
-        file = fopen(filename, "a+");
-        fprintf(file, "frev: %d\n", (int)(frev));
-        fprintf(file, "crev: %d\n", (int)(crev));
-        fclose(file);
-#endif
-        if (frev != 1 || (crev != 3 && crev != 4))
-            return FALSE;
+            union {
+                SET_VOLTAGE_PARAMETERS_V1_3 in;
+            } args;
+            args.in.ucVoltageType = VOLTAGE_TYPE_VDDC;
+            args.in.ucVoltageMode = ATOM_SET_VOLTAGE;
+            args.in.usVoltageLevel = VDDC;
+            amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+        }
 
-        union {
-            SET_VOLTAGE_PARAMETERS_V1_3 in;
-        } args;
-        args.in.ucVoltageType = VOLTAGE_TYPE_VDDCI;
-        args.in.ucVoltageMode = ATOM_SET_VOLTAGE;
-        args.in.usVoltageLevel = voltage;
-        int priority = GetThreadPriority(GetCurrentThread());
-        SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
-        amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+        {
+            int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
+            //amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
+
+            union {
+                SET_VOLTAGE_PARAMETERS_V1_3 in;
+            } args;
+            args.in.ucVoltageType = VOLTAGE_TYPE_VDDCI;
+            args.in.ucVoltageMode = ATOM_SET_VOLTAGE;
+            args.in.usVoltageLevel = VDDCI;
+            amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+        }
+
         UnmapPhyMem((PVOID)virtualAddressArray[bus_number], MAX_BIOS_SIZE);
         virtualAddressArray[bus_number] = NULL;
         SetThreadPriority(GetCurrentThread(), priority);

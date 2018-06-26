@@ -479,16 +479,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /i /s /y $(ProjectDir)Kernels $(TargetDir)Kernels
-xcopy /i /s /y $(SolutionDir)CLRX $(TargetDir)CLRX
-del $(TargetDir)CLRX\*.bat
+    <PostBuildEvent>xcopy /i /s /y "$(ProjectDir)Kernels" "$(TargetDir)Kernels"
+xcopy /i /s /y "$(SolutionDir)CLRX" "$(TargetDir)CLRX"
+del "$(TargetDir)CLRX\*.bat"
 xcopy "$(ProjectDir)DeviceSettings" "$(TargetDir)DeviceSettings"  /i /s /y
-xcopy /i /s /y $(ProjectDir)BinaryKernels $(TargetDir)BinaryKernels
-xcopy /i /s /y $(ProjectDir)AssemblyKernels $(TargetDir)AssemblyKernels
-copy $(SolutionDir)$(SolutionName)\nvml.dll $(TargetDir)
-copy $(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe $(TargetDir)
+xcopy /i /s /y "$(ProjectDir)BinaryKernels" "$(TargetDir)BinaryKernels"
+xcopy /i /s /y "$(ProjectDir)AssemblyKernels" "$(TargetDir)AssemblyKernels"
+copy "$(SolutionDir)$(SolutionName)\nvml.dll" "$(TargetDir)"
+copy "$(SolutionDir)GatelessGateSharpMonitor\bin\$(Configuration)\GatelessGateSharpMonitor.exe" "$(TargetDir)"
 
-cd $(SolutionDir)GatelessGateSharp\bin\$(Configuration)
+cd "$(SolutionDir)GatelessGateSharp\bin\$(Configuration)"
 rmdir "..\Gateless Gate Sharp" /s /q
 xcopy . "..\Gateless Gate Sharp" /s /i /y
 cd "..\Gateless Gate Sharp"
@@ -501,9 +501,9 @@ del AssemblyKernels\*.bat
 del AssemblyKernels\*.original
 del "..\Gateless Gate Sharp\GatelessGateSharp.vshost.exe"
 
-cd $(SolutionDir)
-"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" $(TargetPath) /stack:16777216
-showdown makehtml  -i $(SolutionDir)README.md -o README.html
+cd "$(SolutionDir)"
+"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\editbin" "$(TargetPath)" /stack:16777216
+showdown makehtml  -i "$(SolutionDir)README.md" -o "$(SolutionDir)README.html"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

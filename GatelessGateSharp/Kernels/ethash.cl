@@ -34,8 +34,6 @@ uint amd_bitalign(uint src0, uint src1, uint src2)
 #define amd_bitalign(src0, src1, src2) ((uint) (((((ulong)(src0)) << 32) | (ulong)(src1)) >> ((src2) & 31)))
 #endif
 
-//#define LEGACY
-
 #if WORKSIZE % 4 != 0
 #error "WORKSIZE has to be a multiple of 4"
 #endif
@@ -76,8 +74,6 @@ static __constant uint2 const Keccak_f1600_RC[24] = {
 
 #ifdef LEGACY
 #define barrier(x) mem_fence(x)
-#elif WORKSIZE <= 64
-#error "WORKSIZE <= 64 isn't supported by newer AMD drivers and WORKSIZE > 64 is required"
 #endif
 
 #define ROTL64_1(x, y) amd_bitalign((x), (x).s10, 32 - (y))
@@ -167,24 +163,22 @@ static __constant uint2 const Keccak_f1600_RC[24] = {
             } \
         } \
     } \
-    \
-} while(0)
+ } while(0)
 
 
 #define KECCAK_PROCESS(st, in_size, out_size, isolate)    do { \
-    for (int r = 0;r < (23);) { \
+    for (int r = 0; r < 24; ++r) { \
+        int os = (r < 23 ? 25 : (out_size));\
         if (isolate) \
-            KECCAKF_1600_RND(st, r++, 25); \
+            KECCAKF_1600_RND(st, r, os); \
     } \
-    KECCAKF_1600_RND(st, 23, out_size); \
 } while(0)
 
 
 #define fnv(x, y)        ((x) * FNV_PRIME ^ (y))
 #define fnv_reduce(v)    fnv(fnv(fnv(v.x, v.y), v.z), v.w)
 
-typedef union
-{
+typedef union {
     uint uints[128 / sizeof(uint)];
     ulong ulongs[128 / sizeof(ulong)];
     uint2 uint2s[128 / sizeof(uint2)];
@@ -211,8 +205,17 @@ typedef union {
 
 #define MIX(x) \
 do { \
-    if (get_local_id(0) == lane_idx) \
-        buffer[hash_id] = fnv(init0 ^ (a + x), mix.s##x) % DAG_SIZE; \
+    if (get_local_id(0) == lane_idx) { \
+        uint s = mix.s0; \
+        s = select(mix.s1, s, (x) != 1); \
+        s = select(mix.s2, s, (x) != 2); \
+        s = select(mix.s3, s, (x) != 3); \
+        s = select(mix.s4, s, (x) != 4); \
+        s = select(mix.s5, s, (x) != 5); \
+        s = select(mix.s6, s, (x) != 6); \
+        s = select(mix.s7, s, (x) != 7); \
+        buffer[hash_id] = fnv(init0 ^ (a + x), s) % DAG_SIZE; \
+    } \
     barrier(CLK_LOCAL_MEM_FENCE); \
     mix = fnv(mix, g_dag[buffer[hash_id]].uint8s[thread_id]); \
 } while(0)
@@ -221,10 +224,18 @@ do { \
 
 #define MIX(x) \
 do { \
-    buffer[get_local_id(0)] = fnv(init0 ^ (a + x), mix.s##x) % DAG_SIZE; \
-    /*mem_fence(CLK_LOCAL_MEM_FENCE);*/ \
+    uint s = mix.s0; \
+    s = select(mix.s1, s, (x) != 1); \
+    s = select(mix.s2, s, (x) != 2); \
+    s = select(mix.s3, s, (x) != 3); \
+    s = select(mix.s4, s, (x) != 4); \
+    s = select(mix.s5, s, (x) != 5); \
+    s = select(mix.s6, s, (x) != 6); \
+    s = select(mix.s7, s, (x) != 7); \
+    buffer[get_local_id(0)] = fnv(init0 ^ (a + x), s) % DAG_SIZE; \
+    /*barrier(CLK_LOCAL_MEM_FENCE); mem_fence(CLK_LOCAL_MEM_FENCE);*/ \
     mix = fnv(mix, g_dag[buffer[lane_idx]].uint8s[thread_id]); \
-    mem_fence(CLK_LOCAL_MEM_FENCE); \
+    /*barrier(CLK_LOCAL_MEM_FENCE);*/ mem_fence(CLK_LOCAL_MEM_FENCE); \
 } while(0)
 
 #endif
@@ -238,105 +249,132 @@ __kernel void search(
     uint DAG_SIZE,
     ulong start_nonce,
     ulong target,
-    uint isolate
-    )
+    uint isolate,
+    uint itereations
+)
 {
     __global hash128_t const* g_dag = (__global hash128_t const*) _g_dag;
-    const uint gid = get_global_id(0);
-    const uint thread_id = get_local_id(0) % 4;
-    const uint hash_id = get_local_id(0) / 4;
-    
-    __local compute_hash_share sharebuf[WORKSIZE / 4];
+
+    for (volatile int iter = 0; iter < itereations; ++iter) {
+        const uint gid = get_global_id(0) + iter * get_num_groups(0) * WORKSIZE;
+        const uint thread_id = get_local_id(0) % 4;
+        const uint hash_id = get_local_id(0) / 4;
+
+        __local compute_hash_share sharebuf[WORKSIZE / 4];
 #ifdef LEGACY
-    __local uint buffer[WORKSIZE / 4];
+        __local uint buffer[WORKSIZE / 4];
 #else
-    __local uint buffer[WORKSIZE];
+        __local uint buffer[WORKSIZE];
 #endif
-    __local compute_hash_share * const share = sharebuf + hash_id;
+        __local compute_hash_share * const share = sharebuf + hash_id;
 
 
-    // sha3_512(header .. nonce)
-    uint2 state[25];
-    for (uint i = 0; i < 4; i++)
-        state[i] = g_header[i];
-    state[4] = as_uint2(start_nonce + gid);
-    state[5] = as_uint2(0x0000000000000001UL);
-    state[6] = (uint2)(0);
-    state[7] = (uint2)(0);
-    state[8] = as_uint2(0x8000000000000000UL);
-    for (uint i = 9; i < 25; i++)
-        state[i] = (uint2)(0);
-    
-    KECCAK_PROCESS(state, 5, 8, isolate);
-    
-    uint init0;
-    uint8 mix;
-    
-    #pragma unroll 1
-    for (uint tid = 0; tid < 4; tid++) {
-        // share init with other threads
-        if (tid == thread_id)
-            for (uint i = 0; i < 8; i++)
-                share->uint2s[i] = state[i];
-    
-        barrier(CLK_LOCAL_MEM_FENCE);
-        
-        // It's done like it was because of the duplication
-        // We can do the same - with uint8s.
-        mix = share->uint8s[thread_id & 1];
-    
-        init0 = share->uints[0];
+        // sha3_512(header .. nonce)
+        volatile uint2 state[25];
+        state[0] = g_header[0];
+        state[1] = g_header[1];
+        state[2] = g_header[2];
+        state[3] = g_header[3];
+        state[4] = as_uint2(start_nonce + gid);
+        state[5] = as_uint2(0x0000000000000001UL);
+        state[6] = (uint2)(0);
+        state[7] = (uint2)(0);
+        state[8] = as_uint2(0x8000000000000000UL);
+        state[9] = (uint2)(0);
+        state[10] = (uint2)(0);
+        state[11] = (uint2)(0);
+        state[12] = (uint2)(0);
+        state[13] = (uint2)(0);
+        state[14] = (uint2)(0);
+        state[15] = (uint2)(0);
+        state[16] = (uint2)(0);
+        state[17] = (uint2)(0);
+        state[18] = (uint2)(0);
+        state[19] = (uint2)(0);
+        state[20] = (uint2)(0);
+        state[21] = (uint2)(0);
+        state[22] = (uint2)(0);
+        state[23] = (uint2)(0);
+        state[24] = (uint2)(0);
 
-        barrier(CLK_LOCAL_MEM_FENCE);
+        for (volatile int pass = 0; pass < 2; ++pass) {
+            KECCAK_PROCESS(state, select(5, 12, pass != 0), select(8, 1, pass != 0), isolate);
+            if (pass > 0)
+                break;
+
+            uint init0;
+            uint8 mix;
+
+#pragma unroll 1
+            for (volatile uint tid = 0; tid < 4; tid++) {
+                if (tid == thread_id) {
+                    share->uint2s[0] = state[0];
+                    share->uint2s[1] = state[1];
+                    share->uint2s[2] = state[2];
+                    share->uint2s[3] = state[3];
+                    share->uint2s[4] = state[4];
+                    share->uint2s[5] = state[5];
+                    share->uint2s[6] = state[6];
+                    share->uint2s[7] = state[7];
+                }
+
+                barrier(CLK_LOCAL_MEM_FENCE);
+
+                mix = share->uint8s[thread_id & 1];
+                init0 = share->uints[0];
+
+                barrier(CLK_LOCAL_MEM_FENCE);
 
 #ifdef LEGACY
-        for (uint a = 0; a < (ACCESSES & isolate); a += 8) {
+                for (uint a = 0; a < (ACCESSES & isolate); a += 8) {
 #else
-        #pragma unroll 1
-        for (uint a = 0; a < ACCESSES; a += 8) {
+#pragma unroll 1
+                for (volatile uint a = 0; a < ACCESSES; a += 8) {
 #endif
-            const uint lane_idx = 4*hash_id + a / 8 % 4;
-            MIX(0);
-            MIX(1);
-            MIX(2);
-            MIX(3);
-            MIX(4);
-            MIX(5);
-            MIX(6);
-            MIX(7);
+                    const uint lane_idx = 4 * hash_id + a / 8 % 4;
+                    for (volatile uint x = 0; x < 8; ++x)
+                        MIX(x);
+                }
+
+                barrier(CLK_LOCAL_MEM_FENCE);
+
+                share->uint2s[thread_id] = (uint2)(fnv_reduce(mix.lo), fnv_reduce(mix.hi));
+
+                barrier(CLK_LOCAL_MEM_FENCE);
+
+                if (tid == thread_id) {
+                    state[8] = share->uint2s[0];
+                    state[9] = share->uint2s[1];
+                    state[10] = share->uint2s[2];
+                    state[11] = share->uint2s[3];
+                }
+
+                barrier(CLK_LOCAL_MEM_FENCE);
+            }
+
+            state[12] = as_uint2(0x0000000000000001UL);
+            state[13] = (uint2)(0);
+            state[14] = (uint2)(0);
+            state[15] = (uint2)(0);
+            state[16] = as_uint2(0x8000000000000000UL);
+            state[17] = (uint2)(0);
+            state[18] = (uint2)(0);
+            state[19] = (uint2)(0);
+            state[20] = (uint2)(0);
+            state[21] = (uint2)(0);
+            state[22] = (uint2)(0);
+            state[23] = (uint2)(0);
+            state[24] = (uint2)(0);
         }
 
-        barrier(CLK_LOCAL_MEM_FENCE);
-        
-        share->uint2s[thread_id] = (uint2)(fnv_reduce(mix.lo), fnv_reduce(mix.hi));
-        
-        barrier(CLK_LOCAL_MEM_FENCE);
-        
-        if (tid == thread_id)
-            for (uint i = 0; i < 4; i++)
-                state[8 + i] = share->uint2s[i];
-
-        barrier(CLK_LOCAL_MEM_FENCE);
-    }
-    
-    for (uint i = 13; i < 25; ++i)
-        state[i] = (uint2)(0);
-    state[12] = as_uint2(0x0000000000000001UL);
-    state[16] = as_uint2(0x8000000000000000UL);
-    
-    KECCAK_PROCESS(state, 12, 1, isolate);
-    
-    if (as_ulong(as_uchar8(state[0]).s76543210) < target) {
-        uint slot = min(MAX_OUTPUTS-1u, atomic_inc(&g_output[MAX_OUTPUTS]));
-        g_output[slot] = gid;
+        if (as_ulong(as_uchar8(state[0]).s76543210) < target) {
+            uint slot = min(MAX_OUTPUTS - 1u, atomic_inc(&g_output[MAX_OUTPUTS]));
+            g_output[slot] = gid;
+        }
     }
 }
 
-
-
-
-typedef union _Node
-{
+typedef union _Node {
     uint dwords[16];
     uint2 qwords[8];
     uint4 dqwords[4];
@@ -345,17 +383,17 @@ typedef union _Node
 static void SHA3_512(uint2 *s, uint isolate)
 {
     uint2 st[25];
-    
+
     for (uint i = 0; i < 8; ++i)
         st[i] = s[i];
-    
+
     for (uint i = 8; i != 25; ++i)
         st[i] = (uint2)(0);
-    
+
     st[8].x = 0x00000001;
     st[8].y = 0x80000000;
     KECCAK_PROCESS(st, 8, 8, isolate);
-    
+
     for (uint i = 0; i < 8; ++i)
         s[i] = st[i];
 }
@@ -366,26 +404,26 @@ __kernel void GenerateDAG(uint start, __global const uint16 *_Cache, __global ui
     __global Node *DAG = (__global Node *) _DAG;
     uint NodeIdx = start + get_global_id(0);
 
-	Node DAGNode = Cache[NodeIdx % LIGHT_SIZE];
+    Node DAGNode = Cache[NodeIdx % LIGHT_SIZE];
 
-	DAGNode.dwords[0] ^= NodeIdx;
-	SHA3_512(DAGNode.qwords, isolate);
+    DAGNode.dwords[0] ^= NodeIdx;
+    SHA3_512(DAGNode.qwords, isolate);
 
-	for (uint i = 0; i < 256; ++i)
-	{
-		uint ParentIdx = fnv(NodeIdx ^ i, DAGNode.dwords[i & 15]) % LIGHT_SIZE;
-		__global const Node *ParentNode = Cache + ParentIdx;
+    for (uint i = 0; i < 256; ++i) {
+        uint ParentIdx = fnv(NodeIdx ^ i, DAGNode.dwords[i & 15]) % LIGHT_SIZE;
+        __global const Node *ParentNode = Cache + ParentIdx;
 
 #pragma unroll
-		for (uint x = 0; x < 4; ++x)
-		{
-			DAGNode.dqwords[x] *= (uint4)(FNV_PRIME);
-			DAGNode.dqwords[x] ^= ParentNode->dqwords[x];
-		}
-	}
+        for (uint x = 0; x < 4; ++x) {
+            if (isolate) {
+                DAGNode.dqwords[x] *= (uint4)(FNV_PRIME);
+                DAGNode.dqwords[x] ^= ParentNode->dqwords[x];
+            }
+        }
+    }
 
-	SHA3_512(DAGNode.qwords, isolate);
+    SHA3_512(DAGNode.qwords, isolate);
 
-	//if (NodeIdx < DAG_SIZE)
-		DAG[NodeIdx] = DAGNode;
+    //if (NodeIdx < DAG_SIZE)
+    DAG[NodeIdx] = DAGNode;
 }
