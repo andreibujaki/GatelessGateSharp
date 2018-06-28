@@ -966,13 +966,13 @@ namespace GatelessGateSharp
 
                 if (UpdateOverclockingSettings_firstCall) {
                     MainForm.Logger("systemData.iNumberOfPerformanceLevels: " + systemData.iNumberOfPerformanceLevels);
-                    for (int i = 0; i < systemData.iNumberOfPerformanceLevels - 1; ++i) {
+                    for (int i = 0; i < systemData.iNumberOfPerformanceLevels; ++i) {
                         MainForm.Logger("systemData.aLevels[" + i + "].iClock:   " + systemData.aLevels[i].iClock);
                         MainForm.Logger("systemData.aLevels[" + i + "].iVddc:    " + systemData.aLevels[i].iVddc);
                         MainForm.Logger("systemData.aLevels[" + i + "].iEnabled: " + systemData.aLevels[i].iEnabled);
                     }
                     MainForm.Logger("memoryData.iNumberOfPerformanceLevels: " + memoryData.iNumberOfPerformanceLevels);
-                    for (int i = 0; i < memoryData.iNumberOfPerformanceLevels - 1; ++i) {
+                    for (int i = 0; i < memoryData.iNumberOfPerformanceLevels; ++i) {
                         MainForm.Logger("memoryData.aLevels[" + i + "].iClock:   " + memoryData.aLevels[i].iClock);
                         MainForm.Logger("memoryData.aLevels[" + i + "].iVddc:    " + memoryData.aLevels[i].iVddc);
                         MainForm.Logger("memoryData.aLevels[" + i + "].iEnabled: " + memoryData.aLevels[i].iEnabled);
@@ -981,22 +981,22 @@ namespace GatelessGateSharp
                 }
 
                 systemData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                systemData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
                 int start = systemData.iNumberOfPerformanceLevels - 1;
-                for (int i = start; i > 0; --i) {
-                    if (systemData.aLevels[i].iEnabled != 0) {
-                        systemData.aLevels[i].iClock = DriverCoreClock * 100;
-                        systemData.aLevels[i].iVddc = TargetCoreVoltage;
-                    }
+                for (int i = start; i >= 0; --i) {
+                    systemData.aLevels[i].iEnabled = 1;
+                    systemData.aLevels[i].iClock = DriverCoreClock * 100;
+                    systemData.aLevels[i].iVddc = TargetCoreVoltage;
                 }
                 Marshal.StructureToPtr(systemData, systemBuffer, false);
 
                 memoryData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                memoryData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
                 start = memoryData.iNumberOfPerformanceLevels - 1;
-                for (int i = start; i > 0; --i) {
-                    if (memoryData.aLevels[i].iEnabled != 0) {
-                        memoryData.aLevels[i].iClock = DriverMemoryClock * 100;
-                        memoryData.aLevels[i].iVddc = TargetMemoryVoltage;
-                    }
+                for (int i = start; i >= 0; --i) {
+                    memoryData.aLevels[i].iEnabled = 1;
+                    memoryData.aLevels[i].iClock = DriverMemoryClock * 100;
+                    memoryData.aLevels[i].iVddc = TargetMemoryVoltage;
                 }
                 Marshal.StructureToPtr(memoryData, memoryBuffer, false);
 

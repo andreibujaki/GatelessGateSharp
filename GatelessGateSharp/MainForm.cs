@@ -676,8 +676,8 @@ namespace GatelessGateSharp
                     "memory_timings_polaris10_pa2rdata",
                     "memory_timings_polaris10_pa2wdata",
                     "memory_timings_polaris10_faw",
-                    //"memory_timings_polaris10_tredc",
-                    //"memory_timings_polaris10_twedc",
+                    "memory_timings_polaris10_tredc",
+                    "memory_timings_polaris10_twedc",
                     "memory_timings_polaris10_t32aw",
                     "memory_timings_polaris10_twdatatr",
 
@@ -762,8 +762,8 @@ namespace GatelessGateSharp
                         MISC2Data.Data = ((UInt32)bytes[4 * 6 + 0] << 0) | ((UInt32)bytes[4 * 6 + 1] << 8) | ((UInt32)bytes[4 * 6 + 2] << 16) | ((UInt32)bytes[4 * 6 + 3] << 24);
                         numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = MISC2Data.FAW;
                         numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = MISC2Data.T32AW;
-                        //numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = MISC2Data.TREDC;
-                        //numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
+                        numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = MISC2Data.TREDC;
+                        numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
 
                         UInt32 MISC1Data = ((UInt32)bytes[4 * 7 + 0] << 0) | ((UInt32)bytes[4 * 7 + 1] << 8) | ((UInt32)bytes[4 * 7 + 2] << 16) | ((UInt32)bytes[4 * 7 + 3] << 24);
                         stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = String.Format("{0:X8}", MISC1Data);
@@ -1035,8 +1035,8 @@ namespace GatelessGateSharp
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_pa2rdata", 0, 0, 15, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_pa2wdata", 0, 0, 15, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_faw", 0, 0, 31, 1),
-                            //new Tuple<string, int, int, int, int>("memory_timings_polaris10_tredc", 0, 0, 7, 1),
-                            //new Tuple<string, int, int, int, int>("memory_timings_polaris10_twedc", 0, 0, 31, 1),
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_tredc", 0, 0, 7, 1),
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_twedc", 0, 0, 31, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_t32aw", 0, 0, 15, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_twdatatr", 0, 0, 15, 1),
                         }) {
@@ -1787,8 +1787,8 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tcl")].Value = 23;
 
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = 4;
-                    //numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
-                    //numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = 6;
 
                     stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = "20140604";
@@ -1827,8 +1827,8 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = 219;
 
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = 0;
-                    //numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
-                    //numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = 3;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = 25;
                     numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = 0;
 
                     stringDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "memory_timings_polaris10_seq_pmg")].Text = "101CCC22";
@@ -5210,6 +5210,10 @@ namespace GatelessGateSharp
                     memoryTimingsEnabled = false;
                 }
             }
+            if (overclockingEnabled)
+                device.UpdateOverclockingSettings();
+            if (memoryTimingsEnabled)
+                device.UpdateMemoryTimings();
             device.OverclockingEnabled = overclockingEnabled;
             device.MemoryTimingModsEnabled = memoryTimingsEnabled;
 
@@ -5400,13 +5404,13 @@ namespace GatelessGateSharp
                     device.MemoryTimingModsEnabled = false;
                     device.FanControlEnabled = false;
                     device.FanSpeed = -1;
-                    //device.OverclockingEnabled = false;
-                    //device.PowerLimit = 100;
-                    //device.TargetCoreClock = device.DefaultCoreClock;
-                    //device.TargetMemoryClock = device.DefaultMemoryClock;
-                    //device.TargetMemoryVoltage = device.DefaultMemoryVoltage;
-                    //device.TargetCoreVoltage = device.DefaultCoreVoltage;
-                    //device.UpdateOverclockingSettings();
+                    device.OverclockingEnabled = false;
+                    device.PowerLimit = 100;
+                    device.TargetCoreClock = device.DriverCoreClock = device.DefaultCoreClock;
+                    device.TargetMemoryClock = device.DriverMemoryClock = device.DefaultMemoryClock;
+                    device.TargetMemoryVoltage = device.DefaultMemoryVoltage;
+                    device.TargetCoreVoltage = device.DefaultCoreVoltage;
+                    device.UpdateOverclockingSettings(false);
                 }
 
                 Controller.StopWatch.Stop();
@@ -6122,10 +6126,10 @@ namespace GatelessGateSharp
                 } else {
                     foreach (var miner in Controller.Miners) {
                         if (!miner.Alive) {
-                            MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Restarting the application...");
+                            MainForm.Logger("Miner thread for Device #" + miner.DeviceIndex + " is unresponsive. Rebooting the computer...");
                             UpdateLog();
                             //Utilities.RestartDriversAndApplication();
-                            Environment.Exit(0);
+                            Utilities.ForceReboot();
                         }
                     }
                 }
@@ -8014,15 +8018,15 @@ namespace GatelessGateSharp
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tr2w");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tw2r");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tr2r");
-                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tcl");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tcl");
 
-                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_tredc");
-                    //AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdr");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tredc");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdr");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp_rda");
 
-                    //AddOptimizerEntries(deviceIndexList, algorithm, "memory_timings_polaris10_twedc");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_twedc");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_wrplusrp");
-                    //AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdw");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdw");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp_wra");
 
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_ras2ras");
@@ -8375,9 +8379,9 @@ namespace GatelessGateSharp
 
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC_TIMING, out data);
                     MISCData.Data = data;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trp")].Value = MISCData.TRP;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trp_rda")].Value = MISCData.TRP_RDA;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trp_wra")].Value = MISCData.TRP_WRA;
-                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trp")].Value = MISCData.TRP;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_trfc")].Value = MISCData.TRFC;
 
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC_TIMING2, out data);
@@ -8386,8 +8390,8 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_pa2wdata")].Value = MISC2Data.PA2WDATA;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_faw")].Value = MISC2Data.FAW;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_t32aw")].Value = MISC2Data.T32AW;
-                    //numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = MISC2Data.TREDC;
-                    //numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_tredc")].Value = MISC2Data.TREDC;
+                    numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twdatatr")].Value = MISC2Data.TWDATATR;
 
                     UInt32 MISC1Data, MISC3Data, MISC4Data, MISC8Data, MISC9Data, PHYD0Data, PHYD1Data, PHY2Data;
@@ -8460,8 +8464,7 @@ namespace GatelessGateSharp
         private void buttonBoostPerformance_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show(
-                    "DO NOT USE THIS FEATURE WITH MODDED BIOS'ES!!\n\n"
-                    + "This feature will configure overclocking/memory timing settings with preset values for better performance. "
+                      "This feature will configure overclocking/memory timing settings with preset values for better performance. "
                     + "Although extensive testing has been done, it is not without risk and should be used with utmost caution. "
                     + "You can always confirm the results on the \"Devices\" tab page before you start mining.",
                     appName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);

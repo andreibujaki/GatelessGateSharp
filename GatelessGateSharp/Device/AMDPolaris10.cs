@@ -2143,8 +2143,8 @@ namespace GatelessGateSharp {
             MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_pa2wdata", out value); miscTimings2.PA2WDATA = value;
             MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_faw", out value); miscTimings2.FAW = value;
             MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_t32aw", out value); miscTimings2.T32AW = value;
-            //MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tredc", out value); miscTimings2.TREDC = value;
-            //MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twedc", out value); miscTimings2.TWEDC = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tredc", out value); miscTimings2.TREDC = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twedc", out value); miscTimings2.TWEDC = value;
             MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twdatatr", out value); miscTimings2.TWDATATR = value;
 
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_pmg", out PMGTimings);

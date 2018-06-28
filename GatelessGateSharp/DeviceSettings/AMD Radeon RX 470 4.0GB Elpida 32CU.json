@@ -1,10 +1,10 @@
 {
   "devices": [
     {
-      "device_id": 3,
+      "device_id": 6,
       "device_vendor": "AMD",
       "device_name": "Radeon RX 470",
-      "device_pnp_string": "PCI\\VEN_1002&DEV_67DF&SUBSYS_0B311002&REV_CF\\8&1DCB673E&0&001000400010",
+      "device_pnp_string": "PCI\\VEN_1002&DEV_67DF&SUBSYS_0B311002&REV_CF\\8&1EC2A200&0&001000480010",
       "fan_control": {
         "target_temperature": 75,
         "maximum_temperature": 85,
@@ -14,8 +14,9 @@
       },
       "ethash": {
         "threads": 1,
-        "intensity": 1024,
+        "intensity": 4,
         "local_work_size": 192,
+        "iterations": 512,
         "current_power_consumption": 86,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 120,

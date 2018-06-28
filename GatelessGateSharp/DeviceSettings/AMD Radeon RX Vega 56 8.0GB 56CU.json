@@ -6,8 +6,8 @@
       "device_name": "Radeon RX Vega 56",
       "device_pnp_string": "PCI\\VEN_1002&DEV_687F&SUBSYS_9C301682&REV_C3\\8&31F1EB65&0&000000800010",
       "fan_control": {
-        "target_temperature": 75,
-        "maximum_temperature": 85,
+        "target_temperature": 65,
+        "maximum_temperature": 75,
         "minimum_fan_speed": 20,
         "maximum_fan_speed": 100,
         "enabled": true

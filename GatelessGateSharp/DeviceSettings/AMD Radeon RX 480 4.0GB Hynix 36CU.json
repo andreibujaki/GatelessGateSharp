@@ -1,10 +1,10 @@
 {
   "devices": [
     {
-      "device_id": 2,
+      "device_id": 4,
       "device_vendor": "AMD",
       "device_name": "Radeon RX 480",
-      "device_pnp_string": "PCI\\VEN_1002&DEV_67DF&SUBSYS_05011043&REV_C7\\8&1302F693&0&001800400010",
+      "device_pnp_string": "PCI\\VEN_1002&DEV_67DF&SUBSYS_05011043&REV_C7\\8&120BBBD1&0&001800480010",
       "fan_control": {
         "target_temperature": 75,
         "maximum_temperature": 85,
@@ -14,8 +14,9 @@
       },
       "ethash": {
         "threads": 1,
-        "intensity": 1018,
+        "intensity": 4,
         "local_work_size": 192,
+        "iterations": 512,
         "current_power_consumption": 88,
         "kernel_optimization_level": 5,
         "overclocking_power_limit": 120,
