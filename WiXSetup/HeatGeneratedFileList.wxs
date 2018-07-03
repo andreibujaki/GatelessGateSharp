@@ -2,8 +2,14 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="INSTALLFOLDER">
-            <Component Id="cmp68ADB07AF08A1426815AD3BDF42CE4F6" Guid="*">
-                <File Id="filC9CBDE0814C385DF1C9E496796A4F7CA" KeyPath="yes" Source="$(var.HarvestPath)\Gateless Gate Sharp.lnk" />
+            <Component Id="cmp5B10929762EB39865B06B403922ED3D7" Guid="*">
+                <File Id="fil53634CF0B58612BAD0C68575E81A55BC" KeyPath="yes" Source="$(var.HarvestPath)\bios0007.log" />
+            </Component>
+            <Component Id="cmp16CB201398DCF7F5BF81B25456528975" Guid="*">
+                <File Id="filF54BFEDEDD79D76B8C96299039078DAD" KeyPath="yes" Source="$(var.HarvestPath)\bios0013.log" />
+            </Component>
+            <Component Id="cmpA8DE19DC552E3BCD08DDD88DE2C5CAE8" Guid="*">
+                <File Id="fil6BF3A980E0A2B68CC7249613CC1773BF" KeyPath="yes" Source="$(var.HarvestPath)\ehash.bin" />
             </Component>
             <Component Id="cmp69591F30184324681A0EF8373EA9D2A6" Guid="*">
                 <File Id="filC38C7164BB644943D4E7CABCE338C149" KeyPath="yes" Source="$(var.HarvestPath)\GatelessGateSharp.exe" />
@@ -38,6 +44,47 @@
             <Component Id="cmp46AD2A71B79D2F1399F269A08A3249D2" Guid="*">
                 <File Id="fil639D7C1056145B7EEA780175AB862984" KeyPath="yes" Source="$(var.HarvestPath)\PhyMemWrapper.dll" />
             </Component>
+            <Directory Id="dir22FAE88A4BAEC7F547ECAEC36FEE3966" Name="AssemblyKernels">
+                <Component Id="cmpE4E45A049C516CBDEFB44E39E6BBAA0A" Guid="*">
+                    <File Id="filC314F51A97E9E5C45122E0069BF3429B" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN3_ethash_GenerateDAG.isa" />
+                </Component>
+                <Component Id="cmp1D9FB55DD5BDB00D013752713BAA3FA2" Guid="*">
+                    <File Id="filDAEACD19A98E23735D60717DA21BF3A5" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN3_ethash_LWS128.isa" />
+                </Component>
+                <Component Id="cmp3F85456FA57AB6918EAAB83D5F84320D" Guid="*">
+                    <File Id="fil1CAE0F71B17F761A95FBB80C2DAE53AD" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN3_ethash_LWS192.isa" />
+                </Component>
+                <Component Id="cmp2773654597F5762EF6ED5D90403B6DAE" Guid="*">
+                    <File Id="filDE37BA34717E366B37839DBD0AE7FAF7" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN3_ethash_LWS256.isa" />
+                </Component>
+                <Component Id="cmpCD8A731EC1F77191F6B693B7846B89BF" Guid="*">
+                    <File Id="fil1B552633A55EE74DF7A52E6D924FFD52" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN3_ethash_LWS64.isa" />
+                </Component>
+                <Component Id="cmpD640E8A1D9313D1A64668E1336C88B58" Guid="*">
+                    <File Id="fil11B689BA4051CBAAA5A956F160392ABE" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN3_ethash_search.isa" />
+                </Component>
+                <Component Id="cmp4EA1D77F64DCE2D967AC7DEF05B7AF34" Guid="*">
+                    <File Id="filA31FA6061F58FE54447667B73D1EA802" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN5_ethash_GenerateDAG.isa" />
+                </Component>
+                <Component Id="cmpD690FCB29427095D391F9BCD6929F9FE" Guid="*">
+                    <File Id="fil19090EAA746366E339CB0301C30CEB63" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN5_ethash_LWS128.isa" />
+                </Component>
+                <Component Id="cmpF39623091151895241A03F7A77E0B50F" Guid="*">
+                    <File Id="fil9EF72E928A09843C342A9F7158FFCE60" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN5_ethash_LWS192.isa" />
+                </Component>
+                <Component Id="cmp2114F8D35E1968AA53DE5B5A7DB7A296" Guid="*">
+                    <File Id="fil1CEF2B1B7361F190D9F17E787FD31E7A" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN5_ethash_LWS256.isa" />
+                </Component>
+                <Component Id="cmp5362155A26E59E6609416707C4B1A5BB" Guid="*">
+                    <File Id="fil73A8EDDEAADC7C22327E2C07EB740AD4" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN5_ethash_LWS64.isa" />
+                </Component>
+                <Component Id="cmp8FF5FEFAF4F8FDF05C06238D42D05B35" Guid="*">
+                    <File Id="fil360754D07962B4997913F62DD22170E1" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN5_ethash_search.isa" />
+                </Component>
+                <Component Id="cmp81551989627E7B1B2F2A6457F10E2B72" Guid="*">
+                    <File Id="fil7149879F092FA27BCA692889178FE060" KeyPath="yes" Source="$(var.HarvestPath)\AssemblyKernels\GCN_ethash_globaldata.isa" />
+                </Component>
+            </Directory>
             <Directory Id="dirE3D1E0B6837DDD4581B09A1996205535" Name="BinaryKernels">
                 <Component Id="cmp888CAACFE8DF5C285C5F902C292E3A2E" Guid="*">
                     <File Id="filFC95715068891E2EA270472072B5F552" KeyPath="yes" Source="$(var.HarvestPath)\BinaryKernels\Baffin_x16r_LWS64.bin" />
@@ -132,6 +179,12 @@
                 </Component>
                 <Component Id="cmp017A3E154FAF343245B04E841544B652" Guid="*">
                     <File Id="fil877630DAFF084385ABD38ADD36EC6011" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 560 2.0GB Hynix 16CU.json" />
+                </Component>
+                <Component Id="cmpD47426EAA78B5C9EA6160C25A2DF4930" Guid="*">
+                    <File Id="fil4E6E6DDC58296E755640B221F790A6AD" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 570 8.0GB Micron 32CU.json" />
+                </Component>
+                <Component Id="cmp2AA671AEEFAD04BD071B895F7765DE81" Guid="*">
+                    <File Id="filE3914E8C17BE3D02A53B8AAAA552C414" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX 580 8.0GB Hynix 36CU.json" />
                 </Component>
                 <Component Id="cmp5BF8D70A10CE28C3C54A8CA34C5A2C94" Guid="*">
                     <File Id="fil055F9739893F50779B743338DBB00529" KeyPath="yes" Source="$(var.HarvestPath)\DeviceSettings\AMD Radeon RX Vega 56 8.0GB 56CU.json" />
@@ -274,11 +327,21 @@
                     <File Id="fil01A4A6DC8BFE057092FE0505BEB03757" KeyPath="yes" Source="$(var.HarvestPath)\Kernels\x16r.cl" />
                 </Component>
             </Directory>
+            <Directory Id="dirCF01D5040FD9778C6964A1321276CBAE" Name="Logs">
+                <Component Id="cmpA19ED119AC4978B6CA9B22533BF55C08" Guid="*">
+                    <File Id="fil51ADB7852263822E919B19F4FE454AFB" KeyPath="yes" Source="$(var.HarvestPath)\Logs\bios0007.log" />
+                </Component>
+                <Component Id="cmpF432A0B0DA858A64B6C5DC128B32FD25" Guid="*">
+                    <File Id="fil52ABB0DC64E48A595555499968FF2CB3" KeyPath="yes" Source="$(var.HarvestPath)\Logs\bios0013.log" />
+                </Component>
+            </Directory>
         </DirectoryRef>
     </Fragment>
     <Fragment>
         <ComponentGroup Id="HeatGenerated">
-            <ComponentRef Id="cmp68ADB07AF08A1426815AD3BDF42CE4F6" />
+            <ComponentRef Id="cmp5B10929762EB39865B06B403922ED3D7" />
+            <ComponentRef Id="cmp16CB201398DCF7F5BF81B25456528975" />
+            <ComponentRef Id="cmpA8DE19DC552E3BCD08DDD88DE2C5CAE8" />
             <ComponentRef Id="cmp69591F30184324681A0EF8373EA9D2A6" />
             <ComponentRef Id="cmp8400620DECF2655151D483066AD25190" />
             <ComponentRef Id="cmp3464F8730E573D338954EC7195CFB4A4" />
@@ -290,6 +353,19 @@
             <ComponentRef Id="cmpEFB368FCE043485F0641DD456E80FCFD" />
             <ComponentRef Id="cmp28FB22B28D9FFBC15D2050E172F311EF" />
             <ComponentRef Id="cmp46AD2A71B79D2F1399F269A08A3249D2" />
+            <ComponentRef Id="cmpE4E45A049C516CBDEFB44E39E6BBAA0A" />
+            <ComponentRef Id="cmp1D9FB55DD5BDB00D013752713BAA3FA2" />
+            <ComponentRef Id="cmp3F85456FA57AB6918EAAB83D5F84320D" />
+            <ComponentRef Id="cmp2773654597F5762EF6ED5D90403B6DAE" />
+            <ComponentRef Id="cmpCD8A731EC1F77191F6B693B7846B89BF" />
+            <ComponentRef Id="cmpD640E8A1D9313D1A64668E1336C88B58" />
+            <ComponentRef Id="cmp4EA1D77F64DCE2D967AC7DEF05B7AF34" />
+            <ComponentRef Id="cmpD690FCB29427095D391F9BCD6929F9FE" />
+            <ComponentRef Id="cmpF39623091151895241A03F7A77E0B50F" />
+            <ComponentRef Id="cmp2114F8D35E1968AA53DE5B5A7DB7A296" />
+            <ComponentRef Id="cmp5362155A26E59E6609416707C4B1A5BB" />
+            <ComponentRef Id="cmp8FF5FEFAF4F8FDF05C06238D42D05B35" />
+            <ComponentRef Id="cmp81551989627E7B1B2F2A6457F10E2B72" />
             <ComponentRef Id="cmp888CAACFE8DF5C285C5F902C292E3A2E" />
             <ComponentRef Id="cmpEADCB759A3F6799EBE93CE08D2C06AC8" />
             <ComponentRef Id="cmpE2BC47C0811801357A69B5A60D1B53BF" />
@@ -320,6 +396,8 @@
             <ComponentRef Id="cmp5C0526B10D8CE11FFA753C66FAE0B6EB" />
             <ComponentRef Id="cmpC270B46F3CDFC09C8EF2C0B77987C8C3" />
             <ComponentRef Id="cmp017A3E154FAF343245B04E841544B652" />
+            <ComponentRef Id="cmpD47426EAA78B5C9EA6160C25A2DF4930" />
+            <ComponentRef Id="cmp2AA671AEEFAD04BD071B895F7765DE81" />
             <ComponentRef Id="cmp5BF8D70A10CE28C3C54A8CA34C5A2C94" />
             <ComponentRef Id="cmp5E78A998CD7010B383BE1FA82A8FB425" />
             <ComponentRef Id="cmpD03172C4FB9C92B1CB84095EEDC0D106" />
@@ -366,6 +444,8 @@
             <ComponentRef Id="cmp16E957EE5CAC220E787A5A0775F673E5" />
             <ComponentRef Id="cmpEB1AD5C41FCC7C26871F61F314BB095E" />
             <ComponentRef Id="cmpFF35DD1F688BFAD6B84E67DBA8027105" />
+            <ComponentRef Id="cmpA19ED119AC4978B6CA9B22533BF55C08" />
+            <ComponentRef Id="cmpF432A0B0DA858A64B6C5DC128B32FD25" />
         </ComponentGroup>
     </Fragment>
 </Wix>

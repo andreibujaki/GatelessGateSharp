@@ -55,19 +55,6 @@
   <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
-  <PropertyGroup>
-    <PreBuildEvent>
-cd "$(SolutionDir)GatelessGateSharp\bin\Gateless Gate Sharp"
-signtool.exe sign /sha1 1B4A0DC00154061C27AF52EE28EA555544517DEE /tr http://timestamp.digicert.com /td sha256 /fd sha256 %2a.exe %2a.dll CLRX\%2a.%2a
-cd $(SolutionDir)GatelessGateSharp\bin
-del Gateless_Gate_Sharp_%2a.zip
-del Gateless_Gate_Sharp_%2a.7z
-"c:\Program Files\7-Zip\7z.exe" a -y Gateless_Gate_Sharp_@(VersionNumber).zip "Gateless Gate Sharp"
-"c:\Program Files\7-Zip\7z.exe" a -y Gateless_Gate_Sharp_@(VersionNumber).7z  "Gateless Gate Sharp"
-move %2a.zip $(TargetDir)
-move %2a.7z $(TargetDir)
-    </PreBuildEvent>
-  </PropertyGroup>
   <Target Name="PreBuildMacros">
     <GetAssemblyIdentity AssemblyFiles="$(SolutionDir)GatelessGateSharp\bin\$(Configuration)\GatelessGateSharp.exe">
       <Output TaskParameter="Assemblies" ItemName="Targets" />
@@ -89,11 +76,21 @@ move %2a.7z $(TargetDir)
     <HeatDirectory Directory="$(SolutionDir)GatelessGateSharp\bin\Gateless Gate Sharp" PreprocessorVariable="var.HarvestPath" OutputFile="HeatGeneratedFileList.wxs" ComponentGroupName="HeatGenerated" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>
-"c:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x64\signtool.exe" sign /sha1 1B4A0DC00154061C27AF52EE28EA555544517DEE /tr http://timestamp.digicert.com /td sha256 /fd sha256 $(TargetPath)
-
-start $(TargetDir)
-</PostBuildEvent>
+    <PreBuildEvent>cd "$(SolutionDir)GatelessGateSharp\bin\Gateless Gate Sharp"
+signtool.exe sign /a /t http://timestamp.verisign.com/scripts/timstamp.dll /fd sha1 %2a.dll CLRX\%2a.%2a
+signtool.exe sign /a /tr http://timestamp.digicert.com /td sha256 /fd sha256 /as %2a.exe %2a.dll CLRX\%2a.%2a
+cd $(SolutionDir)GatelessGateSharp\bin
+del Gateless_Gate_Sharp_%2a.zip
+del Gateless_Gate_Sharp_%2a.7z
+"c:\Program Files\7-Zip\7z.exe" a -y Gateless_Gate_Sharp_@(VersionNumber).zip "Gateless Gate Sharp"
+"c:\Program Files\7-Zip\7z.exe" a -y Gateless_Gate_Sharp_@(VersionNumber).7z  "Gateless Gate Sharp"
+move %2a.zip $(TargetDir)
+move %2a.7z $(TargetDir)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>signtool.exe sign /a /t http://timestamp.verisign.com/scripts/timstamp.dll /fd sha1 $(TargetPath)
+rem signtool.exe sign /a /tr http://timestamp.digicert.com /td sha256 /fd sha256 /as $(TargetPath)
+start $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

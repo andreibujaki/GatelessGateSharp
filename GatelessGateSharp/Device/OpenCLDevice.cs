@@ -898,7 +898,7 @@ namespace GatelessGateSharp
 
         static bool UpdateOverclockingSettings_firstCall = true;
 
-        public void UpdateOverclockingSettings(bool adjustClocks = true)
+        public void UpdateOverclockingSettings(bool initial = false, bool adjustClocks = true)
         {
             if (ADLAdapterIndex < 0)
                 return;
@@ -907,7 +907,7 @@ namespace GatelessGateSharp
             int currentCoreClock = CoreClock;
             int currentMemoryClock = MemoryClock;
 
-            if (ADL.ADL2_OverdriveN_SystemClocks_Get != null 
+            if (   ADL.ADL2_OverdriveN_SystemClocks_Get != null 
                 && ADL.ADL2_OverdriveN_SystemClocks_Set != null
                 && ADL.ADL2_OverdriveN_MemoryClocks_Get != null 
                 && ADL.ADL2_OverdriveN_MemoryClocks_Set != null
@@ -944,91 +944,91 @@ namespace GatelessGateSharp
                     DriverMemoryClock = TargetMemoryClock;
                 }
 
-                IntPtr systemBuffer;
-                ADLODNPerformanceLevels systemData = new ADLODNPerformanceLevels();
-                systemData.iMode = (int)ADLODNControlType.ODNControlType_Default;
-                systemData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
-                systemBuffer = Marshal.AllocCoTaskMem((int)(systemData.iSize = Marshal.SizeOf(systemData)));
-                Marshal.StructureToPtr(systemData, systemBuffer, false);
-                var ret = ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, systemBuffer);
-                if ((ret != ADL.ADL_SUCCESS && ret != ADL.ADL_OK_WARNING)) { MainForm.Logger("ADL.ADL2_OverdriveN_SystemClocks_Get() failed with Device #" + DeviceIndex + " (" + ret + ")."); return; }
-                systemData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(systemBuffer, systemData.GetType());
+                if (initial || currentCoreClock != TargetCoreClock || currentMemoryClock != TargetMemoryClock) {
+                    IntPtr systemBuffer;
+                    ADLODNPerformanceLevels systemData = new ADLODNPerformanceLevels();
+                    systemData.iMode = (int)ADLODNControlType.ODNControlType_Default;
+                    systemData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                    systemBuffer = Marshal.AllocCoTaskMem((int)(systemData.iSize = Marshal.SizeOf(systemData)));
+                    Marshal.StructureToPtr(systemData, systemBuffer, false);
+                    var ret = ADL.ADL2_OverdriveN_SystemClocks_Get(ADL2Context, ADLAdapterIndex, systemBuffer);
+                    if ((ret != ADL.ADL_SUCCESS && ret != ADL.ADL_OK_WARNING)) { MainForm.Logger("ADL.ADL2_OverdriveN_SystemClocks_Get() failed with Device #" + DeviceIndex + " (" + ret + ")."); return; }
+                    systemData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(systemBuffer, systemData.GetType());
 
-                IntPtr memoryBuffer;
-                ADLODNPerformanceLevels memoryData = new ADLODNPerformanceLevels();
-                memoryData.iMode = (int)ADLODNControlType.ODNControlType_Default;
-                memoryData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
-                memoryBuffer = Marshal.AllocCoTaskMem((int)(memoryData.iSize = Marshal.SizeOf(memoryData)));
-                Marshal.StructureToPtr(memoryData, memoryBuffer, false);
-                ret = ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, memoryBuffer);
-                if ((ret != ADL.ADL_SUCCESS && ret != ADL.ADL_OK_WARNING)) { MainForm.Logger("ADL.ADL2_OverdriveN_MemoryClocks_Get() failed with Device #" + DeviceIndex + " (" + ret + ")."); return; }
-                memoryData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(memoryBuffer, memoryData.GetType());
+                    IntPtr memoryBuffer;
+                    ADLODNPerformanceLevels memoryData = new ADLODNPerformanceLevels();
+                    memoryData.iMode = (int)ADLODNControlType.ODNControlType_Default;
+                    memoryData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                    memoryBuffer = Marshal.AllocCoTaskMem((int)(memoryData.iSize = Marshal.SizeOf(memoryData)));
+                    Marshal.StructureToPtr(memoryData, memoryBuffer, false);
+                    ret = ADL.ADL2_OverdriveN_MemoryClocks_Get(ADL2Context, ADLAdapterIndex, memoryBuffer);
+                    if ((ret != ADL.ADL_SUCCESS && ret != ADL.ADL_OK_WARNING)) { MainForm.Logger("ADL.ADL2_OverdriveN_MemoryClocks_Get() failed with Device #" + DeviceIndex + " (" + ret + ")."); return; }
+                    memoryData = (ADLODNPerformanceLevels)Marshal.PtrToStructure(memoryBuffer, memoryData.GetType());
 
-                if (UpdateOverclockingSettings_firstCall) {
-                    MainForm.Logger("systemData.iNumberOfPerformanceLevels: " + systemData.iNumberOfPerformanceLevels);
-                    for (int i = 0; i < systemData.iNumberOfPerformanceLevels; ++i) {
-                        MainForm.Logger("systemData.aLevels[" + i + "].iClock:   " + systemData.aLevels[i].iClock);
-                        MainForm.Logger("systemData.aLevels[" + i + "].iVddc:    " + systemData.aLevels[i].iVddc);
-                        MainForm.Logger("systemData.aLevels[" + i + "].iEnabled: " + systemData.aLevels[i].iEnabled);
+                    if (UpdateOverclockingSettings_firstCall) {
+                        MainForm.Logger("systemData.iNumberOfPerformanceLevels: " + systemData.iNumberOfPerformanceLevels);
+                        for (int i = 0; i < systemData.iNumberOfPerformanceLevels; ++i) {
+                            MainForm.Logger("systemData.aLevels[" + i + "].iClock:   " + systemData.aLevels[i].iClock);
+                            MainForm.Logger("systemData.aLevels[" + i + "].iVddc:    " + systemData.aLevels[i].iVddc);
+                            MainForm.Logger("systemData.aLevels[" + i + "].iEnabled: " + systemData.aLevels[i].iEnabled);
+                        }
+                        MainForm.Logger("memoryData.iNumberOfPerformanceLevels: " + memoryData.iNumberOfPerformanceLevels);
+                        for (int i = 0; i < memoryData.iNumberOfPerformanceLevels; ++i) {
+                            MainForm.Logger("memoryData.aLevels[" + i + "].iClock:   " + memoryData.aLevels[i].iClock);
+                            MainForm.Logger("memoryData.aLevels[" + i + "].iVddc:    " + memoryData.aLevels[i].iVddc);
+                            MainForm.Logger("memoryData.aLevels[" + i + "].iEnabled: " + memoryData.aLevels[i].iEnabled);
+                        }
+                        UpdateOverclockingSettings_firstCall = false;
                     }
-                    MainForm.Logger("memoryData.iNumberOfPerformanceLevels: " + memoryData.iNumberOfPerformanceLevels);
-                    for (int i = 0; i < memoryData.iNumberOfPerformanceLevels; ++i) {
-                        MainForm.Logger("memoryData.aLevels[" + i + "].iClock:   " + memoryData.aLevels[i].iClock);
-                        MainForm.Logger("memoryData.aLevels[" + i + "].iVddc:    " + memoryData.aLevels[i].iVddc);
-                        MainForm.Logger("memoryData.aLevels[" + i + "].iEnabled: " + memoryData.aLevels[i].iEnabled);
+
+                    systemData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                    systemData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                    int start = systemData.iNumberOfPerformanceLevels - 1;
+                    for (int i = start; i >= 0; --i) {
+                        systemData.aLevels[i].iEnabled = 1;
+                        systemData.aLevels[i].iClock = DriverCoreClock * 100;
+                        systemData.aLevels[i].iVddc = TargetCoreVoltage;
                     }
-                    UpdateOverclockingSettings_firstCall = false;
-                }
+                    Marshal.StructureToPtr(systemData, systemBuffer, false);
 
-                systemData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
-                systemData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
-                int start = systemData.iNumberOfPerformanceLevels - 1;
-                for (int i = start; i >= 0; --i) {
-                    systemData.aLevels[i].iEnabled = 1;
-                    systemData.aLevels[i].iClock = DriverCoreClock * 100;
-                    systemData.aLevels[i].iVddc = TargetCoreVoltage;
-                }
-                Marshal.StructureToPtr(systemData, systemBuffer, false);
+                    memoryData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
+                    memoryData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
+                    start = memoryData.iNumberOfPerformanceLevels - 1;
+                    for (int i = start; i >= 0; --i) {
+                        memoryData.aLevels[i].iEnabled = 1;
+                        memoryData.aLevels[i].iClock = DriverMemoryClock * 100;
+                        memoryData.aLevels[i].iVddc = TargetMemoryVoltage;
+                    }
+                    Marshal.StructureToPtr(memoryData, memoryBuffer, false);
 
-                memoryData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
-                memoryData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
-                start = memoryData.iNumberOfPerformanceLevels - 1;
-                for (int i = start; i >= 0; --i) {
-                    memoryData.aLevels[i].iEnabled = 1;
-                    memoryData.aLevels[i].iClock = DriverMemoryClock * 100;
-                    memoryData.aLevels[i].iVddc = TargetMemoryVoltage;
+                    ret = ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, memoryBuffer);
+                    if ((ret != ADL.ADL_SUCCESS && ret != ADL.ADL_OK_WARNING)) { MainForm.Logger("ADL.ADL2_OverdriveN_MemoryClocks_Set() failed with Device #" + DeviceIndex + " (" + ret + ")."); return; }
+                    ret = ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, systemBuffer);
+                    if ((ret != ADL.ADL_SUCCESS && ret != ADL.ADL_OK_WARNING)) { MainForm.Logger("ADL.ADL2_OverdriveN_SystemClocks_Set() failed with Device #" + DeviceIndex + " (" + ret + ")."); return; }
                 }
-                Marshal.StructureToPtr(memoryData, memoryBuffer, false);
-
-                ret = ADL.ADL2_OverdriveN_MemoryClocks_Set(ADL2Context, ADLAdapterIndex, memoryBuffer);
-                if ((ret != ADL.ADL_SUCCESS && ret != ADL.ADL_OK_WARNING)) { MainForm.Logger("ADL.ADL2_OverdriveN_MemoryClocks_Set() failed with Device #" + DeviceIndex + " (" + ret + ")."); return; }
-                ret = ADL.ADL2_OverdriveN_SystemClocks_Set(ADL2Context, ADLAdapterIndex, systemBuffer);
-                if ((ret != ADL.ADL_SUCCESS && ret != ADL.ADL_OK_WARNING)) { MainForm.Logger("ADL.ADL2_OverdriveN_SystemClocks_Set() failed with Device #" + DeviceIndex + " (" + ret + ")."); return; }
-            } else {
-                if (ADLVersion >= 5 && TargetCoreClock >= 0 && TargetMemoryClock >= 0 && TargetCoreVoltage >= 0
+            } else if (ADLVersion >= 5 && TargetCoreClock >= 0 && TargetMemoryClock >= 0 && TargetCoreVoltage >= 0
                 && ADL.ADL_Overdrive5_ODPerformanceLevels_Get != null
                 && ADL.ADL_Overdrive5_ODPerformanceLevels_Set != null) {
 
-                    // OverDrive 5
-                    ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                // OverDrive 5
+                ADLODPerformanceLevels OSADLODPerformanceLevelsData = new ADLODPerformanceLevels();
+                OSADLODPerformanceLevelsData.iReserved = 0;
+                var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
+                Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 0, levelsBuffer) == ADL.ADL_SUCCESS) {
+                    OSADLODPerformanceLevelsData = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
+                    //
                     OSADLODPerformanceLevelsData.iReserved = 0;
-                    var levelsBuffer = Marshal.AllocCoTaskMem((int)(OSADLODPerformanceLevelsData.iSize = Marshal.SizeOf(OSADLODPerformanceLevelsData)));
-                    Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
-                    if (ADL.ADL_Overdrive5_ODPerformanceLevels_Get(ADLAdapterIndex, 0, levelsBuffer) == ADL.ADL_SUCCESS) {
-                        OSADLODPerformanceLevelsData = (ADLODPerformanceLevels)Marshal.PtrToStructure(levelsBuffer, OSADLODPerformanceLevelsData.GetType());
-                        //
-                        OSADLODPerformanceLevelsData.iReserved = 0;
-                        for (int i = 0; i < ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5; ++i) {
-                            OSADLODPerformanceLevelsData.aLevels[i].iEngineClock = TargetCoreClock * 100;
-                            OSADLODPerformanceLevelsData.aLevels[i].iMemoryClock = TargetMemoryClock * 100;
-                            OSADLODPerformanceLevelsData.aLevels[i].iVddc = TargetCoreVoltage;
-                        }
-                        Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
-                        ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
+                    for (int i = 0; i < ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_OD5; ++i) {
+                        OSADLODPerformanceLevelsData.aLevels[i].iEngineClock = TargetCoreClock * 100;
+                        OSADLODPerformanceLevelsData.aLevels[i].iMemoryClock = TargetMemoryClock * 100;
+                        OSADLODPerformanceLevelsData.aLevels[i].iVddc = TargetCoreVoltage;
                     }
+                    Marshal.StructureToPtr(OSADLODPerformanceLevelsData, levelsBuffer, false);
+                    ADL.ADL_Overdrive5_ODPerformanceLevels_Set(ADLAdapterIndex, levelsBuffer);
                 }
             }
-            if (OverclockingEnabled && GetComputeDevice().PciBusIdAMD > 0 && TargetCoreClock >= 0 && TargetMemoryClock >= 0 && TargetCoreVoltage >= 0 && TargetMemoryVoltage >= 0)
+            if (GetComputeDevice().PciBusIdAMD > 0 && TargetCoreClock >= 0 && TargetMemoryClock >= 0 && TargetCoreVoltage >= 0 && TargetMemoryVoltage >= 0)
                 PCIExpress.ATOMBIOS_SetOverclockingSettings(GetComputeDevice().PciBusIdAMD, TargetCoreClock, TargetCoreVoltage, TargetMemoryClock, TargetMemoryVoltage);
         }
     }

@@ -74,6 +74,33 @@ namespace GatelessGateSharp
                 }
             }
 
+            [DllImport("Psapi.dll", CharSet = CharSet.Auto, EntryPoint = "GetPerformanceInfo", SetLastError = true)]
+            public static extern int GetPerformanceInfo([In, Out] PerformanceInformation pPerformanceInformation, uint cb);
+
+            [StructLayout(LayoutKind.Sequential)]
+            internal class PerformanceInformation
+            {
+                public uint cb;
+                public UInt64 CommitTotal;
+                public UInt64 CommitLimit;
+                public UInt64 CommitPeak;
+                public UInt64 PhysicalTotal;
+                public UInt64 PhysicalAvailable;
+                public UInt64 SystemCache;
+                public UInt64 KernelTotal;
+                public UInt64 KernelPaged;
+                public UInt64 KernelNonpaged;
+                public UInt64 PageSize;
+                public uint HandleCount;
+                public uint ProcessCount;
+                public uint ThreadCount;
+
+                public PerformanceInformation()
+                {
+                    this.cb = (uint)Marshal.SizeOf(typeof(PerformanceInformation));
+                }
+            }
+
             [DllImport("Shell32.dll")]
             public static extern int SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags, IntPtr hToken, out IntPtr ppszPath);
 
@@ -101,7 +128,7 @@ namespace GatelessGateSharp
 
         private static MainForm instance;
         public static string shortAppName = "Gateless Gate Sharp";
-        public static string appVersion = "1.3.9";
+        public static string appVersion = "2.0.0";
         private static string sRecommendedAMDDriverVersion = "18.5.1";
         public static string appName = shortAppName + " " + appVersion + " alpha";
         public static string normalizedShortAppName = "gateless-gate-sharp";
@@ -1037,7 +1064,7 @@ namespace GatelessGateSharp
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_faw", 0, 0, 31, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_tredc", 0, 0, 7, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_twedc", 0, 0, 31, 1),
-                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_t32aw", 0, 0, 15, 1),
+                            new Tuple<string, int, int, int, int>("memory_timings_polaris10_t32aw", 0, 0, 127, 1),
                             new Tuple<string, int, int, int, int>("memory_timings_polaris10_twdatatr", 0, 0, 15, 1),
                         }) {
                             var tuple2 = new Tuple<int, string, string>(device.DeviceIndex, algorithm, tuple.Item1);
@@ -1978,11 +2005,13 @@ namespace GatelessGateSharp
         private static bool CheckVirtualMemorySize()
         {
             var status = new NativeMethods.MemoryStatusEx();
-
             NativeMethods.GlobalMemoryStatusEx(status);
-
-            if ((ulong)status.ullTotalPageFile - status.ullTotalPhys < (ulong)24 * 1024 * 1024 * 1024) {
-                var result = MessageBox.Show(Utilities.GetAutoClosingForm(20), "The total size of page files is too small.\nAt least 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+            var info = new NativeMethods.PerformanceInformation();
+            NativeMethods.GetPerformanceInfo(info, (uint)Marshal.SizeOf(typeof(NativeMethods.PerformanceInformation)));
+            ulong currentPageFileSize = info.CommitLimit * info.PageSize - status.ullTotalPhys;
+            MainForm.Logger("Current page file size: " + currentPageFileSize);
+            if (currentPageFileSize < Parameters.MinimumPageFileSize) {
+                var result = MessageBox.Show(Utilities.GetAutoClosingForm(20), "The total size of page files is too small.\nThe minimum amount of 24GB is recommended for this application.\nWould you like this application to automatically set it for you?\nThe computer will be rebooted after the change is made.\nAlternatively, you can manually increase the page file size in Advanced System Settings.", appName, MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
                 if (result == DialogResult.Yes) {
                     try {
                         var process = new System.Diagnostics.Process();
@@ -2353,9 +2382,10 @@ namespace GatelessGateSharp
                 comboBoxBenchmarkingFirstParameter.SelectedIndex = 0;
             if (comboBoxBenchmarkingSecondParameter.SelectedIndex < 0)
                 comboBoxBenchmarkingSecondParameter.SelectedIndex = 0;
+            MainForm.Instance.Enabled = true;
             UpdateDevicesTabPage();
             UpdateBenchmarkTable();
-            MainForm.Instance.Enabled = true;
+            UpdateControls();
         }
 
         private void LoadDeviceSettingsFromJSONObject(OpenCLDevice device, JArray deviceSettingsArray, string[] excludedParameters = null)
@@ -5198,10 +5228,6 @@ namespace GatelessGateSharp
                 device.TargetMemoryClock = device.DriverMemoryClock = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_clock")].Value);
                 device.TargetCoreVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_core_voltage")].Value);
                 device.TargetMemoryVoltage = Decimal.ToInt32(numericDeviceParameterArray[new Tuple<int, string, string>(device.DeviceIndex, algorithm, "overclocking_memory_voltage")].Value);
-                if (device.DriverCoreClock > device.DefaultCoreClock)
-                    device.DriverCoreClock = device.DefaultCoreClock;
-                if (device.DriverMemoryClock > device.DefaultMemoryClock)
-                    device.DriverMemoryClock = device.DefaultMemoryClock;
             }
             if (memoryTimingsEnabled) {
                 if (PCIExpress.Available || PCIExpress.LoadPhyMem()) {
@@ -5211,7 +5237,7 @@ namespace GatelessGateSharp
                 }
             }
             if (overclockingEnabled)
-                device.UpdateOverclockingSettings();
+                device.UpdateOverclockingSettings(true, false);
             if (memoryTimingsEnabled)
                 device.UpdateMemoryTimings();
             device.OverclockingEnabled = overclockingEnabled;
@@ -5404,13 +5430,15 @@ namespace GatelessGateSharp
                     device.MemoryTimingModsEnabled = false;
                     device.FanControlEnabled = false;
                     device.FanSpeed = -1;
-                    device.OverclockingEnabled = false;
-                    device.PowerLimit = 100;
-                    device.TargetCoreClock = device.DriverCoreClock = device.DefaultCoreClock;
-                    device.TargetMemoryClock = device.DriverMemoryClock = device.DefaultMemoryClock;
-                    device.TargetMemoryVoltage = device.DefaultMemoryVoltage;
-                    device.TargetCoreVoltage = device.DefaultCoreVoltage;
-                    device.UpdateOverclockingSettings(false);
+                    if (device.OverclockingEnabled) {
+                        device.OverclockingEnabled = false;
+                        device.PowerLimit = 100;
+                        device.TargetCoreClock = device.DriverCoreClock = device.DefaultCoreClock;
+                        device.TargetMemoryClock = device.DriverMemoryClock = device.DefaultMemoryClock;
+                        device.TargetMemoryVoltage = device.DefaultMemoryVoltage;
+                        device.TargetCoreVoltage = device.DefaultCoreVoltage;
+                        device.UpdateOverclockingSettings(false, false);
+                    }
                 }
 
                 Controller.StopWatch.Stop();
@@ -7996,18 +8024,19 @@ namespace GatelessGateSharp
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "overclocking_core_voltage");
 
                 if (checkBoxOptimizationMemoryTimings.Checked) {
-                    //AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
-                    //AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tccdl");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trrd");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tredc");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_twedc");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_faw");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_t32aw");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trc");
 
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_actrd");
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactrd");
-
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_actwr");
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactwr");
 
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trc");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactrd");
+                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_rasmactwr");
                 }
 
                 if (checkBoxOptimizationMemoryTimingsExtended.Checked) {
@@ -8020,11 +8049,9 @@ namespace GatelessGateSharp
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tr2r");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tcl");
 
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_tredc");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdr");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp_rda");
-
-                    AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_twedc");
+                    
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_wrplusrp");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trcdw");
                     AddOptimizerEntriesForParameter(deviceIndexList, algorithm, "memory_timings_polaris10_trp_wra");

@@ -56,7 +56,6 @@ namespace GatelessGateSharp
                     sSerialPort.Write(new byte[] { sCommand }, 0, 1);
                     sSerialPort.Close();
                     sSerialPort = null;
-                    System.Windows.Forms.MessageBox.Show("The USB watchdog is now unmanaged!", MainForm.appName, System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 }
             } catch (Exception) { }
         }

@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>cfaf8b75-a167-4a3a-b0dc-b6a6f05c50f0</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>GatelesGateSharpInstaller</OutputName>
+    <OutputName>GatelessGateSharpInstaller</OutputName>
     <OutputType>Bundle</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -64,14 +64,18 @@
   <PropertyGroup>
     <PostBuildEvent>insignia -ib $(TargetPath) -o engine.exe
 ping -n 5 &gt; nil
-signtool.exe sign /sha1 1B4A0DC00154061C27AF52EE28EA555544517DEE /tr http://timestamp.digicert.com /td sha256 /fd sha256 engine.exe
+signtool.exe sign /a /t http://timestamp.verisign.com/scripts/timstamp.dll /fd sha1 engine.exe
 ping -n 5 &gt; nil
-insignia -ab engine.exe $(TargetPath) -o $(TargetPath)
+rem signtool.exe sign /a /tr http://timestamp.digicert.com /td sha256 /fd sha256 /as engine.exe
 ping -n 5 &gt; nil
-signtool.exe sign /sha1 1B4A0DC00154061C27AF52EE28EA555544517DEE /tr http://timestamp.digicert.com /td sha256 /fd sha256 $(TargetPath)
+insignia -ab engine.exe "$(TargetPath)" -o "$(TargetPath)"
+ping -n 5 &gt; nil
+signtool.exe sign /a /t http://timestamp.verisign.com/scripts/timstamp.dll /fd sha1 "$(TargetPath)"
+rem ping -n 5 &gt; nil
+signtool.exe sign /a /tr http://timestamp.digicert.com /td sha256 /fd sha256 /as "$(TargetPath)"
 ping -n 5 &gt; nil
 del engine.exe
-start $(TargetDir)</PostBuildEvent>
+start "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
