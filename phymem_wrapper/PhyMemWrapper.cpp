@@ -739,14 +739,14 @@ end:
         const uint32_t GRBM_STATUS__GUI_ACTIVE_MASK = 0x80000000;
 
         if (   (*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (value3 & 0xff000000)) {
-            //if (*(virtual_addr + mmMC_SEQ_RD_CTL_D0) != 0x7077) *(virtual_addr + mmMC_SEQ_RD_CTL_D0) = 0x7077;
-            //if (*(virtual_addr + mmMC_SEQ_RD_CTL_D1) != 0x7077) *(virtual_addr + mmMC_SEQ_RD_CTL_D1) = 0x7077;
-            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_D0) != 0x7077) *(virtual_addr + mmMC_SEQ_WR_CTL_D0) = 0x7077;
-            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_D1) != 0x7077) *(virtual_addr + mmMC_SEQ_WR_CTL_D1) = 0x7077;
+            //if (*(virtual_addr + mmMC_SEQ_RD_CTL_D0) != 0x00e0327a) *(virtual_addr + mmMC_SEQ_RD_CTL_D0) = 0x00e0327a;
+            //if (*(virtual_addr + mmMC_SEQ_RD_CTL_D1) != 0x00e0c17a) *(virtual_addr + mmMC_SEQ_RD_CTL_D1) = 0x00e0c17a;
+            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_D0) != 0x20353133) *(virtual_addr + mmMC_SEQ_WR_CTL_D0) = 0x20353133;
+            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_D1) != 0x20353133) *(virtual_addr + mmMC_SEQ_WR_CTL_D1) = 0x20353133;
             //if (*(virtual_addr + mmMC_SEQ_WR_CTL_2) != 0x0) *(virtual_addr + mmMC_SEQ_WR_CTL_2) = 0x0;
             
             if (*(virtual_addr + mmMC_SEQ_CAS_TIMING) != value3) *(virtual_addr + mmMC_SEQ_CAS_TIMING) = value3;
-            value5 = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
+            //value5 = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
             if (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) != value5) *(virtual_addr + mmMC_SEQ_MISC_TIMING2) = value5;
             
             if (*(virtual_addr + mmMC_ARB_BURST_TIME) != value15) *(virtual_addr + mmMC_ARB_BURST_TIME) = value15;
