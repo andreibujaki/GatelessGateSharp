@@ -746,7 +746,7 @@ end:
             //if (*(virtual_addr + mmMC_SEQ_WR_CTL_2) != 0x0) *(virtual_addr + mmMC_SEQ_WR_CTL_2) = 0x0;
             
             if (*(virtual_addr + mmMC_SEQ_CAS_TIMING) != value3) *(virtual_addr + mmMC_SEQ_CAS_TIMING) = value3;
-            //value5 = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
+            value5 = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
             if (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) != value5) *(virtual_addr + mmMC_SEQ_MISC_TIMING2) = value5;
             
             if (*(virtual_addr + mmMC_ARB_BURST_TIME) != value15) *(virtual_addr + mmMC_ARB_BURST_TIME) = value15;
