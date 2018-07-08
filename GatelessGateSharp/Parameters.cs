@@ -14,7 +14,7 @@ namespace GatelessGateSharp {
 
         public static readonly ulong MinimumPageFileSize = 24UL * 1024 * 1024 * 1024;
 
-        public static readonly int MemoryTimingUpdateInterval = 100;
+        public static readonly int MemoryTimingUpdateInterval = 1;
         public static readonly int OverclockingSettingsUpdateInterval = 100;
 
         public static readonly int FanControlUpdateInterval = 5000;

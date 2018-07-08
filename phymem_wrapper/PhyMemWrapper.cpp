@@ -731,14 +731,20 @@ end:
         const uint32_t mmMC_ARB_DRAM_TIMING_1 = 0x9fc;
         const uint32_t mmMC_ARB_DRAM_TIMING2_1 = 0x9ff;
         const uint32_t mmMC_ARB_BURST_TIME = 0xa02;
+        const uint32_t mmMC_SEQ_SUP_CNTL = 0xa32;
 
         const uint32_t mask5 = 0xffe01fff;
 
         const uint32_t mmGRBM_STATUS = 0x2004;
         const uint32_t GRBM_STATUS__GUI_ACTIVE_MASK = 0x80000000;
 
-        if (   (*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) != (default_value3 & 0xff000000)) {
-
+        if (   (*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (value3 & 0xff000000)) {
+            //if (*(virtual_addr + mmMC_SEQ_RD_CTL_D0) != 0x7077) *(virtual_addr + mmMC_SEQ_RD_CTL_D0) = 0x7077;
+            //if (*(virtual_addr + mmMC_SEQ_RD_CTL_D1) != 0x7077) *(virtual_addr + mmMC_SEQ_RD_CTL_D1) = 0x7077;
+            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_D0) != 0x7077) *(virtual_addr + mmMC_SEQ_WR_CTL_D0) = 0x7077;
+            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_D1) != 0x7077) *(virtual_addr + mmMC_SEQ_WR_CTL_D1) = 0x7077;
+            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_2) != 0x0) *(virtual_addr + mmMC_SEQ_WR_CTL_2) = 0x0;
+            
             if (*(virtual_addr + mmMC_SEQ_CAS_TIMING) != value3) *(virtual_addr + mmMC_SEQ_CAS_TIMING) = value3;
             value5 = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
             if (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) != value5) *(virtual_addr + mmMC_SEQ_MISC_TIMING2) = value5;
@@ -750,7 +756,7 @@ end:
             if (*(virtual_addr + mmMC_SEQ_RAS_TIMING) != value2) *(virtual_addr + mmMC_SEQ_RAS_TIMING) = value2;
             if (*(virtual_addr + mmMC_SEQ_MISC_TIMING) != value4) *(virtual_addr + mmMC_SEQ_MISC_TIMING) = value4;
             if (*(virtual_addr + mmMC_SEQ_PMG_TIMING) != value6) *(virtual_addr + mmMC_SEQ_PMG_TIMING) = value6;
-
+            
             if (*(virtual_addr + mmMC_PHY_TIMING_D0) != value7) *(virtual_addr + mmMC_PHY_TIMING_D0) = value7;
 			if (*(virtual_addr + mmMC_PHY_TIMING_D1) != value8) *(virtual_addr + mmMC_PHY_TIMING_D1) = value8;
             if (*(virtual_addr + mmMC_PHY_TIMING_2) != value9) *(virtual_addr + mmMC_PHY_TIMING_2) = value9;
