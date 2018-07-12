@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using Cloo;
 
 
+
 namespace GatelessGateSharp {
     class AMDGMC81 : AMDDevice {
         public enum GMC81Registers : uint {
@@ -2253,7 +2254,14 @@ namespace GatelessGateSharp {
             uint MC_SEQ_MISC8Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC8, out MC_SEQ_MISC8Data); MainForm.Logger("MC_SEQ_MISC8: 0x" + String.Format("{0:x8}", MC_SEQ_MISC8Data));
             uint MC_SEQ_MISC9Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_MISC9, out MC_SEQ_MISC9Data); MainForm.Logger("MC_SEQ_MISC9: 0x" + String.Format("{0:x8}", MC_SEQ_MISC9Data));
             uint MC_SEQ_DRAMData = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_DRAM, out MC_SEQ_DRAMData); MainForm.Logger("MC_SEQ_DRAM: 0x" + String.Format("{0:x8}", MC_SEQ_DRAMData));
+            uint MC_SEQ_DRAM2Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_DRAM_2, out MC_SEQ_DRAM2Data); MainForm.Logger("MC_SEQ_DRAM_2: 0x" + String.Format("{0:x8}", MC_SEQ_DRAM2Data));
             uint MC_SEQ_CMDData = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CMD, out MC_SEQ_CMDData); MainForm.Logger("MC_SEQ_CMD: 0x" + String.Format("{0:x8}", MC_SEQ_CMDData));
+            uint MC_CONFIGData = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_CONFIG, out MC_CONFIGData); MainForm.Logger("MC_CONFIG: 0x" + String.Format("{0:x8}", MC_CONFIGData));
+            uint MC_IO_PAD_CNTL_D0Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_IO_PAD_CNTL_D0, out MC_IO_PAD_CNTL_D0Data); MainForm.Logger("MC_IO_PAD_CNTL_D0: 0x" + String.Format("{0:x8}", MC_IO_PAD_CNTL_D0Data));
+            uint MC_IO_PAD_CNTL_D1Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_IO_PAD_CNTL_D1, out MC_IO_PAD_CNTL_D1Data); MainForm.Logger("MC_IO_PAD_CNTL_D1: 0x" + String.Format("{0:x8}", MC_IO_PAD_CNTL_D1Data));
+            uint data = 0;
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out data); MainForm.Logger("mmMC_ARB_DRAM_TIMING: 0x" + String.Format("{0:x8}", ARBTimings.Data));
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out data); MainForm.Logger("mmMC_ARB_DRAM_TIMING2: 0x" + String.Format("{0:x8}", ARBTimings2.Data));
             MainForm.Logger("MC_SEQ_PMG: 0x" + String.Format("{0:x8}", PMGData));
             MainForm.Logger("-------------");
             MainForm.Logger("ACTRD:    " + ARBTimings.ACTRD);
@@ -2308,6 +2316,38 @@ namespace GatelessGateSharp {
             MainForm.Logger("SEQ_IDLE: " + PMGTimings.SEQ_IDLE);
             MainForm.Logger("TCKE_PULSE_MSB:" + PMGTimings.TCKE_PULSE_MSB);
             MainForm.Logger("SEQ_IDLE_SS:" + PMGTimings.SEQ_IDLE_SS);
+            MainForm.Logger("-------------");
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000,         out data); MainForm.Logger("SMC74_Firmware_Header.Digest[0]: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 1 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.Digest[1]: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 2 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.Digest[2]: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 3 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.Digest[3]: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 4 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.Digest[4]: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 5 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.Version: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 6 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.HeaderSize: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 7 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.Flags: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 8 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.EntryPoint: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 9 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.CodeSize: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 10 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.ImageSize: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 17 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.mcRegisterTable: 0x" + String.Format("{0:x8}", data));
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 18 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.mcArbDramTimingTable: 0x" + String.Format("{0:x8}", data));
+            /*
+            uint ARBTableStart;
+            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 18 * 4, out ARBTableStart);
+            for (uint i = 0; i < 32; ++i) {
+                PCIExpress.SMU7_ReadDWORD((uint)busNumber, ARBTableStart + (i * 3 + 0) * 4, out data); MainForm.Logger("    0x" + String.Format("{0:x8}", data));
+                PCIExpress.SMU7_ReadDWORD((uint)busNumber, ARBTableStart + (i * 3 + 1) * 4, out data); MainForm.Logger("    0x" + String.Format("{0:x8}", data));
+                PCIExpress.SMU7_ReadDWORD((uint)busNumber, ARBTableStart + (i * 3 + 2) * 4, out data); MainForm.Logger("    0x" + String.Format("{0:x8}", data));
+            }
+            for (uint i = 0x20000; i < 0x40000; i += 16) {
+                string s = "    ";
+                s = String.Format("{0:x8}: ", i);
+                PCIExpress.SMU7_ReadDWORD((uint)busNumber, i + 0,  out data); s += String.Format(" 0x{0:x8}", data);
+                PCIExpress.SMU7_ReadDWORD((uint)busNumber, i + 4,  out data); s += String.Format(" 0x{0:x8}", data);
+                PCIExpress.SMU7_ReadDWORD((uint)busNumber, i + 8,  out data); s += String.Format(" 0x{0:x8}", data);
+                PCIExpress.SMU7_ReadDWORD((uint)busNumber, i + 12, out data); s += String.Format(" 0x{0:x8}", data);
+                MainForm.Logger("    " + s);
+            }
+            */
         }
     }
 }

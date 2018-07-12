@@ -52,6 +52,10 @@ namespace GatelessGateSharp {
         public static extern int ATOMBIOS_SetOverclockingSettings(uint busNumber, int engineClock, int VDDC, int memoryClock, int VDDCI);
         [DllImport("PhyMemWrapper.dll")]
         public static extern int ATOMBIOS_SetMemoryTimings(uint busNumber, int coreClock, int memoryClock);
+        [DllImport("PhyMemWrapper.dll")]
+        public static extern int SMU7_ReadDWORD(uint busNum, uint SMCAddress, out uint value);
+        [DllImport("PhyMemWrapper.dll")]
+        public static extern int SMU7_WriteDWORD(uint busNum, uint SMCAddress, uint value);
 
         [StructLayout(LayoutKind.Sequential)]
         internal class PCIConfigurationSpace {

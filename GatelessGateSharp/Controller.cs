@@ -135,7 +135,7 @@ namespace GatelessGateSharp {
                 foreach (var device in Controller.OpenCLDevices) {
                     try {
                         if (device.OverclockingEnabled)
-                            device.UpdateOverclockingSettings(false, true);
+                            device.UpdateOverclockingSettings(false, false);
                         if (device.MemoryTimingModsEnabled && device.MemoryClock == device.TargetMemoryClock) {
                             interval = Parameters.MemoryTimingUpdateInterval;
                             device.UpdateMemoryTimings();

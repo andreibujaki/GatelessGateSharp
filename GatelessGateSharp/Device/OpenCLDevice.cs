@@ -898,7 +898,7 @@ namespace GatelessGateSharp
 
         static bool UpdateOverclockingSettings_firstCall = true;
 
-        public void UpdateOverclockingSettings(bool initial = false, bool adjustClocks = true)
+        public void UpdateOverclockingSettings(bool initial = false, bool adjustClocks = false)
         {
             if (ADLAdapterIndex < 0)
                 return;
@@ -992,7 +992,6 @@ namespace GatelessGateSharp
                     Marshal.StructureToPtr(systemData, systemBuffer, false);
 
                     memoryData.iMode = (int)ADLODNControlType.ODNControlType_Manual;
-                    memoryData.iNumberOfPerformanceLevels = ADL.ADL_MAX_NUM_PERFORMANCE_LEVELS_ODN;
                     start = memoryData.iNumberOfPerformanceLevels - 1;
                     for (int i = start; i >= 0; --i) {
                         memoryData.aLevels[i].iEnabled = 1;

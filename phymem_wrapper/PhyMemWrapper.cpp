@@ -239,7 +239,7 @@ extern "C" {
                 break;
         }
         if (RSDTPtrOffset < RSDT_PTR_MAGIC_STRING_RANGE_SIZE - strlen(RSDT_PTR_MAGIC_STRING)) {
-            //printf("Pointer to ACPI Root System Description Table (RSDT) found at 0x%08x.\n", (unsigned int)virtual_addr + rsdt_ptr_offset);
+            //printf("Pointer to ACPI Root System Description Table (RSDT) found at 0x%08x.\n", (unsigned int)virtualAddress + rsdt_ptr_offset);
             RSDTTableBase = *(uint32_t *)(virtualAddress + RSDTPtrOffset + 0x10);
             UnmapPhyMem(virtualAddress, RSDT_PTR_MAGIC_STRING_RANGE_SIZE);
 
@@ -667,6 +667,83 @@ end:
     }
 
     __declspec(dllexport)
+        BOOL SMU7_ReadDWORD(uint32_t busNum, uint32_t SMCAddress, uint32_t *value)
+    {
+        const uint32_t mmSMC_IND_ACCESS_CNTL = 0x90;
+        const uint32_t mmSMC_IND_INDEX_8 = 0x8e;
+        const uint32_t mmSMC_IND_DATA_8 = 0x8f;
+        const uint32_t SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK = 0x100;
+
+        int result = TRUE;
+        uint32_t configRegistersBase = configRegistersBaseArray[busNum];
+
+        if (!configRegistersBase) {
+            if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+                return FALSE;
+            configRegistersBase &= 0xfffffff0;
+            configRegistersBaseArray[busNum] = configRegistersBase;
+        }
+
+        volatile uint32_t *virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+        if (!virtualAddress)
+            return FALSE;
+
+        *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress;
+        *(virtualAddress + mmSMC_IND_ACCESS_CNTL) &= ~SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK;
+        *value = *(virtualAddress + mmSMC_IND_DATA_8);
+
+        UnmapPhyMem((PVOID)virtualAddress, 256 * 1024);
+
+        return result;
+    }
+
+    __declspec(dllexport)
+        BOOL SMU7_WriteDWORD(uint32_t busNum, uint32_t SMCAddress, uint32_t value)
+    {
+        const uint32_t mmSMC_IND_ACCESS_CNTL = 0x90;
+        const uint32_t mmSMC_IND_INDEX_8 = 0x8e;
+        const uint32_t mmSMC_IND_DATA_8 = 0x8f;
+        const uint32_t SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK = 0x100;
+
+        int result = TRUE;
+        uint32_t configRegistersBase = configRegistersBaseArray[busNum];
+
+        if (!configRegistersBase) {
+            if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+                return FALSE;
+            configRegistersBase &= 0xfffffff0;
+            configRegistersBaseArray[busNum] = configRegistersBase;
+        }
+
+        volatile uint32_t *virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+        if (!virtualAddress)
+            return FALSE;
+
+        *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress;
+        *(virtualAddress + mmSMC_IND_ACCESS_CNTL) &= ~SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK;
+        *(virtualAddress + mmSMC_IND_DATA_8) = value;
+
+        UnmapPhyMem((PVOID)virtualAddress, 256 * 1024);
+
+        return result;
+    }
+    struct SMU74_Discrete_MCArbDramTimingTableEntry {
+        uint32_t McArbDramTiming;
+        uint32_t McArbDramTiming2;
+        uint8_t  McArbBurstTime;
+        uint8_t  padding[3];
+    };
+
+    typedef struct SMU74_Discrete_MCArbDramTimingTableEntry SMU74_Discrete_MCArbDramTimingTableEntry;
+
+#define SMU__NUM_SCLK_DPM_STATE  8
+#define SMU__NUM_MCLK_DPM_LEVELS 4
+
+    struct SMU74_Discrete_MCArbDramTimingTable {
+        SMU74_Discrete_MCArbDramTimingTableEntry entries[SMU__NUM_SCLK_DPM_STATE][SMU__NUM_MCLK_DPM_LEVELS];
+    };
+
+    __declspec(dllexport)
         BOOL UpdateGMC81Registers(int32_t busNum,
                                   uint32_t value0,
                                   uint32_t value1,
@@ -696,9 +773,14 @@ end:
             configRegistersBaseArray[busNum] = configRegistersBase;
         }
 
-        volatile uint32_t *virtual_addr = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
-        if (!virtual_addr)
+        volatile uint32_t *virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
+        if (!virtualAddress)
             return FALSE;
+
+        const uint32_t mmSMC_IND_ACCESS_CNTL = 0x90;
+        const uint32_t mmSMC_IND_INDEX_8 = 0x8e;
+        const uint32_t mmSMC_IND_DATA_8 = 0x8f;
+        const uint32_t SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK = 0x100;
 
         const uint32_t mmMC_SEQ_MISC1 = 0xa81;
         const uint32_t mmMC_SEQ_MISC3 = 0xa8b;
@@ -732,43 +814,67 @@ end:
         const uint32_t mmMC_ARB_DRAM_TIMING2_1 = 0x9ff;
         const uint32_t mmMC_ARB_BURST_TIME = 0xa02;
         const uint32_t mmMC_SEQ_SUP_CNTL = 0xa32;
+        const uint32_t mmMC_SEQ_DRAM_2 = 0xa27;
+        const uint32_t mmMC_CONFIG = 0x800;
+        const uint32_t mmPMI_STATUS_CNTL = 0x15;
+        const uint32_t mmMC_SEQ_STATUS_M = 0xa7d;
+        const uint32_t mmMC_SEQ_RD_CTL_D0_LP = 0xac7;
+        const uint32_t mmMC_SEQ_RD_CTL_D1_LP = 0xac8;
+        const uint32_t mmMC_SEQ_WR_CTL_2_LP = 0xad6;
+        const uint32_t mmMC_SEQ_WR_CTL_D0_LP = 0xa9f;
+        const uint32_t mmMC_SEQ_WR_CTL_D1_LP = 0xaa0;
 
         const uint32_t mask5 = 0xffe01fff;
 
-        const uint32_t mmGRBM_STATUS = 0x2004;
-        const uint32_t GRBM_STATUS__GUI_ACTIVE_MASK = 0x80000000;
-
-        if (   (*(virtual_addr + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (value3 & 0xff000000)) {
-            //if (*(virtual_addr + mmMC_SEQ_RD_CTL_D0) != 0x00e0327a) *(virtual_addr + mmMC_SEQ_RD_CTL_D0) = 0x00e0327a;
-            //if (*(virtual_addr + mmMC_SEQ_RD_CTL_D1) != 0x00e0c17a) *(virtual_addr + mmMC_SEQ_RD_CTL_D1) = 0x00e0c17a;
-            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_D0) != 0x20353133) *(virtual_addr + mmMC_SEQ_WR_CTL_D0) = 0x20353133;
-            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_D1) != 0x20353133) *(virtual_addr + mmMC_SEQ_WR_CTL_D1) = 0x20353133;
-            //if (*(virtual_addr + mmMC_SEQ_WR_CTL_2) != 0x0) *(virtual_addr + mmMC_SEQ_WR_CTL_2) = 0x0;
-            
-            if (*(virtual_addr + mmMC_SEQ_CAS_TIMING) != value3) *(virtual_addr + mmMC_SEQ_CAS_TIMING) = value3;
-            value5 = (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
-            if (*(virtual_addr + mmMC_SEQ_MISC_TIMING2) != value5) *(virtual_addr + mmMC_SEQ_MISC_TIMING2) = value5;
-            
-            if (*(virtual_addr + mmMC_ARB_BURST_TIME) != value15) *(virtual_addr + mmMC_ARB_BURST_TIME) = value15;
-            if (*(virtual_addr + mmMC_ARB_DRAM_TIMING) != value0) *(virtual_addr + mmMC_ARB_DRAM_TIMING) = value0;
-            if (*(virtual_addr + mmMC_ARB_DRAM_TIMING2) != value1) *(virtual_addr + mmMC_ARB_DRAM_TIMING2) = value1;
-
-            if (*(virtual_addr + mmMC_SEQ_RAS_TIMING) != value2) *(virtual_addr + mmMC_SEQ_RAS_TIMING) = value2;
-            if (*(virtual_addr + mmMC_SEQ_MISC_TIMING) != value4) *(virtual_addr + mmMC_SEQ_MISC_TIMING) = value4;
-            if (*(virtual_addr + mmMC_SEQ_PMG_TIMING) != value6) *(virtual_addr + mmMC_SEQ_PMG_TIMING) = value6;
-            
-            if (*(virtual_addr + mmMC_PHY_TIMING_D0) != value7) *(virtual_addr + mmMC_PHY_TIMING_D0) = value7;
-			if (*(virtual_addr + mmMC_PHY_TIMING_D1) != value8) *(virtual_addr + mmMC_PHY_TIMING_D1) = value8;
-            if (*(virtual_addr + mmMC_PHY_TIMING_2) != value9) *(virtual_addr + mmMC_PHY_TIMING_2) = value9;
-
-            if (*(virtual_addr + mmMC_SEQ_MISC1) != value10) *(virtual_addr + mmMC_SEQ_MISC1) = value10;
-            if (*(virtual_addr + mmMC_SEQ_MISC3) != value11) *(virtual_addr + mmMC_SEQ_MISC3) = value11;
-            if (*(virtual_addr + mmMC_SEQ_MISC4) != value12) *(virtual_addr + mmMC_SEQ_MISC4) = value12;
-            if (*(virtual_addr + mmMC_SEQ_MISC8) != value13) *(virtual_addr + mmMC_SEQ_MISC8) = value13;
-            if (*(virtual_addr + mmMC_SEQ_MISC9) != value14) *(virtual_addr + mmMC_SEQ_MISC9) = value14;
+        *(virtualAddress + mmSMC_IND_INDEX_8) = 0x20000 + 18 * 4;
+        uint32_t SMCAddress = *(virtualAddress + mmSMC_IND_DATA_8);
+        for (int i = 4; i < 32; ++i) {
+            if (i % 4 != 0) {
+                *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress + i * 12;     *(virtualAddress + mmSMC_IND_DATA_8) = value0;
+                *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress + i * 12 + 4; *(virtualAddress + mmSMC_IND_DATA_8) = value1;
+                *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress + i * 12 + 8; *(virtualAddress + mmSMC_IND_DATA_8) = ((value15 & 0x0000001f) << 24);
+            }
         }
 
-        UnmapPhyMem((uint32_t *)virtual_addr, 256 * 1024);
+        *(virtualAddress + mmMC_SEQ_SUP_CNTL) &= 0xfffffffe;
+
+        if (   (*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (value3 & 0xff000000)
+            && *(virtualAddress + mmMC_ARB_DRAM_TIMING) == value0
+            && *(virtualAddress + mmMC_ARB_DRAM_TIMING2) == value1) {
+
+            //*(virtualAddress + mmMC_SEQ_RD_CTL_D0) = 0x00e0327a;
+            //*(virtualAddress + mmMC_SEQ_RD_CTL_D1) = 0x00e0c17a;
+            //*(virtualAddress + mmMC_SEQ_WR_CTL_D0) = 0x2035f1ff;
+            //*(virtualAddress + mmMC_SEQ_WR_CTL_D1) = 0x2035f1ff;
+            //*(virtualAddress + mmMC_SEQ_WR_CTL_2) = 0x00000000;
+
+            value5 = (*(virtualAddress + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
+
+            if (*(virtualAddress + mmMC_SEQ_CAS_TIMING) != value3) *(virtualAddress + mmMC_SEQ_CAS_TIMING) = value3;
+            if (*(virtualAddress + mmMC_SEQ_MISC_TIMING2) != value5) *(virtualAddress + mmMC_SEQ_MISC_TIMING2) = value5;
+ 
+            if (*(virtualAddress + mmMC_ARB_BURST_TIME) != value15) *(virtualAddress + mmMC_ARB_BURST_TIME) = value15;
+            if (*(virtualAddress + mmMC_ARB_DRAM_TIMING) != value0) *(virtualAddress + mmMC_ARB_DRAM_TIMING) = value0;
+            if (*(virtualAddress + mmMC_ARB_DRAM_TIMING2) != value1) *(virtualAddress + mmMC_ARB_DRAM_TIMING2) = value1;
+
+            if (*(virtualAddress + mmMC_SEQ_RAS_TIMING) != value2) *(virtualAddress + mmMC_SEQ_RAS_TIMING) = value2;
+            if (*(virtualAddress + mmMC_SEQ_MISC_TIMING) != value4) *(virtualAddress + mmMC_SEQ_MISC_TIMING) = value4;
+            if (*(virtualAddress + mmMC_SEQ_PMG_TIMING) != value6) *(virtualAddress + mmMC_SEQ_PMG_TIMING) = value6;
+
+            if (*(virtualAddress + mmMC_PHY_TIMING_D0) != value7) *(virtualAddress + mmMC_PHY_TIMING_D0) = value7;
+            if (*(virtualAddress + mmMC_PHY_TIMING_D1) != value8) *(virtualAddress + mmMC_PHY_TIMING_D1) = value8;
+            if (*(virtualAddress + mmMC_PHY_TIMING_2) != value9) *(virtualAddress + mmMC_PHY_TIMING_2) = value9;
+
+            if (*(virtualAddress + mmMC_SEQ_MISC1) != value10) *(virtualAddress + mmMC_SEQ_MISC1) = value10;
+            if (*(virtualAddress + mmMC_SEQ_MISC3) != value11) *(virtualAddress + mmMC_SEQ_MISC3) = value11;
+            if (*(virtualAddress + mmMC_SEQ_MISC4) != value12) *(virtualAddress + mmMC_SEQ_MISC4) = value12;
+            if (*(virtualAddress + mmMC_SEQ_MISC8) != value13) *(virtualAddress + mmMC_SEQ_MISC8) = value13;
+            if (*(virtualAddress + mmMC_SEQ_MISC9) != value14) *(virtualAddress + mmMC_SEQ_MISC9) = value14;
+        }
+        
+        *(virtualAddress + mmMC_SEQ_SUP_CNTL) |= 0x00000001;
+
+        UnmapPhyMem((uint32_t *)virtualAddress, 256 * 1024);
 
         return ret;
     }
@@ -1009,7 +1115,7 @@ end:
         int priority = GetThreadPriority(GetCurrentThread());
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
-        {
+        if (false) {
             int index = GetIndexIntoMasterTable(COMMAND, DynamicMemorySettings);
             //amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
 
@@ -1020,7 +1126,7 @@ end:
             amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
         }
 
-        {
+        if (true) {
             int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
             amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
 
@@ -1033,7 +1139,7 @@ end:
             amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
         }
 
-        {
+        if (true) {
             int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
             //amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
 
