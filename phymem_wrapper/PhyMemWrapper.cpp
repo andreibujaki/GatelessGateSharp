@@ -866,9 +866,9 @@ end:
             *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) = blackout;
         }
 
-        std::this_thread::sleep_for(std::chrono::microseconds(200));
-
         *(virtualAddress + mmMC_SEQ_SUP_CNTL) &= 0xfffffffe;
+
+        std::this_thread::sleep_for(std::chrono::microseconds(200));
 
         if (   (*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (value3 & 0xff000000)
             //&& *(virtualAddress + mmMC_ARB_DRAM_TIMING) == value0
