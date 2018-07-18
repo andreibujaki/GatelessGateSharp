@@ -47,7 +47,7 @@ typedef uint8_t u8;
 #define printk() 
 #define mdelay(msec) std::this_thread::sleep_for(std::chrono::milliseconds(msec))
 #define udelay(usec) std::this_thread::sleep_for(std::chrono::microseconds(usec))
-#define msleep() 
+#define msleep(msec)  std::this_thread::sleep_for(std::chrono::milliseconds(msec))
 #define drm_can_sleep() true
 #define do_div(a, b) ((a) / (b))
 #define lower_32_bits(val64) ((uint32_t)((val64) & 0xffffffffUL))

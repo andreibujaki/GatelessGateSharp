@@ -26,7 +26,7 @@ namespace GatelessGateSharp {
         [DllImport("PhyMemWrapper.dll")]
         public static extern int ReadFromAMDGPURegister(int busNum, uint regNo, out uint ptrValue);
         [DllImport("PhyMemWrapper.dll")]
-        public static extern int WriteToGMC81Register(int busNum, uint regNo, uint value, uint mask = 0xffffffff);
+        public static extern int WriteToAMDGPURegister(int busNum, uint regNo, uint value, uint mask = 0xffffffff);
         [DllImport("PhyMemWrapper.dll")]
         public static extern int UpdateGMC81Registers(int busNum,
             uint value,
@@ -51,7 +51,7 @@ namespace GatelessGateSharp {
         [DllImport("PhyMemWrapper.dll")]
         public static extern int ATOMBIOS_SetOverclockingSettings(uint busNumber, int engineClock, int VDDC, int memoryClock, int VDDCI);
         [DllImport("PhyMemWrapper.dll")]
-        public static extern int ATOMBIOS_SetMemoryTimings(uint busNumber, int coreClock, int memoryClock);
+        public static extern int ATOMBIOS_MemoryTraining(uint busNumber);
         [DllImport("PhyMemWrapper.dll")]
         public static extern int SMU7_ReadDWORD(uint busNum, uint SMCAddress, out uint value);
         [DllImport("PhyMemWrapper.dll")]

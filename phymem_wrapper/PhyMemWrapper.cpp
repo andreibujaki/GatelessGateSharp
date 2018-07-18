@@ -836,11 +836,44 @@ end:
             }
         }
 
+#define mmSRBM_STATUS 0x394
+#define SRBM_STATUS__VMC_BUSY_MASK 0x100
+#define SRBM_STATUS__MCB_BUSY_MASK 0x200
+#define SRBM_STATUS__MCB_NON_DISPLAY_BUSY_MASK 0x400
+#define SRBM_STATUS__MCC_BUSY_MASK 0x800
+#define SRBM_STATUS__MCD_BUSY_MASK 0x1000
+#define SRBM_STATUS__VMC1_BUSY_MASK 0x2000
+
+        while (*(virtualAddress + mmSRBM_STATUS)
+               & (SRBM_STATUS__MCB_BUSY_MASK |
+                  SRBM_STATUS__MCB_NON_DISPLAY_BUSY_MASK |
+                  SRBM_STATUS__MCC_BUSY_MASK |
+                  SRBM_STATUS__MCD_BUSY_MASK |
+                  SRBM_STATUS__VMC_BUSY_MASK |
+                  SRBM_STATUS__VMC1_BUSY_MASK))
+            ;
+            //std::this_thread::sleep_for(std::chrono::microseconds(1));
+
+#define mmMC_SHARED_BLACKOUT_CNTL 0x82b
+#define mmBIF_FB_EN  0x1524
+#define BIF_FB_EN__FB_READ_EN_MASK 0x1
+#define BIF_FB_EN__FB_WRITE_EN_MASK 0x2
+
+        uint32_t blackout = *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL);
+        if ((blackout & 0x7) != 1) {
+            *(virtualAddress + mmBIF_FB_EN) = 0;
+            blackout = (blackout & 0xfffffff8) | 1;
+            *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) = blackout;
+        }
+
+        std::this_thread::sleep_for(std::chrono::microseconds(200));
+
         *(virtualAddress + mmMC_SEQ_SUP_CNTL) &= 0xfffffffe;
 
         if (   (*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (value3 & 0xff000000)
-            && *(virtualAddress + mmMC_ARB_DRAM_TIMING) == value0
-            && *(virtualAddress + mmMC_ARB_DRAM_TIMING2) == value1) {
+            //&& *(virtualAddress + mmMC_ARB_DRAM_TIMING) == value0
+            //&& *(virtualAddress + mmMC_ARB_DRAM_TIMING2) == value1
+            ) {
 
             //*(virtualAddress + mmMC_SEQ_RD_CTL_D0) = 0x00e0327a;
             //*(virtualAddress + mmMC_SEQ_RD_CTL_D1) = 0x00e0c17a;
@@ -871,8 +904,11 @@ end:
             if (*(virtualAddress + mmMC_SEQ_MISC8) != value13) *(virtualAddress + mmMC_SEQ_MISC8) = value13;
             if (*(virtualAddress + mmMC_SEQ_MISC9) != value14) *(virtualAddress + mmMC_SEQ_MISC9) = value14;
         }
-        
-        *(virtualAddress + mmMC_SEQ_SUP_CNTL) |= 0x00000001;
+
+        *(virtualAddress + mmMC_SEQ_SUP_CNTL) |= 0x1;
+
+        *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) = (*(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) & 0xfffffff8);
+        *(virtualAddress + mmBIF_FB_EN) |= 0x3;
 
         UnmapPhyMem((uint32_t *)virtualAddress, 256 * 1024);
 

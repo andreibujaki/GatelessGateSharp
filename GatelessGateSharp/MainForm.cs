@@ -5238,8 +5238,8 @@ namespace GatelessGateSharp
             }
             if (overclockingEnabled)
                 device.UpdateOverclockingSettings(true, false);
-            if (memoryTimingsEnabled)
-                device.UpdateMemoryTimings();
+            //if (memoryTimingsEnabled)
+            //    device.UpdateMemoryTimings();
             device.OverclockingEnabled = overclockingEnabled;
             device.MemoryTimingModsEnabled = memoryTimingsEnabled;
 
