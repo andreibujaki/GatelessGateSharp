@@ -786,9 +786,9 @@ end:
             *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) = blackout;
         }
 
-        std::this_thread::sleep_for(std::chrono::microseconds(200));
+        //std::this_thread::sleep_for(std::chrono::microseconds(200));
 
-        *(virtualAddress + mmMC_SEQ_SUP_CNTL) = 0x0;
+        //*(virtualAddress + mmMC_SEQ_SUP_CNTL) = 0x0;
 
         std::this_thread::sleep_for(std::chrono::microseconds(200));
 
