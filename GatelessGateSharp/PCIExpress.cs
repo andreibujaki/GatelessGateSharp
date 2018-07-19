@@ -28,24 +28,23 @@ namespace GatelessGateSharp {
         [DllImport("PhyMemWrapper.dll")]
         public static extern int WriteToAMDGPURegister(int busNum, uint regNo, uint value, uint mask = 0xffffffff);
         [DllImport("PhyMemWrapper.dll")]
-        public static extern int UpdateGMC81Registers(int busNum,
-            uint value,
-            uint value1,
-            uint value2,
-            uint value3,
-            uint value4,
-            uint value5,
-            uint value6,
-            uint value7,
-            uint value8,
-            uint value9,   
-            uint value10,
-            uint value11,
-            uint value12,
-            uint value13,
-            uint value14,
-            uint value15,
-            uint default_value3);
+        public static extern int UpdateGMC81Registers(
+            uint busNum,
+            uint arbDramTiming,
+            uint arbDramTiming2,
+            uint seqRasTiming,
+            uint seqCasTiming,
+            uint seqMiscTiming,
+            uint seqMiscTiming2,
+            uint seqMisc1,
+            uint seqMisc3,
+            uint seqMisc8,
+            uint seqWrCtlD0,
+            uint seqWrCtlD1,
+            uint seqWrCtl2,
+            uint arbDramTiming_1,
+            uint arbDramTiming2_1,
+            uint arbRttCntl0);
         [DllImport("PhyMemWrapper.dll")]
         public static extern int ATOMBIOS_Load(uint busNumber);
         [DllImport("PhyMemWrapper.dll")]

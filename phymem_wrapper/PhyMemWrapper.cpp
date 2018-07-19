@@ -611,28 +611,34 @@ end:
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     };
-    
-    __declspec(dllexport)
-        BOOL ReadFromAMDGPURegister(int32_t busNum, uint32_t regNo, uint32_t *ptrValue)
+
+    volatile uint32_t *GetVirtualAddress(uint32_t busNumber)
     {
-        volatile uint32_t *virtualAddress = virtualAddressArray[busNum];
+        volatile uint32_t *virtualAddress = virtualAddressArray[busNumber];
 
         if (virtualAddress == NULL) {
-            uint32_t configRegistersBase = configRegistersBaseArray[busNum];
+            uint32_t configRegistersBase = configRegistersBaseArray[busNumber];
 
             if (!configRegistersBase) {
-                if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
+                if (!ReadPCI(busNumber, 0, 0, 0x24, 4, &configRegistersBase))
                     return FALSE;
                 configRegistersBase &= 0xfffffff0;
-                configRegistersBaseArray[busNum] = configRegistersBase;
+                configRegistersBaseArray[busNumber] = configRegistersBase;
             }
 
             virtualAddress = (uint32_t *)MapPhyMem(configRegistersBase, MAX_BIOS_SIZE);
             if (!virtualAddress)
                 return FALSE;
 
-            virtualAddressArray[busNum] = virtualAddress;
+            virtualAddressArray[busNumber] = virtualAddress;
         }
+        return virtualAddress;
+    }
+
+    __declspec(dllexport)
+        BOOL ReadFromAMDGPURegister(int32_t busNum, uint32_t regNo, uint32_t *ptrValue)
+    {
+        volatile uint32_t *virtualAddress = GetVirtualAddress(busNum);
 
         *ptrValue = *(virtualAddress + regNo);
 
@@ -642,24 +648,7 @@ end:
     __declspec(dllexport)
         BOOL WriteToAMDGPURegister(int32_t busNum, uint32_t regNo, uint32_t value)
     {
-        volatile uint32_t *virtualAddress = virtualAddressArray[busNum];
-
-        if (virtualAddress == NULL) {
-            uint32_t configRegistersBase = configRegistersBaseArray[busNum];
-
-            if (!configRegistersBase) {
-                if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
-                    return FALSE;
-                configRegistersBase &= 0xfffffff0;
-                configRegistersBaseArray[busNum] = configRegistersBase;
-            }
-
-            virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, MAX_BIOS_SIZE);
-            if (!virtualAddress)
-                return FALSE;
-
-            virtualAddressArray[busNum] = virtualAddress;
-        }
+        volatile uint32_t *virtualAddress = GetVirtualAddress(busNum);
 
         *(virtualAddress + regNo) = value;
         
@@ -674,19 +663,7 @@ end:
         const uint32_t mmSMC_IND_DATA_8 = 0x8f;
         const uint32_t SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK = 0x100;
 
-        int result = TRUE;
-        uint32_t configRegistersBase = configRegistersBaseArray[busNum];
-
-        if (!configRegistersBase) {
-            if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
-                return FALSE;
-            configRegistersBase &= 0xfffffff0;
-            configRegistersBaseArray[busNum] = configRegistersBase;
-        }
-
-        volatile uint32_t *virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
-        if (!virtualAddress)
-            return FALSE;
+        volatile uint32_t *virtualAddress = GetVirtualAddress(busNum);
 
         *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress;
         *(virtualAddress + mmSMC_IND_ACCESS_CNTL) &= ~SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK;
@@ -694,7 +671,7 @@ end:
 
         UnmapPhyMem((PVOID)virtualAddress, 256 * 1024);
 
-        return result;
+        return TRUE;
     }
 
     __declspec(dllexport)
@@ -705,19 +682,7 @@ end:
         const uint32_t mmSMC_IND_DATA_8 = 0x8f;
         const uint32_t SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK = 0x100;
 
-        int result = TRUE;
-        uint32_t configRegistersBase = configRegistersBaseArray[busNum];
-
-        if (!configRegistersBase) {
-            if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
-                return FALSE;
-            configRegistersBase &= 0xfffffff0;
-            configRegistersBaseArray[busNum] = configRegistersBase;
-        }
-
-        volatile uint32_t *virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
-        if (!virtualAddress)
-            return FALSE;
+        volatile uint32_t *virtualAddress = GetVirtualAddress(busNum);
 
         *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress;
         *(virtualAddress + mmSMC_IND_ACCESS_CNTL) &= ~SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK;
@@ -725,62 +690,29 @@ end:
 
         UnmapPhyMem((PVOID)virtualAddress, 256 * 1024);
 
-        return result;
+        return TRUE;
     }
-    struct SMU74_Discrete_MCArbDramTimingTableEntry {
-        uint32_t McArbDramTiming;
-        uint32_t McArbDramTiming2;
-        uint8_t  McArbBurstTime;
-        uint8_t  padding[3];
-    };
-
-    typedef struct SMU74_Discrete_MCArbDramTimingTableEntry SMU74_Discrete_MCArbDramTimingTableEntry;
-
-#define SMU__NUM_SCLK_DPM_STATE  8
-#define SMU__NUM_MCLK_DPM_LEVELS 4
-
-    struct SMU74_Discrete_MCArbDramTimingTable {
-        SMU74_Discrete_MCArbDramTimingTableEntry entries[SMU__NUM_SCLK_DPM_STATE][SMU__NUM_MCLK_DPM_LEVELS];
-    };
 
     __declspec(dllexport)
-        BOOL UpdateGMC81Registers(int32_t busNum,
-                                  uint32_t value0,
-                                  uint32_t value1,
-                                  uint32_t value2,
-                                  uint32_t value3,
-                                  uint32_t value4,
-                                  uint32_t value5,
-                                  uint32_t value6,
-                                  uint32_t value7,
-                                  uint32_t value8,
-                                  uint32_t value9,
-                                  uint32_t value10,
-                                  uint32_t value11,
-                                  uint32_t value12,
-                                  uint32_t value13,
-                                  uint32_t value14,
-                                  uint32_t value15,
-                                  uint32_t default_value3)
+        BOOL UpdateGMC81Registers(uint32_t busNum,
+                                  uint32_t arbDramTiming,
+                                  uint32_t arbDramTiming2,
+                                  uint32_t seqRasTiming,
+                                  uint32_t seqCasTiming,
+                                  uint32_t seqMiscTiming,
+                                  uint32_t seqMiscTiming2,
+                                  uint32_t seqMisc1,
+                                  uint32_t seqMisc3,
+                                  uint32_t seqMisc8,
+                                  uint32_t seqWrCtlD0,
+                                  uint32_t seqWrCtlD1,
+                                  uint32_t seqWrCtl2,
+                                  uint32_t arbDramTiming_1,
+                                  uint32_t arbDramTiming2_1,
+                                  uint32_t arbRttCntl0)
     {
         BOOL ret = true;  
-        uint32_t configRegistersBase = configRegistersBaseArray[busNum];
-
-        if (!configRegistersBase) {
-            if (!ReadPCI(busNum, 0, 0, 0x24, 4, &configRegistersBase))
-                return FALSE;
-            configRegistersBase &= 0xfffffff0;
-            configRegistersBaseArray[busNum] = configRegistersBase;
-        }
-
-        volatile uint32_t *virtualAddress = (volatile uint32_t *)MapPhyMem(configRegistersBase, 256 * 1024);
-        if (!virtualAddress)
-            return FALSE;
-
-        const uint32_t mmSMC_IND_ACCESS_CNTL = 0x90;
-        const uint32_t mmSMC_IND_INDEX_8 = 0x8e;
-        const uint32_t mmSMC_IND_DATA_8 = 0x8f;
-        const uint32_t SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK = 0x100;
+        volatile uint32_t *virtualAddress = GetVirtualAddress(busNum);
 
         const uint32_t mmMC_SEQ_MISC1 = 0xa81;
         const uint32_t mmMC_SEQ_MISC3 = 0xa8b;
@@ -823,18 +755,7 @@ end:
         const uint32_t mmMC_SEQ_WR_CTL_2_LP = 0xad6;
         const uint32_t mmMC_SEQ_WR_CTL_D0_LP = 0xa9f;
         const uint32_t mmMC_SEQ_WR_CTL_D1_LP = 0xaa0;
-
-        const uint32_t mask5 = 0xffe01fff;
-
-        *(virtualAddress + mmSMC_IND_INDEX_8) = 0x20000 + 18 * 4;
-        uint32_t SMCAddress = *(virtualAddress + mmSMC_IND_DATA_8);
-        for (int i = 4; i < 32; ++i) {
-            if (i % 4 != 0) {
-                *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress + i * 12;     *(virtualAddress + mmSMC_IND_DATA_8) = value0;
-                *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress + i * 12 + 4; *(virtualAddress + mmSMC_IND_DATA_8) = value1;
-                *(virtualAddress + mmSMC_IND_INDEX_8) = SMCAddress + i * 12 + 8; *(virtualAddress + mmSMC_IND_DATA_8) = ((value15 & 0x0000001f) << 24);
-            }
-        }
+        const uint32_t mmMC_ARB_RTT_CNTL0 = 0x9d0;
 
 #define mmSRBM_STATUS 0x394
 #define SRBM_STATUS__VMC_BUSY_MASK 0x100
@@ -852,7 +773,6 @@ end:
                   SRBM_STATUS__VMC_BUSY_MASK |
                   SRBM_STATUS__VMC1_BUSY_MASK))
             ;
-            //std::this_thread::sleep_for(std::chrono::microseconds(1));
 
 #define mmMC_SHARED_BLACKOUT_CNTL 0x82b
 #define mmBIF_FB_EN  0x1524
@@ -866,51 +786,64 @@ end:
             *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) = blackout;
         }
 
-        *(virtualAddress + mmMC_SEQ_SUP_CNTL) &= 0xfffffffe;
+        std::this_thread::sleep_for(std::chrono::microseconds(200));
+
+        *(virtualAddress + mmMC_SEQ_SUP_CNTL) = 0x0;
 
         std::this_thread::sleep_for(std::chrono::microseconds(200));
 
-        if (   (*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (value3 & 0xff000000)
-            //&& *(virtualAddress + mmMC_ARB_DRAM_TIMING) == value0
-            //&& *(virtualAddress + mmMC_ARB_DRAM_TIMING2) == value1
-            ) {
+        if (   *(virtualAddress + mmMC_ARB_DRAM_TIMING) != arbDramTiming
+            || *(virtualAddress + mmMC_ARB_DRAM_TIMING2) != arbDramTiming2
+            || *(virtualAddress + mmMC_ARB_DRAM_TIMING_1) != arbDramTiming_1
+            || *(virtualAddress + mmMC_ARB_DRAM_TIMING2_1) != arbDramTiming2_1
+            || *(virtualAddress + mmMC_ARB_RTT_CNTL0) != arbRttCntl0
+            || *(virtualAddress + mmMC_SEQ_RAS_TIMING) != seqRasTiming
+            || *(virtualAddress + mmMC_SEQ_MISC_TIMING) != seqMiscTiming
+            || *(virtualAddress + mmMC_SEQ_MISC1) != seqMisc1
+            || *(virtualAddress + mmMC_SEQ_MISC3) != seqMisc3
+            || *(virtualAddress + mmMC_SEQ_MISC8) != seqMisc8) {
 
-            //*(virtualAddress + mmMC_SEQ_RD_CTL_D0) = 0x00e0327a;
-            //*(virtualAddress + mmMC_SEQ_RD_CTL_D1) = 0x00e0c17a;
-            //*(virtualAddress + mmMC_SEQ_WR_CTL_D0) = 0x2035f1ff;
-            //*(virtualAddress + mmMC_SEQ_WR_CTL_D1) = 0x2035f1ff;
-            //*(virtualAddress + mmMC_SEQ_WR_CTL_2) = 0x00000000;
+            *(virtualAddress + mmMC_ARB_DRAM_TIMING) = arbDramTiming;
+            *(virtualAddress + mmMC_ARB_DRAM_TIMING2) = arbDramTiming2;
+            *(virtualAddress + mmMC_ARB_DRAM_TIMING_1) = arbDramTiming_1;
+            *(virtualAddress + mmMC_ARB_DRAM_TIMING2_1) = arbDramTiming2_1;
+            *(virtualAddress + mmMC_ARB_RTT_CNTL0) = arbRttCntl0;
 
-            value5 = (*(virtualAddress + mmMC_SEQ_MISC_TIMING2) & ~mask5) | (value5 & mask5);
+            *(virtualAddress + mmMC_SEQ_RAS_TIMING) = seqRasTiming;
+            *(virtualAddress + mmMC_SEQ_MISC_TIMING) = seqMiscTiming;
+            *(virtualAddress + mmMC_SEQ_MISC1) = seqMisc1;
+            *(virtualAddress + mmMC_SEQ_MISC3) = seqMisc3;
+            *(virtualAddress + mmMC_SEQ_MISC8) = seqMisc8;
+        } else {
+            seqCasTiming = (*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) | (seqCasTiming & ~0xff000000);
+            seqMiscTiming2 = (*(virtualAddress + mmMC_SEQ_MISC_TIMING2) & 0x001fe000) | (seqMiscTiming2 & ~0x001fe000);
 
-            if (*(virtualAddress + mmMC_SEQ_CAS_TIMING) != value3) *(virtualAddress + mmMC_SEQ_CAS_TIMING) = value3;
-            if (*(virtualAddress + mmMC_SEQ_MISC_TIMING2) != value5) *(virtualAddress + mmMC_SEQ_MISC_TIMING2) = value5;
- 
-            if (*(virtualAddress + mmMC_ARB_BURST_TIME) != value15) *(virtualAddress + mmMC_ARB_BURST_TIME) = value15;
-            if (*(virtualAddress + mmMC_ARB_DRAM_TIMING) != value0) *(virtualAddress + mmMC_ARB_DRAM_TIMING) = value0;
-            if (*(virtualAddress + mmMC_ARB_DRAM_TIMING2) != value1) *(virtualAddress + mmMC_ARB_DRAM_TIMING2) = value1;
+            if (   *(virtualAddress + mmMC_SEQ_CAS_TIMING) != seqCasTiming
+                || *(virtualAddress + mmMC_SEQ_MISC_TIMING2) != seqMiscTiming2) {
 
-            if (*(virtualAddress + mmMC_SEQ_RAS_TIMING) != value2) *(virtualAddress + mmMC_SEQ_RAS_TIMING) = value2;
-            if (*(virtualAddress + mmMC_SEQ_MISC_TIMING) != value4) *(virtualAddress + mmMC_SEQ_MISC_TIMING) = value4;
-            if (*(virtualAddress + mmMC_SEQ_PMG_TIMING) != value6) *(virtualAddress + mmMC_SEQ_PMG_TIMING) = value6;
-
-            if (*(virtualAddress + mmMC_PHY_TIMING_D0) != value7) *(virtualAddress + mmMC_PHY_TIMING_D0) = value7;
-            if (*(virtualAddress + mmMC_PHY_TIMING_D1) != value8) *(virtualAddress + mmMC_PHY_TIMING_D1) = value8;
-            if (*(virtualAddress + mmMC_PHY_TIMING_2) != value9) *(virtualAddress + mmMC_PHY_TIMING_2) = value9;
-
-            if (*(virtualAddress + mmMC_SEQ_MISC1) != value10) *(virtualAddress + mmMC_SEQ_MISC1) = value10;
-            if (*(virtualAddress + mmMC_SEQ_MISC3) != value11) *(virtualAddress + mmMC_SEQ_MISC3) = value11;
-            if (*(virtualAddress + mmMC_SEQ_MISC4) != value12) *(virtualAddress + mmMC_SEQ_MISC4) = value12;
-            if (*(virtualAddress + mmMC_SEQ_MISC8) != value13) *(virtualAddress + mmMC_SEQ_MISC8) = value13;
-            if (*(virtualAddress + mmMC_SEQ_MISC9) != value14) *(virtualAddress + mmMC_SEQ_MISC9) = value14;
+                *(virtualAddress + mmMC_SEQ_CAS_TIMING) = (*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) | (seqCasTiming & ~0xff000000);
+                *(virtualAddress + mmMC_SEQ_MISC_TIMING2) = (*(virtualAddress + mmMC_SEQ_MISC_TIMING2) & 0x001fe000) | (seqMiscTiming2 & ~0x001fe000);
+            } else {
+                //*(virtualAddress + mmMC_SEQ_WR_CTL_D0) = seqWrCtlD0;
+                //*(virtualAddress + mmMC_SEQ_WR_CTL_D1) = seqWrCtlD1;
+                //*(virtualAddress + mmMC_SEQ_WR_CTL_2)  = seqWrCtl2;
+            }
         }
 
-        *(virtualAddress + mmMC_SEQ_SUP_CNTL) |= 0x1;
+        *(virtualAddress + mmMC_SEQ_SUP_CNTL) = 0x8;
+        *(virtualAddress + mmMC_SEQ_SUP_CNTL) = 0x4;
+        *(virtualAddress + mmMC_SEQ_SUP_CNTL) = 0x1;
 
         *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) = (*(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) & 0xfffffff8);
         *(virtualAddress + mmBIF_FB_EN) |= 0x3;
 
-        UnmapPhyMem((uint32_t *)virtualAddress, 256 * 1024);
+#if FALSE
+        char filename[256];
+        sprintf(filename, "timing%04d.log", busNum);
+        FILE *file = fopen(filename, "a+");
+        fprintf(file, "updated: %d\n", updated);
+        fclose(file);
+#endif
 
         return ret;
     }
@@ -1140,11 +1073,11 @@ end:
     }
 
     __declspec(dllexport)
-        BOOL ATOMBIOS_SetOverclockingSettings(uint32_t bus_number, int32_t engineClock, int32_t VDDC, int32_t memoryClock, int32_t VDDCI)
+        BOOL ATOMBIOS_SetOverclockingSettings(uint32_t busNum, int32_t engineClock, int32_t VDDC, int32_t memoryClock, int32_t VDDCI)
     {
         std::lock_guard<std::mutex> guard(ATOMBIOSMutex);
 
-        if (ATOMBIOSContextArray[bus_number].context == NULL)
+        if (ATOMBIOSContextArray[busNum].context == NULL)
             return FALSE;
 
         uint8_t frev, crev;
@@ -1152,19 +1085,29 @@ end:
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
         if (false) {
-            int index = GetIndexIntoMasterTable(COMMAND, DynamicMemorySettings);
-            //amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
+            int index = GetIndexIntoMasterTable(COMMAND, SetEngineClock);
+            amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[busNum].context, index, &frev, &crev);
 
             DYNAMICE_ENGINE_SETTINGS_PARAMETER  args;
             args.ulClock.ulClockFreq = (uint64_t)engineClock * 100;
             args.ulClock.ulComputeClockFlag = COMPUTE_ENGINE_PLL_PARAM;
             args.ulMemoryClock = (uint64_t)memoryClock * 100;
-            amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+            amdgpu_atom_execute_table(ATOMBIOSContextArray[busNum].context, index, (uint32_t *)&args);
+        }
+
+        if (false) {
+            int index = GetIndexIntoMasterTable(COMMAND, SetMemoryClock);
+            amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[busNum].context, index, &frev, &crev);
+
+            DYNAMICE_ENGINE_SETTINGS_PARAMETER  args;
+            args.ulClock.ulClockFreq = (uint64_t)memoryClock * 100;
+            args.ulClock.ulComputeClockFlag = COMPUTE_MEMORY_PLL_PARAM;
+            amdgpu_atom_execute_table(ATOMBIOSContextArray[busNum].context, index, (uint32_t *)&args);
         }
 
         if (true) {
             int index = GetIndexIntoMasterTable(COMMAND, SetVoltage);
-            amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[bus_number].context, index, &frev, &crev);
+            amdgpu_atom_parse_cmd_header(ATOMBIOSContextArray[busNum].context, index, &frev, &crev);
 
             union {
                 SET_VOLTAGE_PARAMETERS_V1_3 in;
@@ -1172,7 +1115,7 @@ end:
             args.in.ucVoltageType = VOLTAGE_TYPE_VDDC;
             args.in.ucVoltageMode = ATOM_SET_VOLTAGE;
             args.in.usVoltageLevel = VDDC;
-            amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+            amdgpu_atom_execute_table(ATOMBIOSContextArray[busNum].context, index, (uint32_t *)&args);
         }
 
         if (true) {
@@ -1185,11 +1128,9 @@ end:
             args.in.ucVoltageType = VOLTAGE_TYPE_VDDCI;
             args.in.ucVoltageMode = ATOM_SET_VOLTAGE;
             args.in.usVoltageLevel = VDDCI;
-            amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&args);
+            amdgpu_atom_execute_table(ATOMBIOSContextArray[busNum].context, index, (uint32_t *)&args);
         }
 
-        UnmapPhyMem((PVOID)virtualAddressArray[bus_number], MAX_BIOS_SIZE);
-        virtualAddressArray[bus_number] = NULL;
         SetThreadPriority(GetCurrentThread(), priority);
 
         return TRUE;
@@ -1213,15 +1154,14 @@ end:
         fprintf(file, "crev: %d\n", (int)(crev));
         fclose(file);
 #endif
-        //if (frev != 1 || crev != 3)
-        //    return FALSE;
 
         SET_ENGINE_CLOCK_PS_ALLOCATION engine_clock_parameters;
         engine_clock_parameters.ulTargetEngineClock = (((unsigned long)coreClock * 100) & SET_CLOCK_FREQ_MASK) | (COMPUTE_ENGINE_PLL_PARAM << 24);
         engine_clock_parameters.sReserved.ulClock = (((unsigned long)memoryClock * 100) & SET_CLOCK_FREQ_MASK);
+        amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&engine_clock_parameters);
+        
         UnmapPhyMem((PVOID)virtualAddressArray[bus_number], MAX_BIOS_SIZE);
         virtualAddressArray[bus_number] = NULL;
-        amdgpu_atom_execute_table(ATOMBIOSContextArray[bus_number].context, index, (uint32_t *)&engine_clock_parameters);
 
         return TRUE;
     }

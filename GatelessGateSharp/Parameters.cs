@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace GatelessGateSharp {
     public class Parameters
     {
-        public static readonly System.Diagnostics.ProcessPriorityClass ProcessPriority = System.Diagnostics.ProcessPriorityClass.High;
+        public static readonly System.Diagnostics.ProcessPriorityClass ProcessPriority = System.Diagnostics.ProcessPriorityClass.RealTime;
         public static readonly System.Threading.ThreadPriority MainThreadPriority = System.Threading.ThreadPriority.AboveNormal;
         public static readonly System.Threading.ThreadPriority MinerThreadPriority = System.Threading.ThreadPriority.Normal;
         public static readonly System.Threading.ThreadPriority MemoryTimingsTaskPriority = System.Threading.ThreadPriority.Highest;

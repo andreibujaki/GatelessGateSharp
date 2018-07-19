@@ -2072,23 +2072,21 @@ namespace GatelessGateSharp {
             return mMemoryVendor;
         }
 
-        MC_ARB_DRAM_TIMING ARBTimings = new MC_ARB_DRAM_TIMING();
-        MC_ARB_DRAM_TIMING2 ARBTimings2 = new MC_ARB_DRAM_TIMING2();
-        MC_SEQ_RAS_TIMING RASTimings = new MC_SEQ_RAS_TIMING();
-        MC_SEQ_CAS_TIMING CASTimings = new MC_SEQ_CAS_TIMING();
-        MC_SEQ_MISC_TIMING miscTimings = new MC_SEQ_MISC_TIMING();
-        MC_SEQ_MISC_TIMING2 miscTimings2 = new MC_SEQ_MISC_TIMING2();
-        UInt32 PMGTimings;
-        UInt32 PHYTimingsD0;
-        UInt32 PHYTimingsD1;
-        UInt32 PHYTimings2;
-        UInt32 misc1;
-        UInt32 misc3;
-        UInt32 misc4;
-        UInt32 misc8;
-        UInt32 misc9;
-        MC_ARB_BURST_TIME ARBBurstTime = new MC_ARB_BURST_TIME();
-        UInt32 mDefaultCASTimings;
+        MC_ARB_DRAM_TIMING  arbDramTiming  = new MC_ARB_DRAM_TIMING();
+        MC_ARB_DRAM_TIMING2 arbDramTiming2 = new MC_ARB_DRAM_TIMING2();
+        MC_SEQ_RAS_TIMING   seqRasTiming   = new MC_SEQ_RAS_TIMING();
+        MC_SEQ_CAS_TIMING   seqCasTiming   = new MC_SEQ_CAS_TIMING();
+        MC_SEQ_MISC_TIMING  seqMiscTiming  = new MC_SEQ_MISC_TIMING();
+        MC_SEQ_MISC_TIMING2 seqMiscTiming2 = new MC_SEQ_MISC_TIMING2();
+        UInt32              seqMisc1;
+        UInt32              seqMisc3;
+        UInt32              seqMisc8;
+        UInt32              seqWrCtlD0;
+        UInt32              seqWrCtlD1;
+        UInt32              seqWrCtl2;
+        UInt32              arbDramTiming_1;
+        UInt32              arbDramTiming2_1;
+        UInt32              arbRttCntl0;
 
         public override void PrepareMemoryTimingMods(string algorithm)
         {
@@ -2104,69 +2102,58 @@ namespace GatelessGateSharp {
             mMemoryType = misc0.MemoryType;
             mMemoryVendor = misc0.MemoryVendor;
 
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_SEQ_CAS_TIMING, out mDefaultCASTimings);
-
-            ARBTimings = new MC_ARB_DRAM_TIMING();
-            ARBTimings2 = new MC_ARB_DRAM_TIMING2();
-            RASTimings = new MC_SEQ_RAS_TIMING();
-            CASTimings = new MC_SEQ_CAS_TIMING();
-            miscTimings = new MC_SEQ_MISC_TIMING();
-            miscTimings2 = new MC_SEQ_MISC_TIMING2();
+            arbDramTiming = new MC_ARB_DRAM_TIMING();
+            arbDramTiming2 = new MC_ARB_DRAM_TIMING2();
+            seqRasTiming = new MC_SEQ_RAS_TIMING();
+            seqCasTiming = new MC_SEQ_CAS_TIMING();
+            seqMiscTiming = new MC_SEQ_MISC_TIMING();
+            seqMiscTiming2 = new MC_SEQ_MISC_TIMING2();
 
             uint value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_actrd", out value); ARBTimings.ACTRD = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_actwr", out value); ARBTimings.ACTWR = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_rasmactrd", out value); ARBTimings.RASMACTRD = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_rasmactwr", out value); ARBTimings.RASMACTWR = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_actrd", out value); arbDramTiming.ACTRD = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_actwr", out value); arbDramTiming.ACTWR = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_rasmactrd", out value); arbDramTiming.RASMACTRD = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_rasmactwr", out value); arbDramTiming.RASMACTWR = value;
 
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_ras2ras", out value); ARBTimings2.RAS2RAS = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_rp", out value); ARBTimings2.RP = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_wrplusrp", out value); ARBTimings2.WRPLUSRP = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_bus_turn", out value); ARBTimings2.BUS_TURN = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_ras2ras", out value); arbDramTiming2.RAS2RAS = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_rp", out value); arbDramTiming2.RP = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_wrplusrp", out value); arbDramTiming2.WRPLUSRP = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_bus_turn", out value); arbDramTiming2.BUS_TURN = value;
 
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trcdw", out value); RASTimings.TRCDW = RASTimings.TRCDWA = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trcdr", out value); RASTimings.TRCDR = RASTimings.TRCDRA = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrd", out value); RASTimings.TRRD = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trc", out value); RASTimings.TRC = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trcdw", out value); seqRasTiming.TRCDW = seqRasTiming.TRCDWA = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trcdr", out value); seqRasTiming.TRCDR = seqRasTiming.TRCDRA = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrd", out value); seqRasTiming.TRRD = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trc", out value); seqRasTiming.TRC = value;
 
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tr2w", out value); CASTimings.TR2W = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tr2r", out value); CASTimings.TR2R = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tw2r", out value); CASTimings.TW2R = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tccdl", out value); CASTimings.TCCDL = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tcl", out value); CASTimings.TCL = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tr2w", out value); seqCasTiming.TR2W = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tr2r", out value); seqCasTiming.TR2R = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tw2r", out value); seqCasTiming.TW2R = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tccdl", out value); seqCasTiming.TCCDL = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tcl", out value); seqCasTiming.TCL = value;
 
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trp_wra", out value); miscTimings.TRP_WRA = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trp_rda", out value); miscTimings.TRP_RDA = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trp", out value); miscTimings.TRP = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trfc", out value); miscTimings.TRFC = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trp_wra", out value); seqMiscTiming.TRP_WRA = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trp_rda", out value); seqMiscTiming.TRP_RDA = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trp", out value); seqMiscTiming.TRP = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trfc", out value); seqMiscTiming.TRFC = value;
 
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_pa2rdata", out value); miscTimings2.PA2RDATA = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_pa2wdata", out value); miscTimings2.PA2WDATA = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_faw", out value); miscTimings2.FAW = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_t32aw", out value); miscTimings2.T32AW = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tredc", out value); miscTimings2.TREDC = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twedc", out value); miscTimings2.TWEDC = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twdatatr", out value); miscTimings2.TWDATATR = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_pa2rdata", out value); seqMiscTiming2.PA2RDATA = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_pa2wdata", out value); seqMiscTiming2.PA2WDATA = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_faw", out value); seqMiscTiming2.FAW = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_t32aw", out value); seqMiscTiming2.T32AW = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_tredc", out value); seqMiscTiming2.TREDC = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twedc", out value); seqMiscTiming2.TWEDC = value;
+            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_twdatatr", out value); seqMiscTiming2.TWDATATR = value;
 
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_pmg", out PMGTimings);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_phy_d0", out PHYTimingsD0);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_phy_d1", out PHYTimingsD1);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_phy_2", out PHYTimings2);
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc1", out seqMisc1);
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc3", out seqMisc3);
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc8", out seqMisc8);
 
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc1", out misc1);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc3", out misc3);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc4", out misc4);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc8", out misc8);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc9", out misc9);
-
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_state0", out value); ARBBurstTime.STATE0 = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_state1", out value); ARBBurstTime.STATE1 = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrds0", out value); ARBBurstTime.TRRDS0 = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrds1", out value); ARBBurstTime.TRRDS1 = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrdl0", out value); ARBBurstTime.TRRDL0 = value;
-            MainForm.GetMemoryTimingsParameterValue(DeviceIndex, algorithm, "polaris10_trrdl1", out value); ARBBurstTime.TRRDL1 = value;
-
-            //MemoryTimingModsEnabled = true;
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_wr_ctl_d0", out seqWrCtlD0);
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_wr_ctl_d1", out seqWrCtlD1);
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_wr_ctl_2",  out seqWrCtl2);
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_arb_dram_timing_1", out arbDramTiming_1);
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_arb_dram_timing2_1", out arbDramTiming2_1);
+            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_arb_rtt_cntl0",  out arbRttCntl0);
         }
 
         public override void UpdateMemoryTimings()
@@ -2178,24 +2165,22 @@ namespace GatelessGateSharp {
                 return;
 
             if (PCIExpress.UpdateGMC81Registers(
-                busNumber,
-                ARBTimings.Data, 
-                ARBTimings2.Data, 
-                RASTimings.Data,
-                CASTimings.Data, 
-                miscTimings.Data, 
-                miscTimings2.Data, 
-                PMGTimings, 
-                PHYTimingsD0, 
-                PHYTimingsD1,
-                PHYTimings2, 
-                misc1,
-                misc3,
-                misc4,
-                misc8,
-                misc9,    
-                ARBBurstTime.Data,
-                mDefaultCASTimings) == 0)
+                (uint)busNumber,
+                arbDramTiming.Data,
+                arbDramTiming2.Data,
+                seqRasTiming.Data,
+                seqCasTiming.Data,  
+                seqMiscTiming.Data,  
+                seqMiscTiming2.Data, 
+                seqMisc1, 
+                seqMisc3,
+                seqMisc8,
+                seqWrCtlD0,
+                seqWrCtlD1,
+                seqWrCtl2,
+                arbDramTiming_1,
+                arbDramTiming2_1,
+                arbRttCntl0) == 0)
                 Environment.Exit(1);
         }
 
@@ -2261,7 +2246,7 @@ namespace GatelessGateSharp {
             uint MC_IO_PAD_CNTL_D1Data = 0; PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_IO_PAD_CNTL_D1, out MC_IO_PAD_CNTL_D1Data); MainForm.Logger("MC_IO_PAD_CNTL_D1: 0x" + String.Format("{0:x8}", MC_IO_PAD_CNTL_D1Data));
             uint data = 0;
             PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING, out data); MainForm.Logger("mmMC_ARB_DRAM_TIMING: 0x" + String.Format("{0:x8}", ARBTimings.Data));
-            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out data); MainForm.Logger("mmMC_ARB_DRAM_TIMING2: 0x" + String.Format("{0:x8}", ARBTimings2.Data));
+            PCIExpress.ReadFromAMDGPURegister(busNumber, (int)GMC81Registers.mmMC_ARB_DRAM_TIMING2, out data); MainForm.Logger("mmMC_ARB_DRAM_TIMING2: 0x" + String.Format("{0:x8}", arbDramTiming2.Data));
             MainForm.Logger("MC_SEQ_PMG: 0x" + String.Format("{0:x8}", PMGData));
             MainForm.Logger("-------------");
             MainForm.Logger("ACTRD:    " + ARBTimings.ACTRD);
@@ -2330,24 +2315,6 @@ namespace GatelessGateSharp {
             PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 10 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.ImageSize: 0x" + String.Format("{0:x8}", data));
             PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 17 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.mcRegisterTable: 0x" + String.Format("{0:x8}", data));
             PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 18 * 4, out data); MainForm.Logger("SMC74_Firmware_Header.mcArbDramTimingTable: 0x" + String.Format("{0:x8}", data));
-            /*
-            uint ARBTableStart;
-            PCIExpress.SMU7_ReadDWORD((uint)busNumber, 0x20000 + 18 * 4, out ARBTableStart);
-            for (uint i = 0; i < 32; ++i) {
-                PCIExpress.SMU7_ReadDWORD((uint)busNumber, ARBTableStart + (i * 3 + 0) * 4, out data); MainForm.Logger("    0x" + String.Format("{0:x8}", data));
-                PCIExpress.SMU7_ReadDWORD((uint)busNumber, ARBTableStart + (i * 3 + 1) * 4, out data); MainForm.Logger("    0x" + String.Format("{0:x8}", data));
-                PCIExpress.SMU7_ReadDWORD((uint)busNumber, ARBTableStart + (i * 3 + 2) * 4, out data); MainForm.Logger("    0x" + String.Format("{0:x8}", data));
-            }
-            for (uint i = 0x20000; i < 0x40000; i += 16) {
-                string s = "    ";
-                s = String.Format("{0:x8}: ", i);
-                PCIExpress.SMU7_ReadDWORD((uint)busNumber, i + 0,  out data); s += String.Format(" 0x{0:x8}", data);
-                PCIExpress.SMU7_ReadDWORD((uint)busNumber, i + 4,  out data); s += String.Format(" 0x{0:x8}", data);
-                PCIExpress.SMU7_ReadDWORD((uint)busNumber, i + 8,  out data); s += String.Format(" 0x{0:x8}", data);
-                PCIExpress.SMU7_ReadDWORD((uint)busNumber, i + 12, out data); s += String.Format(" 0x{0:x8}", data);
-                MainForm.Logger("    " + s);
-            }
-            */
         }
     }
 }

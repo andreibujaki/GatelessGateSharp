@@ -930,15 +930,6 @@ namespace GatelessGateSharp
                         DriverCoreClock -= (currentCoreClock - TargetCoreClock);
                     }
                     DriverMemoryClock = TargetMemoryClock;
-                    /*
-                    if (TargetMemoryClock > currentMemoryClock) {
-                        DriverMemoryClock += 5;
-                    } else if (TargetMemoryClock + 50 < currentMemoryClock) {
-                        DriverMemoryClock = TargetMemoryClock;
-                    } else if (TargetMemoryClock < currentMemoryClock) {
-                        DriverMemoryClock -= (currentMemoryClock - TargetMemoryClock);
-                    }
-                    */
                 } else {
                     DriverCoreClock = TargetCoreClock;
                     DriverMemoryClock = TargetMemoryClock;
