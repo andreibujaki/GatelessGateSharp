@@ -2081,9 +2081,6 @@ namespace GatelessGateSharp {
         UInt32              seqMisc1;
         UInt32              seqMisc3;
         UInt32              seqMisc8;
-        UInt32              seqWrCtlD0;
-        UInt32              seqWrCtlD1;
-        UInt32              seqWrCtl2;
         UInt32              arbDramTiming_1;
         UInt32              arbDramTiming2_1;
         UInt32              arbRttCntl0;
@@ -2147,10 +2144,7 @@ namespace GatelessGateSharp {
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc1", out seqMisc1);
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc3", out seqMisc3);
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_misc8", out seqMisc8);
-
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_wr_ctl_d0", out seqWrCtlD0);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_wr_ctl_d1", out seqWrCtlD1);
-            MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_seq_wr_ctl_2",  out seqWrCtl2);
+            
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_arb_dram_timing_1", out arbDramTiming_1);
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_arb_dram_timing2_1", out arbDramTiming2_1);
             MainForm.GetMemoryTimingsRegisterValue(DeviceIndex, algorithm, "polaris10_arb_rtt_cntl0",  out arbRttCntl0);
@@ -2175,9 +2169,6 @@ namespace GatelessGateSharp {
                 seqMisc1, 
                 seqMisc3,
                 seqMisc8,
-                seqWrCtlD0,
-                seqWrCtlD1,
-                seqWrCtl2,
                 arbDramTiming_1,
                 arbDramTiming2_1,
                 arbRttCntl0) == 0)

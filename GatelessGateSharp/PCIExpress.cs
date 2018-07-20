@@ -39,9 +39,6 @@ namespace GatelessGateSharp {
             uint seqMisc1,
             uint seqMisc3,
             uint seqMisc8,
-            uint seqWrCtlD0,
-            uint seqWrCtlD1,
-            uint seqWrCtl2,
             uint arbDramTiming_1,
             uint arbDramTiming2_1,
             uint arbRttCntl0);

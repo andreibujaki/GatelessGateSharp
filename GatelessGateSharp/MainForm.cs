@@ -8387,22 +8387,16 @@ namespace GatelessGateSharp
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twedc")].Value = MISC2Data.TWEDC;
                     numericDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_twdatatr")].Value = MISC2Data.TWDATATR;
 
-                    UInt32 MISC1Data, MISC3Data, MISC8Data, seqWrCtlD0, seqWrCtlD1, seqWrCtl2, arbDramTiming_1, arbDramTiming2_1, arbRttCntl0;
+                    UInt32 MISC1Data, MISC3Data, MISC8Data, arbDramTiming_1, arbDramTiming2_1, arbRttCntl0;
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC1, out MISC1Data);
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC3, out MISC3Data);
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_MISC8, out MISC8Data);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_WR_CTL_D0, out seqWrCtlD0);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_WR_CTL_D1, out seqWrCtlD1);
-                    PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_SEQ_WR_CTL_2, out seqWrCtl2);
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_ARB_DRAM_TIMING_1, out arbDramTiming_1);
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_ARB_DRAM_TIMING2_1, out arbDramTiming2_1);
                     PCIExpress.ReadFromAMDGPURegister(busNumber, (uint)AMDGMC81.GMC81Registers.mmMC_ARB_RTT_CNTL0, out arbRttCntl0);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_misc1")].Text = String.Format("{0:X8}", MISC1Data);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_misc3")].Text = String.Format("{0:X8}", MISC3Data);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_misc8")].Text = String.Format("{0:X8}", MISC8Data);
-                    stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_wr_ctl_d0")].Text = String.Format("{0:X8}", seqWrCtlD0);
-                    stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_wr_ctl_d1"           )].Text = String.Format("{0:X8}", seqWrCtlD1);
-                    stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_seq_wr_ctl_2"            )].Text = String.Format("{0:X8}", seqWrCtl2);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_arb_dram_timing_1"       )].Text = String.Format("{0:X8}", arbDramTiming_1);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_arb_dram_timing2_1"      )].Text = String.Format("{0:X8}", arbDramTiming2_1);
                     stringDeviceParameterArray[new Tuple<int, string, string>(deviceIndex, algorithm, "memory_timings_polaris10_arb_rtt_cntl0"           )].Text = String.Format("{0:X8}", arbRttCntl0);
