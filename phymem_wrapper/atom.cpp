@@ -22,6 +22,8 @@
  * Author: Stanislaw Skowronek
  */
 
+#define ATOM_DEBUG
+
 //#include <linux/module.h>
 //#include <linux/sched.h>
 //#include <linux/slab.h>
@@ -33,6 +35,8 @@
 #include <chrono>
 #include <thread>
 
+#include <windows.h>
+
 #define kzalloc(size, options) calloc(size, 1)
 #define kfree(p) free(p)
 typedef uint32_t u32;
@@ -42,9 +46,14 @@ typedef uint8_t u8;
 #define false 0
 #define GFP_KERNEL 0
 #define EINVAL 1
-#define DRM_ERROR(msg, param) 
+#define FPRINTF(...) fprintf(file, __VA_ARGS__ )
+#define printk( ... ) \
+do {\
+    FILE *file = fopen("atombios.log", "a+");\
+    FPRINTF( __VA_ARGS__ );\
+    fclose(file);\
+} while (0)
 #define pr_info() 
-#define printk() 
 #define mdelay(msec) std::this_thread::sleep_for(std::chrono::milliseconds(msec))
 #define udelay(usec) std::this_thread::sleep_for(std::chrono::microseconds(usec))
 #define msleep(msec)  std::this_thread::sleep_for(std::chrono::milliseconds(msec))
@@ -77,12 +86,10 @@ size_t strlcpy(char *dest, const char *src, size_t size)
 #define USHORT uint16_t
 #define UCHAR uint8_t
 #define ATOM_BIG_ENDIAN 0
-#pragma pack(push,1)
+#pragma pack(1)
 #include "atom.h"
 #include "atombios.h"
-//#pragma pack(pop)
 #include "atom-types.h"
-//
 
 //#define ATOM_DEBUG
 
@@ -143,15 +150,16 @@ static int atom_def_dst[8] = { 0, 0, 1, 2, 0, 1, 2, 3 };
 
 static int debug_depth = 0;
 #ifdef ATOM_DEBUG
+#define DRM_ERROR printk
 static void debug_print_spaces(int n)
 {
 	while (n--)
 		printk("   ");
 }
-
-#define DEBUG(...) do if (amdgpu_atom_debug) { printk(KERN_DEBUG __VA_ARGS__); } while (0)
-#define SDEBUG(...) do if (amdgpu_atom_debug) { printk(KERN_DEBUG); debug_print_spaces(debug_depth); printk(__VA_ARGS__); } while (0)
+#define DEBUG(...) do { printk(__VA_ARGS__); } while (0)
+#define SDEBUG(...) do { printk(__VA_ARGS__); } while (0)
 #else
+#define DRM_ERROR 
 #define DEBUG(...) do { } while (0)
 #define SDEBUG(...) do { } while (0)
 #endif
@@ -281,37 +289,55 @@ static uint32_t atom_get_src_int(atom_exec_context *ctx, uint8_t attr,
 	case ATOM_ARG_WS:
 		idx = U8(*ptr);
 		(*ptr)++;
-		if (print)
-			DEBUG("WS[0x%02X]", idx);
 		switch (idx) {
 		case ATOM_WS_QUOTIENT:
-			val = gctx->divmul[0];
+            if (print)
+                DEBUG("WS[0x%02X]", idx);
+            val = gctx->divmul[0];
 			break;
 		case ATOM_WS_REMAINDER:
+            if (print)
+                DEBUG("WS[0x%02X(ATOM_WS_REMAINDER)]", idx);
 			val = gctx->divmul[1];
 			break;
 		case ATOM_WS_DATAPTR:
-			val = gctx->data_block;
+            if (print)
+                DEBUG("WS[0x%02X(ATOM_WS_DATAPTR)]", idx);
+            val = gctx->data_block;
 			break;
 		case ATOM_WS_SHIFT:
+            if (print)
+                DEBUG("WS[0x%02X(ATOM_WS_SHIFT)]", idx);
 			val = gctx->shift;
 			break;
 		case ATOM_WS_OR_MASK:
+            if (print)
+                DEBUG("WS[0x%02X(ATOM_WS_OR_MASK)]", idx);
 			val = 1 << gctx->shift;
 			break;
 		case ATOM_WS_AND_MASK:
+            if (print)
+                DEBUG("WS[0x%02X(ATOM_WS_AND_MASK)]", idx);
 			val = ~(1 << gctx->shift);
 			break;
 		case ATOM_WS_FB_WINDOW:
+            if (print)
+                DEBUG("WS[0x%02X(ATOM_WS_FB_WINDOW)]", idx);
 			val = gctx->fb_base;
 			break;
 		case ATOM_WS_ATTRIBUTES:
+            if (print)
+                DEBUG("WS[0x%02X(ATOM_WS_ATTRIBUTES)]", idx);
 			val = gctx->io_attr;
 			break;
 		case ATOM_WS_REGPTR:
-			val = gctx->reg_block;
+            if (print)
+                DEBUG("WS[0x%02X(ATOM_WS_REGPTR)]", idx);
+            val = gctx->reg_block;
 			break;
 		default:
+            if (print)
+                DEBUG("WS[0x%02X]", idx);
 			val = ctx->ws[idx];
 		}
 		break;
@@ -796,24 +822,26 @@ static void atom_op_jump(atom_exec_context *ctx, int *ptr, int arg)
 		SDEBUG("   taken: %s\n", execute ? "yes" : "no");
 	SDEBUG("   target: 0x%04X\n", target);
 	if (execute) {
-        /*
 		if (ctx->last_jump == (ctx->start + target)) {
-			cjiffies = jiffies;
-			if (time_after(cjiffies, ctx->last_jump_jiffies)) {
+			//cjiffies = jiffies;
+            cjiffies = GetTickCount();
+            //if (time_after(cjiffies, ctx->last_jump_jiffies)) {
+            if (cjiffies > ctx->last_jump_jiffies) {
 				cjiffies -= ctx->last_jump_jiffies;
-				if ((jiffies_to_msecs(cjiffies) > 5000)) {
-					DRM_ERROR("atombios stuck in loop for more than 5secs aborting\n");
+				if (cjiffies > 5000) {
+					DRM_ERROR("atombios stuck in loop for more than 5s aborting\n");
 					ctx->abort = true;
 				}
 			} else {
 				// jiffies wrap around we will just wait a little longer
-				ctx->last_jump_jiffies = jiffies;
+				//ctx->last_jump_jiffies = jiffies
+                ctx->last_jump_jiffies = GetTickCount();
 			}
 		} else {
 			ctx->last_jump = ctx->start + target;
-			ctx->last_jump_jiffies = jiffies;
-		}
-        */
+			//ctx->last_jump_jiffies = jiffies;
+            ctx->last_jump_jiffies = GetTickCount();
+        }
         *ptr = ctx->start + target;
 	}
 }
