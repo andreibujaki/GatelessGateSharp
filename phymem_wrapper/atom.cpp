@@ -37,6 +37,22 @@
 
 #include <windows.h>
 
+
+
+void udelay(uint64_t usec)
+{
+    LARGE_INTEGER start, current, freq;
+    if (!QueryPerformanceFrequency(&freq))
+        return;
+    if (!QueryPerformanceCounter(&start))
+        return;
+    current = start;
+    while ((double)(current.QuadPart - start.QuadPart) * 1000000000.0 < (double)usec * freq.QuadPart)
+        QueryPerformanceCounter(&current);
+}
+
+
+
 #define kzalloc(size, options) calloc(size, 1)
 #define kfree(p) free(p)
 typedef uint32_t u32;
@@ -54,9 +70,8 @@ do {\
     fclose(file);\
 } while (0)
 #define pr_info() 
-#define mdelay(msec) std::this_thread::sleep_for(std::chrono::milliseconds(msec))
-#define udelay(usec) std::this_thread::sleep_for(std::chrono::microseconds(usec))
-#define msleep(msec)  std::this_thread::sleep_for(std::chrono::milliseconds(msec))
+#define mdelay(msec) udelay((uint64_t)(msec) * 1000000)
+#define msleep(msec)  Sleep(msec)
 #define drm_can_sleep() true
 #define do_div(a, b) ((a) / (b))
 #define lower_32_bits(val64) ((uint32_t)((val64) & 0xffffffffUL))
