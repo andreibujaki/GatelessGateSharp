@@ -2155,7 +2155,11 @@ namespace GatelessGateSharp {
             if (!PCIExpress.Available)
                 return;
             int busNumber = GetComputeDevice().PciBusIdAMD;
-            if (busNumber <= 0)
+            if (busNumber <= 0 || ADLAdapterIndex < 0)
+                return;
+
+            int accessibility = 0;
+            if (ATI.ADL.ADL.ADL2_Adapter_Accessibility_Get(ADL2Context, ADLAdapterIndex, out accessibility) != ATI.ADL.ADL.ADL_SUCCESS || accessibility == 0)
                 return;
 
             if (PCIExpress.UpdateGMC81Registers(

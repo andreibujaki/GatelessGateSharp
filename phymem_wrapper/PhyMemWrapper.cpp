@@ -36,6 +36,7 @@
 #include "atombios.h"
 //#pragma pack(pop)
 std::mutex ATOMBIOSMutex;
+extern void udelay(uint64_t usec);
 
 
 
@@ -693,6 +694,45 @@ end:
         return TRUE;
     }
 
+    static struct {
+        struct atom_context *context;
+        uint8_t *BIOS;
+        int    BIOSSize;
+        struct card_info card_info;
+    } ATOMBIOSContextArray[256] =
+    {
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
+    };
+
     __declspec(dllexport)
         BOOL UpdateGMC81Registers(uint32_t busNum,
                                   uint32_t arbDramTiming,
@@ -708,7 +748,7 @@ end:
                                   uint32_t arbDramTiming2_1,
                                   uint32_t arbRttCntl0)
     {
-        BOOL ret = true;  
+        BOOL ret = true;
         volatile uint32_t *virtualAddress = GetVirtualAddress(busNum);
 
         const uint32_t mmMC_SEQ_MISC1 = 0xa81;
@@ -754,48 +794,11 @@ end:
         const uint32_t mmMC_SEQ_WR_CTL_D1_LP = 0xaa0;
         const uint32_t mmMC_ARB_RTT_CNTL0 = 0x9d0;
 
-#define mmBIOS_SCRATCH_6                                                        0x5cf
-        // BIOS_6_SCRATCH Definition
-#define ATOM_S6_DEVICE_CHANGE           0x00000001L
-#define ATOM_S6_SCALER_CHANGE           0x00000002L
-#define ATOM_S6_LID_CHANGE              0x00000004L
-#define ATOM_S6_DOCKING_CHANGE          0x00000008L
-#define ATOM_S6_ACC_MODE                0x00000010L
-#define ATOM_S6_EXT_DESKTOP_MODE        0x00000020L
-#define ATOM_S6_LID_STATE               0x00000040L
-#define ATOM_S6_DOCK_STATE              0x00000080L
-#define ATOM_S6_CRITICAL_STATE          0x00000100L
-#define ATOM_S6_HW_I2C_BUSY_STATE       0x00000200L
-#define ATOM_S6_THERMAL_STATE_CHANGE    0x00000400L
-#define ATOM_S6_INTERRUPT_SET_BY_BIOS   0x00000800L
-#define ATOM_S6_REQ_LCD_EXPANSION_FULL         0x00001000L //Normal expansion Request bit for LCD
-#define ATOM_S6_REQ_LCD_EXPANSION_ASPEC_RATIO  0x00002000L //Aspect ratio expansion Request bit for LCD
-
-#define ATOM_S6_DISPLAY_STATE_CHANGE    0x00004000L        //This bit is recycled when ATOM_BIOS_INFO_BIOS_SCRATCH6_SCL2_REDEFINE is set,previously it's SCL2_H_expansion
-#define ATOM_S6_I2C_STATE_CHANGE        0x00008000L        //This bit is recycled,when ATOM_BIOS_INFO_BIOS_SCRATCH6_SCL2_REDEFINE is set,previously it's SCL2_V_expansion
-
-#define ATOM_S6_ACC_REQ_CRT1            0x00010000L
-#define ATOM_S6_ACC_REQ_LCD1            0x00020000L
-#define ATOM_S6_ACC_REQ_TV1             0x00040000L
-#define ATOM_S6_ACC_REQ_DFP1            0x00080000L
-#define ATOM_S6_ACC_REQ_CRT2            0x00100000L
-#define ATOM_S6_ACC_REQ_LCD2            0x00200000L
-#define ATOM_S6_ACC_REQ_DFP6            0x00400000L
-#define ATOM_S6_ACC_REQ_DFP2            0x00800000L
-#define ATOM_S6_ACC_REQ_CV              0x01000000L
-#define ATOM_S6_ACC_REQ_DFP3                  0x02000000L
-#define ATOM_S6_ACC_REQ_DFP4                  0x04000000L
-#define ATOM_S6_ACC_REQ_DFP5                  0x08000000L
-
-#define ATOM_S6_ACC_REQ_MASK                0x0FFF0000L
-#define ATOM_S6_SYSTEM_POWER_MODE_CHANGE    0x10000000L
-#define ATOM_S6_ACC_BLOCK_DISPLAY_SWITCH    0x20000000L
-#define ATOM_S6_VRI_BRIGHTNESS_CHANGE       0x40000000L
-#define ATOM_S6_CONFIG_DISPLAY_CHANGE_MASK  0x80000000L
-
-        *(virtualAddress + mmBIOS_SCRATCH_6) &= ~ATOM_S6_ACC_MODE;
-        *(virtualAddress + mmBIOS_SCRATCH_6) |= ATOM_S6_CRITICAL_STATE;
-
+        const uint32_t mmSMC_IND_ACCESS_CNTL = 0x90;
+        const uint32_t mmSMC_IND_INDEX_8 = 0x8e;
+        const uint32_t mmSMC_IND_DATA_8 = 0x8f;
+        const uint32_t SMC_IND_ACCESS_CNTL__AUTO_INCREMENT_IND_8_MASK = 0x100;
+        
 #define mmSRBM_STATUS 0x394
 #define SRBM_STATUS__VMC_BUSY_MASK 0x100
 #define SRBM_STATUS__MCB_BUSY_MASK 0x200
@@ -825,16 +828,13 @@ end:
             *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) = blackout;
         }
 
-        while (*(virtualAddress + mmMC_SEQ_STATUS_M) & 0x600c000)
-            ;
+        *(virtualAddress + mmMC_SEQ_SUP_CNTL) = 0x0;
 
-        //*(virtualAddress + mmMC_SEQ_SUP_CNTL) = 0x0;
+        udelay(200);
 
-        //std::this_thread::sleep_for(std::chrono::microseconds(200));
-
-        if (*(virtualAddress + mmMC_SEQ_STATUS_M) & 0x10000) {
-            seqCasTiming = (*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) | (seqCasTiming & ~0xff000000);
-            seqMiscTiming2 = (*(virtualAddress + mmMC_SEQ_MISC_TIMING2) & 0x001fe000) | (seqMiscTiming2 & ~0x001fe000);
+        if ((*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) == (seqCasTiming & 0xff000000)) {
+            //seqCasTiming = (*(virtualAddress + mmMC_SEQ_CAS_TIMING) & 0xff000000) | (seqCasTiming & ~0xff000000);
+            //seqMiscTiming2 = (*(virtualAddress + mmMC_SEQ_MISC_TIMING2) & 0x001fe000) | (seqMiscTiming2 & ~0x001fe000);
 
             if (*(virtualAddress + mmMC_ARB_DRAM_TIMING) != arbDramTiming
                 || *(virtualAddress + mmMC_ARB_DRAM_TIMING2) != arbDramTiming2
@@ -873,9 +873,6 @@ end:
         *(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) = (*(virtualAddress + mmMC_SHARED_BLACKOUT_CNTL) & 0xfffffff8);
         *(virtualAddress + mmBIF_FB_EN) |= 0x3;
 
-        *(virtualAddress + mmBIOS_SCRATCH_6) |= ATOM_S6_ACC_MODE;
-        *(virtualAddress + mmBIOS_SCRATCH_6) &= ~ATOM_S6_CRITICAL_STATE;
-
 #if FALSE
         char filename[256];
         sprintf(filename, "timing%04d.log", busNum);
@@ -887,45 +884,6 @@ end:
         return ret;
     }
 
-
-    static struct {
-        struct atom_context *context;
-        uint8_t *BIOS;
-        int    BIOSSize;
-        struct card_info card_info;
-    } ATOMBIOSContextArray[256] =
-    {
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-        { NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },{ NULL, NULL, 0 },
-    };
 
 #define AMD_VBIOS_SIGNATURE " 761295520"
 #define AMD_VBIOS_SIGNATURE_OFFSET 0x30

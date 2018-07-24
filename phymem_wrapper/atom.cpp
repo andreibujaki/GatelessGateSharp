@@ -22,7 +22,7 @@
  * Author: Stanislaw Skowronek
  */
 
-#define ATOM_DEBUG
+//#define ATOM_DEBUG
 
 //#include <linux/module.h>
 //#include <linux/sched.h>

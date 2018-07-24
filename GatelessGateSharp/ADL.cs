@@ -158,6 +158,8 @@ namespace ATI.ADL
 
     internal delegate int ADL2_Flush_Driver_Data(IntPtr context, int iAdapterIndex);
 
+    internal delegate int ADL2_Adapter_Accessibility_Get(IntPtr context, int iAdapterIndex, out int iSpeed);
+
     #endregion Export Delegates
 
     #region Export Struct
@@ -636,6 +638,9 @@ namespace ATI.ADL
 
             [DllImport(Atiadlxx_FileName)]
             internal static extern int ADL2_Flush_Driver_Data(IntPtr context, int iAdapterIndex);
+
+            [DllImport(Atiadlxx_FileName)]
+            internal static extern int ADL2_Adapter_Accessibility_Get(IntPtr context, int iAdapterIndex, out int iSpeed);
 
             #endregion DLLImport
         }
@@ -1484,7 +1489,6 @@ namespace ATI.ADL
         private static bool ADL_Workstation_ECC_Set_Check = false;
         #endregion ADL_Workstation_ECC_Set
 
-        // 
         #region ADL2_Flush_Driver_Data
         /// <summary> ADL2_Flush_Driver_Data Delegates</summary>
         internal static ADL2_Flush_Driver_Data ADL2_Flush_Driver_Data {
@@ -1503,6 +1507,25 @@ namespace ATI.ADL
         /// <summary> check flag to indicate the delegate has been checked</summary>
         private static bool ADL2_Flush_Driver_Data_Check = false;
         #endregion ADL2_Flush_Driver_Data
+
+        #region ADL2_Adapter_Accessibility_Get
+        /// <summary> ADL2_Adapter_Accessibility_Get Delegates</summary>
+        internal static ADL2_Adapter_Accessibility_Get ADL2_Adapter_Accessibility_Get {
+            get {
+                if (!ADL2_Adapter_Accessibility_Get_Check && null == ADL2_Adapter_Accessibility_Get_) {
+                    ADL2_Adapter_Accessibility_Get_Check = true;
+                    if (ADLCheckLibrary.IsFunctionValid("ADL2_Adapter_Accessibility_Get")) {
+                        ADL2_Adapter_Accessibility_Get_ = ADLImport.ADL2_Adapter_Accessibility_Get;
+                    }
+                }
+                return ADL2_Adapter_Accessibility_Get_;
+            }
+        }
+        /// <summary> Private Delegate</summary>
+        private static ADL2_Adapter_Accessibility_Get ADL2_Adapter_Accessibility_Get_ = null;
+        /// <summary> check flag to indicate the delegate has been checked</summary>
+        private static bool ADL2_Adapter_Accessibility_Get_Check = false;
+        #endregion ADL2_Adapter_Accessibility_Get
 
         #endregion Export Functions
     }
